@@ -1,0 +1,45 @@
+name: Update existing advisory
+description: Add new info, IOCs, sources, or status changes to an existing advisory.
+title: "[update] <advisory id> — <what's new>"
+labels: ["update", "triage"]
+body:
+  - type: input
+    id: advisory-id
+    attributes:
+      label: Advisory ID (filename or `id` frontmatter)
+      placeholder: "2026-05-tanstack-mini-shai-hulud"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: change-type
+    attributes:
+      label: Type of update
+      multiple: true
+      options:
+        - New source / writeup
+        - New IOC
+        - Status change (active → contained, etc.)
+        - Severity reassessment
+        - Affected version list correction
+        - Recovery / playbook addition
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: what-changed
+    attributes:
+      label: What's new?
+      description: The fact, source, or correction. Include links.
+    validations:
+      required: true
+
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources
+      placeholder: |
+        - https://...
+    validations:
+      required: false

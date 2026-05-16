@@ -1,0 +1,83 @@
+name: New advisory
+description: Report a new supply-chain incident, malicious MCP, or vibe-coding-tool vulnerability.
+title: "[advisory] <package or tool> — <one-line description>"
+labels: ["new-advisory", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for reporting. The faster you can get the basics down, the faster others can react.
+        If you can only fill in a few fields, that's still useful — submit and we'll flesh it out.
+
+  - type: input
+    id: affected
+    attributes:
+      label: Affected package / tool / MCP
+      description: Exact name(s). Multiple? Comma-separate.
+      placeholder: "@tanstack/react-router, @tanstack/router"
+    validations:
+      required: true
+
+  - type: input
+    id: versions
+    attributes:
+      label: Affected version(s)
+      description: Version ranges or specific bad versions.
+      placeholder: ">=1.0.0 <1.0.16, or 'all versions from 2026-05-11 to takedown'"
+    validations:
+      required: false
+
+  - type: input
+    id: date
+    attributes:
+      label: Date disclosed / detected
+      placeholder: "2026-05-14"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity (best guess)
+      options:
+        - critical
+        - high
+        - medium
+        - unsure
+    validations:
+      required: true
+
+  - type: textarea
+    id: tldr
+    attributes:
+      label: TL;DR
+      description: Two sentences. What happened, what's the impact?
+    validations:
+      required: true
+
+  - type: textarea
+    id: sources
+    attributes:
+      label: Sources
+      description: Links to writeups, advisories, vendor statements. At least one.
+      placeholder: |
+        - https://socket.dev/blog/...
+        - https://www.stepsecurity.io/blog/...
+    validations:
+      required: true
+
+  - type: textarea
+    id: iocs
+    attributes:
+      label: IOCs (optional)
+      description: Domains, hashes, repo names, commit SHAs, file paths.
+    validations:
+      required: false
+
+  - type: textarea
+    id: am-i-affected
+    attributes:
+      label: How a reader can check if they're affected
+      description: Commands, lockfile greps, MCP config checks.
+    validations:
+      required: false

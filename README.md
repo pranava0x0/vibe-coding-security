@@ -1,0 +1,57 @@
+# vibe-coding-security
+
+> A living index of supply-chain attacks, malicious MCP servers, prompt-injection campaigns, and credential-theft incidents that target people who build with AI coding tools.
+
+**Audience.** Anyone shipping with Cursor, Claude Code, Lovable, v0, Bolt, Replit, Windsurf, Codex, or any agent that runs `npm install` / `pip install` on its own. If an LLM has ever suggested a package and you installed it without reading the source, this repo is for you.
+
+**Last full sweep:** 2026-05-16
+
+---
+
+## How to use this repo
+
+1. **Hit by something right now?** → start at [ALERTS.md](ALERTS.md). It's a single scannable feed, latest on top.
+2. **Wondering if a specific incident matters to you?** → [advisories/](advisories/) — one file per incident, with concrete `am I affected?` checks.
+3. **Already compromised and need to recover?** → [playbooks/](playbooks/) — credential rotation, package removal, blast-radius assessment.
+4. **Trying not to get hit in the first place?** → [prevention/](prevention/) — npm hardening, MCP hygiene, credential storage, sandboxing.
+5. **Want to monitor this stuff yourself?** → [sources/](sources/) — who to follow on X, which blogs, which feeds.
+
+---
+
+## Why this exists
+
+Vibe coding broke the old contract. The old contract was: a human reads the README, a human picks the dependency, a human runs `npm install`. The new contract is: an agent picks a dependency it half-remembers, runs `npm install` inside `--dangerously-skip-permissions`, and your shell history, `~/.npmrc`, `~/.aws/credentials`, and SSH keys leave the building before you finish your coffee.
+
+In the last 12 months alone:
+
+- **Shai-Hulud** (Sep 2025) — first self-replicating npm worm. Stole npm/GitHub/AWS/GCP creds, made private repos public, then re-published itself into every package the compromised maintainer owned.
+- **Shai-Hulud "Second Coming"** (Nov 2025) — 492 packages, 132M downloads/month, hit Zapier / ENS / PostHog / Postman. 25,000+ malicious GitHub repos in days.
+- **Nx s1ngularity** (Aug 2025) — first malware to *use Claude Code and Gemini CLI as recon tools* to find your credentials. 2,349 secrets leaked in hours.
+- **qix compromise** (Sep 2025) — `chalk`, `debug`, `ansi-styles`. 2 *billion* downloads per week, single phishing email.
+- **Postmark MCP** (Sep 2025) — first malicious MCP server. Built trust over 15 versions, then silently BCC'd every email to the attacker.
+- **Mini Shai-Hulud** (April–May 2026, ongoing) — SAP packages, TanStack (`@tanstack/react-router`, 12.7M weekly), node-ipc (10M weekly, **two days ago**).
+- **Axios** (Mar 2026) — 70M+ weekly downloads, auto-updated into thousands of projects before takedown.
+
+Most defenders have hours to react. Most vibe coders find out weeks later, when their AWS bill arrives.
+
+---
+
+## What this repo is not
+
+- **Not a vulnerability scanner.** Use [Socket](https://socket.dev/), [Snyk](https://snyk.io/), [StepSecurity](https://www.stepsecurity.io/), or `npm audit`. We point at them; we don't replace them.
+- **Not a feed for every CVE.** Only incidents that meaningfully affect people building with AI coding tools (npm/PyPI compromise, malicious MCPs, IDE/agent vulnerabilities, prompt-injection campaigns).
+- **Not infallible.** Every entry is dated and sourced. Verify before you act on it.
+
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md). New advisory? Open an issue with the `new-advisory` template, or submit a PR using the format in [advisories/README.md](advisories/README.md).
+
+If you spotted something live and need it logged in the next hour, just open an issue with a link and we'll flesh it out.
+
+---
+
+## License
+
+CC0 / public domain. Copy, fork, mirror, paste into your own runbooks. Attribution appreciated but not required.
