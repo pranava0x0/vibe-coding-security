@@ -1048,6 +1048,11 @@ def main() -> None:
     if css.exists():
         shutil.copy(css, DIST_DIR / "style.css")
 
+    # Copy .well-known/ verbatim (security.txt etc.)
+    wellknown_src = REPO_ROOT / ".well-known"
+    if wellknown_src.is_dir():
+        shutil.copytree(wellknown_src, DIST_DIR / ".well-known")
+
     (DIST_DIR / ".nojekyll").touch()
 
     pages = discover_pages()

@@ -43,6 +43,7 @@ REQUIRED_OUTPUTS = [
     "api/index.json",
     "api/v1/index.json",
     "api/v1/advisories.json",
+    ".well-known/security.txt",
 ]
 
 
