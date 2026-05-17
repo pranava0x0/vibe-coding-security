@@ -1,17 +1,17 @@
 ---
 id: 2025-08-claude-code-inverseprompt
-title: "Claude Code InversePrompt (CVE-2025-54794, CVE-2025-54795)"
+title: "Claude Code InversePrompt and follow-on CVEs (multiple)"
 date_disclosed: 2025-08
-last_updated: 2026-05-16
+last_updated: 2026-05-17
 severity: medium
 status: patched
 ecosystems: [claude-code]
 tools_affected: [claude-code]
-tags: [prompt-injection, claude-code, mcp, indirect-prompt-injection]
+tags: [prompt-injection, claude-code, mcp, indirect-prompt-injection, cve, trustfall]
 ---
 
 ## TL;DR
-Two CVEs in Claude Code (CVE-2025-54794 and CVE-2025-54795), disclosed by Cymulate, demonstrated that indirect prompt injection in content Claude Code reads (web pages, repo READMEs, MCP-fetched content) could be chained to invoke its own tools against the user. Patched, but the **class of attack is permanent**: any agent that mixes trusted instructions with untrusted content is vulnerable.
+A growing collection of Claude Code CVEs — **CVE-2025-54794, CVE-2025-54795** (Cymulate's "InversePrompt", Aug 2025), **CVE-2025-52882** (information disclosure), **CVE-2025-59536**, **CVE-2026-21852** ("Leaks Data via Malicious Environment Configuration Before Trust Confirmation"), **CVE-2026-33068**, plus the **"TrustFall" convention exposure** (early 2026). All patched by Anthropic. Lasso Security and Dark Reading have both covered the broader pattern: **the class of attack is permanent**, because any agent that mixes trusted instructions with untrusted content is fundamentally vulnerable. See also the related [Comment and Control](2026-04-comment-and-control-pr-injection.md) chain which scored CVSS 9.4 Critical.
 
 ## What happened
 The InversePrompt research showed several routes to indirect prompt injection in Claude Code:
@@ -50,6 +50,10 @@ The general defensive posture from Anthropic's own [Claude Code security docs](h
 
 ## Sources
 - [Cymulate — InversePrompt: Turning Claude Against Itself (CVE-2025-54794 & CVE-2025-54795)](https://cymulate.com/blog/cve-2025-547954-54795-claude-inverseprompt/)
+- [SentinelOne — CVE-2025-52882: Claude Code Information Disclosure Flaw](https://www.sentinelone.com/vulnerability-database/cve-2025-52882/)
+- [GitHub Advisory — CVE-2026-21852: Claude Code Leaks Data via Malicious Environment Configuration Before Trust Confirmation](https://github.com/advisories/GHSA-jh7p-qr78-84p7)
+- [Dark Reading — 'TrustFall' Convention Exposes Claude Code Execution Risk](https://www.darkreading.com/application-security/trustfall-exposes-claude-code-execution-risk)
+- [Dark Reading — Flaws in Claude Code Put Developers' Machines at Risk](https://www.darkreading.com/application-security/flaws-claude-code-developer-machines-risk)
 - [Lasso Security — Detecting Indirect Prompt Injection in Claude Code](https://www.lasso.security/blog/the-hidden-backdoor-in-claude-coding-assistant)
 - [Checkmarx — Claude Code Security: Top 6 Risks, Controls, and Best Practices](https://checkmarx.com/learn/ai-security/claude-code-security-top-6-risks-controls-and-best-practices/)
 - [The Register — Claude Code bypasses safety rule if given too many commands](https://www.theregister.com/2026/04/01/claude_code_rule_cap_raises/)

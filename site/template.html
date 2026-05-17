@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}} — vibe-coding-security</title>
+<meta name="description" content="Living index of supply-chain attacks, malicious MCP servers, and prompt-injection campaigns relevant to vibe coding.">
+<link rel="stylesheet" href="{{ASSET_PREFIX}}style.css">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <a href="{{ASSET_PREFIX}}index.html" class="brand">
+    <span class="brand-mark">⚠</span>
+    <span class="brand-name">vibe-coding-security</span>
+  </a>
+  <nav class="topnav">
+    <a href="{{ASSET_PREFIX}}alerts.html">Alerts</a>
+    <a href="{{ASSET_PREFIX}}advisories/index.html">Advisories</a>
+    <a href="{{ASSET_PREFIX}}playbooks/index.html">Playbooks</a>
+    <a href="{{ASSET_PREFIX}}prevention/index.html">Prevention</a>
+    <a href="https://github.com/pranava0x0/vibe-coding-security" class="external">GitHub</a>
+  </nav>
+  <button class="menu-toggle" aria-label="Toggle navigation" onclick="document.body.classList.toggle('nav-open')">☰</button>
+</header>
+
+<div class="layout">
+  <aside class="sidebar" aria-label="Section navigation">
+    {{SIDEBAR}}
+  </aside>
+
+  <main id="main" class="content">
+    <article>
+      <h1 class="page-title">{{TITLE}}</h1>
+      {{META}}
+      <div class="markdown-body">
+        {{CONTENT}}
+      </div>
+    </article>
+    <footer class="footer">
+      <p>
+        Built {{BUILD_DATE}}. CC0 / public domain. ·
+        <a href="https://github.com/pranava0x0/vibe-coding-security">Source on GitHub</a> ·
+        <a href="{{ASSET_PREFIX}}contributing.html">Contribute</a>
+      </p>
+    </footer>
+  </main>
+</div>
+
+</body>
+</html>

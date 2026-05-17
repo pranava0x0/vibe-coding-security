@@ -35,3 +35,6 @@ build/
 # Local-only working files
 *.local.md
 NOTES.md
+
+# Site build output
+dist/

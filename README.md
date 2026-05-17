@@ -4,7 +4,7 @@
 
 **Audience.** Anyone shipping with Cursor, Claude Code, Lovable, v0, Bolt, Replit, Windsurf, Codex, or any agent that runs `npm install` / `pip install` on its own. If an LLM has ever suggested a package and you installed it without reading the source, this repo is for you.
 
-**Last full sweep:** 2026-05-16
+**Last full sweep:** 2026-05-17 · **Website:** [pranava0x0.github.io/vibe-coding-security](https://pranava0x0.github.io/vibe-coding-security/)
 
 ---
 
@@ -43,6 +43,18 @@ Most defenders have hours to react. Most vibe coders find out weeks later, when 
 - **Not infallible.** Every entry is dated and sourced. Verify before you act on it.
 
 ---
+
+## Keeping it fresh
+
+The repo ships with a Claude Code skill at [`.claude/skills/vibe-security-update/`](.claude/skills/vibe-security-update/SKILL.md). Running `/vibe-security-update` (or asking Claude to "refresh the sweep") performs a tiered web sweep — **deep over the last 24h, medium over 3d, light over 7d** — and updates ALERTS.md + advisories. The skill maintains a [`source-priorities.json`](.claude/skills/vibe-security-update/source-priorities.json) that **learns over time**: sources that consistently produce hits gain weight and get queried first on future runs.
+
+The website (built from the markdown sources) auto-deploys on every push to `main` via GitHub Actions ([`.github/workflows/deploy-site.yml`](.github/workflows/deploy-site.yml)). Build locally with:
+
+```bash
+pip install -r site/requirements.txt
+python site/build.py
+open dist/index.html
+```
 
 ## Contributing
 

@@ -2,23 +2,35 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-05-16. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-05-17. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
 
-### 2026-05-14 — `node-ipc` compromised (3 malicious versions)
-Three malicious versions of `node-ipc` (10M+ weekly downloads) published simultaneously. Identical 80KB obfuscated credential-stealing payload. Foundational IPC library, transitive dependency in thousands of projects.
+### 2026-05-13 — Systemic MCP stdio RCE class (~200,000 servers exposed)
+OX Security: 7,000 vulnerable MCP servers on public IPs; ~200,000 total estimated. Three database MCPs (Apache Doris, Alibaba RDS, Apache Pinot) disclosed same window; **Alibaba declined to patch**. Microsoft MCP server hit by CVE-2026-26118.
+→ [advisories/2026-05-mcp-stdio-systemic-rce.md](advisories/2026-05-mcp-stdio-systemic-rce.md)
+
+### 2026-05 — Windsurf zero-click MCP RCE (CVE-2026-30615)
+Prompt injection in MCP-fetched content writes to `mcp.json` and auto-registers attacker-controlled server — **no user interaction**. CVSS 8.0. Patched in Windsurf > 1.9544.26. Cursor / Claude Code / Gemini-CLI have the same class issue; vendors declined to issue CVEs.
+→ [advisories/2026-05-windsurf-zero-click-mcp-rce.md](advisories/2026-05-windsurf-zero-click-mcp-rce.md)
+
+### 2026-05-14 — `node-ipc` compromised (versions 9.1.6, 9.2.3, 12.0.1)
+822K weekly downloads. Identical 80KB payload, DNS-based exfil to `sh.azurestaticprovider.net` / `37.16.75.69`. Steals 90+ credential categories. Forensic marker: tarball files timestamped 1985-10-26.
 → [advisories/2026-05-node-ipc-compromise.md](advisories/2026-05-node-ipc-compromise.md)
 
-### 2026-05-11 — `@tanstack/*` Mini Shai-Hulud (84 artifacts, 42 packages)
-`@tanstack/react-router` (12.7M weekly downloads) and 41 sibling packages compromised via GitHub Actions "Pwn Request" + cache poisoning + OIDC token abuse.
+### 2026-05-11 → 2026-05-12 — Mini Shai-Hulud wave: TanStack, Mistral, UiPath, OpenSearch
+**172 unique packages, 403 malicious versions** across npm + PyPI. Operated by **TeamPCP**. First documented case of malicious npm package carrying **valid SLSA provenance** (published by legitimate pipeline after attacker hijacked the runner).
 → [advisories/2026-05-tanstack-mini-shai-hulud.md](advisories/2026-05-tanstack-mini-shai-hulud.md)
 
 ### 2026-04 (ongoing) — Mini Shai-Hulud SAP packages
-`mbt`, `@cap-js/db-service`, `@cap-js/postgres`, `@cap-js/sqlite` compromised. Harvests local dev creds, GitHub/npm tokens, GH Actions secrets, AWS/Azure/GCP/Kubernetes creds.
+`mbt`, `@cap-js/db-service`, `@cap-js/postgres`, `@cap-js/sqlite` compromised. Same TeamPCP playbook. Harvests local dev creds, GH/npm tokens, cloud creds.
 → [advisories/2026-04-mini-shai-hulud-sap.md](advisories/2026-04-mini-shai-hulud-sap.md)
+
+### 2026-04 — "Comment and Control" prompt injection (Claude Code Sec Review / Gemini CLI / Copilot Agent)
+CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI agent to exfiltrate Actions runner secrets. All three vendors patched.
+→ [advisories/2026-04-comment-and-control-pr-injection.md](advisories/2026-04-comment-and-control-pr-injection.md)
 
 ---
 
@@ -64,8 +76,8 @@ Demonstrated by Simon Willison / General Analysis: Cursor + Supabase MCP with `s
 
 ## 🟡 HISTORICAL — patched, but pattern recurs
 
-### 2025-08 → 2026-Q1 — Claude Code InversePrompt (CVE-2025-54794, CVE-2025-54795)
-Indirect prompt injection chains that turn Claude Code's own tool use against the user. Patched, but the *class* of attack (hidden text in fetched content, MCP-delivered prompts) is permanent.
+### 2025-08 → 2026-Q1 — Claude Code InversePrompt (CVE-2025-54794, CVE-2025-54795, CVE-2025-59536, CVE-2026-21852, CVE-2026-33068, TrustFall)
+Indirect prompt injection chains that turn Claude Code's own tool use against the user. Anthropic has patched all listed. The *class* of attack (hidden text in fetched content, MCP-delivered prompts, malicious env config) keeps recurring — see also [Comment and Control](advisories/2026-04-comment-and-control-pr-injection.md).
 → [advisories/2025-08-claude-code-inverseprompt.md](advisories/2025-08-claude-code-inverseprompt.md)
 
 ### Ongoing — Slopsquatting (AI-hallucinated package names)
@@ -73,7 +85,7 @@ LLMs invent package names that don't exist. Attackers register them. Next user w
 → [advisories/ongoing-slopsquatting.md](advisories/ongoing-slopsquatting.md)
 
 ### Ongoing — Lovable / Bolt / Replit data exposure patterns
-Lovable BOLA left open 48 days. Bolt env-var leakage. Replit public repls leaking secrets. RLS misconfigurations across thousands of vibe-coded apps. Class issue, not single incident.
+Lovable BOLA left open 48 days. Bolt env-var leakage. Replit public repls leaking secrets. RLS misconfigurations across thousands of vibe-coded apps. Class issue, not single incident. (Replit shipped Security Agent in April 2026 and Workspace Security Center 2.0 on May 8, 2026 — partial defender response.)
 → [advisories/ongoing-vibe-platform-exposure.md](advisories/ongoing-vibe-platform-exposure.md)
 
 ---
