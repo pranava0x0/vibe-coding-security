@@ -48,7 +48,7 @@ DIST_DIR = REPO_ROOT / "dist"
 
 SITE_URL = "https://pranava0x0.github.io/vibe-coding-security"
 REPO_URL = "https://github.com/pranava0x0/vibe-coding-security"
-SITE_NAME = "vibe-coding-security"
+SITE_NAME = "Vibe Coding - Security Issue Tracking"
 SITE_TAGLINE = (
     "Living index of supply-chain attacks, malicious MCP servers, and "
     "prompt-injection campaigns relevant to vibe coding."
@@ -542,9 +542,18 @@ def render_page(page: Page, all_pages: list[Page], template: str) -> str:
 
     og_type = "article" if page.section == "advisories" and not page.is_index else "website"
 
+    # <title> tag: home page just shows the site name; everything else gets
+    # "<page title> — <site name>". Use the visual variant of the site name.
+    site_display = "Vibe Coding · Security Issue Tracking"
+    if page.output_path == Path("index.html"):
+        html_title = site_display
+    else:
+        html_title = f"{html.escape(page.title)} — {site_display}"
+
     out = template
     repl = {
         "{{TITLE}}": html.escape(page.title),
+        "{{HTML_TITLE}}": html_title,
         "{{DESCRIPTION}}": html.escape(page.description),
         "{{CANONICAL}}": html.escape(page_url),
         "{{OG_TYPE}}": og_type,

@@ -1,6 +1,8 @@
-# vibe-coding-security
+# Vibe Coding — Security Issue Tracking
 
 > A living index of supply-chain attacks, malicious MCP servers, prompt-injection campaigns, and credential-theft incidents that target people who build with AI coding tools.
+>
+> _(The GitHub repo and short URL slug remain `vibe-coding-security`; "Vibe Coding · Security Issue Tracking" is the human-readable site title.)_
 
 **Audience.** Anyone shipping with Cursor, Claude Code, Lovable, v0, Bolt, Replit, Windsurf, Codex, or any agent that runs `npm install` / `pip install` on its own. If an LLM has ever suggested a package and you installed it without reading the source, this repo is for you.
 
