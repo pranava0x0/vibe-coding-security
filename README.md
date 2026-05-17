@@ -48,13 +48,26 @@ Most defenders have hours to react. Most vibe coders find out weeks later, when 
 
 The repo ships with a Claude Code skill at [`.claude/skills/vibe-security-update/`](.claude/skills/vibe-security-update/SKILL.md). Running `/vibe-security-update` (or asking Claude to "refresh the sweep") performs a tiered web sweep — **deep over the last 24h, medium over 3d, light over 7d** — and updates ALERTS.md + advisories. The skill maintains a [`source-priorities.json`](.claude/skills/vibe-security-update/source-priorities.json) that **learns over time**: sources that consistently produce hits gain weight and get queried first on future runs.
 
-The website (built from the markdown sources) auto-deploys on every push to `main` via GitHub Actions ([`.github/workflows/deploy-site.yml`](.github/workflows/deploy-site.yml)). Build locally with:
+The website (built from the markdown sources) auto-deploys on every push to `main` via GitHub Actions ([`.github/workflows/deploy-site.yml`](.github/workflows/deploy-site.yml)). The build runs through [`site/validate.py`](site/validate.py) in CI — broken internal links, missing meta tags, skipped heading levels, or malformed frontmatter fail the deploy. Build locally with:
 
 ```bash
 pip install -r site/requirements.txt
-python site/build.py
+python site/build.py        # writes dist/
+python site/validate.py     # 9 checks: links, metadata, JSON-LD, sitemap, llms.txt
 open dist/index.html
 ```
+
+## LLM-friendly outputs
+
+Every build also emits machine-readable artifacts under `dist/`:
+
+- **[llms.txt](https://pranava0x0.github.io/vibe-coding-security/llms.txt)** — [llmstxt.org](https://llmstxt.org/) format index with one-line descriptions of every page.
+- **[llms-full.txt](https://pranava0x0.github.io/vibe-coding-security/llms-full.txt)** — every advisory, playbook, and prevention doc concatenated as raw markdown. Drop this into any LLM context window for full coverage in one paste.
+- **[advisories.json](https://pranava0x0.github.io/vibe-coding-security/advisories.json)** — structured index of all advisories with frontmatter (severity, status, ecosystems, dates, IDs).
+- **[search.json](https://pranava0x0.github.io/vibe-coding-security/search.json)** — minimal per-page index for future client-side search.
+- **[sitemap.xml](https://pranava0x0.github.io/vibe-coding-security/sitemap.xml)** + **[robots.txt](https://pranava0x0.github.io/vibe-coding-security/robots.txt)** — for search-engine and LLM crawlers.
+
+Each rendered HTML page also includes JSON-LD (`TechArticle` for advisories, `Article` for everything else) with `datePublished` / `dateModified`, plus Open Graph + Twitter card meta tags.
 
 ## Contributing
 

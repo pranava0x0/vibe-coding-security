@@ -2,50 +2,80 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark light">
 <title>{{TITLE}} — vibe-coding-security</title>
-<meta name="description" content="Living index of supply-chain attacks, malicious MCP servers, and prompt-injection campaigns relevant to vibe coding.">
+<meta name="description" content="{{DESCRIPTION}}">
+<link rel="canonical" href="{{CANONICAL}}">
+
+<!-- Open Graph -->
+<meta property="og:type" content="{{OG_TYPE}}">
+<meta property="og:site_name" content="vibe-coding-security">
+<meta property="og:title" content="{{TITLE}}">
+<meta property="og:description" content="{{DESCRIPTION}}">
+<meta property="og:url" content="{{CANONICAL}}">
+
+<!-- Twitter card -->
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="{{TITLE}}">
+<meta name="twitter:description" content="{{DESCRIPTION}}">
+
+<link rel="alternate" type="text/plain" href="{{SITE_URL}}/llms.txt" title="LLM index">
+<link rel="alternate" type="text/plain" href="{{SITE_URL}}/llms-full.txt" title="Full corpus">
+<link rel="alternate" type="application/json" href="{{SITE_URL}}/advisories.json" title="Advisories JSON">
+<link rel="sitemap" type="application/xml" href="{{SITE_URL}}/sitemap.xml">
+
 <link rel="stylesheet" href="{{ASSET_PREFIX}}style.css">
+{{JSONLD}}
 </head>
-<body>
+<body class="{{HAS_TOC}}">
 <a class="skip" href="#main">Skip to content</a>
 
-<header class="topbar">
-  <a href="{{ASSET_PREFIX}}index.html" class="brand">
-    <span class="brand-mark">⚠</span>
+<header class="topbar" role="banner">
+  <a href="{{ASSET_PREFIX}}index.html" class="brand" aria-label="vibe-coding-security home">
+    <span class="brand-mark" aria-hidden="true">⚠</span>
     <span class="brand-name">vibe-coding-security</span>
   </a>
-  <nav class="topnav">
+  <nav class="topnav" aria-label="Primary">
     <a href="{{ASSET_PREFIX}}alerts.html">Alerts</a>
     <a href="{{ASSET_PREFIX}}advisories/index.html">Advisories</a>
     <a href="{{ASSET_PREFIX}}playbooks/index.html">Playbooks</a>
     <a href="{{ASSET_PREFIX}}prevention/index.html">Prevention</a>
-    <a href="https://github.com/pranava0x0/vibe-coding-security" class="external">GitHub</a>
+    <a href="{{REPO_URL}}" class="external" rel="noopener">GitHub</a>
   </nav>
-  <button class="menu-toggle" aria-label="Toggle navigation" onclick="document.body.classList.toggle('nav-open')">☰</button>
+  <button class="menu-toggle" aria-label="Toggle navigation" aria-controls="sidebar" aria-expanded="false"
+          onclick="var b=document.body;var open=b.classList.toggle('nav-open');this.setAttribute('aria-expanded',open);">
+    <span aria-hidden="true">☰</span>
+  </button>
 </header>
 
 <div class="layout">
-  <aside class="sidebar" aria-label="Section navigation">
+  <aside id="sidebar" class="sidebar" aria-label="Section navigation">
     {{SIDEBAR}}
   </aside>
 
-  <main id="main" class="content">
+  <main id="main" class="content" role="main">
+    {{BREADCRUMB}}
     <article>
-      <h1 class="page-title">{{TITLE}}</h1>
-      {{META}}
+      <header class="page-header">
+        <h1 class="page-title">{{TITLE}}</h1>
+        {{META}}
+      </header>
       <div class="markdown-body">
         {{CONTENT}}
       </div>
     </article>
     <footer class="footer">
       <p>
-        Built {{BUILD_DATE}}. CC0 / public domain. ·
-        <a href="https://github.com/pranava0x0/vibe-coding-security">Source on GitHub</a> ·
-        <a href="{{ASSET_PREFIX}}contributing.html">Contribute</a>
+        Built <time datetime="{{BUILD_DATE}}">{{BUILD_DATE}}</time>. CC0 / public domain. ·
+        <a href="{{REPO_URL}}" rel="noopener">Source on GitHub</a> ·
+        <a href="{{ASSET_PREFIX}}contributing.html">Contribute</a> ·
+        <a href="{{SITE_URL}}/llms.txt">llms.txt</a>
       </p>
     </footer>
   </main>
+
+  {{TOC}}
 </div>
 
 </body>
