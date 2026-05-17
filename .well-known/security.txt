@@ -1,0 +1,6 @@
+# https://securitytxt.org/
+Contact: https://github.com/pranava0x0/vibe-coding-security/security/advisories/new
+Expires: 2027-12-31T23:59:59Z
+Preferred-Languages: en
+Canonical: https://pranava0x0.github.io/vibe-coding-security/.well-known/security.txt
+Policy: https://pranava0x0.github.io/vibe-coding-security/security.html

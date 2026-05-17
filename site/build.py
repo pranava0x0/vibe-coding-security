@@ -1,24 +1,37 @@
 #!/usr/bin/env python3
 """
-Build the vibe-coding-security static site + LLM-friendly outputs.
+Build the Vibe Coding · Security Issue Tracking static site + LLM-friendly outputs.
 
 Outputs (in dist/):
-  - One HTML page per source .md file
-  - style.css, .nojekyll
-  - advisories.json — machine-readable index of all advisories
-  - llms.txt — short index in llmstxt.org format
-  - llms-full.txt — all advisories/playbooks/prevention concatenated
-  - sitemap.xml — for search engines + LLM crawlers
-  - robots.txt — explicit allow + sitemap pointer
-  - search.json — minimal payload for a future client-side search
+  Per page:
+    - <page>.html (rendered)
+    - <page>.md (raw markdown source — Mintlify/Anthropic pattern so LLMs
+      and tools can fetch the source without re-parsing HTML)
 
-Each HTML page includes:
-  - Semantic <article>, <header>, <nav>, <aside>, <main>, <footer>
-  - <meta name="description"> per page (frontmatter or first paragraph)
-  - Open Graph + Twitter card meta
-  - JSON-LD SecurityAdvisory schema for advisory pages
-  - Per-page table of contents (right rail at >=1200px, inline at smaller)
-  - <time datetime=...> on all dates in meta
+  Site-wide:
+    - style.css, .nojekyll
+    - llms.txt (llmstxt.org root index)
+    - llms-full.txt (full corpus; advisories + playbooks + prevention)
+    - llms-ctx.txt (compact: just alerts + advisory TL;DRs)
+    - advisories/llms.txt, playbooks/llms.txt, prevention/llms.txt, etc.
+      (per-section indexes for narrowly-scoped LLM consumption)
+    - sitemap.xml + robots.txt
+    - feed.xml (Atom feed of advisories)
+    - advisories.json (structured frontmatter dump)
+    - search.json (per-page index for client-side search)
+    - advisory-schema.json (JSON Schema for advisory frontmatter — enables
+      authoring tools to validate)
+    - api/v1/advisories.json (versioned API endpoint)
+    - api/v1/index.json (top-level API index)
+
+Per page also includes:
+  - Semantic HTML with <article>, <header>, <nav>, <aside>, <main>, <footer>
+  - <meta name="description"> derived from frontmatter or first paragraph
+  - canonical link, Open Graph, Twitter card
+  - JSON-LD (TechArticle / Article + ItemList on index pages)
+  - <link rel="alternate"> entries for the .md version + RSS + section indexes
+  - Per-page TOC (right rail at >=1200px) auto-generated from h2/h3
+  - "View raw markdown" link in the page header
 
 Run locally:
     pip install -r site/requirements.txt
@@ -33,10 +46,11 @@ import json
 import re
 import shutil
 from dataclasses import dataclass, field
-from datetime import date
-from os.path import relpath
+from datetime import date, datetime, timezone
+from os.path import relpath as _relpath
 from pathlib import Path
 from typing import Any
+from xml.sax.saxutils import escape as xml_escape
 
 import markdown  # type: ignore
 import yaml  # type: ignore
@@ -49,13 +63,13 @@ DIST_DIR = REPO_ROOT / "dist"
 SITE_URL = "https://pranava0x0.github.io/vibe-coding-security"
 REPO_URL = "https://github.com/pranava0x0/vibe-coding-security"
 SITE_NAME = "Vibe Coding - Security Issue Tracking"
+SITE_NAME_DISPLAY = "Vibe Coding · Security Issue Tracking"
 SITE_TAGLINE = (
     "Living index of supply-chain attacks, malicious MCP servers, and "
     "prompt-injection campaigns relevant to vibe coding."
 )
 
 SECTIONS: list[tuple[str, str, str]] = [
-    # (slug, label, source dir relative to repo root)
     ("advisories", "Advisories", "advisories"),
     ("playbooks", "Playbooks", "playbooks"),
     ("prevention", "Prevention", "prevention"),
@@ -66,9 +80,10 @@ SECTIONS: list[tuple[str, str, str]] = [
 TOP_LEVEL_PAGES: list[tuple[str, str]] = [
     ("ALERTS.md", "alerts.html"),
     ("CONTRIBUTING.md", "contributing.html"),
-    ("security.md", "security.html"),
-    ("backlog.md", "backlog.html"),
-    ("issues.md", "issues.html"),
+    ("SECURITY.md", "security.html"),
+    ("CHANGELOG.md", "changelog.html"),
+    ("BACKLOG.md", "backlog.html"),
+    ("ISSUES.md", "issues.html"),
 ]
 
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
@@ -81,6 +96,7 @@ class Page:
     title: str
     frontmatter: dict[str, Any] = field(default_factory=dict)
     body: str = ""
+    raw_text: str = ""
     section: str = ""
     is_index: bool = False
     description: str = ""
@@ -115,13 +131,11 @@ def derive_title(frontmatter: dict[str, Any], body: str, source_path: Path) -> s
 
 
 def derive_description(frontmatter: dict[str, Any], body: str) -> str:
-    """First paragraph of body, stripped of markdown, max ~200 chars."""
     if frontmatter.get("description"):
         return str(frontmatter["description"]).strip()
 
-    # Find TL;DR or first paragraph after first heading
-    in_para = False
     buf: list[str] = []
+    in_para = False
     for line in body.splitlines():
         stripped = line.strip()
         if not stripped:
@@ -142,7 +156,6 @@ def derive_description(frontmatter: dict[str, Any], body: str) -> str:
             break
 
     desc = " ".join(buf)
-    # Strip markdown
     desc = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", desc)
     desc = re.sub(r"[*_`]+", "", desc)
     desc = re.sub(r"\s+", " ", desc).strip()
@@ -160,38 +173,16 @@ def rewrite_links(
     current_relpath: Path | None = None,
     source_to_output: dict[Path, Path] | None = None,
 ) -> str:
-    """Rewrite markdown-style hrefs to their built equivalents.
-
-    Algorithm:
-      1. Skip external / mailto / anchor-only / data: hrefs.
-      2. Normalize the href against the current page's repo path so we have
-         a canonical repo-relative source path (with ../ resolved).
-      3. If that canonical source is in source_to_output, rewrite to a
-         current-page-relative URL pointing at the output file. This handles
-         case sensitivity (ALERTS.md → alerts.html), README.md → index.html
-         at any depth, and any other source-to-output renaming.
-      4. Else if the canonical source exists in the repo at all, link to the
-         canonical GitHub blob URL (covers .claude/, .github/, site/, raw
-         JSON, etc.).
-      5. Else fall back to the simple .md → .html rewrite (handles same-page
-         anchors and otherwise-unknown paths gracefully).
-    """
+    """Rewrite markdown-style hrefs to their built equivalents."""
     github_blob = f"{REPO_URL}/blob/main"
     src_map = source_to_output or {}
 
     def make_relative(target_rel: Path) -> str:
-        """Build a current-page-relative path to a dist file."""
         if current_relpath is None:
             return str(target_rel).replace("\\", "/")
-        # Map current source's location to its output location to figure out
-        # the right base for relative paths
-        current_out = src_map.get(current_relpath)
-        if current_out is None:
-            # Top-level fallback
-            current_out = Path("index.html")
+        current_out = src_map.get(current_relpath) or Path("index.html")
         base_dir = current_out.parent if str(current_out.parent) != "." else Path(".")
-        from os.path import relpath as _rp
-        return _rp(target_rel, base_dir).replace("\\", "/")
+        return _relpath(target_rel, base_dir).replace("\\", "/")
 
     def replace(match: re.Match[str]) -> str:
         url = match.group(1)
@@ -203,7 +194,6 @@ def rewrite_links(
             url, anchor = url.split("#", 1)
             anchor = "#" + anchor
 
-        # Resolve to a repo-relative path
         normalized: str | None = None
         if current_relpath is not None and not url.startswith("/"):
             try:
@@ -218,11 +208,9 @@ def rewrite_links(
             if src_path in src_map:
                 target = src_map[src_path]
                 return f'href="{make_relative(target)}{anchor}"'
-            # Not built into the site, but exists in the repo → GitHub URL.
             if (REPO_ROOT / src_path).exists():
                 return f'href="{github_blob}/{normalized}{anchor}" rel="noopener"'
 
-        # Fall-through heuristics (unknown / can't be normalized)
         if url.endswith("/README.md"):
             url = url[: -len("README.md")] + "index.html"
         elif url == "README.md":
@@ -238,21 +226,14 @@ def rewrite_links(
 
 
 def render_markdown(body: str) -> tuple[str, str, list[tuple[int, str, str]]]:
-    """Returns (html, toc_html, headings)."""
     md = markdown.Markdown(extensions=[
-        "fenced_code",
-        "tables",
-        "toc",
-        "sane_lists",
-        "codehilite",
-        "attr_list",
+        "fenced_code", "tables", "toc", "sane_lists", "codehilite", "attr_list",
     ], extension_configs={
         "codehilite": {"css_class": "code", "guess_lang": False},
         "toc": {"toc_depth": "2-3", "permalink": False, "anchorlink": False},
     })
     html_out = md.convert(body)
     toc_html = md.toc  # type: ignore[attr-defined]
-    # Extract headings for our own right-rail
     headings: list[tuple[int, str, str]] = []
     for token in md.toc_tokens:  # type: ignore[attr-defined]
         _walk_toc(token, headings, depth=2)
@@ -285,18 +266,15 @@ def status_badge(status: str | None) -> str:
 
 def relative_url(target: Page, current: Page) -> str:
     current_dir = current.output_path.parent if str(current.output_path.parent) != "." else Path(".")
-    rel = relpath(target.output_path, current_dir)
-    return rel.replace("\\", "/")
+    return _relpath(target.output_path, current_dir).replace("\\", "/")
 
 
 def build_sidebar(current: Page, all_pages: list[Page]) -> str:
     parts: list[str] = ['<nav class="sidebar-inner" aria-label="Site sections">']
 
-    # Home
     home = next(p for p in all_pages if p.output_path == Path("index.html"))
     parts.append(_nav_link(home, current, "nav-home", "🏠 Home"))
 
-    # Alerts (special)
     alerts = next((p for p in all_pages if p.output_path == Path("alerts.html")), None)
     if alerts:
         parts.append(_nav_link(alerts, current, "nav-alerts", "⚠ Alerts"))
@@ -409,7 +387,6 @@ def build_toc(page: Page) -> str:
 
 
 def build_breadcrumb(page: Page, all_pages: list[Page]) -> str:
-    """Section breadcrumb for tablet (no sidebar visible)."""
     if not page.section or page.is_index:
         return ""
     home = next(p for p in all_pages if p.output_path == Path("index.html"))
@@ -429,22 +406,58 @@ def build_breadcrumb(page: Page, all_pages: list[Page]) -> str:
     return "\n".join(parts)
 
 
+def build_page_actions(page: Page) -> str:
+    """'View raw markdown' / 'Edit on GitHub' actions in the page header."""
+    md_name = page.output_path.name.replace(".html", ".md")
+    md_url = md_name
+    try:
+        src_rel = page.source_path.relative_to(REPO_ROOT)
+        gh_edit = f"{REPO_URL}/blob/main/{src_rel.as_posix()}"
+    except ValueError:
+        gh_edit = REPO_URL
+    return (
+        '<div class="page-actions">'
+        f'<a href="{md_url}" class="page-action" rel="alternate">View raw markdown</a>'
+        f'<a href="{gh_edit}" class="page-action" rel="noopener">Edit on GitHub ↗</a>'
+        '</div>'
+    )
+
+
 # ────────────────────────────────────────────────────────────────────────────
 # JSON-LD
 # ────────────────────────────────────────────────────────────────────────────
 
-def build_jsonld(page: Page, page_url: str) -> str:
-    """Build JSON-LD for an advisory page; Article for everything else."""
+def build_jsonld(page: Page, page_url: str, all_pages: list[Page]) -> str:
     fm = page.frontmatter
-    if page.section == "advisories" and not page.is_index:
+
+    # Advisories index → ItemList
+    if page.section == "advisories" and page.is_index:
+        items = [p for p in all_pages if p.section == "advisories" and not p.is_index]
+        items.sort(key=lambda p: str(p.frontmatter.get("date_disclosed", "")), reverse=True)
+        data = {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "name": "Vibe Coding Security Advisories",
+            "url": page_url,
+            "itemListElement": [
+                {
+                    "@type": "ListItem",
+                    "position": i + 1,
+                    "url": f"{SITE_URL}/{p.output_path.as_posix()}",
+                    "name": p.title,
+                }
+                for i, p in enumerate(items)
+            ],
+        }
+    elif page.section == "advisories" and not page.is_index:
         data = {
             "@context": "https://schema.org",
             "@type": "TechArticle",
             "headline": page.title,
             "description": page.description,
             "url": page_url,
-            "isPartOf": {"@type": "WebSite", "name": SITE_NAME, "url": SITE_URL},
-            "keywords": ", ".join(fm.get("tags", []) + fm.get("ecosystems", [])),
+            "isPartOf": {"@type": "WebSite", "name": SITE_NAME_DISPLAY, "url": SITE_URL},
+            "keywords": ", ".join(list(fm.get("tags", [])) + list(fm.get("ecosystems", []))),
             "articleSection": "Security Advisory",
         }
         if fm.get("date_disclosed"):
@@ -458,7 +471,7 @@ def build_jsonld(page: Page, page_url: str) -> str:
             "headline": page.title,
             "description": page.description,
             "url": page_url,
-            "isPartOf": {"@type": "WebSite", "name": SITE_NAME, "url": SITE_URL},
+            "isPartOf": {"@type": "WebSite", "name": SITE_NAME_DISPLAY, "url": SITE_URL},
         }
     return '<script type="application/ld+json">' + json.dumps(data) + "</script>"
 
@@ -472,7 +485,7 @@ def discover_pages() -> list[Page]:
 
     readme = REPO_ROOT / "README.md"
     if readme.exists():
-        pages.append(Page(source_path=readme, output_path=Path("index.html"), title=SITE_NAME))
+        pages.append(Page(source_path=readme, output_path=Path("index.html"), title=SITE_NAME_DISPLAY))
 
     for src_name, out_name in TOP_LEVEL_PAGES:
         src = REPO_ROOT / src_name
@@ -497,10 +510,25 @@ def discover_pages() -> list[Page]:
     return pages
 
 
+def _strip_leading_h1(body: str) -> str:
+    """Remove the first '# Heading' line from a markdown body if present.
+
+    The template renders the title as <h1 class="page-title">, so a body-level
+    h1 would produce two h1s on the page (bad for accessibility + SEO)."""
+    lines = body.splitlines()
+    i = 0
+    # skip leading blank lines
+    while i < len(lines) and not lines[i].strip():
+        i += 1
+    if i < len(lines) and lines[i].lstrip().startswith("# "):
+        # drop the line + any immediately-following blank
+        del lines[i]
+        if i < len(lines) and not lines[i].strip():
+            del lines[i]
+    return "\n".join(lines)
+
+
 def preprocess(pages: list[Page]) -> None:
-    """Parse frontmatter + body, render markdown, compute description, headings."""
-    # Build source → output map for accurate link rewriting (handles case
-    # sensitivity, README renames, and rejects unknown links to GitHub).
     src_map: dict[Path, Path] = {}
     for p in pages:
         try:
@@ -510,12 +538,17 @@ def preprocess(pages: list[Page]) -> None:
 
     for p in pages:
         text = p.source_path.read_text(encoding="utf-8")
+        p.raw_text = text
         fm, body = parse_frontmatter(text)
         p.frontmatter = fm
         p.body = body
         p.title = derive_title(fm, body, p.source_path)
         p.description = derive_description(fm, body)
-        rendered, toc, headings = render_markdown(body)
+
+        # Strip body-level h1 to avoid duplicating the template's h1
+        body_for_render = _strip_leading_h1(body)
+
+        rendered, toc, headings = render_markdown(body_for_render)
         try:
             relpath_in_repo = p.source_path.relative_to(REPO_ROOT)
         except ValueError:
@@ -530,25 +563,25 @@ def render_page(page: Page, all_pages: list[Page], template: str) -> str:
     meta_bar = build_meta_bar(page)
     toc = build_toc(page)
     crumb = build_breadcrumb(page, all_pages)
+    actions = build_page_actions(page)
 
     depth = len(page.output_path.parts) - 1
     asset_prefix = "../" * depth if depth else ""
 
-    page_url = f"{SITE_URL}/{str(page.output_path).replace(chr(92), '/')}"
+    page_url = f"{SITE_URL}/{page.output_path.as_posix()}"
     if page.output_path == Path("index.html"):
         page_url = SITE_URL + "/"
 
-    jsonld = build_jsonld(page, page_url)
+    md_alt_url = page_url[:-5] + ".md" if page_url.endswith(".html") else page_url + "index.md"
+
+    jsonld = build_jsonld(page, page_url, all_pages)
 
     og_type = "article" if page.section == "advisories" and not page.is_index else "website"
 
-    # <title> tag: home page just shows the site name; everything else gets
-    # "<page title> — <site name>". Use the visual variant of the site name.
-    site_display = "Vibe Coding · Security Issue Tracking"
     if page.output_path == Path("index.html"):
-        html_title = site_display
+        html_title = SITE_NAME_DISPLAY
     else:
-        html_title = f"{html.escape(page.title)} — {site_display}"
+        html_title = f"{html.escape(page.title)} — {SITE_NAME_DISPLAY}"
 
     out = template
     repl = {
@@ -556,11 +589,13 @@ def render_page(page: Page, all_pages: list[Page], template: str) -> str:
         "{{HTML_TITLE}}": html_title,
         "{{DESCRIPTION}}": html.escape(page.description),
         "{{CANONICAL}}": html.escape(page_url),
+        "{{MD_ALTERNATE}}": html.escape(md_alt_url),
         "{{OG_TYPE}}": og_type,
         "{{ASSET_PREFIX}}": asset_prefix,
         "{{SIDEBAR}}": sidebar,
         "{{BREADCRUMB}}": crumb,
         "{{META}}": meta_bar,
+        "{{ACTIONS}}": actions,
         "{{TOC}}": toc,
         "{{CONTENT}}": page.rendered_html,
         "{{BUILD_DATE}}": date.today().isoformat(),
@@ -578,8 +613,17 @@ def render_page(page: Page, all_pages: list[Page], template: str) -> str:
 # LLM-friendly outputs
 # ────────────────────────────────────────────────────────────────────────────
 
+def _page_md_url(p: Page) -> str:
+    return f"{SITE_URL}/{p.output_path.as_posix()[:-5]}.md"
+
+
+def _page_html_url(p: Page) -> str:
+    if p.output_path == Path("index.html"):
+        return SITE_URL + "/"
+    return f"{SITE_URL}/{p.output_path.as_posix()}"
+
+
 def build_llms_txt(pages: list[Page]) -> str:
-    """llmstxt.org-format index."""
     lines: list[str] = [
         f"# {SITE_NAME}",
         "",
@@ -594,35 +638,29 @@ def build_llms_txt(pages: list[Page]) -> str:
         "Audience: solo devs and small teams shipping with Cursor, Claude Code, ",
         "Lovable, v0, Bolt, Replit, Windsurf, Codex.",
         "",
+        "Every page is also available as raw markdown (replace `.html` with `.md` ",
+        "in any URL, or follow the `<link rel=\"alternate\">` declaration).",
+        "",
+        "## Active alerts",
+        "",
+        f"- [Alerts feed]({SITE_URL}/alerts.html) ([md]({SITE_URL}/alerts.md)): single scannable feed of active, recent, and historical incidents",
+        f"- [Atom feed]({SITE_URL}/feed.xml): subscribe for new advisories in any RSS reader",
+        "",
     ]
 
-    sections_for_llms: list[tuple[str, str]] = [
-        ("Active alerts", "alerts.html"),
-        ("Advisories", "advisories/index.html"),
-        ("Playbooks", "playbooks/index.html"),
-        ("Prevention", "prevention/index.html"),
-        ("Sources", "sources/index.html"),
-        ("Tools", "tools/index.html"),
-    ]
-
-    # Advisories
     advisories = [p for p in pages if p.section == "advisories" and not p.is_index]
     advisories.sort(key=lambda p: str(p.frontmatter.get("date_disclosed", "")), reverse=True)
-
-    lines.append("## Active alerts")
-    lines.append("")
-    lines.append(f"- [Alerts feed]({SITE_URL}/alerts.html): single scannable feed of all active, recent, and historical incidents")
-    lines.append("")
 
     lines.append("## Advisories")
     lines.append("")
     for p in advisories:
         sev = p.frontmatter.get("severity", "")
         date_d = p.frontmatter.get("date_disclosed", "")
-        url = f"{SITE_URL}/{str(p.output_path).replace(chr(92), '/')}"
         meta = f" [{sev}]" if sev else ""
         meta += f" {date_d}" if date_d else ""
-        lines.append(f"- [{p.title}]({url}){meta}: {p.description}")
+        lines.append(
+            f"- [{p.title}]({_page_html_url(p)}) ([md]({_page_md_url(p)})){meta}: {p.description}"
+        )
     lines.append("")
 
     for slug, label, _ in SECTIONS:
@@ -635,22 +673,58 @@ def build_llms_txt(pages: list[Page]) -> str:
         lines.append(f"## {label}")
         lines.append("")
         for p in items:
-            url = f"{SITE_URL}/{str(p.output_path).replace(chr(92), '/')}"
-            lines.append(f"- [{p.title}]({url}): {p.description}")
+            lines.append(f"- [{p.title}]({_page_html_url(p)}) ([md]({_page_md_url(p)})): {p.description}")
         lines.append("")
 
     lines.append("## Optional")
     lines.append("")
-    lines.append(f"- [llms-full.txt]({SITE_URL}/llms-full.txt): every advisory, playbook, and prevention doc concatenated for ingestion")
-    lines.append(f"- [advisories.json]({SITE_URL}/advisories.json): machine-readable advisory index with frontmatter")
+    lines.append(f"- [llms-full.txt]({SITE_URL}/llms-full.txt): every advisory + playbook + prevention doc concatenated (~140KB) for full-context ingestion")
+    lines.append(f"- [llms-ctx.txt]({SITE_URL}/llms-ctx.txt): compact context — alerts + per-advisory TL;DRs only (~10KB)")
+    lines.append(f"- [advisories/llms.txt]({SITE_URL}/advisories/llms.txt): advisories-only index")
+    lines.append(f"- [playbooks/llms.txt]({SITE_URL}/playbooks/llms.txt): playbooks-only index")
+    lines.append(f"- [prevention/llms.txt]({SITE_URL}/prevention/llms.txt): prevention-only index")
+    lines.append(f"- [advisories.json]({SITE_URL}/advisories.json): structured advisory index with frontmatter")
+    lines.append(f"- [api/v1/advisories.json]({SITE_URL}/api/v1/advisories.json): same data behind a stable versioned URL")
+    lines.append(f"- [advisory-schema.json]({SITE_URL}/advisory-schema.json): JSON Schema for advisory frontmatter")
     lines.append(f"- [GitHub source]({REPO_URL}): raw markdown, contribution guide, issue templates")
     lines.append("")
 
     return "\n".join(lines)
 
 
+def build_section_llms_txt(section_slug: str, section_label: str, pages: list[Page]) -> str:
+    """Per-section llms.txt — same format as root, scoped to one section."""
+    items = [p for p in pages if p.section == section_slug and not p.is_index]
+    if section_slug == "advisories":
+        items.sort(key=lambda p: str(p.frontmatter.get("date_disclosed", "")), reverse=True)
+    else:
+        items.sort(key=lambda p: p.title.lower())
+
+    lines: list[str] = [
+        f"# {SITE_NAME} — {section_label}",
+        "",
+        f"> {section_label} section of {SITE_NAME}. {len(items)} entries.",
+        "",
+        f"Root: {SITE_URL}/llms.txt",
+        "",
+        f"## {section_label}",
+        "",
+    ]
+    for p in items:
+        meta = ""
+        if section_slug == "advisories":
+            sev = p.frontmatter.get("severity", "")
+            date_d = p.frontmatter.get("date_disclosed", "")
+            meta = f" [{sev}]" if sev else ""
+            meta += f" {date_d}" if date_d else ""
+        lines.append(
+            f"- [{p.title}]({_page_html_url(p)}) ([md]({_page_md_url(p)})){meta}: {p.description}"
+        )
+    lines.append("")
+    return "\n".join(lines)
+
+
 def build_llms_full_txt(pages: list[Page]) -> str:
-    """Concatenated raw markdown of every advisory/playbook/prevention doc."""
     out: list[str] = [
         f"# {SITE_NAME} — full corpus",
         "",
@@ -667,13 +741,19 @@ def build_llms_full_txt(pages: list[Page]) -> str:
         out.append(f"# {group_label}")
         out.append("")
         for p in group_pages:
-            url = f"{SITE_URL}/{str(p.output_path).replace(chr(92), '/')}"
             out.append(f"---")
             out.append("")
             out.append(f"<!-- source: {p.source_path.relative_to(REPO_ROOT)} -->")
-            out.append(f"<!-- canonical: {url} -->")
+            out.append(f"<!-- canonical: {_page_html_url(p)} -->")
             out.append("")
-            out.append(p.body.strip())
+            # Prefix with the title as a heading so LLMs can navigate the
+            # document by section title. (Bodies typically start with ## TL;DR
+            # — without the title, structure is hard to follow.)
+            out.append(f"## {p.title}")
+            out.append("")
+            # Strip the body's own leading # heading if present, to avoid
+            # duplication with the prefix above.
+            out.append(_strip_leading_h1(p.body).strip())
             out.append("")
         out.append("")
 
@@ -701,18 +781,107 @@ def build_llms_full_txt(pages: list[Page]) -> str:
     return "\n".join(out)
 
 
+def build_llms_ctx_txt(pages: list[Page]) -> str:
+    """Compact mid-tier: alerts URL + per-advisory TL;DR only. Fits comfortably
+    in any modern context window. Goal: under 10KB.
+
+    Pattern documented in: Mintlify's llms.txt guidance + Anthropic docs."""
+    advisories = [p for p in pages if p.section == "advisories" and not p.is_index]
+    advisories.sort(key=lambda p: str(p.frontmatter.get("date_disclosed", "")), reverse=True)
+
+    lines: list[str] = [
+        f"# {SITE_NAME} — compact context",
+        "",
+        f"> {SITE_TAGLINE}",
+        "",
+        f"Generated {date.today().isoformat()}. Compact variant: alerts + per-advisory ",
+        "TL;DR + 'am I affected?' commands. For full content use llms-full.txt.",
+        "",
+        f"Index: {SITE_URL}/llms.txt | Full: {SITE_URL}/llms-full.txt | Web: {SITE_URL}/",
+        "",
+        "---",
+        "",
+    ]
+
+    for p in advisories:
+        sev = p.frontmatter.get("severity", "")
+        status = p.frontmatter.get("status", "")
+        date_d = p.frontmatter.get("date_disclosed", "")
+        tag_line = " | ".join(
+            x for x in [
+                f"severity={sev}" if sev else "",
+                f"status={status}" if status else "",
+                f"disclosed={date_d}" if date_d else "",
+            ] if x
+        )
+
+        # Extract just TL;DR section if present
+        tldr = _extract_section(p.body, "TL;DR") or p.description
+        affected = _extract_section(p.body, "Am I affected?")
+        affected_short = affected[:600] + "…" if affected and len(affected) > 600 else affected
+
+        lines.append(f"## {p.title}")
+        lines.append("")
+        if tag_line:
+            lines.append(f"_{tag_line}_")
+            lines.append("")
+        lines.append(f"URL: {_page_html_url(p)}")
+        lines.append("")
+        lines.append(tldr.strip())
+        lines.append("")
+        if affected_short:
+            lines.append("**Am I affected?**")
+            lines.append("")
+            lines.append(affected_short.strip())
+            lines.append("")
+        lines.append("---")
+        lines.append("")
+
+    return "\n".join(lines)
+
+
+def _extract_section(body: str, section_title: str) -> str | None:
+    """Return the body of `## <section_title>` until the next `## ` heading."""
+    pattern = re.compile(
+        rf"^##\s+{re.escape(section_title)}\s*$(.*?)(?=^##\s|\Z)",
+        re.MULTILINE | re.DOTALL,
+    )
+    m = pattern.search(body)
+    if not m:
+        return None
+    return m.group(1).strip()
+
+
 def build_sitemap(pages: list[Page]) -> str:
     today = date.today().isoformat()
     lines = ['<?xml version="1.0" encoding="UTF-8"?>',
              '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">']
     for p in pages:
-        loc = f"{SITE_URL}/{str(p.output_path).replace(chr(92), '/')}"
-        if p.output_path == Path("index.html"):
-            loc = SITE_URL + "/"
+        loc = _page_html_url(p)
         lastmod = str(p.frontmatter.get("last_updated") or today)
+
+        # Frequency + priority hints for crawlers
+        if p.output_path == Path("alerts.html") or p.output_path == Path("index.html"):
+            changefreq = "daily"
+            priority = "1.0"
+        elif p.section == "advisories" and not p.is_index:
+            changefreq = "monthly"
+            priority = "0.8"
+        elif p.section == "advisories" and p.is_index:
+            changefreq = "weekly"
+            priority = "0.9"
+        elif p.section in {"playbooks", "prevention"}:
+            changefreq = "monthly"
+            priority = "0.7"
+        else:
+            changefreq = "monthly"
+            priority = "0.5"
+
         lines.append("  <url>")
         lines.append(f"    <loc>{html.escape(loc)}</loc>")
         lines.append(f"    <lastmod>{lastmod}</lastmod>")
+        lines.append(f"    <changefreq>{changefreq}</changefreq>")
+        lines.append(f"    <priority>{priority}</priority>")
         lines.append("  </url>")
     lines.append('</urlset>')
     return "\n".join(lines)
@@ -720,6 +889,7 @@ def build_sitemap(pages: list[Page]) -> str:
 
 def build_robots() -> str:
     return (
+        "# Crawlers welcome. AI/LLM training: explicitly allowed.\n"
         "User-agent: *\n"
         "Allow: /\n"
         "\n"
@@ -727,10 +897,54 @@ def build_robots() -> str:
     )
 
 
+def build_atom_feed(pages: list[Page]) -> str:
+    advisories = [p for p in pages if p.section == "advisories" and not p.is_index]
+    advisories.sort(key=lambda p: str(p.frontmatter.get("last_updated") or p.frontmatter.get("date_disclosed") or ""), reverse=True)
+
+    # Determinism: use the most-recent advisory's last_updated as the feed
+    # <updated>, not datetime.now(). This way two consecutive builds produce
+    # identical output (only changes when source changes).
+    feed_updated_date = (
+        str(advisories[0].frontmatter.get("last_updated"))
+        if advisories else date.today().isoformat()
+    )
+    feed_updated = (
+        f"{feed_updated_date}T00:00:00Z" if len(feed_updated_date) == 10 else feed_updated_date
+    )
+
+    out: list[str] = [
+        '<?xml version="1.0" encoding="utf-8"?>',
+        '<feed xmlns="http://www.w3.org/2005/Atom">',
+        f'  <title>{xml_escape(SITE_NAME_DISPLAY)}</title>',
+        f'  <link href="{SITE_URL}/" rel="alternate"/>',
+        f'  <link href="{SITE_URL}/feed.xml" rel="self"/>',
+        f'  <id>{SITE_URL}/</id>',
+        f'  <updated>{feed_updated}</updated>',
+        f'  <subtitle>{xml_escape(SITE_TAGLINE)}</subtitle>',
+        '  <generator>vibe-coding-security site builder</generator>',
+    ]
+    for p in advisories[:25]:
+        url = _page_html_url(p)
+        updated = str(p.frontmatter.get("last_updated") or p.frontmatter.get("date_disclosed") or feed_updated_date)
+        if len(updated) == 10:
+            updated = f"{updated}T00:00:00Z"
+        out.append("  <entry>")
+        out.append(f"    <title>{xml_escape(p.title)}</title>")
+        out.append(f'    <link href="{url}"/>')
+        out.append(f"    <id>{url}</id>")
+        out.append(f"    <updated>{updated}</updated>")
+        out.append(f"    <summary>{xml_escape(p.description)}</summary>")
+        for tag in p.frontmatter.get("tags", []):
+            out.append(f'    <category term="{xml_escape(str(tag))}"/>')
+        out.append("  </entry>")
+    out.append('</feed>')
+    return "\n".join(out)
+
+
 def build_search_index(pages: list[Page]) -> str:
     items = []
     for p in pages:
-        url = f"/{str(p.output_path).replace(chr(92), '/')}"
+        url = f"/{p.output_path.as_posix()}"
         items.append({
             "title": p.title,
             "url": url,
@@ -747,7 +961,6 @@ def build_advisories_json(pages: list[Page]) -> str:
     data = []
     for p in pages:
         if p.section == "advisories" and not p.is_index:
-            url = f"{SITE_URL}/{str(p.output_path).replace(chr(92), '/')}"
             data.append({
                 "id": p.frontmatter.get("id"),
                 "title": p.title,
@@ -759,10 +972,65 @@ def build_advisories_json(pages: list[Page]) -> str:
                 "ecosystems": p.frontmatter.get("ecosystems", []),
                 "tools_affected": p.frontmatter.get("tools_affected", []),
                 "tags": p.frontmatter.get("tags", []),
-                "url": url,
+                "url": _page_html_url(p),
+                "markdown_url": _page_md_url(p),
             })
     data.sort(key=lambda x: str(x.get("date_disclosed") or ""), reverse=True)
     return json.dumps({"generated": date.today().isoformat(), "advisories": data}, indent=2)
+
+
+def build_advisory_schema() -> str:
+    """JSON Schema (draft 2020-12) for advisory frontmatter."""
+    schema = {
+        "$schema": "https://json-schema.org/draft/2020-12/schema",
+        "$id": f"{SITE_URL}/advisory-schema.json",
+        "title": "VibeCodingSecurityAdvisory",
+        "description": "Frontmatter schema for an advisory under advisories/",
+        "type": "object",
+        "required": ["id", "title", "severity", "status", "date_disclosed", "last_updated"],
+        "additionalProperties": True,
+        "properties": {
+            "id": {
+                "type": "string",
+                "pattern": "^[0-9]{4}-[0-9]{2}(-[a-z0-9-]+)?$|^ongoing-[a-z0-9-]+$",
+                "description": "YYYY-MM-short-id or ongoing-short-id."
+            },
+            "title": {"type": "string", "minLength": 1, "maxLength": 200},
+            "severity": {"enum": ["critical", "high", "medium", "low"]},
+            "status": {"enum": ["active", "contained", "patched", "mitigated", "ongoing", "historical"]},
+            "date_disclosed": {
+                "type": "string",
+                "pattern": "^[0-9]{4}(-[0-9]{2}(-[0-9]{2})?)?$",
+                "description": "Date or partial date — YYYY, YYYY-MM, or YYYY-MM-DD."
+            },
+            "last_updated": {"type": "string", "format": "date"},
+            "ecosystems": {"type": "array", "items": {"type": "string"}},
+            "tools_affected": {"type": "array", "items": {"type": "string"}},
+            "tags": {"type": "array", "items": {"type": "string"}},
+            "description": {"type": "string"},
+        },
+    }
+    return json.dumps(schema, indent=2)
+
+
+def build_api_index() -> str:
+    return json.dumps({
+        "name": SITE_NAME,
+        "version": "v1",
+        "generated": date.today().isoformat(),
+        "endpoints": {
+            "advisories": f"{SITE_URL}/api/v1/advisories.json",
+            "schema": f"{SITE_URL}/advisory-schema.json",
+            "feed": f"{SITE_URL}/feed.xml",
+            "sitemap": f"{SITE_URL}/sitemap.xml",
+            "llms_index": f"{SITE_URL}/llms.txt",
+            "llms_full": f"{SITE_URL}/llms-full.txt",
+            "llms_compact": f"{SITE_URL}/llms-ctx.txt",
+        },
+        "docs": SITE_URL + "/",
+        "source": REPO_URL,
+        "license": "CC0-1.0",
+    }, indent=2)
 
 
 # ────────────────────────────────────────────────────────────────────────────
@@ -785,22 +1053,52 @@ def main() -> None:
     pages = discover_pages()
     preprocess(pages)
 
+    # HTML pages + .md mirrors
     for page in pages:
-        out_html = render_page(page, pages, template)
-        out_path = DIST_DIR / page.output_path
-        out_path.parent.mkdir(parents=True, exist_ok=True)
-        out_path.write_text(out_html, encoding="utf-8")
+        # HTML
+        html_path = DIST_DIR / page.output_path
+        html_path.parent.mkdir(parents=True, exist_ok=True)
+        html_path.write_text(render_page(page, pages, template), encoding="utf-8")
 
-    # LLM + crawler outputs
+        # Raw markdown mirror (frontmatter preserved if present)
+        md_relpath = Path(str(page.output_path).replace(".html", ".md"))
+        md_path = DIST_DIR / md_relpath
+        md_path.write_text(page.raw_text, encoding="utf-8")
+
+    # Site-wide LLM-friendly outputs
     (DIST_DIR / "llms.txt").write_text(build_llms_txt(pages), encoding="utf-8")
     (DIST_DIR / "llms-full.txt").write_text(build_llms_full_txt(pages), encoding="utf-8")
+    (DIST_DIR / "llms-ctx.txt").write_text(build_llms_ctx_txt(pages), encoding="utf-8")
+
+    # Per-section llms.txt
+    for slug, label, _ in SECTIONS:
+        section_pages = [p for p in pages if p.section == slug]
+        if not section_pages:
+            continue
+        (DIST_DIR / slug / "llms.txt").write_text(
+            build_section_llms_txt(slug, label, pages), encoding="utf-8"
+        )
+
     (DIST_DIR / "sitemap.xml").write_text(build_sitemap(pages), encoding="utf-8")
     (DIST_DIR / "robots.txt").write_text(build_robots(), encoding="utf-8")
+    (DIST_DIR / "feed.xml").write_text(build_atom_feed(pages), encoding="utf-8")
     (DIST_DIR / "search.json").write_text(build_search_index(pages), encoding="utf-8")
     (DIST_DIR / "advisories.json").write_text(build_advisories_json(pages), encoding="utf-8")
+    (DIST_DIR / "advisory-schema.json").write_text(build_advisory_schema(), encoding="utf-8")
 
-    print(f"Built {len(pages)} HTML pages → {DIST_DIR}")
-    print("  + llms.txt, llms-full.txt, sitemap.xml, robots.txt, search.json, advisories.json")
+    # Versioned API
+    api_dir = DIST_DIR / "api" / "v1"
+    api_dir.mkdir(parents=True, exist_ok=True)
+    (DIST_DIR / "api" / "index.json").write_text(build_api_index(), encoding="utf-8")
+    (api_dir / "index.json").write_text(build_api_index(), encoding="utf-8")
+    (api_dir / "advisories.json").write_text(build_advisories_json(pages), encoding="utf-8")
+
+    print(f"Built {len(pages)} HTML pages + {len(pages)} .md mirrors → {DIST_DIR}")
+    print("  + llms.txt, llms-full.txt, llms-ctx.txt")
+    print("  + per-section llms.txt for", ", ".join(s[0] for s in SECTIONS))
+    print("  + feed.xml, sitemap.xml, robots.txt")
+    print("  + advisories.json, advisory-schema.json, search.json")
+    print("  + api/v1/{index,advisories}.json")
 
 
 if __name__ == "__main__":

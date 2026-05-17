@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+title: "Vibe Coding — Security Issue Tracking"
+message: "If you reference this advisory database in research, please cite it."
+abstract: >-
+  A living, AI-friendly index of supply-chain attacks, malicious MCP servers,
+  CVEs in AI coding tools, and prompt-injection campaigns targeting people
+  who build with vibe-coding tools (Cursor, Claude Code, Lovable, v0, Bolt,
+  Replit, Windsurf). Every advisory includes concrete IOCs, "am I affected?"
+  diagnostics, and links to recovery playbooks. Machine-readable via JSON,
+  Atom, and llms.txt / llms-full.txt.
+authors:
+  - given-names: Pranava
+    family-names: Raparla
+    alias: pranava0x0
+type: dataset
+license: CC0-1.0
+repository-code: "https://github.com/pranava0x0/vibe-coding-security"
+url: "https://pranava0x0.github.io/vibe-coding-security/"
+keywords:
+  - supply-chain-security
+  - npm
+  - pypi
+  - mcp
+  - prompt-injection
+  - ai-coding-tools
+  - vibe-coding
+  - cursor
+  - claude-code
+  - llm-security
+date-released: 2026-05-16

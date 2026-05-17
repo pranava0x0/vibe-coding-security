@@ -36,6 +36,9 @@ jobs:
       - name: Validate build
         run: python site/validate.py
 
+      - name: Run test suite
+        run: python -m pytest tests/ -v
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

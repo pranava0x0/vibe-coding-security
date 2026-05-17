@@ -340,6 +340,39 @@ article {
   overflow-wrap: break-word;
 }
 
+/* Page actions (View raw / Edit on GitHub) */
+.page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.8rem;
+}
+.page-action {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.8rem;
+  padding: 0.25rem 0.65rem;
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  color: var(--fg-muted);
+  min-height: 28px;
+}
+.page-action:hover {
+  background: var(--bg-elev-2);
+  color: var(--fg);
+  text-decoration: none;
+}
+
+.footer-formats {
+  margin-top: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+}
+.footer-formats a {
+  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+}
+
 @media (min-width: 640px) {
   .content { padding: 2rem 1.5rem 4rem; }
   .page-title { font-size: 1.9rem; }

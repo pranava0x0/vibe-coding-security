@@ -83,7 +83,8 @@ class HTMLAuditor(HTMLParser):
 
 def check_outputs_exist() -> list[str]:
     required = [
-        "index.html", "alerts.html", "contributing.html",
+        "index.html", "alerts.html", "contributing.html", "security.html",
+        "changelog.html", "backlog.html", "issues.html",
         "advisories/index.html",
         "playbooks/index.html",
         "prevention/index.html",
@@ -91,9 +92,14 @@ def check_outputs_exist() -> list[str]:
         "tools/index.html",
         "style.css",
         ".nojekyll",
-        "llms.txt", "llms-full.txt",
-        "sitemap.xml", "robots.txt",
-        "advisories.json", "search.json",
+        # LLM-friendly outputs
+        "llms.txt", "llms-full.txt", "llms-ctx.txt",
+        "advisories/llms.txt", "playbooks/llms.txt", "prevention/llms.txt",
+        # Feeds + crawler bits
+        "feed.xml", "sitemap.xml", "robots.txt",
+        # Structured data
+        "advisories.json", "search.json", "advisory-schema.json",
+        "api/v1/index.json", "api/v1/advisories.json",
     ]
     errors = []
     for rel in required:
@@ -103,8 +109,11 @@ def check_outputs_exist() -> list[str]:
 
 
 def check_no_md_links() -> list[str]:
-    """Find .md links that *should* have been rewritten (relative paths only).
-    External links to .md files (e.g., GitHub blob URLs) are intentional."""
+    """Find .md links that don't resolve.
+
+    Per the Mintlify pattern we now ship a .md mirror alongside each .html
+    page, so .md hrefs are legitimate as long as they point to an existing
+    file in dist/. External links (GitHub blob URLs etc.) are skipped."""
     errors = []
     for html_path in DIST_DIR.rglob("*.html"):
         text = html_path.read_text(encoding="utf-8")
@@ -112,10 +121,14 @@ def check_no_md_links() -> list[str]:
             href = m.group(1)
             if href.startswith(("http://", "https://", "mailto:", "#", "data:")):
                 continue
-            # Strip anchor
             path = href.split("#", 1)[0]
-            if path.endswith(".md"):
-                errors.append(f"{html_path.relative_to(DIST_DIR)}: unrewritten .md link: href=\"{href}\"")
+            if not path.endswith(".md"):
+                continue
+            target = (html_path.parent / path).resolve()
+            if not target.exists():
+                errors.append(
+                    f"{html_path.relative_to(DIST_DIR)}: unresolved .md link: href=\"{href}\""
+                )
     return errors
 
 

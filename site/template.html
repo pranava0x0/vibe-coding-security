@@ -20,9 +20,13 @@
 <meta name="twitter:title" content="{{TITLE}}">
 <meta name="twitter:description" content="{{DESCRIPTION}}">
 
-<link rel="alternate" type="text/plain" href="{{SITE_URL}}/llms.txt" title="LLM index">
-<link rel="alternate" type="text/plain" href="{{SITE_URL}}/llms-full.txt" title="Full corpus">
+<link rel="alternate" type="text/markdown" href="{{MD_ALTERNATE}}" title="Markdown source of this page">
+<link rel="alternate" type="application/atom+xml" href="{{SITE_URL}}/feed.xml" title="Advisories Atom feed">
+<link rel="alternate" type="text/plain" href="{{SITE_URL}}/llms.txt" title="LLM index (llmstxt.org)">
+<link rel="alternate" type="text/plain" href="{{SITE_URL}}/llms-full.txt" title="Full corpus for LLMs">
+<link rel="alternate" type="text/plain" href="{{SITE_URL}}/llms-ctx.txt" title="Compact LLM context">
 <link rel="alternate" type="application/json" href="{{SITE_URL}}/advisories.json" title="Advisories JSON">
+<link rel="alternate" type="application/schema+json" href="{{SITE_URL}}/advisory-schema.json" title="Advisory JSON Schema">
 <link rel="sitemap" type="application/xml" href="{{SITE_URL}}/sitemap.xml">
 
 <link rel="stylesheet" href="{{ASSET_PREFIX}}style.css">
@@ -59,6 +63,7 @@
     <article>
       <header class="page-header">
         <h1 class="page-title">{{TITLE}}</h1>
+        {{ACTIONS}}
         {{META}}
       </header>
       <div class="markdown-body">
@@ -67,10 +72,16 @@
     </article>
     <footer class="footer">
       <p>
-        Built <time datetime="{{BUILD_DATE}}">{{BUILD_DATE}}</time>. CC0 / public domain. ·
+        Built <time datetime="{{BUILD_DATE}}">{{BUILD_DATE}}</time> · CC0 / public domain ·
         <a href="{{REPO_URL}}" rel="noopener">Source on GitHub</a> ·
-        <a href="{{ASSET_PREFIX}}contributing.html">Contribute</a> ·
-        <a href="{{SITE_URL}}/llms.txt">llms.txt</a>
+        <a href="{{ASSET_PREFIX}}contributing.html">Contribute</a>
+      </p>
+      <p class="footer-formats">
+        <a href="{{SITE_URL}}/llms.txt">llms.txt</a> ·
+        <a href="{{SITE_URL}}/llms-full.txt">llms-full.txt</a> ·
+        <a href="{{SITE_URL}}/llms-ctx.txt">llms-ctx.txt</a> ·
+        <a href="{{SITE_URL}}/feed.xml">Atom feed</a> ·
+        <a href="{{SITE_URL}}/advisories.json">JSON</a>
       </p>
     </footer>
   </main>
