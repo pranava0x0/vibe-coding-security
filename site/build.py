@@ -155,21 +155,43 @@ def derive_description(frontmatter: dict[str, Any], body: str) -> str:
 # Markdown rendering
 # ────────────────────────────────────────────────────────────────────────────
 
-def rewrite_links(html_text: str, current_relpath: Path | None = None) -> str:
+def rewrite_links(
+    html_text: str,
+    current_relpath: Path | None = None,
+    source_to_output: dict[Path, Path] | None = None,
+) -> str:
     """Rewrite markdown-style hrefs to their built equivalents.
 
-    Rules (applied in order; first match wins):
-      1. External / mailto / anchor-only → leave alone.
-      2. Anything starting with .claude/ or .github/ (any depth, going up too) →
-         rewrite to the canonical GitHub blob URL — these files are not built
-         into the static site but are visible in the repo.
-      3. Path ends with /README.md (or just README.md) → swap for /index.html
-         (because we render section READMEs as section/index.html).
-      4. Path ends with .md → swap for .html.
-      5. Path ends with / → append index.html.
-      6. Everything else → leave as-is (already an html/asset link).
+    Algorithm:
+      1. Skip external / mailto / anchor-only / data: hrefs.
+      2. Normalize the href against the current page's repo path so we have
+         a canonical repo-relative source path (with ../ resolved).
+      3. If that canonical source is in source_to_output, rewrite to a
+         current-page-relative URL pointing at the output file. This handles
+         case sensitivity (ALERTS.md → alerts.html), README.md → index.html
+         at any depth, and any other source-to-output renaming.
+      4. Else if the canonical source exists in the repo at all, link to the
+         canonical GitHub blob URL (covers .claude/, .github/, site/, raw
+         JSON, etc.).
+      5. Else fall back to the simple .md → .html rewrite (handles same-page
+         anchors and otherwise-unknown paths gracefully).
     """
     github_blob = f"{REPO_URL}/blob/main"
+    src_map = source_to_output or {}
+
+    def make_relative(target_rel: Path) -> str:
+        """Build a current-page-relative path to a dist file."""
+        if current_relpath is None:
+            return str(target_rel).replace("\\", "/")
+        # Map current source's location to its output location to figure out
+        # the right base for relative paths
+        current_out = src_map.get(current_relpath)
+        if current_out is None:
+            # Top-level fallback
+            current_out = Path("index.html")
+        base_dir = current_out.parent if str(current_out.parent) != "." else Path(".")
+        from os.path import relpath as _rp
+        return _rp(target_rel, base_dir).replace("\\", "/")
 
     def replace(match: re.Match[str]) -> str:
         url = match.group(1)
@@ -181,21 +203,26 @@ def rewrite_links(html_text: str, current_relpath: Path | None = None) -> str:
             url, anchor = url.split("#", 1)
             anchor = "#" + anchor
 
-        # Detect repo-relative paths into .claude / .github by normalizing ../ segments
-        # against the current page's repo path.
-        normalized = url
+        # Resolve to a repo-relative path
+        normalized: str | None = None
         if current_relpath is not None and not url.startswith("/"):
             try:
                 base_dir = current_relpath.parent
-                normalized_path = (REPO_ROOT / base_dir / url).resolve()
-                normalized = str(normalized_path.relative_to(REPO_ROOT))
+                resolved = (REPO_ROOT / base_dir / url).resolve()
+                normalized = str(resolved.relative_to(REPO_ROOT))
             except (ValueError, OSError):
-                normalized = url
+                normalized = None
 
-        if normalized.startswith((".claude/", ".github/")) or normalized in {".claude", ".github"}:
-            return f'href="{github_blob}/{normalized}{anchor}" rel="noopener"'
+        if normalized is not None:
+            src_path = Path(normalized)
+            if src_path in src_map:
+                target = src_map[src_path]
+                return f'href="{make_relative(target)}{anchor}"'
+            # Not built into the site, but exists in the repo → GitHub URL.
+            if (REPO_ROOT / src_path).exists():
+                return f'href="{github_blob}/{normalized}{anchor}" rel="noopener"'
 
-        # README.md → index.html (any depth)
+        # Fall-through heuristics (unknown / can't be normalized)
         if url.endswith("/README.md"):
             url = url[: -len("README.md")] + "index.html"
         elif url == "README.md":
@@ -472,6 +499,15 @@ def discover_pages() -> list[Page]:
 
 def preprocess(pages: list[Page]) -> None:
     """Parse frontmatter + body, render markdown, compute description, headings."""
+    # Build source → output map for accurate link rewriting (handles case
+    # sensitivity, README renames, and rejects unknown links to GitHub).
+    src_map: dict[Path, Path] = {}
+    for p in pages:
+        try:
+            src_map[p.source_path.relative_to(REPO_ROOT)] = p.output_path
+        except ValueError:
+            pass
+
     for p in pages:
         text = p.source_path.read_text(encoding="utf-8")
         fm, body = parse_frontmatter(text)
@@ -484,7 +520,7 @@ def preprocess(pages: list[Page]) -> None:
             relpath_in_repo = p.source_path.relative_to(REPO_ROOT)
         except ValueError:
             relpath_in_repo = None
-        p.rendered_html = rewrite_links(rendered, relpath_in_repo)
+        p.rendered_html = rewrite_links(rendered, relpath_in_repo, src_map)
         p.toc_html = toc
         p.headings = headings
 
