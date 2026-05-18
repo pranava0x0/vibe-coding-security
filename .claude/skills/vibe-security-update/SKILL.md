@@ -48,18 +48,26 @@ Run these in **a single message with parallel WebSearch calls**. Three depth tie
 - "Lovable / Bolt / v0 / Replit security {today.year}"
 - "AI coding assistant security incident {today.year}"
 - "PyPI malicious package supply chain {today.year}"
+- "AI agent framework CVE {today.year}" — rotate framework names: Semantic Kernel / LangChain / OpenClaw / PraisonAI / Langflow / aider / OpenHands / SWE-agent. As of 2026-Q2 this is a top attack-surface category (decorator-as-documentation pattern → RCE).
 
 For each query, prepend top sources from `source-priorities.json` (top 10 by weight) via the `allowed_domains` filter on rotating subsets so we don't miss high-signal pages buried under news aggregators.
 
 **Tier B — MEDIUM (3-day window).** ~4 parallel queries on top-weight sources:
 - "{top-3-source-domains} supply chain"
 - "GitHub Advisory Database npm critical"
-- "Shai-Hulud OR mini-shai-hulud {today.year}"
-- "{tool-vendor} security advisory" (rotate vendor: Cursor / Anthropic / Vercel / Lovable / Supabase)
+- "Shai-Hulud OR mini-shai-hulud cross-ecosystem npm pypi {today.year}"
+- "{tool-vendor} security advisory" — rotate vendor across:
+  - **IDEs/agents:** Cursor, Anthropic (Claude Code), Windsurf, Google (Antigravity), Cline, aider, OpenHands, OpenClaw
+  - **Vibe-coding platforms:** Lovable, Bolt, v0, Replit, Base44
+  - **Web frameworks:** Vercel (Next.js), React/Meta, Svelte, Tailwind, Vite
+  - **Backend/Auth/DB:** Supabase, Prisma, NextAuth.js, FastAPI, Streamlit, Google AI Studio SDK
+  - **Agent SDKs:** Microsoft (Semantic Kernel), LangChain, PraisonAI
+- "{vendor} coordinated security release {today.year}" — catches multi-CVE rollups (Vercel May 2026 shipped 13 in one batch; Anthropic similar cadence post-source-leak).
 
-**Tier C — SHALLOW (7-day window).** ~2 parallel queries to catch slower-moving stories:
+**Tier C — SHALLOW (7-day window).** ~3 parallel queries to catch slower-moving stories and social-media disclosure:
 - "vibe coding security incident week {today.year}"
 - "AI agent CVE OR security disclosed {today.year}"
+- "vibe coding security site:substack.com OR site:x.com OR site:bsky.app {today.year}" — Substack newsletters (vibecodingweekly, mvidmar, ipenewsletter) and security-research X/Bluesky posts (StepSecurity, Snyk, Aikido, Socket) regularly break new IOCs hours before traditional aggregators pick them up. Also probe `news.ycombinator.com` and `reddit.com/r/{programming,netsec,cybersecurity}` discussions for first-hand reports.
 
 Don't repeat queries already run within the last 24h (check `runs.log.md`).
 
@@ -70,9 +78,13 @@ For each unique candidate incident pulled from results, decide:
 **A. NEW ADVISORY** — write a new file in `advisories/` if:
 - Package > 100k weekly downloads compromised, OR
 - CVE in major AI coding tool, OR
+- CVE in major AI-agent framework SDK (LangChain, Semantic Kernel, PraisonAI, OpenClaw, etc.), OR
+- CVE in core vibe-coding web stack (Next.js, React, Svelte, Vite, Tailwind, FastAPI, Streamlit, Prisma, NextAuth.js, Supabase) with practical exploitation path, OR
 - Malicious MCP server, OR
 - Prompt-injection PoC against vibe-coding tool, OR
-- Vibe platform data exposure with PII impact
+- Vibe platform data exposure with PII impact, OR
+- Cross-ecosystem worm (npm ↔ PyPI ↔ RubyGems with identical payload), OR
+- Significant supply-chain hygiene incident at a major AI vendor (e.g., source-map leak, accidental token exposure)
 
 Use the template in `CONTRIBUTING.md`. Filename: `YYYY-MM-short-id.md`.
 
@@ -188,3 +200,6 @@ Use `weight` to:
 - **Cap output.** If a sweep finds more than 10 candidate incidents, prioritize by severity × audience overlap with vibe coders. Log skipped ones in `runs.log.md` under "Notes: deferred".
 - **Don't touch playbooks/prevention** in a routine sweep — those are evergreen. If you find a new attack pattern that warrants a new playbook, flag in `runs.log.md` under "Notes: playbook backlog" and let a human decide.
 - **Don't auto-resolve status to `patched`** unless a vendor explicitly says so in a primary source.
+- **Treat AI-agent framework CVEs as time-critical.** As of 2026-Q2, baseline disclosure-to-exploit is < 4 hours (per Sysdig honeypot data on PraisonAI). Prioritize these in triage and write them up same-day even if only 2 sources are available.
+- **Cross-link cross-ecosystem worms.** When the same threat actor or payload appears in multiple ecosystems, cross-link the advisories explicitly (see Mini Shai-Hulud: TanStack ↔ PyTorch Lightning). Don't let the npm advisory and the PyPI advisory live in isolation.
+- **Decorator-as-documentation pattern.** Watch specifically for vulnerabilities where an SDK annotation (`[KernelFunction]`, `@tool`, `@function_tool`, FastAPI's `@app.get`) is treated as documentation rather than a security boundary. This is now a known recurring class. When you see one, look for sibling vulnerabilities in the same SDK.
