@@ -2,31 +2,55 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-05-17. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-05-18. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
 
+### 2026-05-13 — OpenClaw "Claw Chain" (CVE-2026-44112/44113/44115/44118)
+Four chainable flaws in **OpenClaw** AI agent — TOCTOU sandbox-escape (read + write), here-doc allowlist bypass, owner impersonation. ~245K public instances; 63% with no auth. Patched in **OpenClaw 2026.4.22**. If you exposed an instance: assume full compromise.
+→ [advisories/2026-05-openclaw-claw-chain.md](advisories/2026-05-openclaw-claw-chain.md)
+
 ### 2026-05-13 — Systemic MCP stdio RCE class (~200,000 servers exposed)
 OX Security: 7,000 vulnerable MCP servers on public IPs; ~200,000 total estimated. Three database MCPs (Apache Doris, Alibaba RDS, Apache Pinot) disclosed same window; **Alibaba declined to patch**. Microsoft MCP server hit by CVE-2026-26118.
 → [advisories/2026-05-mcp-stdio-systemic-rce.md](advisories/2026-05-mcp-stdio-systemic-rce.md)
 
-### 2026-05 — Windsurf zero-click MCP RCE (CVE-2026-30615)
-Prompt injection in MCP-fetched content writes to `mcp.json` and auto-registers attacker-controlled server — **no user interaction**. CVSS 8.0. Patched in Windsurf > 1.9544.26. Cursor / Claude Code / Gemini-CLI have the same class issue; vendors declined to issue CVEs.
-→ [advisories/2026-05-windsurf-zero-click-mcp-rce.md](advisories/2026-05-windsurf-zero-click-mcp-rce.md)
+### 2026-05-11 — PraisonAI auth bypass (CVE-2026-44338) — exploited in 3h44m
+Legacy Flask API server shipped with auth disabled. Sysdig honeypot saw scanner probing the vulnerable endpoint **3 hours, 44 minutes** after GHSA published. Affects PraisonAI 2.5.6–4.6.33. Fixed in **4.6.34**. New baseline for AI-agent framework disclosure-to-exploit gap: < one workday.
+→ [advisories/2026-05-praisonai-auth-bypass.md](advisories/2026-05-praisonai-auth-bypass.md)
+
+### 2026-05-11 → 2026-05-12 — Mini Shai-Hulud wave: TanStack, Mistral, UiPath, OpenSearch
+**172 unique packages, 403 malicious versions** across npm + PyPI (518M+ cumulative downloads). Operated by **TeamPCP**. First documented case of malicious npm package carrying **valid SLSA provenance**. TanStack subset is **CVE-2026-45321 (CVSS 9.6)**.
+→ [advisories/2026-05-tanstack-mini-shai-hulud.md](advisories/2026-05-tanstack-mini-shai-hulud.md)
 
 ### 2026-05-14 — `node-ipc` compromised (versions 9.1.6, 9.2.3, 12.0.1)
 822K weekly downloads. Identical 80KB payload, DNS-based exfil to `sh.azurestaticprovider.net` / `37.16.75.69`. Steals 90+ credential categories. Forensic marker: tarball files timestamped 1985-10-26.
 → [advisories/2026-05-node-ipc-compromise.md](advisories/2026-05-node-ipc-compromise.md)
 
-### 2026-05-11 → 2026-05-12 — Mini Shai-Hulud wave: TanStack, Mistral, UiPath, OpenSearch
-**172 unique packages, 403 malicious versions** across npm + PyPI. Operated by **TeamPCP**. First documented case of malicious npm package carrying **valid SLSA provenance** (published by legitimate pipeline after attacker hijacked the runner).
-→ [advisories/2026-05-tanstack-mini-shai-hulud.md](advisories/2026-05-tanstack-mini-shai-hulud.md)
+### 2026-05-08 — Cursor "Open-Folder" autorun + Git-hook RCE (CVE-2026-26268, CVE-2026-22708, CVE-2026-32202)
+Three Cursor IDE flaws: malicious Git pre-commit hooks in nested bare repos execute on agent autopilot; shell built-ins bypass Auto-Run allowlist; Workspace Trust off by default. Opening or cloning an untrusted repo is a silent-RCE primitive. Patched in **Cursor 2.5**.
+→ [advisories/2026-05-cursor-open-folder-autorun.md](advisories/2026-05-cursor-open-folder-autorun.md)
+
+### 2026-05-07 — Microsoft Semantic Kernel — prompt-injection-to-RCE (CVE-2026-25592, CVE-2026-26030)
+.NET SDK: `[KernelFunction]`-exposed `DownloadFileAsync` lets prompt-injected agent escape Azure Container Apps Python sandbox. **CVSS 10.0**. Python SDK: `InMemoryVectorStore` filter uses `eval()` on user-influenced input. **CVSS 9.9**. Patch .NET 1.71.0 / Python 1.39.4.
+→ [advisories/2026-05-semantic-kernel-rce.md](advisories/2026-05-semantic-kernel-rce.md)
+
+### 2026-05-06 → 05-07 — Next.js + React May 2026 security release (13 CVEs)
+Headline: **CVE-2026-44578 (CVSS 8.6) — unauthenticated SSRF** in WebSocket upgrade handler, all self-hosted Next.js 13.4.13+ (Vercel-hosted unaffected). ~79K vulnerable instances on Shodan. **CVE-2026-23870** is an upstream React Server Components DoS. Upgrade to **Next.js 15.5.18 / 16.2.6**.
+→ [advisories/2026-05-nextjs-react-security-release.md](advisories/2026-05-nextjs-react-security-release.md)
+
+### 2026-05 — Windsurf zero-click MCP RCE (CVE-2026-30615)
+Prompt injection in MCP-fetched content writes to `mcp.json` and auto-registers attacker-controlled server — **no user interaction**. CVSS 8.0. Patched in Windsurf > 1.9544.26. Cursor / Claude Code / Gemini-CLI have the same class issue; vendors declined to issue CVEs.
+→ [advisories/2026-05-windsurf-zero-click-mcp-rce.md](advisories/2026-05-windsurf-zero-click-mcp-rce.md)
 
 ### 2026-04 (ongoing) — Mini Shai-Hulud SAP packages
 `mbt`, `@cap-js/db-service`, `@cap-js/postgres`, `@cap-js/sqlite` compromised. Same TeamPCP playbook. Harvests local dev creds, GH/npm tokens, cloud creds.
 → [advisories/2026-04-mini-shai-hulud-sap.md](advisories/2026-04-mini-shai-hulud-sap.md)
+
+### 2026-04-30 — PyTorch Lightning + intercom-client (Mini Shai-Hulud cross-ecosystem)
+`pytorch-lightning` 2.6.2/2.6.3 (PyPI) and `intercom-client@7.0.4` (npm) shipped with hidden `_runtime/router_runtime.js` (~11 MB Bun JS payload). Steals cloud creds, GitHub/npm tokens, Claude Code + VS Code config. Plants `.claude/setup.mjs` and `.vscode/tasks.json` postinstall hooks in victim repos. Caught in ~42 minutes. Downgrade to **2.6.1**. Same threat actor (TeamPCP) as TanStack wave 11 days later.
+→ [advisories/2026-04-pytorch-lightning-compromise.md](advisories/2026-04-pytorch-lightning-compromise.md)
 
 ### 2026-04 — "Comment and Control" prompt injection (Claude Code Sec Review / Gemini CLI / Copilot Agent)
 CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI agent to exfiltrate Actions runner secrets. All three vendors patched.
@@ -39,6 +63,14 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 ### 2026-03-31 — `axios` compromise (70M+ weekly downloads)
 Two malicious Axios versions connected to Sapphire Sleet C2 to pull a RAT. Auto-update enabled = silent infection. Removed but inspect lockfiles from late March.
 → [advisories/2026-03-axios-compromise.md](advisories/2026-03-axios-compromise.md)
+
+### 2026-03-31 — Claude Code source-map leak (~512K lines of internal TypeScript)
+Missing `*.map` entry in `.npmignore` shipped a 59.8 MB source map exposing 512,000 lines of Claude Code internals. No model weights or user data leaked. Subsequent Claude Code CVE cadence accelerated as researchers reverse-engineered internals. Patched within a day.
+→ [advisories/2026-03-claude-code-source-map-leak.md](advisories/2026-03-claude-code-source-map-leak.md)
+
+### 2026-02-28 — Google Antigravity Secure Mode sandbox escape
+Pillar Security: `find_by_name` tool exposed `fd -X` flag injection *before* Secure Mode's network/sandbox checks fired. Single prompt injection → arbitrary RCE outside the sandbox. Disclosed 2026-01-07, patched 2026-02-28.
+→ [advisories/2026-02-google-antigravity-sandbox-escape.md](advisories/2026-02-google-antigravity-sandbox-escape.md)
 
 ### 2025-11-24 — Shai-Hulud "The Second Coming"
 492 packages (132M monthly downloads), Zapier / ENS / PostHog / Postman trojanized. 25,000+ malicious GitHub repos. Aligned with npm classic-token revocation deadline.
@@ -76,8 +108,8 @@ Demonstrated by Simon Willison / General Analysis: Cursor + Supabase MCP with `s
 
 ## 🟡 HISTORICAL — patched, but pattern recurs
 
-### 2025-08 → 2026-Q1 — Claude Code InversePrompt (CVE-2025-54794, CVE-2025-54795, CVE-2025-59536, CVE-2026-21852, CVE-2026-33068, TrustFall)
-Indirect prompt injection chains that turn Claude Code's own tool use against the user. Anthropic has patched all listed. The *class* of attack (hidden text in fetched content, MCP-delivered prompts, malicious env config) keeps recurring — see also [Comment and Control](advisories/2026-04-comment-and-control-pr-injection.md).
+### 2025-08 → 2026-Q2 — Claude Code InversePrompt + May 2026 CVE cluster (CVE-2025-54794/54795, CVE-2025-59536, CVE-2026-21852, CVE-2026-33068, CVE-2026-24887, CVE-2026-35021, CVE-2026-39861, CVE-2026-35603, TrustFall)
+Indirect prompt injection chains that turn Claude Code's own tool use against the user. May 2026 added find-command bypass, prompt-editor command injection, symlink-following sandbox escape, and privilege escalation. Anthropic has patched all listed; cadence accelerated after the [source-map leak](advisories/2026-03-claude-code-source-map-leak.md). The *class* of attack (hidden text in fetched content, MCP-delivered prompts, malicious env config) keeps recurring — see also [Comment and Control](advisories/2026-04-comment-and-control-pr-injection.md).
 → [advisories/2025-08-claude-code-inverseprompt.md](advisories/2025-08-claude-code-inverseprompt.md)
 
 ### Ongoing — Slopsquatting (AI-hallucinated package names)
@@ -85,7 +117,7 @@ LLMs invent package names that don't exist. Attackers register them. Next user w
 → [advisories/ongoing-slopsquatting.md](advisories/ongoing-slopsquatting.md)
 
 ### Ongoing — Lovable / Bolt / Replit data exposure patterns
-Lovable BOLA left open 48 days. Bolt env-var leakage. Replit public repls leaking secrets. RLS misconfigurations across thousands of vibe-coded apps. Class issue, not single incident. (Replit shipped Security Agent in April 2026 and Workspace Security Center 2.0 on May 8, 2026 — partial defender response.)
+Lovable BOLA left open 48 days. Bolt env-var leakage. Replit public repls leaking secrets. RLS misconfigurations across thousands of vibe-coded apps. **May 2026:** RedAccess scanned 380K vibe-coded apps and found ~5K leaking medical / financial / customer-service data. Class issue, not single incident. (Replit shipped Security Agent in April 2026 and Workspace Security Center 2.0 on May 8, 2026 — partial defender response.)
 → [advisories/ongoing-vibe-platform-exposure.md](advisories/ongoing-vibe-platform-exposure.md)
 
 ---

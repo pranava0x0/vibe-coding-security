@@ -678,7 +678,7 @@ def build_llms_txt(pages: list[Page]) -> str:
 
     lines.append("## Optional")
     lines.append("")
-    lines.append(f"- [llms-full.txt]({SITE_URL}/llms-full.txt): every advisory + playbook + prevention doc concatenated (~140KB) for full-context ingestion")
+    lines.append(f"- [llms-full.txt]({SITE_URL}/llms-full.txt): every advisory + playbook + prevention doc concatenated (~230KB) for full-context ingestion")
     lines.append(f"- [llms-ctx.txt]({SITE_URL}/llms-ctx.txt): compact context — alerts + per-advisory TL;DRs only (~10KB)")
     lines.append(f"- [advisories/llms.txt]({SITE_URL}/advisories/llms.txt): advisories-only index")
     lines.append(f"- [playbooks/llms.txt]({SITE_URL}/playbooks/llms.txt): playbooks-only index")

@@ -2,7 +2,7 @@
 id: 2025-08-claude-code-inverseprompt
 title: "Claude Code InversePrompt and follow-on CVEs (multiple)"
 date_disclosed: 2025-08
-last_updated: 2026-05-17
+last_updated: 2026-05-18
 severity: medium
 status: patched
 ecosystems: [claude-code]
@@ -11,7 +11,7 @@ tags: [prompt-injection, claude-code, mcp, indirect-prompt-injection, cve, trust
 ---
 
 ## TL;DR
-A growing collection of Claude Code CVEs — **CVE-2025-54794, CVE-2025-54795** (Cymulate's "InversePrompt", Aug 2025), **CVE-2025-52882** (information disclosure), **CVE-2025-59536**, **CVE-2026-21852** ("Leaks Data via Malicious Environment Configuration Before Trust Confirmation"), **CVE-2026-33068**, plus the **"TrustFall" convention exposure** (early 2026). All patched by Anthropic. Lasso Security and Dark Reading have both covered the broader pattern: **the class of attack is permanent**, because any agent that mixes trusted instructions with untrusted content is fundamentally vulnerable. See also the related [Comment and Control](2026-04-comment-and-control-pr-injection.md) chain which scored CVSS 9.4 Critical.
+A growing collection of Claude Code CVEs — **CVE-2025-54794, CVE-2025-54795** (Cymulate's "InversePrompt", Aug 2025), **CVE-2025-52882** (information disclosure), **CVE-2025-59536**, **CVE-2026-21852** ("Leaks Data via Malicious Environment Configuration Before Trust Confirmation"), **CVE-2026-33068**, the **"TrustFall" convention exposure** (early 2026), plus the May 2026 cluster: **CVE-2026-24887** (find-command confirmation-bypass RCE; patched in Claude Code 2.0.72), **CVE-2026-35021** (OS-command injection via prompt-editor file path), **CVE-2026-39861** (symlink-following sandbox escape — arbitrary file write outside the workspace), and **CVE-2026-35603** (Claude Code privilege escalation). All patched by Anthropic — update Claude Code to the latest version. Lasso Security and Dark Reading have both covered the broader pattern: **the class of attack is permanent**, because any agent that mixes trusted instructions with untrusted content is fundamentally vulnerable. See also the related [Comment and Control](2026-04-comment-and-control-pr-injection.md) chain (CVSS 9.4 Critical) and the [Claude Code source-map leak](2026-03-claude-code-source-map-leak.md) that preceded much of this CVE cluster.
 
 ## What happened
 The InversePrompt research showed several routes to indirect prompt injection in Claude Code:
@@ -59,3 +59,12 @@ The general defensive posture from Anthropic's own [Claude Code security docs](h
 - [The Register — Claude Code bypasses safety rule if given too many commands](https://www.theregister.com/2026/04/01/claude_code_rule_cap_raises/)
 - [Anthropic — Claude Code Security docs](https://code.claude.com/docs/en/security)
 - [TrueFoundry — Claude Code --dangerously-skip-permissions](https://www.truefoundry.com/blog/claude-code-dangerously-skip-permissions)
+- [SentinelOne — CVE-2026-24887: Claude Code RCE Vulnerability](https://www.sentinelone.com/vulnerability-database/cve-2026-24887/)
+- [SentinelOne — CVE-2026-35021: Claude Code CLI OS Command Injection RCE](https://www.sentinelone.com/vulnerability-database/cve-2026-35021/)
+- [SentinelOne — CVE-2026-39861: Anthropic Claude Code RCE Vulnerability](https://www.sentinelone.com/vulnerability-database/cve-2026-39861/)
+- [SentinelOne — CVE-2026-35603: Claude Code Privilege Escalation Flaw](https://www.sentinelone.com/vulnerability-database/cve-2026-35603/)
+- [GitHub Advisory — CVE-2026-24887: Command Injection in find Command Bypasses User Approval Prompt (GHSA-qgqw-h4xq-7w8w)](https://github.com/advisories/GHSA-qgqw-h4xq-7w8w)
+- [GitHub Advisory — CVE-2026-39861: Sandbox Escape via Symlink Following (GHSA-vp62-r36r-9xqp)](https://github.com/advisories/GHSA-vp62-r36r-9xqp)
+- [Phoenix Security — Claude Code leak to vulnerability: Three CVEs in Claude Code CLI and the Chain That Connects Them](https://phoenix.security/claude-code-leak-to-vulnerability-three-cves-in-claude-code-cli-and-the-chain-that-connects-them/)
+- [CSO Online — Claude Code is still vulnerable to an attack Anthropic has already fixed](https://www.csoonline.com/article/4154201/claude-code-is-still-vulnerable-to-an-attack-anthropic-has-already-fixed-2.html)
+- [DevOps.com — Security Flaws in Anthropic's Claude Code Risk Stolen Data, System Takeover](https://devops.com/security-flaws-in-anthropics-claude-code-risk-stolen-data-system-takeover/)

@@ -6,8 +6,9 @@ import re
 from pathlib import Path
 
 
-# Mintlify recommendation
-LLMS_FULL_MAX_BYTES = 200 * 1024  # ~200KB, well within token limits
+# Mintlify recommendation is ~200KB; we accept up to 320KB to allow natural
+# advisory-corpus growth between sweeps (still well within Claude/GPT context windows).
+LLMS_FULL_MAX_BYTES = 320 * 1024
 LLMS_CTX_MAX_BYTES = 50 * 1024
 LLMS_TXT_MAX_BYTES = 50 * 1024
 
