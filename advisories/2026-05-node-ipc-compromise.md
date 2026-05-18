@@ -2,7 +2,7 @@
 id: 2026-05-node-ipc-compromise
 title: "node-ipc compromise (3 malicious versions, May 2026)"
 date_disclosed: 2026-05-14
-last_updated: 2026-05-17
+last_updated: 2026-05-18
 severity: critical
 status: active
 ecosystems: [npm]
@@ -44,6 +44,7 @@ npm ls node-ipc --all | grep -E '9\.1\.6|9\.2\.3|12\.0\.1'
 | Temp dir pattern | `$TMPDIR/nt-*` |
 | Process env flag | `__ntw=1` |
 | Forensic marker | Every file in malicious tarball timestamped `1985-10-26` |
+| Publisher account | `atiertant` (a.tiertant@atlantis-software[.]net) — not a prior maintainer |
 
 ```bash
 # Lockfile spot-check
@@ -77,3 +78,5 @@ If any malicious version was on a dev machine or CI runner, treat the host as co
 - [Cybersecurity News — node-ipc npm Package with 822K Weekly Downloads Compromised](https://cybersecuritynews.com/node-ipc-npm-package-compromised/)
 - [Upwind — Malicious node-ipc npm Package Targets Developer Credentials](https://www.upwind.io/feed/malicious-node-ipc-npm-package-credential-theft)
 - [The Register — Another npm supply chain worm hits dev environments](https://www.theregister.com/2026/04/22/another_npm_supply_chain_attack/)
+- [Datadog Security Labs — Backdoored node-ipc npm releases steal developer credentials through DNS queries](https://securitylabs.datadoghq.com/articles/node-ipc-npm-malware-analysis/)
+- [StepSecurity X post — BREAKING: node-ipc compromised. Again.](https://x.com/step_security/status/2054965387041874223)
