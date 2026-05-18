@@ -4,13 +4,21 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-05-13 | [OpenClaw "Claw Chain" — 4 sandbox-escape CVEs](2026-05-openclaw-claw-chain.md) | critical | patched |
 | 2026-05-13 | [Systemic MCP stdio RCE class](2026-05-mcp-stdio-systemic-rce.md) | high | mitigated |
-| 2026-05 | [Windsurf zero-click MCP RCE (CVE-2026-30615)](2026-05-windsurf-zero-click-mcp-rce.md) | critical | patched |
 | 2026-05-14 | [node-ipc compromise](2026-05-node-ipc-compromise.md) | critical | active |
+| 2026-05-11 | [PraisonAI auth bypass (CVE-2026-44338)](2026-05-praisonai-auth-bypass.md) | high | patched |
 | 2026-05-11 | [Mini Shai-Hulud wave — TanStack/Mistral/UiPath/OpenSearch](2026-05-tanstack-mini-shai-hulud.md) | critical | active |
+| 2026-05-08 | [Cursor open-folder + Git-hook RCE](2026-05-cursor-open-folder-autorun.md) | high | patched |
+| 2026-05-07 | [Microsoft Semantic Kernel RCE (CVE-2026-25592 / CVE-2026-26030)](2026-05-semantic-kernel-rce.md) | critical | patched |
+| 2026-05-06 | [Next.js + React May 2026 security release (13 CVEs)](2026-05-nextjs-react-security-release.md) | high | patched |
+| 2026-05 | [Windsurf zero-click MCP RCE (CVE-2026-30615)](2026-05-windsurf-zero-click-mcp-rce.md) | critical | patched |
+| 2026-04-30 | [PyTorch Lightning + intercom-client (Mini Shai-Hulud)](2026-04-pytorch-lightning-compromise.md) | critical | contained |
 | 2026-04 | [Mini Shai-Hulud SAP packages](2026-04-mini-shai-hulud-sap.md) | high | active |
 | 2026-04 | ["Comment and Control" PR prompt injection](2026-04-comment-and-control-pr-injection.md) | critical | patched |
 | 2026-03-31 | [Axios compromise](2026-03-axios-compromise.md) | critical | contained |
+| 2026-03-31 | [Claude Code source-map leak](2026-03-claude-code-source-map-leak.md) | medium | contained |
+| 2026-02-28 | [Google Antigravity sandbox escape (Pillar)](2026-02-google-antigravity-sandbox-escape.md) | high | patched |
 | 2025-11-24 | [Shai-Hulud "Second Coming"](2025-11-shai-hulud-second-coming.md) | critical | contained |
 | 2025-09-17 | [postmark-mcp backdoor](2025-09-postmark-mcp-backdoor.md) | high | contained |
 | 2025-09-15 | [Shai-Hulud original](2025-09-shai-hulud-original.md) | critical | contained |
