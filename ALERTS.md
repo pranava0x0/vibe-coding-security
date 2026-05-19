@@ -2,11 +2,19 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-05-18. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-05-19. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-05-12 — Claude Code `claude-cli://` deeplink RCE — patched in 2.1.118
+`eagerParseCliFlag()` in `main.tsx` accepted `--settings=` from anywhere in argv, including values smuggled through `--prefill`. The registered `claude-cli://` URL handler turns that into a one-click silent RCE: a malicious link can swap your `~/.claude/settings.json` (hooks) and run any shell command on session start. Researcher: Joernchen / 0day.click. Upgrade immediately.
+→ [advisories/2026-05-claude-code-deeplink-rce.md](advisories/2026-05-claude-code-deeplink-rce.md)
+
+### 2026-05-06 — ClaudeBleed — Claude in Chrome extension hijack (v1.0.70, **partial fix**)
+LayerX: Claude's `externally_connectable` handler trusts *any* other Chrome extension to issue commands to Claude. Zero-permission neighbor extension → Claude drives Gmail, Drive, GitHub on the user's behalf. Anthropic shipped v1.0.70 with extra approval prompts but did not remove the handler; side-panel / privileged-mode bypass still works. Treat as **mitigated, not patched**.
+→ [advisories/2026-05-claudebleed-chrome-extension.md](advisories/2026-05-claudebleed-chrome-extension.md)
 
 ### 2026-05-13 — OpenClaw "Claw Chain" (CVE-2026-44112/44113/44115/44118)
 Four chainable flaws in **OpenClaw** AI agent — TOCTOU sandbox-escape (read + write), here-doc allowlist bypass, owner impersonation. ~245K public instances; 63% with no auth. Patched in **OpenClaw 2026.4.22**. If you exposed an instance: assume full compromise.
@@ -59,6 +67,18 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 ---
 
 ## 🟠 RECENT — verify exposure
+
+### 2026-04-19 — Vercel breach via Context.ai OAuth supply chain
+Lumma Stealer compromised a Context.ai employee → attackers used the Workspace OAuth grant to pivot into a Vercel employee's account, then into Vercel internals, then enumerated/decrypted non-sensitive customer environment variables. Encrypted "sensitive" env vars, Next.js / Turbopack source, and npm packages were not touched. First widely documented "AI tool → cloud platform" OAuth pivot. Rotate everything in non-sensitive env vars and mark every credential as sensitive going forward.
+→ [advisories/2026-04-vercel-context-ai-breach.md](advisories/2026-04-vercel-context-ai-breach.md)
+
+### 2026-02-17 — Cline `2.3.0` supply-chain compromise — "Clinejection" → OpenClaw payload
+GitHub-issue-title prompt injection → Cline's own AI triage bot ran attacker-controlled `npm install` → Cacheract poisoned the Actions cache → next publish workflow restored poisoned cache and leaked `NPM_RELEASE_TOKEN` → attacker pushed `cline@2.3.0` with a `postinstall` script installing **OpenClaw** as a system daemon. ~4,000 installs in 8h before takedown. Cline's rotation hit the wrong token. Researcher: Adnan Khan.
+→ [advisories/2026-02-cline-clinejection.md](advisories/2026-02-cline-clinejection.md)
+
+### 2025-12-23 — LangChain LangGrinch + path traversal (CVE-2025-68664 / CVE-2026-34070)
+`langchain-core`'s `dumps()`/`dumpd()` did not escape user dicts containing the reserved `"lc"` key → attacker-controlled round-trip can instantiate framework classes, render Jinja2, read env vars, reach RCE. Patched in `langchain-core` 0.3.81 / 1.2.5 (LangGrinch) and 1.2.22 (CVE-2026-34070 path traversal). LangChain at ~98M downloads/month — anything that loads user-influenced JSON through LangChain's serializer is in scope.
+→ [advisories/2025-12-langchain-langgrinch.md](advisories/2025-12-langchain-langgrinch.md)
 
 ### 2026-03-31 — `axios` compromise (70M+ weekly downloads)
 Two malicious Axios versions connected to Sapphire Sleet C2 to pull a RAT. Auto-update enabled = silent infection. Removed but inspect lockfiles from late March.
