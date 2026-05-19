@@ -48,7 +48,8 @@ Run these in **a single message with parallel WebSearch calls**. Three depth tie
 - "Lovable / Bolt / v0 / Replit security {today.year}"
 - "AI coding assistant security incident {today.year}"
 - "PyPI malicious package supply chain {today.year}"
-- "AI agent framework CVE {today.year}" — rotate framework names: Semantic Kernel / LangChain / OpenClaw / PraisonAI / Langflow / aider / OpenHands / SWE-agent. As of 2026-Q2 this is a top attack-surface category (decorator-as-documentation pattern → RCE).
+- "AI agent framework CVE {today.year}" — rotate framework names: Semantic Kernel / LangChain / OpenClaw / PraisonAI / Langflow / aider / OpenHands / SWE-agent / Cline. As of 2026-Q2 this is a top attack-surface category (decorator-as-documentation pattern → RCE). LangChain in particular sits on ~98M downloads/month — assume any LangGrinch-class finding is high-impact.
+- "AI tool OAuth supply chain breach {today.year}" — third-party AI productivity tools (Context.ai, Cline, meeting-notes assistants) granted Workspace/Drive/GitHub OAuth are an upstream-access path into the platforms they connect to. Watch for "[AI tool] employee compromised → [cloud platform] breach" chains; the Vercel/Context.ai April 2026 case is the template.
 
 For each query, prepend top sources from `source-priorities.json` (top 10 by weight) via the `allowed_domains` filter on rotating subsets so we don't miss high-signal pages buried under news aggregators.
 
@@ -59,15 +60,17 @@ For each query, prepend top sources from `source-priorities.json` (top 10 by wei
 - "{tool-vendor} security advisory" — rotate vendor across:
   - **IDEs/agents:** Cursor, Anthropic (Claude Code), Windsurf, Google (Antigravity), Cline, aider, OpenHands, OpenClaw
   - **Vibe-coding platforms:** Lovable, Bolt, v0, Replit, Base44
-  - **Web frameworks:** Vercel (Next.js), React/Meta, Svelte, Tailwind, Vite
-  - **Backend/Auth/DB:** Supabase, Prisma, NextAuth.js, FastAPI, Streamlit, Google AI Studio SDK
-  - **Agent SDKs:** Microsoft (Semantic Kernel), LangChain, PraisonAI
+  - **Web frameworks:** Vercel (Next.js), React/Meta, Svelte, Tailwind, Vite, Shadcn UI
+  - **Backend/Auth/DB:** Supabase, Prisma, NextAuth.js / Auth.js, FastAPI, Streamlit, Google AI Studio SDK
+  - **Agent SDKs:** Microsoft (Semantic Kernel), LangChain / LangGraph, PraisonAI
+  - **AI-adjacent third parties** (OAuth-pivot surface — Vercel/Context.ai April 2026 template): meeting-notes / inbox / calendar AI tools that hold Workspace OAuth grants — Context.ai, Granola, Otter, etc. A breach at any of them now is upstream of every platform they're connected to.
 - "{vendor} coordinated security release {today.year}" — catches multi-CVE rollups (Vercel May 2026 shipped 13 in one batch; Anthropic similar cadence post-source-leak).
 
 **Tier C — SHALLOW (7-day window).** ~3 parallel queries to catch slower-moving stories and social-media disclosure:
 - "vibe coding security incident week {today.year}"
 - "AI agent CVE OR security disclosed {today.year}"
 - "vibe coding security site:substack.com OR site:x.com OR site:bsky.app {today.year}" — Substack newsletters (vibecodingweekly, mvidmar, ipenewsletter) and security-research X/Bluesky posts (StepSecurity, Snyk, Aikido, Socket) regularly break new IOCs hours before traditional aggregators pick them up. Also probe `news.ycombinator.com` and `reddit.com/r/{programming,netsec,cybersecurity}` discussions for first-hand reports.
+- **Researcher blogs are upstream of aggregators.** Many primary disclosures land on the researcher's own domain (e.g., 0day.click, cyata.ai, layerxsecurity.com, pillar.security, oasis.security, danusminimus.github.io) hours-to-days before The Hacker News / Cybersecurity News mirror them. If a Tier-A aggregator query surfaces a story citing "researcher X at firm Y," go fetch firm Y's own writeup directly — that's the canonical IOC source. Add the researcher domain to `source-priorities.json` at weight 10–11 on first hit even if it's single-source, because subsequent runs will benefit.
 
 Don't repeat queries already run within the last 24h (check `runs.log.md`).
 
@@ -203,3 +206,7 @@ Use `weight` to:
 - **Treat AI-agent framework CVEs as time-critical.** As of 2026-Q2, baseline disclosure-to-exploit is < 4 hours (per Sysdig honeypot data on PraisonAI). Prioritize these in triage and write them up same-day even if only 2 sources are available.
 - **Cross-link cross-ecosystem worms.** When the same threat actor or payload appears in multiple ecosystems, cross-link the advisories explicitly (see Mini Shai-Hulud: TanStack ↔ PyTorch Lightning). Don't let the npm advisory and the PyPI advisory live in isolation.
 - **Decorator-as-documentation pattern.** Watch specifically for vulnerabilities where an SDK annotation (`[KernelFunction]`, `@tool`, `@function_tool`, FastAPI's `@app.get`) is treated as documentation rather than a security boundary. This is now a known recurring class. When you see one, look for sibling vulnerabilities in the same SDK.
+- **Argv-smuggling / pre-parser pattern.** When an AI-tool CLI has an "eager" pre-parser that walks `process.argv` looking for a flag (Claude Code's `eagerParseCliFlag`, Cursor's auto-run built-in handling), it usually doesn't track whether the matched string is itself the *value* of another flag. Result: an attacker who controls *any* argv element (via deeplink, URL handler, MCP tool reply, etc.) can smuggle in arbitrary flag values. Same shape as the InversePrompt cluster. Look for it whenever a vendor ships a deeplink/URL scheme + a CLI that reads settings from argv.
+- **AI-tool OAuth pivot pattern.** A breach at a third-party AI productivity tool that holds Workspace/Drive/GitHub OAuth grants is upstream of every cloud account that authorized it. The Vercel/Context.ai April 2026 incident is the first widely documented case; expect more. When triaging an AI-vendor breach disclosure, check what *other* platforms the breached tool had OAuth into — those are downstream victims.
+- **Vendor patched ≠ patched.** If a vendor ships a fix that adds approval prompts or alerts but leaves the underlying trust-boundary intact (cf. ClaudeBleed v1.0.70), the correct status is `mitigated`, not `patched`. Don't auto-promote based on "vendor released a version." Read the researcher's follow-up and confirm the structural fix.
+- **AI-agent → AI-agent supply chain.** Recurring: one compromised AI tool installs a second AI agent on victims (Clinejection → OpenClaw via npm postinstall; Comment and Control → exfil via Claude Code Sec Review). When you find a compromised AI dev tool, check whether the payload installs *another* known AI agent — cross-link both advisories.

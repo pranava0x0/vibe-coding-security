@@ -4,6 +4,8 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-05-12 | [Claude Code `claude-cli://` deeplink RCE (2.1.118)](2026-05-claude-code-deeplink-rce.md) | critical | patched |
+| 2026-05-06 | [ClaudeBleed — Claude in Chrome extension hijack](2026-05-claudebleed-chrome-extension.md) | high | mitigated |
 | 2026-05-13 | [OpenClaw "Claw Chain" — 4 sandbox-escape CVEs](2026-05-openclaw-claw-chain.md) | critical | patched |
 | 2026-05-13 | [Systemic MCP stdio RCE class](2026-05-mcp-stdio-systemic-rce.md) | high | mitigated |
 | 2026-05-14 | [node-ipc compromise](2026-05-node-ipc-compromise.md) | critical | active |
@@ -14,11 +16,14 @@ One file per incident. Latest at the top.
 | 2026-05-06 | [Next.js + React May 2026 security release (13 CVEs)](2026-05-nextjs-react-security-release.md) | high | patched |
 | 2026-05 | [Windsurf zero-click MCP RCE (CVE-2026-30615)](2026-05-windsurf-zero-click-mcp-rce.md) | critical | patched |
 | 2026-04-30 | [PyTorch Lightning + intercom-client (Mini Shai-Hulud)](2026-04-pytorch-lightning-compromise.md) | critical | contained |
+| 2026-04-19 | [Vercel breach via Context.ai OAuth supply chain](2026-04-vercel-context-ai-breach.md) | high | contained |
 | 2026-04 | [Mini Shai-Hulud SAP packages](2026-04-mini-shai-hulud-sap.md) | high | active |
 | 2026-04 | ["Comment and Control" PR prompt injection](2026-04-comment-and-control-pr-injection.md) | critical | patched |
 | 2026-03-31 | [Axios compromise](2026-03-axios-compromise.md) | critical | contained |
 | 2026-03-31 | [Claude Code source-map leak](2026-03-claude-code-source-map-leak.md) | medium | contained |
 | 2026-02-28 | [Google Antigravity sandbox escape (Pillar)](2026-02-google-antigravity-sandbox-escape.md) | high | patched |
+| 2026-02-17 | [Cline 2.3.0 supply-chain compromise (Clinejection → OpenClaw)](2026-02-cline-clinejection.md) | critical | contained |
+| 2025-12-23 | [LangChain LangGrinch (CVE-2025-68664) + path traversal (CVE-2026-34070)](2025-12-langchain-langgrinch.md) | critical | patched |
 | 2025-11-24 | [Shai-Hulud "Second Coming"](2025-11-shai-hulud-second-coming.md) | critical | contained |
 | 2025-09-17 | [postmark-mcp backdoor](2025-09-postmark-mcp-backdoor.md) | high | contained |
 | 2025-09-15 | [Shai-Hulud original](2025-09-shai-hulud-original.md) | critical | contained |

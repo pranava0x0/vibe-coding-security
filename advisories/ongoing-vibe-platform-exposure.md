@@ -2,7 +2,7 @@
 id: ongoing-vibe-platform-exposure
 title: "Vibe-coded app data exposure — Lovable, Bolt, Replit pattern issues"
 date_disclosed: 2025
-last_updated: 2026-05-18
+last_updated: 2026-05-19
 severity: high
 status: ongoing
 ecosystems: [lovable, bolt, replit, v0, supabase]
@@ -11,7 +11,7 @@ tags: [data-exposure, rls, env-vars, bola, vibe-platform, configuration]
 ---
 
 ## TL;DR
-Systemic data exposure across vibe-coding platforms in 2025–2026. Lovable: 16 critical flaws documented + a BOLA report left open 48 days. Bolt: env-var leakage in client bundles. Replit: secrets exposed via public Repls. Cross-platform: 40–62% of AI-generated code contains vulnerabilities, 91.5% of Q1 2026 vibe-coded apps had at least one AI-hallucination-related flaw. **May 2026 update:** Israeli researcher group **RedAccess scanned ~380,000 publicly accessible vibe-coded apps** (built on Lovable, Base44, Netlify, Replit) and found ~**5,000 leaking sensitive corporate/personal data** — medical records, financial info, full unredacted customer service conversations, internal banking data, shipping-route intel, vendor contracts. Many apps had no authentication at all; many more had a trivial "any email" gate.
+Systemic data exposure across vibe-coding platforms in 2025–2026. Lovable: 16 critical flaws documented + a BOLA report left open 48 days. Bolt: env-var leakage in client bundles. Replit: secrets exposed via public Repls. Cross-platform: 40–62% of AI-generated code contains vulnerabilities, 91.5% of Q1 2026 vibe-coded apps had at least one AI-hallucination-related flaw. **May 2026 update:** Israeli researcher group **RedAccess scanned ~380,000 publicly accessible vibe-coded apps** (built on Lovable, Base44, Netlify, Replit) and found ~**5,000 leaking sensitive corporate/personal data** — medical records, financial info, full unredacted customer service conversations, internal banking data, shipping-route intel, vendor contracts. Many apps had no authentication at all; many more had a trivial "any email" gate. **February 2026 — Moltbook**: a social-networking site built entirely through vibe coding leaked **1.5M authentication tokens and 35K email addresses** via a misconfigured public database; founder publicly admitted he "didn't write one line of code." **Georgia Tech Vibe Security Radar (Q1 2026)**: CVE attribution data shows **35 CVEs in March 2026 alone, up from 6 in January 2026** — a ~6× quarterly increase.
 
 ## What's recurring
 This isn't one incident — it's a pattern. The common shapes:
