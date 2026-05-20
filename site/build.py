@@ -815,10 +815,12 @@ def build_llms_ctx_txt(pages: list[Page]) -> str:
             ] if x
         )
 
-        # Extract just TL;DR section if present
+        # Extract just TL;DR section if present (truncated to keep this variant compact)
         tldr = _extract_section(p.body, "TL;DR") or p.description
+        tldr = tldr.strip()
+        tldr_short = tldr[:500] + "…" if len(tldr) > 500 else tldr
         affected = _extract_section(p.body, "Am I affected?")
-        affected_short = affected[:600] + "…" if affected and len(affected) > 600 else affected
+        affected_short = affected[:450] + "…" if affected and len(affected) > 450 else affected
 
         lines.append(f"## {p.title}")
         lines.append("")
@@ -827,7 +829,7 @@ def build_llms_ctx_txt(pages: list[Page]) -> str:
             lines.append("")
         lines.append(f"URL: {_page_html_url(p)}")
         lines.append("")
-        lines.append(tldr.strip())
+        lines.append(tldr_short)
         lines.append("")
         if affected_short:
             lines.append("**Am I affected?**")

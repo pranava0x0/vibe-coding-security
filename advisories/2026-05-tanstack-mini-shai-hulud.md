@@ -2,7 +2,7 @@
 id: 2026-05-tanstack-mini-shai-hulud
 title: "Mini Shai-Hulud wave — TanStack, Mistral, UiPath, OpenSearch (May 2026)"
 date_disclosed: 2026-05-11
-last_updated: 2026-05-18
+last_updated: 2026-05-20
 severity: critical
 status: active
 ecosystems: [npm, pypi]
@@ -11,7 +11,9 @@ tags: [supply-chain, worm, ci-cd, github-actions, oidc, credential-theft, slsa-p
 ---
 
 ## TL;DR
-Over a 48-hour window on **2026-05-11 → 2026-05-12**, the Mini Shai-Hulud worm — operated by threat actor group **TeamPCP** — compromised **172 unique packages across 403 malicious versions** on npm and PyPI. High-profile scopes hit: **`@tanstack`, `@mistralai`, `@uipath`, `@opensearch-project`**, plus Guardrails AI. Cumulative downloads of affected packages exceed **518 million**. The TanStack subset (~84 versions across 42 `@tanstack/*` packages, including `@tanstack/react-router` ~12.7M weekly downloads) was assigned **CVE-2026-45321 (CVSS 9.6)**. This is the **first documented case of a malicious npm package carrying valid SLSA provenance** — published by the legitimate release pipeline after attacker-controlled code hijacked the runner mid-workflow. Same threat actor is now confirmed to have launched the [PyTorch Lightning compromise](2026-04-pytorch-lightning-compromise.md) on April 30, 2026.
+Over a 48-hour window on **2026-05-11 → 2026-05-12**, the Mini Shai-Hulud worm — operated by threat actor group **TeamPCP** — compromised **172 unique packages across 403 malicious versions** on npm and PyPI. High-profile scopes hit: **`@tanstack`, `@mistralai`, `@uipath`, `@opensearch-project`**, plus Guardrails AI. Cumulative downloads of affected packages exceed **518 million**. The TanStack subset (~84 versions across 42 `@tanstack/*` packages, including `@tanstack/react-router` ~12.7M weekly downloads) was assigned **CVE-2026-45321 (CVSS 9.6)**. This is the **first documented case of a malicious npm package carrying valid SLSA provenance** — published by the legitimate release pipeline after attacker-controlled code hijacked the runner mid-workflow. Same threat actor is now confirmed to have launched the [PyTorch Lightning compromise](2026-04-pytorch-lightning-compromise.md) on April 30, 2026, and went on to hit the [@antv ecosystem + Microsoft `durabletask` on May 19](2026-05-mini-shai-hulud-may19-wave.md) and to breach [GitHub's own internal repos on May 20](2026-05-teampcp-github-breach.md).
+
+> **Campaign context (updated 2026-05-20):** TeamPCP (aka PCPcat / DeadCatx3 / UNC6780) has been the most active supply-chain actor of 2026. The Mini Shai-Hulud campaign began in early March with **Aqua's Trivy** scanner, then cascaded through **Checkmarx KICS**, **LiteLLM**, **Telnyx**, the [SAP scope](2026-04-mini-shai-hulud-sap.md) (April), [PyTorch Lightning](2026-04-pytorch-lightning-compromise.md) (Apr 30), this TanStack/Mistral/UiPath/OpenSearch wave (May 11), [node-ipc](2026-05-node-ipc-compromise.md) (May 14), and the [@antv + durabletask wave](2026-05-mini-shai-hulud-may19-wave.md) (May 19). **Campaign total to date: ~1,055 malicious versions across ~502 unique packages** (npm 1,048, PyPI 6, Composer 1).
 
 ## What happened
 The worm chained three vulnerabilities in GitHub Actions:
