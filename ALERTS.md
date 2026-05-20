@@ -2,11 +2,19 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-05-19. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-05-20. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-05-20 — TeamPCP breaches GitHub's internal repos via poisoned VS Code extension
+GitHub confirmed ~**3,800 internal repositories** exfiltrated after an employee installed a **poisoned VS Code extension**. Actor is **TeamPCP** (PCPcat/DeadCatx3/UNC6780) — same group as the Mini Shai-Hulud worm — who listed the source for sale at **$50K**. No evidence customer data outside internal repos hit (investigation ongoing). Lesson: your IDE extension marketplace is an unaudited supply-chain surface. Disable silent extension auto-update on credential-holding editors.
+→ [advisories/2026-05-teampcp-github-breach.md](advisories/2026-05-teampcp-github-breach.md)
+
+### 2026-05-19 — Mini Shai-Hulud May 19 wave — @antv npm + Microsoft `durabletask` PyPI
+TeamPCP pushed **~637 malicious versions across ~317 npm packages** (the whole `@antv` scope, `echarts-for-react` ~1.1M weekly, `timeago.js`, `size-sensor`) in a 22-min burst, plus trojanized **Microsoft `durabletask`** PyPI versions **1.4.1/1.4.2/1.4.3** (pin to 1.4.0). Payload steals 20+ cred classes, attempts **Docker host-socket escape**, plants VS Code + Claude Code backdoors, and now **self-mints valid Sigstore provenance** (green badge ≠ safe). Campaign total: ~1,055 versions / ~502 packages (npm+PyPI+Composer).
+→ [advisories/2026-05-mini-shai-hulud-may19-wave.md](advisories/2026-05-mini-shai-hulud-may19-wave.md)
 
 ### 2026-05-12 — Claude Code `claude-cli://` deeplink RCE — patched in 2.1.118
 `eagerParseCliFlag()` in `main.tsx` accepted `--settings=` from anywhere in argv, including values smuggled through `--prefill`. The registered `claude-cli://` URL handler turns that into a one-click silent RCE: a malicious link can swap your `~/.claude/settings.json` (hooks) and run any shell command on session start. Researcher: Joernchen / 0day.click. Upgrade immediately.
@@ -87,6 +95,18 @@ Two malicious Axios versions connected to Sapphire Sleet C2 to pull a RAT. Auto-
 ### 2026-03-31 — Claude Code source-map leak (~512K lines of internal TypeScript)
 Missing `*.map` entry in `.npmignore` shipped a 59.8 MB source map exposing 512,000 lines of Claude Code internals. No model weights or user data leaked. Subsequent Claude Code CVE cadence accelerated as researchers reverse-engineered internals. Patched within a day.
 → [advisories/2026-03-claude-code-source-map-leak.md](advisories/2026-03-claude-code-source-map-leak.md)
+
+### 2026-03-27 — OpenHands git-diff command injection (CVE-2026-33718)
+`get_git_diff()` interpolates the `path` param from `/api/conversations/{id}/git/diff` into a `shell=True` command — authenticated attackers run arbitrary commands in the agent sandbox. CVSS HIGH, authenticated-only (but exposed/no-auth instances are common). Fixed in **OpenHands 1.5.0**.
+→ [advisories/2026-03-openhands-git-diff-rce.md](advisories/2026-03-openhands-git-diff-rce.md)
+
+### 2026-03-17 — Langflow unauthenticated RCE (CVE-2026-33017) — CISA KEV
+A single crafted HTTP request to the public flow-build endpoint runs arbitrary Python on any exposed Langflow instance — **no auth**. CVSS 9.8, exploited ~20h after disclosure (NATS-as-C2, AWS-key theft). **Incomplete fix:** 1.8.2 is still exploitable; upgrade to **1.9.0**.
+→ [advisories/2026-03-langflow-rce.md](advisories/2026-03-langflow-rce.md)
+
+### 2026-03-11 — Supabase Auth OIDC issuer-validation bypass (CVE-2026-31813)
+Supabase Auth (`gotrue`) < 2.185.0 doesn't validate the OIDC token issuer when Apple/Azure providers are enabled — an attacker mints signed ID tokens from their own IdP and logs in as **any user**. Account-takeover primitive for self-hosted Supabase, the default backend for most vibe-coded apps. Fix: **2.185.0**.
+→ [advisories/2026-03-supabase-auth-oidc-bypass.md](advisories/2026-03-supabase-auth-oidc-bypass.md)
 
 ### 2026-02-28 — Google Antigravity Secure Mode sandbox escape
 Pillar Security: `find_by_name` tool exposed `fd -X` flag injection *before* Secure Mode's network/sandbox checks fired. Single prompt injection → arbitrary RCE outside the sandbox. Disclosed 2026-01-07, patched 2026-02-28.
