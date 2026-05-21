@@ -2,14 +2,22 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-05-20. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-05-21. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
 
+### 2026-05-20 — Claude Code network-sandbox SOCKS5 null-byte allowlist bypass (silent fix in 2.1.90)
+A host like `attacker-host.com\x00.google.com` passes Claude Code's egress allowlist (matcher sees the trailing `.google.com`) but the OS truncates at the null byte and dials `attacker-host.com`. Affected **v2.0.24 → v2.1.89** (~130 versions / 5.5 months); **silently patched in v2.1.90 (2026-04-01)** — no CVE, no advisory, no changelog note. If you used the sandbox as a real boundary while running untrusted repos/MCP content, rotate any reachable creds. Researcher: Aonan Guan / oddguan.com. Second silently-fixed sandbox bypass in ~5 months.
+→ [advisories/2026-05-claude-code-sandbox-socks5-bypass.md](advisories/2026-05-claude-code-sandbox-socks5-bypass.md)
+
+### 2026-05-18 — Nx Console VS Code extension compromised (nrwl.angular-console 18.95.0)
+Trojanized **Nx Console** (~2.2M installs) live ~**11–18 min** on the VS Code Marketplace. On any `folderOpen` it pulled a **498 KB stealer hidden in a dangling orphan commit inside `nrwl/nx`** and exfiltrated GitHub/npm/AWS/Vault/K8s/1Password secrets — plus **`~/.claude/settings.json`** — over HTTPS + GitHub API + DNS tunneling. Maintainer token leaked in the [TanStack / Mini Shai-Hulud wave](advisories/2026-05-tanstack-mini-shai-hulud.md); this is the **same extension** behind GitHub's ~3,800-repo breach. ~6,000+ may have auto-updated. Disable silent extension auto-update.
+→ [advisories/2026-05-nx-console-vscode-compromise.md](advisories/2026-05-nx-console-vscode-compromise.md)
+
 ### 2026-05-20 — TeamPCP breaches GitHub's internal repos via poisoned VS Code extension
-GitHub confirmed ~**3,800 internal repositories** exfiltrated after an employee installed a **poisoned VS Code extension**. Actor is **TeamPCP** (PCPcat/DeadCatx3/UNC6780) — same group as the Mini Shai-Hulud worm — who listed the source for sale at **$50K**. No evidence customer data outside internal repos hit (investigation ongoing). Lesson: your IDE extension marketplace is an unaudited supply-chain surface. Disable silent extension auto-update on credential-holding editors.
+GitHub confirmed ~**3,800 internal repositories** exfiltrated after an employee installed a **poisoned VS Code extension** — now named as the trojanized **[Nx Console `nrwl.angular-console@18.95.0`](advisories/2026-05-nx-console-vscode-compromise.md)**, linked to the [TanStack / Mini Shai-Hulud wave](advisories/2026-05-tanstack-mini-shai-hulud.md). Actor is **TeamPCP** (PCPcat/DeadCatx3/UNC6780) — same group as the Mini Shai-Hulud worm — who listed the source for sale at **$50K**. No evidence customer data outside internal repos hit (investigation ongoing). Lesson: your IDE extension marketplace is an unaudited supply-chain surface. Disable silent extension auto-update on credential-holding editors.
 → [advisories/2026-05-teampcp-github-breach.md](advisories/2026-05-teampcp-github-breach.md)
 
 ### 2026-05-19 — Mini Shai-Hulud May 19 wave — @antv npm + Microsoft `durabletask` PyPI
@@ -29,7 +37,7 @@ Four chainable flaws in **OpenClaw** AI agent — TOCTOU sandbox-escape (read + 
 → [advisories/2026-05-openclaw-claw-chain.md](advisories/2026-05-openclaw-claw-chain.md)
 
 ### 2026-05-13 — Systemic MCP stdio RCE class (~200,000 servers exposed)
-OX Security: 7,000 vulnerable MCP servers on public IPs; ~200,000 total estimated. Three database MCPs (Apache Doris, Alibaba RDS, Apache Pinot) disclosed same window; **Alibaba declined to patch**. Microsoft MCP server hit by CVE-2026-26118.
+OX Security: 7,000 vulnerable MCP servers on public IPs; ~200,000 total estimated. Three database MCPs (Apache Doris, Alibaba RDS, Apache Pinot) disclosed same window; **Alibaba declined to patch**. Microsoft MCP server hit by CVE-2026-26118. Named KEV-listed instance: **nginx-ui "MCPwn" (CVE-2026-33032, CVSS 9.8)** — empty default IP allowlist on `/mcp_message` = unauthenticated full nginx takeover in 2 requests; ~2,600 exposed, exploited in the wild, patch ≥ 2.3.4.
 → [advisories/2026-05-mcp-stdio-systemic-rce.md](advisories/2026-05-mcp-stdio-systemic-rce.md)
 
 ### 2026-05-11 — PraisonAI auth bypass (CVE-2026-44338) — exploited in 3h44m
@@ -112,9 +120,17 @@ Supabase Auth (`gotrue`) < 2.185.0 doesn't validate the OIDC token issuer when A
 Pillar Security: `find_by_name` tool exposed `fd -X` flag injection *before* Secure Mode's network/sandbox checks fired. Single prompt injection → arbitrary RCE outside the sandbox. Disclosed 2026-01-07, patched 2026-02-28.
 → [advisories/2026-02-google-antigravity-sandbox-escape.md](advisories/2026-02-google-antigravity-sandbox-escape.md)
 
+### 2026-02-09 — Claude Desktop Extensions (DXT) zero-click RCE — Anthropic declines to fix
+LayerX: DXT extensions run **unsandboxed with full user privileges**, and Claude will autonomously chain a low-trust reader connector (Google Calendar/email/Drive) into a high-trust local executor. A malicious calendar event + a vague prompt ("check my calendar and take care of it") = **zero-click local RCE, CVSS 10.0**; ~10,000+ users / 50 extensions. Anthropic called it "outside our current threat model" → **no patch**. Distinct from ClaudeBleed (Chrome). Don't co-locate reader and executor MCP servers in one Claude profile.
+→ [advisories/2026-02-claude-desktop-extensions-rce.md](advisories/2026-02-claude-desktop-extensions-rce.md)
+
 ### 2025-11-24 — Shai-Hulud "The Second Coming"
 492 packages (132M monthly downloads), Zapier / ENS / PostHog / Postman trojanized. 25,000+ malicious GitHub repos. Aligned with npm classic-token revocation deadline.
 → [advisories/2025-11-shai-hulud-second-coming.md](advisories/2025-11-shai-hulud-second-coming.md)
+
+### 2025-10-17 — GlassWorm — self-propagating VS Code / Open VSX worm (recurring through 2026)
+First self-propagating worm in VS Code/Open VSX extensions. Hides payload in **invisible Unicode** (literally unreadable in an editor); C2 is an un-takedownable **Solana blockchain dead-drop** + direct IP + Google Calendar. Steals npm/GitHub/Git creds, drains 49 crypto wallets, drops SOCKS proxies + hidden VNC, re-seeds itself. Multiple 2026 waves (Dec 2025; 72+ Open VSX extensions since Jan 31; v2 in Mar–Apr hitting 150+ GitHub repos). Open VSX (Cursor/Windsurf/VSCodium default) is the primary vector.
+→ [advisories/2025-10-glassworm-vscode-worm.md](advisories/2025-10-glassworm-vscode-worm.md)
 
 ### 2025-09-17 — `postmark-mcp` backdoor (first malicious MCP)
 v1.0.16 silently BCC'd every outgoing email to `phan@giftshop[.]club`. Built trust over 15 clean versions. 1,643 downloads before removal.
