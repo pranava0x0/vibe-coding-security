@@ -2,7 +2,7 @@
 id: 2026-05-teampcp-github-breach
 title: "TeamPCP breaches GitHub's internal repos via poisoned VS Code extension (May 2026)"
 date_disclosed: 2026-05-20
-last_updated: 2026-05-20
+last_updated: 2026-05-21
 severity: high
 status: contained
 ecosystems: [vscode, github, npm, pypi]
@@ -11,7 +11,7 @@ tags: [supply-chain, ide-extension, credential-theft, source-code-theft, teampcp
 ---
 
 ## TL;DR
-On **2026-05-20**, GitHub confirmed that attackers exfiltrated **~3,800 of its own internal repositories** after a GitHub employee installed a **poisoned VS Code extension** on their device. The actor is **TeamPCP** (aka PCPcat / DeadCatx3 / UNC6780) — the same group behind the [Mini Shai-Hulud npm/PyPI worm](2026-05-mini-shai-hulud-may19-wave.md) — who listed the stolen source for sale at **$50,000** and threatened to leak it free if no buyer appeared. GitHub says it removed the malicious extension version, isolated the endpoint, and found **no evidence** that customer data stored outside its internal repos was affected (investigation ongoing). The takeaway for vibe coders: your **IDE extension marketplace is an unaudited supply-chain surface** sitting directly on top of every credential your editor can reach.
+On **2026-05-20**, GitHub confirmed that attackers exfiltrated **~3,800 of its own internal repositories** after a GitHub employee installed a **poisoned VS Code extension** on their device. As of **2026-05-21** GitHub and researchers have **named the extension**: the trojanized **Nx Console** build (`nrwl.angular-console` **v18.95.0**) — see the dedicated [Nx Console compromise advisory](2026-05-nx-console-vscode-compromise.md) — and **linked the breach to the [TanStack / Mini Shai-Hulud wave](2026-05-tanstack-mini-shai-hulud.md)**, which leaked the Nx contributor token used to publish it. The actor is **TeamPCP** (aka PCPcat / DeadCatx3 / UNC6780) — the same group behind the [Mini Shai-Hulud npm/PyPI worm](2026-05-mini-shai-hulud-may19-wave.md) — who listed the stolen source for sale at **$50,000** and threatened to leak it free if no buyer appeared. GitHub says it removed the malicious extension version, isolated the endpoint, and found **no evidence** that customer data stored outside its internal repos was affected (investigation ongoing). The takeaway for vibe coders: your **IDE extension marketplace is an unaudited supply-chain surface** sitting directly on top of every credential your editor can reach.
 
 ## What happened
 GitHub launched an investigation after TeamPCP publicly claimed it had breached GitHub's private codebase. GitHub's findings: the attacker compromised a GitHub employee's device through a **malicious version of a Visual Studio Code extension**, then used that foothold to access and exfiltrate GitHub-internal repositories. The attacker's claim of **~3,800 repositories** is, per GitHub, "directionally consistent" with the investigation so far.
@@ -20,7 +20,7 @@ This is the latest escalation in the TeamPCP campaign that has run all year — 
 
 GitHub's response so far: removed the malicious extension version, isolated the compromised endpoint, and began incident response. The company stated it has no evidence customer information outside GitHub-internal repos was impacted, with the caveat that the investigation is ongoing.
 
-> **Note:** at the time of writing the specific malicious extension and its publisher/IOCs have not been publicly named. This advisory will be updated as GitHub and researchers publish concrete indicators. Do not infer a package name that isn't confirmed.
+> **Update 2026-05-21 — extension named.** The malicious extension is now confirmed to be the trojanized **Nx Console** build `nrwl.angular-console@18.95.0`, published 2026-05-18 (live ~11–18 min) using an Nx contributor's GitHub token that had leaked in the [TanStack / Mini Shai-Hulud wave](2026-05-tanstack-mini-shai-hulud.md). The GitHub employee who installed it became TeamPCP's foothold. Full payload/IOC analysis lives in the [Nx Console compromise advisory](2026-05-nx-console-vscode-compromise.md). Other orgs caught in the same credential-leak fallout reportedly include OpenAI, Mistral AI, and Grafana Labs.
 
 ## Am I affected?
 This is a breach of GitHub's *own* internal repos, not a directly distributed payload — so most readers are not directly compromised. The actionable risk is the **attack pattern**: a poisoned IDE extension on a developer machine.
@@ -46,9 +46,10 @@ Things to check:
 |---|---|
 | Threat actor | TeamPCP (aka PCPcat, DeadCatx3, UNC6780) |
 | Initial access vector | Poisoned VS Code extension on employee device |
+| Malicious extension name | **`nrwl.angular-console` (Nx Console) v18.95.0** — see [advisory](2026-05-nx-console-vscode-compromise.md) |
+| Root cause | Nx contributor GitHub token leaked in [TanStack / Mini Shai-Hulud wave](2026-05-tanstack-mini-shai-hulud.md) |
 | Impact | ~3,800 GitHub-internal repositories exfiltrated |
 | Extortion | Source listed for sale at $50,000; leak threat if unsold |
-| Malicious extension name | Not yet publicly disclosed (this advisory will be updated) |
 
 ## If you are affected
 → [playbooks/if-an-mcp-server-was-malicious.md](../playbooks/if-an-mcp-server-was-malicious.md) — closest analogue for "a tool inside my editor was hostile"; same rotation logic applies.
@@ -68,3 +69,6 @@ Things to check:
 - [SecurityAffairs — A Malicious VS Code Extension Just Breached GitHub's Internal Repositories](https://securityaffairs.com/192440/cyber-crime/a-malicious-vs-code-extension-just-breached-github-s-internal-repositories.html)
 - [Phoenix Security — GitHub Internal Repository Breach via Poisoned VS Code Extension (May 2026)](https://phoenix.security/vs-code-extension-malware-github-breach-teampcp-2026/)
 - [Cybernews — GitHub hacked after poisoned VS Code extension infects employee device](https://cybernews.com/security/github-vscode-extension-breach-sourcecode/)
+- [The Hacker News — GitHub Internal Repositories Breached via Malicious Nx Console VS Code Extension](https://thehackernews.com/2026/05/github-internal-repositories-breached.html)
+- [BleepingComputer — GitHub links repo breach to TanStack npm supply-chain attack](https://www.bleepingcomputer.com/news/security/github-links-repo-breach-to-tanstack-npm-supply-chain-attack/)
+- [Aikido — GitHub Breached via VS Code Extension](https://www.aikido.dev/blog/github-breached-vs-code-extension)

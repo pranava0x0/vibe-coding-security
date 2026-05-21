@@ -4,8 +4,10 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-05-20 | [Claude Code network-sandbox SOCKS5 null-byte bypass](2026-05-claude-code-sandbox-socks5-bypass.md) | high | patched |
 | 2026-05-20 | [TeamPCP breaches GitHub internal repos via poisoned VS Code extension](2026-05-teampcp-github-breach.md) | high | contained |
 | 2026-05-19 | [Mini Shai-Hulud May 19 wave — @antv npm + Microsoft durabletask PyPI](2026-05-mini-shai-hulud-may19-wave.md) | critical | active |
+| 2026-05-18 | [Nx Console VS Code extension compromise (nrwl.angular-console 18.95.0)](2026-05-nx-console-vscode-compromise.md) | critical | contained |
 | 2026-05-12 | [Claude Code `claude-cli://` deeplink RCE (2.1.118)](2026-05-claude-code-deeplink-rce.md) | critical | patched |
 | 2026-05-06 | [ClaudeBleed — Claude in Chrome extension hijack](2026-05-claudebleed-chrome-extension.md) | high | mitigated |
 | 2026-05-13 | [OpenClaw "Claw Chain" — 4 sandbox-escape CVEs](2026-05-openclaw-claw-chain.md) | critical | patched |
@@ -28,8 +30,10 @@ One file per incident. Latest at the top.
 | 2026-03-11 | [Supabase Auth OIDC issuer-validation bypass (CVE-2026-31813)](2026-03-supabase-auth-oidc-bypass.md) | high | patched |
 | 2026-02-28 | [Google Antigravity sandbox escape (Pillar)](2026-02-google-antigravity-sandbox-escape.md) | high | patched |
 | 2026-02-17 | [Cline 2.3.0 supply-chain compromise (Clinejection → OpenClaw)](2026-02-cline-clinejection.md) | critical | contained |
+| 2026-02-09 | [Claude Desktop Extensions (DXT) zero-click RCE — Anthropic won't fix](2026-02-claude-desktop-extensions-rce.md) | critical | active |
 | 2025-12-23 | [LangChain LangGrinch (CVE-2025-68664) + path traversal (CVE-2026-34070)](2025-12-langchain-langgrinch.md) | critical | patched |
 | 2025-11-24 | [Shai-Hulud "Second Coming"](2025-11-shai-hulud-second-coming.md) | critical | contained |
+| 2025-10-17 | [GlassWorm — self-propagating VS Code / Open VSX worm](2025-10-glassworm-vscode-worm.md) | high | active |
 | 2025-09-17 | [postmark-mcp backdoor](2025-09-postmark-mcp-backdoor.md) | high | contained |
 | 2025-09-15 | [Shai-Hulud original](2025-09-shai-hulud-original.md) | critical | contained |
 | 2025-09-08 | [qix npm account compromise](2025-09-qix-compromise.md) | critical | contained |
