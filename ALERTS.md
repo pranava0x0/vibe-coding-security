@@ -2,7 +2,7 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-05-21. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-05-22. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
@@ -123,6 +123,10 @@ Pillar Security: `find_by_name` tool exposed `fd -X` flag injection *before* Sec
 ### 2026-02-09 — Claude Desktop Extensions (DXT) zero-click RCE — Anthropic declines to fix
 LayerX: DXT extensions run **unsandboxed with full user privileges**, and Claude will autonomously chain a low-trust reader connector (Google Calendar/email/Drive) into a high-trust local executor. A malicious calendar event + a vague prompt ("check my calendar and take care of it") = **zero-click local RCE, CVSS 10.0**; ~10,000+ users / 50 extensions. Anthropic called it "outside our current threat model" → **no patch**. Distinct from ClaudeBleed (Chrome). Don't co-locate reader and executor MCP servers in one Claude profile.
 → [advisories/2026-02-claude-desktop-extensions-rce.md](advisories/2026-02-claude-desktop-extensions-rce.md)
+
+### 2026-02-01 — ClawHavoc — mass malicious-skill poisoning of OpenClaw's ClawHub marketplace
+Koi Security audited all **2,857 skills** on **ClawHub** (the open-by-default skill marketplace for the self-hosted **OpenClaw** agent, formerly Clawdbot/Moltbot) and found **341 malicious** — **335 from one campaign ("ClawHavoc")** that uses **fake prerequisites** to install **Atomic Stealer (AMOS)**. First malicious skill 2026-01-27, surge 01-31. As the marketplace grew to 10,700+ skills, the count more than doubled (824+; some trackers cite ~1,184). Publishing needs only a **GitHub account a week old**. Installing an AI-agent skill = `curl | bash` — vet the publisher, distrust any "install this first" step.
+→ [advisories/2026-02-clawhavoc-clawhub-skills.md](advisories/2026-02-clawhavoc-clawhub-skills.md)
 
 ### 2025-11-24 — Shai-Hulud "The Second Coming"
 492 packages (132M monthly downloads), Zapier / ENS / PostHog / Postman trojanized. 25,000+ malicious GitHub repos. Aligned with npm classic-token revocation deadline.
