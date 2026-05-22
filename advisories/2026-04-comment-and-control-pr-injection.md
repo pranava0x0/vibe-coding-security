@@ -2,7 +2,7 @@
 id: 2026-04-comment-and-control-pr-injection
 title: "'Comment and Control' — prompt injection via GitHub PRs/issues hits Claude Code Security Review, Gemini CLI Action, Copilot Agent (April 2026)"
 date_disclosed: 2026-04
-last_updated: 2026-05-17
+last_updated: 2026-05-22
 severity: critical
 status: patched
 ecosystems: [claude-code, gemini-cli, github-copilot, github-actions]
@@ -23,6 +23,9 @@ A new contributor (or any internet stranger, on a public repo) opens a PR or iss
 Anthropic's own system card explicitly noted Claude Code Security Review was **"not hardened against prompt injection"** — which is exactly what got exploited.
 
 Bounty awards (a useful proxy for vendor seriousness): Anthropic $100 (despite the CVSS 9.4 rating), Google $1,337, GitHub $500.
+
+### Sibling: Gemini CLI GitHub-issue RCE (CVSS 10.0)
+A separate but mechanically identical flaw in **Google Gemini CLI** earned a full **CVSS 10.0**. In headless mode Gemini CLI **auto-trusts any workspace folder** it's active in for loading config and env vars, and in `--yolo` mode it **ignores tool allowlists and auto-approves every tool call**. An attacker who plants hidden instructions in a **public GitHub issue** on a repo whose auto-triage agent runs in that mode gets arbitrary host command execution — the same "untrusted issue text → AI agent runs commands" shape as Comment and Control. Discovered by Elad Meged (Novee Security) and Dan Lisichkin (Pillar Security); **fixed in `@google/gemini-cli` 0.39.1 and 0.40.0-preview.3**. If you run Gemini CLI in CI, never combine `--yolo` with untrusted workspace content.
 
 ## Am I affected?
 
@@ -68,3 +71,5 @@ The CVE is fixed, but the **pattern is permanent**. Every "AI reads our issues a
 - [Palo Alto Unit 42 — Fooling AI Agents: Web-Based Indirect Prompt Injection Observed in the Wild](https://unit42.paloaltonetworks.com/ai-agent-prompt-injection/)
 - [TechRepublic — Indirect Prompt Injection Is Now a Real-World AI Security Threat](https://www.techrepublic.com/article/news-ai-agents-prompt-injection-data-security/)
 - [Dark Reading — 'TrustFall' Convention Exposes Claude Code Execution Risk](https://www.darkreading.com/application-security/trustfall-exposes-claude-code-execution-risk)
+- [SecurityWeek — Critical Gemini CLI Flaw Enabled Host Code Execution, Supply Chain Attacks](https://www.securityweek.com/critical-gemini-cli-flaw-enabled-host-code-execution-supply-chain-attacks/) — Gemini CLI CVSS 10.0 sibling, fixed 0.39.1.
+- [Pillar Security — My Agentic Trust Issues: From Prompt Injection to Supply-Chain Compromise on gemini-cli](https://www.pillar.security/blog/my-agentic-trust-issues-from-prompt-injection-to-supply-chain-compromise-on-gemini-cli) — canonical research (Novee + Pillar).
