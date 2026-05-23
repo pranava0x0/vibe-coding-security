@@ -2,7 +2,7 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-05-22. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-05-23. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
@@ -84,9 +84,21 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 
 ## 🟠 RECENT — verify exposure
 
+### 2026-04-24 — elementary-data PyPI + GHCR compromise (malicious `.pth` auto-exec)
+`elementary-data==0.23.3` (dbt observability tool, ~**1M+ monthly downloads**) shipped a top-level **`elementary.pth`** that Python auto-execs at *every* interpreter startup — a 3-stage infostealer grabbing cloud tokens, SSH keys, K8s creds, and crypto wallets. The matching **GHCR Docker images were poisoned** (`ghcr.io/elementary-data/elementary`), so every unpinned `pull`/`FROM` ran the trojan. Initial access: a **GitHub Actions script injection** → forged signed release → the *real* publish pipeline. Fixed in **0.23.4**. Pin images by digest; flag `.pth` files in dependencies.
+→ [advisories/2026-04-elementary-data-pypi-ghcr-compromise.md](advisories/2026-04-elementary-data-pypi-ghcr-compromise.md)
+
+### 2026-04-22 — Bitwarden CLI backdoored — first supply-chain malware to hunt AI-tool creds
+`@bitwarden/cli` **v2026.4.0** (npm; ~70K weekly downloads) was live ~**90 min** as one arm of TeamPCP's **"Shai-Hulud: The Third Coming"** Checkmarx-channel campaign. Beyond multi-cloud cred theft + a self-propagating npm worm + GitHub commit dead-drop C2, it carried a **novel module that scrapes authenticated AI coding assistants** — AI-tool config + **MCP files** (Claude Code, Cursor, Codex). Bitwarden vault data was unaffected; the risk is anyone who *installed the poisoned CLI*. Rotate cloud/GitHub/npm tokens and every AI-tool/MCP key.
+→ [advisories/2026-04-bitwarden-cli-shai-hulud-third-coming.md](advisories/2026-04-bitwarden-cli-shai-hulud-third-coming.md)
+
 ### 2026-04-19 — Vercel breach via Context.ai OAuth supply chain
 Lumma Stealer compromised a Context.ai employee → attackers used the Workspace OAuth grant to pivot into a Vercel employee's account, then into Vercel internals, then enumerated/decrypted non-sensitive customer environment variables. Encrypted "sensitive" env vars, Next.js / Turbopack source, and npm packages were not touched. First widely documented "AI tool → cloud platform" OAuth pivot. Rotate everything in non-sensitive env vars and mark every credential as sensitive going forward.
 → [advisories/2026-04-vercel-context-ai-breach.md](advisories/2026-04-vercel-context-ai-breach.md)
+
+### 2026-04-08 — Marimo notebook pre-auth RCE (CVE-2026-39987) — exploited in <10h, CISA KEV
+Marimo's `/terminal/ws` WebSocket endpoint **skips authentication** (every other WS endpoint calls `validate_auth()`), handing any network-reachable attacker a **full PTY shell**. Sysdig saw exploitation **9h 41m** after disclosure (credential theft in <3 min); **CISA KEV** 2026-04-23. Affects **≤ 0.20.4**, fixed in **0.23.0**. Same "AI/data tool ships an unauthenticated network endpoint" class as [Langflow](advisories/2026-03-langflow-rce.md) and [PraisonAI](advisories/2026-05-praisonai-auth-bypass.md) — patch on disclosure, never expose a notebook server.
+→ [advisories/2026-04-marimo-notebook-rce.md](advisories/2026-04-marimo-notebook-rce.md)
 
 ### 2026-02-17 — Cline `2.3.0` supply-chain compromise — "Clinejection" → OpenClaw payload
 GitHub-issue-title prompt injection → Cline's own AI triage bot ran attacker-controlled `npm install` → Cacheract poisoned the Actions cache → next publish workflow restored poisoned cache and leaked `NPM_RELEASE_TOKEN` → attacker pushed `cline@2.3.0` with a `postinstall` script installing **OpenClaw** as a system daemon. ~4,000 installs in 8h before takedown. Cline's rotation hit the wrong token. Researcher: Adnan Khan.
@@ -128,9 +140,17 @@ LayerX: DXT extensions run **unsandboxed with full user privileges**, and Claude
 Koi Security audited all **2,857 skills** on **ClawHub** (the open-by-default skill marketplace for the self-hosted **OpenClaw** agent, formerly Clawdbot/Moltbot) and found **341 malicious** — **335 from one campaign ("ClawHavoc")** that uses **fake prerequisites** to install **Atomic Stealer (AMOS)**. First malicious skill 2026-01-27, surge 01-31. As the marketplace grew to 10,700+ skills, the count more than doubled (824+; some trackers cite ~1,184). Publishing needs only a **GitHub account a week old**. Installing an AI-agent skill = `curl | bash` — vet the publisher, distrust any "install this first" step.
 → [advisories/2026-02-clawhavoc-clawhub-skills.md](advisories/2026-02-clawhavoc-clawhub-skills.md)
 
+### 2026-01-05 — AI IDEs recommend non-existent extensions — OpenVSX namespace hijack
+Koi Security: **Cursor / Windsurf / Antigravity / Trae** recommend extensions that don't exist on **OpenVSX** (the marketplace these forks use), leaving the publisher namespaces **unclaimed** — an attacker registers `ms-ossdata.vscode-postgresql`, uploads malware, and the **IDE itself** prompts "Recommended," which installs with full local privileges. Cursor fixed 2025-12-01; Google fixed 2026-01-01; **Windsurf never responded**. Koi pre-claimed the dangling namespaces; no abuse observed pre-disclosure. Verify any "recommended" extension's publisher on open.vsx.org before installing.
+→ [advisories/2026-01-vscode-fork-recommended-extension-hijack.md](advisories/2026-01-vscode-fork-recommended-extension-hijack.md)
+
 ### 2025-11-24 — Shai-Hulud "The Second Coming"
 492 packages (132M monthly downloads), Zapier / ENS / PostHog / Postman trojanized. 25,000+ malicious GitHub repos. Aligned with npm classic-token revocation deadline.
 → [advisories/2025-11-shai-hulud-second-coming.md](advisories/2025-11-shai-hulud-second-coming.md)
+
+### 2025-10-21 — Cursor & Windsurf ship stale Chromium — 94+ n-day vulns (1.8M devs)
+OX Security ("Forked and Forgotten"): both IDEs lag behind upstream VS Code/Electron, inheriting **94+ already-patched Chromium/V8 n-days**; OX weaponized **CVE-2025-7656** (V8 integer overflow) against the *latest* builds. The exposure is any attacker-controlled web content rendered in the IDE (preview panes, webviews, agent-fetched pages). **Windsurf didn't respond; Cursor dismissed the PoC as "self-inflicted DoS, out of scope."** No per-bug patch — keep the IDE on its newest release and don't open untrusted content inside it.
+→ [advisories/2025-10-cursor-windsurf-chromium-ndays.md](advisories/2025-10-cursor-windsurf-chromium-ndays.md)
 
 ### 2025-10-17 — GlassWorm — self-propagating VS Code / Open VSX worm (recurring through 2026)
 First self-propagating worm in VS Code/Open VSX extensions. Hides payload in **invisible Unicode** (literally unreadable in an editor); C2 is an un-takedownable **Solana blockchain dead-drop** + direct IP + Google Calendar. Steals npm/GitHub/Git creds, drains 49 crypto wallets, drops SOCKS proxies + hidden VNC, re-seeds itself. Multiple 2026 waves (Dec 2025; 72+ Open VSX extensions since Jan 31; v2 in Mar–Apr hitting 150+ GitHub repos). Open VSX (Cursor/Windsurf/VSCodium default) is the primary vector.

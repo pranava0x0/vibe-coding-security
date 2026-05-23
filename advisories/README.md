@@ -20,7 +20,10 @@ One file per incident. Latest at the top.
 | 2026-05-06 | [Next.js + React May 2026 security release (13 CVEs)](2026-05-nextjs-react-security-release.md) | high | patched |
 | 2026-05 | [Windsurf zero-click MCP RCE (CVE-2026-30615)](2026-05-windsurf-zero-click-mcp-rce.md) | critical | patched |
 | 2026-04-30 | [PyTorch Lightning + intercom-client (Mini Shai-Hulud)](2026-04-pytorch-lightning-compromise.md) | critical | contained |
+| 2026-04-24 | [elementary-data PyPI + GHCR compromise (malicious .pth auto-exec)](2026-04-elementary-data-pypi-ghcr-compromise.md) | critical | contained |
+| 2026-04-22 | [Bitwarden CLI backdoored — first AI-tool-cred-hunting supply-chain malware](2026-04-bitwarden-cli-shai-hulud-third-coming.md) | critical | contained |
 | 2026-04-19 | [Vercel breach via Context.ai OAuth supply chain](2026-04-vercel-context-ai-breach.md) | high | contained |
+| 2026-04-08 | [Marimo notebook pre-auth RCE (CVE-2026-39987)](2026-04-marimo-notebook-rce.md) | critical | patched |
 | 2026-04 | [Mini Shai-Hulud SAP packages](2026-04-mini-shai-hulud-sap.md) | high | active |
 | 2026-04 | ["Comment and Control" PR prompt injection](2026-04-comment-and-control-pr-injection.md) | critical | patched |
 | 2026-03-31 | [Axios compromise](2026-03-axios-compromise.md) | critical | contained |
@@ -33,7 +36,9 @@ One file per incident. Latest at the top.
 | 2026-02-09 | [Claude Desktop Extensions (DXT) zero-click RCE — Anthropic won't fix](2026-02-claude-desktop-extensions-rce.md) | critical | active |
 | 2026-02-01 | [ClawHavoc — malicious-skill poisoning of OpenClaw's ClawHub marketplace](2026-02-clawhavoc-clawhub-skills.md) | high | active |
 | 2025-12-23 | [LangChain LangGrinch (CVE-2025-68664) + path traversal (CVE-2026-34070)](2025-12-langchain-langgrinch.md) | critical | patched |
+| 2026-01-05 | [AI IDEs recommend non-existent extensions — OpenVSX namespace hijack](2026-01-vscode-fork-recommended-extension-hijack.md) | high | mitigated |
 | 2025-11-24 | [Shai-Hulud "Second Coming"](2025-11-shai-hulud-second-coming.md) | critical | contained |
+| 2025-10-21 | [Cursor & Windsurf ship stale Chromium — 94+ n-day vulns](2025-10-cursor-windsurf-chromium-ndays.md) | high | active |
 | 2025-10-17 | [GlassWorm — self-propagating VS Code / Open VSX worm](2025-10-glassworm-vscode-worm.md) | high | active |
 | 2025-09-17 | [postmark-mcp backdoor](2025-09-postmark-mcp-backdoor.md) | high | contained |
 | 2025-09-15 | [Shai-Hulud original](2025-09-shai-hulud-original.md) | critical | contained |
