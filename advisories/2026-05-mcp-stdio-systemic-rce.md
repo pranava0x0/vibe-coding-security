@@ -2,7 +2,7 @@
 id: 2026-05-mcp-stdio-systemic-rce
 title: "Systemic MCP stdio RCE class — 200,000+ servers exposed (May 2026)"
 date_disclosed: 2026-05
-last_updated: 2026-05-22
+last_updated: 2026-05-23
 severity: high
 status: mitigated
 ecosystems: [mcp, anthropic-mcp]
@@ -35,6 +35,8 @@ Microsoft's own MCP server has now had **two** disclosures in this class:
 - **CVE-2026-27825 (CVSS 9.1)** — arbitrary file write: the `confluence_download_attachment` tool lacks directory-boundary enforcement, so the attacker writes content to any path the server process can reach.
 - Chained (SSRF → arbitrary write of an executable/cron/config), this is unauthenticated host takeover. Affects **< 0.17.0**; fixed in **0.17.0**, which adds `validate_safe_path()` and `validate_url_for_ssrf()` (path confinement + scheme/domain allowlisting + redirect/localhost/private-IP blocking).
 
+**Named instance — `network-ai` empty-default-secret (CVE-2026-46701):** the MCP SSE server in `network-ai` (npm) **defaults to an empty shared secret**, so its authorization check passes for everyone — an **unauthenticated cross-origin attacker can invoke any MCP tool** (and a sibling path-traversal lets it write arbitrary files on the host). Published 2026-05-21; affects **< 5.4.5**, fixed in **5.4.5**. Same root failure as the others — an MCP surface that ships **open by default** (here the "auth" is real but the default credential is blank).
+
 **Named, KEV-listed instance — nginx-ui "MCPwn" (CVE-2026-33032, CVSS 9.8):** the clearest real-world example of the "MCP endpoint shipped without auth" class. nginx-ui exposes two HTTP MCP endpoints, `/mcp` and `/mcp_message`. `/mcp` requires IP-allowlisting **and** `AuthRequired()` middleware; `/mcp_message` only gets IP-allowlisting — and the **default IP allowlist is empty, which the middleware treats as "allow all."** So an unauthenticated network attacker can invoke all **12 MCP tools** (including `nginx_config_add` with auto-reload) and achieve **full nginx takeover in two HTTP requests**. ~**2,600** exposed instances (Pluto Security / Shodan), **actively exploited**, added to **VulnCheck KEV (2026-04-13)** and named in Recorded Future's most-exploited-CVE list for March 2026. Fixed in **nginx-ui 2.3.4** (2026-03-15); workaround is to add `middleware.AuthRequired()` to `/mcp_message` or flip the IP-allowlist default from allow-all to deny-all. This is an **HTTP-transport** auth-bypass rather than stdio, but it's the same root failure — an MCP surface treated as trusted-by-default.
 
 ## Am I affected?
@@ -45,6 +47,7 @@ You are exposed by the class issue if:
 - You use Microsoft's **Azure MCP Server** — check against **CVE-2026-26118** (SSRF, patched) **and CVE-2026-32211** (missing auth, CVSS 9.1); restrict it to trusted networks until patched.
 - You run **`mcp-atlassian` < 0.17.0** with its HTTP transport reachable (CVE-2026-27825 / -27826 / "MCPwnfluence") — it binds `0.0.0.0` with no auth by default; upgrade to **≥ 0.17.0** now.
 - You run **nginx-ui < 2.3.4** with its MCP endpoint reachable (CVE-2026-33032 / "MCPwn") — patch now; it's in CISA/VulnCheck KEV and exploited in the wild.
+- You run **`network-ai` < 5.4.5** (CVE-2026-46701) — its MCP SSE server ships an **empty default secret**; upgrade to **≥ 5.4.5** and set a non-empty secret.
 
 ```bash
 # Find MCP servers configured in your tools
@@ -94,3 +97,4 @@ OX Security calls this "The Mother of All AI Supply Chains" — making the case 
 - [GitHub — plutosecurity/MCPwnfluence (detection + auto-update script)](https://github.com/plutosecurity/MCPwnfluence)
 - [GitHub Advisory Database — CVE-2026-26118: Azure MCP Server SSRF privilege escalation](https://github.com/advisories/GHSA-hhfx-wfvq-7g9c)
 - [Windows News — CVE-2026-32211: Critical Azure MCP Server Authentication Flaw (CVSS 9.1)](https://windowsnews.ai/article/cve-2026-32211-critical-azure-mcp-server-authentication-flaw-exposes-sensitive-data-cvss-91.409622)
+- [GitLab Advisory Database — CVE-2026-46701: network-ai Unauthenticated Cross-Origin MCP Tool Invocation via Empty Default Secret](https://advisories.gitlab.com/npm/network-ai/CVE-2026-46701/)
