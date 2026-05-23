@@ -2,7 +2,7 @@
 id: 2026-05-cursor-open-folder-autorun
 title: "Cursor 'Open-Folder' autorun + Git-hook RCE (CVE-2026-26268, CVE-2026-22708, CVE-2026-32202, May 2026)"
 date_disclosed: 2026-05-08
-last_updated: 2026-05-18
+last_updated: 2026-05-23
 severity: high
 status: patched
 ecosystems: [cursor, vscode]
@@ -12,6 +12,8 @@ tags: [cve, rce, workspace-trust, git-hooks, autorun, cursor, vscode-task]
 
 ## TL;DR
 A cluster of Cursor IDE vulnerabilities disclosed in May 2026 turn the act of opening — or just cloning — a repo into silent RCE on the developer's machine. **CVE-2026-26268 (Novee, high severity)** — a malicious `.git/hooks/pre-commit` inside a *bare* repo embedded in a parent repo triggers when the agent autonomously runs Git commands. **CVE-2026-22708** — shell built-ins bypass the Cursor Auto-Run allowlist. **CVE-2026-32202 (Oasis Security)** — Workspace Trust is disabled by default, so a malicious `.vscode/tasks.json` with `runOptions.runOn: folderOpen` runs the moment a developer browses a project. All patched in **Cursor 2.5**. Together they mean: do not open or `git clone` an untrusted repo on a vulnerable Cursor install.
+
+> **Related Cursor attack surfaces (different layers of the same stack):** the [OpenVSX recommended-extension hijack](2026-01-vscode-fork-recommended-extension-hijack.md) (the IDE recommends installable malware) and the [stale-Chromium n-day exposure](2025-10-cursor-windsurf-chromium-ndays.md) (94+ unpatched Chromium bugs in the embedded browser).
 
 ## What happened
 
