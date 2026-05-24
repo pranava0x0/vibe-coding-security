@@ -7,6 +7,7 @@ One file per incident. Latest at the top.
 | 2026-05-20 | [Claude Code network-sandbox SOCKS5 null-byte bypass](2026-05-claude-code-sandbox-socks5-bypass.md) | high | patched |
 | 2026-05-20 | [TeamPCP breaches GitHub internal repos via poisoned VS Code extension](2026-05-teampcp-github-breach.md) | high | contained |
 | 2026-05-19 | [Mini Shai-Hulud May 19 wave — @antv npm + Microsoft durabletask PyPI](2026-05-mini-shai-hulud-may19-wave.md) | critical | active |
+| 2026-05-18 | [Shai-Hulud copycats after the worm source went public](2026-05-shai-hulud-copycat-wave.md) | high | active |
 | 2026-05-18 | [Nx Console VS Code extension compromise (nrwl.angular-console 18.95.0)](2026-05-nx-console-vscode-compromise.md) | critical | contained |
 | 2026-05-12 | [Claude Code `claude-cli://` deeplink RCE (2.1.118)](2026-05-claude-code-deeplink-rce.md) | critical | patched |
 | 2026-05-06 | [ClaudeBleed — Claude in Chrome extension hijack](2026-05-claudebleed-chrome-extension.md) | high | mitigated |

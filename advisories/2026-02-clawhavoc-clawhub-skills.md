@@ -2,12 +2,12 @@
 id: 2026-02-clawhavoc-clawhub-skills
 title: "ClawHavoc — mass malicious-skill poisoning of OpenClaw's ClawHub marketplace (February 2026)"
 date_disclosed: 2026-02-01
-last_updated: 2026-05-22
+last_updated: 2026-05-24
 severity: high
 status: active
 ecosystems: [ai-agents, openclaw, clawhub]
-tools_affected: [openclaw, clawdbot, moltbot, clawhub-skills]
-tags: [supply-chain, credential-theft, ai-agent, skill-marketplace, atomic-stealer, amos, malware, koi-security]
+tools_affected: [openclaw, clawdbot, moltbot, clawhub-skills, skills.sh]
+tags: [supply-chain, credential-theft, ai-agent, skill-marketplace, atomic-stealer, amos, malware, koi-security, snyk, toxicskills, prompt-injection]
 ---
 
 ## TL;DR
@@ -22,6 +22,15 @@ Koi Security audited **all 2,857 skills** then on ClawHub and found **341 malici
 - **Camouflage:** the malicious skills span ~25 attack categories built to look useful to developers — browser-automation agents, **coding agents**, LinkedIn/WhatsApp integrations, PDF tools, and even **fake security-scanning skills**.
 - **Growth:** since the initial blog the marketplace grew from 2,857 to **10,700+** skills and Koi's malicious count **more than doubled to 824**; some trackers tally **~1,184** as removals lagged. Because the marketplace is open-by-default, the surface is **ongoing**, not a one-time event.
 
+### Update (May 2026) — Snyk "ToxicSkills": the problem is the whole ecosystem, not one campaign
+Snyk Labs published the first comprehensive security audit of the AI-agent-skill ecosystem, scanning **3,984 skills across ClawHub *and* skills.sh** (snapshot 2026-02-05). The results generalize ClawHavoc from "one bad campaign" to a structural problem:
+
+- **Prompt injection in 36%** of skills tested; **1,467 malicious payloads** across the ecosystem; **534 of 3,984 (13.4%)** carried critical-level issues; 76 confirmed credential-theft / backdoor / exfil payloads. **8 malicious skills were still live on clawhub.ai at publication.**
+- **"ToxicSkills" threat class:** a skill that looks harmless under static review but behaves maliciously *when executed by a capable agent* — the agent itself is the gadget that turns benign-looking instructions into actions.
+- **Runtime-fetch evasion:** **2.9% of ClawHub skills (21% of malicious samples) dynamically fetch and execute remote content at runtime.** The published skill passes review; the attacker swaps the payload later on their own infrastructure. This breaks naive "scan-on-publish" defenses — Snyk's companion piece argues a **skill scanner is often false security** (and can itself be malware).
+- **Second marketplace:** **skills.sh** joins ClawHub as an affected surface; this is a class issue across agent-skill registries, not a single site.
+
+### Why this keeps happening
 This is the AI-agent-skill analogue of the [GlassWorm Open VSX worm](2025-10-glassworm-vscode-worm.md) and the [Nx Console extension compromise](2026-05-nx-console-vscode-compromise.md): an under-governed plugin/extension marketplace becomes a credential-theft delivery channel. It is distinct from the [OpenClaw "Claw Chain" CVEs](2026-05-openclaw-claw-chain.md) (flaws *in* the agent) and the Moltbook token leak (see [vibe platform exposure](ongoing-vibe-platform-exposure.md)) — here the **content in the marketplace** is the threat.
 
 ## Am I affected?
@@ -51,6 +60,7 @@ If a skill triggered an unexpected install step or a macOS password prompt, trea
 → [prevention/agent-sandboxing.md](../prevention/agent-sandboxing.md) — don't run agent skills with your full user privileges
 - Install skills only from publishers you can verify; a one-week-old GitHub account is not a trust signal.
 - Be maximally suspicious of any skill that asks you to install a "prerequisite," run a script, or approve an OS password prompt.
+- A clean static scan is not a clean bill of health: skills that fetch-and-execute remote content at runtime can flip malicious after review (Snyk ToxicSkills). Don't trust a "skill scanner" badge as proof of safety.
 
 ## Sources
 - [Koi Security — ClawHavoc: 341 Malicious ClawedBot Skills Found by the Bot They Were Targeting](https://www.koi.ai/blog/clawhavoc-341-malicious-clawedbot-skills-found-by-the-bot-they-were-targeting) — canonical research, audit method, counts.
@@ -60,3 +70,6 @@ If a skill triggered an unexpected install step or a macOS password prompt, trea
 - [The Register — It's easy to backdoor OpenClaw, and its skills leak API keys](https://www.theregister.com/2026/02/05/openclaw_skills_marketplace_leaky_security/) — open-by-default marketplace critique.
 - [CyberPress — ClawHavoc Poisons OpenClaw's ClawHub With 1,184 Malicious Skills](https://cyberpress.org/clawhavoc-poisons-openclaws-clawhub-with-1184-malicious-skills/) — updated tally.
 - [PointGuard AI — OpenClaw ClawHub Malicious Skills Supply Chain Attack](https://www.pointguardai.com/ai-security-incidents/openclaw-clawhub-malicious-skills-supply-chain-attack) — incident summary.
+- [Snyk — ToxicSkills: Prompt Injection in 36%, 1,467 Malicious Payloads across the Agent-Skills Supply Chain](https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/) — ecosystem-wide audit (ClawHub + skills.sh), runtime-fetch evasion, ToxicSkills class.
+- [Snyk — Why Your "Skill Scanner" Is Just False Security (and Maybe Malware)](https://snyk.io/blog/skill-scanner-false-security/) — why scan-on-publish defenses fail.
+- [Snyk — How a Malicious Google Skill on ClawHub Tricks Users Into Installing Malware](https://snyk.io/blog/clawhub-malicious-google-skill-openclaw-malware/) — worked example of a high-ranking malicious skill.

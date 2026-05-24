@@ -2,7 +2,7 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-05-23. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-05-24. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
@@ -23,6 +23,10 @@ GitHub confirmed ~**3,800 internal repositories** exfiltrated after an employee 
 ### 2026-05-19 — Mini Shai-Hulud May 19 wave — @antv npm + Microsoft `durabletask` PyPI
 TeamPCP pushed **~637 malicious versions across ~317 npm packages** (the whole `@antv` scope, `echarts-for-react` ~1.1M weekly, `timeago.js`, `size-sensor`) in a 22-min burst, plus trojanized **Microsoft `durabletask`** PyPI versions **1.4.1/1.4.2/1.4.3** (pin to 1.4.0). Payload steals 20+ cred classes, attempts **Docker host-socket escape**, plants VS Code + Claude Code backdoors, and now **self-mints valid Sigstore provenance** (green badge ≠ safe). Campaign total: ~1,055 versions / ~502 packages (npm+PyPI+Composer).
 → [advisories/2026-05-mini-shai-hulud-may19-wave.md](advisories/2026-05-mini-shai-hulud-may19-wave.md)
+
+### 2026-05-18 — Shai-Hulud copycats after the worm source went public
+TeamPCP **open-sourced the Mini Shai-Hulud worm** (2026-05-12) and posted a **$1,000 "biggest supply-chain attack" competition on BreachForums** — and the worm is now a commodity. Actor `deadcode09284814` shipped **four npm packages** (~2,700 downloads): **`chalk-tempalte`** (near-verbatim worm clone, C2 `87e0bbc636999b.lhr.life`, marker "A Mini Sha1-Hulud has Appeared"), **`@deadcode09284814/axios-util`** (SSH/env/cloud-cred exfil → `80.200.28.28:2222`), **`axois-utils`** (Golang **"Phantom Bot" DDoS** botnet + Windows/Linux persistence), and **`color-style-utils`** (IP/geo/wallet theft → `edcf8b03c84634.lhr.life`). Low volume so far, but copycats with noisier payloads (DDoS, not just stealers) are the new tail of the [Mini Shai-Hulud wave](advisories/2026-05-tanstack-mini-shai-hulud.md).
+→ [advisories/2026-05-shai-hulud-copycat-wave.md](advisories/2026-05-shai-hulud-copycat-wave.md)
 
 ### 2026-05-12 — Claude Code `claude-cli://` deeplink RCE — patched in 2.1.118
 `eagerParseCliFlag()` in `main.tsx` accepted `--settings=` from anywhere in argv, including values smuggled through `--prefill`. The registered `claude-cli://` URL handler turns that into a one-click silent RCE: a malicious link can swap your `~/.claude/settings.json` (hooks) and run any shell command on session start. Researcher: Joernchen / 0day.click. Upgrade immediately.
@@ -137,7 +141,7 @@ LayerX: DXT extensions run **unsandboxed with full user privileges**, and Claude
 → [advisories/2026-02-claude-desktop-extensions-rce.md](advisories/2026-02-claude-desktop-extensions-rce.md)
 
 ### 2026-02-01 — ClawHavoc — mass malicious-skill poisoning of OpenClaw's ClawHub marketplace
-Koi Security audited all **2,857 skills** on **ClawHub** (the open-by-default skill marketplace for the self-hosted **OpenClaw** agent, formerly Clawdbot/Moltbot) and found **341 malicious** — **335 from one campaign ("ClawHavoc")** that uses **fake prerequisites** to install **Atomic Stealer (AMOS)**. First malicious skill 2026-01-27, surge 01-31. As the marketplace grew to 10,700+ skills, the count more than doubled (824+; some trackers cite ~1,184). Publishing needs only a **GitHub account a week old**. Installing an AI-agent skill = `curl | bash` — vet the publisher, distrust any "install this first" step.
+Koi Security audited all **2,857 skills** on **ClawHub** (the open-by-default skill marketplace for the self-hosted **OpenClaw** agent, formerly Clawdbot/Moltbot) and found **341 malicious** — **335 from one campaign ("ClawHavoc")** that uses **fake prerequisites** to install **Atomic Stealer (AMOS)**. First malicious skill 2026-01-27, surge 01-31. As the marketplace grew to 10,700+ skills, the count more than doubled (824+; some trackers cite ~1,184). Publishing needs only a **GitHub account a week old**. Installing an AI-agent skill = `curl | bash` — vet the publisher, distrust any "install this first" step. **May 2026 update — Snyk "ToxicSkills":** an ecosystem-wide audit of **3,984 skills across ClawHub + skills.sh** found **prompt injection in 36%**, **1,467 malicious payloads**, and **2.9% that fetch-and-execute remote content at runtime** (so scan-on-publish misses them — a "skill scanner" badge is not safety). Class problem, multiple marketplaces, not one campaign.
 → [advisories/2026-02-clawhavoc-clawhub-skills.md](advisories/2026-02-clawhavoc-clawhub-skills.md)
 
 ### 2026-01-05 — AI IDEs recommend non-existent extensions — OpenVSX namespace hijack
