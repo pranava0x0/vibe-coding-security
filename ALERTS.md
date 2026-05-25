@@ -2,11 +2,15 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-05-24. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-05-25. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-05-22 — TrapDoor — cross-ecosystem stealer that poisons your `.cursorrules` / `CLAUDE.md`
+Socket flagged **TrapDoor**: **34+ malicious packages / 384+ versions** pushed to **npm + PyPI + Crates.io** at once (first activity 2026-05-22 20:20 UTC), impersonating crypto/DeFi/AI/security dev tooling (`prompt-engineering-toolkit`, `solidity-deploy-guard`, `defi-threat-scanner`). npm `postinstall` runs `trap-core.js` (live-validates AWS/GitHub tokens); PyPI auto-execs on import; Rust `build.rs` XOR-encrypts keystores → GitHub Gists. The vibe-coding twist: it **rewrites `.cursorrules` / `CLAUDE.md` with zero-width Unicode** so your own AI agent exfiltrates secrets under the guise of an "automated security scan." Markers: GitHub `ddjidd564`, `ddjidd564.github.io`, `P-2024-001`. Distinct actor (not TeamPCP). Grep your agent-config files for invisible Unicode.
+→ [advisories/2026-05-trapdoor-cross-ecosystem-stealer.md](advisories/2026-05-trapdoor-cross-ecosystem-stealer.md)
 
 ### 2026-05-20 — Claude Code network-sandbox SOCKS5 null-byte allowlist bypass (silent fix in 2.1.90)
 A host like `attacker-host.com\x00.google.com` passes Claude Code's egress allowlist (matcher sees the trailing `.google.com`) but the OS truncates at the null byte and dials `attacker-host.com`. Affected **v2.0.24 → v2.1.89** (~130 versions / 5.5 months); **silently patched in v2.1.90 (2026-04-01)** — no CVE, no advisory, no changelog note. If you used the sandbox as a real boundary while running untrusted repos/MCP content, rotate any reachable creds. Researcher: Aonan Guan / oddguan.com. Second silently-fixed sandbox bypass in ~5 months.
