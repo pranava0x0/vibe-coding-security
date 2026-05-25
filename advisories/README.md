@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-05-22 | [TrapDoor — cross-ecosystem stealer poisons .cursorrules / CLAUDE.md](2026-05-trapdoor-cross-ecosystem-stealer.md) | critical | active |
 | 2026-05-20 | [Claude Code network-sandbox SOCKS5 null-byte bypass](2026-05-claude-code-sandbox-socks5-bypass.md) | high | patched |
 | 2026-05-20 | [TeamPCP breaches GitHub internal repos via poisoned VS Code extension](2026-05-teampcp-github-breach.md) | high | contained |
 | 2026-05-19 | [Mini Shai-Hulud May 19 wave — @antv npm + Microsoft durabletask PyPI](2026-05-mini-shai-hulud-may19-wave.md) | critical | active |
