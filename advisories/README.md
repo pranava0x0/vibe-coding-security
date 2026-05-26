@@ -37,6 +37,7 @@ One file per incident. Latest at the top.
 | 2026-02-17 | [Cline 2.3.0 supply-chain compromise (Clinejection → OpenClaw)](2026-02-cline-clinejection.md) | critical | contained |
 | 2026-02-09 | [Claude Desktop Extensions (DXT) zero-click RCE — Anthropic won't fix](2026-02-claude-desktop-extensions-rce.md) | critical | active |
 | 2026-02-01 | [ClawHavoc — malicious-skill poisoning of OpenClaw's ClawHub marketplace](2026-02-clawhavoc-clawhub-skills.md) | high | active |
+| 2025-12-28 | [Shai-Hulud 3.0 test payload — @vietmoney/react-big-calendar@0.26.2](2025-12-shai-hulud-3-test-payload.md) | high | contained |
 | 2025-12-23 | [LangChain LangGrinch (CVE-2025-68664) + path traversal (CVE-2026-34070)](2025-12-langchain-langgrinch.md) | critical | patched |
 | 2026-01-05 | [AI IDEs recommend non-existent extensions — OpenVSX namespace hijack](2026-01-vscode-fork-recommended-extension-hijack.md) | high | mitigated |
 | 2025-11-24 | [Shai-Hulud "Second Coming"](2025-11-shai-hulud-second-coming.md) | critical | contained |
