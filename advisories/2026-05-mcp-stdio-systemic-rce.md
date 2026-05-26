@@ -2,7 +2,7 @@
 id: 2026-05-mcp-stdio-systemic-rce
 title: "Systemic MCP stdio RCE class — 200,000+ servers exposed (May 2026)"
 date_disclosed: 2026-05
-last_updated: 2026-05-25
+last_updated: 2026-05-26
 severity: high
 status: mitigated
 ecosystems: [mcp, anthropic-mcp]
@@ -37,6 +37,10 @@ Microsoft's own MCP server has now had **two** disclosures in this class:
 
 **Named instance — `network-ai` empty-default-secret (CVE-2026-46701):** the MCP SSE server in `network-ai` (npm) **defaults to an empty shared secret**, so its authorization check passes for everyone — an **unauthenticated cross-origin attacker can invoke any MCP tool** (and a sibling path-traversal lets it write arbitrary files on the host). Published 2026-05-21; affects **< 5.4.5**, fixed in **5.4.5**. Same root failure as the others — an MCP surface that ships **open by default** (here the "auth" is real but the default credential is blank).
 
+**Named instance — `aws-mcp-server` unauthenticated RCE (CVE-2026-5058 + CVE-2026-5059, CVSS 9.8 each):** Two sibling **command-injection** flaws in `aws-mcp-server` let a network-reachable, **unauthenticated** attacker run arbitrary code as the server process (CWE-78). Both reside in the server's handling of the **allowed-commands list**: user-supplied strings flow into a system call without proper neutralization, so the "allowlist" is bypassable. Published 2026-04-11; tracked by Zero Day Initiative as **ZDI-26-245 / ZDI-26-246**; patches at disclosure were still pending — pull the server off the network and monitor vendor channels for a fixed release. Critically, this is *not* AWS's official "AWS API MCP" product (which has its own, separate **CVE-2026-4270** file-access-restriction bypass); `aws-mcp-server` is a popular community/third-party project. Treat as the AWS-credential analogue of the nginx-ui MCPwn class: an MCP surface shipped without auth that runs shell-style commands on input.
+
+**Named instance — `n8n-mcp` post-auth SSRF (CVE-2026-39974):** The multi-tenant HTTP mode of **`n8n-mcp`** (a popular MCP server that exposes n8n node documentation/operations to AI assistants) takes user-controlled URLs from multi-tenant HTTP headers and issues server-side requests **without adequate validation**, **reflecting the response body back through JSON-RPC**. An authenticated attacker (valid `AUTH_TOKEN`) can read the contents of any URL the server can reach — most damagingly the **cloud instance metadata services** (AWS IMDS, GCP, Azure, Alibaba, Oracle) to harvest temporary credentials. Affects **≤ 2.47.3**, fixed in **2.47.4**, which adds SSRF protection that validates and rejects embedded-credential URLs and requests to restricted destinations. Lower severity than the unauthenticated MCP class (post-auth, no RCE), but a clean named instance of "MCP server reflects arbitrary HTTP responses back to the client."
+
 **Named instance — `@mcpjam/inspector` zero-auth RCE (CVE-2026-23744):** the MCPJam Inspector (an MCP-server dev/debug tool) **binds `0.0.0.0` by default** and ships **no authentication** on its server-management endpoint, so any network-reachable attacker can send a crafted HTTP request that **installs and runs a malicious MCP server → RCE**, with **no user interaction**. Unlike the related CVE-2025-49596 (which bound `127.0.0.1` and needed user interaction), this one is exposed on all interfaces. Affects **≤ 1.4.2**, fixed in **1.4.3** (disclosed Feb 2026; surfaced in this sweep). Same root failure: an MCP dev surface trusted-by-default and reachable off-host.
 
 **Named, KEV-listed instance — nginx-ui "MCPwn" (CVE-2026-33032, CVSS 9.8):** the clearest real-world example of the "MCP endpoint shipped without auth" class. nginx-ui exposes two HTTP MCP endpoints, `/mcp` and `/mcp_message`. `/mcp` requires IP-allowlisting **and** `AuthRequired()` middleware; `/mcp_message` only gets IP-allowlisting — and the **default IP allowlist is empty, which the middleware treats as "allow all."** So an unauthenticated network attacker can invoke all **12 MCP tools** (including `nginx_config_add` with auto-reload) and achieve **full nginx takeover in two HTTP requests**. ~**2,600** exposed instances (Pluto Security / Shodan), **actively exploited**, added to **VulnCheck KEV (2026-04-13)** and named in Recorded Future's most-exploited-CVE list for March 2026. Fixed in **nginx-ui 2.3.4** (2026-03-15); workaround is to add `middleware.AuthRequired()` to `/mcp_message` or flip the IP-allowlist default from allow-all to deny-all. This is an **HTTP-transport** auth-bypass rather than stdio, but it's the same root failure — an MCP surface treated as trusted-by-default.
@@ -51,6 +55,8 @@ You are exposed by the class issue if:
 - You run **nginx-ui < 2.3.4** with its MCP endpoint reachable (CVE-2026-33032 / "MCPwn") — patch now; it's in CISA/VulnCheck KEV and exploited in the wild.
 - You run **`network-ai` < 5.4.5** (CVE-2026-46701) — its MCP SSE server ships an **empty default secret**; upgrade to **≥ 5.4.5** and set a non-empty secret.
 - You run **`@mcpjam/inspector` ≤ 1.4.2** (CVE-2026-23744) — it binds `0.0.0.0` with no auth → zero-interaction RCE; upgrade to **≥ 1.4.3** and bind it to `127.0.0.1`.
+- You run **`aws-mcp-server`** (community/third-party project) — CVE-2026-5058 / CVE-2026-5059 are **unauthenticated, CVSS 9.8 command-injection RCEs**; patches were pending at disclosure (2026-04-11), so remove it from any network-reachable path and watch the project + ZDI-26-245/-246 for a fixed release.
+- You run **`n8n-mcp` ≤ 2.47.3** in multi-tenant HTTP mode (CVE-2026-39974) — authenticated SSRF that reflects responses back, including cloud IMDS; upgrade to **≥ 2.47.4**.
 
 ```bash
 # Find MCP servers configured in your tools
@@ -69,6 +75,8 @@ lsof -iTCP -sTCP:LISTEN -P -n 2>/dev/null | grep -iE 'mcp|model-context'
 3. **Update `mcp-atlassian` to ≥ 0.17.0** (MCPwnfluence, CVE-2026-27825/-27826); never expose its HTTP transport on `0.0.0.0` without an auth proxy. Pluto Security ships a [detection/auto-update script](https://github.com/plutosecurity/MCPwnfluence).
 4. **Update nginx-ui to ≥ 2.3.4** (CVE-2026-33032 / MCPwn), or add `middleware.AuthRequired()` to `/mcp_message` and set the IP allowlist to deny-all.
 5. **Update `@mcpjam/inspector` to ≥ 1.4.3** (CVE-2026-23744) and never run an MCP inspector/dev tool bound to `0.0.0.0`; keep it on `127.0.0.1`.
+5a. **For `aws-mcp-server` (CVE-2026-5058 / -5059):** treat as unfixed-in-the-wild. Remove from any reachable network path; restrict to loopback; rotate AWS credentials that were exposed to the host. Track ZDI-26-245 / -246 for the vendor patch.
+5b. **Update `n8n-mcp` to ≥ 2.47.4** (CVE-2026-39974). Until upgraded, block egress from the MCP host to cloud IMDS endpoints (`169.254.169.254`, `metadata.google.internal`, etc.) and restrict `AUTH_TOKEN` to trusted callers.
 6. **For Apache Doris MCP:** apply the patch + the CVE tracker recommendations.
 7. **For Alibaba RDS MCP:** since Alibaba declined to patch, do not deploy without an isolating proxy that filters MCP messages.
 8. **Do not expose stdio MCPs to network sockets.** If you've wrapped one with a proxy / HTTP gateway, audit the proxy's input validation.
@@ -104,3 +112,12 @@ OX Security calls this "The Mother of All AI Supply Chains" — making the case 
 - [GitLab Advisory Database — CVE-2026-46701: network-ai Unauthenticated Cross-Origin MCP Tool Invocation via Empty Default Secret](https://advisories.gitlab.com/npm/network-ai/CVE-2026-46701/)
 - [GitHub Advisory Database — CVE-2026-23744: RCE in MCPJam inspector due to exposed HTTP endpoint (GHSA-232v-j27c-5pp6)](https://github.com/advisories/GHSA-232v-j27c-5pp6)
 - [The Vulnerable MCP Project — MCPJam Inspector RCE (CVE-2026-23744)](https://vulnerablemcp.info/vuln/cve-2026-23744-mcpjam-inspector-rce.html) — binds 0.0.0.0, no auth, no user interaction; fixed 1.4.3.
+- [SentinelOne — CVE-2026-5058: aws-mcp-server RCE Vulnerability](https://www.sentinelone.com/vulnerability-database/cve-2026-5058/) — unauthenticated command injection in allowed-commands handling, CVSS 9.8.
+- [SentinelOne — CVE-2026-5059: aws-mcp-server Command Injection RCE Flaw](https://www.sentinelone.com/vulnerability-database/cve-2026-5059/) — sibling vulnerability, same root cause.
+- [NVD — CVE-2026-5058](https://nvd.nist.gov/vuln/detail/CVE-2026-5058)
+- [NVD — CVE-2026-5059](https://nvd.nist.gov/vuln/detail/CVE-2026-5059)
+- [TheHackerWire — aws-mcp-server Remote Code Execution via Command Injection (CVE-2026-5058)](https://www.thehackerwire.com/aws-mcp-server-remote-code-execution-via-command-injection-cve-2026-5058/) — exploit context, ZDI-CAN-27968 attribution.
+- [Zero Day Initiative — ZDI-26-245](https://www.zerodayinitiative.com/advisories/ZDI-26-245/) — ZDI tracking for the aws-mcp-server RCE cluster.
+- [SentinelOne — CVE-2026-39974: n8n-MCP Server SSRF Vulnerability](https://www.sentinelone.com/vulnerability-database/cve-2026-39974/) — post-auth SSRF, IMDS targeting, fixed in 2.47.4.
+- [NVD — CVE-2026-39974](https://nvd.nist.gov/vuln/detail/CVE-2026-39974)
+- [Shenlong CVE Platform — n8n-mcp Post-Auth SSRF Vulnerability and Mitigation Guide](https://cve.imfht.com/intel/579223?lang=en) — mitigation specifics, version range.
