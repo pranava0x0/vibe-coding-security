@@ -2,7 +2,7 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-05-25. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-05-26. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
@@ -45,7 +45,7 @@ Four chainable flaws in **OpenClaw** AI agent — TOCTOU sandbox-escape (read + 
 → [advisories/2026-05-openclaw-claw-chain.md](advisories/2026-05-openclaw-claw-chain.md)
 
 ### 2026-05-13 — Systemic MCP stdio RCE class (~200,000 servers exposed)
-OX Security: 7,000 vulnerable MCP servers on public IPs; ~200,000 total estimated. Three database MCPs (Apache Doris, Alibaba RDS, Apache Pinot) disclosed same window; **Alibaba declined to patch**. Microsoft MCP server hit by CVE-2026-26118. Named KEV-listed instance: **nginx-ui "MCPwn" (CVE-2026-33032, CVSS 9.8)** — empty default IP allowlist on `/mcp_message` = unauthenticated full nginx takeover in 2 requests; ~2,600 exposed, exploited in the wild, patch ≥ 2.3.4.
+OX Security: 7,000 vulnerable MCP servers on public IPs; ~200,000 total estimated. Three database MCPs (Apache Doris, Alibaba RDS, Apache Pinot) disclosed same window; **Alibaba declined to patch**. Microsoft MCP server hit by CVE-2026-26118. Named KEV-listed instance: **nginx-ui "MCPwn" (CVE-2026-33032, CVSS 9.8)** — empty default IP allowlist on `/mcp_message` = unauthenticated full nginx takeover in 2 requests; ~2,600 exposed, exploited in the wild, patch ≥ 2.3.4. **New this sweep:** **`aws-mcp-server` CVE-2026-5058 + CVE-2026-5059** (CVSS 9.8 each, unauthenticated command-injection RCE in the allowed-commands handler, ZDI-26-245/-246, patches pending — remove from network); **`n8n-mcp` CVE-2026-39974** (post-auth SSRF that reflects responses → IMDS-credential theft; fixed 2.47.4).
 → [advisories/2026-05-mcp-stdio-systemic-rce.md](advisories/2026-05-mcp-stdio-systemic-rce.md)
 
 ### 2026-05-11 — PraisonAI auth bypass (CVE-2026-44338) — exploited in 3h44m
@@ -111,6 +111,10 @@ Marimo's `/terminal/ws` WebSocket endpoint **skips authentication** (every other
 ### 2026-02-17 — Cline `2.3.0` supply-chain compromise — "Clinejection" → OpenClaw payload
 GitHub-issue-title prompt injection → Cline's own AI triage bot ran attacker-controlled `npm install` → Cacheract poisoned the Actions cache → next publish workflow restored poisoned cache and leaked `NPM_RELEASE_TOKEN` → attacker pushed `cline@2.3.0` with a `postinstall` script installing **OpenClaw** as a system daemon. ~4,000 installs in 8h before takedown. Cline's rotation hit the wrong token. Researcher: Adnan Khan.
 → [advisories/2026-02-cline-clinejection.md](advisories/2026-02-cline-clinejection.md)
+
+### 2025-12-28 — Shai-Hulud 3.0 — `@vietmoney/react-big-calendar@0.26.2` (test payload)
+Third generation of the Shai-Hulud worm dropped on a dormant npm package (no update since March 2021) with **heavier obfuscation + reliability improvements** but the same install-time credential-theft + GitHub-exfil core. Low downloads / no major spread — Aikido: "we may have caught the attackers testing their payload." Snyk's "Holiday Whisper." Now read in retrospect as the **TeamPCP rehearsal** that became the [SAP](advisories/2026-04-mini-shai-hulud-sap.md) / [PyTorch Lightning](advisories/2026-04-pytorch-lightning-compromise.md) / [Bitwarden CLI](advisories/2026-04-bitwarden-cli-shai-hulud-third-coming.md) / [TanStack](advisories/2026-05-tanstack-mini-shai-hulud.md) / [@antv+durabletask](advisories/2026-05-mini-shai-hulud-may19-wave.md) wave through Q2 2026. Remove `@vietmoney/react-big-calendar` and check for a planted exfil repo on your GitHub.
+→ [advisories/2025-12-shai-hulud-3-test-payload.md](advisories/2025-12-shai-hulud-3-test-payload.md)
 
 ### 2025-12-23 — LangChain LangGrinch + path traversal (CVE-2025-68664 / CVE-2026-34070)
 `langchain-core`'s `dumps()`/`dumpd()` did not escape user dicts containing the reserved `"lc"` key → attacker-controlled round-trip can instantiate framework classes, render Jinja2, read env vars, reach RCE. Patched in `langchain-core` 0.3.81 / 1.2.5 (LangGrinch) and 1.2.22 (CVE-2026-34070 path traversal). LangChain at ~98M downloads/month — anything that loads user-influenced JSON through LangChain's serializer is in scope.
