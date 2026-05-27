@@ -6,11 +6,11 @@ import re
 from pathlib import Path
 
 
-# Mintlify recommendation is ~200KB; we accept up to 400KB to allow natural
+# Mintlify recommendation is ~200KB; we accept up to 512KB to allow natural
 # advisory-corpus growth between sweeps (still well within Claude/GPT context windows).
 # llms-ctx.txt is a compact per-advisory TL;DR + "am I affected?" digest, so it grows
 # roughly linearly with the advisory count — bumped to 64KB as the corpus passed 45 entries.
-LLMS_FULL_MAX_BYTES = 400 * 1024
+LLMS_FULL_MAX_BYTES = 512 * 1024
 LLMS_CTX_MAX_BYTES = 64 * 1024
 LLMS_TXT_MAX_BYTES = 50 * 1024
 
