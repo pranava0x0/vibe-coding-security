@@ -2,11 +2,19 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-05-26. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-05-27. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-05-22 — Composio AI-agent platform breach (LLM-augmented attacker registered malicious tool definitions in the sandbox)
+**Composio** — the AI-agent infrastructure platform that brokers ~100 MCP toolkits (GitHub/Gmail/Jira/Notion/Slack/Linear/HubSpot/Drive/Vercel/Sentry…) — disclosed that an attacker **brute-forced exploit chains with LLM-generated attack patterns** on **2026-05-21 (01:05 – 09:15 PT)**, landed in an *internal monitoring agent*, pivoted into the automated-remediation system, then **registered malicious tool definitions inside the sandboxed execution environment** to reach arbitrary code execution. Blast radius: **~5,001 user GitHub OAuth connections + ~5,241 cached API keys** (~0.3% of active). Composio mandated full API-key rotation by **2026-05-23 23:00 PT** and deleted all keys older than 2026-05-22 23:00 PT. Second documented **"AI tool → cloud platform" OAuth pivot** (after [Vercel/Context.ai](advisories/2026-04-vercel-context-ai-breach.md)) and **first** with attacker openly using LLM-augmented exploitation + a *malicious-tool-definition-in-sandbox* primitive. Audit your GitHub/Google OAuth grants for any Composio-connected app.
+→ [advisories/2026-05-composio-ai-agent-platform-breach.md](advisories/2026-05-composio-ai-agent-platform-breach.md)
+
+### 2026-05-25 — Cargo May 2026 security release — symlink-override + sparse-URL credential leak (CVE-2026-5223, CVE-2026-5222)
+First Cargo-itself CVEs in this repo. **CVE-2026-5223 (medium):** Cargo did not reject symlinks inside crate tarballs from **third-party registries** → a malicious crate's tarball can extract one directory up and **overwrite the cached source of another crate from the same registry**, hijacking a subsequent `cargo build`. **crates.io users NOT affected** (crates.io rejects symlink uploads server-side). **CVE-2026-5222 (low):** sparse-registry URL normalization stripped `.git`, so creds for `…/index.git` are replayed against `…/index`. Both fixed in **Rust 1.96.0 (2026-05-28)**. Generalizes [TrapDoor](advisories/2026-05-trapdoor-cross-ecosystem-stealer.md)'s Crates.io arm: build-system archive-extraction primitives are supply-chain primitives. Upgrade Rust; if you run a mirror registry, enable server-side symlink rejection.
+→ [advisories/2026-05-cargo-symlink-sparse-url-cves.md](advisories/2026-05-cargo-symlink-sparse-url-cves.md)
 
 ### 2026-05-22 — TrapDoor — cross-ecosystem stealer that poisons your `.cursorrules` / `CLAUDE.md`
 Socket flagged **TrapDoor**: **34+ malicious packages / 384+ versions** pushed to **npm + PyPI + Crates.io** at once (first activity 2026-05-22 20:20 UTC), impersonating crypto/DeFi/AI/security dev tooling (`prompt-engineering-toolkit`, `solidity-deploy-guard`, `defi-threat-scanner`). npm `postinstall` runs `trap-core.js` (live-validates AWS/GitHub tokens); PyPI auto-execs on import; Rust `build.rs` XOR-encrypts keystores → GitHub Gists. The vibe-coding twist: it **rewrites `.cursorrules` / `CLAUDE.md` with zero-width Unicode** so your own AI agent exfiltrates secrets under the guise of an "automated security scan." Markers: GitHub `ddjidd564`, `ddjidd564.github.io`, `P-2024-001`. Distinct actor (not TeamPCP). Grep your agent-config files for invisible Unicode.
