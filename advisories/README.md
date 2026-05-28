@@ -5,6 +5,7 @@ One file per incident. Latest at the top.
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
 | 2026-05-25 | [Cargo May 2026 security release — symlink-override + sparse-URL leak (CVE-2026-5223, CVE-2026-5222)](2026-05-cargo-symlink-sparse-url-cves.md) | medium | patched |
+| 2026-05-22 | [BadHost — Starlette host-header auth bypass blasts FastAPI, vLLM, LiteLLM, MCP servers (CVE-2026-48710)](2026-05-starlette-badhost-host-header-bypass.md) | critical | patched |
 | 2026-05-22 | [Composio AI-agent platform breach — LLM-augmented attacker registered malicious tool definitions in the sandbox](2026-05-composio-ai-agent-platform-breach.md) | high | contained |
 | 2026-05-22 | [TrapDoor — cross-ecosystem stealer poisons .cursorrules / CLAUDE.md](2026-05-trapdoor-cross-ecosystem-stealer.md) | critical | active |
 | 2026-05-20 | [Claude Code network-sandbox SOCKS5 null-byte bypass](2026-05-claude-code-sandbox-socks5-bypass.md) | high | patched |
