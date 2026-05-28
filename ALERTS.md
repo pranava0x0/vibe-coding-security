@@ -2,11 +2,15 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-05-27. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-05-28. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-05-22 — BadHost: Starlette host-header auth bypass blasts FastAPI, vLLM, LiteLLM, MCP servers (CVE-2026-48710)
+**CVE-2026-48710** — Starlette < 1.0.1 rebuilds `request.url` from the raw HTTP `Host` header without RFC validation. A single `/`, `?`, or `#` in `Host` shifts path/query/fragment boundaries on re-parse, so middleware reading `request.url.path` sees a different path than the ASGI router actually dispatched. **Any auth middleware that checks `request.url.path` fails open** — one character, no credentials. Starlette ships **~325M downloads/week** and underpins **FastAPI, vLLM, LiteLLM, Text Generation Inference, OpenAI-compatible proxies, the Python MCP SDK, and most AI-agent dashboards**. X41 D-Sec found it during an OSTIF-sponsored vLLM audit; coordinated disclosure **2026-05-22**, one day after the upstream fix. **Patched in Starlette 1.0.1.** Structural fix: replace `request.url.path` with `request.scope["path"]` in any security-decision code. Third entry in the "two parsers, one string" class (siblings: Claude Code argv-smuggling deeplink, Claude Code SOCKS5 null-byte).
+→ [advisories/2026-05-starlette-badhost-host-header-bypass.md](advisories/2026-05-starlette-badhost-host-header-bypass.md)
 
 ### 2026-05-22 — Composio AI-agent platform breach (LLM-augmented attacker registered malicious tool definitions in the sandbox)
 **Composio** — the AI-agent infrastructure platform that brokers ~100 MCP toolkits (GitHub/Gmail/Jira/Notion/Slack/Linear/HubSpot/Drive/Vercel/Sentry…) — disclosed that an attacker **brute-forced exploit chains with LLM-generated attack patterns** on **2026-05-21 (01:05 – 09:15 PT)**, landed in an *internal monitoring agent*, pivoted into the automated-remediation system, then **registered malicious tool definitions inside the sandboxed execution environment** to reach arbitrary code execution. Blast radius: **~5,001 user GitHub OAuth connections + ~5,241 cached API keys** (~0.3% of active). Composio mandated full API-key rotation by **2026-05-23 23:00 PT** and deleted all keys older than 2026-05-22 23:00 PT. Second documented **"AI tool → cloud platform" OAuth pivot** (after [Vercel/Context.ai](advisories/2026-04-vercel-context-ai-breach.md)) and **first** with attacker openly using LLM-augmented exploitation + a *malicious-tool-definition-in-sandbox* primitive. Audit your GitHub/Google OAuth grants for any Composio-connected app.
