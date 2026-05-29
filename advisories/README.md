@@ -40,11 +40,13 @@ One file per incident. Latest at the top.
 | 2026-02-17 | [Cline 2.3.0 supply-chain compromise (Clinejection → OpenClaw)](2026-02-cline-clinejection.md) | critical | contained |
 | 2026-02-09 | [Claude Desktop Extensions (DXT) zero-click RCE — Anthropic won't fix](2026-02-claude-desktop-extensions-rce.md) | critical | active |
 | 2026-02-01 | [ClawHavoc — malicious-skill poisoning of OpenClaw's ClawHub marketplace](2026-02-clawhavoc-clawhub-skills.md) | high | active |
+| 2026-01-26 | [OpenClaw 1-click RCE via WebSocket gateway-URL token theft (CVE-2026-25253)](2026-01-openclaw-cve-2026-25253-gatewayurl-rce.md) | critical | patched |
 | 2025-12-28 | [Shai-Hulud 3.0 test payload — @vietmoney/react-big-calendar@0.26.2](2025-12-shai-hulud-3-test-payload.md) | high | contained |
 | 2025-12-23 | [LangChain LangGrinch (CVE-2025-68664) + path traversal (CVE-2026-34070)](2025-12-langchain-langgrinch.md) | critical | patched |
 | 2026-01-05 | [AI IDEs recommend non-existent extensions — OpenVSX namespace hijack](2026-01-vscode-fork-recommended-extension-hijack.md) | high | mitigated |
 | 2025-11-24 | [Shai-Hulud "Second Coming"](2025-11-shai-hulud-second-coming.md) | critical | contained |
 | 2025-10-21 | [Cursor & Windsurf ship stale Chromium — 94+ n-day vulns](2025-10-cursor-windsurf-chromium-ndays.md) | high | active |
+| 2025-10 | [Windsurf path-traversal via prompt-injected README (CVE-2025-62353)](2025-10-windsurf-cve-2025-62353-path-traversal.md) | critical | patched |
 | 2025-10-17 | [GlassWorm — self-propagating VS Code / Open VSX worm](2025-10-glassworm-vscode-worm.md) | high | active |
 | 2025-09-17 | [postmark-mcp backdoor](2025-09-postmark-mcp-backdoor.md) | high | contained |
 | 2025-09-15 | [Shai-Hulud original](2025-09-shai-hulud-original.md) | critical | contained |
