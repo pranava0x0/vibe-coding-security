@@ -2,7 +2,7 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-05-28. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-05-29. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
@@ -160,6 +160,10 @@ Pillar Security: `find_by_name` tool exposed `fd -X` flag injection *before* Sec
 LayerX: DXT extensions run **unsandboxed with full user privileges**, and Claude will autonomously chain a low-trust reader connector (Google Calendar/email/Drive) into a high-trust local executor. A malicious calendar event + a vague prompt ("check my calendar and take care of it") = **zero-click local RCE, CVSS 10.0**; ~10,000+ users / 50 extensions. Anthropic called it "outside our current threat model" → **no patch**. Distinct from ClaudeBleed (Chrome). Don't co-locate reader and executor MCP servers in one Claude profile.
 → [advisories/2026-02-claude-desktop-extensions-rce.md](advisories/2026-02-claude-desktop-extensions-rce.md)
 
+### 2026-01-26 — OpenClaw 1-click RCE via WebSocket gateway-URL token theft (CVE-2026-25253)
+**CVE-2026-25253** (CVSS 8.8) — OpenClaw's Control UI blindly trusted the `gatewayUrl` query-string parameter in browser URLs. A single click on a malicious link silently pointed OpenClaw at an attacker-controlled WebSocket gateway, leaked the **auth token**, and ran arbitrary commands on the victim's machine with the agent's full system privileges. The localhost-only assumption failed because the *browser* — which trivially reaches `localhost` — is the network attacker; even instances behind NAT were exploitable. Patched in **OpenClaw 2026.1.29** (confirmation modal; later releases added origin validation). Distinct from May's [Claw Chain cluster](advisories/2026-05-openclaw-claw-chain.md) — different bug, different month, different researcher. Public PoCs available.
+→ [advisories/2026-01-openclaw-cve-2026-25253-gatewayurl-rce.md](advisories/2026-01-openclaw-cve-2026-25253-gatewayurl-rce.md)
+
 ### 2026-02-01 — ClawHavoc — mass malicious-skill poisoning of OpenClaw's ClawHub marketplace
 Koi Security audited all **2,857 skills** on **ClawHub** (the open-by-default skill marketplace for the self-hosted **OpenClaw** agent, formerly Clawdbot/Moltbot) and found **341 malicious** — **335 from one campaign ("ClawHavoc")** that uses **fake prerequisites** to install **Atomic Stealer (AMOS)**. First malicious skill 2026-01-27, surge 01-31. As the marketplace grew to 10,700+ skills, the count more than doubled (824+; some trackers cite ~1,184). Publishing needs only a **GitHub account a week old**. Installing an AI-agent skill = `curl | bash` — vet the publisher, distrust any "install this first" step. **May 2026 update — Snyk "ToxicSkills":** an ecosystem-wide audit of **3,984 skills across ClawHub + skills.sh** found **prompt injection in 36%**, **1,467 malicious payloads**, and **2.9% that fetch-and-execute remote content at runtime** (so scan-on-publish misses them — a "skill scanner" badge is not safety). Class problem, multiple marketplaces, not one campaign.
 → [advisories/2026-02-clawhavoc-clawhub-skills.md](advisories/2026-02-clawhavoc-clawhub-skills.md)
@@ -171,6 +175,10 @@ Koi Security: **Cursor / Windsurf / Antigravity / Trae** recommend extensions th
 ### 2025-11-24 — Shai-Hulud "The Second Coming"
 492 packages (132M monthly downloads), Zapier / ENS / PostHog / Postman trojanized. 25,000+ malicious GitHub repos. Aligned with npm classic-token revocation deadline.
 → [advisories/2025-11-shai-hulud-second-coming.md](advisories/2025-11-shai-hulud-second-coming.md)
+
+### 2025-10 — Windsurf path-traversal via prompt-injected README — Cascade reads/writes arbitrary files (CVE-2025-62353)
+**CVE-2025-62353** (CVSS 9.8) — HiddenLayer found that Windsurf's **Cascade** agent followed instructions hidden inside a project's `README.md` (HTML-comment markers, invisible to humans) to change its workspace path to the filesystem root and then **read/write arbitrary files** on the developer's machine. Critically, **Auto-Execution OFF and `write_to_file` on the explicit deny list did NOT stop it** — the deny check ran on the *current* (already-rewritten) workspace scope. Affects **all Windsurf ≤ 1.12.12**. Same "two parsers, one string" family as [Claude Code argv-smuggling](advisories/2026-05-claude-code-deeplink-rce.md), [SOCKS5 null-byte](advisories/2026-05-claude-code-sandbox-socks5-bypass.md), and [Starlette BadHost](advisories/2026-05-starlette-badhost-host-header-bypass.md). Upgrade Windsurf, rotate dev creds, audit any repo you opened in old Windsurf for invisible-comment or zero-width-Unicode injection.
+→ [advisories/2025-10-windsurf-cve-2025-62353-path-traversal.md](advisories/2025-10-windsurf-cve-2025-62353-path-traversal.md)
 
 ### 2025-10-21 — Cursor & Windsurf ship stale Chromium — 94+ n-day vulns (1.8M devs)
 OX Security ("Forked and Forgotten"): both IDEs lag behind upstream VS Code/Electron, inheriting **94+ already-patched Chromium/V8 n-days**; OX weaponized **CVE-2025-7656** (V8 integer overflow) against the *latest* builds. The exposure is any attacker-controlled web content rendered in the IDE (preview panes, webviews, agent-fetched pages). **Windsurf didn't respond; Cursor dismissed the PoC as "self-inflicted DoS, out of scope."** No per-bug patch — keep the IDE on its newest release and don't open untrusted content inside it.
