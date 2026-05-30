@@ -25,7 +25,9 @@ One file per incident. Latest at the top.
 | 2026-05-06 | [Next.js + React May 2026 security release (13 CVEs)](2026-05-nextjs-react-security-release.md) | high | patched |
 | 2026-05 | [Windsurf zero-click MCP RCE (CVE-2026-30615)](2026-05-windsurf-zero-click-mcp-rce.md) | critical | patched |
 | 2026-04-30 | [PyTorch Lightning + intercom-client (Mini Shai-Hulud)](2026-04-pytorch-lightning-compromise.md) | critical | contained |
+| 2026-04-24 | [LiteLLM proxy pre-auth SQL injection (CVE-2026-42208, CISA KEV)](2026-04-litellm-sql-injection.md) | critical | patched |
 | 2026-04-24 | [elementary-data PyPI + GHCR compromise (malicious .pth auto-exec)](2026-04-elementary-data-pypi-ghcr-compromise.md) | critical | contained |
+| 2026-04-23 | [Flowise RCE cluster — CVE-2025-59528 actively exploited + April Agent-node cluster (CVE-2026-41265 et al.)](2026-04-flowise-rce-cluster.md) | critical | patched |
 | 2026-04-22 | [Bitwarden CLI backdoored — first AI-tool-cred-hunting supply-chain malware](2026-04-bitwarden-cli-shai-hulud-third-coming.md) | critical | contained |
 | 2026-04-19 | [Vercel breach via Context.ai OAuth supply chain](2026-04-vercel-context-ai-breach.md) | high | contained |
 | 2026-04-08 | [Marimo notebook pre-auth RCE (CVE-2026-39987)](2026-04-marimo-notebook-rce.md) | critical | patched |
@@ -41,6 +43,7 @@ One file per incident. Latest at the top.
 | 2026-02-09 | [Claude Desktop Extensions (DXT) zero-click RCE — Anthropic won't fix](2026-02-claude-desktop-extensions-rce.md) | critical | active |
 | 2026-02-01 | [ClawHavoc — malicious-skill poisoning of OpenClaw's ClawHub marketplace](2026-02-clawhavoc-clawhub-skills.md) | high | active |
 | 2026-01-26 | [OpenClaw 1-click RCE via WebSocket gateway-URL token theft (CVE-2026-25253)](2026-01-openclaw-cve-2026-25253-gatewayurl-rce.md) | critical | patched |
+| 2026-01-12 | [OpenCode AI coding agent — twin localhost RCEs (CVE-2026-22812 + CVE-2026-22813)](2026-01-opencode-localhost-rce.md) | critical | patched |
 | 2025-12-28 | [Shai-Hulud 3.0 test payload — @vietmoney/react-big-calendar@0.26.2](2025-12-shai-hulud-3-test-payload.md) | high | contained |
 | 2025-12-23 | [LangChain LangGrinch (CVE-2025-68664) + path traversal (CVE-2026-34070)](2025-12-langchain-langgrinch.md) | critical | patched |
 | 2026-01-05 | [AI IDEs recommend non-existent extensions — OpenVSX namespace hijack](2026-01-vscode-fork-recommended-extension-hijack.md) | high | mitigated |

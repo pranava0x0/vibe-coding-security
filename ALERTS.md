@@ -2,7 +2,7 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-05-29. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-05-30. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
@@ -104,6 +104,14 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 
 ## 🟠 RECENT — verify exposure
 
+### 2026-04-24 — LiteLLM proxy pre-auth SQL injection (CVE-2026-42208, CISA KEV)
+**CVE-2026-42208** (CVSS 9.3) — BerriAI's **LiteLLM** proxy concatenates the caller-supplied `Authorization: Bearer` value directly into the API-key verification SQL query. Any **unauthenticated** attacker reaches read/write on the proxy database — which holds **every upstream LLM provider key** (OpenAI / Anthropic / AWS Bedrock / Azure / Vertex / Cohere / Mistral) for everyone the proxy fronts. **Exploited 26 hours after disclosure** ([Sysdig honeypot 2026-04-26 16:17 UTC](https://www.sysdig.com/blog/cve-2026-42208-targeted-sql-injection-against-litellms-authentication-path-discovered-36-hours-following-vulnerability-disclosure)); **CISA KEV 2026-05-08** with detected exploitation against US financial-services and healthcare critical infrastructure. Affects **1.81.16 → 1.83.6**, fixed **1.83.7** (run `1.83.10-stable`). Same "AI/data tool ships an unauthenticated network endpoint" cluster as [Langflow](advisories/2026-03-langflow-rce.md), [PraisonAI](advisories/2026-05-praisonai-auth-bypass.md), [Marimo](advisories/2026-04-marimo-notebook-rce.md), [Flowise](advisories/2026-04-flowise-rce-cluster.md).
+→ [advisories/2026-04-litellm-sql-injection.md](advisories/2026-04-litellm-sql-injection.md)
+
+### 2026-04-23 — Flowise RCE cluster — CVE-2025-59528 actively exploited + April Agent-node cluster (CVE-2026-41265 et al.)
+**Flowise** — the drag-and-drop LLM workflow builder (~38K stars, **12,000–15,000 internet-exposed instances**) — has two overlapping RCE problems. **CVE-2025-59528** (CVSS 10.0): unauth code injection in the `CustomMCP` node (`eval` on `mcpServerConfig`), under **active exploitation since early April 2026** (VulnCheck observed a Starlink-IP attacker); fixed in **3.0.6**. **April 2026 Agent-node cluster** (CVE-2026-41265 Airtable, CVE-2026-41138 Airtable+Pandas, CVE-2026-41264/41268 generic, CVE-2026-40933, CVE-2026-41137 CSV, CVE-2026-41269 file upload — CVSS 9.2 each): the various Agent classes evaluate **LLM-generated Python with no sandbox**, so any chatflow caller can prompt-inject the LLM into emitting Python that runs on the host. All fixed in **3.1.0** (use **3.1.1**). Flowise stores upstream LLM provider keys — assume those are exfiltrated on any exposed vulnerable host. Sibling of [Langflow](advisories/2026-03-langflow-rce.md), [Marimo](advisories/2026-04-marimo-notebook-rce.md), [Semantic Kernel decorator-as-documentation](advisories/2026-05-semantic-kernel-rce.md).
+→ [advisories/2026-04-flowise-rce-cluster.md](advisories/2026-04-flowise-rce-cluster.md)
+
 ### 2026-04-24 — elementary-data PyPI + GHCR compromise (malicious `.pth` auto-exec)
 `elementary-data==0.23.3` (dbt observability tool, ~**1M+ monthly downloads**) shipped a top-level **`elementary.pth`** that Python auto-execs at *every* interpreter startup — a 3-stage infostealer grabbing cloud tokens, SSH keys, K8s creds, and crypto wallets. The matching **GHCR Docker images were poisoned** (`ghcr.io/elementary-data/elementary`), so every unpinned `pull`/`FROM` ran the trojan. Initial access: a **GitHub Actions script injection** → forged signed release → the *real* publish pipeline. Fixed in **0.23.4**. Pin images by digest; flag `.pth` files in dependencies.
 → [advisories/2026-04-elementary-data-pypi-ghcr-compromise.md](advisories/2026-04-elementary-data-pypi-ghcr-compromise.md)
@@ -159,6 +167,10 @@ Pillar Security: `find_by_name` tool exposed `fd -X` flag injection *before* Sec
 ### 2026-02-09 — Claude Desktop Extensions (DXT) zero-click RCE — Anthropic declines to fix
 LayerX: DXT extensions run **unsandboxed with full user privileges**, and Claude will autonomously chain a low-trust reader connector (Google Calendar/email/Drive) into a high-trust local executor. A malicious calendar event + a vague prompt ("check my calendar and take care of it") = **zero-click local RCE, CVSS 10.0**; ~10,000+ users / 50 extensions. Anthropic called it "outside our current threat model" → **no patch**. Distinct from ClaudeBleed (Chrome). Don't co-locate reader and executor MCP servers in one Claude profile.
 → [advisories/2026-02-claude-desktop-extensions-rce.md](advisories/2026-02-claude-desktop-extensions-rce.md)
+
+### 2026-01-12 — OpenCode AI coding agent — twin localhost RCEs (CVE-2026-22812 + CVE-2026-22813)
+**OpenCode** — the **71K-star** open-source AI coding agent (anomalyco / SST) — shipped **two unauth RCEs** in the same window. **CVE-2026-22812** (CVSS 8.8): the local HTTP server **binds `0.0.0.0` with CORS `*`** and exposes `POST /session/{id}/shell` unauthenticated → any web page the developer visits sends one `fetch()` and runs arbitrary commands. **CVE-2026-22813** (CVSS 9.4): the chat UI inserts **LLM markdown responses straight into the DOM** with no DOMPurify and no CSP → any attacker-controlled text the agent ever reads (poisoned file, fetched page, MCP reply) → XSS → WebSocket → shell. **Both fixed in v1.0.216** (per-session auth token). **~220,000 instances exposed**; **public PoCs on GitHub** with command-exec / file-r/w / interactive-shell modes. Same "**localhost is not a security boundary in the browser-attacker model**" root cause as [OpenClaw CVE-2026-25253](advisories/2026-01-openclaw-cve-2026-25253-gatewayurl-rce.md) and [Marimo CVE-2026-39987](advisories/2026-04-marimo-notebook-rce.md); the markdown variant is a **connector-chaining lethal-trifecta in one app**.
+→ [advisories/2026-01-opencode-localhost-rce.md](advisories/2026-01-opencode-localhost-rce.md)
 
 ### 2026-01-26 — OpenClaw 1-click RCE via WebSocket gateway-URL token theft (CVE-2026-25253)
 **CVE-2026-25253** (CVSS 8.8) — OpenClaw's Control UI blindly trusted the `gatewayUrl` query-string parameter in browser URLs. A single click on a malicious link silently pointed OpenClaw at an attacker-controlled WebSocket gateway, leaked the **auth token**, and ran arbitrary commands on the victim's machine with the agent's full system privileges. The localhost-only assumption failed because the *browser* — which trivially reaches `localhost` — is the network attacker; even instances behind NAT were exploitable. Patched in **OpenClaw 2026.1.29** (confirmation modal; later releases added origin validation). Distinct from May's [Claw Chain cluster](advisories/2026-05-openclaw-claw-chain.md) — different bug, different month, different researcher. Public PoCs available.
