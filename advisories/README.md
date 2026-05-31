@@ -5,6 +5,7 @@ One file per incident. Latest at the top.
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
 | 2026-05-25 | [Cargo May 2026 security release — symlink-override + sparse-URL leak (CVE-2026-5223, CVE-2026-5222)](2026-05-cargo-symlink-sparse-url-cves.md) | medium | patched |
+| 2026-05-22 | [Megalodon — mass GitHub-Actions workflow poisoning of 5,561 repos](2026-05-megalodon-github-actions-mass-campaign.md) | critical | contained |
 | 2026-05-22 | [BadHost — Starlette host-header auth bypass blasts FastAPI, vLLM, LiteLLM, MCP servers (CVE-2026-48710)](2026-05-starlette-badhost-host-header-bypass.md) | critical | patched |
 | 2026-05-22 | [Composio AI-agent platform breach — LLM-augmented attacker registered malicious tool definitions in the sandbox](2026-05-composio-ai-agent-platform-breach.md) | high | contained |
 | 2026-05-22 | [TrapDoor — cross-ecosystem stealer poisons .cursorrules / CLAUDE.md](2026-05-trapdoor-cross-ecosystem-stealer.md) | critical | active |
@@ -50,7 +51,7 @@ One file per incident. Latest at the top.
 | 2025-11-24 | [Shai-Hulud "Second Coming"](2025-11-shai-hulud-second-coming.md) | critical | contained |
 | 2025-10-21 | [Cursor & Windsurf ship stale Chromium — 94+ n-day vulns](2025-10-cursor-windsurf-chromium-ndays.md) | high | active |
 | 2025-10 | [Windsurf path-traversal via prompt-injected README (CVE-2025-62353)](2025-10-windsurf-cve-2025-62353-path-traversal.md) | critical | patched |
-| 2025-10-17 | [GlassWorm — self-propagating VS Code / Open VSX worm](2025-10-glassworm-vscode-worm.md) | high | active |
+| 2025-10-17 | [GlassWorm — self-propagating VS Code / Open VSX worm](2025-10-glassworm-vscode-worm.md) | high | mitigated |
 | 2025-09-17 | [postmark-mcp backdoor](2025-09-postmark-mcp-backdoor.md) | high | contained |
 | 2025-09-15 | [Shai-Hulud original](2025-09-shai-hulud-original.md) | critical | contained |
 | 2025-09-08 | [qix npm account compromise](2025-09-qix-compromise.md) | critical | contained |

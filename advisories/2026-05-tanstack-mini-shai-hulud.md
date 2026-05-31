@@ -2,17 +2,19 @@
 id: 2026-05-tanstack-mini-shai-hulud
 title: "Mini Shai-Hulud wave — TanStack, Mistral, UiPath, OpenSearch (May 2026)"
 date_disclosed: 2026-05-11
-last_updated: 2026-05-23
+last_updated: 2026-05-31
 severity: critical
 status: active
 ecosystems: [npm, pypi]
 tools_affected: [any-react-project, cursor, claude-code, lovable, bolt, v0, llm-tooling]
-tags: [supply-chain, worm, ci-cd, github-actions, oidc, credential-theft, slsa-provenance, teampcp, cve]
+tags: [supply-chain, worm, ci-cd, github-actions, oidc, credential-theft, slsa-provenance, teampcp, cve, cisa-kev]
 ---
 
 ## TL;DR
 Over a 48-hour window on **2026-05-11 → 2026-05-12**, the Mini Shai-Hulud worm — operated by threat actor group **TeamPCP** — compromised **172 unique packages across 403 malicious versions** on npm and PyPI. High-profile scopes hit: **`@tanstack`, `@mistralai`, `@uipath`, `@opensearch-project`**, plus Guardrails AI. Cumulative downloads of affected packages exceed **518 million**. The TanStack subset (~84 versions across 42 `@tanstack/*` packages, including `@tanstack/react-router` ~12.7M weekly downloads) was assigned **CVE-2026-45321 (CVSS 9.6)**. This is the **first documented case of a malicious npm package carrying valid SLSA provenance** — published by the legitimate release pipeline after attacker-controlled code hijacked the runner mid-workflow. Same threat actor is now confirmed to have launched the [PyTorch Lightning compromise](2026-04-pytorch-lightning-compromise.md) on April 30, 2026, and went on to hit the [@antv ecosystem + Microsoft `durabletask` on May 19](2026-05-mini-shai-hulud-may19-wave.md) and to breach [GitHub's own internal repos on May 20](2026-05-teampcp-github-breach.md).
 
+> **Update 2026-05-31:** **CISA added CVE-2026-45321 to the Known Exploited Vulnerabilities catalog on 2026-05-27** alongside [CVE-2026-48027 (Nx Console)](2026-05-nx-console-vscode-compromise.md) and CVE-2026-8398 (DAEMON Tools Lite) — **federal-agency remediation deadline 2026-06-10**. **OpenAI** disclosed on **2026-05-14** that this wave reached **two OpenAI employee devices**, exfiltrated **"limited credential material" from internal source-code repos**, and forced **re-signing of the macOS, Windows, iOS, and Android desktop apps** (ChatGPT Desktop, Codex, Codex-cli, Atlas). **Old certificates are revoked on 2026-06-12** — unupdated macOS users will be blocked from launching the apps. OpenAI's own postmortem notes the compromised devices had not yet received post-[Axios](2026-03-axios-compromise.md) supply-chain hardening (pinned commit hashes + `minimumReleaseAge` floor) that would have blocked the malicious dependency. Two AI-vendor code-signing-cert rotations in five weeks (Axios → 2026-05-08, TanStack → 2026-06-12) — track this as a recurring named-instance pattern.
+>
 > **Campaign context (updated 2026-05-23):** TeamPCP (aka PCPcat / DeadCatx3 / UNC6780, per Google Threat Intelligence) has been the most active supply-chain actor of 2026. The Mini Shai-Hulud campaign began in early March with **Aqua's Trivy** scanner, then cascaded through **Checkmarx KICS**, **LiteLLM**, **Telnyx**, the **["Shai-Hulud: The Third Coming" Checkmarx-channel wave](2026-04-bitwarden-cli-shai-hulud-third-coming.md)** that backdoored **`@bitwarden/cli`** (Apr 22 — the first payload to specifically hunt **AI-coding-tool credentials**), the [SAP scope](2026-04-mini-shai-hulud-sap.md) (April), [PyTorch Lightning](2026-04-pytorch-lightning-compromise.md) (Apr 30), this TanStack/Mistral/UiPath/OpenSearch wave (May 11), [node-ipc](2026-05-node-ipc-compromise.md) (May 14), the [@antv + durabletask wave](2026-05-mini-shai-hulud-may19-wave.md) (May 19), and a **Checkmarx Jenkins AST Plugin** backdoor (May). **Campaign total to date: ~1,055 malicious versions across ~502 unique packages** (npm 1,048, PyPI 6, Composer 1). Separately, the same *"hijack the real release pipeline via GitHub Actions"* TTP showed up in the [elementary-data PyPI/GHCR compromise](2026-04-elementary-data-pypi-ghcr-compromise.md) (Apr 24) — script injection → forged signed release → legitimate publish pipeline.
 
 ## What happened
@@ -51,7 +53,8 @@ gh api /user/repos --paginate --jq '.[] | select(.created_at > "2026-05-10") | {
 
 | Type | Value |
 |---|---|
-| CVE (TanStack subset) | `CVE-2026-45321` (CVSS 9.6) |
+| CVE (TanStack subset) | `CVE-2026-45321` (CVSS 9.6) — **CISA KEV 2026-05-27**, federal deadline **2026-06-10** |
+| Downstream AI-vendor impact | **OpenAI**: 2 employee devices compromised, internal source-code credential exfil; macOS/Windows/iOS/Android signing certs rotated; old certs revoked **2026-06-12** |
 | Worm commit-message prefix | `EveryBoiWeBuildIsAWormyBoi` |
 | Exfil repo description | `"A Mini Shai-Hulud has Appeared"` / `"Shai-Hulud: Here We Go Again"` |
 | C2 / staging hosts | `git-tanstack[.]com`, `*.getsession.org`, `filev2.getsession.org`, `api.masscan.cloud` |
@@ -97,3 +100,11 @@ SLSA provenance is meant to prove "this artifact was built by this pipeline from
 - [The CyberSec Guru — Mini Shai-Hulud npm Attack: All Affected Packages](https://thecybersecguru.com/news/mini-shai-hulud-npm-worm-affected-packages-list/)
 - [Qualysec — Mini Shai-Hulud Worm: 170+ npm & PyPI Packages Compromised](https://qualysec.com/cybersecurity-news/mini-shai-hulud-worm-compromises/)
 - [Cybersecurity News — MistralAI PyPI Package Compromised](https://cybersecuritynews.com/mistralai-pypi-package-compromised/amp/)
+- [OpenAI — Our response to the TanStack npm supply chain attack](https://openai.com/index/our-response-to-the-tanstack-npm-supply-chain-attack/) — official vendor IR: 2 employee devices, signing certs rotated, June 12 revocation
+- [The Register — OpenAI caught in TanStack npm supply chain chaos after employee devices compromised (2026-05-15)](https://www.theregister.com/security/2026/05/15/openai-caught-in-tanstack-npm-supply-chain-chaos-after-employee-devices-compromised/5241019)
+- [The Hacker News — TanStack Supply Chain Attack Hits Two OpenAI Employee Devices, Forces macOS Updates](https://thehackernews.com/2026/05/tanstack-supply-chain-attack-hits-two.html)
+- [SecurityWeek — OpenAI Hit by TanStack Supply Chain Attack](https://www.securityweek.com/openai-hit-by-tanstack-supply-chain-attack/)
+- [TechCrunch — OpenAI says hackers stole some data after latest code security issue](https://techcrunch.com/2026/05/14/openai-says-hackers-stole-some-data-after-latest-code-security-issue/)
+- [CISA — Three Known Exploited Vulnerabilities Added to Catalog (2026-05-27)](https://www.cisa.gov/news-events/alerts/2026/05/27/cisa-adds-three-known-exploited-vulnerabilities-catalog) — CVE-2026-45321 KEV addition
+- [SecurityAffairs — U.S. CISA adds Daemon Tools, TanStack, and Nx Console flaws to its KEV catalog](https://securityaffairs.com/192776/security/u-s-cisa-adds-daemon-tools-tanstack-and-nx-console-flaws-to-its-known-exploited-vulnerabilities-catalog.html)
+- [VentureBeat — Four AI supply-chain attacks in 50 days exposed the release pipeline red teams aren't covering](https://venturebeat.com/security/supply-chain-incidents-openai-anthropic-meta-release-surface-vendor-questionnaire-matrix)
