@@ -356,7 +356,7 @@ article {
   border: 1px solid var(--border);
   border-radius: var(--r-sm);
   color: var(--fg-muted);
-  min-height: 28px;
+  min-height: 44px;
 }
 .page-action:hover {
   background: var(--bg-elev-2);

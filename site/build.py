@@ -130,9 +130,53 @@ def derive_title(frontmatter: dict[str, Any], body: str, source_path: Path) -> s
     return source_path.stem.replace("-", " ").replace("_", " ").title()
 
 
+def _leading_blockquote_summary(body: str) -> str | None:
+    """First paragraph of a leading `>` blockquote, cleaned — the page's intended
+    summary (the llmstxt.org convention; README, ALERTS, and several playbooks
+    open with one). Returns None if the body doesn't start with a blockquote, so
+    callers fall through to first-paragraph extraction. Prevents a page whose body
+    leads with a list (e.g. the README's numbered "How to use") from producing a
+    meta/OG description that starts mid-list."""
+    lines = body.splitlines()
+    i = 0
+    while i < len(lines) and not lines[i].strip():
+        i += 1
+    if i < len(lines) and lines[i].lstrip().startswith("# "):  # skip a leading h1
+        i += 1
+        while i < len(lines) and not lines[i].strip():
+            i += 1
+    buf: list[str] = []
+    for line in lines[i:]:
+        s = line.strip()
+        if s.startswith(">"):
+            content = s[1:].strip()
+            if not content:  # blank `>` line terminates the first paragraph
+                break
+            buf.append(content)
+        elif buf:
+            break
+        else:
+            return None  # no leading blockquote
+    if not buf:
+        return None
+    text = " ".join(buf)
+    text = re.sub(r"\[([^\]]+)\]\([^)]+\)", r"\1", text)
+    text = re.sub(r"[*_`]+", "", text)
+    text = re.sub(r"\s+", " ", text).strip()
+    if len(text) > 200:
+        text = text[:197].rsplit(" ", 1)[0] + "…"
+    return text or None
+
+
 def derive_description(frontmatter: dict[str, Any], body: str) -> str:
     if frontmatter.get("description"):
         return str(frontmatter["description"]).strip()
+
+    # A leading `>` blockquote is the page's hand-written summary — prefer it over
+    # scraping the first paragraph (which can land on a list item or code block).
+    bq = _leading_blockquote_summary(body)
+    if bq:
+        return bq
 
     buf: list[str] = []
     in_para = False

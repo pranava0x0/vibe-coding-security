@@ -25,11 +25,17 @@ The format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/
 - **SECURITY.md** (renamed from lowercase `security.md` for the standard GitHub convention).
 - **CHANGELOG.md** — this file.
 - **Comprehensive pytest test suite** under `tests/` — frontmatter schema, link integrity, no-secrets, determinism, accessibility, llms.txt format, advisory ID uniqueness, etc. Wired into the deploy workflow.
+- **Prevention guides:**
+  - **`prevention/supply-chain-attack-surface.md`** — a map of every pathway by which external code/data reaches you (package managers, lockfiles, CI/GitHub Actions, browser CDN, MCP & agent tooling, editor/browser extensions, scraped data, datasets, global installs, hosted builds), each with the one defense that matters and links to the deep guide.
+  - **`prevention/ci-cd-hardening.md`** — GitHub Actions / CI supply-chain hardening: SHA-pin actions, least-privilege `permissions:`, the third-party-action-with-write-token anti-pattern, dangerous triggers, script injection, and OIDC publishing.
 
 ### Changed
 - **Site title** displayed as "Vibe Coding · Security Issue Tracking" (was "vibe-coding-security"). Repo URL slug unchanged.
 - **Footer** now exposes the full set of LLM/feed format links.
 - **`robots.txt`** explicit comment: AI/LLM training allowed.
+
+### Security
+- **Hardened the deploy workflow** (`.github/workflows/deploy-site.yml`): pinned all GitHub Actions to full commit SHAs (were floating `@vN` tags) and scoped `permissions:` to least privilege per job — `build` keeps only `contents: read`, the elevated `pages: write` + `id-token: write` now live solely on the `deploy` job. The project now practices the CI hardening documented in [prevention/ci-cd-hardening.md](prevention/ci-cd-hardening.md).
 
 ---
 
