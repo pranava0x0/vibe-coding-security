@@ -15,7 +15,7 @@
 1. **Hit by something right now?** → start at [ALERTS.md](ALERTS.md). It's a single scannable feed, latest on top.
 2. **Wondering if a specific incident matters to you?** → [advisories/](advisories/) — one file per incident, with concrete `am I affected?` checks.
 3. **Already compromised and need to recover?** → [playbooks/](playbooks/) — credential rotation, package removal, blast-radius assessment.
-4. **Trying not to get hit in the first place?** → [prevention/](prevention/) — npm hardening, MCP hygiene, credential storage, sandboxing.
+4. **Trying not to get hit in the first place?** → [prevention/](prevention/) — start with the [attack-surface map](prevention/supply-chain-attack-surface.md), then npm hardening, CI/CD (GitHub Actions) hardening, MCP hygiene, credential storage, sandboxing.
 5. **Want to monitor this stuff yourself?** → [sources/](sources/) — who to follow on X, which blogs, which feeds.
 
 ---

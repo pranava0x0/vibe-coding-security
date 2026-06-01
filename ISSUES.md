@@ -10,6 +10,11 @@ _None open._
 
 ## Fixed
 
+### Supply-chain coverage gap + CI self-hardening — 2026-06-01
+Prompted by a personalized exposure audit of the maintainer's other repos, which surfaced pathway categories this knowledge base didn't yet represent or practice.
+- **Coverage gap: no CI/CD prevention guide.** Added [`prevention/ci-cd-hardening.md`](prevention/ci-cd-hardening.md) (SHA-pin actions, least-privilege `permissions:`, third-party-action-with-write-token anti-pattern, dangerous triggers, script injection, OIDC publishing) and [`prevention/supply-chain-attack-surface.md`](prevention/supply-chain-attack-surface.md) (a map of all 11 pathways external code/data enters, each linked to its deep guide). Wired both into `prevention/README.md`, `README.md`, `npm-hardening.md`, and `CHANGELOG.md`. Root cause: content gap — GitHub Actions is a top supply-chain vector (Megalodon, elementary-data, Comment-and-Control advisories) but had no dedicated guide.
+- **Practice-what-we-preach: the project's own `deploy-site.yml` had the exact gap it documents.** Pinned all four actions to commit SHAs (were floating `@vN`) and scoped `permissions:` per job (`build`: `contents: read`; `deploy`: `pages: write` + `id-token: write`, previously granted to both jobs). Root cause: infra hygiene. Regression guard: a future test could assert no floating `@vN` action tags remain in `.github/workflows/` (logged to BACKLOG).
+
 ### Low-severity UAT follow-ups — 2026-06-01
 - **[UAT-001] Homepage meta/OG description started mid-list** ("1. Hit by something right now?…"). `derive_description()` now prefers a page's leading `>` blockquote summary (the llmstxt.org convention the README/ALERTS/playbooks already use), falling through to paragraph extraction otherwise. Homepage description is now "A living index of supply-chain attacks…". Bonus: 20 other pages (alerts, playbooks, prevention, sources, tools) improved from list/code fragments to their real summaries — verified with a full before/after description diff; **no advisory descriptions changed, no regressions**. Root cause: code (deriver heuristic).
 - **[UAT-002] `.page-action` touch target ~30px → 44px** (`site/style.css` `min-height`). "View raw markdown" / "Edit on GitHub" are now 44px tall, single-line at desktop width (verified in preview). Root cause: code (CSS).

@@ -124,7 +124,7 @@ Code review: when a PR touches `package-lock.json` / `yarn.lock` / `pnpm-lock.ya
 
 ## For consumers downstream of CI/CD
 
-Harden your GitHub Actions workflows — most modern npm worms (Shai-Hulud 2.0, TanStack Mini) propagate via compromised CI:
+**Full guide: [ci-cd-hardening.md](ci-cd-hardening.md).** Harden your GitHub Actions workflows — most modern npm worms (Shai-Hulud 2.0, TanStack Mini) propagate via compromised CI:
 
 - **[GitHub's official Secure use reference](https://docs.github.com/en/actions/reference/security/secure-use)**
 - **[Wiz — Hardening GitHub Actions: Lessons from Recent Attacks](https://www.wiz.io/blog/github-actions-security-guide)**
