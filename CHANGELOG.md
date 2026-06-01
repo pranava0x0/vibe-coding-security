@@ -13,7 +13,7 @@ The format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/
 - **LLM-friendly outputs (Mintlify / Anthropic pattern):**
   - **Per-page `.md` mirrors** alongside every `.html` page — replace `.html` with `.md` in any URL to get the raw markdown source without re-parsing HTML.
   - **Per-section `llms.txt`** at `advisories/llms.txt`, `playbooks/llms.txt`, `prevention/llms.txt`, `sources/llms.txt`, `tools/llms.txt`.
-  - **Compact `llms-ctx.txt`** — alerts + per-advisory TL;DRs + "am I affected?" only (~10KB) for mid-context-window ingestion.
+  - **Compact `llms-ctx.txt`** — alerts + per-advisory TL;DRs + "am I affected?" only (compact per-advisory digest, ~70KB at ~50 advisories) for mid-context-window ingestion.
 - **`feed.xml`** — Atom feed of advisories for RSS readers.
 - **`advisory-schema.json`** — JSON Schema (draft 2020-12) for advisory frontmatter.
 - **Versioned API** at `api/v1/advisories.json` and `api/v1/index.json`.

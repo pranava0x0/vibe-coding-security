@@ -6,12 +6,16 @@ import re
 from pathlib import Path
 
 
-# Mintlify recommendation is ~200KB; we accept up to 512KB to allow natural
-# advisory-corpus growth between sweeps (still well within Claude/GPT context windows).
-# llms-ctx.txt is a compact per-advisory TL;DR + "am I affected?" digest, so it grows
-# roughly linearly with the advisory count — bumped to 96KB as the corpus passed 50 entries
-# (2026-05-30 sweep: 3 new advisories pushed the per-advisory digest past the 64KB cap).
-LLMS_FULL_MAX_BYTES = 512 * 1024
+# Mintlify recommendation is ~200KB; we accept a larger ceiling to allow natural
+# advisory-corpus growth between sweeps. Both full + ctx grow ~linearly with the
+# advisory count, so these caps get bumped as the corpus crosses round numbers:
+#   - ctx: 64KB → 96KB (2026-05-30 sweep, corpus passed 50 entries).
+#   - full: 512KB → 640KB (2026-06-01, corpus reached ~505KB / ~50 advisories — only
+#     ~7KB of headroom left, one sweep from breaking the deploy). 640KB ≈ 160K tokens:
+#     still a single paste for GPT/Gemini 1M-token windows and Claude's 200K. If
+#     llms-full.txt grows much past this, trim historical-status advisories from it
+#     rather than raising the cap again — at some point it stops being "one paste".
+LLMS_FULL_MAX_BYTES = 640 * 1024
 LLMS_CTX_MAX_BYTES = 96 * 1024
 LLMS_TXT_MAX_BYTES = 50 * 1024
 

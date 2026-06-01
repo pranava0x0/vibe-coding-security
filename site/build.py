@@ -613,6 +613,18 @@ def render_page(page: Page, all_pages: list[Page], template: str) -> str:
 # LLM-friendly outputs
 # ────────────────────────────────────────────────────────────────────────────
 
+def _human_size(num_bytes: int) -> str:
+    """Approximate human-readable byte size for the llms.txt index.
+
+    Rounded to the nearest 10KB (or 0.1MB) so the figure stays accurate as the
+    corpus grows without jittering on every build — keeps determinism intact
+    while never going stale the way a hardcoded '~230KB' did."""
+    kb = num_bytes / 1024
+    if kb < 1000:
+        return f"~{round(kb / 10) * 10}KB"
+    return f"~{kb / 1024:.1f}MB"
+
+
 def _page_md_url(p: Page) -> str:
     return f"{SITE_URL}/{p.output_path.as_posix()[:-5]}.md"
 
@@ -623,7 +635,7 @@ def _page_html_url(p: Page) -> str:
     return f"{SITE_URL}/{p.output_path.as_posix()}"
 
 
-def build_llms_txt(pages: list[Page]) -> str:
+def build_llms_txt(pages: list[Page], full_bytes: int | None = None, ctx_bytes: int | None = None) -> str:
     lines: list[str] = [
         f"# {SITE_NAME}",
         "",
@@ -676,10 +688,12 @@ def build_llms_txt(pages: list[Page]) -> str:
             lines.append(f"- [{p.title}]({_page_html_url(p)}) ([md]({_page_md_url(p)})): {p.description}")
         lines.append("")
 
+    full_size = _human_size(full_bytes) if full_bytes else "~500KB"
+    ctx_size = _human_size(ctx_bytes) if ctx_bytes else "~70KB"
     lines.append("## Optional")
     lines.append("")
-    lines.append(f"- [llms-full.txt]({SITE_URL}/llms-full.txt): every advisory + playbook + prevention doc concatenated (~230KB) for full-context ingestion")
-    lines.append(f"- [llms-ctx.txt]({SITE_URL}/llms-ctx.txt): compact context — alerts + per-advisory TL;DRs only (~10KB)")
+    lines.append(f"- [llms-full.txt]({SITE_URL}/llms-full.txt): every advisory + playbook + prevention doc concatenated ({full_size}) for full-context ingestion")
+    lines.append(f"- [llms-ctx.txt]({SITE_URL}/llms-ctx.txt): compact context — alerts + per-advisory TL;DRs only ({ctx_size})")
     lines.append(f"- [advisories/llms.txt]({SITE_URL}/advisories/llms.txt): advisories-only index")
     lines.append(f"- [playbooks/llms.txt]({SITE_URL}/playbooks/llms.txt): playbooks-only index")
     lines.append(f"- [prevention/llms.txt]({SITE_URL}/prevention/llms.txt): prevention-only index")
@@ -782,8 +796,9 @@ def build_llms_full_txt(pages: list[Page]) -> str:
 
 
 def build_llms_ctx_txt(pages: list[Page]) -> str:
-    """Compact mid-tier: alerts URL + per-advisory TL;DR only. Fits comfortably
-    in any modern context window. Goal: under 10KB.
+    """Compact mid-tier: per-advisory TL;DR + 'am I affected?' only — far smaller
+    than llms-full.txt while still covering every advisory. Grows ~linearly with
+    the corpus (see LLMS_CTX_MAX_BYTES in tests/test_llms.py for the current cap).
 
     Pattern documented in: Mintlify's llms.txt guidance + Anthropic docs."""
     advisories = [p for p in pages if p.section == "advisories" and not p.is_index]
@@ -1072,10 +1087,17 @@ def main() -> None:
         md_path = DIST_DIR / md_relpath
         md_path.write_text(page.raw_text, encoding="utf-8")
 
-    # Site-wide LLM-friendly outputs
-    (DIST_DIR / "llms.txt").write_text(build_llms_txt(pages), encoding="utf-8")
-    (DIST_DIR / "llms-full.txt").write_text(build_llms_full_txt(pages), encoding="utf-8")
-    (DIST_DIR / "llms-ctx.txt").write_text(build_llms_ctx_txt(pages), encoding="utf-8")
+    # Site-wide LLM-friendly outputs. Build full + ctx first so the llms.txt
+    # index can report their real byte sizes (keeps the "(~NKB)" annotations
+    # honest as the corpus grows, instead of a hardcoded number that goes stale).
+    llms_full = build_llms_full_txt(pages)
+    llms_ctx = build_llms_ctx_txt(pages)
+    (DIST_DIR / "llms.txt").write_text(
+        build_llms_txt(pages, len(llms_full.encode("utf-8")), len(llms_ctx.encode("utf-8"))),
+        encoding="utf-8",
+    )
+    (DIST_DIR / "llms-full.txt").write_text(llms_full, encoding="utf-8")
+    (DIST_DIR / "llms-ctx.txt").write_text(llms_ctx, encoding="utf-8")
 
     # Per-section llms.txt
     for slug, label, _ in SECTIONS:

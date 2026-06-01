@@ -6,7 +6,7 @@
 
 **Audience.** Anyone shipping with Cursor, Claude Code, Lovable, v0, Bolt, Replit, Windsurf, Codex, or any agent that runs `npm install` / `pip install` on its own. If an LLM has ever suggested a package and you installed it without reading the source, this repo is for you.
 
-**Last full sweep:** 2026-05-28 · **Website:** [pranava0x0.github.io/vibe-coding-security](https://pranava0x0.github.io/vibe-coding-security/)
+**Last full sweep:** 2026-05-31 · **Website:** [pranava0x0.github.io/vibe-coding-security](https://pranava0x0.github.io/vibe-coding-security/)
 
 ---
 
@@ -31,7 +31,7 @@ In the last 12 months alone:
 - **Nx s1ngularity** (Aug 2025) — first malware to *use Claude Code and Gemini CLI as recon tools* to find your credentials. 2,349 secrets leaked in hours.
 - **qix compromise** (Sep 2025) — `chalk`, `debug`, `ansi-styles`. 2 *billion* downloads per week, single phishing email.
 - **Postmark MCP** (Sep 2025) — first malicious MCP server. Built trust over 15 versions, then silently BCC'd every email to the attacker.
-- **Mini Shai-Hulud** (April–May 2026, ongoing) — SAP packages, TanStack (`@tanstack/react-router`, 12.7M weekly), node-ipc (10M weekly, **two days ago**).
+- **Mini Shai-Hulud** (April–May 2026, ongoing) — SAP packages, TanStack (`@tanstack/react-router`, 12.7M weekly), node-ipc (10M weekly, **May 14**).
 - **Axios** (Mar 2026) — 70M+ weekly downloads, auto-updated into thousands of projects before takedown.
 
 Most defenders have hours to react. Most vibe coders find out weeks later, when their AWS bill arrives.
@@ -72,8 +72,8 @@ Every build emits machine-readable artifacts under `dist/`. Pattern adapted from
 
 **For LLMs**
 - **[llms.txt](https://pranava0x0.github.io/vibe-coding-security/llms.txt)** — [llmstxt.org](https://llmstxt.org/) index with one-line descriptions of every page.
-- **[llms-full.txt](https://pranava0x0.github.io/vibe-coding-security/llms-full.txt)** — every advisory + playbook + prevention doc concatenated as raw markdown (~145KB, fits in any context window). Drop it into Claude / GPT / Gemini for full coverage in one paste.
-- **[llms-ctx.txt](https://pranava0x0.github.io/vibe-coding-security/llms-ctx.txt)** — compact variant: alerts + per-advisory TL;DR + "am I affected?" only (~12KB).
+- **[llms-full.txt](https://pranava0x0.github.io/vibe-coding-security/llms-full.txt)** — every advisory + playbook + prevention doc concatenated as raw markdown (~500KB / ~125K tokens, fits a 200K-token context window). Drop it into Claude / GPT / Gemini for full coverage in one paste.
+- **[llms-ctx.txt](https://pranava0x0.github.io/vibe-coding-security/llms-ctx.txt)** — compact variant: alerts + per-advisory TL;DR + "am I affected?" only (~70KB).
 - **[advisories/llms.txt](https://pranava0x0.github.io/vibe-coding-security/advisories/llms.txt)** + per-section variants — narrow indexes scoped to one section.
 - **Per-page `.md` mirror** — replace `.html` with `.md` in any URL to get the raw markdown source. Also discoverable via `<link rel="alternate" type="text/markdown">` on every page.
 
