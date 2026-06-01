@@ -31,7 +31,7 @@ In the last 12 months alone:
 - **Nx s1ngularity** (Aug 2025) — first malware to *use Claude Code and Gemini CLI as recon tools* to find your credentials. 2,349 secrets leaked in hours.
 - **qix compromise** (Sep 2025) — `chalk`, `debug`, `ansi-styles`. 2 *billion* downloads per week, single phishing email.
 - **Postmark MCP** (Sep 2025) — first malicious MCP server. Built trust over 15 versions, then silently BCC'd every email to the attacker.
-- **Mini Shai-Hulud** (April–May 2026, ongoing) — SAP packages, TanStack (`@tanstack/react-router`, 12.7M weekly), node-ipc (10M weekly, **May 14**).
+- **Mini Shai-Hulud** (April–May 2026, ongoing) — SAP packages, TanStack (`@tanstack/react-router`, 12.7M weekly), node-ipc (~822K weekly, **May 14**).
 - **Axios** (Mar 2026) — 70M+ weekly downloads, auto-updated into thousands of projects before takedown.
 
 Most defenders have hours to react. Most vibe coders find out weeks later, when their AWS bill arrives.
