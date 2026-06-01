@@ -6,15 +6,61 @@
 
 ## Open
 
-_See UAT log below; promote any open items here as they're triaged._
+### [UAT-001] Homepage `<meta description>` / `og:description` starts mid-list ("1. Hit by something right now?")
+- **Severity**: low
+- **Area**: `site/build.py` `derive_description()` + `README.md` (homepage source)
+- **Discovered**: 2026-06-01
+- **Status**: open
+- **Description**: The homepage has no frontmatter `description`, so the deriver scans the body. Every early paragraph starts with `**bold**` (skipped as `*`) or `>`/`#`, so the first non-skipped line is the numbered list item `1. Hit by something right now? …`, which becomes the meta + Open Graph description. Functional but awkward for SEO/social cards.
+- **Root cause**: content/build interaction (deriver skips `* _ # > | -` prefixes but not `N.` list markers, and the homepage has no plain lead paragraph).
+- **Fix**: _(pending)_ — either add a tolerated frontmatter `description:` to the homepage source, or have `derive_description()` skip ordered-list markers so it falls through to the "Vibe coding broke the old contract…" paragraph. Deferred from the 2026-06-01 pass to keep blast radius small (the deriver feeds all 84 pages).
+
+### [UAT-002] `.page-action` buttons are ~30px tall (below the 44px touch-target guideline)
+- **Severity**: low
+- **Area**: `site/style.css` (`.page-action`)
+- **Discovered**: 2026-06-01
+- **Status**: open
+- **Description**: "View raw markdown" / "Edit on GitHub" header actions measure ~30px tall at mobile width. CLAUDE.md sets ≥44px for touch targets. Secondary actions, so low impact, but worth padding up. (Inline prose links < 24px are exempt under the WCAG inline exception and are not counted here.)
+- **Fix**: _(pending)_
+
+### [UAT-003] README intro cites node-ipc "10M weekly" vs advisory's "~822K weekly"
+- **Severity**: low
+- **Area**: `README.md` "Why this exists" vs `advisories/2026-05-node-ipc-compromise.md`
+- **Discovered**: 2026-06-01
+- **Status**: open
+- **Description**: Download-count discrepancy (not a date issue). The advisory's ~822K weekly is the sourced figure; the README's "10M weekly" looks like the historical 2022 node-ipc number. Reconcile against a source. Flagged during the freshness pass but left unchanged (no clean source to pick a single number in this pass).
+- **Fix**: _(pending)_
 
 ## Fixed
 
-_Move closed items here with a Fixed-in commit SHA._
+### Data-freshness + llms.txt-accuracy pass — 2026-06-01
+- **`README.md` "Last full sweep: 2026-05-28" → "2026-05-31"** — was stale vs the actual last sweep (recorded in the skill `runs.log.md` and reflected by ALERTS.md "Last refreshed: 2026-05-31"). Root cause: content (field not bumped by recent daily sweeps).
+- **`README.md` node-ipc "two days ago" → "May 14"** — a relative date frozen at the 2026-05-16 seed (node-ipc disclosed 2026-05-14); 18 days stale. Replaced with an absolute date so it can't rot. Root cause: content.
+- **llms.txt size annotations were badly stale** — generated `llms.txt` advertised `llms-full.txt (~230KB)` / `llms-ctx.txt (~10KB)`; real sizes were ~505KB / ~71KB. Made the figures **dynamic** in `build.py` (`_human_size()` computes from the actual built bytes) so the index can never drift again; README/CHANGELOG prose updated to match. Root cause: hardcoded magic numbers (code/content).
+- **`tests/test_llms.py` `LLMS_FULL_MAX_BYTES` 512KB → 640KB** — `llms-full.txt` was at ~505KB (98.7% of the cap); the next daily sweep would have broken the build/deploy. Bumped with a dated comment + a note to trim historical advisories rather than keep raising the cap. Root cause: corpus growth against a guardrail (maintenance).
 
 ---
 
 ## UAT log
+
+### 2026-06-01 — UAT pass (local `dist/` build) + freshness/perf/llms.txt audit
+
+Run against a local server of `dist/` (browser walkthrough at 1280px desktop, 375px mobile, dark mode) + `python3 site/validate.py` + `pytest tests/` + a live HTTP sweep of all artifact URLs.
+
+**Findings:**
+
+- **[INFO]** Renders cleanly at 1280px (3-column: nav + sidebar + right-rail TOC), 634px (single-column, hamburger), and 375px mobile. Dark mode (`prefers-color-scheme: dark`) themes the whole page; severity colors intact.
+- **[INFO]** Mobile hamburger menu works — `body.nav-open` toggled by an inline `onclick` (no external JS); opens a full-screen nav with all 7 sections. `aria-expanded` flips correctly; toggle button is 44×44px.
+- **[INFO]** No console errors/warnings anywhere (site ships zero external JS; only inline JSON-LD + the menu `onclick`).
+- **[INFO]** All 9 `validate.py` checks pass; **86/86 pytest** pass (incl. build determinism after the dynamic-size change).
+- **[INFO]** Live HTTP sweep: all 32 sampled URLs (HTML, `.md` mirrors, all `llms*.txt`, per-section `llms.txt`, JSON/API endpoints, feed, sitemap, robots, security.txt) return 200.
+- **[FRESH]** Fixed two stale date strings in README (see Fixed: `2026-05-28`→`2026-05-31`, and node-ipc "two days ago"→"May 14"). ALERTS.md "Last refreshed: 2026-05-31" is current (1 day old, inside the 7-day window). `.well-known/security.txt` `Expires: 2027-12-31` — valid. Build/feed/sitemap dates are generated via `date.today()` — always fresh.
+- **[PERF]** HTML pages 5–22KB gzipped (alerts.html largest at 72KB raw / 22KB gz); `style.css` 17KB raw / 4.3KB gz. A typical page = 2 requests (HTML + CSS), no JS/fonts/images/third-parties. Excellent.
+- **[PERF]** **Fixed:** `llms-full.txt` (~505KB) was at 98.7% of its 512KB test cap — one sweep from breaking the deploy. Cap bumped to 640KB. `llms-ctx.txt` ~71KB (cap 96KB).
+- **[LLMS]** **Fixed:** the index's size annotations were wrong (`~230KB`/`~10KB` vs real `~505KB`/`~71KB`); now computed dynamically. `llms.txt` validated: starts with `# title`, `> summary`, has all required sections, lists every advisory, Optional section links the alternates.
+- **[OPEN]** Logged UAT-001 (homepage meta description starts mid-list), UAT-002 (`.page-action` ~30px touch target), UAT-003 (node-ipc download-count discrepancy) — all low severity.
+
+**No regressions.** Build, validators, and full test suite green after the fixes.
 
 ### 2026-05-17 — UAT pass on deployed site
 
