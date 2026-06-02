@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-06-01 | [Miasma — @redhat-cloud-services npm scope compromised by Mini-Shai-Hulud-derived worm](2026-06-miasma-redhat-cloud-services-compromise.md) | critical | contained |
 | 2026-05-25 | [Cargo May 2026 security release — symlink-override + sparse-URL leak (CVE-2026-5223, CVE-2026-5222)](2026-05-cargo-symlink-sparse-url-cves.md) | medium | patched |
 | 2026-05-22 | [Megalodon — mass GitHub-Actions workflow poisoning of 5,561 repos](2026-05-megalodon-github-actions-mass-campaign.md) | critical | contained |
 | 2026-05-22 | [BadHost — Starlette host-header auth bypass blasts FastAPI, vLLM, LiteLLM, MCP servers (CVE-2026-48710)](2026-05-starlette-badhost-host-header-bypass.md) | critical | patched |

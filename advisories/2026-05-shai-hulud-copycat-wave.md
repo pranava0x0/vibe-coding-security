@@ -2,7 +2,7 @@
 id: 2026-05-shai-hulud-copycat-wave
 title: "Shai-Hulud copycats after the worm source went public (May 2026)"
 date_disclosed: 2026-05-18
-last_updated: 2026-05-24
+last_updated: 2026-06-02
 severity: high
 status: active
 ecosystems: [npm]
@@ -12,6 +12,11 @@ tags: [supply-chain, worm, credential-theft, npm, copycat, ddos, infostealer, te
 
 ## TL;DR
 On 2026-05-12 TeamPCP **open-sourced the fully weaponized Mini Shai-Hulud worm** to public GitHub and announced a paid "biggest supply-chain attack" **competition on BreachForums**. Within days, low-skill copycats began shipping near-verbatim clones on npm — the first being **`chalk-tempalte`**, a barely-modified copy of the leaked worm with its own C2. A single actor (`deadcode09284814`) published **four malicious packages** mixing a Shai-Hulud clone, plain infostealers, and a **Golang DDoS botnet ("Phantom Bot")**. Downloads are small so far (~2,700–3,000), but the worm is now a commodity — expect more.
+
+> **Update 2026-06-02:** the worm is now a *named-family* commodity. Three distinct copycat waves have shipped derivatives of the open-sourced Mini Shai-Hulud worm in three weeks:
+> 1. **This typosquat wave** (`deadcode09284814`, 2026-05-18) — near-verbatim clones with `*.lhr.life` C2 + DDoS botnet payload variant.
+> 2. **[TrapDoor](2026-05-trapdoor-cross-ecosystem-stealer.md)** (2026-05-22) — different actor, cross-ecosystem (npm + PyPI + Crates.io), `.cursorrules` / `CLAUDE.md` poisoning as a new persistence primitive.
+> 3. **[Miasma](2026-06-miasma-redhat-cloud-services-compromise.md)** (2026-06-01) — the first to land on a major *legitimate* npm scope (`@redhat-cloud-services`) rather than typosquats; Greek-mythology theming replaces Dune markers, GCP/Azure cloud-identity collectors added, and exfil is disguised as **`api.anthropic.com/v1/api`** (camouflage on a real AI-vendor host). Treat any future "worm reskin" finding as a likely fourth copycat in this lineage.
 
 ## What happened
 The May 11–12 [TanStack / Mini Shai-Hulud wave](2026-05-tanstack-mini-shai-hulud.md) ended with TeamPCP publishing the worm's complete toolchain — CI cache-poisoning scripts, the OIDC-token extractor, and the credential stealer with its propagation logic — to public GitHub repos, then posting a **$1,000 contest on BreachForums** for the biggest supply-chain campaign (offering to buy "meaningful access" / a cut of ransoms on top). Commoditizing the worm is the story: the barrier to launching a Shai-Hulud-class attack dropped to "clone a repo, swap the C2 key."
