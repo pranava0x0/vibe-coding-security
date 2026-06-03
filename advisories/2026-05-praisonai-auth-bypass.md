@@ -1,13 +1,13 @@
 ---
 id: 2026-05-praisonai-auth-bypass
-title: "PraisonAI authentication bypass — CVE-2026-44338 (May 2026)"
+title: "PraisonAI authentication bypass — CVE-2026-44338 + platform CVEs (May 2026)"
 date_disclosed: 2026-05-11
-last_updated: 2026-05-18
+last_updated: 2026-06-03
 severity: high
 status: patched
 ecosystems: [pypi, ai-agents]
-tools_affected: [praisonai]
-tags: [cve, authentication-bypass, ai-agent-framework, rapid-exploitation, missing-auth]
+tools_affected: [praisonai, praisonai-platform]
+tags: [cve, authentication-bypass, ai-agent-framework, rapid-exploitation, missing-auth, idor, privilege-escalation]
 ---
 
 ## TL;DR
@@ -61,6 +61,19 @@ If you ran `python api_server.py` (or the `praisonai api` subcommand on a vulner
 → Never expose agent-framework dev servers to the public internet. Default-bind to `127.0.0.1`, put a real reverse proxy with auth in front, or route through a tunnel (Tailscale, Cloudflare Tunnel, Ngrok with basic auth).
 → Treat **disclosure-to-exploit as <4 hours** for any AI-agent framework. Subscribe to vendor security advisories; consider Dependabot security updates with auto-merge for these packages.
 
+## June 2026 update — `praisonai-platform` package: four additional CVEs
+
+A second cluster of vulnerabilities affecting the **`praisonai-platform`** PyPI package (the newer multi-tenant deployment surface, distinct from the legacy `api_server.py` covered by CVE-2026-44338) was disclosed in mid-2026:
+
+| CVE | CVSS | Issue |
+|---|---|---|
+| **CVE-2026-47418** | high | Cross-workspace IDOR — a user in workspace A can enumerate and read resources belonging to workspace B by supplying the target workspace ID directly. No ownership check. |
+| **CVE-2026-47416** | high | Privilege escalation to workspace owner — a regular member can elevate their own role to owner via a crafted API call; no server-side enforcement of role hierarchy. |
+| **CVE-2026-47408** | critical | Unauthenticated A2A (agent-to-agent) tool execution — the inter-agent communication endpoint did not require authentication; any network-reachable caller could invoke registered tools as if they were a legitimate agent. |
+| **CVE-2026-47409** | medium | Missing auth on member removal — the `DELETE /workspace/members/{id}` endpoint did not verify the caller had owner/admin privileges; any workspace member could remove other members. |
+
+**Fix:** Upgrade `praisonai-platform` to the patched version per the GitHub advisory. If you run a multi-tenant PraisonAI Platform deployment, treat any workspace with untrusted members as potentially compromised for the IDOR and privilege-escalation bugs; treat any internet-exposed A2A endpoint as having been reachable without credentials.
+
 ## Sources
 - [Sysdig — CVE-2026-44338: PraisonAI authentication bypass in under 4 hours and the growing trend of rapid exploitation](https://www.sysdig.com/blog/cve-2026-44338-praisonai-authentication-bypass-in-under-4-hours-and-the-growing-trend-of-rapid-exploitation)
 - [The Hacker News — PraisonAI CVE-2026-44338 Auth Bypass Targeted Within Hours of Disclosure](https://thehackernews.com/2026/05/praisonai-cve-2026-44338-auth-bypass.html)
@@ -69,3 +82,5 @@ If you ran `python api_server.py` (or the `praisonai api` subcommand on a vulner
 - [Cybersecurity News — PraisonAI Vulnerability Exploited Within Hours of Public Disclosure](https://cybersecuritynews.com/praisonai-vulnerability-exploited/)
 - [GBHackers — PraisonAI Vulnerability Actively Exploited Within Hours of Being Made Public](https://gbhackers.com/praisonai-vulnerability-actively-exploited/)
 - [GitHub Advisory — GHSA-6rmh-7xcm-cpxj](https://github.com/advisories/GHSA-6rmh-7xcm-cpxj)
+- [GitHub Advisory — CVE-2026-47418 praisonai-platform cross-workspace IDOR](https://github.com/advisories?query=praisonai-platform)
+- [GitHub Advisory — CVE-2026-47408 praisonai-platform unauthenticated A2A tool execution](https://github.com/advisories?query=praisonai-platform)

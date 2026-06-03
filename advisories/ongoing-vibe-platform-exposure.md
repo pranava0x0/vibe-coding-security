@@ -1,13 +1,13 @@
 ---
 id: ongoing-vibe-platform-exposure
-title: "Vibe-coded app data exposure — Lovable, Bolt, Replit pattern issues"
+title: "Vibe-coded app data exposure — Lovable, Bolt, Replit, Base44 pattern issues"
 date_disclosed: 2025
-last_updated: 2026-05-19
+last_updated: 2026-06-03
 severity: high
 status: ongoing
-ecosystems: [lovable, bolt, replit, v0, supabase]
-tools_affected: [lovable, bolt, replit, v0]
-tags: [data-exposure, rls, env-vars, bola, vibe-platform, configuration]
+ecosystems: [lovable, bolt, replit, v0, supabase, base44]
+tools_affected: [lovable, bolt, replit, v0, base44]
+tags: [data-exposure, rls, env-vars, bola, vibe-platform, configuration, auth-bypass]
 ---
 
 ## TL;DR
@@ -51,6 +51,10 @@ grep -r "service_role\|sk_live\|AKIA[0-9A-Z]\{16\}" dist/ build/ public/ .next/ 
 → [playbooks/auditing-a-vibe-coded-repo.md](../playbooks/auditing-a-vibe-coded-repo.md)
 
 **Hard rule for vibe-coded apps that will hold real user data:** before launch, have a human (or a dedicated security agent in a fresh context) audit the auth, the RLS, and the secret layout. The agent that wrote the code is exactly the wrong agent to review it — it cannot see what it didn't write.
+
+## July 2025 — Base44 auth endpoint exposure (patched within 24 hours)
+
+**Base44**, an AI-powered app builder (similar positioning to Lovable/Bolt), shipped with **unauthenticated registration and OTP verification endpoints** whose only intended protection was an `app_id` parameter — which was not treated as a secret and was trivially enumerable from the client. A researcher demonstrated that registration/login flows could be invoked for any app without possessing the `app_id` as a secret, bypassing authentication entirely. Base44 patched the issue within **24 hours** of responsible disclosure; no exploitation was confirmed. The pattern (auth endpoint protected only by a non-secret identifier) recurs across vibe-coding platforms as a direct consequence of AI-generated auth code that looks correct but isn't.
 
 ## Sources
 - [Vibe Eval — Vibe Coding Security: Risks, Vulnerabilities, and Fixes (2026)](https://vibe-eval.com/vibe-coding-security-risks)
