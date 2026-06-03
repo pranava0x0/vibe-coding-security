@@ -2,11 +2,15 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-06-02. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-06-03. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-06-01 — codexui-android npm package steals OpenAI Codex auth tokens
+Aikido Security flagged **`codexui-android`** (~29K weekly npm downloads): a clean GitHub source repo hides a malicious pre-built `dist/` that runs a `postinstall` hook reading `~/.codex/auth.json` (the OpenAI Codex OAuth blob) and POSTing it to **`sentry.anyclaw.store/startlog`** — a fake Sentry host chosen to blend into error-monitoring egress. Actor self-identified as **"BrutalStrike"**; `anyclaw.store` domain registered April 12, 2026. Same actor delivered the payload via two Android apps (50K+ and 10K+ installs). **First documented supply-chain attack targeting OpenAI Codex authentication tokens.** If you installed this package on a machine with Codex configured, revoke your OpenAI Codex OAuth token immediately and audit sibling AI-tool config files (`~/.claude/settings.json`, `~/.cursor/mcp.json`, etc.).
+→ [advisories/2026-06-codexui-android-codex-token-stealer.md](advisories/2026-06-codexui-android-codex-token-stealer.md)
 
 ### 2026-06-01 — Miasma: @redhat-cloud-services npm scope compromised by Mini-Shai-Hulud-derived worm
 Wiz Research flagged a supply-chain compromise of Red Hat's official **`@redhat-cloud-services`** npm scope (used by the Hybrid Cloud Console / Insights / OpenShift frontends). In a **~72-second automated burst on 2026-06-01**, **32 packages and 96 malicious versions** were published, each carrying a **`preinstall`** script that runs a **~4.2 MB obfuscated payload** harvesting **AWS / GCP / Azure / Kubernetes / HashiCorp Vault / GitHub / npm / CircleCI** credentials. The payload is a **lightly reskinned descendant of the Mini Shai-Hulud worm** that [TeamPCP open-sourced 2026-05-12](advisories/2026-05-shai-hulud-copycat-wave.md) — Greek-mythology theming (`spartan`/`miasma`) replaces Dune markers, with **new GCP/Azure cloud-identity collectors**. Notable IOC: exfil hits a **camouflage URL `https://api.anthropic.com:443/v1/api`** (fake path on real-vendor host, chosen to blend into AI-tool egress logs). ~80K weekly cumulative downloads in scope; initial access was a **compromised Red Hat employee GitHub account → GitHub Actions OIDC token → `npm publish`** (no separate npm credential theft). Red Hat issued [RHSB-2026-006](https://access.redhat.com/security/vulnerabilities/RHSB-2026-006); malicious versions removed from npm. **Third copycat wave** of the open-sourced worm after [TrapDoor](advisories/2026-05-trapdoor-cross-ecosystem-stealer.md) and the [`deadcode09284814` typosquats](advisories/2026-05-shai-hulud-copycat-wave.md), and the first to disguise exfil as AI-vendor API traffic.
@@ -68,8 +72,8 @@ Four chainable flaws in **OpenClaw** AI agent — TOCTOU sandbox-escape (read + 
 OX Security: 7,000 vulnerable MCP servers on public IPs; ~200,000 total estimated. Three database MCPs (Apache Doris, Alibaba RDS, Apache Pinot) disclosed same window; **Alibaba declined to patch**. Microsoft MCP server hit by CVE-2026-26118. Named KEV-listed instance: **nginx-ui "MCPwn" (CVE-2026-33032, CVSS 9.8)** — empty default IP allowlist on `/mcp_message` = unauthenticated full nginx takeover in 2 requests; ~2,600 exposed, exploited in the wild, patch ≥ 2.3.4. **New this sweep:** **`aws-mcp-server` CVE-2026-5058 + CVE-2026-5059** (CVSS 9.8 each, unauthenticated command-injection RCE in the allowed-commands handler, ZDI-26-245/-246, patches pending — remove from network); **`n8n-mcp` CVE-2026-39974** (post-auth SSRF that reflects responses → IMDS-credential theft; fixed 2.47.4).
 → [advisories/2026-05-mcp-stdio-systemic-rce.md](advisories/2026-05-mcp-stdio-systemic-rce.md)
 
-### 2026-05-11 — PraisonAI auth bypass (CVE-2026-44338) — exploited in 3h44m
-Legacy Flask API server shipped with auth disabled. Sysdig honeypot saw scanner probing the vulnerable endpoint **3 hours, 44 minutes** after GHSA published. Affects PraisonAI 2.5.6–4.6.33. Fixed in **4.6.34**. New baseline for AI-agent framework disclosure-to-exploit gap: < one workday.
+### 2026-05-11 — PraisonAI auth bypass (CVE-2026-44338) — exploited in 3h44m; four additional platform CVEs
+Legacy Flask API server shipped with auth disabled. Sysdig honeypot saw scanner probing **3 hours, 44 minutes** after GHSA published. Affects PraisonAI 2.5.6–4.6.33. Fixed in **4.6.34**. **June 2026 addition:** `praisonai-platform` package carries four more CVEs: **CVE-2026-47408** (unauthenticated A2A tool execution), **CVE-2026-47418** (cross-workspace IDOR), **CVE-2026-47416** (privilege escalation to owner), **CVE-2026-47409** (missing auth on member removal). Upgrade `praisonai-platform` to the patched version.
 → [advisories/2026-05-praisonai-auth-bypass.md](advisories/2026-05-praisonai-auth-bypass.md)
 
 ### 2026-05-11 → 2026-05-12 — Mini Shai-Hulud wave: TanStack, Mistral, UiPath, OpenSearch — CISA KEV; OpenAI mac certs revoked
@@ -111,6 +115,14 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 ---
 
 ## 🟠 RECENT — verify exposure
+
+### 2026-03-12 — TeamPCP breaches Trivy GitHub Actions → LiteLLM 1.82.7–1.82.8 backdoored (March 2026)
+TeamPCP **force-pushed malicious replacements onto 75 of 76 `aquasecurity/trivy-action` release tags**, injecting an `entrypoint.sh` that exfiltrated `$GITHUB_TOKEN`, masked CI secrets, and cloud creds from any pipeline running `trivy-action` by tag (not SHA). LiteLLM's release pipeline was hit: the stolen PyPI token was used to push **LiteLLM 1.82.7 + 1.82.8** (~3.4M daily downloads) live for ~3 hours. **1,705 dependent PyPI packages** had their CI pipelines exposed. Cisco internal source code was stolen in a related breach. **Novel pattern: security scanner as supply-chain attack vector** — `trivy-action` was running with the same CI permissions as any other action. Upgrade LiteLLM to ≥ 1.83.0; pin all GitHub Actions to full commit SHAs, not tags.
+→ [advisories/2026-03-trivy-litellm-supply-chain.md](advisories/2026-03-trivy-litellm-supply-chain.md)
+
+### 2026-01-07 — LangSmith CVE-2026-25750 — unvalidated baseUrl → account takeover
+**CVE-2026-25750** (CVSS 8.5) — LangSmith Studio accepted an arbitrary `baseUrl` parameter without validation; all authenticated API calls (including session tokens) were forwarded to attacker-controlled hosts. Companion **CVE-2026-25528** is SSRF via the distributed tracing header → cloud IMDS credential theft. LangSmith cloud was silently patched **2025-12-20**; self-hosted deployments need **LangSmith ≥ 0.12.71**. LangSmith stores upstream LLM provider keys + trace data for every agent run — account takeover = full workspace compromise. An AI observability platform that holds every upstream provider key is a high-trust hub; treat it accordingly.
+→ [advisories/2026-01-langsmith-account-takeover.md](advisories/2026-01-langsmith-account-takeover.md)
 
 ### 2026-04-24 — LiteLLM proxy pre-auth SQL injection (CVE-2026-42208, CISA KEV)
 **CVE-2026-42208** (CVSS 9.3) — BerriAI's **LiteLLM** proxy concatenates the caller-supplied `Authorization: Bearer` value directly into the API-key verification SQL query. Any **unauthenticated** attacker reaches read/write on the proxy database — which holds **every upstream LLM provider key** (OpenAI / Anthropic / AWS Bedrock / Azure / Vertex / Cohere / Mistral) for everyone the proxy fronts. **Exploited 26 hours after disclosure** ([Sysdig honeypot 2026-04-26 16:17 UTC](https://www.sysdig.com/blog/cve-2026-42208-targeted-sql-injection-against-litellms-authentication-path-discovered-36-hours-following-vulnerability-disclosure)); **CISA KEV 2026-05-08** with detected exploitation against US financial-services and healthcare critical infrastructure. Affects **1.81.16 → 1.83.6**, fixed **1.83.7** (run `1.83.10-stable`). Same "AI/data tool ships an unauthenticated network endpoint" cluster as [Langflow](advisories/2026-03-langflow-rce.md), [PraisonAI](advisories/2026-05-praisonai-auth-bypass.md), [Marimo](advisories/2026-04-marimo-notebook-rce.md), [Flowise](advisories/2026-04-flowise-rce-cluster.md).

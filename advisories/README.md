@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-06-01 | [codexui-android npm — OpenAI Codex auth-token stealer](2026-06-codexui-android-codex-token-stealer.md) | high | active |
 | 2026-06-01 | [Miasma — @redhat-cloud-services npm scope compromised by Mini-Shai-Hulud-derived worm](2026-06-miasma-redhat-cloud-services-compromise.md) | critical | contained |
 | 2026-05-25 | [Cargo May 2026 security release — symlink-override + sparse-URL leak (CVE-2026-5223, CVE-2026-5222)](2026-05-cargo-symlink-sparse-url-cves.md) | medium | patched |
 | 2026-05-22 | [Megalodon — mass GitHub-Actions workflow poisoning of 5,561 repos](2026-05-megalodon-github-actions-mass-campaign.md) | critical | contained |
@@ -35,6 +36,7 @@ One file per incident. Latest at the top.
 | 2026-04-08 | [Marimo notebook pre-auth RCE (CVE-2026-39987)](2026-04-marimo-notebook-rce.md) | critical | patched |
 | 2026-04 | [Mini Shai-Hulud SAP packages](2026-04-mini-shai-hulud-sap.md) | high | active |
 | 2026-04 | ["Comment and Control" PR prompt injection](2026-04-comment-and-control-pr-injection.md) | critical | patched |
+| 2026-03-12 | [TeamPCP breaches Trivy GitHub Actions → LiteLLM 1.82.7–1.82.8 backdoored](2026-03-trivy-litellm-supply-chain.md) | critical | contained |
 | 2026-03-31 | [Axios compromise](2026-03-axios-compromise.md) | critical | contained |
 | 2026-03-31 | [Claude Code source-map leak](2026-03-claude-code-source-map-leak.md) | medium | contained |
 | 2026-03-27 | [OpenHands git-diff command injection (CVE-2026-33718)](2026-03-openhands-git-diff-rce.md) | high | patched |
@@ -45,6 +47,7 @@ One file per incident. Latest at the top.
 | 2026-02-09 | [Claude Desktop Extensions (DXT) zero-click RCE — Anthropic won't fix](2026-02-claude-desktop-extensions-rce.md) | critical | active |
 | 2026-02-01 | [ClawHavoc — malicious-skill poisoning of OpenClaw's ClawHub marketplace](2026-02-clawhavoc-clawhub-skills.md) | high | active |
 | 2026-01-26 | [OpenClaw 1-click RCE via WebSocket gateway-URL token theft (CVE-2026-25253)](2026-01-openclaw-cve-2026-25253-gatewayurl-rce.md) | critical | patched |
+| 2026-01-07 | [LangSmith CVE-2026-25750 unvalidated baseUrl → account takeover](2026-01-langsmith-account-takeover.md) | high | patched |
 | 2026-01-12 | [OpenCode AI coding agent — twin localhost RCEs (CVE-2026-22812 + CVE-2026-22813)](2026-01-opencode-localhost-rce.md) | critical | patched |
 | 2025-12-28 | [Shai-Hulud 3.0 test payload — @vietmoney/react-big-calendar@0.26.2](2025-12-shai-hulud-3-test-payload.md) | high | contained |
 | 2025-12-23 | [LangChain LangGrinch (CVE-2025-68664) + path traversal (CVE-2026-34070)](2025-12-langchain-langgrinch.md) | critical | patched |
