@@ -2,11 +2,27 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-06-03. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-06-04. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-06-06 — Gluestack @react-native-aria packages backdoored with RAT (~960K weekly downloads)
+A compromised npm contributor access token let attackers publish malicious versions of **17 of the 20 `@react-native-aria` packages** plus **`@gluestack-ui/utils`** (cumulative ~960K weekly downloads) on **2026-06-06**, embedding a **Remote Access Trojan (RAT)** with commands to harvest system info and exfiltrate to attacker C2. All malicious versions have been deprecated; Gluestack revoked the compromised token. Roll back to pre-June-6 versions and treat the machine as fully compromised if you installed any of these packages during the window.
+→ [advisories/2026-06-gluestack-react-native-aria-rat.md](advisories/2026-06-gluestack-react-native-aria-rat.md)
+
+### 2026-06-03 — Phantom Gyp — Miasma wave 4: self-propagating npm worm via binding.gyp (57 packages)
+StepSecurity and Snyk flagged a new wave of the Miasma / Shai-Hulud worm lineage on **2026-06-03**, using **`binding.gyp` / node-gyp** (rather than `preinstall`/`postinstall` lifecycle hooks) to execute malicious code at install time — a technique StepSecurity named **"Phantom Gyp."** Snyk tracks it as *Node-gyp Supply Chain Compromise June 2026*: **57 packages, hundreds of malicious versions**, carrying the same credential-theft + GitHub-Actions-workflow-injection + self-propagating worm payload as prior Miasma waves. **`--ignore-scripts` alone does NOT block this** — the binding.gyp native-build step runs regardless. Fourth copycat wave of the open-sourced Mini Shai-Hulud worm after the deadcode09284814 typosquats, TrapDoor, and the @redhat-cloud-services Miasma wave.
+→ [advisories/2026-06-phantom-gyp-miasma-wave4.md](advisories/2026-06-phantom-gyp-miasma-wave4.md)
+
+### 2026-06-01 — Cline CVE-2026-44211 — cross-origin WebSocket hijack → 1-click RCE (CVSS 9.7)
+**CVE-2026-44211** (CVSS 9.7) — **Cline** (the VS Code AI coding agent, widely used for Claude/GPT-4 coding assistance) starts a WebSocket server on **port 3484 with no authentication and no origin validation**. Any webpage the developer visits can connect and issue arbitrary shell commands. Affects **Cline ≤ 2.13.0**. Same "localhost is not a security boundary" root cause as OpenClaw CVE-2026-25253, OpenCode CVE-2026-22812, and Marimo CVE-2026-39987. Patch immediately to the fixed version.
+→ [advisories/2026-06-cline-cve-2026-44211-websocket-rce.md](advisories/2026-06-cline-cve-2026-44211-websocket-rce.md)
+
+### 2026-06 — Claude Code GitHub Actions [bot] trust bypass (patched in v1.0.94)
+Researcher RyotaK (GMO Flatt Security) found that `checkWritePermissions()` in **`anthropics/claude-code-action`** trusted any GitHub actor whose username ends in `[bot]` — no actual permission check. Combined with prompt injection in a PR comment or issue body, an unauthenticated external attacker could exfiltrate CI secrets, steal OIDC tokens, and push malicious code to any downstream repo — including Anthropic's own `claude-code-action` source, making it a supply-chain vector into every repo that pins the action. **Patched in Claude Code GitHub Actions v1.0.94.** Update your workflows and pin to the full commit SHA.
+→ [advisories/2026-06-claude-code-github-actions-bot-bypass.md](advisories/2026-06-claude-code-github-actions-bot-bypass.md)
 
 ### 2026-06-01 — codexui-android npm package steals OpenAI Codex auth tokens
 Aikido Security flagged **`codexui-android`** (~29K weekly npm downloads): a clean GitHub source repo hides a malicious pre-built `dist/` that runs a `postinstall` hook reading `~/.codex/auth.json` (the OpenAI Codex OAuth blob) and POSTing it to **`sentry.anyclaw.store/startlog`** — a fake Sentry host chosen to blend into error-monitoring egress. Actor self-identified as **"BrutalStrike"**; `anyclaw.store` domain registered April 12, 2026. Same actor delivered the payload via two Android apps (50K+ and 10K+ installs). **First documented supply-chain attack targeting OpenAI Codex authentication tokens.** If you installed this package on a machine with Codex configured, revoke your OpenAI Codex OAuth token immediately and audit sibling AI-tool config files (`~/.claude/settings.json`, `~/.cursor/mcp.json`, etc.).
@@ -115,6 +131,10 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 ---
 
 ## 🟠 RECENT — verify exposure
+
+### 2025-12-05 → ongoing — React2Shell (CVE-2025-55182, CVSS 10.0) — RCE in React Server Components; CISA KEV; 766+ hosts compromised
+**CVE-2025-55182 "React2Shell"** (CVSS 10.0, CISA KEV) is an unauthenticated RCE via **insecure deserialization in React's Flight protocol**. Any exposed React Server Component (RSC) endpoint is a one-request RCE — no credentials needed. Affects **Next.js, Waku, React Router (RSC mode), RedwoodSDK, Parcel RSC, Vite RSC plugin**. First exploited **2025-12-05**; a large-scale credential-harvesting campaign had compromised at least **766 hosts** through April 2026 (database creds, SSH keys, AWS secrets, Stripe API keys, GitHub tokens + cryptomining backdoors). The RondoDox botnet weaponized it in January 2026. **Patched in React 19.0.4/19.1.5/19.2.4** and corresponding Next.js versions. This is a historical backfill — if you haven't patched, patch now.
+→ [advisories/2025-12-react2shell-rce.md](advisories/2025-12-react2shell-rce.md)
 
 ### 2026-03-12 — TeamPCP breaches Trivy GitHub Actions → LiteLLM 1.82.7–1.82.8 backdoored (March 2026)
 TeamPCP **force-pushed malicious replacements onto 75 of 76 `aquasecurity/trivy-action` release tags**, injecting an `entrypoint.sh` that exfiltrated `$GITHUB_TOKEN`, masked CI secrets, and cloud creds from any pipeline running `trivy-action` by tag (not SHA). LiteLLM's release pipeline was hit: the stolen PyPI token was used to push **LiteLLM 1.82.7 + 1.82.8** (~3.4M daily downloads) live for ~3 hours. **1,705 dependent PyPI packages** had their CI pipelines exposed. Cisco internal source code was stolen in a related breach. **Novel pattern: security scanner as supply-chain attack vector** — `trivy-action` was running with the same CI permissions as any other action. Upgrade LiteLLM to ≥ 1.83.0; pin all GitHub Actions to full commit SHAs, not tags.
