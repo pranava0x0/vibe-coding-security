@@ -4,6 +4,10 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-06-06 | [Gluestack @react-native-aria RAT via compromised contributor token](2026-06-gluestack-react-native-aria-rat.md) | critical | contained |
+| 2026-06-04 | [Phantom Gyp — Miasma wave 4: self-propagating npm worm via binding.gyp (57 packages)](2026-06-phantom-gyp-miasma-wave4.md) | critical | active |
+| 2026-06-04 | [Claude Code GitHub Actions [bot] trust bypass — supply chain risk (patched v1.0.94)](2026-06-claude-code-github-actions-bot-bypass.md) | high | patched |
+| 2026-06-01 | [Cline CVE-2026-44211 — cross-origin WebSocket hijack → 1-click RCE](2026-06-cline-cve-2026-44211-websocket-rce.md) | critical | active |
 | 2026-06-01 | [codexui-android npm — OpenAI Codex auth-token stealer](2026-06-codexui-android-codex-token-stealer.md) | high | active |
 | 2026-06-01 | [Miasma — @redhat-cloud-services npm scope compromised by Mini-Shai-Hulud-derived worm](2026-06-miasma-redhat-cloud-services-compromise.md) | critical | contained |
 | 2026-05-25 | [Cargo May 2026 security release — symlink-override + sparse-URL leak (CVE-2026-5223, CVE-2026-5222)](2026-05-cargo-symlink-sparse-url-cves.md) | medium | patched |
@@ -51,6 +55,7 @@ One file per incident. Latest at the top.
 | 2026-01-12 | [OpenCode AI coding agent — twin localhost RCEs (CVE-2026-22812 + CVE-2026-22813)](2026-01-opencode-localhost-rce.md) | critical | patched |
 | 2025-12-28 | [Shai-Hulud 3.0 test payload — @vietmoney/react-big-calendar@0.26.2](2025-12-shai-hulud-3-test-payload.md) | high | contained |
 | 2025-12-23 | [LangChain LangGrinch (CVE-2025-68664) + path traversal (CVE-2026-34070)](2025-12-langchain-langgrinch.md) | critical | patched |
+| 2025-12-05 | [React2Shell — CVE-2025-55182 RCE in React Server Components (CISA KEV, exploited through Apr 2026)](2025-12-react2shell-rce.md) | critical | patched |
 | 2026-01-05 | [AI IDEs recommend non-existent extensions — OpenVSX namespace hijack](2026-01-vscode-fork-recommended-extension-hijack.md) | high | mitigated |
 | 2025-11-24 | [Shai-Hulud "Second Coming"](2025-11-shai-hulud-second-coming.md) | critical | contained |
 | 2025-10-21 | [Cursor & Windsurf ship stale Chromium — 94+ n-day vulns](2025-10-cursor-windsurf-chromium-ndays.md) | high | active |
