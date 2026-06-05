@@ -1,13 +1,13 @@
 ---
 id: 2025-12-langchain-langgrinch
-title: "LangChain LangGrinch + path-traversal (CVE-2025-68664, CVE-2026-34070)"
+title: "LangChain LangGrinch + path-traversal + SSRF (CVE-2025-68664, CVE-2026-34070, CVE-2026-26019)"
 date_disclosed: 2025-12-23
-last_updated: 2026-05-19
+last_updated: 2026-06-05
 severity: critical
 status: patched
-ecosystems: [pypi, ai-agents, langchain]
-tools_affected: [langchain, langchain-core, langgraph]
-tags: [cve, deserialization, prompt-injection, secret-exfil, path-traversal, ai-agent-framework]
+ecosystems: [pypi, npm, ai-agents, langchain]
+tools_affected: [langchain, langchain-core, langgraph, @langchain/community]
+tags: [cve, deserialization, prompt-injection, secret-exfil, path-traversal, ssrf, ai-agent-framework]
 ---
 
 ## TL;DR
@@ -70,6 +70,27 @@ You are affected if:
 → Never use a framework deserializer (LangChain `load.dump`, Pydantic `parse_obj_as`, pickle) on data you didn't write. Use plain JSON + an explicit schema.
 → Pin AI-framework packages to exact versions in production; treat AI-agent framework CVEs as < 4-hour disclosure-to-exploit per the [PraisonAI baseline](2026-05-praisonai-auth-bypass.md).
 
+## June 2026 update — CVE-2026-26019: @langchain/community RecursiveUrlLoader SSRF
+
+**CVE-2026-26019** (moderate) was disclosed in the **JavaScript/TypeScript** LangChain package `@langchain/community` (up to version 1.1.13). The `RecursiveUrlLoader` class validates URLs with `String.startsWith()` (a string-prefix check, not a semantic URL comparison), allowing crafted subdomains like `https://example.com.attacker.com` to bypass the `preventOutside` same-domain restriction. Additionally, the crawler did not block access to cloud metadata endpoints (`169.254.169.254`), loopback, or RFC-1918 private addresses — enabling SSRF to AWS/GCP/Azure instance metadata services.
+
+**Fixed in `@langchain/community` 1.1.14** by replacing the prefix check with strict `URL` API origin validation and adding explicit SSRF filters for private IP ranges, loopback, cloud metadata, and non-HTTP(S) schemes.
+
+```bash
+# Check JS/TS LangChain community version
+npm list @langchain/community 2>/dev/null
+# Vulnerable: <1.1.14
+```
+
+If your LangChain JS agent uses `RecursiveUrlLoader` and processes user-supplied or externally-fetched URLs, upgrade immediately.
+
+| Field | Value |
+|---|---|
+| CVE | `CVE-2026-26019` |
+| GHSA | `GHSA-gf3v-fwqg-4vh7` |
+| Affected | `@langchain/community <1.1.14` |
+| Fixed | `@langchain/community 1.1.14` |
+
 ## Sources
 - [Cyata — All I Want for Christmas is Your Secrets: LangGrinch hits LangChain Core (CVE-2025-68664)](https://cyata.ai/blog/langgrinch-langchain-core-cve-2025-68664/) — Original disclosure (Dec 23, 2025), full PoC chain.
 - [NVD — CVE-2025-68664 Detail](https://nvd.nist.gov/vuln/detail/CVE-2025-68664) — Official CVE record + CVSS 9.3.
@@ -80,3 +101,6 @@ You are affected if:
 - [GitHub — Rickidevs/CVE-2026-34070 (path traversal disclosure)](https://github.com/Rickidevs/CVE-2026-34070) — CVE-2026-34070 researcher writeup.
 - [Vucense — Security Audit: Patching the Langchain CVE-2026-34070 and the Risks of Unchecked AI Deserialization](https://vucense.com/tech-guides/vulnerabilities/security-audit-patching-the-langchain-cve-2026-34070-and-the-risks-of-unchecked-ai-deserialization/) — Path-traversal context + patched-version (1.2.22) confirmation.
 - [Hacker News thread — Critical vulnerability in LangChain – CVE-2025-68664](https://news.ycombinator.com/item?id=46386009) — Community discussion and exploitation context.
+- [GitHub Advisory Database — CVE-2026-26019](https://github.com/advisories/GHSA-gf3v-fwqg-4vh7) — SSRF in @langchain/community RecursiveUrlLoader.
+- [CyberSecurityNews — LangChain Community SSRF Bypass Vulnerability Enables Access to Internal Services](https://cybersecuritynews.com/langchain-community-ssrf-bypass-vulnerability/) — CVE-2026-26019 write-up.
+- [NVD — CVE-2026-26019 Detail](https://nvd.nist.gov/vuln/detail/CVE-2026-26019) — Official CVE record.

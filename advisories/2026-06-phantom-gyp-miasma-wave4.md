@@ -2,17 +2,17 @@
 id: 2026-06-phantom-gyp-miasma-wave4
 title: "Phantom Gyp — Miasma wave 4: self-propagating npm worm via binding.gyp (June 2026)"
 date_disclosed: 2026-06-04
-last_updated: 2026-06-04
+last_updated: 2026-06-05
 severity: critical
 status: active
 ecosystems: [npm]
-tools_affected: [any project that npm-installs a node-gyp-dependent package]
-tags: [supply-chain, worm, credential-theft, self-propagating, miasma-lineage]
+tools_affected: [any project that npm-installs a node-gyp-dependent package; notably @vapi-ai/server-sdk (408K+ monthly downloads)]
+tags: [supply-chain, worm, credential-theft, self-propagating, miasma-lineage, provenance-forgery]
 ---
 
 ## TL;DR
 
-A fourth wave of the Miasma / Shai-Hulud worm lineage hit npm on **June 3–4, 2026**, using **`binding.gyp`** instead of `preinstall`/`postinstall` scripts to run malicious code at install time — a technique StepSecurity named **"Phantom Gyp."** Snyk tracks it as *Node-gyp Supply Chain Compromise June 2026*; **57 packages / hundreds of malicious versions** were published. Same credential-theft and self-propagation core as prior waves, but with a novel install-time primitive designed to evade defenses that block lifecycle scripts.
+A fourth wave of the Miasma / Shai-Hulud worm lineage hit npm on **June 3–4, 2026**, using **`binding.gyp`** instead of `preinstall`/`postinstall` scripts to run malicious code at install time — a technique StepSecurity named **"Phantom Gyp."** Snyk tracks it as *Node-gyp Supply Chain Compromise June 2026*; **57 packages / 286+ malicious versions** (including **`@vapi-ai/server-sdk` with 408K+ monthly downloads** as the highest-profile victim) were published. Same credential-theft and self-propagation core as prior waves, with a novel install-time primitive **plus forged SLSA v1 provenance attestations** on repackaged malicious versions — green "verified provenance" badges are not safety.
 
 ## What happened
 
@@ -23,6 +23,8 @@ On **2026-06-03** (and continuing through June 4), a threat actor published 57 m
 - Injects malicious GitHub Actions workflows (same `.github/workflows/*.yml` shape as [Megalodon](2026-05-megalodon-github-actions-mass-campaign.md))
 - Exfiltrates stolen credentials to attacker C2
 - Self-propagates by publishing additional poisoned npm packages using stolen npm tokens (worm behavior)
+
+**Largest victim: `@vapi-ai/server-sdk`** — the official Vapi.ai voice AI server SDK with **408,000+ monthly downloads** was among the first packages hit, at 23:30 UTC on June 3, 2026. The campaign infected **57 packages across 286+ malicious versions** in a rolling wave lasting under two hours. A notable escalation: the worm **forges SLSA v1 provenance attestations** on repackaged malicious versions — reinfected packages display a green "verified provenance" badge and pass standard provenance verification, yet carry the malicious payload (same forgery primitive as the May 19 Mini Shai-Hulud wave that self-minted Sigstore attestations).
 
 **Attribution / lineage:** The underlying payload and IOCs are consistent with the Miasma / Mini Shai-Hulud worm family (Greek-mythology theming). This is the **fourth documented copycat wave** after:
 1. [`deadcode09284814` typosquats](2026-05-shai-hulud-copycat-wave.md) (May 2026)

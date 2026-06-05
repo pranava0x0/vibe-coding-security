@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-06-04 | [IronWorm — Rust npm worm with eBPF kernel rootkit + Tor C2 (36 packages)](2026-06-ironworm-npm-rust-ebpf.md) | critical | active |
 | 2026-06-06 | [Gluestack @react-native-aria RAT via compromised contributor token](2026-06-gluestack-react-native-aria-rat.md) | critical | contained |
 | 2026-06-04 | [Phantom Gyp — Miasma wave 4: self-propagating npm worm via binding.gyp (57 packages)](2026-06-phantom-gyp-miasma-wave4.md) | critical | active |
 | 2026-06-04 | [Claude Code GitHub Actions [bot] trust bypass — supply chain risk (patched v1.0.94)](2026-06-claude-code-github-actions-bot-bypass.md) | high | patched |
@@ -21,6 +22,7 @@ One file per incident. Latest at the top.
 | 2026-05-18 | [Shai-Hulud copycats after the worm source went public](2026-05-shai-hulud-copycat-wave.md) | high | active |
 | 2026-05-18 | [Nx Console VS Code extension compromise (nrwl.angular-console 18.95.0)](2026-05-nx-console-vscode-compromise.md) | critical | contained |
 | 2026-05-12 | [Claude Code `claude-cli://` deeplink RCE (2.1.118)](2026-05-claude-code-deeplink-rce.md) | critical | patched |
+| 2026-05 | [WhiteCobra — VS Code / Cursor / Windsurf / Open VSX crypto-stealer campaign (July 2025 → ongoing)](2026-05-whitecobra-vscode-extensions.md) | high | active |
 | 2026-05-06 | [ClaudeBleed — Claude in Chrome extension hijack](2026-05-claudebleed-chrome-extension.md) | high | mitigated |
 | 2026-05-13 | [OpenClaw "Claw Chain" — 4 sandbox-escape CVEs](2026-05-openclaw-claw-chain.md) | critical | patched |
 | 2026-05-13 | [Systemic MCP stdio RCE class](2026-05-mcp-stdio-systemic-rce.md) | high | mitigated |
@@ -53,6 +55,7 @@ One file per incident. Latest at the top.
 | 2026-01-26 | [OpenClaw 1-click RCE via WebSocket gateway-URL token theft (CVE-2026-25253)](2026-01-openclaw-cve-2026-25253-gatewayurl-rce.md) | critical | patched |
 | 2026-01-07 | [LangSmith CVE-2026-25750 unvalidated baseUrl → account takeover](2026-01-langsmith-account-takeover.md) | high | patched |
 | 2026-01-12 | [OpenCode AI coding agent — twin localhost RCEs (CVE-2026-22812 + CVE-2026-22813)](2026-01-opencode-localhost-rce.md) | critical | patched |
+| 2025-11-09 | [n8n Ni8mare (CVE-2026-21858, CVSS 10.0) — unauth RCE + credential theft in workflow automation](2025-11-n8n-ni8mare-rce.md) | critical | patched |
 | 2025-12-28 | [Shai-Hulud 3.0 test payload — @vietmoney/react-big-calendar@0.26.2](2025-12-shai-hulud-3-test-payload.md) | high | contained |
 | 2025-12-23 | [LangChain LangGrinch (CVE-2025-68664) + path traversal (CVE-2026-34070)](2025-12-langchain-langgrinch.md) | critical | patched |
 | 2025-12-05 | [React2Shell — CVE-2025-55182 RCE in React Server Components (CISA KEV, exploited through Apr 2026)](2025-12-react2shell-rce.md) | critical | patched |

@@ -2,18 +2,22 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-06-04. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-06-05. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
 
+### 2026-06-04 — IronWorm — Rust npm worm with eBPF kernel rootkit + Tor C2 (36 packages)
+JFrog Security Research identified a new self-propagating npm worm called **IronWorm**, starting from the compromised account `asteroiddao`. Unlike prior waves (Miasma/Shai-Hulud), IronWorm deploys a **Rust ELF binary** that hides behind an **eBPF kernel rootkit** (invisible to eBPF-based EDR monitoring) and exfiltrates credentials over **Tor** (bypasses IP blocklists and DNS monitoring). Targets 86 env vars and 20 credential files — specifically harvests **OpenAI, Anthropic, AWS** credentials alongside npm tokens, SSH keys, and Exodus wallet files. Propagates by publishing trojanized versions of victims' own packages via stolen npm credentials including Trusted Publishing secrets. Commit author masquerades as `"claude"`. Backdates git timestamps up to 13 years to evade timeline detection.
+→ [advisories/2026-06-ironworm-npm-rust-ebpf.md](advisories/2026-06-ironworm-npm-rust-ebpf.md)
+
 ### 2026-06-06 — Gluestack @react-native-aria packages backdoored with RAT (~960K weekly downloads)
 A compromised npm contributor access token let attackers publish malicious versions of **17 of the 20 `@react-native-aria` packages** plus **`@gluestack-ui/utils`** (cumulative ~960K weekly downloads) on **2026-06-06**, embedding a **Remote Access Trojan (RAT)** with commands to harvest system info and exfiltrate to attacker C2. All malicious versions have been deprecated; Gluestack revoked the compromised token. Roll back to pre-June-6 versions and treat the machine as fully compromised if you installed any of these packages during the window.
 → [advisories/2026-06-gluestack-react-native-aria-rat.md](advisories/2026-06-gluestack-react-native-aria-rat.md)
 
-### 2026-06-03 — Phantom Gyp — Miasma wave 4: self-propagating npm worm via binding.gyp (57 packages)
-StepSecurity and Snyk flagged a new wave of the Miasma / Shai-Hulud worm lineage on **2026-06-03**, using **`binding.gyp` / node-gyp** (rather than `preinstall`/`postinstall` lifecycle hooks) to execute malicious code at install time — a technique StepSecurity named **"Phantom Gyp."** Snyk tracks it as *Node-gyp Supply Chain Compromise June 2026*: **57 packages, hundreds of malicious versions**, carrying the same credential-theft + GitHub-Actions-workflow-injection + self-propagating worm payload as prior Miasma waves. **`--ignore-scripts` alone does NOT block this** — the binding.gyp native-build step runs regardless. Fourth copycat wave of the open-sourced Mini Shai-Hulud worm after the deadcode09284814 typosquats, TrapDoor, and the @redhat-cloud-services Miasma wave.
+### 2026-06-03 — Phantom Gyp — Miasma wave 4: self-propagating npm worm via binding.gyp (57 packages / 286+ versions)
+StepSecurity and Snyk flagged a new wave of the Miasma / Shai-Hulud worm lineage on **2026-06-03**, using **`binding.gyp` / node-gyp** (rather than `preinstall`/`postinstall` lifecycle hooks) to execute malicious code at install time — a technique StepSecurity named **"Phantom Gyp."** Snyk tracks it as *Node-gyp Supply Chain Compromise June 2026*: **57 packages / 286+ malicious versions**, with **`@vapi-ai/server-sdk` (408K+ monthly downloads)** as the highest-profile victim. The worm also **forges SLSA v1 provenance attestations** on repackaged packages — a green provenance badge is not safety. **`--ignore-scripts` alone does NOT block this** — the binding.gyp native-build step runs regardless. Fourth copycat wave of the open-sourced Mini Shai-Hulud worm.
 → [advisories/2026-06-phantom-gyp-miasma-wave4.md](advisories/2026-06-phantom-gyp-miasma-wave4.md)
 
 ### 2026-06-01 — Cline CVE-2026-44211 — cross-origin WebSocket hijack → 1-click RCE (CVSS 9.7)
@@ -76,6 +80,10 @@ TeamPCP **open-sourced the Mini Shai-Hulud worm** (2026-05-12) and posted a **$1
 `eagerParseCliFlag()` in `main.tsx` accepted `--settings=` from anywhere in argv, including values smuggled through `--prefill`. The registered `claude-cli://` URL handler turns that into a one-click silent RCE: a malicious link can swap your `~/.claude/settings.json` (hooks) and run any shell command on session start. Researcher: Joernchen / 0day.click. Upgrade immediately.
 → [advisories/2026-05-claude-code-deeplink-rce.md](advisories/2026-05-claude-code-deeplink-rce.md)
 
+### 2025-07 → ongoing — WhiteCobra — VS Code / Cursor / Windsurf / Open VSX crypto-stealer campaign
+**WhiteCobra** is a persistent, funded threat-actor campaign continuously flooding the VS Code Marketplace and Open VSX with malicious extensions targeting crypto wallet users of **Cursor** and **Windsurf**. The group stole **$500,000** in July 2025 via a fake Solidity syntax-highlighting extension (`contractshark.solidity-lang`, 54,000 OpenVSX downloads), deploys **LummaStealer** payloads that steal crypto wallets, browser credentials, and messaging app data, and can redeploy a new campaign in under **3 hours** — so removals don't stop it. Koi Security exposed the threat actor's playbook in May 2026. At least **24 malicious extensions** documented across VS Code Marketplace and Open VSX. If you use Cursor or Windsurf for Solidity/web3 development, audit your extensions now.
+→ [advisories/2026-05-whitecobra-vscode-extensions.md](advisories/2026-05-whitecobra-vscode-extensions.md)
+
 ### 2026-05-06 — ClaudeBleed — Claude in Chrome extension hijack (v1.0.70, **partial fix**)
 LayerX: Claude's `externally_connectable` handler trusts *any* other Chrome extension to issue commands to Claude. Zero-permission neighbor extension → Claude drives Gmail, Drive, GitHub on the user's behalf. Anthropic shipped v1.0.70 with extra approval prompts but did not remove the handler; side-panel / privileged-mode bypass still works. Treat as **mitigated, not patched**.
 → [advisories/2026-05-claudebleed-chrome-extension.md](advisories/2026-05-claudebleed-chrome-extension.md)
@@ -131,6 +139,10 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 ---
 
 ## 🟠 RECENT — verify exposure
+
+### 2025-11-09 — n8n Ni8mare (CVE-2026-21858, CVSS 10.0) — unauth RCE in workflow automation; ~60K instances; exploited in wild
+**CVE-2026-21858 "Ni8mare"** (CVSS 10.0) — any network-reachable attacker can run arbitrary commands on a self-hosted **n8n** instance without credentials, gaining full control over the host and **all OAuth tokens and API keys stored in n8n's credential store** (Google Drive, Slack, GitHub, HubSpot, Notion, Jira, etc.). n8n is widely used as an AI workflow orchestration layer — this is structurally equivalent to the [Composio breach](advisories/2026-05-composio-ai-agent-platform-breach.md) pattern. An estimated **26,512–100,000 instances** were exposed; GreyNoise logged **33,000+ exploitation attempts** between January 27–February 3, 2026. **Patched in n8n 1.121.0** (November 18, 2025). A follow-on authenticated sandbox bypass (CVE-2026-25049, CVSS 9.4) was disclosed in February 2026 with public exploits; additional RCE/credential-exposure flaws followed in March 2026. Upgrade to the latest n8n release.
+→ [advisories/2025-11-n8n-ni8mare-rce.md](advisories/2025-11-n8n-ni8mare-rce.md)
 
 ### 2025-12-05 → ongoing — React2Shell (CVE-2025-55182, CVSS 10.0) — RCE in React Server Components; CISA KEV; 766+ hosts compromised
 **CVE-2025-55182 "React2Shell"** (CVSS 10.0, CISA KEV) is an unauthenticated RCE via **insecure deserialization in React's Flight protocol**. Any exposed React Server Component (RSC) endpoint is a one-request RCE — no credentials needed. Affects **Next.js, Waku, React Router (RSC mode), RedwoodSDK, Parcel RSC, Vite RSC plugin**. First exploited **2025-12-05**; a large-scale credential-harvesting campaign had compromised at least **766 hosts** through April 2026 (database creds, SSH keys, AWS secrets, Stripe API keys, GitHub tokens + cryptomining backdoors). The RondoDox botnet weaponized it in January 2026. **Patched in React 19.0.4/19.1.5/19.2.4** and corresponding Next.js versions. This is a historical backfill — if you haven't patched, patch now.
