@@ -2,7 +2,7 @@
 id: 2025-08-claude-code-inverseprompt
 title: "Claude Code InversePrompt and follow-on CVEs (multiple)"
 date_disclosed: 2025-08
-last_updated: 2026-05-18
+last_updated: 2026-06-06
 severity: medium
 status: patched
 ecosystems: [claude-code]
@@ -11,7 +11,7 @@ tags: [prompt-injection, claude-code, mcp, indirect-prompt-injection, cve, trust
 ---
 
 ## TL;DR
-A growing collection of Claude Code CVEs — **CVE-2025-54794, CVE-2025-54795** (Cymulate's "InversePrompt", Aug 2025), **CVE-2025-52882** (information disclosure), **CVE-2025-59536**, **CVE-2026-21852** ("Leaks Data via Malicious Environment Configuration Before Trust Confirmation"), **CVE-2026-33068**, the **"TrustFall" convention exposure** (early 2026), plus the May 2026 cluster: **CVE-2026-24887** (find-command confirmation-bypass RCE; patched in Claude Code 2.0.72), **CVE-2026-35021** (OS-command injection via prompt-editor file path), **CVE-2026-39861** (symlink-following sandbox escape — arbitrary file write outside the workspace), and **CVE-2026-35603** (Claude Code privilege escalation). All patched by Anthropic — update Claude Code to the latest version. Lasso Security and Dark Reading have both covered the broader pattern: **the class of attack is permanent**, because any agent that mixes trusted instructions with untrusted content is fundamentally vulnerable. See also the related [Comment and Control](2026-04-comment-and-control-pr-injection.md) chain (CVSS 9.4 Critical) and the [Claude Code source-map leak](2026-03-claude-code-source-map-leak.md) that preceded much of this CVE cluster.
+A growing collection of Claude Code CVEs — **CVE-2025-54794, CVE-2025-54795** (Cymulate's "InversePrompt", Aug 2025), **CVE-2025-52882** (information disclosure), **CVE-2025-59536**, **CVE-2026-21852** ("Leaks Data via Malicious Environment Configuration Before Trust Confirmation"), **CVE-2026-33068**, the **"TrustFall" convention exposure** (early 2026), plus the May 2026 cluster: **CVE-2026-24887** (find-command confirmation-bypass RCE; patched in Claude Code 2.0.72), **CVE-2026-35021** (OS-command injection via prompt-editor file path), **CVE-2026-39861** (symlink-following sandbox escape — arbitrary file write outside the workspace), and **CVE-2026-35603** (Claude Code privilege escalation), and **CVE-2026-25723** (deny-rule bypass via 50-subcommand shell-pipeline padding; patched in Claude Code 2.1.90). All patched by Anthropic — update Claude Code to the latest version. Lasso Security and Dark Reading have both covered the broader pattern: **the class of attack is permanent**, because any agent that mixes trusted instructions with untrusted content is fundamentally vulnerable. See also the related [Comment and Control](2026-04-comment-and-control-pr-injection.md) chain (CVSS 9.4 Critical) and the [Claude Code source-map leak](2026-03-claude-code-source-map-leak.md) that preceded much of this CVE cluster.
 
 ## What happened
 The InversePrompt research showed several routes to indirect prompt injection in Claude Code:
@@ -47,6 +47,10 @@ The general defensive posture from Anthropic's own [Claude Code security docs](h
 - Review every shell command and file edit before approving.
 - Limit the URLs and MCP sources the agent can read.
 - Run untrusted exploration inside a container.
+
+## June 2026 addition — CVE-2026-25723: deny-rule bypass via shell-pipeline padding
+
+**CVE-2026-25723** — Claude Code evaluates shell-command deny rules on each individual subcommand token. When a compound pipeline contains **50 or more subcommands** (chained with `&&`, `||`, or `;`), Claude Code skips all deny-rule enforcement and falls back to a generic permissions prompt — granting every command in the pipeline a free pass regardless of configured deny rules. Attack vector: a malicious `CLAUDE.md` or README with a prompt-injection instruction that coerces Claude into generating a deeply-chained shell pipeline with the malicious command buried past position 50. First reported by The Register in April 2026; **CVE-2026-25723** formally assigned; **patched in Claude Code 2.1.90**. Same "check-vs-effect scope disagreement" shape as the `claude-cli://` deeplink (CVE-2026-35021) — both exploit a disconnect between the rule-evaluation phase and the execution phase.
 
 ## Sources
 - [Cymulate — InversePrompt: Turning Claude Against Itself (CVE-2025-54794 & CVE-2025-54795)](https://cymulate.com/blog/cve-2025-547954-54795-claude-inverseprompt/)
