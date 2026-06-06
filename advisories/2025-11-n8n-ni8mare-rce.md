@@ -2,7 +2,7 @@
 id: 2025-11-n8n-ni8mare-rce
 title: "n8n Ni8mare + RCE cluster — CVSS 10.0 unauth takeover of workflow automation (Nov 2025 → Feb 2026)"
 date_disclosed: 2025-11-09
-last_updated: 2026-06-05
+last_updated: 2026-06-06
 severity: critical
 status: patched
 ecosystems: [npm, self-hosted]
@@ -30,6 +30,15 @@ A second critical flaw (CVSS 9.4) was disclosed in February 2026. It bypasses mi
 
 The Hacker News reported additional critical n8n flaws in March 2026 that allow RCE and exposure of stored credentials. These appear to be separate from the Nov/Feb cluster.
 
+**June 2026 — n8n node-level RCE cluster (CVE-2026-44789, CVE-2026-44790, CVE-2026-44791)**
+
+Three additional critical flaws were disclosed in June 2026, all fixed in n8n **1.123.43 / 2.20.7 / 2.22.1**:
+- **CVE-2026-44789** (HTTP Request node prototype pollution): user-controlled pagination parameters in the HTTP Request node pollute the JavaScript prototype, bypassing sandbox restrictions and enabling arbitrary code execution.
+- **CVE-2026-44790** (Git node argument injection): the Git node passes user-supplied branch and tag names directly into shell arguments without sanitization, allowing a workflow editor to inject shell commands that read arbitrary files or execute code on the n8n host.
+- **CVE-2026-44791** (XML node RCE): a separate code-execution class in the XML processing node; full technical details pending coordinated disclosure.
+
+Affected: n8n **< 1.123.43** (v1 release line) **/ < 2.20.7 / < 2.22.1** (v2 release lines). Upgrade immediately.
+
 **Why this matters for vibe coders and AI agent builders:**
 
 n8n is widely used as an AI workflow orchestration layer — it brokers connections between AI models and dozens of downstream services (Google Drive, Gmail, Slack, GitHub, HubSpot, Notion, Jira, Airtable, Telegram, and more) via OAuth grants and API keys stored in its credential store. A full host compromise via Ni8mare gives an attacker:
@@ -47,7 +56,7 @@ This is structurally equivalent to the [Composio breach](2026-05-composio-ai-age
 npx n8n --version 2>/dev/null
 docker exec <n8n-container> n8n --version 2>/dev/null
 
-# Vulnerable: any n8n < 1.121.0 (Ni8mare), < 1.127.x (CVE-2026-25049)
+# Vulnerable: any n8n < 1.121.0 (Ni8mare), < 1.127.x (CVE-2026-25049), < 1.123.43/2.20.7/2.22.1 (June 2026 cluster)
 # Check if your instance is network-exposed
 curl -s -o /dev/null -w "%{http_code}" http://localhost:5678/healthz
 
@@ -61,7 +70,7 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:5678/healthz
 
 ## If you are affected
 
-1. **Upgrade to n8n ≥ 1.127.0** (addresses both Ni8mare and CVE-2026-25049; check current latest).
+1. **Upgrade to n8n ≥ 1.123.43 / 2.20.7 / 2.22.1** (addresses Ni8mare, CVE-2026-25049, and the June 2026 node-level cluster; check current latest).
 2. **Rotate all OAuth tokens and API keys** stored in n8n's credential store — attacker had full access.
 3. **Revoke and re-authorize** every service connection under Settings → Credentials.
 4. **Review execution logs** for unusual workflow triggers, especially to external webhooks.
@@ -86,3 +95,6 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:5678/healthz
 - [The Hacker News — "Critical n8n Flaws Allow Remote Code Execution and Exposure of Stored Credentials"](https://thehackernews.com/2026/03/critical-n8n-flaws-allow-remote-code.html) — March 2026 follow-on cluster.
 - [SecurityWeek — "Critical Vulnerability Exposes n8n Instances to Takeover Attacks"](https://www.securityweek.com/critical-vulnerability-exposes-n8n-instances-to-takeover-attacks/) — instance count and exploitation risk.
 - Cross-reference: [2026-05-mcp-stdio-systemic-rce.md](2026-05-mcp-stdio-systemic-rce.md) (n8n-mcp SSRF), [2026-05-composio-ai-agent-platform-breach.md](2026-05-composio-ai-agent-platform-breach.md) (same "workflow broker as credential hub" pattern).
+- [BleepingComputer — n8n CVE-2026-44789/44790/44791 node-level RCE cluster](https://www.bleepingcomputer.com/news/security/critical-n8n-flaws-cve-2026-44789-44790-44791/) — June 2026 cluster; prototype pollution, argument injection, XML node RCE.
+- [CyberSecurityNews — n8n HTTP Request Node Vulnerability Let Attackers Execute Arbitrary Code](https://cybersecuritynews.com/n8n-http-request-node-vulnerability/) — CVE-2026-44789 prototype pollution detail.
+- [NVD — CVE-2026-44789](https://nvd.nist.gov/vuln/detail/CVE-2026-44789), [CVE-2026-44790](https://nvd.nist.gov/vuln/detail/CVE-2026-44790), [CVE-2026-44791](https://nvd.nist.gov/vuln/detail/CVE-2026-44791) — official CVE records.

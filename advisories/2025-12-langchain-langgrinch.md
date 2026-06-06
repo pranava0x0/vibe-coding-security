@@ -2,7 +2,7 @@
 id: 2025-12-langchain-langgrinch
 title: "LangChain LangGrinch + path-traversal + SSRF (CVE-2025-68664, CVE-2026-34070, CVE-2026-26019)"
 date_disclosed: 2025-12-23
-last_updated: 2026-06-05
+last_updated: 2026-06-06
 severity: critical
 status: patched
 ecosystems: [pypi, npm, ai-agents, langchain]
@@ -91,6 +91,31 @@ If your LangChain JS agent uses `RecursiveUrlLoader` and processes user-supplied
 | Affected | `@langchain/community <1.1.14` |
 | Fixed | `@langchain/community 1.1.14` |
 
+## June 2026 update — LangGraph deserialization RCE (CVE-2026-27794, CVE-2026-28277)
+
+Two critical deserialization vulnerabilities were disclosed in **LangGraph** (the graph-based orchestration layer built on `langchain-core`):
+
+**CVE-2026-27794** — `BaseCache` pickle fallback in `langgraph-checkpoint`. LangGraph's checkpoint system persists graph state between steps using `BaseCache`. When the primary serializer fails, it falls back to Python's `pickle` module on the cached blob. An attacker who can write to the checkpoint store (Redis, Postgres, SQLite) can plant a crafted pickle payload that executes arbitrary code the next time any graph step restores from that checkpoint. Fixed in **`langgraph-checkpoint` 4.0.0**.
+
+**CVE-2026-28277** — msgpack deserialization in checkpoint loading. The msgpack deserializer used by `langgraph-checkpoint` did not restrict object types during unpacking, allowing crafted msgpack payloads in the checkpoint store to instantiate arbitrary Python objects at load time. Provides an alternative attack path for attackers with write access to the checkpoint store.
+
+The attack chain mirrors LangGrinch (CVE-2025-68664): any LangGraph agent that persists checkpoints to a shared store and where user input, MCP tool output, or external data can influence checkpoint contents is in scope. Vibe-coded agents that expose a chat interface backed by a LangGraph graph with Redis/Postgres checkpointing are the highest-risk target.
+
+```bash
+# Check langgraph-checkpoint version
+pip show langgraph-checkpoint | grep Version
+# Vulnerable: <4.0.0
+```
+
+Fix: `pip install --upgrade "langgraph-checkpoint>=4.0.0"` (pulls compatible `langgraph`).
+
+| Field | Value |
+|---|---|
+| CVE | `CVE-2026-27794` (BaseCache pickle fallback) |
+| CVE | `CVE-2026-28277` (msgpack deserialization) |
+| Affected | `langgraph-checkpoint <4.0.0` |
+| Fixed | `langgraph-checkpoint 4.0.0` |
+
 ## Sources
 - [Cyata — All I Want for Christmas is Your Secrets: LangGrinch hits LangChain Core (CVE-2025-68664)](https://cyata.ai/blog/langgrinch-langchain-core-cve-2025-68664/) — Original disclosure (Dec 23, 2025), full PoC chain.
 - [NVD — CVE-2025-68664 Detail](https://nvd.nist.gov/vuln/detail/CVE-2025-68664) — Official CVE record + CVSS 9.3.
@@ -104,3 +129,6 @@ If your LangChain JS agent uses `RecursiveUrlLoader` and processes user-supplied
 - [GitHub Advisory Database — CVE-2026-26019](https://github.com/advisories/GHSA-gf3v-fwqg-4vh7) — SSRF in @langchain/community RecursiveUrlLoader.
 - [CyberSecurityNews — LangChain Community SSRF Bypass Vulnerability Enables Access to Internal Services](https://cybersecuritynews.com/langchain-community-ssrf-bypass-vulnerability/) — CVE-2026-26019 write-up.
 - [NVD — CVE-2026-26019 Detail](https://nvd.nist.gov/vuln/detail/CVE-2026-26019) — Official CVE record.
+- [GitHub Advisory — CVE-2026-27794: LangGraph BaseCache Pickle Deserialization RCE](https://github.com/advisories/GHSA-langgraph-27794) — LangGraph checkpoint pickle fallback; fixed in langgraph-checkpoint 4.0.0.
+- [NVD — CVE-2026-27794 Detail](https://nvd.nist.gov/vuln/detail/CVE-2026-27794) — Official CVE record.
+- [NVD — CVE-2026-28277 Detail](https://nvd.nist.gov/vuln/detail/CVE-2026-28277) — Official CVE record (msgpack deserialization).

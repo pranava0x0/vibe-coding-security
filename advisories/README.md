@@ -23,6 +23,7 @@ One file per incident. Latest at the top.
 | 2026-05-18 | [Nx Console VS Code extension compromise (nrwl.angular-console 18.95.0)](2026-05-nx-console-vscode-compromise.md) | critical | contained |
 | 2026-05-12 | [Claude Code `claude-cli://` deeplink RCE (2.1.118)](2026-05-claude-code-deeplink-rce.md) | critical | patched |
 | 2026-05 | [WhiteCobra — VS Code / Cursor / Windsurf / Open VSX crypto-stealer campaign (July 2025 → ongoing)](2026-05-whitecobra-vscode-extensions.md) | high | active |
+| 2026-05 | [PCPJack — credential-stealing counter-worm that removes TeamPCP infections](2026-05-pcpjack-counter-worm.md) | high | active |
 | 2026-05-06 | [ClaudeBleed — Claude in Chrome extension hijack](2026-05-claudebleed-chrome-extension.md) | high | mitigated |
 | 2026-05-13 | [OpenClaw "Claw Chain" — 4 sandbox-escape CVEs](2026-05-openclaw-claw-chain.md) | critical | patched |
 | 2026-05-13 | [Systemic MCP stdio RCE class](2026-05-mcp-stdio-systemic-rce.md) | high | mitigated |
@@ -50,6 +51,7 @@ One file per incident. Latest at the top.
 | 2026-03-11 | [Supabase Auth OIDC issuer-validation bypass (CVE-2026-31813)](2026-03-supabase-auth-oidc-bypass.md) | high | patched |
 | 2026-02-28 | [Google Antigravity sandbox escape (Pillar)](2026-02-google-antigravity-sandbox-escape.md) | high | patched |
 | 2026-02-17 | [Cline 2.3.0 supply-chain compromise (Clinejection → OpenClaw)](2026-02-cline-clinejection.md) | critical | contained |
+| 2026-02-17 | [SANDWORM_MODE — Shai-Hulud-style npm worm with MCP injection, CI implant, and 48-hour delayed activation](2026-02-sandworm-mode-npm-worm.md) | critical | active |
 | 2026-02-09 | [Claude Desktop Extensions (DXT) zero-click RCE — Anthropic won't fix](2026-02-claude-desktop-extensions-rce.md) | critical | active |
 | 2026-02-01 | [ClawHavoc — malicious-skill poisoning of OpenClaw's ClawHub marketplace](2026-02-clawhavoc-clawhub-skills.md) | high | active |
 | 2026-01-26 | [OpenClaw 1-click RCE via WebSocket gateway-URL token theft (CVE-2026-25253)](2026-01-openclaw-cve-2026-25253-gatewayurl-rce.md) | critical | patched |

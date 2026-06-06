@@ -2,7 +2,7 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-06-05. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-06-06. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
@@ -124,6 +124,10 @@ Headline: **CVE-2026-44578 (CVSS 8.6) — unauthenticated SSRF** in WebSocket up
 Prompt injection in MCP-fetched content writes to `mcp.json` and auto-registers attacker-controlled server — **no user interaction**. CVSS 8.0. Patched in Windsurf > 1.9544.26. Cursor / Claude Code / Gemini-CLI have the same class issue; vendors declined to issue CVEs.
 → [advisories/2026-05-windsurf-zero-click-mcp-rce.md](advisories/2026-05-windsurf-zero-click-mcp-rce.md)
 
+### 2026-05 — PCPJack — credential-stealing counter-worm that removes TeamPCP infections
+**PCPJack** poses as a cleanup tool for **TeamPCP** infections — it genuinely removes TeamPCP's malicious processes and configurations, giving victims false confidence that their host is clean, while PCPJack's own credential harvest runs in the background. Disclosed May 2026 by SentinelLabs. Chains **5 CVEs** to spread worm-like across Kubernetes clusters, Docker hosts, Redis, MongoDB, and RayML environments. Most critically, it exploits **CVE-2025-55182 (React2Shell, CVSS 10.0)** and **CVE-2025-29927 (Next.js)** to gain initial footholds via web apps, then pivots from the compromised web server into cloud credentials it finds on the same host (`~/.aws`, `KUBECONFIG`, Docker socket). Any unpatched React/Next.js app running on a host with cloud credentials is a potential lateral-movement entry point into the developer's entire cloud infrastructure. **Do not trust the absence of TeamPCP infections as a sign of a clean host** — PCPJack specifically cleans TeamPCP to reduce detection noise.
+→ [advisories/2026-05-pcpjack-counter-worm.md](advisories/2026-05-pcpjack-counter-worm.md)
+
 ### 2026-04 (ongoing) — Mini Shai-Hulud SAP packages
 `mbt`, `@cap-js/db-service`, `@cap-js/postgres`, `@cap-js/sqlite` compromised. Same TeamPCP playbook. Harvests local dev creds, GH/npm tokens, cloud creds.
 → [advisories/2026-04-mini-shai-hulud-sap.md](advisories/2026-04-mini-shai-hulud-sap.md)
@@ -183,6 +187,10 @@ Marimo's `/terminal/ws` WebSocket endpoint **skips authentication** (every other
 ### 2026-02-17 — Cline `2.3.0` supply-chain compromise — "Clinejection" → OpenClaw payload
 GitHub-issue-title prompt injection → Cline's own AI triage bot ran attacker-controlled `npm install` → Cacheract poisoned the Actions cache → next publish workflow restored poisoned cache and leaked `NPM_RELEASE_TOKEN` → attacker pushed `cline@2.3.0` with a `postinstall` script installing **OpenClaw** as a system daemon. ~4,000 installs in 8h before takedown. Cline's rotation hit the wrong token. Researcher: Adnan Khan.
 → [advisories/2026-02-cline-clinejection.md](advisories/2026-02-cline-clinejection.md)
+
+### 2026-02-17 — SANDWORM_MODE npm worm: MCP server injection, CI implant, 48-hour delayed activation (19 packages)
+**SANDWORM_MODE** is a self-propagating npm supply-chain worm discovered by Socket in February 2026. **19 malicious packages** across two publisher aliases typosquat Claude Code, OpenClaw, and popular Node.js utilities. Two-stage attack: **Stage 1** (immediate on `npm install`) steals all developer/CI credentials — npm tokens, GitHub tokens, AWS/GCP/Azure keys, SSH keys, and crypto wallet seeds — and exfiltrates them to a GitHub API endpoint. **Stage 2** fires after a **48-hour delay plus up to 48h random jitter** — deliberately longer than npm security's typical 6–24h triage window — and runs a deeper sweep from password managers, **injects a malicious MCP server with embedded prompt injection** into Claude Code/Cursor config, installs Git hook persistence, and self-propagates by publishing trojanized versions of packages the victim maintains. The GitHub Actions **`ci-quality/code-quality-check`** Action is also used as a weaponized "code quality scanner" that harvests CI secrets and OIDC tokens and patches `.github/workflows/*.yml` for persistence. If you installed any AI-tool-adjacent npm packages in February 2026 and your MCP config, Git hooks, or workflows contain unfamiliar entries, Stage 2 may already have fired.
+→ [advisories/2026-02-sandworm-mode-npm-worm.md](advisories/2026-02-sandworm-mode-npm-worm.md)
 
 ### 2025-12-28 — Shai-Hulud 3.0 — `@vietmoney/react-big-calendar@0.26.2` (test payload)
 Third generation of the Shai-Hulud worm dropped on a dormant npm package (no update since March 2021) with **heavier obfuscation + reliability improvements** but the same install-time credential-theft + GitHub-exfil core. Low downloads / no major spread — Aikido: "we may have caught the attackers testing their payload." Snyk's "Holiday Whisper." Now read in retrospect as the **TeamPCP rehearsal** that became the [SAP](advisories/2026-04-mini-shai-hulud-sap.md) / [PyTorch Lightning](advisories/2026-04-pytorch-lightning-compromise.md) / [Bitwarden CLI](advisories/2026-04-bitwarden-cli-shai-hulud-third-coming.md) / [TanStack](advisories/2026-05-tanstack-mini-shai-hulud.md) / [@antv+durabletask](advisories/2026-05-mini-shai-hulud-may19-wave.md) wave through Q2 2026. Remove `@vietmoney/react-big-calendar` and check for a planted exfil repo on your GitHub.
