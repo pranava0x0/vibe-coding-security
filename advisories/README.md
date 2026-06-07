@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-06-05 | [Miasma Wave 5 — 73 Microsoft Azure GitHub repos + mantine-datatable poisoned; payload auto-fires via Claude Code / Cursor / Gemini CLI](2026-06-miasma-wave5-microsoft-azure-github.md) | critical | active |
 | 2026-06-04 | [IronWorm — Rust npm worm with eBPF kernel rootkit + Tor C2 (36 packages)](2026-06-ironworm-npm-rust-ebpf.md) | critical | active |
 | 2026-06-06 | [Gluestack @react-native-aria RAT via compromised contributor token](2026-06-gluestack-react-native-aria-rat.md) | critical | contained |
 | 2026-06-04 | [Phantom Gyp — Miasma wave 4: self-propagating npm worm via binding.gyp (57 packages)](2026-06-phantom-gyp-miasma-wave4.md) | critical | active |
