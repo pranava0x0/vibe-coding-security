@@ -2,7 +2,7 @@
 id: 2026-06-phantom-gyp-miasma-wave4
 title: "Phantom Gyp — Miasma wave 4: self-propagating npm worm via binding.gyp (June 2026)"
 date_disclosed: 2026-06-04
-last_updated: 2026-06-05
+last_updated: 2026-06-07
 severity: critical
 status: active
 ecosystems: [npm]
@@ -25,6 +25,8 @@ On **2026-06-03** (and continuing through June 4), a threat actor published 57 m
 - Self-propagates by publishing additional poisoned npm packages using stolen npm tokens (worm behavior)
 
 **Largest victim: `@vapi-ai/server-sdk`** — the official Vapi.ai voice AI server SDK with **408,000+ monthly downloads** was among the first packages hit, at 23:30 UTC on June 3, 2026. The campaign infected **57 packages across 286+ malicious versions** in a rolling wave lasting under two hours. A notable escalation: the worm **forges SLSA v1 provenance attestations** on repackaged malicious versions — reinfected packages display a green "verified provenance" badge and pass standard provenance verification, yet carry the malicious payload (same forgery primitive as the May 19 Mini Shai-Hulud wave that self-minted Sigstore attestations).
+
+**June 5 follow-on (Wave 5):** On 2026-06-05, credentials stolen during this binding.gyp wave were used to compromise a Microsoft contributor's GitHub account, planting malicious commits in **73 Microsoft GitHub repositories** (Azure, Azure-Samples, Microsoft, MicrosoftDocs) and **5 mantine-datatable repos** — without touching the npm registry. See [2026-06-miasma-wave5-microsoft-azure-github.md](2026-06-miasma-wave5-microsoft-azure-github.md) for full details.
 
 **Attribution / lineage:** The underlying payload and IOCs are consistent with the Miasma / Mini Shai-Hulud worm family (Greek-mythology theming). This is the **fourth documented copycat wave** after:
 1. [`deadcode09284814` typosquats](2026-05-shai-hulud-copycat-wave.md) (May 2026)
@@ -71,4 +73,5 @@ If you ran `npm install` on any project between **2026-06-03 00:00 UTC** and **2
 - [Snyk — "Node-gyp Supply Chain Compromise June 2026"](https://snyk.io/blog/node-gyp-supply-chain-compromise-self-propagating-npm-worm-binding-gyp/) — canonical analysis, 57-package scope, "Phantom Gyp" technique detail, payload behavior.
 - [StepSecurity — "Phantom Gyp" campaign tracking](https://www.stepsecurity.io) — technique naming, IOC list, timeline.
 - [The Hacker News — Miasma Supply Chain](https://thehackernews.com/2026/06/miasma-supply-chain-attack-compromises.html) — family lineage context.
+- Cross-reference: [2026-06-miasma-wave5-microsoft-azure-github.md](2026-06-miasma-wave5-microsoft-azure-github.md) — Wave 5 that used credentials stolen in this wave to hit 73 Microsoft GitHub repos via direct source-repo poisoning.
 - Cross-reference: [2026-06-miasma-redhat-cloud-services-compromise.md](2026-06-miasma-redhat-cloud-services-compromise.md), [2026-05-shai-hulud-copycat-wave.md](2026-05-shai-hulud-copycat-wave.md), [2026-05-trapdoor-cross-ecosystem-stealer.md](2026-05-trapdoor-cross-ecosystem-stealer.md).

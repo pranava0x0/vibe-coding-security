@@ -2,11 +2,15 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-06-06. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-06-07. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-06-05 — Miasma Wave 5 — 73 Microsoft Azure GitHub repos + mantine-datatable poisoned; payload auto-fires via Claude Code / Cursor / Gemini CLI
+Credentials stolen during the [Phantom Gyp / Wave 4](advisories/2026-06-phantom-gyp-miasma-wave4.md) binding.gyp campaign were used to push malicious commits to **73 Microsoft GitHub repositories** (Azure, Azure-Samples, Microsoft, MicrosoftDocs organizations) and **5 mantine-datatable / mantine-contextmenu repos** on 2026-06-05. Wave 5 introduces a **registry bypass**: no npm package is published — the attacker commits a **4.3 MB payload runner directly to the source repo** and wires it to auto-execute via **five developer tools: Claude Code, Gemini CLI, Cursor, VS Code, and the npm test hook**. Opening a compromised repository in any of these tools triggers a full credential harvest without running `npm install`. If you cloned or pulled any Microsoft Azure organization repo or mantine-datatable family repo after 2026-06-04, rotate all cloud and developer credentials immediately.
+→ [advisories/2026-06-miasma-wave5-microsoft-azure-github.md](advisories/2026-06-miasma-wave5-microsoft-azure-github.md)
 
 ### 2026-06-04 — IronWorm — Rust npm worm with eBPF kernel rootkit + Tor C2 (36 packages)
 JFrog Security Research identified a new self-propagating npm worm called **IronWorm**, starting from the compromised account `asteroiddao`. Unlike prior waves (Miasma/Shai-Hulud), IronWorm deploys a **Rust ELF binary** that hides behind an **eBPF kernel rootkit** (invisible to eBPF-based EDR monitoring) and exfiltrates credentials over **Tor** (bypasses IP blocklists and DNS monitoring). Targets 86 env vars and 20 credential files — specifically harvests **OpenAI, Anthropic, AWS** credentials alongside npm tokens, SSH keys, and Exodus wallet files. Propagates by publishing trojanized versions of victims' own packages via stolen npm credentials including Trusted Publishing secrets. Commit author masquerades as `"claude"`. Backdates git timestamps up to 13 years to evade timeline detection.
@@ -125,7 +129,7 @@ Prompt injection in MCP-fetched content writes to `mcp.json` and auto-registers 
 → [advisories/2026-05-windsurf-zero-click-mcp-rce.md](advisories/2026-05-windsurf-zero-click-mcp-rce.md)
 
 ### 2026-05 — PCPJack — credential-stealing counter-worm that removes TeamPCP infections
-**PCPJack** poses as a cleanup tool for **TeamPCP** infections — it genuinely removes TeamPCP's malicious processes and configurations, giving victims false confidence that their host is clean, while PCPJack's own credential harvest runs in the background. Disclosed May 2026 by SentinelLabs. Chains **5 CVEs** to spread worm-like across Kubernetes clusters, Docker hosts, Redis, MongoDB, and RayML environments. Most critically, it exploits **CVE-2025-55182 (React2Shell, CVSS 10.0)** and **CVE-2025-29927 (Next.js)** to gain initial footholds via web apps, then pivots from the compromised web server into cloud credentials it finds on the same host (`~/.aws`, `KUBECONFIG`, Docker socket). Any unpatched React/Next.js app running on a host with cloud credentials is a potential lateral-movement entry point into the developer's entire cloud infrastructure. **Do not trust the absence of TeamPCP infections as a sign of a clean host** — PCPJack specifically cleans TeamPCP to reduce detection noise.
+**PCPJack** poses as a cleanup tool for **TeamPCP** infections — it genuinely removes TeamPCP's malicious processes and configurations, giving victims false confidence that their host is clean, while PCPJack's own credential harvest runs in the background. Disclosed May 2026 by SentinelLabs. Chains **5 CVEs** to spread worm-like across Kubernetes clusters, Docker hosts, Redis, MongoDB, and RayML environments. Most critically, it exploits **CVE-2025-55182 (React2Shell, CVSS 10.0)** and **CVE-2025-29927 (Next.js)** to gain initial footholds via web apps, then pivots from the compromised web server into cloud credentials it finds on the same host (`~/.aws`, `KUBECONFIG`, Docker socket). Any unpatched React/Next.js app running on a host with cloud credentials is a potential lateral-movement entry point into the developer's entire cloud infrastructure. **Do not trust the absence of TeamPCP infections as a sign of a clean host** — PCPJack specifically cleans TeamPCP to reduce detection noise. **June 2026 update:** PCPJack has escalated to building a **230-node covert SMTP relay network** from hijacked AWS, Google Cloud, and Azure servers — syncing verified outbound-mail proxies every five minutes for downstream spam/phishing abuse.
 → [advisories/2026-05-pcpjack-counter-worm.md](advisories/2026-05-pcpjack-counter-worm.md)
 
 ### 2026-04 (ongoing) — Mini Shai-Hulud SAP packages
