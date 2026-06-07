@@ -2,7 +2,7 @@
 id: 2026-05-pcpjack-counter-worm
 title: "PCPJack — credential-stealing counter-worm that removes TeamPCP infections (May 2026)"
 date_disclosed: 2026-05
-last_updated: 2026-06-06
+last_updated: 2026-06-07
 severity: high
 status: active
 ecosystems: [npm, cloud, kubernetes, docker]
@@ -82,11 +82,23 @@ docker events --since 24h 2>/dev/null | grep -i pull
 - **Network-segment your databases** — Redis and MongoDB should not be reachable from web app hosts.
 - **Treat a "cleaned" host as still compromised** until full incident response confirms otherwise.
 
+## June 2026 escalation — 230-node SMTP relay
+
+**PCPJack has weaponized its credential harvest into a covert SMTP relay network.** As of June 2026, SentinelLabs researchers found that PCPJack hijacked **230 AWS, Google Cloud, and Azure servers** — all compromised via stolen cloud IAM credentials from prior waves — and quietly converted them into SMTP mail proxies. The relay network syncs verified outbound-mail-capable proxies to a downstream consumer every **five minutes**, providing a scalable, constantly-refreshing spam/phishing infrastructure sourced entirely from legitimate enterprise cloud accounts.
+
+Key implications for defenders:
+- PCPJack is not just a credential harvester — it is now monetizing stolen cloud access as **SMTP-as-a-Service** for downstream threat actors.
+- If your AWS/GCP/Azure accounts were exposed in any prior Miasma/GlassWorm/Megalodon/Shai-Hulud wave, assume they may be enrolled in this relay network.
+- Detection: unusual SMTP traffic (port 25/587) from EC2/Compute Engine/Azure VM instances that do not run mail servers; unexpected IAM role usage for network egress.
+
+Source: [The Hacker News — "PCPJack Hijacks 230 AWS, Google Cloud, and Azure Servers for Covert SMTP Relay Network"](https://thehackernews.com/2026/06/pcpjack-hijacks-230-aws-google-cloud.html)
+
 ## Sources
 
 - [SecurityWeek — 'PCPJack' Worm Removes TeamPCP Infections, Steals Credentials](https://www.securityweek.com/pcpjack-worm-removes-teampcp-infections-steals-credentials/) — Primary disclosure; counter-worm mechanics, CVE list.
 - [BleepingComputer — New PCPJack worm steals credentials, cleans TeamPCP infections](https://www.bleepingcomputer.com/news/security/new-pcpjack-worm-steals-credentials-cleans-teampcp-infections/) — Technical detail, lateral-movement targets.
 - [CyberSecurityNews — New PCPJack Worm Targets Docker, Kubernetes, Redis, and MongoDB for Credential Theft](https://cybersecuritynews.com/new-pcpjack-worm-targets-docker/) — Infrastructure targeting and reconnaissance mechanics.
 - [The Hacker News — PCPJack Credential Stealer Exploits 5 CVEs to Spread Worm-Like Across Cloud Systems](https://thehackernews.com/2026/05/pcpjack-credential-stealer-exploits-5.html) — 5-CVE list, Common Crawl scanning, React2Shell chain.
+- [The Hacker News — "PCPJack Hijacks 230 AWS, Google Cloud, and Azure Servers for Covert SMTP Relay Network"](https://thehackernews.com/2026/06/pcpjack-hijacks-230-aws-google-cloud.html) — June 2026 SMTP relay escalation; 230-node network, five-minute refresh, enterprise cloud accounts.
 - Cross-reference: [2025-12-react2shell-rce.md](2025-12-react2shell-rce.md) — CVE-2025-55182 React Server Components RCE, which PCPJack uses as its primary web-entry vector.
 - Cross-reference: [2026-05-tanstack-mini-shai-hulud.md](2026-05-tanstack-mini-shai-hulud.md) — TeamPCP campaign whose infections PCPJack claims to remove.
