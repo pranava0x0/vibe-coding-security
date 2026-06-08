@@ -6,7 +6,7 @@ last_updated: 2026-06-06
 severity: critical
 status: patched
 ecosystems: [pypi, npm, ai-agents, langchain]
-tools_affected: [langchain, langchain-core, langgraph, @langchain/community]
+tools_affected: [langchain, langchain-core, langgraph, "@langchain/community"]
 tags: [cve, deserialization, prompt-injection, secret-exfil, path-traversal, ssrf, ai-agent-framework]
 ---
 

@@ -2,7 +2,7 @@
 id: 2025-11-n8n-ni8mare-rce
 title: "n8n Ni8mare + RCE cluster — CVSS 10.0 unauth takeover of workflow automation (Nov 2025 → Feb 2026)"
 date_disclosed: 2025-11-09
-last_updated: 2026-06-06
+last_updated: 2026-06-08
 severity: critical
 status: patched
 ecosystems: [npm, self-hosted]
@@ -30,6 +30,12 @@ A second critical flaw (CVSS 9.4) was disclosed in February 2026. It bypasses mi
 
 The Hacker News reported additional critical n8n flaws in March 2026 that allow RCE and exposure of stored credentials. These appear to be separate from the Nov/Feb cluster.
 
+**May 2026 — Merge node "Combine by SQL" sandbox escape (CVE-2026-33660)**
+
+A critical sandbox escape (CVSS ~9.4) was disclosed as part of the May 2026 enterprise patch rollup. The **Merge node's "Combine by SQL" mode** passes user-supplied SQL expressions into a query engine without sanitization. An authenticated user who can create or modify workflows can inject a crafted SQL expression that escapes the n8n sandbox, reads arbitrary local files from the host filesystem, or achieves full host compromise. Exploitation requires workflow-editor privileges but not admin access.
+
+Fixed in **n8n 1.123.43 / 2.20.7 / 2.22.1**.
+
 **June 2026 — n8n node-level RCE cluster (CVE-2026-44789, CVE-2026-44790, CVE-2026-44791)**
 
 Three additional critical flaws were disclosed in June 2026, all fixed in n8n **1.123.43 / 2.20.7 / 2.22.1**:
@@ -56,7 +62,7 @@ This is structurally equivalent to the [Composio breach](2026-05-composio-ai-age
 npx n8n --version 2>/dev/null
 docker exec <n8n-container> n8n --version 2>/dev/null
 
-# Vulnerable: any n8n < 1.121.0 (Ni8mare), < 1.127.x (CVE-2026-25049), < 1.123.43/2.20.7/2.22.1 (June 2026 cluster)
+# Vulnerable: any n8n < 1.121.0 (Ni8mare), < 1.127.x (CVE-2026-25049), < 1.123.43/2.20.7/2.22.1 (CVE-2026-33660 + June 2026 cluster)
 # Check if your instance is network-exposed
 curl -s -o /dev/null -w "%{http_code}" http://localhost:5678/healthz
 
@@ -98,3 +104,5 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:5678/healthz
 - [BleepingComputer — n8n CVE-2026-44789/44790/44791 node-level RCE cluster](https://www.bleepingcomputer.com/news/security/critical-n8n-flaws-cve-2026-44789-44790-44791/) — June 2026 cluster; prototype pollution, argument injection, XML node RCE.
 - [CyberSecurityNews — n8n HTTP Request Node Vulnerability Let Attackers Execute Arbitrary Code](https://cybersecuritynews.com/n8n-http-request-node-vulnerability/) — CVE-2026-44789 prototype pollution detail.
 - [NVD — CVE-2026-44789](https://nvd.nist.gov/vuln/detail/CVE-2026-44789), [CVE-2026-44790](https://nvd.nist.gov/vuln/detail/CVE-2026-44790), [CVE-2026-44791](https://nvd.nist.gov/vuln/detail/CVE-2026-44791) — official CVE records.
+- [NVD — CVE-2026-33660](https://nvd.nist.gov/vuln/detail/CVE-2026-33660) — Merge node "Combine by SQL" sandbox escape; official CVE record.
+- [CyberSecurityNews — n8n Merge Node Vulnerability Let Attackers Read Arbitrary Files](https://cybersecuritynews.com/n8n-merge-node-vulnerability/) — CVE-2026-33660 technical detail.

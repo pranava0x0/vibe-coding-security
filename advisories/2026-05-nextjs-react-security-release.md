@@ -2,7 +2,7 @@
 id: 2026-05-nextjs-react-security-release
 title: "Next.js + React May 2026 security release — 13 CVEs, including unauth SSRF (CVE-2026-44578)"
 date_disclosed: 2026-05-06
-last_updated: 2026-05-18
+last_updated: 2026-06-08
 severity: high
 status: patched
 ecosystems: [npm, javascript]
@@ -76,6 +76,24 @@ Next.js is the de facto front-end for Lovable, Bolt, v0, and a large fraction of
 → Don't rely on middleware as your sole auth boundary; enforce per-route in the handler too.
 → Block instance-metadata egress at the network layer (cloud-side IMDSv2 + hop-limit 1, Kubernetes NetworkPolicy denying `169.254.169.254`).
 → If self-hosting, put a real reverse proxy (NGINX, Caddy, or a CDN with WAF) in front; don't expose `next start` directly.
+
+## June 2026 update — RSC DoS and source code exposure (CVE-2026-23864, CVE-2026-23869, CVE-2025-55183)
+
+Vercel published a follow-on security update — **"React Server Components security update: DoS and Source Code Exposure"** — covering three additional CVEs in the RSC layer that were not fully addressed in the May rollup:
+
+**CVE-2026-23864** (high) — Memory exhaustion DoS in the RSC deserializer. A crafted RSC payload causes unbounded memory allocation; no authentication required. An unauthenticated attacker can crash the server process by sending a single crafted request to any RSC endpoint.
+
+**CVE-2026-23869** (high) — A second RSC DoS via the streaming serializer; crafted input causes pathological CPU consumption rather than memory exhaustion, achieving a similar denial-of-service from a different code path.
+
+**CVE-2025-55183** (medium) — Source code exposure via malformed RSC requests under specific configurations. A crafted request causes the RSC error handler to include raw application source file content in the response, leaking internal code to an unauthenticated requester.
+
+All three are patched in the latest point release on each active Next.js branch; consult the [Vercel security changelog](https://vercel.com/changelog/summary-of-cve-2026-23869) and the [Akamai CVE-2026-23864 writeup](https://www.akamai.com/blog/security-research/cve-2026-23864-react-nextjs-denial-of-service) for the full per-branch version matrix.
+
+| CVE | Type | Severity | Fix |
+|---|---|---|---|
+| CVE-2026-23864 | RSC memory exhaustion DoS | High | Latest patch per branch |
+| CVE-2026-23869 | RSC CPU exhaustion DoS | High | Latest patch per branch |
+| CVE-2025-55183 | RSC source code exposure | Medium | Latest patch per branch |
 
 ## Sources
 - [Vercel — Next.js May 2026 security release](https://vercel.com/changelog/next-js-may-2026-security-release)

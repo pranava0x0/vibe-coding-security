@@ -107,7 +107,7 @@ grep -rP "[\x{200B}-\x{200D}\x{FEFF}\x{00AD}]" .claude/ .cursor/ .cursorrules CL
 - **Diff agent-config files on every `git pull`** — `git diff HEAD~1 .claude/ .cursor/ CLAUDE.md .cursorrules` before opening the project in your AI tool.
 - **Require signed commits** on protected branches of your own repos. An unsigned commit from a contributor account on a security-sensitive file is a red flag.
 - **Review workflow changes carefully.** Any `.github/workflows/*.yml` change authored by a bot-named account or containing `base64 -d | bash` should be rejected immediately.
-- **Pin GitHub Actions to commit SHA** — see [prevention/ci-hardening.md](../prevention/ci-hardening.md).
+- **Pin GitHub Actions to commit SHA** — see [prevention/ci-cd-hardening.md](../prevention/ci-cd-hardening.md).
 - **Assume stolen credentials cascade.** If your token appeared in any prior Miasma/GlassWorm/Megalodon wave, assume Wave 5 may already have used it.
 
 ## Sources

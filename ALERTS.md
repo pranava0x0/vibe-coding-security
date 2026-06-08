@@ -2,7 +2,7 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-06-07. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-06-08. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
@@ -120,8 +120,8 @@ Three Cursor IDE flaws: malicious Git pre-commit hooks in nested bare repos exec
 .NET SDK: `[KernelFunction]`-exposed `DownloadFileAsync` lets prompt-injected agent escape Azure Container Apps Python sandbox. **CVSS 10.0**. Python SDK: `InMemoryVectorStore` filter uses `eval()` on user-influenced input. **CVSS 9.9**. Patch .NET 1.71.0 / Python 1.39.4.
 → [advisories/2026-05-semantic-kernel-rce.md](advisories/2026-05-semantic-kernel-rce.md)
 
-### 2026-05-06 → 05-07 — Next.js + React May 2026 security release (13 CVEs)
-Headline: **CVE-2026-44578 (CVSS 8.6) — unauthenticated SSRF** in WebSocket upgrade handler, all self-hosted Next.js 13.4.13+ (Vercel-hosted unaffected). ~79K vulnerable instances on Shodan. **CVE-2026-23870** is an upstream React Server Components DoS. Upgrade to **Next.js 15.5.18 / 16.2.6**.
+### 2026-05-06 → 06-08 — Next.js + React security releases (13+ CVEs; updated June 2026)
+Headline: **CVE-2026-44578 (CVSS 8.6) — unauthenticated SSRF** in WebSocket upgrade handler, all self-hosted Next.js 13.4.13+ (Vercel-hosted unaffected). ~79K vulnerable instances on Shodan. **CVE-2026-23870** is an upstream React Server Components DoS (May release). A **June 2026 follow-on** added three RSC layer CVEs: **CVE-2026-23864** (unauthenticated memory exhaustion DoS), **CVE-2026-23869** (CPU exhaustion DoS), and **CVE-2025-55183** (source code exposure). Upgrade to the latest patch release on your Next.js branch.
 → [advisories/2026-05-nextjs-react-security-release.md](advisories/2026-05-nextjs-react-security-release.md)
 
 ### 2026-05 — Windsurf zero-click MCP RCE (CVE-2026-30615)
@@ -148,8 +148,8 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 
 ## 🟠 RECENT — verify exposure
 
-### 2025-11-09 — n8n Ni8mare (CVE-2026-21858, CVSS 10.0) — unauth RCE in workflow automation; ~60K instances; exploited in wild
-**CVE-2026-21858 "Ni8mare"** (CVSS 10.0) — any network-reachable attacker can run arbitrary commands on a self-hosted **n8n** instance without credentials, gaining full control over the host and **all OAuth tokens and API keys stored in n8n's credential store** (Google Drive, Slack, GitHub, HubSpot, Notion, Jira, etc.). n8n is widely used as an AI workflow orchestration layer — this is structurally equivalent to the [Composio breach](advisories/2026-05-composio-ai-agent-platform-breach.md) pattern. An estimated **26,512–100,000 instances** were exposed; GreyNoise logged **33,000+ exploitation attempts** between January 27–February 3, 2026. **Patched in n8n 1.121.0** (November 18, 2025). A follow-on authenticated sandbox bypass (CVE-2026-25049, CVSS 9.4) was disclosed in February 2026 with public exploits; additional RCE/credential-exposure flaws followed in March 2026. Upgrade to the latest n8n release.
+### 2025-11-09 → 2026-06 — n8n Ni8mare (CVE-2026-21858, CVSS 10.0) + ongoing RCE cluster — unauth RCE in workflow automation; ~60K instances; exploited in wild
+**CVE-2026-21858 "Ni8mare"** (CVSS 10.0) — any network-reachable attacker can run arbitrary commands on a self-hosted **n8n** instance without credentials, gaining full control over the host and **all OAuth tokens and API keys stored in n8n's credential store** (Google Drive, Slack, GitHub, HubSpot, Notion, Jira, etc.). n8n is widely used as an AI workflow orchestration layer — this is structurally equivalent to the [Composio breach](advisories/2026-05-composio-ai-agent-platform-breach.md) pattern. An estimated **26,512–100,000 instances** were exposed; GreyNoise logged **33,000+ exploitation attempts** between January 27–February 3, 2026. **Patched in n8n 1.121.0** (November 18, 2025). Additional critical flaws followed: CVE-2026-25049 (authenticated sandbox bypass, CVSS 9.4, Feb 2026); more RCE/credential-exposure flaws in March 2026; **CVE-2026-33660** (Merge node "Combine by SQL" sandbox escape, May 2026 — authenticated workflow editor can read arbitrary local files); and the June 2026 node-level RCE cluster (CVE-2026-44789/44790/44791 — prototype pollution, argument injection, XML node RCE). Upgrade to **n8n ≥ 1.123.43 / 2.20.7 / 2.22.1**.
 → [advisories/2025-11-n8n-ni8mare-rce.md](advisories/2025-11-n8n-ni8mare-rce.md)
 
 ### 2025-12-05 → ongoing — React2Shell (CVE-2025-55182, CVSS 10.0) — RCE in React Server Components; CISA KEV; 766+ hosts compromised
