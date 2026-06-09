@@ -2,7 +2,7 @@
 id: 2026-06-miasma-wave5-microsoft-azure-github
 title: "Miasma Wave 5 — 73 Microsoft Azure GitHub repos + mantine-datatable compromised; payload auto-fires via Claude Code / Cursor / Gemini CLI (June 2026)"
 date_disclosed: 2026-06-05
-last_updated: 2026-06-07
+last_updated: 2026-06-09
 severity: critical
 status: active
 ecosystems: [npm, github]
@@ -17,6 +17,8 @@ tags: [supply-chain, worm, credential-theft, miasma-lineage, github-repo-poisoni
 ## What happened
 
 On **2026-06-05**, attackers leveraged a previously compromised contributor account (a credential stolen during the Phantom Gyp / binding.gyp wave 4 campaign from June 3–4) to push malicious commits to Microsoft's Azure/durabletask repository. GitHub subsequently **disabled 73 repositories** across four Microsoft GitHub organizations:
+
+> **GitHub's automated detection disabled all 73 repositories within 105 seconds of the first suspicious commit** — the fastest documented GitHub platform response to a supply-chain poisoning event. Despite the speed, the payload runner had already been cloned by an unknown number of developers before the lockdown. The targeting of `Azure/durabletask` specifically — a credential already exposed via Wave 4 (Phantom Gyp) — suggests the actor maintained a list of partially-rotated stolen tokens and systematically re-targeted accounts where credential rotation was incomplete.
 
 - `Azure`
 - `Azure-Samples`
@@ -121,3 +123,4 @@ grep -rP "[\x{200B}-\x{200D}\x{FEFF}\x{00AD}]" .claude/ .cursor/ .cursorrules CL
 - Cross-reference: [2026-06-miasma-redhat-cloud-services-compromise.md](2026-06-miasma-redhat-cloud-services-compromise.md) — Wave 3 (Red Hat @redhat-cloud-services).
 - Cross-reference: [2026-05-megalodon-github-actions-mass-campaign.md](2026-05-megalodon-github-actions-mass-campaign.md) — Megalodon GitHub Actions injection; same `.github/workflows/*.yml` base64-bash payload shape.
 - Cross-reference: [2025-10-glassworm-vscode-worm.md](2025-10-glassworm-vscode-worm.md) — GlassWorm credential harvest that almost certainly fed the contributor-token pool exploited here.
+- [The Register — "GitHub pulls plug on 73 Microsoft repos in 105 seconds after supply-chain attack detected"](https://www.theregister.com/2026/06/08/github_miasma_wave5_response/) (2026-06-08) — 105-second automated response detail; partial-rotation re-targeting analysis.
