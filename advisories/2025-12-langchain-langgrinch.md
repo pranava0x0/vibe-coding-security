@@ -1,12 +1,12 @@
 ---
 id: 2025-12-langchain-langgrinch
-title: "LangChain LangGrinch + path-traversal + SSRF (CVE-2025-68664, CVE-2026-34070, CVE-2026-26019)"
+title: "LangChain LangGrinch + path-traversal + SSRF + SQLi (CVE-2025-68664, CVE-2026-34070, CVE-2026-26019, CVE-2025-67644)"
 date_disclosed: 2025-12-23
-last_updated: 2026-06-06
+last_updated: 2026-06-09
 severity: critical
 status: patched
 ecosystems: [pypi, npm, ai-agents, langchain]
-tools_affected: [langchain, langchain-core, langgraph, @langchain/community]
+tools_affected: [langchain, langchain-core, langgraph, langgraph-checkpoint-sqlite, "@langchain/community"]
 tags: [cve, deserialization, prompt-injection, secret-exfil, path-traversal, ssrf, ai-agent-framework]
 ---
 
@@ -116,6 +116,33 @@ Fix: `pip install --upgrade "langgraph-checkpoint>=4.0.0"` (pulls compatible `la
 | Affected | `langgraph-checkpoint <4.0.0` |
 | Fixed | `langgraph-checkpoint 4.0.0` |
 
+## June 2026 update — CVE-2025-67644: LangGraph SQLite SQL injection
+
+**CVE-2025-67644** (CVSS 7.3 High, CWE-89) is a SQL injection vulnerability in `langgraph-checkpoint-sqlite` — the SQLite-backed checkpoint store for LangGraph agents. The vulnerable function `_metadata_predicate` constructs SQL `WHERE` clauses by interpolating metadata filter keys directly into the query string without sanitisation or parameterisation. Calling `SqliteSaver.list()` or `SqliteSaver.alist()` with attacker-influenced metadata key names allows an attacker to break out of the filter clause and inject arbitrary SQL.
+
+**Impact:** an attacker who can influence the metadata keys passed to a checkpoint list/search operation can bypass filters and read **all checkpoint records** in the SQLite database — leaking full conversation history (all threads), thread IDs, and any agent-state metadata persisted there. The checkpoint store may include tool call results, retrieved documents, and other structured context that the agent persisted during a run.
+
+The attack surface is realistic for vibe coders: if a LangGraph agent accepts a user-provided metadata key (e.g., "filter by tag name" or "filter by session label") and passes it to `SqliteSaver.list()`, the SQL injection fires at query time — no deserialization required.
+
+**Fixed in `langgraph-checkpoint-sqlite >= 3.0.1`** by applying a strict allowlist regex (`^[a-zA-Z0-9_.-]+$`) on all metadata key names before they enter the query string.
+
+```bash
+# Check your langgraph-checkpoint-sqlite version
+pip show langgraph-checkpoint-sqlite | grep Version
+# Vulnerable: <3.0.1
+```
+
+Fix: `pip install --upgrade "langgraph-checkpoint-sqlite>=3.0.1"`.
+
+| Field | Value |
+|---|---|
+| CVE | `CVE-2025-67644` |
+| GHSA | `GHSA-7p73-8jqx-23r8` |
+| CWE | CWE-89 (SQL Injection) |
+| CVSS | `7.3` High |
+| Affected | `langgraph-checkpoint-sqlite <3.0.1` |
+| Fixed | `langgraph-checkpoint-sqlite 3.0.1` |
+
 ## Sources
 - [Cyata — All I Want for Christmas is Your Secrets: LangGrinch hits LangChain Core (CVE-2025-68664)](https://cyata.ai/blog/langgrinch-langchain-core-cve-2025-68664/) — Original disclosure (Dec 23, 2025), full PoC chain.
 - [NVD — CVE-2025-68664 Detail](https://nvd.nist.gov/vuln/detail/CVE-2025-68664) — Official CVE record + CVSS 9.3.
@@ -132,3 +159,7 @@ Fix: `pip install --upgrade "langgraph-checkpoint>=4.0.0"` (pulls compatible `la
 - [GitHub Advisory — CVE-2026-27794: LangGraph BaseCache Pickle Deserialization RCE](https://github.com/advisories/GHSA-langgraph-27794) — LangGraph checkpoint pickle fallback; fixed in langgraph-checkpoint 4.0.0.
 - [NVD — CVE-2026-27794 Detail](https://nvd.nist.gov/vuln/detail/CVE-2026-27794) — Official CVE record.
 - [NVD — CVE-2026-28277 Detail](https://nvd.nist.gov/vuln/detail/CVE-2026-28277) — Official CVE record (msgpack deserialization).
+- [GitHub Advisory — GHSA-7p73-8jqx-23r8: LangGraph SQLite SQL injection (CVE-2025-67644)](https://github.com/langchain-ai/langgraph/security/advisories/GHSA-7p73-8jqx-23r8) — Official advisory; fix description (strict key regex in 3.0.1).
+- [Snyk — SNYK-PYTHON-LANGGRAPHCHECKPOINTSQLITE-14361682](https://security.snyk.io/vuln/SNYK-PYTHON-LANGGRAPHCHECKPOINTSQLITE-14361682) — CVE-2025-67644 package tracking.
+- [NVD — CVE-2025-67644 Detail](https://nvd.nist.gov/vuln/detail/CVE-2025-67644) — Official CVE record (CVSS 7.3 High, CWE-89).
+- [The Hacker News — LangChain / LangGraph Flaws Expose Files and Agent State](https://thehackernews.com/2026/03/langchain-langgraph-flaws-expose-files.html) — Coverage of LangGraph checkpoint vulnerability class.
