@@ -10,12 +10,13 @@ from pathlib import Path
 # advisory-corpus growth between sweeps. Both full + ctx grow ~linearly with the
 # advisory count, so these caps get bumped as the corpus crosses round numbers:
 #   - ctx: 64KB → 96KB (2026-05-30 sweep, corpus passed 50 entries).
-#   - full: 512KB → 640KB (2026-06-01, corpus reached ~505KB / ~50 advisories — only
-#     ~7KB of headroom left, one sweep from breaking the deploy). 640KB ≈ 160K tokens:
-#     still a single paste for GPT/Gemini 1M-token windows and Claude's 200K. If
-#     llms-full.txt grows much past this, trim historical-status advisories from it
-#     rather than raising the cap again — at some point it stops being "one paste".
-LLMS_FULL_MAX_BYTES = 640 * 1024
+#   - full: 512KB → 640KB (2026-06-01, corpus reached ~505KB / ~50 advisories).
+#   - full: 640KB → 768KB (2026-06-10, corpus reached ~646KB / ~82 advisories; Hades
+#     PyPI worm + Claude Code MCP hijack advisories pushed past the 640KB ceiling).
+#     768KB ≈ 192K tokens: still fits in Claude 200K and GPT/Gemini 1M contexts.
+#     At ~120 advisories expect another breach — at that point trim patched/contained
+#     advisories older than 12 months from llms-full.txt rather than raising the cap.
+LLMS_FULL_MAX_BYTES = 768 * 1024
 LLMS_CTX_MAX_BYTES = 96 * 1024
 LLMS_TXT_MAX_BYTES = 50 * 1024
 
