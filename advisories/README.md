@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-06-08 | [Hades Campaign — 19 PyPI bioinformatics + MCP-developer packages poisoned with Bun credential stealer (June 2026)](2026-06-hades-campaign-pypi-mcp-attack.md) | critical | active |
 | 2026-06-05 | [Miasma Wave 5 — 73 Microsoft Azure GitHub repos + mantine-datatable poisoned; payload auto-fires via Claude Code / Cursor / Gemini CLI](2026-06-miasma-wave5-microsoft-azure-github.md) | critical | active |
 | 2026-06-04 | [IronWorm — Rust npm worm with eBPF kernel rootkit + Tor C2 (36 packages)](2026-06-ironworm-npm-rust-ebpf.md) | critical | active |
 | 2026-06-06 | [Gluestack @react-native-aria RAT via compromised contributor token](2026-06-gluestack-react-native-aria-rat.md) | critical | contained |

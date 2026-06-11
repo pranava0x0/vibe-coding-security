@@ -6,7 +6,7 @@
 
 **Audience.** Anyone shipping with Cursor, Claude Code, Lovable, v0, Bolt, Replit, Windsurf, Codex, or any agent that runs `npm install` / `pip install` on its own. If an LLM has ever suggested a package and you installed it without reading the source, this repo is for you.
 
-**Last full sweep:** 2026-06-09 · **Website:** [pranava0x0.github.io/vibe-coding-security](https://pranava0x0.github.io/vibe-coding-security/)
+**Last full sweep:** 2026-06-11 · **Website:** [pranava0x0.github.io/vibe-coding-security](https://pranava0x0.github.io/vibe-coding-security/)
 
 ---
 

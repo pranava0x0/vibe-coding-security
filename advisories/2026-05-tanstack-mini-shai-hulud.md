@@ -2,7 +2,7 @@
 id: 2026-05-tanstack-mini-shai-hulud
 title: "Mini Shai-Hulud wave — TanStack, Mistral, UiPath, OpenSearch (May 2026)"
 date_disclosed: 2026-05-11
-last_updated: 2026-06-02
+last_updated: 2026-06-11
 severity: critical
 status: active
 ecosystems: [npm, pypi]
@@ -12,6 +12,8 @@ tags: [supply-chain, worm, ci-cd, github-actions, oidc, credential-theft, slsa-p
 
 ## TL;DR
 Over a 48-hour window on **2026-05-11 → 2026-05-12**, the Mini Shai-Hulud worm — operated by threat actor group **TeamPCP** — compromised **172 unique packages across 403 malicious versions** on npm and PyPI. High-profile scopes hit: **`@tanstack`, `@mistralai`, `@uipath`, `@opensearch-project`**, plus Guardrails AI. Cumulative downloads of affected packages exceed **518 million**. The TanStack subset (~84 versions across 42 `@tanstack/*` packages, including `@tanstack/react-router` ~12.7M weekly downloads) was assigned **CVE-2026-45321 (CVSS 9.6)**. This is the **first documented case of a malicious npm package carrying valid SLSA provenance** — published by the legitimate release pipeline after attacker-controlled code hijacked the runner mid-workflow. Same threat actor is now confirmed to have launched the [PyTorch Lightning compromise](2026-04-pytorch-lightning-compromise.md) on April 30, 2026, and went on to hit the [@antv ecosystem + Microsoft `durabletask` on May 19](2026-05-mini-shai-hulud-may19-wave.md) and to breach [GitHub's own internal repos on May 20](2026-05-teampcp-github-breach.md).
+
+> **Update 2026-06-11 — ACTION REQUIRED BY 2026-06-12:** OpenAI's **macOS code-signing certificate revocation takes effect tomorrow**. macOS users of **ChatGPT Desktop, Codex, Codex-cli, and Atlas** who have not yet updated will be **blocked from launching the apps** after the certificate is revoked. Update immediately. The Hades Campaign (June 8) is the latest downstream wave of the same threat-actor cluster; see the 2026-05-31 update below for full cert-rotation context.
 
 > **Update 2026-06-02:** the campaign has a third documented worm-source-public copycat. **[Miasma — `@redhat-cloud-services` (2026-06-01)](2026-06-miasma-redhat-cloud-services-compromise.md)** is a lightly reskinned Mini Shai-Hulud derivative (Greek-mythology theming replaces Dune markers; added GCP/Azure identity collectors; exfil camouflaged as `api.anthropic.com/v1/api`) that hit **32 packages / 96 versions** of Red Hat's official OpenShift / Hybrid Cloud Console / Insights client scope in a ~72-second automated burst. Initial access was a compromised Red Hat employee GitHub account → existing GitHub Actions OIDC publish path (no separate npm credential theft) — same shape as [Megalodon's `@tiledesk` arm](2026-05-megalodon-github-actions-mass-campaign.md). This is the **first copycat to land on a major legitimate npm scope** rather than typosquats, and the first to disguise exfil as AI-vendor API traffic.
 >

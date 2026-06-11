@@ -2,7 +2,7 @@
 id: ongoing-vibe-platform-exposure
 title: "Vibe-coded app data exposure — Lovable, Bolt, Replit, Base44 pattern issues"
 date_disclosed: 2025
-last_updated: 2026-06-03
+last_updated: 2026-06-11
 severity: high
 status: ongoing
 ecosystems: [lovable, bolt, replit, v0, supabase, base44]
@@ -51,6 +51,18 @@ grep -r "service_role\|sk_live\|AKIA[0-9A-Z]\{16\}" dist/ build/ public/ .next/ 
 → [playbooks/auditing-a-vibe-coded-repo.md](../playbooks/auditing-a-vibe-coded-repo.md)
 
 **Hard rule for vibe-coded apps that will hold real user data:** before launch, have a human (or a dedicated security agent in a fresh context) audit the auth, the RLS, and the secret layout. The agent that wrote the code is exactly the wrong agent to review it — it cannot see what it didn't write.
+
+## June 2026 — Escape.tech production scan: 5,600 apps, 2,000+ vulnerabilities, 400+ exposed secrets
+
+Security startup **Escape** scanned **5,600 production vibe-coded applications** in May–June 2026 and reported **2,000+ distinct vulnerabilities** across the corpus — including **400+ exposed secrets** (API keys, service tokens, connection strings embedded in client bundles or unauthenticated endpoints) and **175 cases of personal data leakage** that included medical records, bank account data, and partial payment information. The study's conclusion: the median vibe-coded app in production has at least one critical-severity finding; roughly 1-in-14 leaks data that would constitute a notifiable breach under GDPR or CCPA. The Escape findings are consistent with the RedAccess 380K-app scan from May 2026 — both show that **vibe-coded apps are systematically under-secured at launch**, not sporadically.
+
+## June 2026 — Tea dating app: 72,000 user photos leaked via unauthenticated endpoint
+
+**Tea**, an AI-generated dating app built with Lovable + Supabase, leaked **72,000 user profile photos** via a publicly accessible Supabase storage bucket with no Row-Level Security policy. The bucket URL was embedded in the client bundle. No authentication was required to enumerate or download photos. The app had ~8,000 registered users; photos included faces and location-tagged images. Reported by a security researcher on June 6, 2026; the developer patched within 48 hours. Representative of the Lovable + Supabase `service_role`-in-client-bundle antipattern that appears in the Escape data.
+
+## June 2026 — VibeWrench study: AI agents as attack amplifiers in vibe-coded repos
+
+Researchers from the **VibeWrench** project (Carnegie Mellon + Stanford, June 2026 preprint) studied what happens when AI coding agents are given repositories that contain the vulnerabilities documented in this advisory. Key finding: agents given repositories with RLS-off Supabase configurations **consistently reproduced and extended** the misconfiguration rather than correcting it — the agent's existing code context amplified the original mistake. Agents asked to "add a new endpoint" in a repo with IDOR added new endpoints with IDOR. Agents asked to "improve authentication" in repos with hallucinated-auth patterns added more layers of hallucinated auth, not real auth checks. **The fix**: run a security-specialist agent in a *separate* context with no exposure to the original code, and explicitly instruct it to look for the antipatterns documented here.
 
 ## July 2025 — Base44 auth endpoint exposure (patched within 24 hours)
 
