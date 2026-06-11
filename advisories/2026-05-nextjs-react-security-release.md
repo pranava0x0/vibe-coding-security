@@ -2,7 +2,7 @@
 id: 2026-05-nextjs-react-security-release
 title: "Next.js + React May 2026 security release — 13 CVEs, including unauth SSRF (CVE-2026-44578)"
 date_disclosed: 2026-05-06
-last_updated: 2026-05-18
+last_updated: 2026-06-11
 severity: high
 status: patched
 ecosystems: [npm, javascript]
@@ -36,6 +36,14 @@ The Next.js built-in Node.js server handled WebSocket upgrade requests in a way 
 
 ### Middleware-bypass cluster
 Three of the high-severity advisories are middleware-bypass variants where specially crafted `.rsc` URLs and segment-prefetch paths slipped past Next.js middleware-based authentication, returning protected content without enforcement. Anyone using Next.js middleware as an auth gate (a common pattern in vibe-coded auth stacks layered over NextAuth.js / Supabase / Clerk) needs to upgrade.
+
+### CVE-2026-23869 — App Router Server Action CPU exhaustion (CVSS 7.5)
+Unauthenticated requests with a crafted payload sent to any **App Router Server Action endpoint** trigger quadratic CPU work in the Next.js request parser. A single attacker can pin a Node.js process to 100% CPU, causing denial of service for all concurrent requests. Affects all Next.js 13.x–16.x with App Router Server Actions enabled. Patched in the same **15.5.18 / 16.2.6** rollup.
+
+### CVE-2026-23864 — React + Next.js Server Components memory/CPU DoS
+Distinct from CVE-2026-23870: a crafted multi-part RSC streaming request causes the `react-server-dom` runtime to allocate unbounded memory before the streaming buffer is drained, producing out-of-memory kills on constrained containers. Akamai catalogued this as the memory-exhaustion companion to the CPU-exhaustion class. Patched in `react-server-dom-*` alongside the May 2026 release.
+
+**Net effect**: three independent DoS surfaces — CPU exhaustion via Server Actions (CVE-2026-23869), unbounded memory in the RSC streamer (CVE-2026-23864), and pathological RSC deserializer CPU (CVE-2026-23870). Any internet-exposed App Router endpoint is potentially unauthenticated-DoS-able until the May 2026 patch is applied.
 
 ## Am I affected?
 
