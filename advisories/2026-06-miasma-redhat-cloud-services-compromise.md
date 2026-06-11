@@ -2,7 +2,7 @@
 id: 2026-06-miasma-redhat-cloud-services-compromise
 title: "Miasma — @redhat-cloud-services npm scope compromised by Mini-Shai-Hulud-derived worm (June 2026)"
 date_disclosed: 2026-06-01
-last_updated: 2026-06-02
+last_updated: 2026-06-11
 severity: critical
 status: contained
 ecosystems: [npm, github-actions]
@@ -12,6 +12,8 @@ tags: [supply-chain, worm, credential-theft, mini-shai-hulud, teampcp-derivative
 
 ## TL;DR
 On **2026-06-01**, Wiz Research and others identified a supply-chain compromise of the **`@redhat-cloud-services` npm scope** — Red Hat's official client libraries used by the Hybrid Cloud Console, Insights, and OpenShift frontends. **32 packages / 96 malicious versions** were published in a roughly **72-second automated burst** ([Aikido](https://www.aikido.dev/blog/red-hat-npm-packages-compromised-credential-stealing-worm), [Wiz](https://www.wiz.io/blog/miasma-supply-chain-attack-targeting-redhat-npm-packages)), each carrying a **preinstall hook** that drops a **~4.2 MB obfuscated payload** stealing **AWS / GCP / Azure / Kubernetes / HashiCorp Vault / GitHub / npm / CircleCI** credentials. Cumulative weekly downloads of the affected scope: **~80,000**. The campaign — dubbed **"Miasma: The Spreading Blight"** — is a **lightly reskinned descendant of the (Mini) Shai-Hulud worm** that [TeamPCP open-sourced on 2026-05-12](2026-05-shai-hulud-copycat-wave.md), with **Greek-mythology theming (`spartan`) replacing Dune references** but the same self-propagation core, and **new GCP/Azure identity collectors** added. Notable IOC: the payload exfiltrates over HTTPS to a **camouflage URL `https://api.anthropic.com:443/v1/api`** — *not* Anthropic infrastructure, but a fake path on a real-vendor host chosen to blend into network logs at organizations using Anthropic. Initial access was a **compromised Red Hat employee GitHub account → GitHub Actions OIDC token → npm publish** ([JFrog](https://research.jfrog.com/post/shai-hulud-miasma-redhat-cloud-services/), [Aikido](https://www.aikido.dev/blog/red-hat-npm-packages-compromised-credential-stealing-worm)). Red Hat published [RHSB-2026-006](https://access.redhat.com/security/vulnerabilities/RHSB-2026-006); npm has removed the malicious versions.
+
+> **Update 2026-06-11:** On **2026-06-09–10**, the **Miasma worm source code was briefly open-sourced on GitHub** via compromised developer accounts (repositories named "Miasma-Open-Source-Release"), mirroring what TeamPCP did with Mini Shai-Hulud on 2026-05-12. The full attack toolkit — covering npm/PyPI/RubyGems/JFrog/GitHub targeting and AI-tool configuration poisoning — is now public. SafeDep preserved artifacts before GitHub removed the repositories within hours. Mini Shai-Hulud going public spawned five documented copycat waves in 30 days; **a sixth wave is expected imminently.** Monitor supply-chain feeds closely and treat any unexpected outbound HTTPS to `api.anthropic.com`, `api.openai.com`, or other AI-vendor hosts from non-AI workloads as a Miasma-family IOC — the camouflage primitive is now well-known. See the [Hades Campaign advisory](2026-06-hades-campaign-pypi-mcp-attack.md) for the most recent copycat (June 8). Sources: [SafeDep](https://safedep.io/miasma-worm-source-leaked-github/), [BleepingComputer](https://www.bleepingcomputer.com/news/security/the-miasma-worm-source-code-briefly-leaked-on-github/), [The Register](https://www.theregister.com/cyber-crime/2026/06/09/miasma-supply-chain-attack-toolkit-goes-public-on-github/5253074).
 
 ## What happened
 
