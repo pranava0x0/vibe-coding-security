@@ -2,9 +2,9 @@
 id: 2026-06-miasma-wave5-microsoft-azure-github
 title: "Miasma Wave 5 — 73 Microsoft Azure GitHub repos + mantine-datatable compromised; payload auto-fires via Claude Code / Cursor / Gemini CLI (June 2026)"
 date_disclosed: 2026-06-05
-last_updated: 2026-06-09
+last_updated: 2026-06-12
 severity: critical
-status: active
+status: contained
 ecosystems: [npm, github]
 tools_affected: [Claude Code, Cursor, Gemini CLI, VS Code, any project repo open in an AI coding assistant; npm packages in icflorescu/mantine-datatable family; Azure, Azure-Samples, Microsoft, MicrosoftDocs GitHub orgs]
 tags: [supply-chain, worm, credential-theft, miasma-lineage, github-repo-poisoning, ai-tool-config, self-propagating]
@@ -111,6 +111,13 @@ grep -rP "[\x{200B}-\x{200D}\x{FEFF}\x{00AD}]" .claude/ .cursor/ .cursorrules CL
 - **Review workflow changes carefully.** Any `.github/workflows/*.yml` change authored by a bot-named account or containing `base64 -d | bash` should be rejected immediately.
 - **Pin GitHub Actions to commit SHA** — see [prevention/ci-hardening.md](../prevention/ci-hardening.md).
 - **Assume stolen credentials cascade.** If your token appeared in any prior Miasma/GlassWorm/Megalodon wave, assume Wave 5 may already have used it.
+
+## 2026-06-12 update — Microsoft repos restored
+
+All 73 disabled Microsoft repositories have been restored following GitHub's investigation. As part of the probe, Microsoft notified a small number of customers who may have pulled content from the affected repositories during the brief compromise window. The investigation confirmed the attack was a Miasma-lineage variant (same payload family as Wave 4 Phantom Gyp); attribution to the same actor cluster is established. **Status: contained.** Developers who cloned or pulled from any of the affected repos between 2026-06-04 and 2026-06-05 should still rotate credentials.
+
+- [The Hacker News — "Microsoft Restores Some GitHub Repos, Keeps Others Offline as Miasma Probe Continues"](https://thehackernews.com/2026/06/microsoft-restores-some-github-repos.html) — restoration timeline, customer notification detail.
+- [TechCrunch — "Microsoft's open source tools were hacked to steal passwords of AI developers"](https://techcrunch.com/2026/06/08/microsofts-open-source-tools-were-hacked-to-steal-passwords-of-ai-developers/) — broader context: Azure and AI-dev tools specifically targeted; attacker intent was credentials for Claude Code / Gemini CLI users.
 
 ## Sources
 
