@@ -2,9 +2,9 @@
 id: 2025-10-glassworm-vscode-worm
 title: "GlassWorm — self-propagating VS Code / Open VSX extension worm (Oct 2025 → 2026)"
 date_disclosed: 2025-10-17
-last_updated: 2026-05-31
+last_updated: 2026-06-12
 severity: high
-status: mitigated
+status: active
 ecosystems: [vscode, openvsx, npm, github]
 tags: [supply-chain, ide-extension, worm, self-propagating, credential-theft, crypto-theft, invisible-unicode, solana-c2, botnet-takedown]
 ---
@@ -12,7 +12,9 @@ tags: [supply-chain, ide-extension, worm, self-propagating, credential-theft, cr
 ## TL;DR
 **GlassWorm** (first flagged by Koi Security in **October 2025**) is the first **self-propagating worm** to spread through **VS Code / Open VSX extensions**. It hides its payload using **invisible Unicode characters** that don't render in any editor — code that is literally invisible to a human reviewer — and takes commands from a **quad-redundant C2** (a **Solana** blockchain memo as an un-takedownable dead-drop, plus **BitTorrent DHT**, Google Calendar dead-drops, and direct VPS IPs). It steals npm/GitHub/Git credentials, drains **49 crypto-wallet extensions**, drops **SOCKS proxies** and **hidden VNC** servers, and republishes itself into more extensions to keep spreading. It has returned in **multiple waves through 2026** (Dec 2025; 24 extensions, then 72+ Open VSX extensions since Jan 31; a v2 wave in Mar–Apr 2026 hitting 150+ GitHub repos).
 
-> **Update 2026-05-31 — disrupted, but not eradicated.** On **2026-05-26 14:00 UTC**, **CrowdStrike Counter Adversary Operations + Google + the Shadowserver Foundation** executed a coordinated takedown, **simultaneously disabling all four C2 channels** (Solana blockchain memos, BitTorrent DHT, Google Calendar dead-drops, direct VPS IPs). Operators are severed from existing infections and can't deliver new payloads. Status moved from `active` to `mitigated` — **the poisoned extensions and packages still exist on developers' machines**; the takedown stops new commands but does not uninstall the malware, rotate any stolen credentials, or unwind the [Megalodon-style downstream waves](2026-05-megalodon-github-actions-mass-campaign.md) that almost certainly used credentials harvested by this campaign (Hudson Rock: ~33% of Megalodon's affected GitHub accounts matched infostealer victims). If you ever installed any flagged extension, **still treat the host as compromised and rotate every credential**.
+> **Update 2026-05-31 — disrupted.** On **2026-05-26 14:00 UTC**, **CrowdStrike Counter Adversary Operations + Google + the Shadowserver Foundation** executed a coordinated takedown, **simultaneously disabling all four C2 channels** (Solana blockchain memos, BitTorrent DHT, Google Calendar dead-drops, direct VPS IPs). The takedown stopped new payload delivery but did not uninstall the malware, rotate stolen credentials, or undo downstream credential resale.
+>
+> **Update 2026-06-12 — back: new Mac wave with reconstituted fresh infrastructure.** Koi Security and BleepingComputer report a **new GlassWorm wave targeting macOS exclusively** with **fresh C2 infrastructure** — the first wave to survive the May 26 takedown and reconstitute. The operator rebuilt on new infrastructure, pivoted from Windows-only to macOS-first, and added a **hardware-wallet trojanization capability** (Ledger Live and Trezor Suite replaced with backdoored versions). Status reverted to **`active`**. Defensive cue: eBPF/EDR tools that detected the Windows variant may not detect the macOS AppleScript/LaunchAgent-based variant — check koi.ai IOC list for the macOS wave specifically.
 
 ## What happened
 GlassWorm's signature trick is **steganographic source**: the malicious logic is encoded in **printable-but-non-rendering Unicode** (e.g., variation selectors / invisible code points), so a maintainer or reviewer eyeballing the extension's source sees nothing. This defeats human review and most diff-based checks.
@@ -26,6 +28,7 @@ Timeline:
 - **2026-03 (v2)** — fresh wave; **GitHub** compromises ~Mar 3–9, **150+** repos; ~433 components estimated across Open VSX, VS Code Marketplace, GitHub, and npm.
 - **2026-04** — **73** fake VS Code extensions delivering **GlassWorm v2**.
 - **2026-05-26 14:00 UTC** — **CrowdStrike + Google + Shadowserver coordinated takedown** disables all four C2 channels simultaneously; attribution narrows to a **likely Russia-based operator** (malware exits on CIS-country locale checks; Russian-language source comments). The takedown caps a campaign that had poisoned **300+ GitHub repos** via stolen credentials alone.
+- **2026-06 (post-takedown)** — **New macOS-targeting wave with fresh infrastructure** (Koi Security / BleepingComputer). Operator reconstituted on new C2. Targeting macOS exclusively for the first time. New payload: AES-256-CBC encryption, **AppleScript** persistence (vs. PowerShell), **LaunchAgent** persistence (vs. Registry), and a **hardware-wallet trojanization module** targeting **Ledger Live** and **Trezor Suite** app bundles. Also sweeps 50+ browser crypto extensions, GitHub/npm tokens, Safari/Chrome browser data, and macOS Keychain. Hardware-wallet trojans appear incomplete at time of disclosure ("returning empty files") — attacker likely still finalizing macOS wallet payloads. Status reverted to `active`.
 
 The campaign kept recurring because takedowns couldn't reach the Solana dead-drop and the worm re-seeded itself with every set of stolen publish credentials — the same **IDE-extension trust surface** abused by the [Nx Console compromise](2026-05-nx-console-vscode-compromise.md) and the [TeamPCP GitHub breach](2026-05-teampcp-github-breach.md). The 2026-05-26 takedown finally hit all four redundancy channels at once, which is *why* it worked — a less coordinated strike would have let the Solana dead-drop carry survivors. The downstream lesson: **infostealer-harvested credentials don't expire when the C2 dies** — [Megalodon's 5,561-repo wave](2026-05-megalodon-github-actions-mass-campaign.md) (May 18) is what credential resale of this corpus looks like.
 
@@ -78,6 +81,8 @@ If a flagged extension turns up, treat the machine as compromised: npm/GitHub/Gi
 - [Truesec — GlassWorm: Self-Propagating VSCode Extension Worm](https://www.truesec.com/hub/blog/glassworm-self-propagating-vscode-extension)
 - [CrowdStrike — Inside CrowdStrike's Takedown of a Developer-Targeting Botnet (2026-05-27)](https://www.crowdstrike.com/en-us/blog/inside-crowdstrike-takedown-of-a-developer-targeting-botnet/) — canonical takedown writeup
 - [The Register — CrowdStrike, Google shatter Glassworm botnet (2026-05-27)](https://www.theregister.com/cyber-crime/2026/05/27/crowdstrike-google-shatter-glassworm-botnet/5247337)
+- [BleepingComputer — New GlassWorm malware wave targets Macs with trojanized crypto wallets](https://www.bleepingcomputer.com/news/security/new-glassworm-malware-wave-targets-macs-with-trojanized-crypto-wallets/) — post-takedown macOS wave, hardware wallet trojanization.
+- [Koi Security — GlassWorm Goes Mac: Fresh Infrastructure, New Tricks](https://www.koi.ai/blog/glassworm-goes-mac-fresh-infrastructure-new-tricks) — technical detail, AES-256-CBC payload, AppleScript/LaunchAgent persistence, IOCs.
 - [TechCrunch — CrowdStrike and Google take down botnet used by hackers to target open source software developers](https://techcrunch.com/2026/05/27/crowdstrike-and-google-take-down-botnet-used-by-hackers-to-target-software-developers-in-supply-chain-attacks/)
 - [Cybersecurity Dive — Coordinated operation takes down Glassworm botnet](https://www.cybersecuritydive.com/news/takedown-glassworm-botnet-crowdstrike-Google-Shadowserver/821227/)
 - [CyberScoop — CrowdStrike disrupts Glassworm botnet that preyed on open-source supply chain](https://cyberscoop.com/crowdstrike-glassworm-botnet-takedown/)
