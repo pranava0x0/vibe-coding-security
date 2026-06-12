@@ -4,8 +4,10 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-06-10 | [Streamlit CVE-2026-33682 — unauthenticated SSRF on Windows leaks NTLMv2 credentials](2026-06-streamlit-ssrf-windows.md) | high | patched |
+| 2026-06-09 | [LangGraph RCE chain — SQLite SQL injection + msgpack deserialization → arbitrary code execution](2026-06-langgraph-rce-chain.md) | critical | patched |
 | 2026-06-08 | [Hades Campaign — 19 PyPI bioinformatics + MCP-developer packages poisoned with Bun credential stealer (June 2026)](2026-06-hades-campaign-pypi-mcp-attack.md) | critical | active |
-| 2026-06-05 | [Miasma Wave 5 — 73 Microsoft Azure GitHub repos + mantine-datatable poisoned; payload auto-fires via Claude Code / Cursor / Gemini CLI](2026-06-miasma-wave5-microsoft-azure-github.md) | critical | active |
+| 2026-06-05 | [Miasma Wave 5 — 73 Microsoft Azure GitHub repos + mantine-datatable poisoned; payload auto-fires via Claude Code / Cursor / Gemini CLI](2026-06-miasma-wave5-microsoft-azure-github.md) | critical | contained |
 | 2026-06-04 | [IronWorm — Rust npm worm with eBPF kernel rootkit + Tor C2 (36 packages)](2026-06-ironworm-npm-rust-ebpf.md) | critical | active |
 | 2026-06-06 | [Gluestack @react-native-aria RAT via compromised contributor token](2026-06-gluestack-react-native-aria-rat.md) | critical | contained |
 | 2026-06-04 | [Phantom Gyp — Miasma wave 4: self-propagating npm worm via binding.gyp (57 packages)](2026-06-phantom-gyp-miasma-wave4.md) | critical | active |
@@ -67,7 +69,7 @@ One file per incident. Latest at the top.
 | 2025-11-24 | [Shai-Hulud "Second Coming"](2025-11-shai-hulud-second-coming.md) | critical | contained |
 | 2025-10-21 | [Cursor & Windsurf ship stale Chromium — 94+ n-day vulns](2025-10-cursor-windsurf-chromium-ndays.md) | high | active |
 | 2025-10 | [Windsurf path-traversal via prompt-injected README (CVE-2025-62353)](2025-10-windsurf-cve-2025-62353-path-traversal.md) | critical | patched |
-| 2025-10-17 | [GlassWorm — self-propagating VS Code / Open VSX worm](2025-10-glassworm-vscode-worm.md) | high | mitigated |
+| 2025-10-17 | [GlassWorm — self-propagating VS Code / Open VSX worm](2025-10-glassworm-vscode-worm.md) | high | active |
 | 2025-09-17 | [postmark-mcp backdoor](2025-09-postmark-mcp-backdoor.md) | high | contained |
 | 2025-09-15 | [Shai-Hulud original](2025-09-shai-hulud-original.md) | critical | contained |
 | 2025-09-08 | [qix npm account compromise](2025-09-qix-compromise.md) | critical | contained |
