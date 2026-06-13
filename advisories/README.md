@@ -4,6 +4,8 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-06-13 | [Solana FakeFix Campaign — 25 malicious npm + PyPI packages steal wallet keys via GitHub issue spam](2026-06-solana-fakefix-campaign.md) | high | active |
+| 2026-06-10 | [onering Rust crate compromised — build.rs exfiltrates source-code diffs as fake Sentry telemetry](2026-06-onering-rust-crate-compromise.md) | high | unconfirmed |
 | 2026-06-10 | [Streamlit CVE-2026-33682 — unauthenticated SSRF on Windows leaks NTLMv2 credentials](2026-06-streamlit-ssrf-windows.md) | high | patched |
 | 2026-06-09 | [LangGraph RCE chain — SQLite SQL injection + msgpack deserialization → arbitrary code execution](2026-06-langgraph-rce-chain.md) | critical | patched |
 | 2026-06-08 | [Hades Campaign — 19 PyPI bioinformatics + MCP-developer packages poisoned with Bun credential stealer (June 2026)](2026-06-hades-campaign-pypi-mcp-attack.md) | critical | active |

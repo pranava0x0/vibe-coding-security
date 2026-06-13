@@ -1,0 +1,70 @@
+# vibe-coding-security
+
+> A living security advisory feed for developers using AI coding tools (Claude Code, Cursor, Windsurf, Copilot, Lovable, Bolt, v0, Replit) and the packages, frameworks, and platforms they depend on.
+
+This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
+
+**Last refreshed:** 2026-06-13
+
+## Quick start
+
+- Read [`ALERTS.md`](ALERTS.md) for the scannable active/recent/historical threat feed.
+- Browse [`advisories/`](advisories/) for full incident writeups with IOCs and remediation steps.
+- Use [`playbooks/`](playbooks/) for step-by-step incident-response procedures.
+- See [`prevention/`](prevention/) for hardening checklists.
+
+## Key resources
+
+- [ALERTS.md](ALERTS.md): Single-page threat feed, latest on top, tiered by urgency (🔴 active / 🟠 recent / 🟡 historical).
+- [advisories/README.md](advisories/README.md): Index of all advisories with severity and status.
+- [advisories/](advisories/): One Markdown file per incident. Frontmatter includes id, severity, status, ecosystems, date_disclosed, last_updated, sources.
+- [playbooks/](playbooks/): Response playbooks for common incident classes (malicious postinstall, compromised MCP server, credential rotation, etc.).
+- [prevention/](prevention/): Hardening guides for the vibe coding stack (npm, PyPI, IDE extensions, MCP servers, AI agent config).
+- [sources/](sources/): Notes on tracking sources and methodology.
+- [CONTRIBUTING.md](CONTRIBUTING.md): How to add or update advisories.
+- [SECURITY.md](SECURITY.md): Security policy for this repository itself.
+
+## Scope
+
+This feed covers incidents relevant to developers using AI-assisted coding tools. In scope:
+
+- **Package registries:** npm, PyPI, Crates.io, RubyGems — supply-chain attacks, malicious packages, account compromises
+- **AI coding tools:** Claude Code, Cursor, Windsurf, Copilot, OpenClaw, aider, OpenHands, SWE-agent, Gemini CLI, Codex
+- **Vibe coding platforms:** Lovable, Bolt, v0, Replit, Base44
+- **AI agent frameworks:** LangChain/LangGraph, Semantic Kernel, PraisonAI, Flowise, Langflow, n8n, Zapier, Composio
+- **Web stack:** Next.js, React (RSC), Svelte, Vite, Tailwind CSS, Shadcn UI, Prisma, FastAPI, Streamlit, Supabase, NextAuth.js
+- **IDE extensions:** VS Code Marketplace, Open VSX, Cursor/Windsurf extension stores
+- **MCP servers:** Any widely-used Model Context Protocol server, especially those with unauthenticated network exposure
+- **Prompt injection:** Against AI coding agents, CI/CD bots, agent orchestration frameworks
+
+## Advisory format
+
+Each advisory at `advisories/YYYY-MM-<id>.md` contains:
+
+```yaml
+id: YYYY-MM-short-id
+title: "Human readable title"
+date_disclosed: YYYY-MM-DD
+last_updated: YYYY-MM-DD
+severity: critical | high | medium
+status: active | contained | patched | mitigated | ongoing | historical | unconfirmed
+ecosystems: [npm, pypi, mcp, cursor, claude-code, ...]
+tools_affected: [list of tools]
+tags: [supply-chain, credential-theft, prompt-injection, ...]
+```
+
+Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
+
+## Active threat families (as of 2026-06-13)
+
+The highest-risk ongoing threat families for vibe coders:
+
+- **Miasma/Shai-Hulud worm lineage** — Self-propagating npm/PyPI worm family, now in 6+ documented waves, with copycat actors following TeamPCP's May 2026 open-source release of the source code. Waves use different install-time primitives: postinstall hooks, binding.gyp (Phantom Gyp), .pth startup files (Hades), and direct source-repo poisoning (Wave 5). See advisories for each wave.
+- **IronWorm** — Rust-based npm worm with eBPF kernel rootkit + Tor C2 (June 2026). Invisible to eBPF-based EDR. Distinct from Miasma lineage.
+- **GlassWorm** — VS Code / Open VSX worm with steganographic (invisible Unicode) payloads and blockchain C2. Status: mitigated (CrowdStrike/Google/Shadowserver takedown May 2026), but credentials remain in the wild.
+- **WhiteCobra** — Persistent threat actor flooding IDE extension marketplaces with LummaStealer-delivering extensions targeting crypto wallet users. Ongoing since July 2025.
+- **TrapDoor** — Cross-ecosystem (npm + PyPI + Crates.io) stealer that rewrites `.cursorrules`/`CLAUDE.md` with hidden zero-width Unicode to make your own AI agent re-exfiltrate secrets.
+
+## Citation
+
+If citing this repository in research or tooling, see [CITATION.cff](CITATION.cff).

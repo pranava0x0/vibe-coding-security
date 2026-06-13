@@ -2,11 +2,19 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-06-12. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-06-13. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-06-13 — Solana FakeFix Campaign — 25 malicious npm + PyPI packages steal wallet keys via GitHub issue spam
+An unattributed threat actor planted **25 malicious packages** (16 npm + 4 PyPI + 5 CMS-loader variants) impersonating Solana Web3 SDK tooling, and promoted them by opening **nine fake GitHub issues** on popular Solana projects framing the malicious packages as community bug fixes — a new social-engineering vector for supply-chain discovery. npm `postinstall` and PyPI `__init__.py` hooks harvest Solana private keys, cloud credentials (AWS/GCP/Azure), AI-tool config (`~/.claude/settings.json`, `ANTHROPIC_API_KEY`, OpenAI keys), and SSH keys. A bonus `solana-mev-bot` package directly social-engineers users into pasting their private key. If you installed any unfamiliar Solana-adjacent npm/PyPI package after a GitHub issue recommendation, rotate your Solana wallet immediately (private keys are irrecoverable) and all other credentials.
+→ [advisories/2026-06-solana-fakefix-campaign.md](advisories/2026-06-solana-fakefix-campaign.md)
+
+### 2026-06-10 — onering Rust crate compromised — build.rs exfiltrates your source-code diffs as fake Sentry telemetry *(unconfirmed — single source)*
+Aikido Security detected that **`onering` v1.4.1** (Rust synchronous queue library, ~18K Crates.io downloads) injected a malicious **`build.rs`** that runs `git diff HEAD^ HEAD` on the consuming project and POSTs the code diff to a remote server disguised as a Sentry crash-report (same disguise pattern as the `codexui-android` fake-Sentry exfil). Both the Crates.io release and the maintainer's GitHub repo appear compromised — building from git does not provide a safe copy. If `onering = "1.4.1"` is in your `Cargo.lock`, assume source code exfiltration occurred during builds.
+→ [advisories/2026-06-onering-rust-crate-compromise.md](advisories/2026-06-onering-rust-crate-compromise.md)
 
 ### 2026-06-10 — Streamlit CVE-2026-33682 — unauthenticated SSRF on Windows leaks NTLMv2 credentials (patched in 1.54.0)
 **CVE-2026-33682** — **Streamlit < 1.54.0 on Windows** improperly validates filesystem paths, allowing an unauthenticated attacker to supply a **UNC path** (e.g., `\\attacker-ip\share`) that coerces the server into an outbound SMB connection on port 445. Windows auto-authenticates with **NTLMv2**, transmitting the process account's credential hash to the attacker — crackable offline or relayable in NTLM relay attacks for network lateral movement. No user interaction or credentials required. Streamlit is widely used as a quick-UI layer in vibe-coded AI/data apps. Fixed in **Streamlit 1.54.0**. Linux/macOS deployments are NOT affected.
