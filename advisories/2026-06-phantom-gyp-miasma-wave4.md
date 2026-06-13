@@ -2,7 +2,7 @@
 id: 2026-06-phantom-gyp-miasma-wave4
 title: "Phantom Gyp — Miasma wave 4: self-propagating npm worm via binding.gyp (June 2026)"
 date_disclosed: 2026-06-04
-last_updated: 2026-06-07
+last_updated: 2026-06-13
 severity: critical
 status: active
 ecosystems: [npm]
@@ -64,6 +64,7 @@ If you ran `npm install` on any project between **2026-06-03 00:00 UTC** and **2
 ## Prevention
 
 - **Disable binding.gyp execution** for packages that don't need native addons: use `--ignore-scripts` AND audit any package that legitimately requires native build.
+- **Upgrade to npm v12 when it ships (expected July 2026):** GitHub announced that npm v12 will disable install scripts **and** binding.gyp-triggered native builds by default via a new `allowScripts: off` default. This will be the first version of npm that actually blocks the Phantom Gyp primitive out of the box. Until then, explicitly set `allowScripts=false` in `.npmrc` and enable it only for known-safe native dependencies. See [GitHub Changelog: Upcoming breaking changes for npm v12](https://github.blog/changelog/2026-06-09-upcoming-breaking-changes-for-npm-v12/) and [The Register coverage](https://www.theregister.com/devops/2026/06/10/github-pulls-pin-on-npms-auto-run-scripts/).
 - **Pin npm packages to exact versions + lockfile integrity** (`npm ci` over `npm install` in CI).
 - **Block unexpected workflow file creation** via branch-protection rules requiring code review on `.github/workflows/` changes.
 - **Monitor npm publish activity** for your account/org with StepSecurity's npm package monitoring.

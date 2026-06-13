@@ -2,7 +2,7 @@
 id: 2026-06-hades-campaign-pypi-mcp-attack
 title: "Hades Campaign — 19 PyPI bioinformatics + MCP-developer packages poisoned with Bun credential stealer (June 2026)"
 date_disclosed: 2026-06-08
-last_updated: 2026-06-11
+last_updated: 2026-06-13
 severity: critical
 status: active
 ecosystems: [pypi, npm]
@@ -13,6 +13,8 @@ tags: [supply-chain, credential-theft, pypi, pth-file, bun-runtime, mcp-targetin
 ## TL;DR
 
 On **2026-06-08**, StepSecurity identified a sophisticated supply-chain campaign — dubbed **"Hades"** — that poisoned **19 PyPI packages** across 37 malicious wheel artifacts in two distinct target categories: (1) popular **bioinformatics / graph-ML packages** (ensmallen, dynamo, spateo, coolbox, u-fish, napari-ufish, gpsea, phenopacket-store-toolkit, and related tools), and (2) explicitly **MCP-developer-targeted packages** (`langchain-core-mcp`, `openai-mcp`, `instructor-mcp`, `tiktoken-mcp`, `ray-mcp-server`). The payload uses a **`*-setup.pth` startup hook** (auto-executes at every Python interpreter startup — no import or explicit run needed), silently downloads the **Bun JavaScript runtime**, and runs an obfuscated `_index.js` credential harvester that specifically targets **Claude / MCP configuration files** alongside the standard cloud-credential sweep. This is the **fifth documented copycat wave** of the open-sourced Mini Shai-Hulud / Miasma lineage and the **first to explicitly target Model Context Protocol developer tooling by name**.
+
+**2026-06-13 update:** Socket Threat Research has published a comprehensive cross-ecosystem tracking blog covering Mini Shai-Hulud, Miasma, and Hades as a unified worm cluster. The Hades PyPI arm has expanded to **26 packages / 45 versions** (up from the initial 19 packages / 37 versions), with additional typosquat packages targeting `rsquests`, `tlask`, `rlask` (Flask/requests typosquats) and MCP-themed variants. The combined campaign now spans **471 total artifacts** — 411 npm artifacts across 106 packages + 60 PyPI artifacts across 37 packages — making it the largest cross-ecosystem worm cluster documented to date.
 
 ## What happened
 
@@ -115,8 +117,9 @@ Note: On **2026-06-10**, the Miasma worm source code was briefly open-sourced to
 
 ## Sources
 
-- [StepSecurity — The Hades Campaign: Graph ML PyPI Packages Deploy Cross-Platform Memory Scrapers, AI Analyst Misdirection, and a Wiper Deterrent](https://www.stepsecurity.io/blog/the-hades-campaign-pypi-packages)
+- [StepSecurity — The Hades Campaign: Graph ML PyPI Packages Deploy Cross-Platform Memory Scrapers, AI Analyst Misdirection, and a Wiper Deterrent](https://www.stepsecurity.io/blog/the-hades-campaign-pypi-packages) — canonical analysis
 - [The Hacker News — Hades PyPI Attack: 19 Packages Poisoned to Auto-Run Bun Credential Stealer](https://thehackernews.com/2026/06/hades-pypi-attack-19-packages-poisoned.html)
 - [BleepingComputer — New Shai-Hulud attack trojanizes 19 science-focused PyPI packages](https://www.bleepingcomputer.com/news/security/new-shai-hulud-attack-trojanizes-19-science-focused-pypi-packages/)
 - [SecurityWeek — Over 100 NPM, PyPI Packages Hit in New Shai-Hulud Supply Chain Attacks](https://www.securityweek.com/over-100-npm-pypi-packages-hit-in-new-shai-hulud-supply-chain-attacks/)
 - [CybersecurityNews — New Shai-Hulud Attack Compromises 23 PyPI Packages to Target MCP Developers](https://cybersecuritynews.com/23-pypi-packages-compromised/)
+- [Socket Threat Research — Mini Shai-Hulud, Miasma, and Hades Worms Target Bioinformatics and MCP Developers via Malicious Packages](https://socket.dev/blog/mini-shai-hulud-miasma-and-hades-worms-target-bioinformatics-and-mcp-developers-via-malicious) — comprehensive cross-ecosystem tracking, 471 total artifacts, expanded Hades scope (26 packages / 45 versions)
