@@ -2,11 +2,15 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-06-13. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-06-14. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-06-12 — Agentjacking — Sentry DSN injection via MCP poisons AI coding agents (2,388 orgs exposed)
+Tenet Security disclosed a new **indirect prompt-injection-at-scale attack class**: attackers plant malicious instructions inside **Sentry error event fields** (issue bodies, breadcrumbs, stack-frame locals) — content that any user who triggers an error in a public-facing app can control. When an AI coding agent (Claude Code, Cursor, Codex) queries those issues via the **Sentry MCP server**, it reads the attacker's instructions as trusted context and executes them: exfiltrating `~/.claude/settings.json`, `ANTHROPIC_API_KEY`, and cloud credentials; pushing backdoor GitHub Actions workflows; or adding malicious npm dependencies. In controlled experiments across 47 consenting organizations, **40 of 47 (85%)** resulted in at least one attacker-specified command being executed. **Sentry declined to implement server-side filtering** — the official Sentry MCP server does not sanitize issue data as of 2026-06-14. **Immediate action:** remove the Sentry MCP server from your agent config if your Sentry projects receive any user-controlled error data, or disable it until you can review its output in every session.
+→ [advisories/2026-06-agentjacking-sentry-mcp-injection.md](advisories/2026-06-agentjacking-sentry-mcp-injection.md)
 
 ### 2026-06-13 — Solana FakeFix Campaign — 25 malicious npm + PyPI packages steal wallet keys via GitHub issue spam
 An unattributed threat actor planted **25 malicious packages** (16 npm + 4 PyPI + 5 CMS-loader variants) impersonating Solana Web3 SDK tooling, and promoted them by opening **nine fake GitHub issues** on popular Solana projects framing the malicious packages as community bug fixes — a new social-engineering vector for supply-chain discovery. npm `postinstall` and PyPI `__init__.py` hooks harvest Solana private keys, cloud credentials (AWS/GCP/Azure), AI-tool config (`~/.claude/settings.json`, `ANTHROPIC_API_KEY`, OpenAI keys), and SSH keys. A bonus `solana-mev-bot` package directly social-engineers users into pasting their private key. If you installed any unfamiliar Solana-adjacent npm/PyPI package after a GitHub issue recommendation, rotate your Solana wallet immediately (private keys are irrecoverable) and all other credentials.
@@ -224,6 +228,10 @@ Third generation of the Shai-Hulud worm dropped on a dormant npm package (no upd
 `langchain-core`'s `dumps()`/`dumpd()` did not escape user dicts containing the reserved `"lc"` key → attacker-controlled round-trip can instantiate framework classes, render Jinja2, read env vars, reach RCE. Patched in `langchain-core` 0.3.81 / 1.2.5 (LangGrinch) and 1.2.22 (CVE-2026-34070 path traversal). LangChain at ~98M downloads/month — anything that loads user-influenced JSON through LangChain's serializer is in scope.
 → [advisories/2025-12-langchain-langgrinch.md](advisories/2025-12-langchain-langgrinch.md)
 
+### 2026-03 — SGLang unauth RCE cluster (CVE-2026-3059/3060 CVSS 9.8, CVE-2026-5760) — patched in 0.4.6
+**SGLang** (fast LLM inference/serving framework, ~1M monthly PyPI downloads) shipped two critical unauthenticated RCEs. **CVE-2026-3059 + CVE-2026-3060** (CVSS 9.8 each): the multi-node ZMQ broker deserializes incoming payloads with `pickle.loads()` — no authentication, no HMAC — on **port 30000/tcp** often bound to `0.0.0.0`. Any host that can send a TCP packet to that port achieves arbitrary Python execution. **CVE-2026-5760**: a maliciously crafted **GGUF model file** triggers RCE at model-load time (joins PyTorch `torch.load()`, Keras lambda deserialization, numpy allow_pickle as the "model-file-as-exploit" class). SGLang inference servers typically hold LLM provider API keys (OpenAI, Anthropic, AWS Bedrock, Google Vertex) + cloud IAM credentials. **Patched in SGLang ≥ 0.4.6**. Firewall port 30000 to known cluster IPs only; verify GGUF checksums against HuggingFace model cards.
+→ [advisories/2026-03-sglang-unauth-rce.md](advisories/2026-03-sglang-unauth-rce.md)
+
 ### 2026-03-31 — `axios` compromise (70M+ weekly downloads)
 Two malicious Axios versions connected to Sapphire Sleet C2 to pull a RAT. Auto-update enabled = silent infection. Removed but inspect lockfiles from late March.
 → [advisories/2026-03-axios-compromise.md](advisories/2026-03-axios-compromise.md)
@@ -316,8 +324,8 @@ Demonstrated by Simon Willison / General Analysis: Cursor + Supabase MCP with `s
 
 ## 🟡 HISTORICAL — patched, but pattern recurs
 
-### 2025-08 → 2026-Q2 — Claude Code InversePrompt + May 2026 CVE cluster (CVE-2025-54794/54795, CVE-2025-59536, CVE-2026-21852, CVE-2026-33068, CVE-2026-24887, CVE-2026-35021, CVE-2026-39861, CVE-2026-35603, TrustFall)
-Indirect prompt injection chains that turn Claude Code's own tool use against the user. May 2026 added find-command bypass, prompt-editor command injection, symlink-following sandbox escape, and privilege escalation. Anthropic has patched all listed; cadence accelerated after the [source-map leak](advisories/2026-03-claude-code-source-map-leak.md). The *class* of attack (hidden text in fetched content, MCP-delivered prompts, malicious env config) keeps recurring — see also [Comment and Control](advisories/2026-04-comment-and-control-pr-injection.md).
+### 2025-08 → 2026-Q2 — Claude Code InversePrompt + May/June 2026 CVE cluster + "Lies in the Loop" (CVE-2025-54794/54795, CVE-2025-59536, CVE-2026-21852, CVE-2026-33068, CVE-2026-24887, CVE-2026-35021, CVE-2026-39861, CVE-2026-35603, TrustFall, CVE-2026-25723, LITL)
+Indirect prompt injection chains that turn Claude Code's own tool use against the user. May 2026 added find-command bypass, prompt-editor command injection, symlink-following sandbox escape, and privilege escalation. **June 2026 addition — "Lies in the Loop" (LITL):** Checkmarx Zero: attackers inject blank lines or zero-width Unicode into approval dialogs so the malicious command is below the visible fold — the developer approves what looks safe while the hidden payload runs. Affects Claude Code + VS Code Copilot; neither vendor has shipped a definitive fix as of 2026-06-14. Anthropic has patched all listed CVEs; cadence accelerated after the [source-map leak](advisories/2026-03-claude-code-source-map-leak.md). The *class* of attack (hidden text in fetched content, MCP-delivered prompts, malicious env config) keeps recurring — see also [Agentjacking](advisories/2026-06-agentjacking-sentry-mcp-injection.md) and [Comment and Control](advisories/2026-04-comment-and-control-pr-injection.md).
 → [advisories/2025-08-claude-code-inverseprompt.md](advisories/2025-08-claude-code-inverseprompt.md)
 
 ### Ongoing — Slopsquatting (AI-hallucinated package names)
