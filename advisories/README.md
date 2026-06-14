@@ -5,6 +5,7 @@ One file per incident. Latest at the top.
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
 | 2026-06-13 | [Solana FakeFix Campaign — 25 malicious npm + PyPI packages steal wallet keys via GitHub issue spam](2026-06-solana-fakefix-campaign.md) | high | active |
+| 2026-06-12 | [Agentjacking — Sentry DSN injection via MCP poisons AI coding agent context (2,388 orgs exposed)](2026-06-agentjacking-sentry-mcp-injection.md) | high | active |
 | 2026-06-10 | [onering Rust crate compromised — build.rs exfiltrates source-code diffs as fake Sentry telemetry](2026-06-onering-rust-crate-compromise.md) | high | unconfirmed |
 | 2026-06-10 | [Streamlit CVE-2026-33682 — unauthenticated SSRF on Windows leaks NTLMv2 credentials](2026-06-streamlit-ssrf-windows.md) | high | patched |
 | 2026-06-09 | [LangGraph RCE chain — SQLite SQL injection + msgpack deserialization → arbitrary code execution](2026-06-langgraph-rce-chain.md) | critical | patched |
@@ -49,6 +50,7 @@ One file per incident. Latest at the top.
 | 2026-04-08 | [Marimo notebook pre-auth RCE (CVE-2026-39987)](2026-04-marimo-notebook-rce.md) | critical | patched |
 | 2026-04 | [Mini Shai-Hulud SAP packages](2026-04-mini-shai-hulud-sap.md) | high | active |
 | 2026-04 | ["Comment and Control" PR prompt injection](2026-04-comment-and-control-pr-injection.md) | critical | patched |
+| 2026-03 | [SGLang unauth RCE cluster — CVE-2026-3059/3060 (pickle ZMQ, CVSS 9.8) + CVE-2026-5760 (GGUF model RCE)](2026-03-sglang-unauth-rce.md) | critical | patched |
 | 2026-03-12 | [TeamPCP breaches Trivy GitHub Actions → LiteLLM 1.82.7–1.82.8 backdoored](2026-03-trivy-litellm-supply-chain.md) | critical | contained |
 | 2026-03-31 | [Axios compromise](2026-03-axios-compromise.md) | critical | contained |
 | 2026-03-31 | [Claude Code source-map leak](2026-03-claude-code-source-map-leak.md) | medium | contained |
