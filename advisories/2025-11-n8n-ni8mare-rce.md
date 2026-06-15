@@ -2,7 +2,7 @@
 id: 2025-11-n8n-ni8mare-rce
 title: "n8n Ni8mare + RCE cluster — CVSS 10.0 unauth takeover of workflow automation (Nov 2025 → Feb 2026)"
 date_disclosed: 2025-11-09
-last_updated: 2026-06-06
+last_updated: 2026-06-15
 severity: critical
 status: patched
 ecosystems: [npm, self-hosted]
@@ -39,6 +39,14 @@ Three additional critical flaws were disclosed in June 2026, all fixed in n8n **
 
 Affected: n8n **< 1.123.43** (v1 release line) **/ < 2.20.7 / < 2.22.1** (v2 release lines). Upgrade immediately.
 
+**June 2026 additional — CVE-2026-21877 (CVSS 10.0): authenticated arbitrary file write → RCE**
+
+A second CVSS 10.0 vulnerability (**CVE-2026-21877**, GHSA-v364-rw7m-3263) was disclosed in June 2026 and affects n8n in the same era as Ni8mare. An **authenticated** n8n user with workflow-creation privileges can craft a workflow that causes the n8n process to write arbitrary content to arbitrary paths on the host filesystem. Because n8n typically runs as a system-level service with broad filesystem access, writing a malicious file to `/etc/cron.d/`, a startup script directory, or any path that gets auto-executed yields persistent remote code execution. Fixed in **n8n 1.121.3**; upgrade to ≥ 1.121.3 (or the latest release) immediately.
+
+**CISA KEV — CVE-2025-68613 added March 2026**
+
+**CVE-2025-68613** (the December 2025 authentication-bypass patch that preceded Ni8mare) was added to the **CISA Known Exploited Vulnerabilities (KEV) catalog** in March 2026 after CISA observed active exploitation targeting approximately **24,700 exposed n8n instances**. If you are a US federal agency or contractor, this CVE carried a mandatory remediation deadline; consult your compliance team.
+
 **Why this matters for vibe coders and AI agent builders:**
 
 n8n is widely used as an AI workflow orchestration layer — it brokers connections between AI models and dozens of downstream services (Google Drive, Gmail, Slack, GitHub, HubSpot, Notion, Jira, Airtable, Telegram, and more) via OAuth grants and API keys stored in its credential store. A full host compromise via Ni8mare gives an attacker:
@@ -70,7 +78,7 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:5678/healthz
 
 ## If you are affected
 
-1. **Upgrade to n8n ≥ 1.123.43 / 2.20.7 / 2.22.1** (addresses Ni8mare, CVE-2026-25049, and the June 2026 node-level cluster; check current latest).
+1. **Upgrade to the latest n8n release** (addresses Ni8mare CVE-2026-21858, CVE-2026-25049, the March 2026 RCE cluster, the authenticated file-write CVE-2026-21877, and the June 2026 node-level cluster; minimum: ≥ 1.123.43 / 2.20.7 / 2.22.1 for the node-level cluster, but upgrade to the latest available version).
 2. **Rotate all OAuth tokens and API keys** stored in n8n's credential store — attacker had full access.
 3. **Revoke and re-authorize** every service connection under Settings → Credentials.
 4. **Review execution logs** for unusual workflow triggers, especially to external webhooks.
@@ -98,3 +106,6 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:5678/healthz
 - [BleepingComputer — n8n CVE-2026-44789/44790/44791 node-level RCE cluster](https://www.bleepingcomputer.com/news/security/critical-n8n-flaws-cve-2026-44789-44790-44791/) — June 2026 cluster; prototype pollution, argument injection, XML node RCE.
 - [CyberSecurityNews — n8n HTTP Request Node Vulnerability Let Attackers Execute Arbitrary Code](https://cybersecuritynews.com/n8n-http-request-node-vulnerability/) — CVE-2026-44789 prototype pollution detail.
 - [NVD — CVE-2026-44789](https://nvd.nist.gov/vuln/detail/CVE-2026-44789), [CVE-2026-44790](https://nvd.nist.gov/vuln/detail/CVE-2026-44790), [CVE-2026-44791](https://nvd.nist.gov/vuln/detail/CVE-2026-44791) — official CVE records.
+- [GitHub Advisory — GHSA-v364-rw7m-3263 (CVE-2026-21877, authenticated file-write → RCE, fixed 1.121.3)](https://github.com/advisories/GHSA-v364-rw7m-3263)
+- [NVD — CVE-2026-21877](https://nvd.nist.gov/vuln/detail/CVE-2026-21877) — CVSS 10.0 authenticated arbitrary file write.
+- [CISA KEV — CVE-2025-68613](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) — added March 2026; ~24,700 exposed instances observed.
