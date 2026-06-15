@@ -2,7 +2,7 @@
 id: 2026-05-praisonai-auth-bypass
 title: "PraisonAI authentication bypass — CVE-2026-44338 + platform CVEs (May 2026)"
 date_disclosed: 2026-05-11
-last_updated: 2026-06-03
+last_updated: 2026-06-15
 severity: high
 status: patched
 ecosystems: [pypi, ai-agents]
@@ -74,6 +74,24 @@ A second cluster of vulnerabilities affecting the **`praisonai-platform`** PyPI 
 
 **Fix:** Upgrade `praisonai-platform` to the patched version per the GitHub advisory. If you run a multi-tenant PraisonAI Platform deployment, treat any workspace with untrusted members as potentially compromised for the IDOR and privilege-escalation bugs; treat any internet-exposed A2A endpoint as having been reachable without credentials.
 
+## June 2026 update — MCP path-traversal RCE (CVE-2026-44336) and CWD tools.py injection (CVE-2026-40156)
+
+Two additional high/critical vulnerabilities in PraisonAI's MCP surface and tool-loading logic were disclosed in June 2026:
+
+**CVE-2026-44336** (CVSS 9.4, GHSA-9mqq-jqxf-grvw) — **MCP `tools/call` path-traversal → `.pth` injection → RCE**
+
+PraisonAI's default MCP tool set includes file-manipulation tools (`praisonai.rules.create`, `praisonai.rules.update`, `praisonai.rules.read`, and related methods). These tools accept a filename parameter and write to the path without adequate traversal validation. A local attacker (or a prompt-injected agent) can supply a path like `../../../../site-packages/evil.pth` to write a Python `.pth` file into the active Python environment's `site-packages/` directory. A `.pth` file added to `site-packages/` is **executed automatically at every subsequent Python interpreter startup** — achieving persistent, arbitrary code execution on the PraisonAI host. No authentication is required on the MCP `tools/call` endpoint in default configurations. Fixed in PraisonAI ≥ 4.6.34 (same release that patched CVE-2026-44338).
+
+**CVE-2026-40156** — **Arbitrary code injection via `tools.py` auto-loading from CWD**
+
+PraisonAI uses `importlib.util.spec_from_file_location` to auto-load a file named `tools.py` from the current working directory at startup. If an attacker can place a malicious `tools.py` in a directory where `praisonai` is run (e.g., via a supply-chain-poisoned project, a compromised MCP server, or a shared development directory), the file is executed with the full privileges of the Python process on every PraisonAI startup — no additional user action needed.
+
+**Remediation for CVE-2026-44336 and CVE-2026-40156:**
+1. Upgrade to `praisonai >= 4.6.34` (already required for CVE-2026-44338).
+2. Audit `site-packages/` directories in your Python environment for unexpected `.pth` files: `python -c "import site; print(site.getsitepackages())"` then `ls -la <site-packages>/` looking for recently modified `.pth` files.
+3. Avoid running `praisonai` in directories that accept untrusted files (shared project roots, downloaded repos).
+4. If you use PraisonAI in an MCP multi-agent context, audit the MCP `tools/call` history for path-traversal attempts.
+
 ## Sources
 - [Sysdig — CVE-2026-44338: PraisonAI authentication bypass in under 4 hours and the growing trend of rapid exploitation](https://www.sysdig.com/blog/cve-2026-44338-praisonai-authentication-bypass-in-under-4-hours-and-the-growing-trend-of-rapid-exploitation)
 - [The Hacker News — PraisonAI CVE-2026-44338 Auth Bypass Targeted Within Hours of Disclosure](https://thehackernews.com/2026/05/praisonai-cve-2026-44338-auth-bypass.html)
@@ -81,6 +99,9 @@ A second cluster of vulnerabilities affecting the **`praisonai-platform`** PyPI 
 - [CSO Online — PraisonAI vulnerability gets scanned within 4 hours of disclosure](https://www.csoonline.com/article/4171215/praisonai-vulnerability-gets-scanned-within-4-hours-of-disclosure.html)
 - [Cybersecurity News — PraisonAI Vulnerability Exploited Within Hours of Public Disclosure](https://cybersecuritynews.com/praisonai-vulnerability-exploited/)
 - [GBHackers — PraisonAI Vulnerability Actively Exploited Within Hours of Being Made Public](https://gbhackers.com/praisonai-vulnerability-actively-exploited/)
-- [GitHub Advisory — GHSA-6rmh-7xcm-cpxj](https://github.com/advisories/GHSA-6rmh-7xcm-cpxj)
+- [GitHub Advisory — GHSA-6rmh-7xcm-cpxj (CVE-2026-44338)](https://github.com/advisories/GHSA-6rmh-7xcm-cpxj)
+- [GitHub Advisory — GHSA-9mqq-jqxf-grvw (CVE-2026-44336 MCP path-traversal .pth injection)](https://github.com/advisories/GHSA-9mqq-jqxf-grvw)
+- [NVD — CVE-2026-44336](https://nvd.nist.gov/vuln/detail/CVE-2026-44336)
+- [Snyk — SNYK-PYTHON-PRAISONAI-CVE-2026-44336](https://snyk.io/vuln/SNYK-PYTHON-PRAISONAI-CVE-2026-44336)
 - [GitHub Advisory — CVE-2026-47418 praisonai-platform cross-workspace IDOR](https://github.com/advisories?query=praisonai-platform)
 - [GitHub Advisory — CVE-2026-47408 praisonai-platform unauthenticated A2A tool execution](https://github.com/advisories?query=praisonai-platform)

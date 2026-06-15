@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-06-14
+**Last refreshed:** 2026-06-15
 
 ## Quick start
 
@@ -55,7 +55,7 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-06-14)
+## Active threat families (as of 2026-06-15)
 
 The highest-risk ongoing threat families for vibe coders:
 
@@ -65,6 +65,7 @@ The highest-risk ongoing threat families for vibe coders:
 - **WhiteCobra** — Persistent threat actor flooding IDE extension marketplaces with LummaStealer-delivering extensions targeting crypto wallet users. Ongoing since July 2025.
 - **TrapDoor** — Cross-ecosystem (npm + PyPI + Crates.io) stealer that rewrites `.cursorrules`/`CLAUDE.md` with hidden zero-width Unicode to make your own AI agent re-exfiltrate secrets.
 - **Agentjacking** — New attack class (June 2026): attackers plant instructions in Sentry error data; AI agents (Claude Code, Cursor, Codex) read them via MCP and execute. 85% exploitation rate in controlled experiments; 2,388 orgs exposed. Sentry declined to fix server-side.
+- **Claude Code MCP OAuth hijack** — Malicious npm `postinstall` hooks modify `~/.claude.json` to proxy all MCP OAuth traffic through an attacker-controlled localhost process, intercepting bearer tokens for every connected service (Jira, GitHub, Confluence, etc.). Hook persists across manual corrections via `sessionStart` lifecycle injection. Anthropic declined to fix ("out of scope," April 2026). No patch planned.
 
 ## Citation
 
