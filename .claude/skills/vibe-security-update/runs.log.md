@@ -620,3 +620,33 @@
   - **n8n CVE-2026-21877 adds a second CVSS 10.0 to the Ni8mare cluster.** The original Ni8mare (CVE-2026-21858) was unauthenticated; CVE-2026-21877 is authenticated arbitrary file write → RCE. Together they cover both pre-auth and post-auth attack paths. The CISA KEV for CVE-2025-68613 (~24,700 exposed instances) confirms real-world exploitation scale. The n8n advisory is now the single most CVE-dense advisory in the repo.
   - **Source diversity (user-requested):** social/web (X.com/Mitiga Labs announcement thread; no new incidents from bsky.app or Reddit this sweep); industry (Anthropic — no new advisories; Microsoft/Google/AWS/Red Hat — no new vibe-coding advisories this window); research vendors (SecurityWeek canonical for Claude Code MCP OAuth, CybersecurityNews corroboration; GHSA primary for CVE-2026-44336 + CVE-2026-21877); open-source/official (NVD, GHSA advisories, CISA KEV).
   - **Deferred:** (i) Cursor Pwn2Own Berlin 2026 CVEs (still within 90-day coordinated disclosure window). (ii) Carry-over playbook backlog unchanged.
+
+---
+
+## 2026-06-16
+
+- **Queries run:** ~25 (deep: 12, medium: 7, shallow: 6; continuation from 2026-06-15 context)
+- **New advisories:** 2
+  - `2026-06-symjack-ai-coding-agent-mcp-symlink` — **SymJack** (Adversa AI, June 10): symlink in malicious repo redirects approved agent `cp` into MCP config, registering attacker MCP server. Affects Claude Code, Cursor, Copilot, Antigravity, Grok Build. Anthropic silently hardened; others patched. Severity: high, status: mitigated.
+  - `2026-06-arch-aur-atomic-arch-supply-chain` — **Atomic Arch** (Sonatype-2026-003775, CVSS 8.7): ~60 coordinated AUR accounts rewrote PKGBUILDs in 1,500+ packages to drop Rust credential stealer; root builds add eBPF kernel rootkit (persistent via systemd). Targets AI API keys + cloud creds + browser credentials. Active June 11–15. Arch locked new account registration. Severity: high, status: active.
+- **Updated advisories:** 3
+  - `2026-04-litellm-sql-injection` — Added June 2026 CVE cluster: CVE-2026-47101 (auth bypass), CVE-2026-42271 (CISA KEV, auth RCE via MCP stdio), CVE-2026-40217 (sandbox escape). Obsidian Security CVSS 9.9 chain; Horizon3.ai + BadHost unauthenticated CVSS 10.0 chain; Google ADK PYSEC-2026-2. Fix: 1.83.14-stable.
+  - `2026-06-hades-campaign-pypi-mcp-attack` — Added wiper deterrent (gh-token-monitor → rm -rf ~/), AI analyst misdirection (fake CLEAN headers in _index.js), cross-platform scrapers (macOS Keychain + Windows DPAPI).
+  - `advisories/README.md` — Added 2 new rows for SymJack and Atomic Arch.
+- **Sources gained weight:**
+  - adversa.ai: weight 8→9, hits 2→3, last_hit 2026-06-16 (SymJack primary disclosure)
+  - securityweek.com: hits 20→22, last_hit 2026-06-16 (SymJack + Arch AUR)
+  - thehackernews.com: hits 43→46, last_hit 2026-06-16 (SymJack + Arch AUR + Hades update)
+  - bleepingcomputer.com: hits 17→18, last_hit 2026-06-16 (Arch AUR eBPF rootkit)
+  - theregister.com: hits 17→18, last_hit 2026-06-16 (Arch AUR rootkit)
+  - stepsecurity.io: hits 19→20, last_hit 2026-06-16 (Hades capabilities update)
+  - nvd.nist.gov: hits 18→19, last_hit 2026-06-16 (LiteLLM June CVEs)
+  - github.com/advisories: hits 12→13, last_hit 2026-06-16 (PYSEC-2026-2)
+  - sonatype.com: weight 10→11, hits 1→2, last_hit 2026-06-16 (Arch AUR Sonatype-2026-003775)
+- **New sources added:** 3 — `obsidian.security` (research, weight 10, LiteLLM June CVE cluster); `horizon3.ai` (research, weight 11, LiteLLM + BadHost unauthenticated RCE chain); `security.archlinux.org` (official, weight 12, ASA-202606-1)
+- **Notes:**
+  - **SymJack = "two parsers, one string" variant for agent approval dialogs.** Approval-checker sees symlink path A; write lands at resolved path B. Add symlink resolution to agent pre-approval normalization.
+  - **Atomic Arch adds AUR PKGBUILD `build()` injection as a named cross-ecosystem vector.** Distinct from npm postinstall: runs during build, not post-install; `--ignore-scripts` irrelevant. eBPF rootkit on root builds is the first kernel-level persistence seen in this repo from an AUR campaign.
+  - **LiteLLM June CVE cluster demonstrates framework+dependency=escalation pattern.** CVE-2026-42271 alone = auth-required RCE; + BadHost = unauthenticated CVSS 10.0. Google ADK as transitive victim confirms LiteLLM's supply-chain amplifier role.
+  - **Hades wiper deterrent inverts the IR playbook.** Credential rotation triggers evidence destruction; isolate disk before rotating any credentials on a suspected Hades-infected host.
+  - **Deferred:** Cursor Pwn2Own Berlin 2026 CVEs (90-day disclosure window). Carry-over playbook backlog unchanged.
