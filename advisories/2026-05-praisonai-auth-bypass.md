@@ -2,7 +2,7 @@
 id: 2026-05-praisonai-auth-bypass
 title: "PraisonAI authentication bypass — CVE-2026-44338 + platform CVEs (May 2026)"
 date_disclosed: 2026-05-11
-last_updated: 2026-06-15
+last_updated: 2026-06-17
 severity: high
 status: patched
 ecosystems: [pypi, ai-agents]
@@ -91,6 +91,14 @@ PraisonAI uses `importlib.util.spec_from_file_location` to auto-load a file name
 2. Audit `site-packages/` directories in your Python environment for unexpected `.pth` files: `python -c "import site; print(site.getsitepackages())"` then `ls -la <site-packages>/` looking for recently modified `.pth` files.
 3. Avoid running `praisonai` in directories that accept untrusted files (shared project roots, downloaded repos).
 4. If you use PraisonAI in an MCP multi-agent context, audit the MCP `tools/call` history for path-traversal attempts.
+
+## June 2026 update — CVE-2026-39891: template injection via unescaped agent.start() input (CVSS 8.8)
+
+**CVE-2026-39891** (CVSS 8.8) — A **template injection** vulnerability in PraisonAI's `create_agent_centric_tools()` function allows an attacker with the ability to influence the input passed to `agent.start()` to inject malicious template syntax that the framework evaluates in the server context. The `agent.start()` call passes the user's task string directly into the tool-construction pipeline without escaping it, enabling injection of template directives that access the server's environment variables, file system, or execution context — depending on the template engine in use.
+
+**Scope:** Any deployment where end-users or untrusted callers can influence the task string passed to `agent.start()` — including multi-tenant PraisonAI Platform deployments, API endpoints that expose agent execution, or any LLM-driven orchestration where the LLM's output is passed to `agent.start()` (a prompt-injection-to-template-injection chain).
+
+**Remediation:** Upgrade to `praisonai >= 4.6.34` (the same release that addressed CVE-2026-44338 and CVE-2026-44336, with additional input sanitization).
 
 ## Sources
 - [Sysdig — CVE-2026-44338: PraisonAI authentication bypass in under 4 hours and the growing trend of rapid exploitation](https://www.sysdig.com/blog/cve-2026-44338-praisonai-authentication-bypass-in-under-4-hours-and-the-growing-trend-of-rapid-exploitation)
