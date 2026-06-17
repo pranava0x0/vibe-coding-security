@@ -2,7 +2,7 @@
 id: ongoing-vibe-platform-exposure
 title: "Vibe-coded app data exposure — Lovable, Bolt, Replit, Base44 pattern issues"
 date_disclosed: 2025
-last_updated: 2026-06-11
+last_updated: 2026-06-17
 severity: high
 status: ongoing
 ecosystems: [lovable, bolt, replit, v0, supabase, base44]
@@ -67,6 +67,12 @@ Researchers from the **VibeWrench** project (Carnegie Mellon + Stanford, June 20
 ## July 2025 — Base44 auth endpoint exposure (patched within 24 hours)
 
 **Base44**, an AI-powered app builder (similar positioning to Lovable/Bolt), shipped with **unauthenticated registration and OTP verification endpoints** whose only intended protection was an `app_id` parameter — which was not treated as a secret and was trivially enumerable from the client. A researcher demonstrated that registration/login flows could be invoked for any app without possessing the `app_id` as a secret, bypassing authentication entirely. Base44 patched the issue within **24 hours** of responsible disclosure; no exploitation was confirmed. The pattern (auth endpoint protected only by a non-secret identifier) recurs across vibe-coding platforms as a direct consequence of AI-generated auth code that looks correct but isn't.
+
+## June 2026 — Wiz Research: Base44 critical vulnerability exposes private enterprise app data
+
+**Wiz Research** disclosed a **critical vulnerability** in **Base44** (the AI-powered app builder comparable to Lovable/Bolt) that exposed **private enterprise applications and their data** to unauthenticated access. The vulnerability allowed an attacker to enumerate and access Base44 apps belonging to other organizations without authentication, bypassing the intended per-org isolation boundary. Enterprise users of Base44 who had deployed internal-facing applications (HR tools, customer management dashboards, internal knowledge bases) were exposed.
+
+Base44 patched the vulnerability promptly after Wiz's responsible disclosure. Wiz characterized the issue as a **"critical" access-control flaw** affecting the platform's multi-tenant isolation layer — the same class of bug (BOLA / broken object-level authorization at the platform layer, not individual app layer) that has appeared in Lovable (48-day-open BOLA report) and Replit (public Repl defaults). The pattern: vibe-coding platforms are building multi-tenant infrastructure at speed, and access-control mistakes at the platform level have wider blast radius than in any individual app they host.
 
 ## Sources
 - [Vibe Eval — Vibe Coding Security: Risks, Vulnerabilities, and Fixes (2026)](https://vibe-eval.com/vibe-coding-security-risks)

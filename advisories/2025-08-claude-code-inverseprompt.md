@@ -2,7 +2,7 @@
 id: 2025-08-claude-code-inverseprompt
 title: "Claude Code InversePrompt and follow-on CVEs (multiple)"
 date_disclosed: 2025-08
-last_updated: 2026-06-14
+last_updated: 2026-06-17
 severity: medium
 status: patched
 ecosystems: [claude-code]

@@ -4,6 +4,8 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-06-17 | [Mastra AI npm namespace compromise — 144 packages backdoored via hijacked contributor account](2026-06-mastra-ai-npm-compromise.md) | critical | active |
+| 2026-06-11 | [Arch Linux AUR supply-chain attack — 400+ packages hijacked](2026-06-arch-linux-aur-supply-chain.md) | high | active |
 | 2026-06-15 | [Claude Code MCP OAuth token hijack via malicious npm postinstall hook — Anthropic won't fix](2026-06-claude-code-mcp-oauth-hijack.md) | high | active |
 | 2026-06-13 | [Solana FakeFix Campaign — 25 malicious npm + PyPI packages steal wallet keys via GitHub issue spam](2026-06-solana-fakefix-campaign.md) | high | active |
 | 2026-06-12 | [Agentjacking — Sentry DSN injection via MCP poisons AI coding agent context (2,388 orgs exposed)](2026-06-agentjacking-sentry-mcp-injection.md) | high | active |

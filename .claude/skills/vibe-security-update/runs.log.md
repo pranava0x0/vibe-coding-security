@@ -620,3 +620,33 @@
   - **n8n CVE-2026-21877 adds a second CVSS 10.0 to the Ni8mare cluster.** The original Ni8mare (CVE-2026-21858) was unauthenticated; CVE-2026-21877 is authenticated arbitrary file write → RCE. Together they cover both pre-auth and post-auth attack paths. The CISA KEV for CVE-2025-68613 (~24,700 exposed instances) confirms real-world exploitation scale. The n8n advisory is now the single most CVE-dense advisory in the repo.
   - **Source diversity (user-requested):** social/web (X.com/Mitiga Labs announcement thread; no new incidents from bsky.app or Reddit this sweep); industry (Anthropic — no new advisories; Microsoft/Google/AWS/Red Hat — no new vibe-coding advisories this window); research vendors (SecurityWeek canonical for Claude Code MCP OAuth, CybersecurityNews corroboration; GHSA primary for CVE-2026-44336 + CVE-2026-21877); open-source/official (NVD, GHSA advisories, CISA KEV).
   - **Deferred:** (i) Cursor Pwn2Own Berlin 2026 CVEs (still within 90-day coordinated disclosure window). (ii) Carry-over playbook backlog unchanged.
+
+---
+
+## 2026-06-17
+
+- **Queries run:** ~22 (deep: 12, medium: 6, shallow: 4; continuation from 2026-06-15 context — focused on Mastra npm compromise, AUR supply chain, CVE-2026-42271 LiteLLM, CVE-2026-27577/27493 n8n, CVE-2026-39891 PraisonAI, Sentry Agentjacking partial filter, Base44 Wiz disclosure)
+- **New advisories:** 2
+  - `2026-06-mastra-ai-npm-compromise` — **Mastra AI npm namespace compromise**: A hijacked contributor account was used to publish malicious versions across 144 packages in the `@mastra/*` namespace (TypeScript AI agent framework, ~1.1M weekly downloads). Attack used **dependency-injection** pattern: added `easy-day-js` typosquat of `dayjs` as a dependency with a `postinstall` credential-stealing hook. New variant of the Miasma/Shai-Hulud worm lineage where the typosquat is injected as a transitive dependency rather than compromising the primary package. Sources: The Hacker News. Severity: critical, status: active, ACTIVE tier.
+  - `2026-06-arch-linux-aur-supply-chain` — **Arch Linux AUR supply-chain attack (400+ packages)**: First AUR-ecosystem advisory in the repo. 400+ AUR packages found with malicious `PKGBUILD` scripts; AUR has no security vetting; `PKGBUILD` is arbitrary shell code at install time via helpers (`yay`, `paru`, `pamac`). Sources: security research community (limited specific IOCs published at sweep time). Severity: high, status: active, ACTIVE tier. Expands repository coverage to include AUR as a new ecosystem.
+- **Updated advisories:** 6
+  - `2026-04-litellm-sql-injection` — Added **CVE-2026-42271**: new actively exploited RCE chaining from the same unauthenticated access surface. Honeypot evidence of in-the-wild exploitation. Updated last_updated to 2026-06-17.
+  - `2025-11-n8n-ni8mare-rce` — Added **CVE-2026-27577** (CVSS 9.4, expression compiler sandbox escape) and **CVE-2026-27493** (pre-auth RCE via Form node double-evaluation on public endpoints). Updated last_updated to 2026-06-17.
+  - `2026-06-agentjacking-sentry-mcp-injection` — Updated Sentry's response: narrow global content filter deployed 2026-06-17 but only blocks one specific payload string; status remains active. Updated last_updated to 2026-06-17.
+  - `2026-05-praisonai-auth-bypass` — Added **CVE-2026-39891** (CVSS 8.8): template injection via unescaped `agent.start()` input. Updated last_updated to 2026-06-17.
+  - `ongoing-vibe-platform-exposure` — Added **Wiz Research: Base44 critical vulnerability** (June 2026): BOLA at platform multi-tenant isolation layer. Updated last_updated to 2026-06-17.
+  - `2025-08-claude-code-inverseprompt` — Bumped last_updated to 2026-06-17 (LITL + CVE-2026-25723 already present from prior sweep).
+- **Sources gained weight:**
+  - thehackernews.com: hits 43→44, last_hit 2026-06-17 (Mastra npm compromise)
+  - cybersecuritynews.com: hits 32→33, last_hit 2026-06-17 (n8n CVE-2026-27577/27493, PraisonAI CVE-2026-39891)
+  - securityweek.com: hits 20→21, last_hit 2026-06-17 (LiteLLM CVE-2026-42271, Base44 Wiz)
+  - wiz.io: hits 7→8, last_hit 2026-06-17 (Base44 critical vulnerability primary)
+  - checkmarx.com: hits 2→3, last_hit 2026-06-17 (LITL advisory)
+  - tenetsecurity.ai: weight 10→11, hits 1→2, last_hit 2026-06-17 (Agentjacking Sentry partial-filter update)
+- **New sources added:** none
+- **Notes:**
+  - **AUR is the first new package ecosystem added to this repo's advisory coverage.** AUR has no submission vetting, no automated malware scanning, and no signed-release requirement. `PKGBUILD` is equivalent to `postinstall` — arbitrary shell code. Triage cue for future sweeps: any compromise of a widely-used AUR package is high-impact because Arch is popular for developer workstations.
+  - **Mastra dependency-injection variant is a new supply-chain pattern.** Rather than compromising the primary package, the attacker injects a typosquat (`easy-day-js` → `dayjs`) as a transitive dependency. Evades package-integrity checks on `@mastra/*` packages themselves. Detection: `npm ls | grep "easy-day-js"`.
+  - **n8n Form node RCE (CVE-2026-27493) affects intentionally public endpoints.** There is no misconfiguration to fix — the only defensive move is to upgrade n8n. This is a class escalation from "accidentally exposed endpoints" to "by-design public endpoints."
+  - **Sentry partial filter is a false-security signal.** Blocks one documented payload format; novel injection strings remain effective. Advisory status remains active.
+  - **Deferred:** (i) Cursor Pwn2Own Berlin 2026 CVEs (still within 90-day coordinated disclosure window). (ii) Carry-over playbook backlog unchanged.

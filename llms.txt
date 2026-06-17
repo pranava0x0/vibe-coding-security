@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-06-15
+**Last refreshed:** 2026-06-17
 
 ## Quick start
 
@@ -28,7 +28,7 @@ This repository tracks supply-chain attacks, malicious MCP servers, prompt-injec
 
 This feed covers incidents relevant to developers using AI-assisted coding tools. In scope:
 
-- **Package registries:** npm, PyPI, Crates.io, RubyGems — supply-chain attacks, malicious packages, account compromises
+- **Package registries:** npm, PyPI, Crates.io, RubyGems, AUR (Arch Linux) — supply-chain attacks, malicious packages, account compromises
 - **AI coding tools:** Claude Code, Cursor, Windsurf, Copilot, OpenClaw, aider, OpenHands, SWE-agent, Gemini CLI, Codex
 - **Vibe coding platforms:** Lovable, Bolt, v0, Replit, Base44
 - **AI agent frameworks:** LangChain/LangGraph, Semantic Kernel, PraisonAI, Flowise, Langflow, n8n, Zapier, Composio
@@ -55,11 +55,11 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-06-15)
+## Active threat families (as of 2026-06-17)
 
 The highest-risk ongoing threat families for vibe coders:
 
-- **Miasma/Shai-Hulud worm lineage** — Self-propagating npm/PyPI worm family, now in 6+ documented waves, with copycat actors following TeamPCP's May 2026 open-source release of the source code. Waves use different install-time primitives: postinstall hooks, binding.gyp (Phantom Gyp), .pth startup files (Hades), and direct source-repo poisoning (Wave 5). See advisories for each wave.
+- **Miasma/Shai-Hulud worm lineage** — Self-propagating npm/PyPI worm family, now in 6+ documented waves, with copycat actors following TeamPCP's May 2026 open-source release of the source code. Waves use different install-time primitives: postinstall hooks, binding.gyp (Phantom Gyp), .pth startup files (Hades), direct source-repo poisoning (Wave 5), and **dependency-injection** (Mastra, June 2026 — typosquat added as a transitive dependency rather than compromising the primary package). See advisories for each wave.
 - **IronWorm** — Rust-based npm worm with eBPF kernel rootkit + Tor C2 (June 2026). Invisible to eBPF-based EDR. Distinct from Miasma lineage.
 - **GlassWorm** — VS Code / Open VSX worm with steganographic (invisible Unicode) payloads and blockchain C2. Status: mitigated (CrowdStrike/Google/Shadowserver takedown May 2026), but credentials remain in the wild.
 - **WhiteCobra** — Persistent threat actor flooding IDE extension marketplaces with LummaStealer-delivering extensions targeting crypto wallet users. Ongoing since July 2025.

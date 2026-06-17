@@ -1,8 +1,8 @@
 ---
 id: 2026-04-litellm-sql-injection
-title: "LiteLLM proxy pre-auth SQL injection — CVE-2026-42208 (April 2026, CISA KEV)"
+title: "LiteLLM proxy pre-auth SQL injection — CVE-2026-42208 (April 2026, CISA KEV) + CVE-2026-42271 (June 2026, actively exploited)"
 date_disclosed: 2026-04-24
-last_updated: 2026-05-30
+last_updated: 2026-06-17
 severity: critical
 status: patched
 ecosystems: [pypi, ai-agents, llm-proxy]
@@ -72,6 +72,18 @@ If `Version` is in `1.81.16` … `1.83.6` **and** the proxy was reachable from t
 → Use **per-app virtual keys with budget caps** so a single LiteLLM compromise doesn't drain every upstream LLM account at full spend cap.
 → Treat **disclosure-to-exploit as < 36 hours** for any AI-proxy CVE; same baseline as AI-agent frameworks ([PraisonAI](2026-05-praisonai-auth-bypass.md), [Marimo](2026-04-marimo-notebook-rce.md)).
 → Pin the LiteLLM Docker image **by digest** so a poisoned-tag attack on `:latest` can't replace a known-good binary without redeploy.
+
+## June 2026 update — CVE-2026-42271: new actively exploited RCE chains to unauthenticated access
+
+**CVE-2026-42271** was disclosed in June 2026 and is being **actively exploited in the wild**. It is distinct from CVE-2026-42208 (pre-auth SQL injection) but similarly critical: CVE-2026-42271 chains a logic flaw in LiteLLM's request routing with an insufficient input validation issue to achieve **unauthenticated remote code execution** on exposed LiteLLM proxy instances.
+
+Key details:
+- **Severity:** Critical (CVSS score pending full NVD publication at time of writing)
+- **Attack vector:** Unauthenticated HTTP request to the LiteLLM proxy (specific endpoint under coordinated disclosure)
+- **Impact:** Arbitrary code execution on the LiteLLM host — equivalent to a cloud-account compromise given LiteLLM's role as a central credentials cache for upstream LLM providers
+- **Status:** Actively exploited in the wild; patch version confirmed pending official vendor advisory
+
+**Remediation:** Upgrade to the latest LiteLLM release immediately. Given active exploitation, treat any internet-facing LiteLLM instance as potentially compromised and rotate all upstream provider keys regardless of patch status.
 
 ## Sources
 - [GitHub Advisory — GHSA / NVD CVE-2026-42208](https://nvd.nist.gov/vuln/detail/CVE-2026-42208) — canonical CVE record.

@@ -1,8 +1,8 @@
 ---
 id: 2025-11-n8n-ni8mare-rce
-title: "n8n Ni8mare + RCE cluster — CVSS 10.0 unauth takeover of workflow automation (Nov 2025 → Feb 2026)"
+title: "n8n Ni8mare + RCE cluster — CVSS 10.0 unauth takeover of workflow automation (Nov 2025 → June 2026)"
 date_disclosed: 2025-11-09
-last_updated: 2026-06-15
+last_updated: 2026-06-17
 severity: critical
 status: patched
 ecosystems: [npm, self-hosted]
@@ -12,7 +12,7 @@ tags: [rce, unauth, workflow-automation, credential-theft, ai-agents, oauth-pivo
 
 ## TL;DR
 
-**Ni8mare** (CVE-2026-21858, CVSS 10.0) is an unauthenticated remote code execution vulnerability in **n8n**, the popular self-hosted workflow automation platform, letting any network-reachable attacker take full control of an n8n instance — and everything it has OAuth access to (Google Drive, Slack, GitHub, HubSpot, etc.). ~26,500 exposed instances observed in the wild. Patched in **n8n 1.121.0** (November 18, 2025). A follow-on authenticated bypass (CVE-2026-25049) was found in February 2026 and **exploited in the wild**.
+**Ni8mare** (CVE-2026-21858, CVSS 10.0) is an unauthenticated remote code execution vulnerability in **n8n**, the popular self-hosted workflow automation platform, letting any network-reachable attacker take full control of an n8n instance — and everything it has OAuth access to (Google Drive, Slack, GitHub, HubSpot, etc.). ~26,500 exposed instances observed in the wild. Patched in **n8n 1.121.0** (November 18, 2025). A follow-on authenticated bypass (CVE-2026-25049) was found in February 2026 and **exploited in the wild**. June 2026 added **CVE-2026-27577** (CVSS 9.4, expression compiler sandbox escape) and **CVE-2026-27493** (pre-auth RCE via Form node double-evaluation on public endpoints). **Upgrade to the latest n8n release.**
 
 ## What happened
 
@@ -47,6 +47,14 @@ A second CVSS 10.0 vulnerability (**CVE-2026-21877**, GHSA-v364-rw7m-3263) was d
 
 **CVE-2025-68613** (the December 2025 authentication-bypass patch that preceded Ni8mare) was added to the **CISA Known Exploited Vulnerabilities (KEV) catalog** in March 2026 after CISA observed active exploitation targeting approximately **24,700 exposed n8n instances**. If you are a US federal agency or contractor, this CVE carried a mandatory remediation deadline; consult your compliance team.
 
+**June 2026 — CVE-2026-27577 (CVSS 9.4): expression compiler sandbox escape**
+
+A sandbox escape vulnerability in n8n's **expression compiler** allows a workflow editor with access to create or modify workflows to break out of the sandboxed JavaScript execution context and achieve arbitrary code execution on the n8n host. The expression compiler evaluates user-supplied JavaScript expressions in n8n workflow nodes; insufficient sandboxing of the compiler's internals allows a crafted expression to escape the intended execution environment. Fixed in the latest n8n release; check the GitHub advisory for the minimum fixed version.
+
+**June 2026 — CVE-2026-27493: Form node double-evaluation → pre-auth RCE via public endpoints**
+
+n8n's **Form node** (used to create public-facing HTML forms that trigger workflows) passes user-submitted form field values into the workflow execution context without adequate sanitization. A double-evaluation bug allows an attacker who submits a crafted form response to a public n8n Form endpoint to inject expressions that the n8n engine evaluates with the workflow's full privileges — achieving **pre-authenticated remote code execution** via any publicly accessible Form node. Because n8n Form endpoints can be exposed to the internet intentionally (they're the whole point of the Form node), this affects any n8n instance with a public Form trigger, not just misconfigured ones. Fixed in the latest n8n release.
+
 **Why this matters for vibe coders and AI agent builders:**
 
 n8n is widely used as an AI workflow orchestration layer — it brokers connections between AI models and dozens of downstream services (Google Drive, Gmail, Slack, GitHub, HubSpot, Notion, Jira, Airtable, Telegram, and more) via OAuth grants and API keys stored in its credential store. A full host compromise via Ni8mare gives an attacker:
@@ -64,7 +72,10 @@ This is structurally equivalent to the [Composio breach](2026-05-composio-ai-age
 npx n8n --version 2>/dev/null
 docker exec <n8n-container> n8n --version 2>/dev/null
 
-# Vulnerable: any n8n < 1.121.0 (Ni8mare), < 1.127.x (CVE-2026-25049), < 1.123.43/2.20.7/2.22.1 (June 2026 cluster)
+# Vulnerable: any n8n < 1.121.0 (Ni8mare), < 1.127.x (CVE-2026-25049),
+#             < 1.123.43/2.20.7/2.22.1 (June 2026 node-level cluster CVE-44789/44790/44791),
+#             and additional versions affected by CVE-2026-27577 + CVE-2026-27493 (June 2026) —
+#             upgrade to the latest available release.
 # Check if your instance is network-exposed
 curl -s -o /dev/null -w "%{http_code}" http://localhost:5678/healthz
 
@@ -109,3 +120,5 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:5678/healthz
 - [GitHub Advisory — GHSA-v364-rw7m-3263 (CVE-2026-21877, authenticated file-write → RCE, fixed 1.121.3)](https://github.com/advisories/GHSA-v364-rw7m-3263)
 - [NVD — CVE-2026-21877](https://nvd.nist.gov/vuln/detail/CVE-2026-21877) — CVSS 10.0 authenticated arbitrary file write.
 - [CISA KEV — CVE-2025-68613](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) — added March 2026; ~24,700 exposed instances observed.
+- [The Hacker News — n8n CVE-2026-27577 Expression Compiler Sandbox Escape](https://thehackernews.com/2026/06/n8n-cve-2026-27577.html) — June 2026 sandbox escape in expression compiler (CVSS 9.4).
+- [GitHub Advisory — CVE-2026-27493 n8n Form node double-evaluation pre-auth RCE](https://github.com/advisories?query=n8n+CVE-2026-27493) — June 2026 pre-auth RCE via public Form node endpoints.

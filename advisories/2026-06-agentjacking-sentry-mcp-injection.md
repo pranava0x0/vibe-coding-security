@@ -2,7 +2,7 @@
 id: 2026-06-agentjacking-sentry-mcp-injection
 title: "Agentjacking — Sentry DSN injection via MCP poisons AI coding agent context (2,388 orgs exposed)"
 date_disclosed: 2026-06-12
-last_updated: 2026-06-14
+last_updated: 2026-06-17
 severity: high
 status: active
 ecosystems: [mcp, claude-code, cursor, codex, npm]
@@ -41,7 +41,7 @@ Variations used XML-style tags (`<system>`, `<instructions>`) and markdown forma
 - The injected payload arrives as "data" (issue body), not as a tool call — agents typically apply less scrutiny to data than to instructions
 - No `--ignore-scripts` equivalent for MCP data streams exists
 
-**Sentry's response:** Sentry acknowledged the research but declined to implement server-side filtering of error event fields, noting that user-controlled error data is a by-design feature. They recommended that MCP server maintainers implement output sanitization. As of 2026-06-14 the official Sentry MCP server does **not** strip or warn on instruction-shaped text in issue data.
+**Sentry's response:** Sentry acknowledged the research but declined to implement comprehensive server-side filtering of error event fields, noting that user-controlled error data is a by-design feature. They recommended that MCP server maintainers implement output sanitization. **2026-06-17 update:** Sentry deployed a narrow global content filter that blocks a specific known-bad payload string pattern documented in the Tenet Security research. This is a **partial mitigation only** — it filters one documented payload format but does not prevent novel injection strings that achieve the same goal with different phrasing, formatting, or encoding. The official Sentry MCP server remains substantially vulnerable to Agentjacking-class injection; the status of this advisory remains **active**.
 
 ## Am I affected?
 
