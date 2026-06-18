@@ -4,6 +4,8 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-06-18 | [IDEsaster — 30+ flaws (24 CVEs) in Cursor, Windsurf, Kiro.dev, GitHub Copilot, Zed, Roo Code, Junie, Cline](2026-06-idessaster-ai-ide-cve-cluster.md) | high | active |
+| 2026-06-17 | [15 malicious JetBrains Marketplace plugins steal AI provider API keys on entry (70K+ installs)](2026-06-jetbrains-ide-plugins-ai-key-theft.md) | high | active |
 | 2026-06-17 | [Mastra AI npm namespace compromise — 144 packages backdoored via hijacked contributor account](2026-06-mastra-ai-npm-compromise.md) | critical | active |
 | 2026-06-11 | [Arch Linux AUR supply-chain attack — 400+ packages hijacked](2026-06-arch-linux-aur-supply-chain.md) | high | active |
 | 2026-06-15 | [Claude Code MCP OAuth token hijack via malicious npm postinstall hook — Anthropic won't fix](2026-06-claude-code-mcp-oauth-hijack.md) | high | active |

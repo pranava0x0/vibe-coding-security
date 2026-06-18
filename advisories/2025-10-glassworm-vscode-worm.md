@@ -2,7 +2,7 @@
 id: 2025-10-glassworm-vscode-worm
 title: "GlassWorm — self-propagating VS Code / Open VSX extension worm (Oct 2025 → 2026)"
 date_disclosed: 2025-10-17
-last_updated: 2026-06-12
+last_updated: 2026-06-18
 severity: high
 status: active
 ecosystems: [vscode, openvsx, npm, github]
@@ -28,7 +28,7 @@ Timeline:
 - **2026-03 (v2)** — fresh wave; **GitHub** compromises ~Mar 3–9, **150+** repos; ~433 components estimated across Open VSX, VS Code Marketplace, GitHub, and npm.
 - **2026-04** — **73** fake VS Code extensions delivering **GlassWorm v2**.
 - **2026-05-26 14:00 UTC** — **CrowdStrike + Google + Shadowserver coordinated takedown** disables all four C2 channels simultaneously; attribution narrows to a **likely Russia-based operator** (malware exits on CIS-country locale checks; Russian-language source comments). The takedown caps a campaign that had poisoned **300+ GitHub repos** via stolen credentials alone.
-- **2026-06 (post-takedown)** — **New macOS-targeting wave with fresh infrastructure** (Koi Security / BleepingComputer). Operator reconstituted on new C2. Targeting macOS exclusively for the first time. New payload: AES-256-CBC encryption, **AppleScript** persistence (vs. PowerShell), **LaunchAgent** persistence (vs. Registry), and a **hardware-wallet trojanization module** targeting **Ledger Live** and **Trezor Suite** app bundles. Also sweeps 50+ browser crypto extensions, GitHub/npm tokens, Safari/Chrome browser data, and macOS Keychain. Hardware-wallet trojans appear incomplete at time of disclosure ("returning empty files") — attacker likely still finalizing macOS wallet payloads. Status reverted to `active`.
+- **2026-06 (post-takedown)** — **New macOS-targeting wave with fresh infrastructure** (Koi Security / BleepingComputer). Operator reconstituted on new C2. Targeting macOS exclusively for the first time. New payload: AES-256-CBC encryption, **AppleScript** persistence (vs. PowerShell), **LaunchAgent** persistence (vs. Registry), and a **hardware-wallet trojanization module** targeting **Ledger Live** and **Trezor Suite** app bundles. Also sweeps 50+ browser crypto extensions, GitHub/npm tokens, Safari/Chrome browser data, and macOS Keychain. Hardware-wallet trojans appear incomplete at time of disclosure ("returning empty files") — attacker likely still finalizing macOS wallet payloads. Status reverted to `active`. **Confirmed macOS-wave extension IOCs (Open VSX):** `pro-svelte-extension`, `vsce-prettier-pro`, `full-access-catppuccin-pro-extension` — all impersonate popular Open VSX extensions with added macOS-specific payload modules.
 
 The campaign kept recurring because takedowns couldn't reach the Solana dead-drop and the worm re-seeded itself with every set of stolen publish credentials — the same **IDE-extension trust surface** abused by the [Nx Console compromise](2026-05-nx-console-vscode-compromise.md) and the [TeamPCP GitHub breach](2026-05-teampcp-github-breach.md). The 2026-05-26 takedown finally hit all four redundancy channels at once, which is *why* it worked — a less coordinated strike would have let the Solana dead-drop carry survivors. The downstream lesson: **infostealer-harvested credentials don't expire when the C2 dies** — [Megalodon's 5,561-repo wave](2026-05-megalodon-github-actions-mass-campaign.md) (May 18) is what credential resale of this corpus looks like.
 
@@ -57,6 +57,8 @@ If a flagged extension turns up, treat the machine as compromised: npm/GitHub/Gi
 | Targets | npm/GitHub/Git creds, 49 crypto-wallet extensions |
 | Persistence | SOCKS proxy + hidden VNC servers |
 | Marketplaces | Open VSX (primary), VS Code Marketplace; also GitHub + npm |
+| macOS-wave IOC extensions | `pro-svelte-extension`, `vsce-prettier-pro`, `full-access-catppuccin-pro-extension` (Open VSX) |
+| macOS-wave new C2 | Fresh infrastructure; prior Solana/DHT/Calendar C2 channels replaced |
 | First flagged | Koi Security, 2025-10 |
 | Attribution | Likely Russia-based (CIS-locale exit checks, Russian-language source comments) |
 | Takedown | **CrowdStrike Counter Adversary Operations + Google + Shadowserver Foundation**, 2026-05-26 14:00 UTC, all 4 C2 channels simultaneously |

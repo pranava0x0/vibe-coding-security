@@ -2,7 +2,7 @@
 id: 2025-11-n8n-ni8mare-rce
 title: "n8n Ni8mare + RCE cluster — CVSS 10.0 unauth takeover of workflow automation (Nov 2025 → June 2026)"
 date_disclosed: 2025-11-09
-last_updated: 2026-06-17
+last_updated: 2026-06-18
 severity: critical
 status: patched
 ecosystems: [npm, self-hosted]
@@ -54,6 +54,16 @@ A sandbox escape vulnerability in n8n's **expression compiler** allows a workflo
 **June 2026 — CVE-2026-27493: Form node double-evaluation → pre-auth RCE via public endpoints**
 
 n8n's **Form node** (used to create public-facing HTML forms that trigger workflows) passes user-submitted form field values into the workflow execution context without adequate sanitization. A double-evaluation bug allows an attacker who submits a crafted form response to a public n8n Form endpoint to inject expressions that the n8n engine evaluates with the workflow's full privileges — achieving **pre-authenticated remote code execution** via any publicly accessible Form node. Because n8n Form endpoints can be exposed to the internet intentionally (they're the whole point of the Form node), this affects any n8n instance with a public Form trigger, not just misconfigured ones. Fixed in the latest n8n release.
+
+**June 2026 — CVE-2026-27495 (CVSS 9.4): JS Task Runner sandbox escape**
+
+n8n's **JavaScript Task Runner** node executes arbitrary user-supplied JavaScript in a sandboxed environment intended to prevent access to the host filesystem and network. **CVE-2026-27495** (CVSS 9.4) breaks out of this sandbox: a crafted JavaScript payload bypasses the isolation primitive and achieves arbitrary code execution on the n8n host. Any authenticated workflow editor can exploit this by adding a JS Task Runner node with a malicious script. Fixed in the latest n8n release.
+
+**June 2026 — CVE-2026-27497 (CVSS 9.4): Merge node SQL mode → arbitrary code / file write**
+
+n8n's **Merge node** in SQL aggregation mode processes user-controlled SQL expressions that are insufficiently sanitized. **CVE-2026-27497** (CVSS 9.4) allows an authenticated workflow editor to inject SQL that causes n8n to write arbitrary content to arbitrary host filesystem paths — yielding persistent code execution via the same arbitrary-file-write → cron / startup-path chain as CVE-2026-21877. Fixed in the latest n8n release.
+
+**June 2026 — CVE-2026-27494**: Details pending coordinated disclosure as of 2026-06-18. Severity reported as critical; associated with the same June 2026 n8n vulnerability batch as CVE-2026-27493/27495/27497. Upgrade to the latest n8n release to cover all concurrent fixes.
 
 **Why this matters for vibe coders and AI agent builders:**
 
@@ -122,3 +132,6 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:5678/healthz
 - [CISA KEV — CVE-2025-68613](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) — added March 2026; ~24,700 exposed instances observed.
 - [The Hacker News — n8n CVE-2026-27577 Expression Compiler Sandbox Escape](https://thehackernews.com/2026/06/n8n-cve-2026-27577.html) — June 2026 sandbox escape in expression compiler (CVSS 9.4).
 - [GitHub Advisory — CVE-2026-27493 n8n Form node double-evaluation pre-auth RCE](https://github.com/advisories?query=n8n+CVE-2026-27493) — June 2026 pre-auth RCE via public Form node endpoints.
+- [NVD — CVE-2026-27495](https://nvd.nist.gov/vuln/detail/CVE-2026-27495) — CVSS 9.4, JS Task Runner sandbox escape.
+- [NVD — CVE-2026-27497](https://nvd.nist.gov/vuln/detail/CVE-2026-27497) — CVSS 9.4, Merge node SQL mode arbitrary code/file write.
+- [NVD — CVE-2026-27494](https://nvd.nist.gov/vuln/detail/CVE-2026-27494) — additional June 2026 n8n CVE; details pending coordinated disclosure.

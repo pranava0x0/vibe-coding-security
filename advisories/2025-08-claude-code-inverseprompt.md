@@ -2,7 +2,7 @@
 id: 2025-08-claude-code-inverseprompt
 title: "Claude Code InversePrompt and follow-on CVEs (multiple)"
 date_disclosed: 2025-08
-last_updated: 2026-06-17
+last_updated: 2026-06-18
 severity: medium
 status: patched
 ecosystems: [claude-code]
@@ -48,9 +48,9 @@ The general defensive posture from Anthropic's own [Claude Code security docs](h
 - Limit the URLs and MCP sources the agent can read.
 - Run untrusted exploration inside a container.
 
-## June 2026 addition — "Lies in the Loop" (LITL): approval-dialog padding hides malicious commands
+## June 2026 addition — "Lies in the Loop" (LITL) / "HITL Dialog Forging": approval-dialog padding hides malicious commands
 
-Checkmarx Zero disclosed **"Lies in the Loop"** (LITL) in June 2026: a technique that manipulates AI agent approval dialogs to visually hide dangerous commands from the developer. When Claude Code or GitHub Copilot in VS Code presents an "approve this shell command?" dialog, the dialog renders markdown — and an attacker-controlled prompt injection can insert hundreds of blank lines or zero-width characters that push the malicious part of the command below the visible fold, so the developer approves what appears to be a safe operation while the hidden payload runs. Named LITL because the injected text "lies in the loop" of the human-in-the-loop approval step.
+Checkmarx Zero disclosed **"Lies in the Loop"** (LITL; also referred to as **"HITL Dialog Forging"** — forging the human-in-the-loop confirmation dialog) in June 2026: a technique that manipulates AI agent approval dialogs to visually hide dangerous commands from the developer. When Claude Code or GitHub Copilot in VS Code presents an "approve this shell command?" dialog, the dialog renders markdown — and an attacker-controlled prompt injection can insert hundreds of blank lines or zero-width characters that push the malicious part of the command below the visible fold, so the developer approves what appears to be a safe operation while the hidden payload runs. Named LITL because the injected text "lies in the loop" of the human-in-the-loop approval step. The alternate name "HITL Dialog Forging" frames the attack as forging the HITL confirmation artifact itself — both Anthropic and Microsoft categorized the attack class as outside their threat model (the dialog correctly shows all commands; the social-engineering component is the adversarial content that exploits the rendering).
 
 **How it works:** A malicious README, open Sentry issue, GitHub issue, or MCP data stream includes a prompt-injection instruction like:
 ```

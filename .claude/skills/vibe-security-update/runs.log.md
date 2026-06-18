@@ -650,3 +650,29 @@
   - **n8n Form node RCE (CVE-2026-27493) affects intentionally public endpoints.** There is no misconfiguration to fix — the only defensive move is to upgrade n8n. This is a class escalation from "accidentally exposed endpoints" to "by-design public endpoints."
   - **Sentry partial filter is a false-security signal.** Blocks one documented payload format; novel injection strings remain effective. Advisory status remains active.
   - **Deferred:** (i) Cursor Pwn2Own Berlin 2026 CVEs (still within 90-day coordinated disclosure window). (ii) Carry-over playbook backlog unchanged.
+
+---
+
+## 2026-06-18
+
+- **Queries run:** 26 (deep: 14, medium: 8, shallow: 4; full three-tier sweep — 24h/3d/7d windows)
+- **New advisories:** 2
+  - `2026-06-jetbrains-ide-plugins-ai-key-theft` — **15 malicious JetBrains Marketplace plugins steal AI API keys at entry time** (70K+ combined installs). Settings-UI interception: captures OpenAI, Anthropic, Google AI Studio, AWS Bedrock keys **when the developer clicks "Apply" in the plugin settings panel** — before the key is persisted locally. Distinct from file-system credential sweepers (Miasma/Hades/IronWorm). Primary source: CybersecurityNews. Severity: high, status: active.
+  - `2026-06-idessaster-ai-ide-cve-cluster` — **IDEsaster: 30+ flaws (24 CVEs) in 8 AI coding tools simultaneously** — Cursor, Windsurf, Kiro.dev, GitHub Copilot (VS Code), Zed.dev, Roo Code, Junie, Cline. Vulnerability classes: localhost RCE (unauthenticated WebSocket/HTTP servers), prompt injection via workspace artifacts (`.cursorrules`/`CLAUDE.md`/`AGENTS.md`), path traversal, malicious workspace file auto-execution. Coordinated multi-vendor disclosure. Primary source: The Hacker News. Severity: high, status: active.
+- **Updated advisories:** 4
+  - `2025-11-n8n-ni8mare-rce` — Added **CVE-2026-27494** (details pending), **CVE-2026-27495** (CVSS 9.4, JS Task Runner sandbox escape), **CVE-2026-27497** (CVSS 9.4, Merge node SQL mode → arbitrary code/file write). Updated last_updated to 2026-06-18.
+  - `2026-04-litellm-sql-injection` — Added **CVE-2026-49468** (Host header auth bypass, LiteLLM < 1.84.0) and **Obsidian Security privilege escalation chain** (3-step: Host header bypass → user_role self-escalation → config-file RCE; new source: obsidiansecurity.com). Updated last_updated to 2026-06-18.
+  - `2025-08-claude-code-inverseprompt` — Added **HITL Dialog Forging** as alternate name for LITL (Lies in the Loop); documented that both Anthropic and Microsoft classified the attack as outside their threat model. Updated last_updated to 2026-06-18.
+  - `2025-10-glassworm-vscode-worm` — Added macOS-wave **IOC extension names**: `pro-svelte-extension`, `vsce-prettier-pro`, `full-access-catppuccin-pro-extension` (all Open VSX). Added to IOC table. Updated last_updated to 2026-06-18.
+- **Sources gained weight:**
+  - thehackernews.com: hits 44→45, last_hit 2026-06-18 (IDEsaster), ecosystem +idessaster-cve-cluster
+  - cybersecuritynews.com: hits 33→34, last_hit 2026-06-18 (JetBrains plugins, IDEsaster), ecosystems +jetbrains-plugins-ai-key-theft, +idessaster-cve-cluster
+- **New sources added:** 2
+  - `obsidiansecurity.com` (research, weight 10, hits 1; ecosystems: litellm, ai-proxy, privilege-escalation, cve-49468, host-header-bypass)
+  - `jetbrains.com` (vendor, weight 8, hits 1; ecosystems: jetbrains-marketplace, ide-extensions, ai-api-keys, credential-theft)
+- **Notes:**
+  - **IDEsaster is the broadest single-disclosure AI coding tool CVE batch to date.** 24 CVEs across 8 tools in one coordinated release. Every vibe coder should update all AI coding tools today regardless of which specific CVEs affect their toolchain.
+  - **JetBrains settings-UI interception is a new credential-theft primitive.** Unlike the file-system sweepers that read already-stored keys, this plugin class intercepts at the entry point — before the key is written to disk. No credential file to audit; the only signal is unexpected outbound HTTPS from the IDE process. Detection: monitor outbound connections from JetBrains IDE processes to unexpected hosts. Prevention: use env vars instead of plugin settings panels.
+  - **LiteLLM CVE-2026-49468 extends the exploitation chain.** The Obsidian Security chain adds a Host-header bypass → self-role-escalation → config-file-write path that is independent of the SQL injection CVE-2026-42208. Operators who patched to 1.83.7+ for the SQL injection but didn't reach 1.84.0 remain vulnerable to the new chain.
+  - **n8n CVE-2026-27495 (JS Task Runner sandbox escape) is the third sandbox-bypass in the n8n codebase** (after CVE-2026-27577 expression compiler escape and CVE-2026-27493 Form node double-eval). Pattern: n8n ships multiple independent sandboxed execution contexts — each is a separate attack surface requiring a separate fix.
+  - **Deferred:** (i) Cursor Pwn2Own Berlin 2026 CVEs (still within 90-day coordinated disclosure window). (ii) Carry-over playbook backlog unchanged.

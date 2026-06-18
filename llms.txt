@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-06-17
+**Last refreshed:** 2026-06-18
 
 ## Quick start
 
@@ -55,7 +55,7 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-06-17)
+## Active threat families (as of 2026-06-18)
 
 The highest-risk ongoing threat families for vibe coders:
 
@@ -66,6 +66,8 @@ The highest-risk ongoing threat families for vibe coders:
 - **TrapDoor** — Cross-ecosystem (npm + PyPI + Crates.io) stealer that rewrites `.cursorrules`/`CLAUDE.md` with hidden zero-width Unicode to make your own AI agent re-exfiltrate secrets.
 - **Agentjacking** — New attack class (June 2026): attackers plant instructions in Sentry error data; AI agents (Claude Code, Cursor, Codex) read them via MCP and execute. 85% exploitation rate in controlled experiments; 2,388 orgs exposed. Sentry declined to fix server-side.
 - **Claude Code MCP OAuth hijack** — Malicious npm `postinstall` hooks modify `~/.claude.json` to proxy all MCP OAuth traffic through an attacker-controlled localhost process, intercepting bearer tokens for every connected service (Jira, GitHub, Confluence, etc.). Hook persists across manual corrections via `sessionStart` lifecycle injection. Anthropic declined to fix ("out of scope," April 2026). No patch planned.
+- **IDEsaster AI coding tool CVE cluster** — Coordinated June 2026 disclosure of 30+ flaws (24 CVEs) across 8 AI coding tools simultaneously: Cursor, Windsurf, Kiro.dev, GitHub Copilot (VS Code), Zed.dev, Roo Code, Junie, Cline. Recurring classes: unauthenticated localhost WebSocket/HTTP servers, prompt injection via workspace config files, path traversal. Update all AI coding tools to the latest version.
+- **JetBrains Marketplace malicious plugin wave** — 15 malicious plugins (70K+ installs) on the JetBrains Marketplace intercept AI provider API keys (OpenAI, Anthropic, Google AI Studio, AWS Bedrock) at the moment the developer enters them in the plugin settings panel. Settings-UI interception is not blocked by standard file-system credential monitoring. Use environment variables instead of plugin settings panels for AI provider keys.
 
 ## Citation
 

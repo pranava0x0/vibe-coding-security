@@ -2,11 +2,19 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-06-17. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-06-18. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-06-18 — IDEsaster — 30+ flaws (24 CVEs) in Cursor, Windsurf, Kiro.dev, GitHub Copilot, Zed, Roo Code, Junie, Cline
+Researchers disclosed **IDEsaster**: a coordinated dump of **30+ security vulnerabilities (24 CVEs)** simultaneously covering **8 AI coding tools** — Cursor, Windsurf, Kiro.dev (Amazon), GitHub Copilot (VS Code), Zed.dev, Roo Code, Junie (JetBrains), and Cline. Vulnerability classes include **localhost RCE** (unauthenticated WebSocket / HTTP servers — the same root cause as Cline CVE-2026-44211 and OpenClaw CVE-2026-25253), **prompt injection via workspace files** (`.cursorrules`, `CLAUDE.md`, `AGENTS.md`), **path traversal**, and **malicious workspace file auto-execution**. Most affected tools have shipped or are shipping patches; update to the latest version of every AI coding tool immediately. Run `ss -tlnp | grep -E ':(3000|3484|3747|4000|8080|9229)'` to check whether any tool is listening on localhost without authentication.
+→ [advisories/2026-06-idessaster-ai-ide-cve-cluster.md](advisories/2026-06-idessaster-ai-ide-cve-cluster.md)
+
+### 2026-06-17 — 15 malicious JetBrains Marketplace plugins steal AI provider API keys on entry (70K+ installs)
+**15 malicious plugins** on the JetBrains Marketplace (combined **70,000+ installs**) silently exfiltrate AI provider API keys — OpenAI, Anthropic, Google AI Studio, AWS Bedrock — **the moment the developer enters them in the plugin settings panel and clicks "Apply."** This is settings-UI interception, not a file-system sweep: the key is captured before it's persisted locally. If you have installed any unfamiliar AI-assistant plugin in IntelliJ IDEA, PyCharm, WebStorm, GoLand, or other JetBrains IDEs, rotate all AI provider API keys immediately. Use environment variables (`OPENAI_API_KEY`, `ANTHROPIC_API_KEY`) instead of plugin settings panels going forward.
+→ [advisories/2026-06-jetbrains-ide-plugins-ai-key-theft.md](advisories/2026-06-jetbrains-ide-plugins-ai-key-theft.md)
 
 ### 2026-06-17 — Mastra AI npm namespace compromise — 144 packages backdoored via hijacked contributor account (~1.1M weekly downloads)
 A hijacked contributor account was used to publish malicious versions across **144 packages in the `@mastra/*` npm namespace** (Mastra is an open-source TypeScript AI agent framework). The malicious packages inject **`easy-day-js`** — a typosquat of the legitimate `dayjs` library — as a dependency, with a `postinstall` hook that exfiltrates credentials. With ~1.1M weekly downloads combined, this is a significant exposure. The attack follows the Miasma/Shai-Hulud worm **dependency-injection** pattern: instead of compromising the primary package directly, the attacker registers a typosquat as a dependency so any package that installs `@mastra/*` transitively executes the payload. **Immediate action:** run `npm ls | grep easy-day-js` in any project with `@mastra/*` dependencies; if found, rotate all credentials accessible from that environment. Remove `easy-day-js` from all lockfiles and update `@mastra/*` packages to clean versions.
