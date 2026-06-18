@@ -2,7 +2,7 @@
 id: 2026-04-litellm-sql-injection
 title: "LiteLLM proxy pre-auth SQL injection — CVE-2026-42208 (April 2026, CISA KEV) + CVE-2026-42271 (June 2026, actively exploited)"
 date_disclosed: 2026-04-24
-last_updated: 2026-06-17
+last_updated: 2026-06-18
 severity: critical
 status: patched
 ecosystems: [pypi, ai-agents, llm-proxy]
@@ -73,6 +73,17 @@ If `Version` is in `1.81.16` … `1.83.6` **and** the proxy was reachable from t
 → Treat **disclosure-to-exploit as < 36 hours** for any AI-proxy CVE; same baseline as AI-agent frameworks ([PraisonAI](2026-05-praisonai-auth-bypass.md), [Marimo](2026-04-marimo-notebook-rce.md)).
 → Pin the LiteLLM Docker image **by digest** so a poisoned-tag attack on `:latest` can't replace a known-good binary without redeploy.
 
+## June 2026 update — CVE-2026-49468: Host header auth bypass + Obsidian Security privilege escalation chain
+
+**CVE-2026-49468** — LiteLLM proxy **< 1.84.0** fails to properly validate the `Host` header on incoming requests. An attacker can forge the `Host` header to bypass authentication checks that rely on origin validation, effectively gaining access to the LiteLLM admin API as an unauthenticated caller. This is distinct from the pre-auth SQL injection (CVE-2026-42208) — it targets the HTTP-layer auth step rather than the SQL layer.
+
+**Obsidian Security privilege escalation chain (mid-June 2026):** Obsidian Security published a compound attack chain that combines CVE-2026-49468 with two additional LiteLLM logic flaws to escalate from **low-privilege API access → full admin → RCE**:
+1. Step 1 — Use CVE-2026-49468 (Host header bypass) to bypass authentication on a low-privilege virtual key.
+2. Step 2 — Exploit a LiteLLM admin API logic flaw that allows any authenticated user to modify their own account's `user_role` field without admin approval — escalate to `proxy_admin`.
+3. Step 3 — As `proxy_admin`, use the `/health/readiness` config endpoint to write attacker-controlled configuration to the LiteLLM host filesystem → code execution via a hot-reloaded config directive.
+
+**Affected:** LiteLLM `< 1.84.0`. **Fixed:** 1.84.0+. Upgrade immediately.
+
 ## June 2026 update — CVE-2026-42271: new actively exploited RCE chains to unauthenticated access
 
 **CVE-2026-42271** was disclosed in June 2026 and is being **actively exploited in the wild**. It is distinct from CVE-2026-42208 (pre-auth SQL injection) but similarly critical: CVE-2026-42271 chains a logic flaw in LiteLLM's request routing with an insufficient input validation issue to achieve **unauthenticated remote code execution** on exposed LiteLLM proxy instances.
@@ -97,3 +108,5 @@ Key details:
 - [Tenable — CVE-2026-42208](https://www.tenable.com/cve/CVE-2026-42208) — CVE catalog corroboration.
 - [Sonatype — Compromised litellm PyPI Package Exposes AI Systems](https://www.sonatype.com/blog/compromised-litellm-pypi-package-delivers-multi-stage-credential-stealer) — broader LiteLLM/PyPI corroboration.
 - [Trend Micro — Your AI Stack Just Handed Over Your Root Keys: Inside the litellm PyPI Breach](https://www.trendmicro.com/en_us/research/26/c/your-ai-stack-just-handed-over-your-root-keys-inside-the-litellm-pypi-breach.html) — impact framing.
+- [Obsidian Security — LiteLLM Privilege Escalation Chain: CVE-2026-49468 + Host Header Bypass](https://obsidiansecurity.com/blog/litellm-privilege-escalation-cve-2026-49468/) — three-step chain, low-privilege → admin → RCE.
+- [NVD — CVE-2026-49468](https://nvd.nist.gov/vuln/detail/CVE-2026-49468) — Host header auth bypass, affects LiteLLM < 1.84.0.
