@@ -1,8 +1,8 @@
 ---
 id: 2026-06-mastra-ai-npm-compromise
-title: "Mastra AI npm namespace compromise — 144 @mastra/* packages carry easy-day-js typosquat RAT via hijacked contributor account (June 2026)"
+title: "Mastra AI npm namespace compromise — 145 @mastra/* packages carry easy-day-js typosquat RAT via hijacked contributor account `ehindero` (June 2026)"
 date_disclosed: 2026-06-17
-last_updated: 2026-06-17
+last_updated: 2026-06-19
 severity: critical
 status: active
 ecosystems: [npm]
@@ -11,11 +11,11 @@ tags: [supply-chain, credential-theft, typosquat, postinstall, ai-agents, crypto
 ---
 
 ## TL;DR
-A hijacked npm contributor account was used to inject **`easy-day-js`** — a typosquat of the popular `dayjs` date library — as a dependency across **144 packages** in the `@mastra/*` namespace (Mastra AI agent framework). The malicious `easy-day-js` version ran an obfuscated `postinstall` hook that downloaded and executed a cryptocurrency-stealing RAT, then self-deleted to remove evidence. Combined weekly downloads across affected packages exceed **1.1 million**. Attribution: Shai-Hulud/Miasma lineage payload characteristics.
+A hijacked npm contributor account (`ehindero`) was used to inject **`easy-day-js`** — a typosquat of the popular `dayjs` date library — as a dependency across **145 packages** (corrected from initially-reported 144) in the `@mastra/*` namespace (Mastra AI agent framework). The malicious `easy-day-js` version ran an obfuscated `postinstall` hook that downloaded and executed a cryptocurrency-stealing RAT, then self-deleted to remove evidence. The attack window was **01:15 – 02:36 UTC on 2026-06-17** (88 minutes). Combined weekly downloads across affected packages exceed **1.1 million**. Attribution: Shai-Hulud/Miasma lineage payload characteristics; modus operandi matches the [Axios April 2026 attack](2026-03-axios-compromise.md) with possible North Korea link (DPRK-adjacent supply-chain patterns).
 
 ## What happened
 
-**Mastra** is an open-source TypeScript AI agent framework (`@mastra/*` npm namespace) widely used to build AI-powered workflows, agents, tool integrations, and LLM orchestration pipelines. On **2026-06-17**, attackers used a hijacked Mastra contributor's npm access token to publish a malicious dependency across **144 packages** in the `@mastra/*` scope.
+**Mastra** is an open-source TypeScript AI agent framework (`@mastra/*` npm namespace) widely used to build AI-powered workflows, agents, tool integrations, and LLM orchestration pipelines. On **2026-06-17** at **01:15 – 02:36 UTC** (an 88-minute window), the npm account **`ehindero`** — a legitimate Mastra contributor whose access token was hijacked — was used to publish a malicious dependency across **145 packages** in the `@mastra/*` scope.
 
 The attack technique — **dependency injection via a typosquat** — is more subtle than directly modifying the primary package:
 
@@ -31,6 +31,8 @@ The attack technique — **dependency injection via a typosquat** — is more su
 **Why this matters for vibe coders:** Mastra is a primary AI-agent orchestration framework. Any Mastra-powered project running `npm install` during the exposure window installed the RAT with full developer-machine privileges. The RAT specifically targets AI-tool credentials (Anthropic/OpenAI API keys, MCP config files) alongside cloud credentials, SSH keys, and crypto wallets.
 
 This is the sixth documented copycat wave in the Shai-Hulud/Miasma lineage (Shai-Hulud → Second Coming → Third Coming → Phantom Gyp → Hades → Mastra injection), and the first to use a **dependency-injection** (adding a typosquat as a dep, rather than compromising the primary package directly) as its install-time vector at this scale.
+
+**Attribution note:** The modus operandi — contributor token theft → 88-minute automated burst → cleanup — closely matches the [Axios npm compromise (April 2026)](2026-03-axios-compromise.md), which US and South Korean authorities attributed to North Korea (DPRK)-linked actors. Multiple threat-intelligence vendors have flagged the same pattern; DPRK attribution for the Mastra incident is unconfirmed but assessed as likely by several firms.
 
 ## Am I affected?
 
@@ -51,18 +53,19 @@ ls ~/.npm/easy-day-js/ 2>/dev/null
 # Look for unexpected cron/launchd/systemd entries added 2026-06-17
 ```
 
-If you installed any `@mastra/*` package on **2026-06-17** (or if `easy-day-js` appears in your `package-lock.json`), treat the machine as compromised and rotate all credentials.
+If you installed any `@mastra/*` package on **2026-06-17 between 01:15 and 02:36 UTC** (or if `easy-day-js` appears in your `package-lock.json`), treat the machine as compromised and rotate all credentials.
 
 ### IOCs
 
 | Type | Value |
 |---|---|
-| Namespace | `@mastra/*` (144 packages) |
+| Namespace | `@mastra/*` (145 packages) |
 | Malicious dependency | `easy-day-js` (typosquat of `dayjs`) |
 | Attack vector | `postinstall` hook in injected `easy-day-js` |
 | Payload | Obfuscated two-stage dropper → crypto-stealing RAT (self-deletes) |
-| Initial access | Hijacked npm contributor account |
-| Attribution | Shai-Hulud/Miasma lineage (payload family) |
+| Initial access | Hijacked npm contributor account (`ehindero`) |
+| Attack window | 01:15 – 02:36 UTC 2026-06-17 (88 minutes) |
+| Attribution | Shai-Hulud/Miasma lineage (payload); possible DPRK link (Axios modus operandi match) |
 | Combined affected downloads | 1.1M+ weekly |
 
 ## If you are affected
@@ -91,6 +94,11 @@ If you installed any `@mastra/*` package on **2026-06-17** (or if `easy-day-js` 
 
 ## Sources
 
-- [The Hacker News — 144 Mastra npm Packages Compromised via Hijacked Contributor Account](https://thehackernews.com/2026/06/mastra-npm-packages-compromised-hijacked.html) — primary disclosure; contributor-token compromise, 144 packages, easy-day-js typosquat, crypto-stealing RAT.
+- [The Hacker News — 145 Mastra npm Packages Compromised via Hijacked Contributor Account `ehindero`](https://thehackernews.com/2026/06/mastra-npm-packages-compromised-hijacked.html) — primary disclosure; corrected count (145); account name ehindero; attack window 01:15–02:36 UTC; easy-day-js typosquat.
+- [Aikido Security — Mastra AI npm Compromise: How easy-day-js Typosquat Hit 1.1M Weekly Downloads](https://aikido.dev/blog/mastra-ai-npm-compromise-easy-day-js) — detailed IOC analysis; 88-minute window; payload family matching.
+- [Snyk — Mastra @mastra/* Dependency Injection: How a Typosquat Reached 1.1M Weekly Downloads](https://snyk.io/blog/mastra-npm-compromise-easy-day-js/) — dependency tree analysis; DPRK modus operandi note.
+- [Socket — Mastra AI Attack: 145 npm Packages Poisoned via Transitive Dependency Injection](https://socket.dev/blog/mastra-npm-attack) — transitive-dependency injection mechanics; cross-reference Axios April 2026 pattern.
+- [CybersecurityNews — 145 Mastra npm Packages Backdoored Through easy-day-js Typosquat; North Korea Link Suspected](https://cybersecuritynews.com) — DPRK attribution note; modus operandi comparison to Axios compromise.
 - [GitHub Advisory Database — GHSA advisory for @mastra/* easy-day-js dependency injection](https://github.com/advisories?query=mastra+easy-day-js) — official GHSA records.
+- Cross-link: [Axios compromise (March 2026)](2026-03-axios-compromise.md) — same modus operandi; suspected DPRK actor; npm contributor token theft.
 - Cross-link: [IronWorm](2026-06-ironworm-npm-rust-ebpf.md), [Hades Campaign](2026-06-hades-campaign-pypi-mcp-attack.md), [Solana FakeFix](2026-06-solana-fakefix-campaign.md) — same Miasma-lineage payload family; [Phantom Gyp](2026-06-phantom-gyp-miasma-wave4.md) — prior wave using binding.gyp; [Shai-Hulud copycat wave](2026-05-shai-hulud-copycat-wave.md) — prior copycat cadence.
