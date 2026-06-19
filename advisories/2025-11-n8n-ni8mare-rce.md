@@ -83,7 +83,7 @@ npx n8n --version 2>/dev/null
 docker exec <n8n-container> n8n --version 2>/dev/null
 
 # Vulnerable: any n8n < 1.121.0 (Ni8mare), < 1.127.x (CVE-2026-25049),
-#             < 1.123.43/2.20.7/2.22.1 (June 2026 node-level cluster CVE-44789/44790/44791),
+#             < 1.123.43/2.20.7/2.22.1 (June 2026 node-level cluster CVE-2026-44789/44790/44791),
 #             and additional versions affected by CVE-2026-27577 + CVE-2026-27493 (June 2026) —
 #             upgrade to the latest available release.
 # Check if your instance is network-exposed

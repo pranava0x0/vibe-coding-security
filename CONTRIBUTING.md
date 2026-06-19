@@ -95,13 +95,24 @@ Numbered list of concrete actions. Commands where possible.
 Honest list of the trade-offs.
 ```
 
+## Accuracy & citation standards
+
+A wrong-but-confident advisory is worse than none — readers act on it. These are hard requirements, enforced in CI where possible:
+
+- **Cite only what you actually opened.** Every URL in `## Sources` must be a page you read. **Never guess an article slug, CVE/GHSA id, version, or download count** — paste the real one. (Automated sweeps have shipped invented URLs and a malformed `GHSA-langgraph-27794`; don't.)
+- **Identifiers must be canonical and well-formed:** `CVE-YYYY-NNNN` (with the year, ≥4-digit sequence) and `GHSA-xxxx-xxxx-xxxx` (4-4-4). A malformed id is almost always fabricated. `tests/test_advisory_ids.py` fails the build on malformed ids.
+- **Verify before you state.** Confirm a CVE/GHSA on [NVD](https://nvd.nist.gov/) or the [GitHub Advisory Database](https://github.com/advisories); confirm a package/version resolves (`npm view` / `pip index versions`); take counts and blast-radius numbers from a **primary** source, not an aggregator's paraphrase.
+- **Check your links before opening a PR:** `python tools/check-external-links.py advisories/<your-file>.md` flags 404s and whether a Wayback snapshot exists. **404 + no snapshot = the URL never existed → fix or drop it.** Never link a malware/IOC/C2 domain.
+- **Internal links must point to docs that exist.** Link only real files under `playbooks/` and `prevention/` (run `ls` to check). `site/validate.py` fails the build on broken internal links.
+
 ## Style notes
 
-- **Date everything.** Format: `YYYY-MM-DD`. Update `last_updated` in frontmatter when you touch an advisory.
-- **Cite multiple sources** when possible. At least two independent reporters before promoting to a full advisory.
+- **Date everything.** Format: `YYYY-MM-DD`. Update `last_updated` in frontmatter when you touch an advisory. Stamp volatile facts (EPSS/KEV, "as of" counts) with their date.
+- **Cite multiple sources** when possible. At least two independent reporters before promoting to a full advisory; a single-source claim is `status: unconfirmed`.
 - **Concrete > abstract.** Always include a command, a path, or a config snippet when relevant.
 - **No FUD.** Severity claims need to be defensible. If only 1,000 people downloaded the package before takedown, say so.
 - **Short.** Vibe coders are panicking. Hit the bullet points and link out for depth.
+- **Run the build before a PR:** `python site/build.py && python site/validate.py && python -m pytest tests/` — the same gate the deploy runs. A red gate blocks the deploy and freezes the live site.
 
 ## Out-of-scope contributions
 
