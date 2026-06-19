@@ -150,13 +150,13 @@ Fix: `pip install --upgrade "langgraph-checkpoint-sqlite>=3.0.1"`.
 - [Cybersecurity News — Critical Langchain Vulnerability Let attackers Exfiltrate Sensitive Secrets from AI systems](https://cybersecuritynews.com/langchain-vulnerability/) — Impact framing; download stats.
 - [Miggo — CVE-2025-68664: LangChain Deserialization RCE](https://www.miggo.io/vulnerability-database/cve/CVE-2025-68664) — Technical breakdown.
 - [SOCRadar — CVE-2025-68664: Critical LangChain Flaw Enables Secret Extraction](https://socradar.io/blog/cve-2025-68664-langchain-flaw-secret-extraction/) — Aggregator confirmation.
-- [GitHub — Rickidevs/CVE-2026-34070 (path traversal disclosure)](https://github.com/Rickidevs/CVE-2026-34070) — CVE-2026-34070 researcher writeup.
-- [Vucense — Security Audit: Patching the Langchain CVE-2026-34070 and the Risks of Unchecked AI Deserialization](https://vucense.com/tech-guides/vulnerabilities/security-audit-patching-the-langchain-cve-2026-34070-and-the-risks-of-unchecked-ai-deserialization/) — Path-traversal context + patched-version (1.2.22) confirmation.
+- [GitLab Advisory Database — CVE-2026-34070: langchain-core path traversal in legacy `load_prompt` functions](https://advisories.gitlab.com/pkg/pypi/langchain-core/CVE-2026-34070/) — official advisory; legacy `load_prompt`/`load_prompt_from_config` read traversal-able paths; fixed in 1.2.22.
+- [CSO Online — LangChain path traversal bug adds to input validation woes in AI pipelines](https://www.csoonline.com/article/4151814/langchain-path-traversal-bug-adds-to-input-validation-woes-in-ai-pipelines.html) — CVE-2026-34070 path-traversal context + patched-version (1.2.22) confirmation.
 - [Hacker News thread — Critical vulnerability in LangChain – CVE-2025-68664](https://news.ycombinator.com/item?id=46386009) — Community discussion and exploitation context.
 - [GitHub Advisory Database — CVE-2026-26019](https://github.com/advisories/GHSA-gf3v-fwqg-4vh7) — SSRF in @langchain/community RecursiveUrlLoader.
 - [CyberSecurityNews — LangChain Community SSRF Bypass Vulnerability Enables Access to Internal Services](https://cybersecuritynews.com/langchain-community-ssrf-bypass-vulnerability/) — CVE-2026-26019 write-up.
 - [NVD — CVE-2026-26019 Detail](https://nvd.nist.gov/vuln/detail/CVE-2026-26019) — Official CVE record.
-- [GitHub Advisory — CVE-2026-27794: LangGraph BaseCache Pickle Deserialization RCE](https://github.com/advisories/GHSA-langgraph-27794) — LangGraph checkpoint pickle fallback; fixed in langgraph-checkpoint 4.0.0.
+- [GitHub Advisory — CVE-2026-27794: LangGraph BaseCache Pickle Deserialization RCE](https://github.com/advisories/GHSA-mhr3-j7m5-c7c9) — LangGraph checkpoint `pickle_fallback=True`; fixed in langgraph-checkpoint 4.0.0.
 - [NVD — CVE-2026-27794 Detail](https://nvd.nist.gov/vuln/detail/CVE-2026-27794) — Official CVE record.
 - [NVD — CVE-2026-28277 Detail](https://nvd.nist.gov/vuln/detail/CVE-2026-28277) — Official CVE record (msgpack deserialization).
 - [GitHub Advisory — GHSA-7p73-8jqx-23r8: LangGraph SQLite SQL injection (CVE-2025-67644)](https://github.com/langchain-ai/langgraph/security/advisories/GHSA-7p73-8jqx-23r8) — Official advisory; fix description (strict key regex in 3.0.1).

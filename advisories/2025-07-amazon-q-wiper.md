@@ -46,6 +46,6 @@ For users: pin extension versions in regulated environments; review release note
 
 ## Sources
 - [The Register — Destructive AI prompt published in Amazon Q extension](https://www.theregister.com/2025/07/24/amazon_q_ai_prompt/)
-- [404 Media — Hacker Plants Computer 'Wiping' Commands in Amazon's AI Coding Agent](https://www.404media.co/hacker-plants-computer-wiping-commands-in-amazon-q/)
+- [404 Media — Hacker Plants Computer 'Wiping' Commands in Amazon's AI Coding Agent](https://www.404media.co/hacker-plants-computer-wiping-commands-in-amazons-ai-coding-agent/)
 - [SC Media — Amazon Q extension for VS Code reportedly injected with 'wiper' prompt](https://www.scworld.com/news/amazon-q-extension-for-vs-code-reportedly-injected-with-wiper-prompt)
 - [AWSInsider — Formatting Flaw Foils Attempted Prompt Injection on Amazon Q](https://awsinsider.net/articles/2025/07/25/formatting-flaw-foils-attempted-prompt-injection-on-amazon-q.aspx)
