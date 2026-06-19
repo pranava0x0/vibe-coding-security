@@ -2,7 +2,7 @@
 id: 2026-06-jetbrains-ide-plugins-ai-key-theft
 title: "15 malicious JetBrains Marketplace plugins steal AI provider API keys on entry (70K+ installs)"
 date_disclosed: 2026-06-17
-last_updated: 2026-06-18
+last_updated: 2026-06-19
 severity: high
 status: active
 ecosystems: [jetbrains-marketplace, ide-extensions]
@@ -23,7 +23,9 @@ This is distinct from the more common postinstall-hook credential sweepers (Mias
 
 **What's targeted:** The harvested keys are AI provider API keys — OpenAI organization keys, Anthropic Console API keys, Google AI Studio SDK keys, AWS Bedrock IAM credentials, and similar. These are typically high-value, with monthly spend caps in the thousands of dollars and access to model APIs used in production pipelines.
 
-**Scope:** 15 plugins, **70,000+ combined installs** across the JetBrains Marketplace. JetBrains was notified; removal status of individual plugins varies.
+**Scope:** 15 plugins across **7 vendor accounts**, **70,000+ combined installs** across the JetBrains Marketplace. The two highest-install plugins identified: **DeepSeek AI Assist** (27,727 downloads) and **CodeGPT AI Assistant** (25,571 downloads). JetBrains was notified; removal status of individual plugins varies.
+
+**Monetization scheme:** Stolen API keys were resold to users of paid AI services — buyers used the stolen keys to access OpenAI/Anthropic/Google AI APIs without paying, while victims absorbed the usage charges. This "key resale" model is distinct from direct theft for the attacker's own use and explains why attacks may have been sustained over weeks before detection.
 
 ## Am I affected?
 
@@ -50,12 +52,15 @@ If any unfamiliar AI-adjacent plugin has a settings panel that accepted an API k
 
 | Type | Value |
 |---|---|
-| Plugin count | 15 malicious plugins |
+| Plugin count | 15 malicious plugins across 7 vendor accounts |
 | Combined installs | 70,000+ |
+| Top plugins by downloads | DeepSeek AI Assist (27,727), CodeGPT AI Assistant (25,571) |
 | Target credentials | OpenAI org keys, Anthropic console keys, Google AI Studio SDK keys, AWS Bedrock IAM, other AI provider keys |
 | Exfil trigger | Settings dialog "Apply" / "OK" click |
+| Monetization | Stolen keys resold to paid-API users |
 | Affected marketplaces | JetBrains Marketplace (Marketplace ID varies) |
 | Ecosystem | JetBrains IDEs (IntelliJ IDEA, PyCharm, WebStorm, GoLand, etc.) |
+| Canonical source | Aikido Security |
 
 ## If you are affected
 
@@ -79,5 +84,8 @@ If any unfamiliar AI-adjacent plugin has a settings panel that accepted an API k
 
 ## Sources
 
-- [CyberSecurityNews — Malicious JetBrains Marketplace Plugins Steal AI API Keys](https://cybersecuritynews.com/malicious-jetbrains-plugins-steal-ai-api-keys/) — primary disclosure, 15 plugins, 70K+ installs, settings-UI interception mechanism.
+- [Aikido Security — 15 Malicious JetBrains Plugins Steal AI API Keys via Settings-UI Interception](https://aikido.dev/blog/jetbrains-marketplace-malicious-plugins-ai-api-key-theft) — canonical primary source; 15 plugins, 7 vendor accounts, DeepSeek AI Assist + CodeGPT AI Assistant named; key-resale monetization scheme; settings-UI interception mechanism.
+- [BleepingComputer — 15 Malicious JetBrains Plugins with 70K+ Installs Steal AI API Keys via Settings Panel](https://bleepingcomputer.com) — install counts; AI provider key targeting.
+- [The Hacker News — JetBrains Marketplace Hosts 15 Malicious AI Plugins That Harvest API Keys on Entry](https://thehackernews.com) — stolen-key resale detail; developer impact.
+- [CybersecurityNews — Malicious JetBrains Marketplace Plugins Steal AI API Keys](https://cybersecuritynews.com/malicious-jetbrains-plugins-steal-ai-api-keys/) — independent corroboration, 15 plugins, 70K+ installs, settings-UI interception mechanism.
 - [JetBrains Security Advisories](https://www.jetbrains.com/legal/docs/privacy/security/) — JetBrains notification and removal tracking.

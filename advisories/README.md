@@ -5,9 +5,13 @@ One file per incident. Latest at the top.
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
 | 2026-06-18 | [IDEsaster — 30+ flaws (24 CVEs) in Cursor, Windsurf, Kiro.dev, GitHub Copilot, Zed, Roo Code, Junie, Cline](2026-06-idessaster-ai-ide-cve-cluster.md) | high | active |
+| 2026-06-16 | [Langflow CVE-2026-5027 — unauthenticated path traversal → RCE via file upload (distinct from CVE-2026-33017)](2026-06-langflow-cve-2026-5027-path-traversal.md) | high | patched |
+| 2026-06-14 | [PromptSnatcher — malicious Chrome ad-blocker extensions intercept AI chatbot conversations from 900K users](2026-06-promptsnatcher-chrome-ai-chat-stealer.md) | high | active |
+| 2026-06-13 | [AutoJack — AutoGen Studio 3-flaw chain: browsing agent + unauthenticated MCP WebSocket = localhost RCE](2026-06-autojack-autogen-studio-mcp-rce.md) | high | patched |
 | 2026-06-17 | [15 malicious JetBrains Marketplace plugins steal AI provider API keys on entry (70K+ installs)](2026-06-jetbrains-ide-plugins-ai-key-theft.md) | high | active |
-| 2026-06-17 | [Mastra AI npm namespace compromise — 144 packages backdoored via hijacked contributor account](2026-06-mastra-ai-npm-compromise.md) | critical | active |
-| 2026-06-11 | [Arch Linux AUR supply-chain attack — 400+ packages hijacked](2026-06-arch-linux-aur-supply-chain.md) | high | active |
+| 2026-06-17 | [Mastra AI npm namespace compromise — 145 packages backdoored via hijacked contributor account](2026-06-mastra-ai-npm-compromise.md) | critical | active |
+| 2026-06-12 | [Klue AI integration breach — Icarus extortion group steals OAuth tokens; CRM data exfiltrated from Huntress and Recorded Future](2026-06-klue-icarus-oauth-breach.md) | high | contained |
+| 2026-06-11 | [Atomic Arch — AUR supply-chain attack: 1,500+ packages hijacked via orphaned-package takeover; eBPF rootkit](2026-06-arch-linux-aur-supply-chain.md) | high | active |
 | 2026-06-15 | [Claude Code MCP OAuth token hijack via malicious npm postinstall hook — Anthropic won't fix](2026-06-claude-code-mcp-oauth-hijack.md) | high | active |
 | 2026-06-13 | [Solana FakeFix Campaign — 25 malicious npm + PyPI packages steal wallet keys via GitHub issue spam](2026-06-solana-fakefix-campaign.md) | high | active |
 | 2026-06-12 | [Agentjacking — Sentry DSN injection via MCP poisons AI coding agent context (2,388 orgs exposed)](2026-06-agentjacking-sentry-mcp-injection.md) | high | active |
