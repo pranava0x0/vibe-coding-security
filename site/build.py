@@ -1058,7 +1058,7 @@ def build_advisory_schema() -> str:
             },
             "title": {"type": "string", "minLength": 1, "maxLength": 200},
             "severity": {"enum": ["critical", "high", "medium", "low"]},
-            "status": {"enum": ["active", "contained", "patched", "mitigated", "ongoing", "historical"]},
+            "status": {"enum": ["active", "contained", "patched", "mitigated", "ongoing", "historical", "unconfirmed"]},
             "date_disclosed": {
                 "type": "string",
                 "pattern": "^[0-9]{4}(-[0-9]{2}(-[0-9]{2})?)?$",

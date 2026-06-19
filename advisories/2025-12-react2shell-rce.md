@@ -63,7 +63,7 @@ Vite-only apps using React in classic client mode (no RSC) are **not affected**.
 1. **Patch immediately**: upgrade React to 19.0.4 / 19.1.5 / 19.2.4+ and Next.js to the corresponding fixed version.
 2. **Rotate all credentials** on any server that ran an exposed RSC endpoint — attackers demonstrated full credential harvest in the wild.
 3. **Check for backdoors**: look for unexpected cron jobs, systemd services, or SSH authorized_keys entries added since December 2025.
-4. See [playbooks/if-your-webapp-was-compromised.md](../playbooks/if-your-webapp-was-compromised.md).
+4. See [playbooks/auditing-a-vibe-coded-repo.md](../playbooks/auditing-a-vibe-coded-repo.md).
 
 ## Prevention
 

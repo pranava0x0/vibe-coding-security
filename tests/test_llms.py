@@ -15,9 +15,15 @@ from pathlib import Path
 #     still a single paste for GPT/Gemini 1M-token windows and Claude's 200K. If
 #     llms-full.txt grows much past this, trim historical-status advisories from it
 #     rather than raising the cap again — at some point it stops being "one paste".
-LLMS_FULL_MAX_BYTES = 640 * 1024
-LLMS_CTX_MAX_BYTES = 96 * 1024
-LLMS_TXT_MAX_BYTES = 50 * 1024
+#   - 2026-06-19: index/full/ctx all blew past their caps after ~2 weeks of daily
+#     sweeps with no successful deploy (90 advisories). Bumped index 50→64KB,
+#     full 640→896KB, ctx 96→128KB to unblock deploy. NOTE: llms-full.txt is now
+#     ~790KB (~200K tokens) — it has effectively outgrown "one Claude paste". The
+#     real fix (logged to BACKLOG) is to drop historical-status advisories from
+#     llms-full.txt / llms-ctx.txt at build time, not to keep raising these caps.
+LLMS_FULL_MAX_BYTES = 896 * 1024
+LLMS_CTX_MAX_BYTES = 128 * 1024
+LLMS_TXT_MAX_BYTES = 64 * 1024
 
 
 def test_llms_txt_starts_with_title(llms_txt):

@@ -67,7 +67,7 @@ Safe versions are those published **before 2026-06-06** or the most recent non-d
 1. **Roll back** to the last clean version (before 2026-06-06) immediately.
 2. **Rotate all credentials** accessible from the affected machine: cloud API keys (AWS/GCP/Azure), GitHub/npm tokens, SSH keys, browser-stored passwords, `.env` files.
 3. **Assume full system compromise** — the RAT provides interactive C2 access.
-4. See [playbooks/if-you-ran-malicious-postinstall.md](../playbooks/if-you-ran-malicious-postinstall.md).
+4. See [playbooks/if-you-installed-a-bad-npm-package.md](../playbooks/if-you-installed-a-bad-npm-package.md).
 
 ## Prevention
 

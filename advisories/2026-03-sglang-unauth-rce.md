@@ -62,7 +62,7 @@ with open('{}', 'rb') as f:
 3. **Audit ZMQ broker access logs** for unexpected connections to port 30000 (or your configured broker port).
 4. **Firewall the broker port**: restrict to known inference cluster IP ranges with `iptables` or security group rules. The broker should never be accessible from the public internet.
 5. **Verify GGUF model integrity**: compare SHA-256 checksums of any GGUF files against the published HuggingFace model card hashes.
-6. See [playbooks/if-you-ran-malicious-postinstall.md](../playbooks/if-you-ran-malicious-postinstall.md) for the general credential rotation playbook.
+6. See [playbooks/if-you-installed-a-bad-npm-package.md](../playbooks/if-you-installed-a-bad-npm-package.md) for the general credential rotation playbook.
 
 ## Prevention
 

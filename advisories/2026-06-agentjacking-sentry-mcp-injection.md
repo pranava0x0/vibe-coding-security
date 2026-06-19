@@ -71,7 +71,7 @@ sentry-cli issues list --project <your-project> --status unresolved \
    # Cursor — remove from Settings > MCP
    ```
 4. **Enable human-in-the-loop confirmation** for all shell commands in your agent — do not use `--dangerously-skip-permissions` without a sandbox.
-5. See [playbooks/mcp-compromise.md](../playbooks/mcp-compromise.md).
+5. See [playbooks/if-an-mcp-server-was-malicious.md](../playbooks/if-an-mcp-server-was-malicious.md).
 
 ## Prevention
 
