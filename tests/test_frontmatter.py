@@ -11,7 +11,7 @@ import pytest
 
 REQUIRED = {"id", "title", "severity", "status", "date_disclosed", "last_updated"}
 SEVERITIES = {"critical", "high", "medium", "low"}
-STATUSES = {"active", "contained", "patched", "mitigated", "ongoing", "historical"}
+STATUSES = {"active", "contained", "patched", "mitigated", "ongoing", "historical", "unconfirmed"}
 DATE_OR_PARTIAL = re.compile(r"^\d{4}(-\d{2}(-\d{2})?)?$")
 DATE_FULL = re.compile(r"^\d{4}-\d{2}-\d{2}$")
 

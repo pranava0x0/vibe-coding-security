@@ -64,7 +64,7 @@ If you installed any unfamiliar package via `preinstall` between **2026-06-01 an
 2. **Check npm publish history** for unexpected releases from your packages.
 3. **Audit GitHub Actions workflows** added or modified after 2026-06-01.
 4. **Assume eBPF-based monitoring was blind** during the infection window — check kernel audit logs and process accounting instead.
-5. See [playbooks/if-you-ran-malicious-postinstall.md](../playbooks/if-you-ran-malicious-postinstall.md).
+5. See [playbooks/if-you-installed-a-bad-npm-package.md](../playbooks/if-you-installed-a-bad-npm-package.md).
 
 ## Prevention
 
