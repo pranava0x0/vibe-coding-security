@@ -1,6 +1,6 @@
 ---
 id: 2026-03-sglang-unauth-rce
-title: "SGLang unauth RCE cluster — CVE-2026-3059/3060 (pickle ZMQ, CVSS 9.8) + CVE-2026-5760 (GGUF model RCE)"
+title: "SGLang unauth RCE cluster — CVE-2026-3059 / CVE-2026-3060 (pickle ZMQ, CVSS 9.8) + CVE-2026-5760 (GGUF model RCE)"
 date_disclosed: 2026-03
 last_updated: 2026-06-14
 severity: critical

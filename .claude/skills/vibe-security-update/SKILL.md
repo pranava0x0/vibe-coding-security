@@ -18,6 +18,21 @@ A 5-line summary:
 
 ---
 
+## Accuracy bar (non-negotiable — read before writing anything)
+
+A wrong-but-confident advisory is worse than no advisory: readers act on it, and the whole repo's credibility rests on every entry being verifiable. Past sweeps shipped **fabricated facts that read as real** — invented source URLs (wrong article slugs, a non-existent `github.com/Rickidevs/…` repo), a malformed `GHSA-langgraph-27794` (real format is `GHSA-xxxx-xxxx-xxxx`), a `GHSA-XXXX` placeholder, and yearless `CVE-44789` shorthand. None were caught until a manual audit weeks later. Hold this bar on every run:
+
+1. **Cite only what you actually opened.** Every URL in a `## Sources` list must be a page you fetched this run. **Never guess an article slug, CVE number, GHSA id, version, or download count.** If you didn't open it, don't cite it.
+2. **IDs must be canonical and well-formed.** `CVE-YYYY-NNNN` (≥4-digit sequence, with the year) and `GHSA-xxxx-xxxx-xxxx` (4-4-4). A malformed id is a fabricated id — look up the real one or drop the claim. `tests/test_advisory_ids.py` now fails the build on malformed ids; don't work around it, fix the id.
+3. **Verify the identifier resolves before stating it as fact.** A CVE/GHSA → confirm on NVD or the GitHub Advisory Database. A package/version → confirm it resolves (`npm view <pkg> versions` / `pip index versions <pkg>`). A download count / "N packages" / blast-radius number → take it from a **primary** source (vendor IR post, researcher writeup, registry), not an aggregator's paraphrase, and only repeat a figure you saw stated.
+4. **Two independent sources for any full advisory** (already required below); a single-source claim is `status: unconfirmed`, never dressed up as confirmed.
+5. **Run the external-link checker on what you wrote:** `python tools/check-external-links.py advisories/<new-or-edited-file>.md`. It reports 404s and whether a Wayback snapshot exists — **404 + no snapshot = the URL never existed → fix or drop it.** Never cite (or archive) a malware/IOC/C2 domain.
+6. **Date volatile facts.** EPSS/KEV membership, "as of" counts, "patched in X" — stamp the date so future readers know when it was true.
+
+These are enforced by Step 6's gate (`build → validate → pytest`) plus the link checker. The gate is the floor, not the ceiling — the gate can't catch a plausible-but-wrong number; you can.
+
+---
+
 ## Process
 
 ### Step 0 — Sync, then load state

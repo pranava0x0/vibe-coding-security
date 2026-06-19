@@ -46,7 +46,7 @@ ss -tlnp 2>/dev/null | grep -E ':3000|:3001'  # default Flowise ports
 ```
 
 If `Version < 3.0.6` → vulnerable to **CVE-2025-59528** (CustomMCP code injection).
-If `Version < 3.1.0` → vulnerable to **CVE-2026-41264/41265/41268/41138/40933/41137/41269** (Agent-node prompt-injection RCEs).
+If `Version < 3.1.0` → vulnerable to **CVE-2026-41264 / CVE-2026-41265 / CVE-2026-41268 / CVE-2026-41138 / CVE-2026-40933 / CVE-2026-41137 / CVE-2026-41269** (Agent-node prompt-injection RCEs).
 **Recommended minimum: `3.1.1`** (CVE-2025-59528 follow-up hardening).
 
 If any of those versions was reachable from the public internet (or from any network you don't fully trust), treat the host as compromised. **Flowise stores upstream LLM provider keys** — assume those keys, and any cloud-IAM credential wired into a chatflow, are exfiltrated.
