@@ -20,9 +20,19 @@ A 5-line summary:
 
 ## Process
 
-### Step 0 — Load state
+### Step 0 — Sync, then load state
 
-Read these files (all required):
+**FIRST, sync to the remote — the repo is swept ~daily and a local checkout goes stale within days.** Skipping this wastes a whole sweep re-discovering incidents already published (this happened 2026-06-19: a sweep ran against a checkout ~15 sweeps behind `origin/main` and recreated every "new" advisory under duplicate filenames; the push was correctly rejected).
+
+```bash
+git fetch origin
+git log --oneline HEAD..origin/main      # how far behind are we?
+git checkout main && git pull --ff-only  # or: git reset --hard origin/main if local is throwaway
+```
+
+Then **check whether the data is already current**: read the `Last refreshed:` date at the top of `ALERTS.md` and the latest entry in `runs.log.md`. **If a sweep already ran today, stop** — report that the data is current and do not duplicate it. Only proceed if today's sweep hasn't happened.
+
+Read these files (all required, *after* syncing):
 
 - `ALERTS.md` — current active/recent/historical feed
 - `advisories/README.md` — index
@@ -158,23 +168,36 @@ Add an entry:
 - **Notes:** [anything noteworthy — false-alarms, blocked domains, sweep duration]
 ```
 
-### Step 6 — Sanity checks before committing
+### Step 6 — Run the deploy gate locally before committing (CLOSED LOOP — do not skip)
 
-- All new advisory files have valid frontmatter (id, title, date_disclosed, last_updated, severity, status, ecosystems, sources).
-- All internal links resolve (e.g., references to `playbooks/foo.md` exist).
-- ALERTS.md still parses as markdown.
-- `advisories/README.md` table has rows for all advisories.
-- No secret or PII accidentally pasted into an advisory.
+**The GitHub Pages deploy runs `build.py → validate.py → pytest` and fails the deploy if any step fails. Run the exact same gate locally and only commit if it is fully green.** Committing without this is what froze the live site for 2+ weeks (2026-06-04 → 2026-06-19): every daily sweep committed broken internal links, `validate.py` failed, and the site silently stopped updating while `main` kept advancing.
+
+```bash
+python site/build.py        # must succeed
+python site/validate.py     # must print "All checks passed."
+python -m pytest tests/ -q  # must be all-green (matches the deploy's `pytest tests/ -v`)
+```
+
+If any step fails, **fix it before committing** (or revert the offending advisory). Common failure modes seen in practice:
+
+- **Broken internal links (the #1 cause).** Advisory bodies must link **only to playbook/prevention docs that already exist** — run `ls playbooks/ prevention/` and link those exact filenames. Do **not** invent a new `playbooks/if-you-foo.md` and link it: if no existing doc fits, link the closest existing one (`if-you-installed-a-bad-npm-package.md`, `if-an-mcp-server-was-malicious.md`, `auditing-a-vibe-coded-repo.md`, `rotating-cloud-credentials.md`, `prevention/ci-cd-hardening.md`, etc.) and log the wanted-but-missing playbook to `BACKLOG.md` instead of dangling-linking it.
+- **llms.txt size caps** (`tests/test_llms.py`) overflow as the corpus grows — prefer trimming historical-status advisories from `llms-full.txt`/`llms-ctx.txt` at build time; bump the caps (with a dated comment) only as a stopgap.
+- **`status` enum** — valid values are `active | contained | patched | mitigated | ongoing | historical | unconfirmed` (use `unconfirmed` for single-source incidents).
+
+Then the lightweight checks: frontmatter complete on new files; `ALERTS.md` parses; `advisories/README.md` has a row per advisory; no secret/PII pasted in.
 
 ### Step 7 — Commit + push
 
 ```bash
 git add -A
 git status --short
-# If anything changed:
+# If anything changed (only after Step 6 is fully green):
 git commit -m "sweep YYYY-MM-DD: N new, M updated"
+git fetch origin && git rebase origin/main   # a daily sweep may have landed mid-run
 git push
 ```
+
+If the push is rejected (non-fast-forward), a sweep landed while you worked — `git fetch && git rebase origin/main`, re-run Step 6, then push. **Never force-push.** After pushing, confirm the deploy actually goes green (`gh run watch` on the "Deploy site to GitHub Pages" workflow) — a successful push but failed deploy means the live site is still stale.
 
 If nothing changed (zero new, zero updated), still commit the `runs.log.md` + `source-priorities.json` updates with message: `sweep YYYY-MM-DD: no new incidents`.
 
