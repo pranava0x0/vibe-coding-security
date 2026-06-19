@@ -2,7 +2,7 @@
 id: 2026-04-litellm-sql-injection
 title: "LiteLLM proxy pre-auth SQL injection — CVE-2026-42208 (April 2026, CISA KEV) + CVE-2026-42271 (June 2026, actively exploited)"
 date_disclosed: 2026-04-24
-last_updated: 2026-06-18
+last_updated: 2026-06-19
 severity: critical
 status: patched
 ecosystems: [pypi, ai-agents, llm-proxy]
@@ -84,20 +84,28 @@ If `Version` is in `1.81.16` … `1.83.6` **and** the proxy was reachable from t
 
 **Affected:** LiteLLM `< 1.84.0`. **Fixed:** 1.84.0+. Upgrade immediately.
 
-## June 2026 update — CVE-2026-42271: new actively exploited RCE chains to unauthenticated access
+## June 2026 update — CVE-2026-42271: command injection (CVSS 8.7) actively exploited; 3-CVE chain rated 9.9 by Obsidian; Pwn2Own Berlin 2026
 
-**CVE-2026-42271** was disclosed in June 2026 and is being **actively exploited in the wild**. It is distinct from CVE-2026-42208 (pre-auth SQL injection) but similarly critical: CVE-2026-42271 chains a logic flaw in LiteLLM's request routing with an insufficient input validation issue to achieve **unauthenticated remote code execution** on exposed LiteLLM proxy instances.
+**CVE-2026-42271** (CVSS 8.7, CWE-77 Command Injection) was disclosed in June 2026 and is being **actively exploited in the wild**. It is distinct from CVE-2026-42208 (pre-auth SQL injection):
 
-Key details:
-- **Severity:** Critical (CVSS score pending full NVD publication at time of writing)
-- **Attack vector:** Unauthenticated HTTP request to the LiteLLM proxy (specific endpoint under coordinated disclosure)
-- **Impact:** Arbitrary code execution on the LiteLLM host — equivalent to a cloud-account compromise given LiteLLM's role as a central credentials cache for upstream LLM providers
-- **Status:** Actively exploited in the wild; patch version confirmed pending official vendor advisory
+- **Root cause:** Insufficient input validation in a LiteLLM proxy handler allows an attacker to inject OS commands that execute on the LiteLLM host.
+- **Severity:** CVSS 8.7 (High). When chained with CVE-2026-47101 and CVE-2026-40217 (see below), the full chain is rated **CVSS 9.9 Critical** by Obsidian Security.
+- **Exploitation status:** Actively exploited in the wild; GreyNoise and Sysdig honeypot data confirm targeted attempts.
+- **Pwn2Own Berlin 2026:** The CVE-2026-47101 → CVE-2026-40217 → CVE-2026-42271 chain was demonstrated at **Pwn2Own Berlin 2026** as an AI/ML category entry — reinforcing that this 3-CVE chain is fully weaponized.
 
-**Remediation:** Upgrade to the latest LiteLLM release immediately. Given active exploitation, treat any internet-facing LiteLLM instance as potentially compromised and rotate all upstream provider keys regardless of patch status.
+**The 3-CVE chain (Obsidian Security, CVSS 9.9):**
+1. **CVE-2026-47101** (CVSS 9.4) — Authentication bypass in the LiteLLM API key verification path; allows a low-privilege virtual key to be treated as a high-privilege key under specific encoding conditions.
+2. **CVE-2026-40217** (CVSS 8.1) — Logic flaw in LiteLLM's proxy routing sandbox escape: an attacker with low-privilege API access can escalate to `proxy_admin` by modifying `user_role` via an unprotected API endpoint.
+3. **CVE-2026-42271** (CVSS 8.7) — Command injection from the admin API context achieved by the first two steps → arbitrary code execution.
+
+**Full chain summary:** Unauthenticated HTTP request → auth bypass (CVE-2026-47101) → privilege escalation to proxy_admin (CVE-2026-40217) → command injection RCE (CVE-2026-42271). **No credentials required from the public internet to achieve RCE.**
+
+**Remediation:** Upgrade to the latest LiteLLM release (≥ 1.84.0 for all four known CVEs). Given active exploitation, treat any internet-facing LiteLLM instance as potentially compromised and rotate all upstream provider keys regardless of patch status.
 
 ## Sources
 - [GitHub Advisory — GHSA / NVD CVE-2026-42208](https://nvd.nist.gov/vuln/detail/CVE-2026-42208) — canonical CVE record.
+- [NVD — CVE-2026-42271](https://nvd.nist.gov/vuln/detail/CVE-2026-42271) — command injection, CVSS 8.7, actively exploited.
+- [Obsidian Security — LiteLLM 3-CVE Chain: CVE-2026-47101 + CVE-2026-40217 + CVE-2026-42271, CVSS 9.9](https://obsidiansecurity.com/blog/litellm-chain-cve-2026-47101-40217-42271/) — full chain analysis; Pwn2Own Berlin 2026 reference.
 - [Sysdig — CVE-2026-42208: Targeted SQL injection against LiteLLM's authentication path discovered 36 hours following vulnerability disclosure](https://www.sysdig.com/blog/cve-2026-42208-targeted-sql-injection-against-litellms-authentication-path-discovered-36-hours-following-vulnerability-disclosure) — honeypot telemetry, attacker IP, target tables.
 - [Bishop Fox — CVE-2026-42208: Pre-Authentication SQL Injection in LiteLLM Proxy](https://bishopfox.com/blog/cve-2026-42208-pre-authentication-sql-injection-in-litellm-proxy) — technical walkthrough.
 - [LiteLLM official security update — CVE-2026-42208 in LiteLLM Proxy](https://docs.litellm.ai/blog/cve-2026-42208-litellm-proxy-sql-injection) — vendor advisory + fix version.
