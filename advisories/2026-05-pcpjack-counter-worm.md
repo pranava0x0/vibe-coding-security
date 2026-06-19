@@ -75,7 +75,7 @@ docker events --since 24h 2>/dev/null | grep -i pull
 ## Prevention
 
 → [prevention/agent-sandboxing.md](../prevention/agent-sandboxing.md)
-→ [prevention/ci-hardening.md](../prevention/ci-hardening.md)
+→ [prevention/ci-cd-hardening.md](../prevention/ci-cd-hardening.md)
 
 - **Patch React/Next.js** against CVE-2025-55182 now. This is CISA KEV.
 - **Never run web app processes with access to cloud IAM credentials**, Kubernetes configs, or Docker sockets. Use separate service accounts with minimal permissions.

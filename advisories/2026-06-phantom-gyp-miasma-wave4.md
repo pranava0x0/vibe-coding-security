@@ -59,7 +59,7 @@ If you ran `npm install` on any project between **2026-06-03 00:00 UTC** and **2
 1. **Rotate all credentials** accessible from the affected machine: cloud API keys, GitHub/npm/PyPI tokens, SSH keys.
 2. **Audit GitHub Actions workflows** added after 2026-06-02: `git log --all --oneline -- .github/workflows/`
 3. **Check for new npm packages published** from your account: `npm search --json maintainer:<your-username> | jq '.[].date'`
-4. See [playbooks/if-you-ran-malicious-postinstall.md](../playbooks/if-you-ran-malicious-postinstall.md).
+4. See [playbooks/if-you-installed-a-bad-npm-package.md](../playbooks/if-you-installed-a-bad-npm-package.md).
 
 ## Prevention
 

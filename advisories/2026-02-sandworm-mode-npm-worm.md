@@ -84,7 +84,7 @@ You are affected if:
 ## Prevention
 
 → [prevention/package-vetting-checklist.md](../prevention/package-vetting-checklist.md)
-→ [prevention/ci-hardening.md](../prevention/ci-hardening.md)
+→ [prevention/ci-cd-hardening.md](../prevention/ci-cd-hardening.md)
 
 - Use `npm audit` + Socket's `socket npm` CLI before installing new packages.
 - Pin GitHub Actions to full commit SHAs, not tags.
