@@ -38,3 +38,7 @@ NOTES.md
 
 # Site build output
 dist/
+
+# External-link checker output (tools/check-external-links.py)
+tools/dead-links.json
+tools/linkcheck-*.log
