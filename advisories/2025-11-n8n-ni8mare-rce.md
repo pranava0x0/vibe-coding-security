@@ -63,7 +63,7 @@ n8n's **JavaScript Task Runner** node executes arbitrary user-supplied JavaScrip
 
 n8n's **Merge node** in SQL aggregation mode processes user-controlled SQL expressions that are insufficiently sanitized. **CVE-2026-27497** (CVSS 9.4) allows an authenticated workflow editor to inject SQL that causes n8n to write arbitrary content to arbitrary host filesystem paths — yielding persistent code execution via the same arbitrary-file-write → cron / startup-path chain as CVE-2026-21877. Fixed in the latest n8n release.
 
-**June 2026 — CVE-2026-27494**: Details pending coordinated disclosure as of 2026-06-18. Severity reported as critical; associated with the same June 2026 n8n vulnerability batch as CVE-2026-27493/27495/27497. Upgrade to the latest n8n release to cover all concurrent fixes.
+**June 2026 — CVE-2026-27494**: Details pending coordinated disclosure as of 2026-06-18. Severity reported as critical; associated with the same June 2026 n8n vulnerability batch as CVE-2026-27493 / CVE-2026-27495 / CVE-2026-27497. Upgrade to the latest n8n release to cover all concurrent fixes.
 
 **Why this matters for vibe coders and AI agent builders:**
 
@@ -83,7 +83,7 @@ npx n8n --version 2>/dev/null
 docker exec <n8n-container> n8n --version 2>/dev/null
 
 # Vulnerable: any n8n < 1.121.0 (Ni8mare), < 1.127.x (CVE-2026-25049),
-#             < 1.123.43/2.20.7/2.22.1 (June 2026 node-level cluster CVE-2026-44789/44790/44791),
+#             < 1.123.43/2.20.7/2.22.1 (June 2026 node-level cluster CVE-2026-44789 / CVE-2026-44790 / CVE-2026-44791),
 #             and additional versions affected by CVE-2026-27577 + CVE-2026-27493 (June 2026) —
 #             upgrade to the latest available release.
 # Check if your instance is network-exposed
@@ -124,8 +124,8 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:5678/healthz
 - [The Hacker News — "Critical n8n Flaws Allow Remote Code Execution and Exposure of Stored Credentials"](https://thehackernews.com/2026/03/critical-n8n-flaws-allow-remote-code.html) — March 2026 follow-on cluster.
 - [SecurityWeek — "Critical Vulnerability Exposes n8n Instances to Takeover Attacks"](https://www.securityweek.com/critical-vulnerability-exposes-n8n-instances-to-takeover-attacks/) — instance count and exploitation risk.
 - Cross-reference: [2026-05-mcp-stdio-systemic-rce.md](2026-05-mcp-stdio-systemic-rce.md) (n8n-mcp SSRF), [2026-05-composio-ai-agent-platform-breach.md](2026-05-composio-ai-agent-platform-breach.md) (same "workflow broker as credential hub" pattern).
-- [GitLab Advisory Database — CVE-2026-44789: n8n HTTP Request Node pagination prototype pollution → RCE](https://advisories.gitlab.com/npm/n8n/CVE-2026-44789/) — June 2026 cluster (CVE-2026-44789/44790/44791); prototype pollution, Git-node argument injection, XML node RCE; fixed in 1.123.43 / 2.20.7 / 2.22.1.
-- [CyberSecurityNews — Critical n8n Vulnerabilities Expose Automation Nodes to Full RCE](https://cybersecuritynews.com/n8n-rce-vulnerabilities/) — CVE-2026-44789/44790/44791 prototype-pollution + node-RCE detail.
+- [GitLab Advisory Database — CVE-2026-44789: n8n HTTP Request Node pagination prototype pollution → RCE](https://advisories.gitlab.com/npm/n8n/CVE-2026-44789/) — June 2026 cluster (CVE-2026-44789 / CVE-2026-44790 / CVE-2026-44791); prototype pollution, Git-node argument injection, XML node RCE; fixed in 1.123.43 / 2.20.7 / 2.22.1.
+- [CyberSecurityNews — Critical n8n Vulnerabilities Expose Automation Nodes to Full RCE](https://cybersecuritynews.com/n8n-rce-vulnerabilities/) — CVE-2026-44789 / CVE-2026-44790 / CVE-2026-44791 prototype-pollution + node-RCE detail.
 - [NVD — CVE-2026-44789](https://nvd.nist.gov/vuln/detail/CVE-2026-44789), [CVE-2026-44790](https://nvd.nist.gov/vuln/detail/CVE-2026-44790), [CVE-2026-44791](https://nvd.nist.gov/vuln/detail/CVE-2026-44791) — official CVE records.
 - [GitHub Advisory — GHSA-v364-rw7m-3263 (CVE-2026-21877, authenticated file-write → RCE, fixed 1.121.3)](https://github.com/advisories/GHSA-v364-rw7m-3263)
 - [NVD — CVE-2026-21877](https://nvd.nist.gov/vuln/detail/CVE-2026-21877) — CVSS 10.0 authenticated arbitrary file write.
