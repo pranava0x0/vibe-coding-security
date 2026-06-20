@@ -17,6 +17,7 @@ One file per incident. Latest at the top.
 | 2026-06-12 | [Agentjacking — Sentry DSN injection via MCP poisons AI coding agent context (2,388 orgs exposed)](2026-06-agentjacking-sentry-mcp-injection.md) | high | active |
 | 2026-06-10 | [onering Rust crate compromised — build.rs exfiltrates source-code diffs as fake Sentry telemetry](2026-06-onering-rust-crate-compromise.md) | high | unconfirmed |
 | 2026-06-10 | [Streamlit CVE-2026-33682 — unauthenticated SSRF on Windows leaks NTLMv2 credentials](2026-06-streamlit-ssrf-windows.md) | high | patched |
+| 2026-06-10 | [SymJack — symlink hijacking tricks AI coding agents into registering attacker-controlled MCP servers](2026-06-symjack-ai-coding-agent-mcp-symlink.md) | high | mitigated |
 | 2026-06-09 | [LangGraph RCE chain — SQLite SQL injection + msgpack deserialization → arbitrary code execution](2026-06-langgraph-rce-chain.md) | critical | patched |
 | 2026-06-08 | [Hades Campaign — 19 PyPI bioinformatics + MCP-developer packages poisoned with Bun credential stealer (June 2026)](2026-06-hades-campaign-pypi-mcp-attack.md) | critical | active |
 | 2026-06-05 | [Miasma Wave 5 — 73 Microsoft Azure GitHub repos + mantine-datatable poisoned; payload auto-fires via Claude Code / Cursor / Gemini CLI](2026-06-miasma-wave5-microsoft-azure-github.md) | critical | contained |
