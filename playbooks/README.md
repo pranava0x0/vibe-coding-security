@@ -8,6 +8,9 @@ Step-by-step recovery and audit procedures. Optimized for someone who just reali
 | Your `~/.npmrc` token was on disk when malware ran | [if-your-npm-token-leaked.md](if-your-npm-token-leaked.md) |
 | Your GitHub PAT was on disk when malware ran | [if-your-github-pat-leaked.md](if-your-github-pat-leaked.md) |
 | An MCP server you installed turned out to be malicious | [if-an-mcp-server-was-malicious.md](if-an-mcp-server-was-malicious.md) |
+| A package's `postinstall` / `binding.gyp` script ran on your machine | [if-you-ran-malicious-postinstall.md](if-you-ran-malicious-postinstall.md) |
+| Your local AI coding agent (Cline / Cursor / Claude Code / …) was exploited | [if-your-local-ai-agent-was-exploited.md](if-your-local-ai-agent-was-exploited.md) |
+| A production web app had an exploited RCE / auth-bypass / SSRF | [if-your-webapp-was-compromised.md](if-your-webapp-was-compromised.md) |
 | You need to rotate AWS / GCP / Azure / Kubernetes creds | [rotating-cloud-credentials.md](rotating-cloud-credentials.md) |
 | You inherited a vibe-coded repo and need to audit it | [auditing-a-vibe-coded-repo.md](auditing-a-vibe-coded-repo.md) |
 
