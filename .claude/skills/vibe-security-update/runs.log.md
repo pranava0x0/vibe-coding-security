@@ -712,3 +712,16 @@
   - **Atomic Arch eBPF rootkit mirrors IronWorm persistence.** Two independent actors using eBPF rootkits for persistence in the same month (AUR and npm ecosystems). eBPF-based EDR tools cannot detect either. Defense: disable eBPF programs from unprivileged users; audit `bpf()` system call usage; on compromised machines, EDR absence-of-detection is not a clean signal.
   - **LiteLLM 3-CVE chain (CVSS 9.9) was demonstrated at Pwn2Own Berlin 2026.** This means a fully-weaponized public PoC exists. Any internet-facing LiteLLM < 1.84.0 should be treated as actively compromised.
   - **Deferred:** (i) Cursor Pwn2Own Berlin 2026 CVEs (still within 90-day coordinated disclosure window). (ii) Carry-over playbook backlog unchanged.
+
+---
+
+## 2026-06-20
+
+- **Queries run:** 15 (deep: 8, medium: 4, shallow: 3)
+- **New advisories:** 2
+  - `2025-09-litl-ai-approval-dialog-bypass` — "Lies in the Loop" (LITL) / HITL Dialog Forging: Checkmarx Zero (Sept 2025) found indirect prompt injection can pad Claude Code / VS Code Copilot HITL approval dialogs with blank lines or zero-width Unicode, pushing malicious compound commands below the visible fold. Both Anthropic and Microsoft declined to fix. No structural remediation as of 2026-06-14.
+  - `2025-06-vsxploit-openvsx-build-token-theft` — VSXPloit: Koi Security researcher Oren Yomtov found Open VSX's nightly build pipeline ran `npm install` on community extension repos, allowing capture of the `@open-vsx` admin publish token (8M+ developers at risk; Cursor, Windsurf, VSCodium, Gitpod, StackBlitz, Coder). Patched June 25, 2025. No exploitation before patch. Historical/pattern class.
+- **Updated advisories:** 0
+- **Sources gained weight:** checkmarx.com (+1 to 14), securityboulevard.com (+1 to 10), darkreading.com (+1 to 14), infosecurity-magazine.com (+1 to 12), securityaffairs.com (+1 to 13), thehackernews.com (hits 46→47), bleepingcomputer.com (hits 18→19)
+- **New sources added:** none
+- **Notes:** Most Tier-A queries returned results already covered by existing advisories (Comment and Control, Cursor/Windsurf Chromium n-days, VSCode fork recommended extension hijack, Gemini CLI prompt injection). LITL and VSXPloit were genuinely new entries — no matching file existed. Both new advisories passed the external link checker (0/3 and 0/4 flagged respectively). Prior sweep covered most major June 2026 incidents comprehensively. ALERTS.md updated with LITL in RECENT tier and VSXPloit in HISTORICAL tier; InversePrompt HISTORICAL entry updated with cross-reference to LITL standalone advisory.
