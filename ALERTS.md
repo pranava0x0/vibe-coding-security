@@ -2,7 +2,7 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-06-19. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-06-20. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
@@ -344,6 +344,10 @@ First self-replicating npm worm. ~200 packages including `@ctrl/tinycolor` (2.2M
 `chalk`, `debug`, `ansi-styles`, `strip-ansi`, `color-convert`, `wrap-ansi` + 12 more. Phishing email from `npmjs.help` impersonating npm support. ~2 hours live. Browser-side crypto-wallet hijack payload.
 → [advisories/2025-09-qix-compromise.md](advisories/2025-09-qix-compromise.md)
 
+### 2025-09-01 — "Lies in the Loop" (LITL) — approval-dialog padding hides malicious commands in Claude Code and VS Code Copilot (no vendor fix as of 2026-06-14)
+**Checkmarx Zero** disclosed **LITL ("HITL Dialog Forging")** in September 2025: attackers use **indirect prompt injection** to pad AI coding agent approval dialogs with hundreds of blank lines or zero-width Unicode characters, pushing the malicious part of a compound shell command **below the visible fold**. The developer sees and approves a benign-looking top portion; the hidden payload executes simultaneously. Affects **Claude Code** and **GitHub Copilot Chat** in VS Code. **Anthropic classified it "Informative, outside our current threat model" (August 2025). Microsoft acknowledged in October 2025 but closed without a fix in November 2025.** Neither vendor has shipped a structural fix. LITL compounds *any* indirect prompt injection: Agentjacking, poisoned READMEs, MCP data with attacker-controlled fields. **Practical mitigations:** always scroll to the bottom of any approval dialog; reject compound shell commands (`;`, `&&`, `||`, backtick substitution) you haven't reviewed in full; distrust agent commands when the agent has recently processed external content (GitHub issues, MCP server data, fetched pages).
+→ [advisories/2025-09-litl-ai-approval-dialog-bypass.md](advisories/2025-09-litl-ai-approval-dialog-bypass.md)
+
 ### 2025-08-26 — Nx `s1ngularity` (first AI-CLI-assisted malware)
 Postinstall script that *invoked Claude Code and Gemini CLI* to scan for secrets. 2,349 distinct credentials leaked to public GitHub repos. 4 hours live.
 → [advisories/2025-08-nx-s1ngularity.md](advisories/2025-08-nx-s1ngularity.md)
@@ -366,7 +370,11 @@ Demonstrated by Simon Willison / General Analysis: Cursor + Supabase MCP with `s
 
 ### 2025-08 → 2026-Q2 — Claude Code InversePrompt + May/June 2026 CVE cluster + "Lies in the Loop" (CVE-2025-54794/54795, CVE-2025-59536, CVE-2026-21852, CVE-2026-33068, CVE-2026-24887, CVE-2026-35021, CVE-2026-39861, CVE-2026-35603, TrustFall, CVE-2026-25723, LITL)
 Indirect prompt injection chains that turn Claude Code's own tool use against the user. May 2026 added find-command bypass, prompt-editor command injection, symlink-following sandbox escape, and privilege escalation. **June 2026 addition — "Lies in the Loop" (LITL):** Checkmarx Zero: attackers inject blank lines or zero-width Unicode into approval dialogs so the malicious command is below the visible fold — the developer approves what looks safe while the hidden payload runs. Affects Claude Code + VS Code Copilot; neither vendor has shipped a definitive fix as of 2026-06-14. Anthropic has patched all listed CVEs; cadence accelerated after the [source-map leak](advisories/2026-03-claude-code-source-map-leak.md). The *class* of attack (hidden text in fetched content, MCP-delivered prompts, malicious env config) keeps recurring — see also [Agentjacking](advisories/2026-06-agentjacking-sentry-mcp-injection.md) and [Comment and Control](advisories/2026-04-comment-and-control-pr-injection.md).
-→ [advisories/2025-08-claude-code-inverseprompt.md](advisories/2025-08-claude-code-inverseprompt.md)
+→ [advisories/2025-08-claude-code-inverseprompt.md](advisories/2025-08-claude-code-inverseprompt.md) — for the LITL technique specifically, see [advisories/2025-09-litl-ai-approval-dialog-bypass.md](advisories/2025-09-litl-ai-approval-dialog-bypass.md)
+
+### 2025-06-25 — VSXPloit — Open VSX nightly build pipeline could be exploited to steal marketplace admin token (patched June 2025)
+Koi Security researcher **Oren Yomtov** found that **Open VSX**'s nightly build process ran `npm install` on **arbitrary community-submitted extension repositories**, allowing any extension author to plant a malicious `postinstall` script that captured the **`@open-vsx` admin publish token** — the master key to the entire marketplace. An attacker with that token could push malicious updates to every extension or publish under any namespace, affecting **8M+ developers** using **Cursor, Windsurf, VSCodium, Gitpod, StackBlitz, and Coder**. Responsibly disclosed May 4, 2025; **patched June 25, 2025**; no exploitation before the patch. Historical because fully patched and no exploitation observed — but documents a class of risk that recurs wherever a build pipeline executes untrusted code with publish-scoped credentials. (**Distinct from** [Open Sesame / OpenVSX scanner bypass](advisories/2026-05-whitecobra-vscode-extensions.md) and [OpenVSX namespace hijack](advisories/2026-01-vscode-fork-recommended-extension-hijack.md).)
+→ [advisories/2025-06-vsxploit-openvsx-build-token-theft.md](advisories/2025-06-vsxploit-openvsx-build-token-theft.md)
 
 ### Ongoing — Slopsquatting (AI-hallucinated package names)
 LLMs invent package names that don't exist. Attackers register them. Next user who pastes the same hallucinated code gets owned. 500+ packages registered in waves on PyPI.

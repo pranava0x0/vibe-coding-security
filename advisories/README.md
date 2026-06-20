@@ -87,11 +87,13 @@ One file per incident. Latest at the top.
 | 2025-09-17 | [postmark-mcp backdoor](2025-09-postmark-mcp-backdoor.md) | high | contained |
 | 2025-09-15 | [Shai-Hulud original](2025-09-shai-hulud-original.md) | critical | contained |
 | 2025-09-08 | [qix npm account compromise](2025-09-qix-compromise.md) | critical | contained |
+| 2025-09-01 | [Lies in the Loop (LITL) — approval-dialog padding hides malicious commands below the fold; no vendor fix (Claude Code, VS Code Copilot)](2025-09-litl-ai-approval-dialog-bypass.md) | high | active |
 | 2025-08-26 | [Nx s1ngularity](2025-08-nx-s1ngularity.md) | critical | contained |
 | 2025-08 → ongoing | [Claude Code InversePrompt (multiple CVEs)](2025-08-claude-code-inverseprompt.md) | medium | patched |
 | 2025-07-17 | [Amazon Q VS Code wiper](2025-07-amazon-q-wiper.md) | medium | contained |
 | 2025-07 | [Cursor CurXecute / MCPoison](2025-07-cursor-curxecute-mcpoison.md) | high | patched |
 | 2025-07 | [Supabase MCP lethal trifecta](2025-07-supabase-mcp-lethal-trifecta.md) | high | mitigated |
+| 2025-06-25 | [VSXPloit — Open VSX nightly build pipeline token theft; 8M+ developers at risk (patched June 2025)](2025-06-vsxploit-openvsx-build-token-theft.md) | high | patched |
 | ongoing | [Slopsquatting](ongoing-slopsquatting.md) | medium | ongoing |
 | ongoing | [Vibe platform data exposure](ongoing-vibe-platform-exposure.md) | high | ongoing |
 
