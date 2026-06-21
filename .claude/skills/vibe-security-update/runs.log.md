@@ -725,3 +725,14 @@
 - **Sources gained weight:** checkmarx.com (+1 to 14), securityboulevard.com (+1 to 10), darkreading.com (+1 to 14), infosecurity-magazine.com (+1 to 12), securityaffairs.com (+1 to 13), thehackernews.com (hits 46→47), bleepingcomputer.com (hits 18→19)
 - **New sources added:** none
 - **Notes:** Most Tier-A queries returned results already covered by existing advisories (Comment and Control, Cursor/Windsurf Chromium n-days, VSCode fork recommended extension hijack, Gemini CLI prompt injection). LITL and VSXPloit were genuinely new entries — no matching file existed. Both new advisories passed the external link checker (0/3 and 0/4 flagged respectively). Prior sweep covered most major June 2026 incidents comprehensively. ALERTS.md updated with LITL in RECENT tier and VSXPloit in HISTORICAL tier; InversePrompt HISTORICAL entry updated with cross-reference to LITL standalone advisory.
+
+---
+
+## 2026-06-21
+
+- **Queries run:** ~22 (deep: 10, medium: 7, shallow: 5; full three-tier sweep — 24h/3d/7d windows)
+- **New advisories:** none
+- **Updated advisories:** none
+- **Sources gained weight:** none (no new or updated advisories this run)
+- **New sources added:** `isc.sans.edu` (official/aggregator, weight 5, hits 1; ecosystems: npm, supply-chain, ongoing-campaign-tracking, TeamPCP, shai-hulud, miasma — ISC SANS Internet Storm Center diary entries track update threads for ongoing worm campaigns)
+- **Notes:** All Tier-A/B/C findings were already covered by existing advisories. Confirmed that IDEsaster (8 AI coding tools, 24 CVEs), Hades Campaign (PyPI MCP-developer targeting), LangGraph RCE chain, Cline CVE-2026-44211 (WebSocket RCE), Supabase Auth OIDC bypass (CVE-2026-31813), OpenHands git-diff RCE (CVE-2026-33718), and Next.js security release (CVE-2026-44578) are all already in the repo at current detail level. Social-media sweep (X, Bluesky, Reddit, HN) surfaced no new incidents. ISC SANS Internet Storm Center identified as a useful ongoing-campaign-tracking source for Miasma/Shai-Hulud update threads; hadrian.io already in source-priorities.json since 2026-05-18. Run focused on refreshing dates and metadata: ALERTS.md Last refreshed, llms.txt date headers, and source-priorities.json last_updated all bumped to 2026-06-21.

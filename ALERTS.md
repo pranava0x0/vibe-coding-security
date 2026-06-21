@@ -2,7 +2,7 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-06-20. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-06-21. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
