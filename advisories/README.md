@@ -66,6 +66,7 @@ One file per incident. Latest at the top.
 | 2026-03-31 | [Claude Code source-map leak](2026-03-claude-code-source-map-leak.md) | medium | contained |
 | 2026-03-27 | [OpenHands git-diff command injection (CVE-2026-33718)](2026-03-openhands-git-diff-rce.md) | high | patched |
 | 2026-03-17 | [Langflow unauthenticated RCE (CVE-2026-33017)](2026-03-langflow-rce.md) | critical | patched |
+| 2026-03-02 | [ModelScope ms-agent OS command injection (CVE-2026-2256) — unpatched, public PoC, CERT/CC advisory](2026-03-msagent-cve-2026-2256-shell-injection.md) | medium | active |
 | 2026-03-11 | [Supabase Auth OIDC issuer-validation bypass (CVE-2026-31813)](2026-03-supabase-auth-oidc-bypass.md) | high | patched |
 | 2026-02-28 | [Google Antigravity sandbox escape (Pillar)](2026-02-google-antigravity-sandbox-escape.md) | high | patched |
 | 2026-02-17 | [Cline 2.3.0 supply-chain compromise (Clinejection → OpenClaw)](2026-02-cline-clinejection.md) | critical | contained |
