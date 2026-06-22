@@ -2,7 +2,7 @@
 id: 2025-10-glassworm-vscode-worm
 title: "GlassWorm — self-propagating VS Code / Open VSX extension worm (Oct 2025 → 2026)"
 date_disclosed: 2025-10-17
-last_updated: 2026-06-18
+last_updated: 2026-06-22
 severity: high
 status: active
 ecosystems: [vscode, openvsx, npm, github]
@@ -28,7 +28,8 @@ Timeline:
 - **2026-03 (v2)** — fresh wave; **GitHub** compromises ~Mar 3–9, **150+** repos; ~433 components estimated across Open VSX, VS Code Marketplace, GitHub, and npm.
 - **2026-04** — **73** fake VS Code extensions delivering **GlassWorm v2**.
 - **2026-05-26 14:00 UTC** — **CrowdStrike + Google + Shadowserver coordinated takedown** disables all four C2 channels simultaneously; attribution narrows to a **likely Russia-based operator** (malware exits on CIS-country locale checks; Russian-language source comments). The takedown caps a campaign that had poisoned **300+ GitHub repos** via stolen credentials alone.
-- **2026-06 (post-takedown)** — **New macOS-targeting wave with fresh infrastructure** (Koi Security / BleepingComputer). Operator reconstituted on new C2. Targeting macOS exclusively for the first time. New payload: AES-256-CBC encryption, **AppleScript** persistence (vs. PowerShell), **LaunchAgent** persistence (vs. Registry), and a **hardware-wallet trojanization module** targeting **Ledger Live** and **Trezor Suite** app bundles. Also sweeps 50+ browser crypto extensions, GitHub/npm tokens, Safari/Chrome browser data, and macOS Keychain. Hardware-wallet trojans appear incomplete at time of disclosure ("returning empty files") — attacker likely still finalizing macOS wallet payloads. Status reverted to `active`. **Confirmed macOS-wave extension IOCs (Open VSX):** `pro-svelte-extension`, `vsce-prettier-pro`, `full-access-catppuccin-pro-extension` — all impersonate popular Open VSX extensions with added macOS-specific payload modules.
+- **2026-06-09/10** — **GlassWASM: TinyGo-compiled WebAssembly stager on Open VSX** (Socket Research, 2026-06-15). Two trojanized extensions published on the Open VSX registry by the account **`zaitoona43`** (GitHub UID 291961103): `ExarGD/vsblack@0.0.1` (June 9) and `noellee-doc/flint-debug@0.1.1` (June 10). Both are identity-cloned impersonations of legitimate VS Code Marketplace extensions. **New evasion technique:** the stager is a **TinyGo-compiled WebAssembly module** with **ChaCha20-encrypted string constants** — all network indicators and C2 commands are hidden from static analysis. The WASM module is loaded at runtime and constructs platform-specific download-and-execute payloads (`curl | bash` on macOS/Linux; `irm | iex` PowerShell on Windows). **C2:** Same Solana mainnet wallet as prior GlassWorm waves (`6ExrZayPZzMMSnszc42cH81DpuKT8FhCX9H6Sesn6rpz`); active C2 host at time of analysis: `dodod.lat`. Affects all Open VSX consumers: **VSCodium, Cursor, Windsurf, Gitpod** and any VS Code instance configured with Open VSX. Both extensions removed from the registry following Socket's report. Attribution to GlassWorm campaign assessed with **medium confidence** based on the shared Solana wallet address and payload delivery chain.
+- **2026-06-12 (post-takedown)** — **New macOS-targeting wave with fresh infrastructure** (Koi Security / BleepingComputer). Operator reconstituted on new C2. Targeting macOS exclusively for the first time. New payload: AES-256-CBC encryption, **AppleScript** persistence (vs. PowerShell), **LaunchAgent** persistence (vs. Registry), and a **hardware-wallet trojanization module** targeting **Ledger Live** and **Trezor Suite** app bundles. Also sweeps 50+ browser crypto extensions, GitHub/npm tokens, Safari/Chrome browser data, and macOS Keychain. Hardware-wallet trojans appear incomplete at time of disclosure ("returning empty files") — attacker likely still finalizing macOS wallet payloads. Status reverted to `active`. **Confirmed macOS-wave extension IOCs (Open VSX):** `pro-svelte-extension`, `vsce-prettier-pro`, `full-access-catppuccin-pro-extension` — all impersonate popular Open VSX extensions with added macOS-specific payload modules.
 
 The campaign kept recurring because takedowns couldn't reach the Solana dead-drop and the worm re-seeded itself with every set of stolen publish credentials — the same **IDE-extension trust surface** abused by the [Nx Console compromise](2026-05-nx-console-vscode-compromise.md) and the [TeamPCP GitHub breach](2026-05-teampcp-github-breach.md). The 2026-05-26 takedown finally hit all four redundancy channels at once, which is *why* it worked — a less coordinated strike would have let the Solana dead-drop carry survivors. The downstream lesson: **infostealer-harvested credentials don't expire when the C2 dies** — [Megalodon's 5,561-repo wave](2026-05-megalodon-github-actions-mass-campaign.md) (May 18) is what credential resale of this corpus looks like.
 
@@ -59,6 +60,11 @@ If a flagged extension turns up, treat the machine as compromised: npm/GitHub/Gi
 | Marketplaces | Open VSX (primary), VS Code Marketplace; also GitHub + npm |
 | macOS-wave IOC extensions | `pro-svelte-extension`, `vsce-prettier-pro`, `full-access-catppuccin-pro-extension` (Open VSX) |
 | macOS-wave new C2 | Fresh infrastructure; prior Solana/DHT/Calendar C2 channels replaced |
+| GlassWASM extension IOCs | `ExarGD/vsblack@0.0.1`, `noellee-doc/flint-debug@0.1.1` (Open VSX, published June 9-10, 2026) |
+| GlassWASM publisher account | `zaitoona43` (GitHub UID 291961103) |
+| GlassWASM Solana wallet | `6ExrZayPZzMMSnszc42cH81DpuKT8FhCX9H6Sesn6rpz` (shared with prior GlassWorm waves) |
+| GlassWASM C2 host | `dodod.lat` (observed June 2026) |
+| GlassWASM stager tech | TinyGo-compiled WebAssembly; ChaCha20-encrypted C2 URLs |
 | First flagged | Koi Security, 2025-10 |
 | Attribution | Likely Russia-based (CIS-locale exit checks, Russian-language source comments) |
 | Takedown | **CrowdStrike Counter Adversary Operations + Google + Shadowserver Foundation**, 2026-05-26 14:00 UTC, all 4 C2 channels simultaneously |
@@ -90,3 +96,4 @@ If a flagged extension turns up, treat the machine as compromised: npm/GitHub/Gi
 - [CyberScoop — CrowdStrike disrupts Glassworm botnet that preyed on open-source supply chain](https://cyberscoop.com/crowdstrike-glassworm-botnet-takedown/)
 - [Infosecurity Magazine — CrowdStrike, Google Take Down Glassworm Botnet](https://www.infosecurity-magazine.com/news/crowdstrike-google-takedown/)
 - [Socket — GlassWorm Sleeper Extensions Activate on Open VSX](https://socket.dev/blog/glassworm-sleeper-extensions-activated-on-open-vsx) — late-April 2026 73-extension "sleeper" wave (clones of legit extensions, malicious only after update)
+- [Socket Research — GlassWASM: WebAssembly Malware Found in Trojanized Open VSX Extensions](https://socket.dev/blog/glasswasm-malware-open-vsx-extensions) — primary analysis of the June 9-10 2026 GlassWASM wave; TinyGo WASM stager, ChaCha20 string encryption, Solana C2 confirmation, IOCs.
