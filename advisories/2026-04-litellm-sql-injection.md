@@ -2,7 +2,7 @@
 id: 2026-04-litellm-sql-injection
 title: "LiteLLM proxy pre-auth SQL injection — CVE-2026-42208 (April 2026, CISA KEV) + CVE-2026-42271 (June 2026, actively exploited)"
 date_disclosed: 2026-04-24
-last_updated: 2026-06-19
+last_updated: 2026-06-22
 severity: critical
 status: patched
 ecosystems: [pypi, ai-agents, llm-proxy]
@@ -94,7 +94,7 @@ In June 2026, **Obsidian Security** disclosed a chain that takes a **default low
 
 **Full chain:** low-privilege request → authorization bypass (CVE-2026-47101) → `proxy_admin` (CVE-2026-47102) → arbitrary code execution (CVE-2026-40217). **No admin credentials required.**
 
-Separately, **CVE-2026-42271** is a **callback-injection** flaw that lets an attacker rewrite Claude Code (and other client) responses in transit with no visible tampering indicator. It is **actively exploited in the wild** and listed in **CISA KEV**.
+Separately, **CVE-2026-42271** (CVSS 3.1: 8.8 / CVSS 4.0: 8.7; **CISA KEV added 2026-06-08**) is a **command injection** flaw in LiteLLM's MCP server preview endpoints. `POST /mcp-rest/test/connection` and `POST /mcp-rest/test/tools/list` accepted a full MCP server configuration in the request body — including `command`, `args`, and `env` fields — without validating the caller's role. Any authenticated user (including low-privilege virtual-key holders) could supply a malicious `stdio`-transport config causing LiteLLM to spawn arbitrary OS commands as a subprocess with the privileges of the proxy process. **Actively exploited in the wild** per CISA KEV. Affected range: `1.74.2` → `1.83.6`; fixed in **1.83.7**. GHSA: `GHSA-v4p8-mg3p-g94g`.
 
 **Remediation:** Upgrade to the latest LiteLLM release (≥ 1.84.0 for all four known CVEs). Given active exploitation, treat any internet-facing LiteLLM instance as potentially compromised and rotate all upstream provider keys regardless of patch status.
 
