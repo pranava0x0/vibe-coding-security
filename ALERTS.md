@@ -2,7 +2,7 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-06-22. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-06-23. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
@@ -16,8 +16,8 @@ Two malicious Chrome extensions disguised as ad-blockers were found silently int
 Microsoft Research's **AutoGen Studio** was found to contain a **3-flaw chain** researchers named **"AutoJack"**: (1) the MCP WebSocket server binds to `0.0.0.0` with no authentication; (2) no `Origin` header validation on WebSocket connections; (3) a browsing-capable AutoGen agent that visits a malicious page can have that page's JavaScript connect to the localhost MCP WebSocket and execute arbitrary commands. This is the fifth named instance of the "localhost is not a security boundary" class (siblings: Cline CVE-2026-44211, OpenCode CVE-2026-22812, OpenClaw CVE-2026-25253, Marimo CVE-2026-39987). **No exploitation in the wild reported.** Microsoft Research shipped a patched release. Upgrade AutoGen Studio; bind MCP servers to 127.0.0.1 only.
 → [advisories/2026-06-autojack-autogen-studio-mcp-rce.md](advisories/2026-06-autojack-autogen-studio-mcp-rce.md)
 
-### 2026-06-12 — Klue AI integration breach — Icarus extortion group steals Salesforce/HubSpot OAuth tokens; CRM data exfiltrated from Huntress and Recorded Future
-The **Icarus** extortion group breached **Klue** (AI competitive intelligence platform) on June 11–12, 2026, and used Klue's stored OAuth tokens to run automated Salesforce REST API queries against customer accounts for approximately 24 hours — exfiltrating CRM pipeline data, account records, and contacts from at least **Huntress** and **Recorded Future**. Services with stolen OAuth tokens include Salesforce, HubSpot, SharePoint, Zoom, Gong, Chorus, Clari, Google Drive, and Slack. This is the AI-tool OAuth pivot class — a breach at the AI productivity tool is upstream of every service it connects to (template: [Vercel/Context.ai](advisories/2026-04-vercel-context-ai-breach.md), [Composio](advisories/2026-05-composio-ai-agent-platform-breach.md)). Status: contained as of 2026-06-13. **Action:** If your organization uses Klue, revoke all OAuth grants at the connected service level and audit Salesforce audit logs for API calls from the Klue integration between 2026-06-11 and 2026-06-13.
+### 2026-06-12 — Klue AI integration breach — Icarus extortion group steals OAuth tokens; **"hundreds" of customers** including LastPass, HackerOne, Snyk, Tanium, Jamf affected (updated 2026-06-23)
+The **Icarus** extortion group breached **Klue** (AI competitive intelligence platform) on June 11–12, 2026, and used Klue's stored OAuth tokens to run automated Salesforce REST API queries against customer accounts — exfiltrating CRM pipeline data, account records, and contacts from confirmed victims **Huntress, Recorded Future, Tanium, Jamf, Sprout Social, Gong, Insurity, HackerOne, Kudelski Security, Snyk,** and **LastPass** (LastPass confirmed 2026-06-23: names, emails, addresses, support case data). Huntress reports "hundreds" of Klue customers were affected; **Salesforce has disabled the Klue app integration** for affected customers. Icarus has begun posting victim data on its dark-web leak site. This is the AI-tool OAuth pivot class (template: [Vercel/Context.ai](advisories/2026-04-vercel-context-ai-breach.md), [Composio](advisories/2026-05-composio-ai-agent-platform-breach.md)). **Action:** If your organization uses Klue, revoke all OAuth grants at the connected service level (especially Salesforce) and audit API logs for the 2026-06-11 to 2026-06-13 window.
 → [advisories/2026-06-klue-icarus-oauth-breach.md](advisories/2026-06-klue-icarus-oauth-breach.md)
 
 ### 2026-06-16 — Langflow CVE-2026-5027 — unauthenticated path traversal → RCE via file upload (distinct from CVE-2026-33017; ~7,000 exposed; actively exploited)
@@ -291,6 +291,10 @@ Missing `*.map` entry in `.npmignore` shipped a 59.8 MB source map exposing 512,
 ### 2026-03-17 — Langflow unauthenticated RCE (CVE-2026-33017) — CISA KEV
 A single crafted HTTP request to the public flow-build endpoint runs arbitrary Python on any exposed Langflow instance — **no auth**. CVSS 9.8, exploited ~20h after disclosure (NATS-as-C2, AWS-key theft). **Incomplete fix:** 1.8.2 is still exploitable; upgrade to **1.9.0**.
 → [advisories/2026-03-langflow-rce.md](advisories/2026-03-langflow-rce.md)
+
+### 2026-02-25 — Langflow CVE-2026-27966 — CSV Agent hardcodes `allow_dangerous_code=True` → prompt-injection RCE (CVSS 9.8; distinct from CVE-2026-33017 and CVE-2026-5027)
+**CVE-2026-27966** (CVSS 9.8, GHSA-3645-fxcv-hqr4) — Langflow's CSV Agent node unconditionally sets `allow_dangerous_code=True`, activating LangChain's `python_repl_ast` REPL with no option to disable it. Any user who can send a chat message to a chatflow with a CSV Agent node can inject a LangChain action directive (e.g., `Action: python_repl_ast / Action Input: __import__('os').system('...')`) and execute arbitrary commands on the Langflow host. Langflow's auto-login is on by default — unauthenticated on most deployments. This is the **"eval-on-LLM-output"** class (sibling: [Flowise Agent-node CVEs](advisories/2026-04-flowise-rce-cluster.md); [Semantic Kernel](advisories/2026-05-semantic-kernel-rce.md)). **Fixed in Langflow 1.8.0.** Patching CVE-2026-33017 does NOT protect against this flaw; all three Langflow RCEs are independently exploitable.
+→ [advisories/2026-02-langflow-cve-2026-27966-csv-agent-rce.md](advisories/2026-02-langflow-cve-2026-27966-csv-agent-rce.md)
 
 ### 2026-03-11 — Supabase Auth OIDC issuer-validation bypass (CVE-2026-31813)
 Supabase Auth (`gotrue`) < 2.185.0 doesn't validate the OIDC token issuer when Apple/Azure providers are enabled — an attacker mints signed ID tokens from their own IdP and logs in as **any user**. Account-takeover primitive for self-hosted Supabase, the default backend for most vibe-coded apps. Fix: **2.185.0**.

@@ -758,3 +758,27 @@
   - **GlassWASM update is single-source (Socket Research).** Normally new advisories require two independent sources; this is an update to an existing advisory (adding a new wave), so the single confirmed source is sufficient. The Solana wallet address (`6ExrZayPZzMMSnszc42cH81DpuKT8FhCX9H6Sesn6rpz`) matches prior GlassWorm waves — the shared wallet provides corroboration of attribution.
   - **ms-agent (ModelScope) is a new framework in the repo's coverage.** CVE-2026-2256 establishes a precedent for tracking ModelScope-ecosystem CVEs. ms-agent is widely used in Chinese AI developer tooling and is growing internationally. Added to AI-agent framework rotation.
   - **Deferred:** (i) Cursor Pwn2Own Berlin 2026 CVEs (still within 90-day coordinated disclosure window). (ii) Carry-over playbook backlog unchanged.
+
+---
+
+## 2026-06-23
+
+- **Queries run:** ~20 (deep: 10, medium: 6, shallow: 4; full three-tier sweep — 24h/3d/7d windows)
+- **New advisories:** 1
+  - `2026-02-langflow-cve-2026-27966-csv-agent-rce` — **Langflow CVE-2026-27966 (CVSS 9.8, GHSA-3645-fxcv-hqr4): CSV Agent node hardcodes `allow_dangerous_code=True`** unconditionally enabling LangChain's `python_repl_ast` REPL — any user with chat access can execute arbitrary Python/OS commands. Pre-authenticated by default (Langflow auto-login is on). Third distinct Langflow RCE (separate from CVE-2026-33017 flow-build endpoint and CVE-2026-5027 path traversal). Fixed in Langflow 1.8.0. Sources: NVD CVE-2026-27966 (fetched), GHSA-3645-fxcv-hqr4 (fetched). Severity: critical, status: patched.
+- **Updated advisories:** 2
+  - `2026-06-klue-icarus-oauth-breach` — Expanded victim list: added Tanium, Jamf, Sprout Social, Gong, Insurity (SecurityWeek June 12 update), HackerOne, Kudelski Security, Snyk (The Register June 22), LastPass Salesforce CRM data exposed — names, emails, phones, addresses, support case info; vaults unaffected (BleepingComputer June 23). Added "hundreds" total victim count (Huntress statement). Added Icarus leak-site activity, extortion email 48h deadline, Salesforce disabling Klue app integration. Updated last_updated 2026-06-19→2026-06-23.
+  - `ALERTS.md` — Updated Last refreshed 2026-06-22→2026-06-23. Updated Klue 🔴 ACTIVE entry with expanded victim list and containment status. Added Langflow CVE-2026-27966 to 🟠 RECENT tier.
+- **Sources gained weight:**
+  - nvd.nist.gov: hits 21→22, last_hit 2026-06-22→2026-06-23; ecosystems +langflow-cve-27966
+  - github.com/advisories: hits 12→13, last_hit 2026-06-12→2026-06-23; ecosystems +langflow-cve-27966, +ghsa-3645-fxcv-hqr4
+  - bleepingcomputer.com: hits 19→20, last_hit 2026-06-20→2026-06-23; ecosystems +klue-lastpass-update
+  - theregister.com: hits 18→19, last_hit 2026-06-19→2026-06-23; ecosystems +klue-hackernone-snyk
+  - thehackernews.com: hits 47→48, last_hit 2026-06-20→2026-06-23; ecosystems +klue-salesforce-disable
+  - securityweek.com: hits 23→24, last_hit 2026-06-22→2026-06-23; ecosystems +klue-more-victims
+- **New sources added:** none
+- **Notes:**
+  - **Langflow CVE-2026-27966 is a third, distinct, independently-exploitable RCE in the same codebase.** Each of the three Langflow CVEs uses a different attack surface: flow-build endpoint (CVE-2026-33017), file-upload path traversal (CVE-2026-5027), and CSV Agent chat input (CVE-2026-27966). Operators who patched for either prior CVE are still vulnerable to CVE-2026-27966 unless they are on ≥ 1.8.0. Date_disclosed is February 2026, predating the other two, but was not in the repo until this sweep.
+  - **"Decorator-as-documentation" / "eval-on-LLM-output" class confirmed recurring.** CVE-2026-27966 (Langflow), CVE-2026-25592/CVE-2026-26030 (Semantic Kernel), Flowise Agent-node cluster (CVE-2026-41265 et al.) all share the same root: a framework annotation or hardcoded flag enables LLM-output eval as a design feature with no operator override. Any `allow_dangerous_code`, `[KernelFunction]`, or `agent_node_eval` setting in a framework should be treated as a CVSS-10 gadget until proven otherwise.
+  - **Klue victim count now "hundreds."** The breach, which began June 11–12, continues to produce new victim disclosures as of June 23 (LastPass confirmed today). Icarus continues to post on its dark-web leak site. Salesforce's direct response (disabling the Klue integration) is the most significant containment action to date.
+  - **Deferred:** (i) Cursor Pwn2Own Berlin 2026 CVEs (still within 90-day coordinated disclosure window). (ii) Carry-over playbook backlog unchanged.
