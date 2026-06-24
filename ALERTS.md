@@ -2,11 +2,15 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-06-23. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-06-24. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-06-15 — Microsoft 365 Copilot SearchLeak (CVE-2026-42824) — 1-click exfil of emails, MFA codes, and OneDrive files via parameter-to-prompt injection + CSP bypass (patched)
+Varonis Threat Labs disclosed **CVE-2026-42824 ("SearchLeak")**: a 3-stage attack chain in **Microsoft 365 Copilot Enterprise Search** that lets an attacker send a victim **one link on a real `microsoft.com` domain** and silently exfiltrate their emails, calendar events, OneDrive/SharePoint files, MFA codes, and password-reset links — **no second click, no credential prompt**. Stage 1: the `q=` URL parameter is treated as a trusted user prompt rather than attacker input (**parameter-to-prompt injection**), a new attack class distinct from classic indirect prompt injection. Stage 2: an HTML rendering race condition inserts `<img>` exfil tags before CSP headers are applied. Stage 3: Copilot's CSP allowlists Bing-related Microsoft domains — a **Bing SSRF** primitive tunnels exfiltrated data through a Bing-owned host to attacker infrastructure. Microsoft patched on the backend by June 15, 2026; **no customer action required to close this vector.** If your org uses M365 Copilot, the patch is already deployed. If you have audit logs from before June 15, query M365 Purview for Copilot sessions initiated from unusual IPs with unusually long `q=` parameters. **The attack class — treating URL parameters as user intent — will recur in other AI-search products.**
+→ [advisories/2026-06-copilot-searchleak-cve-2026-42824.md](advisories/2026-06-copilot-searchleak-cve-2026-42824.md)
 
 ### 2026-06-14 — PromptSnatcher — malicious Chrome ad-blocker extensions exfiltrate AI chatbot conversations from 900K users across ChatGPT, Claude, Gemini, Copilot, and 4 more
 Two malicious Chrome extensions disguised as ad-blockers were found silently intercepting **full AI chatbot conversations** — prompts and responses — from **~900,000 users** across **8 AI platforms**: ChatGPT, Claude (claude.ai), Google Gemini, Microsoft Copilot, Perplexity, DeepSeek, Grok, and Meta AI. Extensions with `webRequest` permissions can inject content scripts that capture all XHR/fetch traffic to AI chat APIs without any exploit — no vulnerability in the AI platforms is needed. Any code, credentials, or business data you've shared in AI chat sessions while the extension was installed should be treated as exfiltrated. **Audit your Chrome extensions now** — remove anything with "Read and change all your data on all websites" permission that you didn't deliberately install. Prefer well-known open-source ad-blockers (uBlock Origin) over browser-search results.
@@ -359,6 +363,10 @@ First self-replicating npm worm. ~200 packages including `@ctrl/tinycolor` (2.2M
 ### 2025-08-26 — Nx `s1ngularity` (first AI-CLI-assisted malware)
 Postinstall script that *invoked Claude Code and Gemini CLI* to scan for secrets. 2,349 distinct credentials leaked to public GitHub repos. 4 hours live.
 → [advisories/2025-08-nx-s1ngularity.md](advisories/2025-08-nx-s1ngularity.md)
+
+### 2025-08-26 — Salesloft Drift OAuth Breach — UNC6395 steals Salesforce CRM data from Cloudflare, Palo Alto, Zscaler and hundreds of orgs
+**UNC6395** (Mandiant; tracked as **GRUB1** by Cloudflare) compromised a **Salesloft GitHub account** and used it to extract **OAuth tokens and refresh tokens** from the **Drift AI chat agent**'s Salesforce CRM integration. With those tokens they connected directly to hundreds of downstream Salesforce instances — bypassing Salesloft's own auth entirely — and ran automated SOQL queries to bulk-export contact, account, and **support case data** during **August 8–18, 2025**. Confirmed victims: **Cloudflare** (104 API tokens in support cases), **Palo Alto Networks, Zscaler, Google, Cisco, Proofpoint, SpyCloud, Tanium, Tenable, Farmers Insurance, Workday** and hundreds more. Support-case data routinely contains API keys, AWS credentials, Snowflake tokens, and database passwords — data that was already copied to attacker infrastructure and remains there. Salesloft disclosed publicly August 26, 2025; Salesforce disabled all Salesloft integrations in response. **This is the first documented large-scale AI-tool OAuth pivot breach** and the direct structural template for the [Vercel/Context.ai](advisories/2026-04-vercel-context-ai-breach.md) (April 2026) and [Klue/Icarus](advisories/2026-06-klue-icarus-oauth-breach.md) (June 2026) attacks. If your org used Salesloft + Drift with a Salesforce integration between January and August 2025, audit Salesforce API logs for bulk SOQL selects from the Drift Connected App during Aug 8–18, and rotate any credential ever shared in a Salesforce support case.
+→ [advisories/2025-08-salesloft-drift-oauth-breach.md](advisories/2025-08-salesloft-drift-oauth-breach.md)
 
 ### 2025-07-17 — Amazon Q VS Code extension wiper prompt
 v1.84.0 shipped with attacker-injected prompt telling Q to wipe local filesystem + cloud resources. Malformed and inert in practice, but the supply-chain path (open PR → admin access → release) was real.

@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-06-15 | [Microsoft 365 Copilot SearchLeak (CVE-2026-42824) — 1-click exfil of emails, MFA codes, and OneDrive files via parameter-to-prompt injection + CSP bypass](2026-06-copilot-searchleak-cve-2026-42824.md) | high | patched |
 | 2026-06-18 | [IDEsaster — 30+ flaws (24 CVEs) in Cursor, Windsurf, Kiro.dev, GitHub Copilot, Zed, Roo Code, Junie, Cline](2026-06-idessaster-ai-ide-cve-cluster.md) | high | active |
 | 2026-06-16 | [Langflow CVE-2026-5027 — unauthenticated path traversal → RCE via file upload (distinct from CVE-2026-33017)](2026-06-langflow-cve-2026-5027-path-traversal.md) | high | patched |
 | 2026-06-14 | [PromptSnatcher — malicious Chrome ad-blocker extensions intercept AI chatbot conversations from 900K users](2026-06-promptsnatcher-chrome-ai-chat-stealer.md) | high | active |
@@ -90,6 +91,7 @@ One file per incident. Latest at the top.
 | 2025-09-15 | [Shai-Hulud original](2025-09-shai-hulud-original.md) | critical | contained |
 | 2025-09-08 | [qix npm account compromise](2025-09-qix-compromise.md) | critical | contained |
 | 2025-09-01 | [Lies in the Loop (LITL) — approval-dialog padding hides malicious commands below the fold; no vendor fix (Claude Code, VS Code Copilot)](2025-09-litl-ai-approval-dialog-bypass.md) | high | active |
+| 2025-08-26 | [Salesloft Drift OAuth Breach — UNC6395 steals Salesforce CRM data from Cloudflare, Palo Alto, Zscaler and hundreds of orgs](2025-08-salesloft-drift-oauth-breach.md) | high | contained |
 | 2025-08-26 | [Nx s1ngularity](2025-08-nx-s1ngularity.md) | critical | contained |
 | 2025-08 → ongoing | [Claude Code InversePrompt (multiple CVEs)](2025-08-claude-code-inverseprompt.md) | medium | patched |
 | 2025-07-17 | [Amazon Q VS Code wiper](2025-07-amazon-q-wiper.md) | medium | contained |
