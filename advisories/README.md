@@ -4,6 +4,8 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-06-24 | [Cordyceps — GitHub Actions CI/CD misconfiguration class exposes 300+ repos (Microsoft, Google, Cloudflare) to PR-based code execution and credential theft](2026-06-cordyceps-cicd-github-actions.md) | high | active |
+| 2026-05-07 | [TrustFall — Claude Code, Cursor CLI, Gemini CLI, Copilot CLI, Codex CLI auto-execute MCP servers on folder-trust dialog (no patch; Anthropic won't fix)](2026-05-trustfall-mcp-auto-execute.md) | high | active |
 | 2026-06-15 | [Microsoft 365 Copilot SearchLeak (CVE-2026-42824) — 1-click exfil of emails, MFA codes, and OneDrive files via parameter-to-prompt injection + CSP bypass](2026-06-copilot-searchleak-cve-2026-42824.md) | high | patched |
 | 2026-06-18 | [IDEsaster — 30+ flaws (24 CVEs) in Cursor, Windsurf, Kiro.dev, GitHub Copilot, Zed, Roo Code, Junie, Cline](2026-06-idessaster-ai-ide-cve-cluster.md) | high | active |
 | 2026-06-16 | [Langflow CVE-2026-5027 — unauthenticated path traversal → RCE via file upload (distinct from CVE-2026-33017)](2026-06-langflow-cve-2026-5027-path-traversal.md) | high | patched |
