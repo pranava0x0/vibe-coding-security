@@ -805,3 +805,29 @@
   - **Salesloft/Drift backfill closes a foundational gap.** The Vercel/Context.ai (April 2026), Composio (May 2026), and Klue/Icarus (June 2026) advisories all cross-reference "the Salesloft/Drift template" but the template advisory itself was absent from the repo. This sweep fills the gap. The structural lesson: every AI productivity tool authorized with broad OAuth scope is a pivot point — breach the tool, inherit the downstream cloud permissions.
   - **npm v12 `allowScripts: off` default is already documented in phantom-gyp-miasma-wave4.md.** No advisory update needed for the npm v12 announcement this sweep — already covered at current detail level.
   - **Deferred:** (i) Cursor Pwn2Own Berlin 2026 CVEs (still within 90-day coordinated disclosure window). (ii) Carry-over playbook backlog unchanged.
+
+---
+
+## 2026-06-25
+
+- **Queries run:** ~20 (deep: 8, medium: 7, shallow: 5; full three-tier sweep — 24h/3d/7d windows)
+- **New advisories:** 2
+  - `2026-05-trustfall-mcp-auto-execute` — **TrustFall** (Adversa AI, disclosed 2026-05-07): five AI coding CLIs (Claude Code, Cursor CLI, Gemini CLI, GitHub Copilot CLI, OpenAI Codex CLI) auto-execute MCP servers listed in `.mcp.json` / `.claude/settings.json` when the user accepts a folder-trust dialog — no further prompt. An attacker who can land a malicious `.mcp.json` in any repo or project directory (supply-chain, PR, shared template) gets RCE on every developer who opens the folder. Anthropic responded "won't fix" (expected CLI behavior). All five vendors have declined to remove the auto-execute behavior or add a per-MCP confirmation step. Status: active, severity: high. Sources: adversa.ai, darkreading.com, helpnetsecurity.com, lyrie.ai.
+  - `2026-06-cordyceps-cicd-github-actions` — **Cordyceps** (Novee Security, disclosed 2026-06-24): a class of GitHub Actions CI/CD misconfiguration (`pull_request_target` + PR-head checkout + write permissions) that allows any unauthenticated GitHub user to run arbitrary code with registry-publish credentials. 300+ of ~30,000 high-impact repos confirmed exploitable including Microsoft Azure Sentinel, Google AI Agent Development Kit, Cloudflare Workers SDK, Apache Doris, PSF Black formatter. Exploitation can trigger npm/PyPI/Crates.io/Docker publishes, push to protected branches, and steal AWS/GCP/Netlify OIDC credentials. Individual repos patching; Microsoft and Google still remediating at time of disclosure. Status: active, severity: high. Sources: thehackernews.com, darkreading.com, securityweek.com.
+- **Updated advisories:** 1
+  - `2026-06-mastra-ai-npm-compromise` — Added official Microsoft attribution: on 2026-06-20, Microsoft attributed the Mastra AI npm namespace compromise to **Sapphire Sleet (BlueNoroff)**, a North Korean state-sponsored threat group, with high-confidence assessment. Updated TL;DR and attribution section; replaced vague CybersecurityNews source with BleepingComputer and SecurityWeek attribution-specific articles. Sources: bleepingcomputer.com, securityweek.com.
+- **Sources gained weight:**
+  - adversa.ai: weight 8→9, hits 2→3, last_hit 2026-06-25; ecosystems +trustfall, +symjack, +cursor
+  - darkreading.com: weight 15→16, hits 9→11, last_hit 2026-06-25; ecosystems +trustfall, +cordyceps
+  - thehackernews.com: hits 49→50, last_hit 2026-06-25; ecosystems +cordyceps
+  - bleepingcomputer.com: hits 21→22, last_hit 2026-06-25; ecosystems +mastra-sapphire-sleet
+  - securityweek.com: hits 25→27, last_hit 2026-06-25; ecosystems +cordyceps, +mastra-sapphire-sleet
+  - helpnetsecurity.com: weight 10→11, hits 1→2, last_hit 2026-06-25; ecosystems +trustfall, +mcp
+  - novee.security: weight 9→10, hits 1→2, last_hit 2026-06-25; ecosystems +cordyceps, +github-actions, +ci-cd
+- **New sources added:** 1
+  - lyrie.ai: weight 5, hits 1, last_hit 2026-06-25; ecosystems [trustfall, mcp, claude-code, cursor]; tier: research. Independent security researcher blog covering AI agent trust-boundary attacks.
+- **Notes:**
+  - **TrustFall fills a standalone advisory gap.** The attack was previously cited in `2025-08-claude-code-inverseprompt` and `2026-04-comment-and-control-pr-injection` as a supporting reference, but had no dedicated writeup. Given Anthropic's "won't fix" response and the attack's applicability across five distinct AI coding CLIs, it warranted its own advisory.
+  - **Cordyceps is a class advisory, not a single-package incident.** The 300+ repos affected include direct upstream dependencies of the vibe-coding stack (Cloudflare Workers SDK, PSF Black, Google AI Agent Dev Kit). Developers who copy CI templates from popular repos are especially at risk of inheriting the `pull_request_target` + write-permissions pattern.
+  - **North Korean attribution for Mastra solidifies DPRK supply-chain narrative.** Sapphire Sleet (BlueNoroff) is the same actor class behind the earlier Axios compromise (DPRK-linked per US/South Korean authorities). The 88-minute automated burst + contributor token theft tradecraft is now a recognized DPRK supply-chain fingerprint.
+  - **Deferred:** (i) Cursor Pwn2Own Berlin 2026 CVEs (still within 90-day coordinated disclosure window). (ii) Carry-over playbook backlog unchanged.

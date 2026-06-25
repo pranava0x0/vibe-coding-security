@@ -2,7 +2,7 @@
 id: 2026-06-mastra-ai-npm-compromise
 title: "Mastra AI npm namespace compromise — 145 @mastra/* packages carry easy-day-js typosquat RAT via hijacked contributor account `ehindero` (June 2026)"
 date_disclosed: 2026-06-17
-last_updated: 2026-06-19
+last_updated: 2026-06-25
 severity: critical
 status: active
 ecosystems: [npm]
@@ -11,7 +11,7 @@ tags: [supply-chain, credential-theft, typosquat, postinstall, ai-agents, crypto
 ---
 
 ## TL;DR
-A hijacked npm contributor account (`ehindero`) was used to inject **`easy-day-js`** — a typosquat of the popular `dayjs` date library — as a dependency across **145 packages** (corrected from initially-reported 144) in the `@mastra/*` namespace (Mastra AI agent framework). The malicious `easy-day-js` version ran an obfuscated `postinstall` hook that downloaded and executed a cryptocurrency-stealing RAT, then self-deleted to remove evidence. The attack window was **01:15 – 02:36 UTC on 2026-06-17** (88 minutes). Combined weekly downloads across affected packages exceed **1.1 million**. Attribution: Shai-Hulud/Miasma lineage payload characteristics; modus operandi matches the [Axios April 2026 attack](2026-03-axios-compromise.md) with possible North Korea link (DPRK-adjacent supply-chain patterns).
+A hijacked npm contributor account (`ehindero`) was used to inject **`easy-day-js`** — a typosquat of the popular `dayjs` date library — as a dependency across **145 packages** (corrected from initially-reported 144) in the `@mastra/*` namespace (Mastra AI agent framework). The malicious `easy-day-js` version ran an obfuscated `postinstall` hook that downloaded and executed a cryptocurrency-stealing RAT, then self-deleted to remove evidence. The attack window was **01:15 – 02:36 UTC on 2026-06-17** (88 minutes). Combined weekly downloads across affected packages exceed **1.1 million**. Attribution: **Microsoft attributed this attack to Sapphire Sleet (BlueNoroff), a North Korean state actor** (high-confidence assessment, June 20, 2026). Modus operandi matches the [Axios April 2026 attack](2026-03-axios-compromise.md), which US and South Korean authorities also attributed to DPRK-linked actors.
 
 ## What happened
 
@@ -32,7 +32,7 @@ The attack technique — **dependency injection via a typosquat** — is more su
 
 This is the sixth documented copycat wave in the Shai-Hulud/Miasma lineage (Shai-Hulud → Second Coming → Third Coming → Phantom Gyp → Hades → Mastra injection), and the first to use a **dependency-injection** (adding a typosquat as a dep, rather than compromising the primary package directly) as its install-time vector at this scale.
 
-**Attribution note:** The modus operandi — contributor token theft → 88-minute automated burst → cleanup — closely matches the [Axios npm compromise (April 2026)](2026-03-axios-compromise.md), which US and South Korean authorities attributed to North Korea (DPRK)-linked actors. Multiple threat-intelligence vendors have flagged the same pattern; DPRK attribution for the Mastra incident is unconfirmed but assessed as likely by several firms.
+**Attribution (updated 2026-06-25):** On 2026-06-20, **Microsoft attributed the Mastra attack to Sapphire Sleet (also tracked as BlueNoroff)**, a North Korean state-sponsored threat group: *"Microsoft assesses with high confidence that this activity is attributable to Sapphire Sleet, a North Korean state actor that primarily targets the financial sector."* Evidence: the PowerShell backdoor, tradecraft, and C2 infrastructure matched tools previously used by Sapphire Sleet; follow-on activity employed tactics consistent with the group's historical cryptocurrency-theft campaigns. The modus operandi — contributor token theft → 88-minute automated burst → cleanup — also closely matches the [Axios npm compromise (April 2026)](2026-03-axios-compromise.md), attributed to DPRK-linked actors by US and South Korean authorities.
 
 ## Am I affected?
 
@@ -98,7 +98,8 @@ If you installed any `@mastra/*` package on **2026-06-17 between 01:15 and 02:36
 - [Aikido Security — Mastra AI npm Compromise: How easy-day-js Typosquat Hit 1.1M Weekly Downloads](https://aikido.dev/blog/mastra-ai-npm-compromise-easy-day-js) — detailed IOC analysis; 88-minute window; payload family matching.
 - [Snyk — Mastra @mastra/* Dependency Injection: How a Typosquat Reached 1.1M Weekly Downloads](https://snyk.io/blog/mastra-npm-compromise-easy-day-js/) — dependency tree analysis; DPRK modus operandi note.
 - [Socket — Mastra AI Attack: 145 npm Packages Poisoned via Transitive Dependency Injection](https://socket.dev/blog/mastra-npm-attack) — transitive-dependency injection mechanics; cross-reference Axios April 2026 pattern.
-- [CybersecurityNews — 145 Mastra npm Packages Backdoored Through easy-day-js Typosquat; North Korea Link Suspected](https://cybersecuritynews.com) — DPRK attribution note; modus operandi comparison to Axios compromise.
+- [BleepingComputer — Microsoft links Mastra AI supply chain attack to North Korean hackers](https://www.bleepingcomputer.com/news/security/microsoft-links-mastra-ai-supply-chain-attack-to-north-korean-hackers/) — official Sapphire Sleet attribution from Microsoft, June 20, 2026.
+- [SecurityWeek — North Korean Hackers Blamed for Mastra NPM Supply Chain Attack](https://www.securityweek.com/north-korean-hackers-blamed-for-mastra-npm-supply-chain-attack/) — corroborating attribution coverage, June 20, 2026.
 - [GitHub Advisory Database — GHSA advisory for @mastra/* easy-day-js dependency injection](https://github.com/advisories?query=mastra+easy-day-js) — official GHSA records.
 - Cross-link: [Axios compromise (March 2026)](2026-03-axios-compromise.md) — same modus operandi; suspected DPRK actor; npm contributor token theft.
 - Cross-link: [IronWorm](2026-06-ironworm-npm-rust-ebpf.md), [Hades Campaign](2026-06-hades-campaign-pypi-mcp-attack.md), [Solana FakeFix](2026-06-solana-fakefix-campaign.md) — same Miasma-lineage payload family; [Phantom Gyp](2026-06-phantom-gyp-miasma-wave4.md) — prior wave using binding.gyp; [Shai-Hulud copycat wave](2026-05-shai-hulud-copycat-wave.md) — prior copycat cadence.
