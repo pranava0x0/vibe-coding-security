@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-06-25
+**Last refreshed:** 2026-06-26
 
 ## Quick start
 
@@ -55,11 +55,11 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-06-24)
+## Active threat families (as of 2026-06-26)
 
 The highest-risk ongoing threat families for vibe coders:
 
-- **Miasma/Shai-Hulud worm lineage** — Self-propagating npm/PyPI worm family, now in 6+ documented waves, with copycat actors following TeamPCP's May 2026 open-source release of the source code. Waves use different install-time primitives: postinstall hooks, binding.gyp (Phantom Gyp), .pth startup files (Hades), direct source-repo poisoning (Wave 5), and **dependency-injection** (Mastra, June 2026 — typosquat added as a transitive dependency rather than compromising the primary package). See advisories for each wave.
+- **Miasma/Shai-Hulud worm lineage** — Self-propagating npm/PyPI worm family, now in 7+ documented waves, with copycat actors following TeamPCP's May 2026 open-source release of the source code. Waves use different install-time primitives: postinstall hooks, binding.gyp (Phantom Gyp), .pth startup files (Hades), direct source-repo poisoning (Wave 5), **dependency-injection** (Mastra, June 2026), and **compromised-maintainer-token burst** (LeoPlatform wave, June 24 2026 — 20 packages in 3 seconds, plus Go module and GitHub Actions compromise). See advisories for each wave.
 - **IronWorm** — Rust-based npm worm with eBPF kernel rootkit + Tor C2 (June 2026). Invisible to eBPF-based EDR. Distinct from Miasma lineage.
 - **GlassWorm / GlassWASM** — VS Code / Open VSX worm with steganographic (invisible Unicode) payloads and blockchain C2. Status: **active** — returned post-takedown with macOS-targeting wave (June 12) and a new TinyGo-compiled WebAssembly stager called GlassWASM (two Open VSX extensions `vsblack`, `flint-debug` published June 9-10; removed after Socket report June 15). Operator rebuilds on fresh infrastructure after each takedown. Credentials stolen in prior waves remain in the wild.
 - **WhiteCobra** — Persistent threat actor flooding IDE extension marketplaces with LummaStealer-delivering extensions targeting crypto wallet users. Ongoing since July 2025.
@@ -72,6 +72,7 @@ The highest-risk ongoing threat families for vibe coders:
 - **AI-tool OAuth pivot class** — Four confirmed instances: Salesloft/Drift (August 2025 — the foundational template; UNC6395 stole Salesforce CRM data from Cloudflare, Palo Alto, Zscaler and hundreds more), Vercel/Context.ai (April 2026), Composio (May 2026), Klue/Icarus (June 2026). Klue breach (June 11–12) now confirmed to affect hundreds of customers including Huntress, Recorded Future, Tanium, Jamf, Sprout Social, Gong, Insurity, HackerOne, Kudelski Security, Snyk, LastPass. Icarus group continues to release stolen CRM data on dark-web leak site as of 2026-06-24. Salesforce disabled the Klue integration for affected customers. A breach at any AI productivity tool holding OAuth tokens is upstream of every connected cloud service. Audit OAuth grants quarterly; prefer read-only scopes.
 - **PromptSnatcher browser extension AI exfil** — Malicious Chrome extensions (ad-blocker disguise) intercept full AI chatbot conversations from ~900K users across 8 platforms (ChatGPT, Claude, Gemini, Copilot, Perplexity, DeepSeek, Grok, Meta AI). Any code, credentials, or business data shared with AI chat platforms while the extension was active should be treated as exfiltrated.
 - **"Localhost is not a security boundary" AI agent cluster** — Five named instances in 2026: Cline CVE-2026-44211, OpenCode CVE-2026-22812, OpenClaw CVE-2026-25253, Marimo CVE-2026-39987, AutoGen Studio (AutoJack). Any locally-running AI tool that exposes an unauthenticated WebSocket/HTTP server without Origin validation is in this class. Audit: `ss -tlnp | grep -v 127.0.0.1`.
+- **Dify DifyTap** — 4 CVEs (top CVSS 9.4) in Dify (1M+ apps) enabling cross-tenant AI conversation exfiltration, internal SSRF, and document theft. Patched in Dify 1.14.2 (June 2026). WAF rule needed for CVE-2026-41948 until plugin-daemon fix ships. Multi-tenant Dify deployments should upgrade immediately.
 
 ## Citation
 

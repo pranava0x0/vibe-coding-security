@@ -4,6 +4,8 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-06-24 | [Miasma LeoPlatform + Go wave — 20 npm packages + Go module + 1,442 GitHub Actions repos compromised via Phantom Gyp (binding.gyp) in 3-second burst](2026-06-miasma-leoplatform-go-wave.md) | critical | active |
+| 2026-06-22 | [Dify DifyTap — 4 CVEs (top CVSS 9.4) allow cross-tenant AI conversation exfiltration across 1M+ apps; patched 1.14.2](2026-06-dify-difytap-cross-tenant-exfil.md) | high | patched |
 | 2026-06-24 | [Cordyceps — GitHub Actions CI/CD misconfiguration class exposes 300+ repos (Microsoft, Google, Cloudflare) to PR-based code execution and credential theft](2026-06-cordyceps-cicd-github-actions.md) | high | active |
 | 2026-05-07 | [TrustFall — Claude Code, Cursor CLI, Gemini CLI, Copilot CLI, Codex CLI auto-execute MCP servers on folder-trust dialog (no patch; Anthropic won't fix)](2026-05-trustfall-mcp-auto-execute.md) | high | active |
 | 2026-06-15 | [Microsoft 365 Copilot SearchLeak (CVE-2026-42824) — 1-click exfil of emails, MFA codes, and OneDrive files via parameter-to-prompt injection + CSP bypass](2026-06-copilot-searchleak-cve-2026-42824.md) | high | patched |
