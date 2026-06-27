@@ -852,3 +852,28 @@
   - **Dify DifyTap: first high-impact cross-tenant AI platform CVE in this repo.** Dify is used as an AI backend by 1M+ apps. Cross-tenant exfiltration of AI conversations is uniquely dangerous because the platform is multi-tenant by design. CVE-2026-41948 (SSRF via plugin daemon) is the most serious and not fully patched yet.
   - **Deferred (single source or historical):** (i) Amazon Q Developer CVE-2026-12957 (MCP config auto-exec → cloud creds, CVSS 8.5) — only search-snippet references found, no article URL verified; defer until primary source URL confirmed. (ii) Copilot Studio CVE-2026-21520 (ShareLeak, CVSS 7.5, prompt injection via SharePoint form) — NVD confirmed, MSRC page failed to load details; defer until second independent source fetched. (iii) AIR Research runtime-fetch evasion demo (skills.sh, 26K agents) — single THN source; agent count explicitly flagged as unconfirmed by article itself. (iv) npm bypass via Git dependencies / PackageGate (January 2026 — historical, Koi Security; pnpm/vlt/Bun patched, npm rejected fix; already partially addressed by npm v12 allowScripts note in phantom-gyp advisory). (v) Next.js CVE-2026-44578 — already covered in 2026-05-nextjs-react-security-release.md. (vi) Hades Campaign — already current (June 13 update covers 471 artifacts).
   - **Source diversity sweep summary:** Tier A (12 queries) covered npm supply chain, MCP servers, AI IDE CVEs, AI coding incident breaches, PyPI malicious packages, AI framework CVEs, vibe platforms, AI config poisoning, Rust/Crates.io, binding.gyp, Next.js/Supabase, AI agent MCP injection. Tier B (7 queries) covered Amazon Q, Next.js SSRF, Miasma LeoPlatform/Go, Copilot Studio/Salesforce, GitHub npm policy changes, Shai-Hulud MCP targeting, vibe coding week summary. Tier C (2 queries) covered AI agent CVE disclosures and vibe coding security news. Industry sources checked: Anthropic, OpenAI, Google, Microsoft, AWS, Cloudflare, Red Hat, Databricks, Salesforce, Oracle — no new incidents from these sources for this sweep beyond already-covered items.
+
+---
+
+## 2026-06-27
+
+- **Queries run:** 21 (deep: 12, medium: 5, shallow: 4; full three-tier sweep including new Tier-C social/vendor/open-source queries)
+- **New advisories:** 1
+  - `2026-06-amazon-q-mcp-workspace-rce` — **Amazon Q Developer CVE-2026-12957 + CVE-2026-12958** (Wiz Research, disclosed 2026-06-26): auto-loading `.amazonq/mcp.json` spawned MCP server processes without workspace-trust verification, inheriting live AWS credentials. CVE-2026-12957 (CVSS 8.5) + CVE-2026-12958 (symlink path-traversal companion bug). Patched in Language Servers for AWS 1.65.0 (May 12, 2026). Fifth entry in the AI-coding-tool-workspace-config-auto-execute class. Sources: thehackernews.com, securityweek.com, cybersecuritynews.com.
+- **Updated advisories:** 1
+  - `2026-06-klue-icarus-oauth-breach` — Added 5 new confirmed victims: BeyondTrust, OneTrust, 8×8, Pendo, Gms-net (SecurityWeek June 24 article); updated total to ~15 known; noted Gong also disabled Klue integration; Icarus leak site went offline. Sources: securityweek.com.
+- **Sources gained weight:**
+  - thehackernews.com: hits 51→52, last_hit 2026-06-27; ecosystems +aws, +amazon-q
+  - securityweek.com: hits 28→29, last_hit 2026-06-27; ecosystems +aws, +amazon-q, +klue-update
+  - cybersecuritynews.com: hits 35→36, last_hit 2026-06-27; ecosystems +aws, +amazon-q
+- **New sources added:** 3
+  - substack.com: weight 7, hits 0, last_hit: null; ecosystems [supply-chain, ai-security]; tier: independent
+  - anthropic.com: weight 10, hits 0, last_hit: null; ecosystems [ai-agents, claude, mcp]; tier: vendor
+  - arxiv.org: weight 6, hits 0, last_hit: null; ecosystems [research, ai-agents, supply-chain]; tier: research
+- **Notes:**
+  - **Amazon Q advisory fills the deferred item** from the 2026-06-26 run ("only search-snippet references found, no article URL verified"). All three primary source URLs were confirmed via WebFetch before inclusion.
+  - **SKILL.md updated** with four additions: (1) `@MsftSecIntel` added to Tier-C priority social accounts; (2) new Tier-C bullet for open-source advisory databases (GHSA, GitLab Advisory DB, arxiv.org cs.CR); (3) new Tier-C bullet for industry vendor security blog sweep with explicit URL list; (4) new caution for "AI coding tool workspace config auto-execute" systemic class (5 documented entries).
+  - **llms.txt and ALERTS.md** last-refreshed dates updated to 2026-06-27; Klue entry updated; Amazon Q entry added to active tier.
+  - **New source coverage expansion:** substack.com, anthropic.com, arxiv.org added to source-priorities.json per user request for broader source coverage.
+  - **Industry vendor sweeps:** anthropic.com/news, openai.com/security, security.googleblog.com, msrc.microsoft.com, aws.amazon.com/security, cloudflare.com/blog, redhat.com/blog, databricks.com/blog, salesforce.com/blog, oracle.com/security checked — no new undiscovered incidents found for this sweep beyond already-tracked items.
+  - **Deferred:** (i) Copilot Studio CVE-2026-21520 (ShareLeak) — still single source, MSRC page didn't load full details. (ii) Cursor Pwn2Own Berlin 2026 CVEs — within 90-day disclosure window. (iii) AIR Research runtime-fetch evasion demo — single THN source; agent count flagged as unconfirmed.
