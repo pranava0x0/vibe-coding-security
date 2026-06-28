@@ -2,7 +2,7 @@
 id: 2026-06-klue-icarus-oauth-breach
 title: "Klue AI integration breach — Icarus extortion group steals Salesforce/HubSpot/Slack OAuth tokens from CRM data via AI productivity tool (June 2026)"
 date_disclosed: 2026-06-12
-last_updated: 2026-06-27
+last_updated: 2026-06-28
 severity: high
 status: contained
 ecosystems: [oauth, saas-integrations, ai-productivity-tools]
@@ -33,17 +33,17 @@ On **2026-06-11 to 2026-06-12**, the **Icarus** extortion group (a financially-m
 - **Tanium**, **Jamf**, **Sprout Social**, **Gong**, **Insurity** — confirmed affected (Klue/SecurityWeek disclosure, 2026-06-12)
 - **HackerOne**, **Kudelski Security**, **Snyk** — confirmed affected (The Register, 2026-06-22)
 - **LastPass** — confirmed breach 2026-06-23: Salesforce CRM data exposed (names, email addresses, phone numbers, physical addresses, support case info); LastPass notified 2026-06-12; "customer vaults remained secure." (BleepingComputer, 2026-06-23)
-- **BeyondTrust**, **OneTrust**, **8×8**, **Pendo**, **Gms-net** (Swiss AI communications provider) — confirmed affected (SecurityWeek, 2026-06-24); brings known confirmed victims to ~15 organizations
-- **~4 additional undisclosed victims** listed on Icarus's dark-web leak site as of 2026-06-24
-- **"Hundreds" of Klue customers** affected total (Huntress statement)
+- **BeyondTrust**, **OneTrust**, **8×8**, **Pendo**, **Gms-net** (Swiss AI communications provider) — confirmed affected (SecurityWeek, 2026-06-24)
+- **AlertMedia**, **Blackbaud**, **Camunda**, **Cresta**, **Deel**, **Lucanet**, **Link11**, **Tines** — confirmed affected (SecurityWeek, 2026-06-28); brings known publicly-disclosed victims to **~24 organizations**
+- **195 total Klue customers** confirmed affected per Klue's private customer notifications (SecurityWeek, 2026-06-28)
 
-**Extortion / data leak status (updated 2026-06-27):** Icarus began posting victim data on its dark-web leak site and sent extortion emails with a 48-hour deadline. **Salesforce and Gong both disabled** the Klue app integration for affected customers to block further OAuth access. Icarus's Tor-based leak site subsequently went offline; additional victims are expected to come forward. Klue itself had not publicly disclosed the total victim count as of 2026-06-24.
+**Extortion / data leak status (updated 2026-06-28):** Icarus posted victim data on its dark-web leak site and sent extortion emails with a 48-hour deadline. **Salesforce and Gong both disabled** the Klue app integration for affected customers to block further OAuth access. Icarus's Tor-based leak site has been **offline** since approximately 2026-06-26, suggesting Klue may have negotiated with Icarus or that Icarus went dark for operational reasons. **Icarus themselves were reportedly compromised** by a second, unknown threat actor — Klue notified customers that the stolen data is now in the hands of this second actor, which is running its own extortion campaign against Klue. The second actor reportedly obtained only sample data from Icarus (not the full dump). This "hackers getting hacked" development means the full scope of data circulation is now unknown and potentially in the hands of at least two separate threat actors (SecurityWeek, 2026-06-28).
 
 **Services with stolen OAuth tokens:** Salesforce, HubSpot, SharePoint, Zoom, Gong, Chorus, Clari, Google Drive, Slack. All of these are typical AI productivity tool integrations that a platform like Klue would request.
 
 **Why this matters for vibe coders:** This is the AI-tool OAuth pivot class at scale. Every AI productivity tool that connects to your enterprise services holds a set of OAuth tokens that is *upstream* of every downstream service it can reach. A breach at the AI tool means a breach at all connected services — without any vulnerability in the downstream services themselves. The attacker never touched Salesforce's own infrastructure; they walked in through Klue's OAuth tokens.
 
-**Status:** Klue confirmed the breach on 2026-06-12 and initiated credential rotation for all affected OAuth connections. The Klue infrastructure breach was contained by 2026-06-13; however, Icarus continues to release stolen CRM data on its leak site as of 2026-06-23.
+**Status:** Klue confirmed the breach on 2026-06-12 and initiated credential rotation for all affected OAuth connections. The Klue infrastructure breach was contained by 2026-06-13. As of 2026-06-28: Icarus's leak site is offline; the stolen data is believed to be in circulation with at least two threat actors (Icarus + the unnamed group that breached Icarus).
 
 ## Am I affected?
 
@@ -77,7 +77,7 @@ More broadly, this incident is a signal to audit **all** AI productivity tools t
 | Breach window | 2026-06-11 to 2026-06-12 |
 | Access method | Klue OAuth credential store compromise |
 | Exfil mechanism | Automated Salesforce REST API queries (~24h duration) |
-| Confirmed victims | Huntress, Recorded Future, Tanium, Jamf, Sprout Social, Gong, Insurity, HackerOne, Kudelski Security, Snyk, LastPass, BeyondTrust, OneTrust, 8×8, Pendo, Gms-net (~15 known) |
+| Confirmed victims | ~24 publicly disclosed (inc. Huntress, Recorded Future, Tanium, Jamf, Sprout Social, Gong, Insurity, HackerOne, Kudelski Security, Snyk, LastPass, BeyondTrust, OneTrust, 8×8, Pendo, Gms-net, AlertMedia, Blackbaud, Camunda, Cresta, Deel, Lucanet, Link11, Tines); 195 total Klue customers notified |
 | Services exposed | Salesforce, HubSpot, SharePoint, Zoom, Gong, Chorus, Clari, Google Drive, Slack |
 | Attacker goal | CRM data exfiltration + ransom |
 
@@ -106,5 +106,6 @@ More broadly, this incident is a signal to audit **all** AI productivity tools t
 - [The Register — Security shops among the 'hundreds' of Klue hack victims](https://www.theregister.com/cyber-crime/2026/06/22/security-shops-among-the-hundreds-of-klue-hack-victims/5259743) — HackerOne, Kudelski Security, Snyk named; "hundreds" victim count (Huntress); Icarus leak-site activity; Salesforce disables Klue integration; attacker infrastructure IPs (Netherlands, France, Ukraine — likely VPN/Tor).
 - [The Hacker News — Salesforce Disables Klue App Integration After OAuth Token Abuse Exposes Customer Data](https://thehackernews.com/2026/06/salesforce-disables-klue-app.html) — Salesforce's direct response; OAuth token lifecycle; extortion timeline.
 - [SecurityWeek — BeyondTrust, LastPass Impacted by Klue-Salesforce Incident](https://www.securityweek.com/beyondtrust-lastpass-impacted-by-klue-salesforce-incident/) — adds BeyondTrust, OneTrust, 8×8, Pendo, Gms-net as confirmed victims (2026-06-24); Gong disables Klue integration; Icarus leak-site goes offline.
+- [SecurityWeek — More Klue Breach Victims Identified as Hackers Get Hacked](https://www.securityweek.com/more-klue-breach-victims-identified-as-hackers-get-hacked/) — ~24 publicly disclosed victims; 195 total customer notifications; Icarus breach by second actor; leak site offline; AlertMedia, Blackbaud, Camunda, Cresta, Deel, Lucanet, Link11, Tines named (2026-06-28).
 - Cross-link: [Vercel/Context.ai OAuth pivot (April 2026)](2026-04-vercel-context-ai-breach.md) — template for this attack class.
 - Cross-link: [Composio AI-agent platform breach (May 2026)](2026-05-composio-ai-agent-platform-breach.md) — second documented "AI tool → downstream cloud access" breach.
