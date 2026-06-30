@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-06-25 | [Operation Navy Ghost — 8 fake pyrogram packages backdoor Telegram bot servers via victim's own bot token as C2 (~24K installs)](2026-06-operation-navy-ghost-pyrogram.md) | high | unconfirmed |
 | 2026-06-25 | [Mozilla 0DIN DNS Setup Trap — clean GitHub repos trick Claude Code into reverse shell via DNS-TXT record command injection (no patch)](2026-06-0din-dns-setup-trap.md) | high | active |
 | 2026-06-26 | [Amazon Q Developer CVE-2026-12957 + CVE-2026-12958 — auto-loading .amazonq/mcp.json ran attacker code with live AWS credentials on repo open (patched)](2026-06-amazon-q-mcp-workspace-rce.md) | high | patched |
 | 2026-06-24 | [Miasma LeoPlatform + Go wave — 20 npm packages + Go module + 1,442 GitHub Actions repos compromised via Phantom Gyp (binding.gyp) in 3-second burst](2026-06-miasma-leoplatform-go-wave.md) | critical | active |
