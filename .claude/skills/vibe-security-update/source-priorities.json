@@ -617,9 +617,9 @@
       "tier": "independent"
     },
     "checkmarx.com": {
-      "weight": 14,
-      "hits": 4,
-      "last_hit": "2026-06-20",
+      "weight": 15,
+      "hits": 5,
+      "last_hit": "2026-06-30",
       "ecosystems": [
         "npm",
         "pypi",
@@ -627,7 +627,9 @@
         "LITL",
         "hitl-dialog-forging",
         "approval-dialog",
-        "vscode-copilot"
+        "vscode-copilot",
+        "pyrogram-navy-ghost",
+        "telegram-c2"
       ],
       "tier": "research"
     },
