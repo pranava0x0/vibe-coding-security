@@ -2,7 +2,7 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-06-30. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-07-01. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
@@ -243,6 +243,18 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 ---
 
 ## 🟠 RECENT — verify exposure
+
+### 2026-05-29 — Dependency-confusion recon campaign — 33+12 malicious npm packages profile developer environments across 9 corporate scopes (contained)
+Microsoft Threat Intelligence disclosed a single operator (aliases `mr.4nd3r50n`, `ce-rwb`, `t-in-one`) publishing **33 packages in two bursts on 2026-05-28** and **12 more on 2026-05-29** under **9 organizational scopes mirroring real internal corporate namespaces** (`@cloudplatform-single-spa`, `@data-science`, `@payments-widget`, `@travel-autotests`, `@sber-ecom-core`, and others). `postinstall` hooks fetch an obfuscated **reconnaissance-only** payload from `oob.moika.tech` — no destructive action confirmed yet, but the C2 architecture supports escalation. npm has taken down the accounts and packages. If your build ever resolved one of these scopes from the public registry, treat any host that ran `npm install` as having had system/environment data disclosed and configure explicit scope-to-registry mapping going forward.
+→ [advisories/2026-05-npm-dependency-confusion-recon-campaign.md](advisories/2026-05-npm-dependency-confusion-recon-campaign.md)
+
+### 2026-05-14 — Svelte CVE-2026-42573 — DOM clobbering of internal framework state leads to XSS (patched in 5.55.7)
+**CVE-2026-42573** (GHSA-rcqx-6q8c-2c42) — Svelte `<= 5.55.6` is vulnerable to **DOM clobbering**: when an app spreads attacker-influenced attributes onto a `<form>` element and onto an `<input>`/`<button>` inside it, attacker-crafted `id`/`name` values can shadow the properties Svelte's runtime relies on internally, letting injected markup be treated as trusted state and executed as script. NVD scores it 6.1 (medium); Red Hat's independent assessment scores it 8.1 (high). No in-the-wild exploitation reported. **Fixed in Svelte 5.55.7** — `npm install svelte@^5.55.7`. Affects any Svelte/SvelteKit app that spreads user-influenced props onto forms, e.g. dynamic form builders.
+→ [advisories/2026-05-svelte-dom-clobbering-xss.md](advisories/2026-05-svelte-dom-clobbering-xss.md)
+
+### 2026-03-18 — Claudy Day — three chained Claude.ai flaws exfiltrate conversation history via hidden URL-parameter prompt injection (mitigated — 2 of 3 issues fixed)
+Oasis Security disclosed **"Claudy Day"**: (1) invisible HTML in the `claude.ai/new?q=...` pre-fill parameter injects hidden instructions the user never sees, (2) those instructions direct Claude to search the user's own conversation history and exfiltrate it via the **Anthropic Files API** to an attacker-controlled account using an embedded attacker API key, and (3) an **open redirect** on `claude.com/redirect/<target>` lets a Google-Ads-hosted link disguise the delivery as a trusted `claude.com` URL. Anthropic **fixed the prompt-injection vector**; the open-redirect and Files-API exfiltration channel were still being remediated as of publication (2026-03-18, updated 2026-05-27) — treat as **mitigated, not fully patched**. If you clicked a suspicious `claude.ai`/`claude.com` link before the fix, review your Claude conversation history and connected integrations for anything unfamiliar.
+→ [advisories/2026-03-claudy-day-claude-ai-exfiltration.md](advisories/2026-03-claudy-day-claude-ai-exfiltration.md)
 
 ### 2026-03-02 — ModelScope ms-agent CVE-2026-2256 — OS command injection via Shell tool; unpatched; public PoC; CERT/CC advisory
 **CVE-2026-2256** (CVSS 6.5 MEDIUM; NIST assessment pending) — ModelScope's **ms-agent** AI agent framework contains a command injection flaw in its **Shell tool**: input-sanitization relies on a regex-based denylist that can be bypassed via shell parsing semantics. An attacker who controls any agent-consumed content (prompt-derived input, fetched documents, MCP tool results, log files, research data) can execute arbitrary OS commands on the host with the agent's privileges. **No patch exists** — the maintainer has not responded to CERT/CC coordination (VU#431821). A **public PoC exploit** is listed in the NVD advisory. In an AI agent context, a successful exploit gives an attacker the union of every credential in the agent's environment — LLM API keys, cloud IAM creds, SSH keys, npm tokens. Do not feed ms-agent any untrusted content until a patch is released; sandbox the agent process in a container with blocked egress.
