@@ -21,7 +21,11 @@ from pathlib import Path
 #     ~790KB (~200K tokens) — it has effectively outgrown "one Claude paste". The
 #     real fix (logged to BACKLOG) is to drop historical-status advisories from
 #     llms-full.txt / llms-ctx.txt at build time, not to keep raising these caps.
-LLMS_FULL_MAX_BYTES = 896 * 1024
+#   - 2026-07-01: full 896KB→960KB (measured 927KB after 3 new advisories this
+#     sweep, only ~7KB of headroom under the old cap). This is a stopgap per
+#     BACKLOG.md's own guidance — the real fix (trim `status: historical` from
+#     llms-full.txt / llms-ctx.txt at build time) is still open there.
+LLMS_FULL_MAX_BYTES = 960 * 1024
 LLMS_CTX_MAX_BYTES = 128 * 1024
 LLMS_TXT_MAX_BYTES = 64 * 1024
 

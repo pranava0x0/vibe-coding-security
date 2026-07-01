@@ -4,6 +4,9 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-05-29 | [Dependency-confusion recon campaign — 33+12 malicious npm packages profile developer environments across 9 corporate scopes](2026-05-npm-dependency-confusion-recon-campaign.md) | medium | contained |
+| 2026-05-14 | [Svelte CVE-2026-42573 — DOM clobbering of internal framework state leads to XSS](2026-05-svelte-dom-clobbering-xss.md) | medium | patched |
+| 2026-03-18 | [Claudy Day — three chained Claude.ai flaws exfiltrate conversation history via hidden URL-parameter prompt injection](2026-03-claudy-day-claude-ai-exfiltration.md) | high | mitigated |
 | 2026-06-25 | [Operation Navy Ghost — 8 fake pyrogram packages backdoor Telegram bot servers via victim's own bot token as C2 (~24K installs)](2026-06-operation-navy-ghost-pyrogram.md) | high | unconfirmed |
 | 2026-06-25 | [Mozilla 0DIN DNS Setup Trap — clean GitHub repos trick Claude Code into reverse shell via DNS-TXT record command injection (no patch)](2026-06-0din-dns-setup-trap.md) | high | active |
 | 2026-06-26 | [Amazon Q Developer CVE-2026-12957 + CVE-2026-12958 — auto-loading .amazonq/mcp.json ran attacker code with live AWS credentials on repo open (patched)](2026-06-amazon-q-mcp-workspace-rce.md) | high | patched |
