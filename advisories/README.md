@@ -4,6 +4,9 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-06-25 | [Cursor DuneSlide — two CVSS 9.8 zero-click prompt-injection-to-RCE flaws (CVE-2026-50548, CVE-2026-50549)](2026-06-cursor-duneslide-zeroclick-rce.md) | critical | patched |
+| 2026-04-06 | [Vite dev-server WebSocket arbitrary file read + fs.deny bypasses (CVE-2026-39363, CVE-2026-39364, CVE-2026-39365)](2026-04-vite-dev-server-file-read.md) | high | patched |
+| 2026-04-02 | [Claude Code deny-rule bypass via 50-subcommand parser cap (silently patched v2.1.90)](2026-04-claude-code-subcommand-deny-bypass.md) | high | patched |
 | 2026-05-29 | [Dependency-confusion recon campaign — 33+12 malicious npm packages profile developer environments across 9 corporate scopes](2026-05-npm-dependency-confusion-recon-campaign.md) | medium | contained |
 | 2026-05-14 | [Svelte CVE-2026-42573 — DOM clobbering of internal framework state leads to XSS](2026-05-svelte-dom-clobbering-xss.md) | medium | patched |
 | 2026-03-18 | [Claudy Day — three chained Claude.ai flaws exfiltrate conversation history via hidden URL-parameter prompt injection](2026-03-claudy-day-claude-ai-exfiltration.md) | high | mitigated |
