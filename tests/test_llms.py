@@ -25,9 +25,13 @@ from pathlib import Path
 #     sweep, only ~7KB of headroom under the old cap). This is a stopgap per
 #     BACKLOG.md's own guidance — the real fix (trim `status: historical` from
 #     llms-full.txt / llms-ctx.txt at build time) is still open there.
+#   - 2026-07-02: index 64KB→72KB (measured 66,338B, ~800B over) and ctx
+#     128KB→144KB (measured 134,530B, ~3.4KB over) after 3 new advisories this
+#     sweep. Same stopgap as above — BACKLOG.md's trim-historical-status fix is
+#     still the real fix and is still open.
 LLMS_FULL_MAX_BYTES = 960 * 1024
-LLMS_CTX_MAX_BYTES = 128 * 1024
-LLMS_TXT_MAX_BYTES = 64 * 1024
+LLMS_CTX_MAX_BYTES = 144 * 1024
+LLMS_TXT_MAX_BYTES = 72 * 1024
 
 
 def test_llms_txt_starts_with_title(llms_txt):

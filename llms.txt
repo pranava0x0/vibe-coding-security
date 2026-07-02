@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-07-01
+**Last refreshed:** 2026-07-02
 
 ## Quick start
 
@@ -55,7 +55,7 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-07-01)
+## Active threat families (as of 2026-07-02)
 
 The highest-risk ongoing threat families for vibe coders:
 
@@ -76,6 +76,8 @@ The highest-risk ongoing threat families for vibe coders:
 - **PromptSnatcher browser extension AI exfil** — Malicious Chrome extensions (ad-blocker disguise) intercept full AI chatbot conversations from ~900K users across 8 platforms (ChatGPT, Claude, Gemini, Copilot, Perplexity, DeepSeek, Grok, Meta AI). Any code, credentials, or business data shared with AI chat platforms while the extension was active should be treated as exfiltrated.
 - **"Localhost is not a security boundary" AI agent cluster** — Five named instances in 2026: Cline CVE-2026-44211, OpenCode CVE-2026-22812, OpenClaw CVE-2026-25253, Marimo CVE-2026-39987, AutoGen Studio (AutoJack). Any locally-running AI tool that exposes an unauthenticated WebSocket/HTTP server without Origin validation is in this class. Audit: `ss -tlnp | grep -v 127.0.0.1`.
 - **Dify DifyTap** — 4 CVEs (top CVSS 9.4) in Dify (1M+ apps) enabling cross-tenant AI conversation exfiltration, internal SSRF, and document theft. Patched in Dify 1.14.2 (June 2026). WAF rule needed for CVE-2026-41948 until plugin-daemon fix ships. Multi-tenant Dify deployments should upgrade immediately.
+- **Cursor DuneSlide** — Two CVSS 9.8 zero-click prompt-injection-to-RCE flaws (CVE-2026-50548, CVE-2026-50549) in Cursor IDE, disclosed by Cato AI Labs 2026-07-01. Attacker-controlled content the agent reads (an MCP tool response or a poisoned web-search result) escapes the sandbox and writes files anywhere on disk with zero user interaction beyond the original prompt — one flaw overwrites the sandbox helper binary itself via an unvalidated `working_directory` parameter, the other exploits a symlink-resolution fallback that trusts an unresolved path when canonicalization fails. Patched in Cursor 3.0 (April 2026); update if you haven't already.
+- **Silently-bundled Claude Code security fixes** — Anthropic has now shipped at least two independent, unrelated security bugs fixed silently in the *same* release (v2.1.90, April 2026): a SOCKS5 null-byte network-sandbox bypass and a 50-subcommand deny-rule bypass in `bashPermissions.ts`. Neither got a CVE, advisory, or changelog note. Treat "latest" as carrying undisclosed security fixes and don't pin old Claude Code versions.
 
 ## Citation
 
