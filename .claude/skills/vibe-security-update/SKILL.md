@@ -151,8 +151,15 @@ For every NEW or UPDATED advisory:
   - 🔴 active = last 14 days OR malware still propagating
   - 🟠 recent = last 12 months
   - 🟡 historical = older OR pattern-class
-- Update the `Last refreshed:` date at the top of ALERTS.md.
 - Maintain latest-on-top within each tier.
+
+**After all advisories are added/updated, programmatically update the `Last refreshed:` date:**
+
+```bash
+python tools/update-alerts-date.py
+```
+
+This updates the `**Last refreshed:**` marker at the top of ALERTS.md to today's date. Run this even if no advisories changed (0 new, 0 updated) — the sweep ran today.
 
 ### Step 4 — Update source priorities (the learning step)
 
@@ -192,7 +199,10 @@ Add an entry:
 
 **The GitHub Pages deploy runs `build.py → validate.py → pytest` and fails the deploy if any step fails. Run the exact same gate locally and only commit if it is fully green.** Committing without this is what froze the live site for 2+ weeks (2026-06-04 → 2026-06-19): every daily sweep committed broken internal links, `validate.py` failed, and the site silently stopped updating while `main` kept advancing.
 
+**Always run the date-update script FIRST:**
+
 ```bash
+python tools/update-alerts-date.py  # ensure ALERTS.md date is current
 python site/build.py        # must succeed
 python site/validate.py     # must print "All checks passed."
 python -m pytest tests/ -q  # must be all-green (matches the deploy's `pytest tests/ -v`)
