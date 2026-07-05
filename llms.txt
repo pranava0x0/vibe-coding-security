@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-07-04
+**Last refreshed:** 2026-07-05
 
 ## Quick start
 
@@ -55,7 +55,7 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-07-04)
+## Active threat families (as of 2026-07-05)
 
 The highest-risk ongoing threat families for vibe coders:
 
@@ -81,6 +81,7 @@ The highest-risk ongoing threat families for vibe coders:
 - **Cursor DuneSlide** — Two CVSS 9.8 zero-click prompt-injection-to-RCE flaws (CVE-2026-50548, CVE-2026-50549) in Cursor IDE, disclosed by Cato AI Labs 2026-07-01. Attacker-controlled content the agent reads (an MCP tool response or a poisoned web-search result) escapes the sandbox and writes files anywhere on disk with zero user interaction beyond the original prompt — one flaw overwrites the sandbox helper binary itself via an unvalidated `working_directory` parameter, the other exploits a symlink-resolution fallback that trusts an unresolved path when canonicalization fails. Patched in Cursor 3.0 (April 2026); update if you haven't already.
 - **Silently-bundled Claude Code security fixes** — Anthropic has now shipped at least two independent, unrelated security bugs fixed silently in the *same* release (v2.1.90, April 2026): a SOCKS5 null-byte network-sandbox bypass and a 50-subcommand deny-rule bypass in `bashPermissions.ts`. Neither got a CVE, advisory, or changelog note. Treat "latest" as carrying undisclosed security fixes and don't pin old Claude Code versions.
 - **Claude Desktop personalization-sync prompt injection** — Pentera Labs (July 2026) showed a prompt planted in a compromised Claude account's account-wide personalization/preferences (synced across every device) silently loads on next use and, with a command-capable MCP connector present, executes a reverse shell. Anthropic calls this expected functionality, not a vulnerability — sibling of the existing Claude Desktop Extensions (DXT) won't-fix RCE. Treat account-wide AI personalization settings as a code-execution-adjacent trust boundary; protect the account with MFA.
+- **Claude Code GitHub Action credential leaks (two distinct bugs, same ecosystem)** — Microsoft Threat Intelligence found the Action's unsandboxed Read tool could be prompt-injected into reading `/proc/self/environ` and exfiltrating `ANTHROPIC_API_KEY`/CI secrets (disclosed 2026-04-29, patched Claude Code 2.1.128); separately, RyotaK found `checkWritePermissions()` trusted any actor whose name ends in `[bot]` (disclosed 2026-06-04, patched Action v1.0.94). Any agentic CI workflow processing untrusted GitHub content needs every tool it can invoke — not just Bash — sandboxed to the same standard.
 
 ## Citation
 
