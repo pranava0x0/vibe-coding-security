@@ -2,7 +2,7 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-07-04. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-07-05. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
@@ -283,6 +283,10 @@ Three related flaws let an attacker who can reach a **Vite** dev server over the
 ### 2026-04-02 — Claude Code deny-rule bypass via 50-subcommand parser cap (silently patched in v2.1.90)
 Adversa AI found that Claude Code's bash permission checker (`bashPermissions.ts`) **stopped enforcing configured deny rules** on any compound shell command with more than **50 subcommands** — past that threshold it fell back to a generic "allow?" prompt instead of blocking. PoC: 50 no-op subcommands followed by a `curl` that should have hit a deny rule sailed through to a permission prompt. Root cause per internal ticket CC-643: a performance fix that capped per-subcommand security analysis at 50 to stop UI freezes on long compound commands. **Silently patched in v2.1.90** — the same release that separately fixed the unrelated [SOCKS5 sandbox bypass](advisories/2026-05-claude-code-sandbox-socks5-bypass.md); no CVE, no advisory, no changelog note for either. Third silently-patched Claude Code security bug tracked in this repo.
 → [advisories/2026-04-claude-code-subcommand-deny-bypass.md](advisories/2026-04-claude-code-subcommand-deny-bypass.md)
+
+### 2026-04-29 — Claude Code GitHub Action's unsandboxed Read tool leaked CI/CD secrets via /proc/self/environ (patched in 2.1.128)
+Microsoft Threat Intelligence found that Claude Code's **Read tool** did not get the environment-scrubbing sandboxing applied to the Bash tool, so a prompt injected into a GitHub issue, PR, or comment could direct the agent to read **`/proc/self/environ`** inside the CI runner and exfiltrate `ANTHROPIC_API_KEY` and any other secret in the workflow's environment — laundered past output filters (e.g. "cut the first 7 characters") and exfiltrated via a posted comment, workflow log, or web request. Disclosed to Anthropic via HackerOne on **2026-04-29**; patched in **Claude Code 2.1.128** (2026-05-05) by blocking Read-tool access to sensitive `/proc` files. No CVE assigned. **Distinct from** the `[bot]`-suffix trust bypass below — same GitHub Action ecosystem, different root cause and different fix.
+→ [advisories/2026-04-claude-code-action-procfs-credential-leak.md](advisories/2026-04-claude-code-action-procfs-credential-leak.md)
 
 ### 2026-03-18 — Claudy Day — three chained Claude.ai flaws exfiltrate conversation history via hidden URL-parameter prompt injection (mitigated — 2 of 3 issues fixed)
 Oasis Security disclosed **"Claudy Day"**: (1) invisible HTML in the `claude.ai/new?q=...` pre-fill parameter injects hidden instructions the user never sees, (2) those instructions direct Claude to search the user's own conversation history and exfiltrate it via the **Anthropic Files API** to an attacker-controlled account using an embedded attacker API key, and (3) an **open redirect** on `claude.com/redirect/<target>` lets a Google-Ads-hosted link disguise the delivery as a trusted `claude.com` URL. Anthropic **fixed the prompt-injection vector**; the open-redirect and Files-API exfiltration channel were still being remediated as of publication (2026-03-18, updated 2026-05-27) — treat as **mitigated, not fully patched**. If you clicked a suspicious `claude.ai`/`claude.com` link before the fix, review your Claude conversation history and connected integrations for anything unfamiliar.
