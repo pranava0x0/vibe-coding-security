@@ -220,6 +220,8 @@ Then the lightweight checks: frontmatter complete on new files; `ALERTS.md` pars
 ### Step 7 — Commit + push
 
 ```bash
+git config user.name "pranava0x0"
+git config user.email "2497510+pranava0x0@users.noreply.github.com"
 git add -A
 git status --short
 # If anything changed (only after Step 6 is fully green):
@@ -227,6 +229,7 @@ git commit -m "sweep YYYY-MM-DD: N new, M updated"
 git fetch origin && git rebase origin/main   # a daily sweep may have landed mid-run
 git push
 ```
+The `git config` lines are local (repo-scoped), not `--global` — a cloud-run sweep has no pre-existing identity and would otherwise commit as its own default bot account (this is also why commit messages must never carry a `Co-Authored-By:`/`Claude-Session:` trailer — see CLAUDE.md's git discipline section).
 
 If the push is rejected (non-fast-forward), a sweep landed while you worked — `git fetch && git rebase origin/main`, re-run Step 6, then push. **Never force-push.** After pushing, confirm the deploy actually goes green (`gh run watch` on the "Deploy site to GitHub Pages" workflow) — a successful push but failed deploy means the live site is still stale.
 
