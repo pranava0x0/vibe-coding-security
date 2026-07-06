@@ -29,7 +29,10 @@ from pathlib import Path
 #     128KB→144KB (measured 134,530B, ~3.4KB over) after 3 new advisories this
 #     sweep. Same stopgap as above — BACKLOG.md's trim-historical-status fix is
 #     still the real fix and is still open.
-LLMS_FULL_MAX_BYTES = 960 * 1024
+#   - 2026-07-06: full 960KB→1024KB (measured 988,033B, ~5KB over the old cap)
+#     after 2 new advisories over two sweeps. Still the same open stopgap;
+#     BACKLOG.md's trim-historical-status-advisories fix has not been done.
+LLMS_FULL_MAX_BYTES = 1024 * 1024
 LLMS_CTX_MAX_BYTES = 144 * 1024
 LLMS_TXT_MAX_BYTES = 72 * 1024
 
