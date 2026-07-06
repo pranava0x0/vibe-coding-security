@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-07-05
+**Last refreshed:** 2026-07-06
 
 ## Quick start
 
@@ -55,11 +55,11 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-07-05)
+## Active threat families (as of 2026-07-06)
 
 The highest-risk ongoing threat families for vibe coders:
 
-- **Miasma/Shai-Hulud worm lineage** — Self-propagating npm/PyPI worm family, now in 7+ documented waves, with copycat actors following TeamPCP's May 2026 open-source release of the source code. Waves use different install-time primitives: postinstall hooks, binding.gyp (Phantom Gyp), .pth startup files (Hades), direct source-repo poisoning (Wave 5), **dependency-injection** (Mastra, June 2026), and **compromised-maintainer-token burst** (LeoPlatform wave, June 24 2026 — 20 packages in 3 seconds, plus Go module and GitHub Actions compromise). See advisories for each wave.
+- **Miasma/Shai-Hulud worm lineage** — Self-propagating npm/PyPI worm family, now in 8+ documented waves, with copycat actors following TeamPCP's May 2026 open-source release of the source code. Waves use different install-time primitives: postinstall hooks, binding.gyp (Phantom Gyp), .pth startup files (Hades), direct source-repo poisoning (Wave 5), **dependency-injection** (Mastra, June 2026), and **compromised-maintainer-token burst** (LeoPlatform wave, June 24 2026 — 20 packages in 3 seconds, plus Go module and GitHub Actions compromise). The LeoPlatform wave's `codfish/semantic-release-action` GitHub Action compromise produced a **third downstream victim two days later**: 22 versions of `@immobiliarelabs`'s Backstage GitLab/LDAP plugins (June 26), whose payload plants persistence hooks directly in AI coding assistant config files. See advisories for each wave.
 - **IronWorm** — Rust-based npm worm with eBPF kernel rootkit + Tor C2 (June 2026). Invisible to eBPF-based EDR. Distinct from Miasma lineage.
 - **GlassWorm / GlassWASM** — VS Code / Open VSX worm with steganographic (invisible Unicode) payloads and blockchain C2. Status: **active** — returned post-takedown with macOS-targeting wave (June 12) and a new TinyGo-compiled WebAssembly stager called GlassWASM (two Open VSX extensions `vsblack`, `flint-debug` published June 9-10; removed after Socket report June 15). Operator rebuilds on fresh infrastructure after each takedown. Credentials stolen in prior waves remain in the wild.
 - **WhiteCobra** — Persistent threat actor flooding IDE extension marketplaces with LummaStealer-delivering extensions targeting crypto wallet users. Ongoing since July 2025.

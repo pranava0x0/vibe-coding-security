@@ -19,6 +19,7 @@ One file per incident. Latest at the top.
 | 2026-06-25 | [Mozilla 0DIN DNS Setup Trap — clean GitHub repos trick Claude Code into reverse shell via DNS-TXT record command injection (no patch)](2026-06-0din-dns-setup-trap.md) | high | active |
 | 2026-06-26 | [Amazon Q Developer CVE-2026-12957 + CVE-2026-12958 — auto-loading .amazonq/mcp.json ran attacker code with live AWS credentials on repo open (patched)](2026-06-amazon-q-mcp-workspace-rce.md) | high | patched |
 | 2026-06-24 | [Miasma LeoPlatform + Go wave — 20 npm packages + Go module + 1,442 GitHub Actions repos compromised via Phantom Gyp (binding.gyp) in 3-second burst](2026-06-miasma-leoplatform-go-wave.md) | critical | active |
+| 2026-06-26 | [Miasma hits @immobiliarelabs Backstage GitLab/LDAP plugins — 22 versions, AI-assistant config persistence](2026-06-miasma-immobiliarelabs-backstage-wave.md) | critical | contained |
 | 2026-06-22 | [Dify DifyTap — 4 CVEs (top CVSS 9.4) allow cross-tenant AI conversation exfiltration across 1M+ apps; patched 1.14.2](2026-06-dify-difytap-cross-tenant-exfil.md) | high | patched |
 | 2026-06-24 | [Cordyceps — GitHub Actions CI/CD misconfiguration class exposes 300+ repos (Microsoft, Google, Cloudflare) to PR-based code execution and credential theft](2026-06-cordyceps-cicd-github-actions.md) | high | active |
 | 2026-05-07 | [TrustFall — Claude Code, Cursor CLI, Gemini CLI, Copilot CLI, Codex CLI auto-execute MCP servers on folder-trust dialog (no patch; Anthropic won't fix)](2026-05-trustfall-mcp-auto-execute.md) | high | active |

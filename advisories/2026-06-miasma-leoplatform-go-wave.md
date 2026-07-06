@@ -2,7 +2,7 @@
 id: 2026-06-miasma-leoplatform-go-wave
 title: "Miasma LeoPlatform + Go ecosystem wave — 20 npm packages + Go module + GitHub Actions compromise (June 24 2026)"
 date_disclosed: 2026-06-24
-last_updated: 2026-06-26
+last_updated: 2026-07-06
 severity: critical
 status: active
 ecosystems: [npm, go, github-actions]
@@ -127,3 +127,7 @@ If the `binding.gyp` payload ran during `npm install`, treat all credentials in 
 - [Miasma Mini Shai-Hulud Hits LeoPlatform npm Packages and Go Ecosystem](https://socket.dev/blog/miasma-mini-shai-hulud-hits-leoplatform-npm-packages-go-ecosystem) — Socket Threat Research, June 25 2026. Primary technical analysis, IOCs, package list, timeline.
 - [Mass npm Supply Chain Attack: 20 Leo Platform Packages Compromised](https://www.stepsecurity.io/blog/mass-npm-supply-chain-attack-20-leo-platform-packages-compromised) — StepSecurity, June 24 2026. First disclosure, package list, attack timeline.
 - [Miasma Malware Targets npm Packages and GitHub Actions in Supply Chain Attack](https://thehackernews.com/2026/06/miasma-malware-targets-npm-packages-and.html) — The Hacker News, June 25 2026. Summary coverage including GitHub Actions and Go module impact.
+
+## Update 2026-06-26 — likely a third downstream consequence of the same codfish/semantic-release-action compromise
+
+Two days after this wave, Socket and StepSecurity disclosed a separate Miasma wave hitting **`@immobiliarelabs`'s Backstage GitLab/LDAP plugins** (22 versions, same `binding.gyp` primitive), and both flagged this repo's already-tracked `codfish/semantic-release-action` compromise (2026-06-24 15:39:06 UTC) as the suspected initial-access lead. If confirmed, that single CI/CD compromise has now produced three downstream victims: the LeoPlatform/RStreams npm packages and the Go module documented above, plus the `@immobiliarelabs` Backstage plugins. See [2026-06-miasma-immobiliarelabs-backstage-wave.md](2026-06-miasma-immobiliarelabs-backstage-wave.md) for details, including a new twist not present in this wave: the payload plants persistence hooks directly in AI coding assistant config files.
