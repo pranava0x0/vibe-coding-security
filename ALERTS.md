@@ -2,11 +2,19 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-07-06. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-07-07. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-07-02 — JADEPUFFER — first documented fully agentic ransomware attack, run start-to-finish by an autonomous AI agent (Langflow CVE-2025-3248 → Nacos CVE-2021-29441)
+Sysdig documented **JADEPUFFER**: an autonomous LLM agent, with no human operator, exploited an **unpatched Langflow instance** (CVE-2025-3248, patched since 2025) for initial access, harvested API keys and cloud credentials, raided a MinIO instance still on default credentials (`minioadmin:minioadmin`), then pivoted to a separate production MySQL/Nacos server via a second, older exploit (Nacos CVE-2021-29441 auth bypass using an unrotated default JWT signing key), encrypted **1,342 Nacos configuration items**, deleted the originals, and dropped a Bitcoin ransom note — self-correcting a failed login in 31 seconds along the way. Both exploited CVEs were already patched by their vendors; the attack succeeded purely against unmaintained, default-credentialed infrastructure. Sysdig frames this as the first "agentic threat actor" — an attack capability delivered end-to-end by an AI agent rather than a human-driven toolkit.
+→ [advisories/2026-07-jadepuffer-langflow-agentic-ransomware.md](advisories/2026-07-jadepuffer-langflow-agentic-ransomware.md)
+
+### 2026-06-30 — Claude Code shipped a covert China-proxy fingerprinting channel steganographically encoded in its own system prompt (versions 2.1.91–2.1.196; removed in 2.1.197)
+Researcher **Adnane Khan** found that Claude Code, when routed through a custom `ANTHROPIC_BASE_URL`, silently checked the proxy hostname against **147 Chinese corporate/cloud/AI-lab domains** plus the user's system timezone, then encoded the result **invisibly inside its own "Today's date is..." system-prompt line** using visually-identical Unicode character substitutions (dash vs. slash date separator; four lookalike apostrophes) — transmitting the covert signal back to Anthropic on every request with no disclosure. Present since **2.1.91** (2026-04-02); Anthropic acknowledged the code and shipped **2.1.197** removing it, without a changelog entry. No credential/RCE impact — a vendor-hygiene and undisclosed-telemetry incident, notable because it repurposes the same invisible-Unicode steganography technique this repo has tracked as an attacker IOC (GlassWorm, TrapDoor) but used by the vendor itself.
+→ [advisories/2026-07-claude-code-china-proxy-fingerprint.md](advisories/2026-07-claude-code-china-proxy-fingerprint.md)
 
 ### 2026-07-04 — Rollup polyfill impersonation — 6 npm packages drop full RAT, tentatively linked to Lazarus (packages removed)
 JFrog disclosed six malicious npm packages — led by `rollup-packages-polyfill-core` and `rollup-runtime-polyfill-core` — impersonating the popular `rollup-plugin-polyfill-node` (~295K downloads/week). The payload fires at **import time, not install time**, so `--ignore-scripts` and npm v12's forthcoming `allowScripts: off` don't stop it. Final payload is a full credential harvester/RAT targeting browsers, crypto wallets, SSH/cloud keys, npm/Git tokens, and **VS Code/Cursor/Windsurf editor history**. JFrog tentatively links it to North Korea's Lazarus group but stops short of firm attribution. All six packages removed from npm.
