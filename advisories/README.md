@@ -4,6 +4,8 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-07-02 | [JADEPUFFER — first documented fully agentic ransomware attack, run start-to-finish by an autonomous AI agent](2026-07-jadepuffer-langflow-agentic-ransomware.md) | high | active |
+| 2026-06-30 | [Claude Code covert China-proxy fingerprinting channel steganographically encoded in system prompt (2.1.91–2.1.196, removed in 2.1.197)](2026-07-claude-code-china-proxy-fingerprint.md) | medium | patched |
 | 2026-07-04 | [Rollup polyfill impersonation — 6 npm packages drop full RAT, tentatively linked to Lazarus](2026-07-rollup-polyfill-npm-lazarus.md) | high | contained |
 | 2026-07-01 | [Claude Desktop personalization-sync prompt injection → reverse shell — Anthropic calls it expected functionality](2026-07-claude-desktop-personalization-sync-rce.md) | high | active |
 | 2026-03-01 | [PolinRider — DPRK-linked campaign backdoors npm, Packagist, Go, and a Chrome extension via maintainer-account takeover](2026-03-polinrider-multi-ecosystem-dprk-campaign.md) | high | active |
