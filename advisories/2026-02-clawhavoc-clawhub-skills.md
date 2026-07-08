@@ -2,7 +2,7 @@
 id: 2026-02-clawhavoc-clawhub-skills
 title: "ClawHavoc — mass malicious-skill poisoning of OpenClaw's ClawHub marketplace (February 2026)"
 date_disclosed: 2026-02-01
-last_updated: 2026-05-24
+last_updated: 2026-07-08
 severity: high
 status: active
 ecosystems: [ai-agents, openclaw, clawhub]
@@ -29,6 +29,13 @@ Snyk Labs published the first comprehensive security audit of the AI-agent-skill
 - **"ToxicSkills" threat class:** a skill that looks harmless under static review but behaves maliciously *when executed by a capable agent* — the agent itself is the gadget that turns benign-looking instructions into actions.
 - **Runtime-fetch evasion:** **2.9% of ClawHub skills (21% of malicious samples) dynamically fetch and execute remote content at runtime.** The published skill passes review; the attacker swaps the payload later on their own infrastructure. This breaks naive "scan-on-publish" defenses — Snyk's companion piece argues a **skill scanner is often false security** (and can itself be malware).
 - **Second marketplace:** **skills.sh** joins ClawHub as an affected surface; this is a class issue across agent-skill registries, not a single site.
+
+### Update (2026-07-06) — SkillCloak/SkillDetonate: academic research shows scanner-evasion for skill malware is trivial, and proposes a runtime fix
+Researchers at Hong Kong University of Science and Technology published **SkillCloak**, a proof-of-concept tool that rewrites a malicious Agent Skill to preserve its payload while evading static scanners — via structural obfuscation (character substitution) and **self-extracting packing** that hides payloads in directories scanners typically skip. Tested against 8 static scanners, the packing technique evaded detection **>90% of the time (>99% against most individual scanners)**; even lighter rewriting cleared most scanners **>80%** of the time. The paper targets Agent Skills for **Claude Code, OpenAI Codex, and OpenClaw** specifically, and cites this repo's already-tracked ClawHavoc campaign's malicious-skill counts as real-world grounding.
+
+The same researchers built **SkillDetonate**, a sandboxed runtime auditor that inspects a skill's actual OS-level behavior and data flow rather than its static appearance — catching **97%** of attacks in controlled testing (2% false-positive rate) and **87%** of real-world malicious skills, versus roughly 10% for static scanners alone.
+
+**Why this matters beyond the original ClawHavoc campaign:** this is independent academic confirmation of the "skill scanner is often false security" finding Snyk's ToxicSkills audit already surfaced (see above) — and it demonstrates the evasion is not merely theoretical or specific to one marketplace's scanner, but generalizes across at least 8 tested tools with a simple, repeatable packing technique. No CVE applies (this is a research/tooling disclosure, not a specific incident), but the practical takeaway is the same: **static scan-on-publish is not a sufficient control for AI-agent skill marketplaces**, and runtime behavioral monitoring (SkillDetonate's approach, or equivalent sandboxed execution auditing) is the direction defenders should move toward.
 
 ### Why this keeps happening
 This is the AI-agent-skill analogue of the [GlassWorm Open VSX worm](2025-10-glassworm-vscode-worm.md) and the [Nx Console extension compromise](2026-05-nx-console-vscode-compromise.md): an under-governed plugin/extension marketplace becomes a credential-theft delivery channel. It is distinct from the [OpenClaw "Claw Chain" CVEs](2026-05-openclaw-claw-chain.md) (flaws *in* the agent) and the Moltbook token leak (see [vibe platform exposure](ongoing-vibe-platform-exposure.md)) — here the **content in the marketplace** is the threat.
@@ -60,7 +67,7 @@ If a skill triggered an unexpected install step or a macOS password prompt, trea
 → [prevention/agent-sandboxing.md](../prevention/agent-sandboxing.md) — don't run agent skills with your full user privileges
 - Install skills only from publishers you can verify; a one-week-old GitHub account is not a trust signal.
 - Be maximally suspicious of any skill that asks you to install a "prerequisite," run a script, or approve an OS password prompt.
-- A clean static scan is not a clean bill of health: skills that fetch-and-execute remote content at runtime can flip malicious after review (Snyk ToxicSkills). Don't trust a "skill scanner" badge as proof of safety.
+- A clean static scan is not a clean bill of health: skills that fetch-and-execute remote content at runtime can flip malicious after review (Snyk ToxicSkills), and academic research (SkillCloak) shows trivial repackaging evades static scanners >90% of the time. Don't trust a "skill scanner" badge as proof of safety — prefer marketplaces or tooling that do runtime/sandboxed behavioral analysis.
 
 ## Sources
 - [Koi Security — ClawHavoc: 341 Malicious ClawedBot Skills Found by the Bot They Were Targeting](https://www.koi.ai/blog/clawhavoc-341-malicious-clawedbot-skills-found-by-the-bot-they-were-targeting) — canonical research, audit method, counts.
@@ -73,3 +80,4 @@ If a skill triggered an unexpected install step or a macOS password prompt, trea
 - [Snyk — ToxicSkills: Prompt Injection in 36%, 1,467 Malicious Payloads across the Agent-Skills Supply Chain](https://snyk.io/blog/toxicskills-malicious-ai-agent-skills-clawhub/) — ecosystem-wide audit (ClawHub + skills.sh), runtime-fetch evasion, ToxicSkills class.
 - [Snyk — Why Your "Skill Scanner" Is Just False Security (and Maybe Malware)](https://snyk.io/blog/skill-scanner-false-security/) — why scan-on-publish defenses fail.
 - [Snyk — How a Malicious Google Skill on ClawHub Tricks Users Into Installing Malware](https://snyk.io/blog/clawhub-malicious-google-skill-openclaw-malware/) — worked example of a high-ranking malicious skill.
+- [The Hacker News — New SkillCloak Technique Lets Malicious AI Agent Skills Evade Static Scanners](https://thehackernews.com/2026/07/new-skillcloak-technique-lets-malicious.html) — HKUST research; SkillCloak evasion rates, SkillDetonate runtime-auditor results, affected tools (Claude Code, OpenAI Codex, OpenClaw).

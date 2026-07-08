@@ -2,7 +2,7 @@
 id: 2026-05-mcp-stdio-systemic-rce
 title: "Systemic MCP stdio RCE class — 200,000+ servers exposed (May 2026)"
 date_disclosed: 2026-05
-last_updated: 2026-05-26
+last_updated: 2026-07-08
 severity: high
 status: mitigated
 ecosystems: [mcp, anthropic-mcp]
@@ -45,6 +45,8 @@ Microsoft's own MCP server has now had **two** disclosures in this class:
 
 **Named, KEV-listed instance — nginx-ui "MCPwn" (CVE-2026-33032, CVSS 9.8):** the clearest real-world example of the "MCP endpoint shipped without auth" class. nginx-ui exposes two HTTP MCP endpoints, `/mcp` and `/mcp_message`. `/mcp` requires IP-allowlisting **and** `AuthRequired()` middleware; `/mcp_message` only gets IP-allowlisting — and the **default IP allowlist is empty, which the middleware treats as "allow all."** So an unauthenticated network attacker can invoke all **12 MCP tools** (including `nginx_config_add` with auto-reload) and achieve **full nginx takeover in two HTTP requests**. ~**2,600** exposed instances (Pluto Security / Shodan), **actively exploited**, added to **VulnCheck KEV (2026-04-13)** and named in Recorded Future's most-exploited-CVE list for March 2026. Fixed in **nginx-ui 2.3.4** (2026-03-15); workaround is to add `middleware.AuthRequired()` to `/mcp_message` or flip the IP-allowlist default from allow-all to deny-all. This is an **HTTP-transport** auth-bypass rather than stdio, but it's the same root failure — an MCP surface treated as trusted-by-default.
 
+**Named instance — `fast-mcp-telegram` bearer-token path traversal (CVE-2026-52830, CVSS 9.4):** a Telegram MCP server (PyPI) that lets AI agents send/read Telegram messages via MTProto validates its HTTP Bearer token by joining the raw token string directly into a session-file path, then checking whether that path exists — without rejecting path separators or normalizing the result. The verifier does block the literal reserved token `telegram`, but a token of `../fast-mcp-telegram/telegram` traverses back to the documented default session file (`~/.config/fast-mcp-telegram/telegram.session`) and authenticates as that account with **no valid bearer token at all**. Any unauthenticated remote HTTP client can read/send messages and make arbitrary MTProto calls as the default Telegram identity. Affects **≤ 0.19.0**, fixed in **0.19.1** (published 2026-07-02). Same root failure as every other entry here: an MCP surface that treats a caller-supplied string as a trusted path/credential without validating it stays inside its intended boundary.
+
 ## Am I affected?
 You are exposed by the class issue if:
 
@@ -57,6 +59,7 @@ You are exposed by the class issue if:
 - You run **`@mcpjam/inspector` ≤ 1.4.2** (CVE-2026-23744) — it binds `0.0.0.0` with no auth → zero-interaction RCE; upgrade to **≥ 1.4.3** and bind it to `127.0.0.1`.
 - You run **`aws-mcp-server`** (community/third-party project) — CVE-2026-5058 / CVE-2026-5059 are **unauthenticated, CVSS 9.8 command-injection RCEs**; patches were pending at disclosure (2026-04-11), so remove it from any network-reachable path and watch the project + ZDI-26-245/-246 for a fixed release.
 - You run **`n8n-mcp` ≤ 2.47.3** in multi-tenant HTTP mode (CVE-2026-39974) — authenticated SSRF that reflects responses back, including cloud IMDS; upgrade to **≥ 2.47.4**.
+- You run **`fast-mcp-telegram` ≤ 0.19.0** over HTTP (CVE-2026-52830) — its bearer-token check is bypassable via path traversal, letting anyone authenticate as your default Telegram session with no valid token; upgrade to **≥ 0.19.1**.
 
 ```bash
 # Find MCP servers configured in your tools
@@ -77,6 +80,7 @@ lsof -iTCP -sTCP:LISTEN -P -n 2>/dev/null | grep -iE 'mcp|model-context'
 5. **Update `@mcpjam/inspector` to ≥ 1.4.3** (CVE-2026-23744) and never run an MCP inspector/dev tool bound to `0.0.0.0`; keep it on `127.0.0.1`.
 5a. **For `aws-mcp-server` (CVE-2026-5058 / -5059):** treat as unfixed-in-the-wild. Remove from any reachable network path; restrict to loopback; rotate AWS credentials that were exposed to the host. Track ZDI-26-245 / -246 for the vendor patch.
 5b. **Update `n8n-mcp` to ≥ 2.47.4** (CVE-2026-39974). Until upgraded, block egress from the MCP host to cloud IMDS endpoints (`169.254.169.254`, `metadata.google.internal`, etc.) and restrict `AUTH_TOKEN` to trusted callers.
+5c. **Update `fast-mcp-telegram` to ≥ 0.19.1** (CVE-2026-52830). If you can't upgrade immediately, disable the default/legacy session file or move it outside the token-verifier's reachable path prefix, and don't expose the server's HTTP transport off-host.
 6. **For Apache Doris MCP:** apply the patch + the CVE tracker recommendations.
 7. **For Alibaba RDS MCP:** since Alibaba declined to patch, do not deploy without an isolating proxy that filters MCP messages.
 8. **Do not expose stdio MCPs to network sockets.** If you've wrapped one with a proxy / HTTP gateway, audit the proxy's input validation.
@@ -102,7 +106,6 @@ OX Security calls this "The Mother of All AI Supply Chains" — making the case 
 - [Adversa AI — Top MCP security resources — May 2026](https://adversa.ai/blog/top-mcp-security-resources-may-2026/)
 - [The Hacker News — Actively Exploited nginx-ui Flaw (CVE-2026-33032) Enables Full Nginx Server Takeover](https://thehackernews.com/2026/04/critical-nginx-ui-vulnerability-cve.html)
 - [Picus Security — CVE-2026-33032 (MCPwn): How a Missing Middleware Call in nginx-ui Hands Attackers Full Web Server Takeover](https://www.picussecurity.com/resource/blog/cve-2026-33032-mcpwn-how-a-missing-middleware-call-in-nginx-ui-hands-attackers-full-web-server-takeover)
-- [Endor Labs — CVE-2026-33032, nginx-ui's Unauthenticated MCP Endpoint Allows Remote Nginx Takeover](https://www.endorlabs.com/vulnerability/cve-2026-33032)
 - [BleepingComputer — Critical Nginx UI auth bypass flaw now actively exploited in the wild](https://www.bleepingcomputer.com/news/security/critical-nginx-ui-auth-bypass-flaw-now-actively-exploited-in-the-wild/)
 - [Pluto Security — MCPwnfluence: Critical Unauthenticated SSRF to RCE in the Most Widely Used Atlassian MCP Server](https://pluto.security/blog/mcpwnfluence-cve-2026-27825-critical/) — canonical research, attack chain, fixed version.
 - [Arctic Wolf — CVE-2026-27825: Critical Unauthenticated RCE and SSRF in mcp-atlassian](https://arcticwolf.com/resources/blog-uk/cve-2026-27825-critical-unauthenticated-rce-and-ssrf-in-mcp-atlassian/)
@@ -121,3 +124,6 @@ OX Security calls this "The Mother of All AI Supply Chains" — making the case 
 - [SentinelOne — CVE-2026-39974: n8n-MCP Server SSRF Vulnerability](https://www.sentinelone.com/vulnerability-database/cve-2026-39974/) — post-auth SSRF, IMDS targeting, fixed in 2.47.4.
 - [NVD — CVE-2026-39974](https://nvd.nist.gov/vuln/detail/CVE-2026-39974)
 - [Shenlong CVE Platform — n8n-mcp Post-Auth SSRF Vulnerability and Mitigation Guide](https://cve.imfht.com/intel/579223?lang=en) — mitigation specifics, version range.
+- [GitHub Advisory Database — GHSA-rxw2-pc8j-vxwm: fast-mcp-telegram Bearer token path traversal](https://github.com/advisories/GHSA-rxw2-pc8j-vxwm) — canonical description, CVSS 9.4, affected/fixed versions; CVE↔GHSA pairing verified directly.
+- [NVD — CVE-2026-52830](https://nvd.nist.gov/vuln/detail/CVE-2026-52830) — canonical CVE record.
+- [GB Hackers — Critical fast-mcp-telegram Vulnerability Lets Attackers Access Telegram Session Without Token](https://gbhackers.com/critical-fast-mcp-telegram-vulnerability/) — independent corroboration, exploitation scenario.
