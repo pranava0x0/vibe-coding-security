@@ -2,7 +2,7 @@
 id: 2026-07-claude-code-china-proxy-fingerprint
 title: "Claude Code shipped a covert China-proxy fingerprinting channel steganographically encoded in the system prompt (versions 2.1.91–2.1.196; removed in 2.1.197)"
 date_disclosed: 2026-06-30
-last_updated: 2026-07-07
+last_updated: 2026-07-08
 severity: medium
 status: patched
 ecosystems: [claude-code, anthropic]
@@ -31,6 +31,18 @@ The finding first surfaced via a Reddit post and was substantiated by a GitHub-h
 **Anthropic's response:** Anthropic acknowledged the code was present in the shipped client and stated it would be removed in the next release. **Claude Code 2.1.197** was published shortly after, though its changelog did not explicitly document the removal of this mechanism.
 
 **Why this belongs in this repo even without a CVE:** this is the same **invisible-Unicode steganographic encoding technique** this repo has repeatedly flagged as an attacker IOC (GlassWorm, TrapDoor, Miasma Wave 5) — here used by the **vendor itself**, inside a widely-deployed developer tool, to exfiltrate a covert signal about the user's network configuration and geography without disclosure. It fits this repo's "significant supply-chain hygiene incident at a major AI vendor" criterion: a widely-run developer tool shipped an undisclosed, deliberately-obfuscated data channel for roughly three months before independent researchers found it.
+
+## Update 2026-07-08 — China's NVDB issues a public "security backdoor" alert; Alibaba bans internal use; Anthropic engineer responds on the record
+
+On **2026-07-08**, China's **National Vulnerability Database (NVDB)**, a body affiliated with the Ministry of Industry and Information Technology, published a public alert calling the mechanism described above a **"security backdoor"** — asserting it could transmit users' location and identity-related signals to Anthropic without consent, and advising "relevant institutions and users" to "conduct a comprehensive check immediately" and uninstall or upgrade to a version with the code removed. The alert was widely reported same-day by CNBC, CBS News/AFP, The Register, Tom's Hardware, Security Boulevard, China Daily, Global Times, and Cybernews.
+
+**Anthropic's on-the-record response:** Claude Code engineer **Thariq Shihipar** stated publicly (as quoted by CBS News/AFP) that the mechanism was "an experiment we launched in March that was meant to prevent account abuse" (i.e., anti-distillation abuse detection, consistent with this advisory's original reporting), that "the team has landed stronger mitigations since then," and that Anthropic had "actually been meaning to take this down for a while." Anthropic maintains the mechanism does not constitute a security backdoor and notes China access to Claude was never a permitted use case in the first place.
+
+**Patched version — note a reporting discrepancy:** this advisory's original sources (2026-06-30/07-01) reported the mechanism was removed in **Claude Code 2.1.197**. CNBC's 2026-07-08 coverage of the NVDB alert instead states it was "removed in version 2.1.198, released July 1." Both dates point to the same ~July 1 timeframe; we have not independently confirmed which exact version number fully removed the mechanism (it's plausible 2.1.197 shipped a partial removal and 2.1.198 completed it, or one outlet has the version number slightly wrong). **If you need certainty, update to the latest available Claude Code release rather than pinning to either 2.1.197 or 2.1.198 specifically.**
+
+**Business fallout:** Alibaba notified employees it will **ban internal use of Claude Code starting 2026-07-10**, directing staff to switch to its own Qoder tool — the first documented case of a major tech company restricting Claude Code over a security disclosure this repo tracks.
+
+**Status:** kept as `patched` (Anthropic confirms the mechanism has been removed), but this is now also a **vendor-trust/geopolitical-fallout incident**, not purely a technical one — the underlying facts are unchanged from the original disclosure, but an official state body's public alert and a major enterprise's usage ban are new, independently newsworthy developments worth tracking here.
 
 ## Am I affected?
 
@@ -63,3 +75,6 @@ If you were on an affected version and used a custom base URL, your proxy hostna
 - [Tech Startups — Anthropic's Claude Code accused of hiding proxy fingerprints inside system prompts to identify China-linked users](https://techstartups.com/2026/06/30/anthropics-claude-code-accused-of-hiding-proxy-fingerprints-inside-system-prompts-to-identify-china-linked-users/) — primary reporting; attributes the finding to researcher Adnane Khan's GitHub-hosted analysis; full Unicode-encoding mechanism; affected version range.
 - [KuCoin News — Claude Code Accused of Hiding China Proxy Fingerprints in System Prompts](https://www.kucoin.com/news/flash/claude-code-accused-of-hiding-china-proxy-fingerprints-in-system-prompts) — independent corroboration of the mechanism, version range, and Anthropic's acknowledgment plus the 2.1.197 release.
 - [Tech Times — Claude Code Hid Proxy Fingerprints in System Prompts: Anthropic Promises Fix](https://www.techtimes.com/articles/319415/20260701/claude-code-hid-proxy-fingerprints-system-prompts-anthropic-promises-fix.htm) — independent corroboration; timeline and Anthropic's promised fix.
+- [CNBC — China warns about AI risks with Anthropic's Claude Code](https://www.cnbc.com/2026/07/08/china-anthropic-ai-claude-code-backdoor-security-threat.html) — NVDB public alert text, affected version range, "removed in 2.1.198" claim, Alibaba ban.
+- [The Register — China tells devs to ditch Claude Code over 'backdoor code' fears](https://www.theregister.com/security/2026/07/08/china-ditch-older-claude-versions-with-backdoor-code/5268371) — independent corroboration of the NVDB alert and Alibaba's ban.
+- [Tom's Hardware — Alibaba bans Anthropic's Claude Code after an alleged hidden China-detection backdoor is uncovered; employees told to switch to Qoder](https://www.tomshardware.com/tech-industry/artificial-intelligence/alibaba-bans-anthropics-claude-code-after-an-alleged-hidden-china-detection-backdoor-is-uncovered-employees-told-to-switch-to-qoder-as-the-rift-between-the-firms-widens) — Alibaba ban details, effective date 2026-07-10.
