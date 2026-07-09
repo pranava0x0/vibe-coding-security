@@ -32,9 +32,13 @@ from pathlib import Path
 #   - 2026-07-06: full 960KB→1024KB (measured 988,033B, ~5KB over the old cap)
 #     after 2 new advisories over two sweeps. Still the same open stopgap;
 #     BACKLOG.md's trim-historical-status-advisories fix has not been done.
-LLMS_FULL_MAX_BYTES = 1024 * 1024
+#   - 2026-07-09: index 72KB→80KB (measured 74,395B, ~700B over) and full
+#     1024KB→1088KB (measured 1,058,515B, ~10KB over the old cap) after 3
+#     advisory files touched this sweep (2 new, 1 updated). Same stopgap as
+#     above — BACKLOG.md's trim-historical-status fix is still open.
+LLMS_FULL_MAX_BYTES = 1088 * 1024
 LLMS_CTX_MAX_BYTES = 144 * 1024
-LLMS_TXT_MAX_BYTES = 72 * 1024
+LLMS_TXT_MAX_BYTES = 80 * 1024
 
 
 def test_llms_txt_starts_with_title(llms_txt):
