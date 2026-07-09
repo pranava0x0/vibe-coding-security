@@ -2,7 +2,7 @@
 id: 2026-02-clawhavoc-clawhub-skills
 title: "ClawHavoc — mass malicious-skill poisoning of OpenClaw's ClawHub marketplace (February 2026)"
 date_disclosed: 2026-02-01
-last_updated: 2026-07-08
+last_updated: 2026-07-09
 severity: high
 status: active
 ecosystems: [ai-agents, openclaw, clawhub]
@@ -29,6 +29,17 @@ Snyk Labs published the first comprehensive security audit of the AI-agent-skill
 - **"ToxicSkills" threat class:** a skill that looks harmless under static review but behaves maliciously *when executed by a capable agent* — the agent itself is the gadget that turns benign-looking instructions into actions.
 - **Runtime-fetch evasion:** **2.9% of ClawHub skills (21% of malicious samples) dynamically fetch and execute remote content at runtime.** The published skill passes review; the attacker swaps the payload later on their own infrastructure. This breaks naive "scan-on-publish" defenses — Snyk's companion piece argues a **skill scanner is often false security** (and can itself be malware).
 - **Second marketplace:** **skills.sh** joins ClawHub as an affected surface; this is a class issue across agent-skill registries, not a single site.
+
+### Update (2026-06-03) — Trail of Bits: three of four scanner bypasses took under an hour, using tricks distinct from SkillCloak
+
+Trail of Bits researchers built four proof-of-concept malicious skills and used them to bypass **every scanner tested** — ClawHub's own guard model, Cisco's open-source skill-scanner, and the scanners integrated into **skills.sh** (which layers Gen, Socket, and Snyk). Three of the four techniques took **under an hour to conceive and implement**; only the fourth (prompt injection against the guard model) required several hours of trial and error.
+
+- **Newline-truncation bypass:** prepending roughly **100,000 newline characters** before the malicious payload caused OpenClaw's scanning harness to truncate the content fed to its guard model — the malicious section fell entirely outside the inspected window. This defeated both **OpenClaw's default guard model (GPT-5.5)** and the integrated **VirusTotal Code Insight** scanner (built on Gemini 3 Flash), which independently failed to flag the truncated skill as malicious.
+- **Archive obfuscation:** hiding a malicious script inside a `.docx` file (itself a ZIP archive containing XML) evaded scanners that pattern-match on plaintext source.
+- **Bytecode poisoning:** shipping a precompiled `.pyc` file with behavior that diverges from the visible, benign-looking source — the same class of supply-chain trick used in the xz-utils backdoor.
+- **Prompt injection against the guard model itself:** rhetorical framing and corporate jargon convinced the reviewing model that a malicious registry-configuration change was a legitimate update.
+
+This is a **different bypass primitive from SkillCloak** (below): SkillCloak relies on structural obfuscation/self-extracting packing of the payload, while Trail of Bits' newline-truncation and prompt-injection techniques exploit the **scanning harness's context-window and truncation handling directly**, and its archive/bytecode techniques hide payloads in formats scanners don't fully parse. Trail of Bits' practical takeaway: **automated scanning cannot reliably detect malicious skill content**, and organizations should treat public skill marketplaces as an untrusted-code source — favoring curated, internally-managed skill collections over ClawHub/skills.sh for anything security-sensitive.
 
 ### Update (2026-07-06) — SkillCloak/SkillDetonate: academic research shows scanner-evasion for skill malware is trivial, and proposes a runtime fix
 Researchers at Hong Kong University of Science and Technology published **SkillCloak**, a proof-of-concept tool that rewrites a malicious Agent Skill to preserve its payload while evading static scanners — via structural obfuscation (character substitution) and **self-extracting packing** that hides payloads in directories scanners typically skip. Tested against 8 static scanners, the packing technique evaded detection **>90% of the time (>99% against most individual scanners)**; even lighter rewriting cleared most scanners **>80%** of the time. The paper targets Agent Skills for **Claude Code, OpenAI Codex, and OpenClaw** specifically, and cites this repo's already-tracked ClawHavoc campaign's malicious-skill counts as real-world grounding.
@@ -81,3 +92,4 @@ If a skill triggered an unexpected install step or a macOS password prompt, trea
 - [Snyk — Why Your "Skill Scanner" Is Just False Security (and Maybe Malware)](https://snyk.io/blog/skill-scanner-false-security/) — why scan-on-publish defenses fail.
 - [Snyk — How a Malicious Google Skill on ClawHub Tricks Users Into Installing Malware](https://snyk.io/blog/clawhub-malicious-google-skill-openclaw-malware/) — worked example of a high-ranking malicious skill.
 - [The Hacker News — New SkillCloak Technique Lets Malicious AI Agent Skills Evade Static Scanners](https://thehackernews.com/2026/07/new-skillcloak-technique-lets-malicious.html) — HKUST research; SkillCloak evasion rates, SkillDetonate runtime-auditor results, affected tools (Claude Code, OpenAI Codex, OpenClaw).
+- [Trail of Bits — The sorry state of skill distribution](https://blog.trailofbits.com/2026/06/03/the-sorry-state-of-skill-distribution/) — newline-truncation, archive-obfuscation, bytecode-poisoning, and prompt-injection bypasses against ClawHub, Cisco's skill-scanner, and skills.sh's integrated scanners; publication date and technical detail.

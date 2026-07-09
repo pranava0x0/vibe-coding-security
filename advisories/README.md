@@ -4,6 +4,8 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-07-07 | [Fake Paysafe / Skrill / Neteller SDKs on npm and PyPI steal credentials (17 packages, removed)](2026-07-payment-sdk-typosquat-npm-pypi.md) | high | contained |
+| 2026-06-30 | [GuardFall — shell-injection design flaw breaks command guards in 10 of 11 open-source AI coding agents](2026-06-guardfall-shell-injection-agents.md) | high | active |
 | 2026-07-06 | [GitLost — public GitHub Issue prompt-injects GitHub Agentic Workflows into leaking private repos (no full fix)](2026-07-gitlost-github-agentic-workflows-injection.md) | high | active |
 | 2026-06-19 | [Langflow CVE-2026-55255 — cross-tenant IDOR chained with CVE-2026-33017 RCE, added to CISA KEV](2026-07-langflow-cve-2026-55255-idor-kev.md) | critical | active |
 | 2026-06-02 | [better-auth — 13+ OAuth/OIDC/SSO/SCIM advisories including a critical MCP-plugin refresh-token bypass (CVE-2026-53512)](2026-07-better-auth-oauth-oidc-mcp-vulnerabilities.md) | high | patched |
