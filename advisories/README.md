@@ -4,6 +4,8 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-07-08 | [GhostApproval — symlinked config files trick 6 AI coding assistants into writing outside the workspace](2026-07-ghostapproval-symlink-trust-boundary.md) | high | active |
+| 2026-07-08 | [Friendly Fire — hijacking Claude Code auto-mode and Codex auto-review into running the malware they were sent to catch](2026-07-friendly-fire-defensive-agent-rce.md) | high | active |
 | 2026-07-07 | [Fake Paysafe / Skrill / Neteller SDKs on npm and PyPI steal credentials (17 packages, removed)](2026-07-payment-sdk-typosquat-npm-pypi.md) | high | contained |
 | 2026-06-30 | [GuardFall — shell-injection design flaw breaks command guards in 10 of 11 open-source AI coding agents](2026-06-guardfall-shell-injection-agents.md) | high | active |
 | 2026-07-06 | [GitLost — public GitHub Issue prompt-injects GitHub Agentic Workflows into leaking private repos (no full fix)](2026-07-gitlost-github-agentic-workflows-injection.md) | high | active |
