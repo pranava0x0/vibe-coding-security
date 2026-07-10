@@ -2,11 +2,19 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-07-09. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-07-10. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-07-08 — GhostApproval — symlinked config files trick 6 AI coding assistants into writing outside the workspace (Claude Code, Cursor, Amazon Q, Windsurf, Antigravity, Augment)
+Wiz Research disclosed **GhostApproval**: a malicious repository with a symlink disguised as an ordinary config file (`project_settings.json` → really `~/.ssh/authorized_keys`) tricks an AI coding assistant into writing attacker-controlled content through the link — while the confirmation dialog shows the harmless symlink path, not the real target. Asking the agent to "set up the workspace" or "follow the README" is enough; in several cases the agent's own reasoning correctly flagged the dangerous real target, but the UI never surfaced that to the human approving the write. **Six tools confirmed affected**: Amazon Q Developer (CVE-2026-12958, fixed < 1.69.0), Cursor (CVE-2026-50549 — the same CVE as one of the [DuneSlide](advisories/2026-06-cursor-duneslide-zeroclick-rce.md) flaws, fixed in 3.0), Google Antigravity (fixed < 1.19.6, CVE pending), Augment and Windsurf (acknowledged, unpatched), and Anthropic Claude Code (**rejected as "outside our threat model"**). No in-the-wild exploitation reported. If you use an unpatched tool, inspect any unfamiliar repo for symlinks (`find . -type l`) before letting an agent process its README.
+→ [advisories/2026-07-ghostapproval-symlink-trust-boundary.md](advisories/2026-07-ghostapproval-symlink-trust-boundary.md)
+
+### 2026-07-08 — Friendly Fire — hijacking Claude Code auto-mode and Codex auto-review into running the malware they were sent to catch (no CVE, no patch)
+The AI Now Institute disclosed **Friendly Fire**: a proof-of-concept where an agent asked to *defensively review* a third-party codebase for vulnerabilities is instead tricked into executing the malicious payload it was supposed to catch. The injection lives entirely in a `README.md` plus a disguised binary made to look like legitimate security tooling — no MCP server, hook, or config file needed. It works unchanged against **Claude Code (Sonnet 4.6, Sonnet 5, Opus 4.8) in auto-mode** and **OpenAI Codex CLI (GPT-5.5) in auto-review**; in some runs a model correctly noticed the binary didn't match its claimed source and **ran it anyway**. Both vendors were notified but say the finding falls outside their formal disclosure programs — **no CVE, no patch**. Never run auto-mode/auto-review agents against an unfamiliar codebase, including the common "have the agent security-review this dependency" workflow this PoC specifically targets.
+→ [advisories/2026-07-friendly-fire-defensive-agent-rce.md](advisories/2026-07-friendly-fire-defensive-agent-rce.md)
 
 ### 2026-07-07 — Fake Paysafe / Skrill / Neteller SDKs on npm and PyPI steal credentials (17 packages, removed)
 Socket detected a coordinated typosquatting campaign publishing **17 packages across npm (13) and PyPI (4)** impersonating SDKs for payment processors **Paysafe, Skrill, and Neteller**. The fake SDKs mimic real client APIs closely enough to pass casual testing — they return **fake "success" responses** instead of calling the real payment platform — while harvesting environment variables matching `KEY`/`SECRET`/`TOKEN`/`PASS`/`AUTH` (e.g. `PAYSAFE_API_KEY`, `AWS_SECRET_ACCESS_KEY`, `GITHUB_TOKEN`, `NPM_TOKEN`) and exfiltrating them to a C2 endpoint (`caliber-spinner-finishing[.]ngrok-free[.]dev`) with a documented history of hosting NjRAT infrastructure. Each npm package was flagged as malware within **6 minutes** of publication and all packages have been removed. If you integrated any of these package names since 2026-07-07, rotate your payment API keys and any CI/cloud credentials present in that environment.
