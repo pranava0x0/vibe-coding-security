@@ -2,7 +2,7 @@
 id: 2026-06-phantom-gyp-miasma-wave4
 title: "Phantom Gyp — Miasma wave 4: self-propagating npm worm via binding.gyp (June 2026)"
 date_disclosed: 2026-06-04
-last_updated: 2026-06-14
+last_updated: 2026-07-11
 severity: critical
 status: active
 ecosystems: [npm]
@@ -64,7 +64,8 @@ If you ran `npm install` on any project between **2026-06-03 00:00 UTC** and **2
 ## Prevention
 
 - **Disable binding.gyp execution** for packages that don't need native addons: use `--ignore-scripts` AND audit any package that legitimately requires native build.
-- **npm 11.16.0 already ships `allowScripts: off` — upgrade now, don't wait for v12:** While npm v12 (expected July 2026) will make `allowScripts: off` the out-of-the-box default, **npm 11.16.0** (released alongside the June 9 changelog announcement) already includes this flag. You can opt in today: set `allow-scripts=false` in your `.npmrc` and `--allow-git` / `--allow-remote` to `none`. This blocks both lifecycle scripts (preinstall/postinstall) **and** `binding.gyp`-triggered native builds for all packages — the first npm version that actually stops the Phantom Gyp primitive. Enable it only for specific known-safe native dependencies as needed. See [GitHub Changelog: Upcoming breaking changes for npm v12](https://github.blog/changelog/2026-06-09-upcoming-breaking-changes-for-npm-v12/) and [The Register coverage](https://www.theregister.com/devops/2026/06/10/github-pulls-pin-on-npms-auto-run-scripts/).
+- **Update 2026-07-11 — npm v12 has shipped (confirmed, not just planned):** npm v12 shipped on **2026-07-08**, making `allowScripts: off` the out-of-the-box default and turning off install scripts, Git dependencies, and remote-URL dependencies by default for the first time in the CLI's 16-year history. This closes the Phantom Gyp primitive by default for anyone who upgrades: a package with a `binding.gyp` and no explicit install script now has its implicit `node-gyp rebuild` **skipped with a warning** rather than executed silently, unless the package is explicitly approved via `npm approve-scripts`. Prior guidance below (npm 11.16.0's opt-in `allow-scripts=false`) still applies for anyone who hasn't yet upgraded to v12. See [The Hacker News — npm 12 Disables Install Scripts by Default](https://thehackernews.com/2026/07/npm-12-disables-install-scripts-by.html) and [Socket — npm v12 Ships With Install Scripts Off by Default](https://socket.dev/blog/npm-12).
+- **npm 11.16.0 already ships `allowScripts: off` — upgrade now if you haven't moved to v12 yet:** **npm 11.16.0** (released alongside the June 9 changelog announcement) already includes this flag as opt-in. You can opt in today: set `allow-scripts=false` in your `.npmrc` and `--allow-git` / `--allow-remote` to `none`. This blocks both lifecycle scripts (preinstall/postinstall) **and** `binding.gyp`-triggered native builds for all packages — the first npm version that actually stops the Phantom Gyp primitive. Enable it only for specific known-safe native dependencies as needed. See [GitHub Changelog: Upcoming breaking changes for npm v12](https://github.blog/changelog/2026-06-09-upcoming-breaking-changes-for-npm-v12/).
   ```
   # .npmrc — opt in now with npm >= 11.16.0
   allow-scripts=false

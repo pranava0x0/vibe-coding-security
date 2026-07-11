@@ -2,11 +2,19 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-07-10. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-07-11. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-07-08 — Injective Labs SDK npm compromise — compromised contributor account plants wallet-key stealer in @injectivelabs/sdk-ts (contained)
+An attacker who compromised a **legitimate contributor's GitHub account** on the Injective Labs SDK repo published `@injectivelabs/sdk-ts@1.20.21` (plus 17 dependent `@injectivelabs`-scoped packages) with code that hooks the SDK's wallet key-derivation functions (`fromMnemonic`, `fromHex`), base64-encodes any mnemonic/private key generated or imported, and exfiltrates it to a host disguised as Injective's own public testnet infrastructure. Injective reverted the malicious commits and shipped a clean release within about an hour on **2026-06-08**, limiting the malicious version to **310 downloads** against ~50K weekly — but the incident wasn't publicly reported until **2026-07-08**, a month later. If you ever ran `1.20.21` and generated/imported a wallet key during that window, treat that key material as compromised and move funds.
+→ [advisories/2026-07-injective-labs-npm-wallet-stealer.md](advisories/2026-07-injective-labs-npm-wallet-stealer.md)
+
+### 2026-07-01 — Claude Cowork for Windows sandbox escape reaches root in the Hyper-V VM — Anthropic disputes it's a vulnerability (no CVE, no patch)
+Armadin Inc. chained a **DLL-sideloading** flaw (`Claude.exe` resolves `USERENV.dll` from its own app directory before the system copy) with an **RPC parameter-abuse** bug in `CoworkVMService` — a manipulated "resume" flag skips per-command unprivileged-user creation, yielding **root inside the sandboxed VM**, and a wildcarded domain-allowlist override strips the egress proxy's network restrictions entirely. From root, `nsenter` steps out into the wider VM. Reported to Anthropic **2026-03-20**; Anthropic responded **2026-03-24** disputing it as a security issue because it "requires an attacker to already have local code execution on the host" — the same reasoning this repo has flagged as underselling risk in prior won't-fix findings, since a sandbox exists precisely to contain code that already has some foothold. Publicly disclosed **2026-07-01/02**. No CVE, no confirmed patch as of this writing (one outlet claims a hardening patch shipped; two others report Anthropic declined to treat it as fixable — unresolved discrepancy, see advisory).
+→ [advisories/2026-07-claude-cowork-sandbox-escape.md](advisories/2026-07-claude-cowork-sandbox-escape.md)
 
 ### 2026-07-08 — GhostApproval — symlinked config files trick 6 AI coding assistants into writing outside the workspace (Claude Code, Cursor, Amazon Q, Windsurf, Antigravity, Augment)
 Wiz Research disclosed **GhostApproval**: a malicious repository with a symlink disguised as an ordinary config file (`project_settings.json` → really `~/.ssh/authorized_keys`) tricks an AI coding assistant into writing attacker-controlled content through the link — while the confirmation dialog shows the harmless symlink path, not the real target. Asking the agent to "set up the workspace" or "follow the README" is enough; in several cases the agent's own reasoning correctly flagged the dangerous real target, but the UI never surfaced that to the human approving the write. **Six tools confirmed affected**: Amazon Q Developer (CVE-2026-12958, fixed < 1.69.0), Cursor (CVE-2026-50549 — the same CVE as one of the [DuneSlide](advisories/2026-06-cursor-duneslide-zeroclick-rce.md) flaws, fixed in 3.0), Google Antigravity (fixed < 1.19.6, CVE pending), Augment and Windsurf (acknowledged, unpatched), and Anthropic Claude Code (**rejected as "outside our threat model"**). No in-the-wild exploitation reported. If you use an unpatched tool, inspect any unfamiliar repo for symlinks (`find . -type l`) before letting an agent process its README.
