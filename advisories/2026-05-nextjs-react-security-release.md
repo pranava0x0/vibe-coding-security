@@ -2,7 +2,7 @@
 id: 2026-05-nextjs-react-security-release
 title: "Next.js + React May 2026 security release — 13 CVEs, including unauth SSRF (CVE-2026-44578)"
 date_disclosed: 2026-05-06
-last_updated: 2026-06-11
+last_updated: 2026-07-12
 severity: high
 status: patched
 ecosystems: [npm, javascript]
@@ -36,6 +36,8 @@ The Next.js built-in Node.js server handled WebSocket upgrade requests in a way 
 
 ### Middleware-bypass cluster
 Three of the high-severity advisories are middleware-bypass variants where specially crafted `.rsc` URLs and segment-prefetch paths slipped past Next.js middleware-based authentication, returning protected content without enforcement. Anyone using Next.js middleware as an auth gate (a common pattern in vibe-coded auth stacks layered over NextAuth.js / Supabase / Clerk) needs to upgrade.
+
+**Update 2026-07-12** — confirmed directly against the GitHub Advisory Database that one of these three is **CVE-2026-44574** ([GHSA-492v-c6pp-mqqv](https://github.com/vercel/next.js/security/advisories/GHSA-492v-c6pp-mqqv), CVSS 8.1 High): "Middleware / Proxy bypass through dynamic route parameter injection" — an attacker injects a specially crafted query parameter that alters the resolved dynamic-route value while leaving the visible path unchanged, so middleware-based authorization checks evaluate a different route than the one actually dispatched (the same "two parsers, one string" shape as the Starlette BadHost class already tracked in this repo). Affects `>= 15.4.0 < 15.5.16` and `>= 16.0.0 < 16.2.5`; fixed in the same **15.5.16 / 16.2.5** (and the fuller 15.5.18 / 16.2.6 rollup) already recommended below.
 
 ### CVE-2026-23869 — App Router Server Action CPU exhaustion (CVSS 7.5)
 Unauthenticated requests with a crafted payload sent to any **App Router Server Action endpoint** trigger quadratic CPU work in the Next.js request parser. A single attacker can pin a Node.js process to 100% CPU, causing denial of service for all concurrent requests. Affects all Next.js 13.x–16.x with App Router Server Actions enabled. Patched in the same **15.5.18 / 16.2.6** rollup.
@@ -96,3 +98,4 @@ Next.js is the de facto front-end for Lovable, Bolt, v0, and a large fraction of
 - [Cybersecurity News — Multiple Critical Vulnerabilities Patched in Next.js and React Server Components](https://cybersecuritynews.com/next-js-react-server-vulnerabilities/)
 - [Endor Labs — Critical Remote Code Execution Vulnerabilities in React and Next.js](https://www.endorlabs.com/learn/critical-remote-code-execution-rce-vulnerabilities-in-react-and-next-js)
 - [DevOps Daily — Next.js 16.2.6 and 15.5.18 Ship 13 Security Fixes](https://devops-daily.com/posts/nextjs-16-2-6-15-5-18-security-release)
+- [GitHub Advisory Database — CVE-2026-44574 / GHSA-492v-c6pp-mqqv: Middleware / Proxy bypass through dynamic route parameter injection](https://github.com/vercel/next.js/security/advisories/GHSA-492v-c6pp-mqqv)

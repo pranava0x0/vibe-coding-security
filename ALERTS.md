@@ -2,11 +2,15 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-07-11. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-07-12. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-07-11 — jscrambler npm package compromised — Rust infostealer that survives `--ignore-scripts`, targets Claude Desktop/Cursor/Windsurf/Zed/VS Code configs (contained)
+An attacker who obtained jscrambler's npm publishing credential pushed **five malicious releases** (`8.14.0`, `8.16.0`, `8.17.0`, `8.18.0`, `8.20.0`) between **15:12–17:53 UTC on 2026-07-11**. The first three used a `preinstall` hook; the last two **moved the trigger off the install hook into `dist/index.js`**, so the payload fires on import/CLI use instead — a technique that **survives `npm install --ignore-scripts`**. The dropped Rust-compiled infostealer targets crypto wallets (MetaMask, Trust Wallet, Coinbase, Phantom, Exodus), cloud credentials (AWS/GCP/Azure), and — notably — **API keys and MCP credentials stored in Claude Desktop, Cursor, Windsurf, Zed, and VS Code config files**. Socket detected the first bad version within 6 minutes; jscrambler revoked and rotated its publishing credentials. `8.22.0` is confirmed clean. If you installed any of the five bad versions, treat the host as compromised and rotate browser/crypto/cloud credentials.
+→ [advisories/2026-07-jscrambler-npm-preinstall-infostealer.md](advisories/2026-07-jscrambler-npm-preinstall-infostealer.md)
 
 ### 2026-07-08 — Injective Labs SDK npm compromise — compromised contributor account plants wallet-key stealer in @injectivelabs/sdk-ts (contained)
 An attacker who compromised a **legitimate contributor's GitHub account** on the Injective Labs SDK repo published `@injectivelabs/sdk-ts@1.20.21` (plus 17 dependent `@injectivelabs`-scoped packages) with code that hooks the SDK's wallet key-derivation functions (`fromMnemonic`, `fromHex`), base64-encodes any mnemonic/private key generated or imported, and exfiltrates it to a host disguised as Injective's own public testnet infrastructure. Injective reverted the malicious commits and shipped a clean release within about an hour on **2026-06-08**, limiting the malicious version to **310 downloads** against ~50K weekly — but the incident wasn't publicly reported until **2026-07-08**, a month later. If you ever ran `1.20.21` and generated/imported a wallet key during that window, treat that key material as compromised and move funds.
