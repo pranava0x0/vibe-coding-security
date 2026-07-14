@@ -809,10 +809,24 @@ def build_llms_full_txt(pages: list[Page]) -> str:
             # — without the title, structure is hard to follow.)
             out.append(f"## {p.title}")
             out.append("")
-            # Strip the body's own leading # heading if present, to avoid
-            # duplication with the prefix above.
-            out.append(_strip_leading_h1(p.body).strip())
-            out.append("")
+            # 2026-07-14: status=historical advisories are patched/superseded
+            # patterns kept for reference, not active incidents — emit only
+            # TL;DR + a link to the canonical page instead of the full body.
+            # This is the "real fix" tests/test_llms.py has flagged as open
+            # since 2026-06-19 (repeated cap bumps instead of trimming); doing
+            # it now that the corpus has actually forced the issue rather than
+            # bumping LLMS_FULL_MAX_BYTES again.
+            if p.section == "advisories" and p.frontmatter.get("status") == "historical":
+                tldr = _extract_section(p.body, "TL;DR") or p.description
+                out.append((tldr or "").strip())
+                out.append("")
+                out.append(f"_Historical/superseded pattern — full write-up at {_page_html_url(p)}._")
+                out.append("")
+            else:
+                # Strip the body's own leading # heading if present, to avoid
+                # duplication with the prefix above.
+                out.append(_strip_leading_h1(p.body).strip())
+                out.append("")
         out.append("")
 
     advisories = [p for p in pages if p.section == "advisories" and not p.is_index]

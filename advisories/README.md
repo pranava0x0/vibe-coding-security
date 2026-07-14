@@ -5,6 +5,7 @@ One file per incident. Latest at the top.
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
 | 2026-07-11 | [jscrambler npm compromise — Rust infostealer that survives --ignore-scripts, targets Claude Desktop/Cursor/Windsurf configs](2026-07-jscrambler-npm-preinstall-infostealer.md) | high | contained |
+| 2026-05-28 | [Zapocalypse — five-stage exploit chain turns a free Zapier account into NPM publish rights on zapier.com's own JS bundle](2026-05-zapier-zapocalypse-exploit-chain.md) | critical | patched |
 | 2026-07-08 | [Injective Labs SDK npm compromise — compromised contributor account plants wallet-key stealer](2026-07-injective-labs-npm-wallet-stealer.md) | high | contained |
 | 2026-07-01 | [Claude Cowork for Windows sandbox escape — chained flaws reach root in the Hyper-V VM; Anthropic disputes it's a vulnerability](2026-07-claude-cowork-sandbox-escape.md) | high | active |
 | 2026-07-08 | [GhostApproval — symlinked config files trick 6 AI coding assistants into writing outside the workspace](2026-07-ghostapproval-symlink-trust-boundary.md) | high | active |

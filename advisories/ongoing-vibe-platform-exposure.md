@@ -2,7 +2,7 @@
 id: ongoing-vibe-platform-exposure
 title: "Vibe-coded app data exposure — Lovable, Bolt, Replit, Base44 pattern issues"
 date_disclosed: 2025
-last_updated: 2026-06-17
+last_updated: 2026-07-14
 severity: high
 status: ongoing
 ecosystems: [lovable, bolt, replit, v0, supabase, base44]
@@ -64,6 +64,14 @@ Security startup **Escape** scanned **5,600 production vibe-coded applications**
 
 Researchers from the **VibeWrench** project (Carnegie Mellon + Stanford, June 2026 preprint) studied what happens when AI coding agents are given repositories that contain the vulnerabilities documented in this advisory. Key finding: agents given repositories with RLS-off Supabase configurations **consistently reproduced and extended** the misconfiguration rather than correcting it — the agent's existing code context amplified the original mistake. Agents asked to "add a new endpoint" in a repo with IDOR added new endpoints with IDOR. Agents asked to "improve authentication" in repos with hallucinated-auth patterns added more layers of hallucinated auth, not real auth checks. **The fix**: run a security-specialist agent in a *separate* context with no exposure to the original code, and explicitly instruct it to look for the antipatterns documented here.
 
+## April 2026 — Lovable platform-wide BOLA: public-project regression, disputed then acknowledged
+
+Security researcher **@weezerOSINT** reported a Broken Object Level Authorization (BOLA) flaw to Lovable's HackerOne program on **March 3, 2026**: any authenticated Lovable user could read another tenant's public-project **source code and AI chat history** by visiting the project link, because a backend permission-unification change in **February 2026** silently re-enabled chat/source access that Lovable had deliberately disabled for public projects back in March–May 2025 (enterprise projects were restricted from public visibility in May 2025; all new projects went private-by-default in November 2025). HackerOne triagers closed the report(s) as duplicates/expected behavior without escalating, on the belief that public-project visibility was intentional. After **48 days** with no fix, the researcher published the finding on X on **April 20, 2026**, prompting wide pickup (The Register, Fast Company, Bastion) and framing it as a mass breach affecting every public Lovable project created before November 2025.
+
+**Lovable's initial framing disputed the "breach" characterization** — a spokesperson told The Register the exposure was closer to a documentation gap around what "public" means for a project. In its own published incident response, Lovable instead attributed the root cause to the February 2026 backend regression plus a HackerOne triage-process failure, stated the exposure was **limited to public projects' chat history and source code** (private projects and Lovable Cloud were not affected), shipped a fix within **~2 hours** of the public disclosure, converted all public projects to private (apart from official templates), and began notifying affected project owners. **Source discrepancy worth flagging:** The Register's initial writeup (and downstream secondary coverage) described the exposure as including "database credentials," while Lovable's own incident postmortem states only chat history and source code were exposed and explicitly excludes credentials/Lovable Cloud — stated here as reported by each source rather than reconciled, since Lovable's post is the more authoritative primary account of scope but was published after, and in response to, the wider "database credentials" framing.
+
+This is the same underlying 48-day-open BOLA report already summarized in this advisory's TL;DR and sourced via The Next Web; this section adds the full timeline, Lovable's dispute-then-acknowledge response, and the discrepancy over what data was actually exposed.
+
 ## July 2025 — Base44 auth endpoint exposure (patched within 24 hours)
 
 **Base44**, an AI-powered app builder (similar positioning to Lovable/Bolt), shipped with **unauthenticated registration and OTP verification endpoints** whose only intended protection was an `app_id` parameter — which was not treated as a secret and was trivially enumerable from the client. A researcher demonstrated that registration/login flows could be invoked for any app without possessing the `app_id` as a secret, bypassing authentication entirely. Base44 patched the issue within **24 hours** of responsible disclosure; no exploitation was confirmed. The pattern (auth endpoint protected only by a non-secret identifier) recurs across vibe-coding platforms as a direct consequence of AI-generated auth code that looks correct but isn't.
@@ -82,6 +90,8 @@ Base44 patched the vulnerability promptly after Wiz's responsible disclosure. Wi
 - [Android Headlines — Vibe Coding Rise is Fueling a Surge in Security Vulnerabilities](https://www.androidheadlines.com/2026/05/vibe-coding-security-risks-data-leaks-ai-apps.html)
 - [Vibe App Scanner — Platform Security Guides](https://vibeappscanner.com/platforms)
 - [Vibe Eval — Is Replit Safe in 2026?](https://vibe-eval.com/safety/replit/)
+- [The Register — Lovable denies data leak, cites 'intentional behavior'](https://www.theregister.com/2026/04/20/lovable_denies_data_leak/) — initial disclosure, HackerOne timeline, Lovable's dispute of the "breach" framing.
+- [Lovable — Our response to the April 2026 incident](https://lovable.dev/blog/our-response-to-the-april-2026-incident) — Lovable's own postmortem: root cause, scope, timeline, remediation.
 - [Axios — Thousands of AI-built apps exposed sensitive corporate and personal data, researchers found](https://www.axios.com/2026/05/07/loveable-replit-vibe-coding-privacy)
 - [Security Boulevard — Thousands of Vibe-Coded Apps Exposing Corporate, Personal Data: RedAccess](https://securityboulevard.com/2026/05/thousands-of-vibe-coded-apps-exposing-corporate-personal-data-redaccess/)
 - [VentureBeat — Vibe coding exposed 380,000 corporate apps — 5,000 held sensitive data](https://venturebeat.com/security/vibe-coded-apps-shadow-ai-s3-bucket-crisis-ciso-audit-framework)
