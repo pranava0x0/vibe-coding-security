@@ -46,6 +46,12 @@ ALLOWLIST_SUBSTRINGS = {
     "sk_live_[0-9a-zA-Z]",
     "ghp_[A-Za-z0-9]",
     "github_pat_[A-Za-z0-9_]",
+    # Real, verified citation URLs whose hyphenated slug happens to match the
+    # OpenAI-key regex (sk-...{40,}) purely by coincidence — e.g. a URL
+    # containing "...risk-copilot-flaw-can-hijack-...-patch" reads as
+    # "sk-copilot-flaw-...-patch" to the regex. Not a secret; allowlisted
+    # 2026-07-15 after tests/test_llms.py's sibling gate flagged it.
+    "windowsnews.ai/article/a-high-risk-copilot-flaw-can-hijack-your-jetbrains-ide-microsoft-urges-immediate-patch",
 }
 
 
