@@ -36,8 +36,17 @@ from pathlib import Path
 #     1024KB→1088KB (measured 1,058,515B, ~10KB over the old cap) after 3
 #     advisory files touched this sweep (2 new, 1 updated). Same stopgap as
 #     above — BACKLOG.md's trim-historical-status fix is still open.
-LLMS_FULL_MAX_BYTES = 1088 * 1024
-LLMS_CTX_MAX_BYTES = 144 * 1024
+#   - 2026-07-15: full 1088KB→1152KB (measured 1,133,212B, ~19KB over the old
+#     cap) and ctx 144KB→152KB (measured 147,624B, ~168B over the old cap)
+#     after 3 new advisories this sweep. Note the 2026-07-14 historical-status
+#     trim (BACKLOG.md) only benefits llms-full.txt and only saves ~400B while
+#     just one advisory is status:historical — llms-ctx.txt was never in scope
+#     for that trim and both files still grow ~linearly with the advisory
+#     count every sweep. If this keeps recurring, the real fix is broadening
+#     the trim to more statuses (e.g. patched/contained advisories past some
+#     age), not another cap bump — logged to BACKLOG.md.
+LLMS_FULL_MAX_BYTES = 1152 * 1024
+LLMS_CTX_MAX_BYTES = 152 * 1024
 LLMS_TXT_MAX_BYTES = 80 * 1024
 
 
