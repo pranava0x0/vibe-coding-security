@@ -4,6 +4,10 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-07-15 | [PromptFiction — Claude Desktop's claude:// URI auto-submitted hidden prompts with zero clicks, chainable with Claudy Day](2026-07-promptfiction-claude-desktop.md) | high | patched |
+| 2026-07-14 | [Cursor IDE — unpatched Windows zero-day: a git.exe planted in a repo root auto-executes on open](2026-07-cursor-git-exe-autoexec.md) | high | active |
+| 2026-07-13 | [SANS ISC documents internet-wide scanning for exposed MCP servers and AI-coding-tool credential files](2026-07-mcp-scanning-campaign-sans.md) | medium | active |
+| 2026-07-09 | [AI-SDK-name typosquats on npm harvest git/SSH/cloud identity — anthropic-toolkit, ai-sdk-helpers, @langgraphjs/toolkit and more](2026-07-ai-sdk-typosquat-npm-recon.md) | high | contained |
 | 2026-07-14 | [AsyncAPI npm compromise — GitHub Actions "pwn request" steals CI token, publishes Miasma RAT through the project's own OIDC pipeline](2026-07-asyncapi-miasma-npm-github-actions.md) | critical | active |
 | 2026-07-08 | [HalluSquatting — pre-registering AI-hallucinated package/skill/repo names weaponizes coding-agent trust](2026-07-hallusquatting-ai-agent-hallucination.md) | high | active |
 | 2026-07-14 | [Microsoft July Patch Tuesday — GitHub Copilot JetBrains plugin CVE-2026-50510 + M365 Copilot mobile CVE-2026-48561](2026-07-microsoft-copilot-patch-tuesday-cves.md) | high | patched |
