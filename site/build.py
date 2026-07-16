@@ -714,8 +714,16 @@ def build_llms_txt(pages: list[Page], full_bytes: int | None = None, ctx_bytes: 
         date_d = p.frontmatter.get("date_disclosed", "")
         meta = f" [{sev}]" if sev else ""
         meta += f" {date_d}" if date_d else ""
+        # root llms.txt is a scannable *index*, not a full-text export (that's
+        # llms-full.txt) — cap each one-line description so the index stays
+        # roughly flat as the advisory corpus grows, instead of every sweep
+        # eventually re-hitting LLMS_TXT_MAX_BYTES the way llms-full.txt/
+        # llms-ctx.txt repeatedly have. (2026-07-16)
+        desc = p.description
+        if len(desc) > 160:
+            desc = desc[:159].rsplit(" ", 1)[0] + "…"
         lines.append(
-            f"- [{p.title}]({_page_html_url(p)}) ([md]({_page_md_url(p)})){meta}: {p.description}"
+            f"- [{p.title}]({_page_html_url(p)}) ([md]({_page_md_url(p)})){meta}: {desc}"
         )
     lines.append("")
 
