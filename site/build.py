@@ -790,6 +790,18 @@ def build_section_llms_txt(section_slug: str, section_label: str, pages: list[Pa
     return "\n".join(lines)
 
 
+def _advisory_age_days(fm: dict[str, Any]) -> int | None:
+    """Best-effort age in days from date_disclosed (YYYY-MM-DD or YYYY-MM). None if unparseable."""
+    raw = str(fm.get("date_disclosed") or "")
+    for fmt in ("%Y-%m-%d", "%Y-%m"):
+        try:
+            d = datetime.strptime(raw, fmt).date()
+            return (date.today() - d).days
+        except ValueError:
+            continue
+    return None
+
+
 def build_llms_full_txt(pages: list[Page]) -> str:
     out: list[str] = [
         f"# {SITE_NAME} — full corpus",
@@ -820,11 +832,20 @@ def build_llms_full_txt(pages: list[Page]) -> str:
             # 2026-07-14: status=historical advisories are patched/superseded
             # patterns kept for reference, not active incidents — emit only
             # TL;DR + a link to the canonical page instead of the full body.
-            # This is the "real fix" tests/test_llms.py has flagged as open
-            # since 2026-06-19 (repeated cap bumps instead of trimming); doing
-            # it now that the corpus has actually forced the issue rather than
-            # bumping LLMS_FULL_MAX_BYTES again.
-            if p.section == "advisories" and p.frontmatter.get("status") == "historical":
+            # 2026-07-17: broadened per BACKLOG.md — trimming on status=historical
+            # alone doesn't scale (almost nothing is ever marked historical in
+            # practice), so also trim status=patched/contained/mitigated advisories
+            # whose date_disclosed is > 120 days old. These are resolved,
+            # non-actionable incidents for a reader triaging *current* risk; the
+            # full write-up remains one click away via the per-page mirror. This
+            # is the "real fix" flagged as open since 2026-06-19 (repeated cap
+            # bumps instead of broader trimming).
+            _age = _advisory_age_days(p.frontmatter)
+            _trim_status = p.frontmatter.get("status") in ("patched", "contained", "mitigated")
+            if p.section == "advisories" and (
+                p.frontmatter.get("status") == "historical"
+                or (_trim_status and _age is not None and _age > 120)
+            ):
                 tldr = _extract_section(p.body, "TL;DR") or p.description
                 out.append((tldr or "").strip())
                 out.append("")

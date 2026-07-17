@@ -2,7 +2,7 @@
 id: 2025-11-shai-hulud-second-coming
 title: "Shai-Hulud 'The Second Coming' (November 2025)"
 date_disclosed: 2025-11-24
-last_updated: 2026-05-16
+last_updated: 2026-07-17
 severity: critical
 status: contained
 ecosystems: [npm]
@@ -55,6 +55,22 @@ If you find traces or installed an affected package during the window, treat all
 - **2025-11-24** — second wave detected, takedowns begin
 - **2025-12-09** — npm classic token revocation deadline (the reason attackers raced)
 - **2026-05-16** — most packages cleaned, but old lockfiles still vulnerable
+- **2026-07-15/16** — new named victim surfaces 8 months later: AI music-generation company **Suno** (see below)
+
+## Update 2026-07-17 — new named victim: Suno (AI music generator), disclosed via hacker-to-journalist leak, not vendor postmortem
+
+A hacker using the handle **ellie.191** shared Suno's internal source code (2023–2024 vintage) and a customer data set (emails, phone numbers, Stripe payment details for reportedly hundreds of thousands of accounts) with journalist Jason Koebler at [404 Media](https://www.404media.co/hack-reveals-suno-ai-music-generator-scraped-youtube-deezer-and-genius/), published 2026-07-15. The leaked code documents Suno's training-data ingestion pipeline (YouTube Music, Deezer, Genius, Pond5, Jamendo, Freesound, IMSLP, podcast RSS feeds — millions of clips, tens of thousands of hours of audio), which is separately significant for the music-labels' litigation against Suno; that data-sourcing angle is outside this repo's scope and is not covered further here.
+
+**Attack-vector attribution — hedge explicitly:** the hacker themselves claims initial access came from **stealing an employee's credentials via the Shai-Hulud npm supply-chain worm**, then using those credentials to pull internal source code. This claim is *not* independently forensically confirmed by Suno or a security researcher in any source found this sweep — it is the intruder's own account, reported consistently by two independently-fetched outlets ([Cryptobriefing](https://cryptobriefing.com/suno-hack-ai-music-data-scraping/): *"The attack vector was a npm supply-chain worm called Shai-Hulud"*; [Decrypt](https://decrypt.co/373682/leaks-reveal-suno-fed-thousands-hours-deezer-youtube-pond5-data-ai): *"The intruder claims to have used a piece of malware called the Shai-Hulud worm"*), but the primary breach-disclosure article (404 Media) does not itself name a vector. Treat the Shai-Hulud attribution as **claimed, not confirmed**.
+
+**Suno's response:** the company says it identified the incident in **November 2025** — squarely inside this advisory's "Second Coming" wave window (2025-11-24 detection) — and characterized it internally as "limited" and "quickly contained," stating the exposed code was outdated and no longer in use, and concluding individual customer notifications weren't legally required. It did not proactively disclose the breach to users or the public; the incident only became known because the hacker leaked material to a journalist roughly 8 months later. Suno did not respond to Decrypt's request for comment on the record beyond that characterization.
+
+**Why this belongs in this advisory rather than as a standalone entry:** the November 2025 timing places the claimed initial-access credential theft inside the already-tracked Second Coming wave (this file), and the pattern — a worm-driven credential theft disclosed publicly only much later, via the attacker's own leak rather than the victim's own postmortem — is itself a recurring shape worth flagging for future sweeps: **check named victims of past Shai-Hulud/Miasma waves for delayed self-disclosure or attacker-leak disclosure months after the original wave**, since a vendor's internal "contained" assessment doesn't mean the public ever learns what was actually taken.
+
+## Sources (2026-07-17 update)
+- [404 Media — Hack Reveals Suno AI Music Generator Scraped YouTube, Deezer, and Genius](https://www.404media.co/hack-reveals-suno-ai-music-generator-scraped-youtube-deezer-and-genius/) — primary breach disclosure; does not itself name an attack vector.
+- [Cryptobriefing — Hack reveals Suno's data scraping methods for AI music generation](https://cryptobriefing.com/suno-hack-ai-music-data-scraping/) — independent corroboration naming Shai-Hulud as the claimed vector.
+- [Decrypt — Leaks Reveal Suno Fed Thousands of Hours of Deezer, YouTube and Pond5 Data Into Its AI](https://decrypt.co/373682/leaks-reveal-suno-fed-thousands-hours-deezer-youtube-pond5-data-ai) — independent corroboration naming Shai-Hulud as the claimed vector; quotes Suno's "limited"/"quickly contained" characterization.
 
 ## Sources
 - [Microsoft Security Blog — Shai-Hulud 2.0: Guidance for detecting, investigating, and defending](https://www.microsoft.com/en-us/security/blog/2025/12/09/shai-hulud-2-0-guidance-for-detecting-investigating-and-defending-against-the-supply-chain-attack/)
