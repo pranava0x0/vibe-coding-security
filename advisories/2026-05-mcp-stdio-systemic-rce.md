@@ -2,7 +2,7 @@
 id: 2026-05-mcp-stdio-systemic-rce
 title: "Systemic MCP stdio RCE class — 200,000+ servers exposed (May 2026)"
 date_disclosed: 2026-05
-last_updated: 2026-07-16
+last_updated: 2026-07-17
 severity: high
 status: mitigated
 ecosystems: [mcp, anthropic-mcp]
@@ -51,6 +51,8 @@ Microsoft's own MCP server has now had **two** disclosures in this class:
 
 **Named instance — `@andrea9293/mcp-documentation-server` unauthenticated Web UI/API (CVE-2026-54504, CVSS 8.8):** this npm MCP server's Web UI/API listens on **all interfaces by default** (`0.0.0.0:3080`, not localhost-only) and its document-management endpoints ship with **no authentication**, letting any network-adjacent attacker enumerate, create, read, search, and delete documents without credentials. Published 2026-06-04 (indexed into GitHub's Advisory Database 2026-07-15); affects **≤ 1.13.0**, fixed in **1.13.1**. A textbook instance of the class this advisory tracks: bind-to-everything-by-default plus auth-is-optional.
 
+**Named instance — `n8n-mcp` default-scope backup exposure (CVE-2026-55608, CVSS 4.2, medium):** a narrower follow-on to the cross-tenant backup flaw above (CVE-2026-54052) in the same package. In multi-tenant HTTP mode (`ENABLE_MULTI_TENANT=true`), an authenticated tenant could, under certain conditions, still reach n8n-mcp's **local default-scope** `workflow_versions` backups — leftover from single-tenant deployments or migrations — instead of being confined strictly to its own tenant scope. This is a distinct GHSA (`GHSA-2cf7-hpwf-47h9`) from CVE-2026-54052's (`GHSA-j6r7-6fhx-77wx`), confirmed by fetching both pages directly. Published **2026-07-14**; affects **< 2.57.4**, fixed in **2.57.4**. Same tenant-isolation-assumed-but-not-enforced root cause as CVE-2026-54052, scoped to a narrower leftover-data case.
+
 ## Am I affected?
 You are exposed by the class issue if:
 
@@ -66,6 +68,7 @@ You are exposed by the class issue if:
 - You run **`fast-mcp-telegram` ≤ 0.19.0** over HTTP (CVE-2026-52830) — its bearer-token check is bypassable via path traversal, letting anyone authenticate as your default Telegram session with no valid token; upgrade to **≥ 0.19.1**.
 - You run **`n8n-mcp` ≤ 2.56.0** in multi-tenant HTTP mode (CVE-2026-54052) — any authenticated user can read/delete other tenants' workflow-version backups, which embed credential references; upgrade to **≥ 2.56.1**.
 - You run **`@andrea9293/mcp-documentation-server` ≤ 1.13.0** (CVE-2026-54504) — its Web UI/API binds `0.0.0.0:3080` with no authentication; upgrade to **≥ 1.13.1** or bind to `127.0.0.1`.
+- You run **`n8n-mcp` < 2.57.4** in multi-tenant HTTP mode (CVE-2026-55608) — an authenticated tenant may still reach default-scope workflow-version backups; upgrade to **≥ 2.57.4**.
 
 ```bash
 # Find MCP servers configured in your tools
@@ -89,6 +92,7 @@ lsof -iTCP -sTCP:LISTEN -P -n 2>/dev/null | grep -iE 'mcp|model-context'
 5c. **Update `fast-mcp-telegram` to ≥ 0.19.1** (CVE-2026-52830). If you can't upgrade immediately, disable the default/legacy session file or move it outside the token-verifier's reachable path prefix, and don't expose the server's HTTP transport off-host.
 5d. **Update `n8n-mcp` to ≥ 2.56.1** (CVE-2026-54052) if you run multi-tenant HTTP mode; the update includes a migration that isolates and clears previously un-scoped backups. Rotate any credential references that were embedded in workflow-version snapshots readable by other tenants.
 5e. **Update `@andrea9293/mcp-documentation-server` to ≥ 1.13.1** (CVE-2026-54504), or at minimum bind its Web UI/API to `127.0.0.1` instead of `0.0.0.0` until you can upgrade.
+5f. **Update `n8n-mcp` to ≥ 2.57.4** (CVE-2026-55608) if you run multi-tenant HTTP mode; this is on top of the ≥ 2.56.1 upgrade for CVE-2026-54052 above.
 6. **For Apache Doris MCP:** apply the patch + the CVE tracker recommendations.
 7. **For Alibaba RDS MCP:** since Alibaba declined to patch, do not deploy without an isolating proxy that filters MCP messages.
 8. **Do not expose stdio MCPs to network sockets.** If you've wrapped one with a proxy / HTTP gateway, audit the proxy's input validation.
@@ -132,6 +136,7 @@ OX Security calls this "The Mother of All AI Supply Chains" — making the case 
 - [SentinelOne — CVE-2026-39974: n8n-MCP Server SSRF Vulnerability](https://www.sentinelone.com/vulnerability-database/cve-2026-39974/) — post-auth SSRF, IMDS targeting, fixed in 2.47.4.
 - [NVD — CVE-2026-39974](https://nvd.nist.gov/vuln/detail/CVE-2026-39974)
 - [Shenlong CVE Platform — n8n-mcp Post-Auth SSRF Vulnerability and Mitigation Guide](https://cve.imfht.com/intel/579223?lang=en) — mitigation specifics, version range.
+- [GitLab Advisory Database — CVE-2026-55608: n8n-MCP Incorrect authorization can expose default-scope workflow version backups in multi-tenant HTTP mode](https://advisories.gitlab.com/npm/n8n-mcp/CVE-2026-55608/) — CVE↔GHSA (GHSA-2cf7-hpwf-47h9) pairing verified directly; affected/fixed versions, CVSS 3.1 vector.
 - [GitHub Advisory Database — GHSA-rxw2-pc8j-vxwm: fast-mcp-telegram Bearer token path traversal](https://github.com/advisories/GHSA-rxw2-pc8j-vxwm) — canonical description, CVSS 9.4, affected/fixed versions; CVE↔GHSA pairing verified directly.
 - [NVD — CVE-2026-52830](https://nvd.nist.gov/vuln/detail/CVE-2026-52830) — canonical CVE record.
 - [GB Hackers — Critical fast-mcp-telegram Vulnerability Lets Attackers Access Telegram Session Without Token](https://gbhackers.com/critical-fast-mcp-telegram-vulnerability/) — independent corroboration, exploitation scenario.
