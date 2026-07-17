@@ -2,7 +2,7 @@
 id: 2025-09-litl-ai-approval-dialog-bypass
 title: "'Lies in the Loop' (LITL) — approval-dialog padding hides malicious commands below the fold in Claude Code and VS Code Copilot (Sept 2025, no vendor fix)"
 date_disclosed: 2025-09-01
-last_updated: 2026-06-20
+last_updated: 2026-07-17
 severity: high
 status: active
 ecosystems: [claude-code, vscode-copilot]
@@ -90,6 +90,10 @@ Neither Anthropic nor Microsoft has implemented a structural fix. The practical 
 5. **`--dangerously-skip-permissions` removes the approval dialog entirely** — it eliminates LITL as an attack surface but also removes all human-in-the-loop oversight. Don't use this mode with untrusted workspace content.
 
 → [prevention/agent-sandboxing.md](../prevention/agent-sandboxing.md) — structural approach to limiting what a compromised agent can execute.
+
+## Update — 2026-07-17: scoped Unicode fix in chat-relayed permission previews (not a full LITL fix)
+
+Claude Code **v2.1.211 (2026-07-15)** changelog: *"Fixed permission previews relayed to chat channels not neutralizing bidirectional-override, zero-width, and look-alike quote characters, so tool inputs cannot visually alter the approval message."* Same underlying technique as LITL, but scoped to chat-relayed previews (e.g. Remote Control), not the primary terminal HITL dialog Checkmarx targeted. No CVE, no blog post, single source (Anthropic's changelog). **Status stays `active`** — the terminal-dialog padding vector is not confirmed fixed. Follow up next sweep for independent testing against v2.1.211+.
 
 ## Sources
 

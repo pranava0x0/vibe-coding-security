@@ -2,7 +2,7 @@
 id: 2026-07-ghostapproval-symlink-trust-boundary
 title: "GhostApproval — symlinked config files trick 6 AI coding assistants into writing outside the workspace (July 2026)"
 date_disclosed: 2026-07-08
-last_updated: 2026-07-08
+last_updated: 2026-07-17
 severity: high
 status: active
 ecosystems: [claude-code, cursor, amazon-q, windsurf, google-antigravity, agent-frameworks]
@@ -64,6 +64,10 @@ Any symlink whose target resolves **outside** the repo directory (especially int
 - **This is a sibling of the "AI coding tool auto-executes workspace config on open" class** (Claude Code CVE-2025-59536, Cursor CVE-2025-54136, Windsurf CVE-2026-30615, Amazon Q CVE-2026-12957/-12958) — the common defensive pattern is the same: don't let agent-readable repo content (README instructions, symlinks, config files) cross into a privileged write without independently verifying the real target.
 
 → [prevention/agent-sandboxing.md](../prevention/agent-sandboxing.md)
+
+## Update — 2026-07-17: Claude Code changelog shows other silent symlink/sandbox fixes the same week
+
+Claude Code's changelog documents two **different** symlink-related sandbox fixes shipped the same week, no CVE, no reference to GhostApproval: **v2.1.212 (2026-07-17)** — worktree creation following a repo-committed symlink at `.claude/worktrees` could create files outside the repo; **v2.1.210 (2026-07-14)** — late-appearing `.claude/*` symlinks weren't reconciled into the sandbox deny-write list. Single source (Anthropic's own changelog), not written up standalone. Noted here because it complicates the "rejected as outside our threat model" framing above — Anthropic quietly fixed other symlink-class bugs the same week. Don't rely on the confirmation dialog's displayed path; keep Claude Code updated regardless.
 
 ## Sources
 
