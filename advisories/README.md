@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-07-08 | [n8n — 10-advisory security batch: host-level RCE via expression evaluator, SSO privilege escalation, AI-agent sandbox bypass](2026-07-n8n-july-security-advisory-batch.md) | high | patched |
 | 2026-07-15 | [PromptFiction — Claude Desktop's claude:// URI auto-submitted hidden prompts with zero clicks, chainable with Claudy Day](2026-07-promptfiction-claude-desktop.md) | high | patched |
 | 2026-07-14 | [Cursor IDE — unpatched Windows zero-day: a git.exe planted in a repo root auto-executes on open](2026-07-cursor-git-exe-autoexec.md) | high | active |
 | 2026-07-13 | [SANS ISC documents internet-wide scanning for exposed MCP servers and AI-coding-tool credential files](2026-07-mcp-scanning-campaign-sans.md) | medium | active |
