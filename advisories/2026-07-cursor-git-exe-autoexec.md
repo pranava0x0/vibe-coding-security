@@ -1,17 +1,17 @@
 ---
 id: 2026-07-cursor-git-exe-autoexec
-title: "Cursor IDE — unpatched Windows zero-day: a git.exe planted in a repo root auto-executes on open (no CVE, no patch)"
+title: "Cursor IDE — a git.exe planted in a repo root auto-executes on open; silently patched in Desktop, still unpatched in Cursor CLI, Gemini CLI, Codex"
 date_disclosed: 2026-07-14
-last_updated: 2026-07-16
+last_updated: 2026-07-18
 severity: high
-status: active
+status: patched
 ecosystems: [cursor]
 tools_affected: [cursor]
 tags: [zero-click-rce, windows, git-hijacking, unpatched, ai-ide, disclosure-stonewalled]
 ---
 
 ## TL;DR
-Mindgard disclosed that **Cursor on Windows** searches multiple locations for a Git binary when it opens a project — including the **workspace root itself** — and will execute whatever it finds there **automatically, with no prompt, warning, or user interaction**. Placing a malicious binary renamed to `git.exe` in a repository's root directory is enough: simply opening that repo in Cursor runs it, repeatedly, during normal operation. Reported privately in December 2025, the flaw was still unpatched at full public disclosure on **2026-07-14** — over 190 days and, per Mindgard, well over 70 subsequent Cursor releases later.
+Mindgard disclosed that **Cursor Desktop on Windows** searches multiple locations for a Git binary when it opens a project — including the **workspace root itself** — and will execute whatever it finds there **automatically, with no prompt, warning, or user interaction**. Placing a malicious binary renamed to `git.exe` in a repository's root directory is enough: simply opening that repo in Cursor runs it, repeatedly, during normal operation. Reported privately in December 2025, the flaw remained live through Mindgard's full public disclosure on **2026-07-14** — but Cursor **silently patched it on 2026-07-13**, one day earlier, with no CVE, no advisory, and no disclosed version number. Separately, independent research from Cymulate found the **same binary-planting class in Cursor CLI, Google Gemini CLI, and OpenAI's Codex Desktop App — all still unpatched** as of that research's publication.
 
 ## What happened
 Mindgard researcher **Aaron Portnoy** found that when Cursor loads a project on Windows, it resolves the Git executable by searching several candidate locations rather than trusting only the system `PATH` or a pinned binary — and one of those candidate locations is inside the opened workspace itself. As proof of concept, the researchers renamed the Windows Calculator (`calc.exe`) to `git.exe` and placed it at the root of a test repository; opening that repository in Cursor caused the "calculator" to launch repeatedly and automatically as Cursor performed its normal Git-status operations, with **zero clicks, prompts, or confirmation dialogs** ([Mindgard](https://mindgard.ai/blog/cursor-0day-when-full-disclosure-becomes-the-only-protection-left)). In a real attack, the planted binary would be an actual payload rather than a calculator, giving the attacker code execution under the current user's privileges the instant a developer opens the repository — no different from cloning any other untrusted repo.
@@ -25,8 +25,16 @@ Mindgard researcher **Aaron Portnoy** found that when Cursor loads a project on 
 
 **Scope**: Windows only — Mac and Linux were not reported as affected. **No CVE has been assigned.** This is a distinct bug from the two other 2026 Cursor Git-related flaws already tracked in this repo: [DuneSlide](2026-06-cursor-duneslide-zeroclick-rce.md) (CVE-2026-50548/CVE-2026-50549, sandbox-escape via `working_directory`/symlink handling, patched in Cursor 3.0) and the nested-bare-repo Git-hook RCE (CVE-2026-26268, patched February 2026) — this is a third, separate mechanism: trusting a Git binary found *inside the untrusted workspace* rather than the system's own Git installation.
 
+## Update — 2026-07-18: silently patched one day before public disclosure — and the same binary-planting class is unpatched in three other AI coding CLIs
+
+**Cursor silently fixed the Cursor Desktop git.exe issue on 2026-07-13** — one day before Mindgard's public disclosure went live on 2026-07-14. As of 2026-07-17, Cursor has issued **no public security advisory, no CVE, and has not disclosed which version number contains the fix** — the fix was confirmed only by researchers re-testing and observing the exploit no longer working, not by any vendor statement. Per this repo's standing "silent patch ≠ no incident" caution: treat this as `status: patched`, but keep the "no disclosure" fact itself as part of the record, and update to Cursor's latest build rather than trying to pin a specific "safe" version number, since none has been published.
+
+Separately, and distinct from the above: **Cymulate Research Labs** disclosed (reported to vendors starting ~2026-01-04, published 2026-06-04) that the **same class of vulnerability — an AI coding tool auto-executing a `git.exe` (or similar) binary planted in the working directory, with no approval, warning, or integrity check — also affects Cursor *CLI*** (a separate product from Cursor Desktop covered above), **Google Gemini CLI**, and **OpenAI's Codex Desktop App**. In Cymulate's Gemini CLI proof-of-concept, the technique escalated to an elevated PowerShell process via a UAC bypass. Vendor responses documented by Cymulate as of its June 4 write-up: **Google acknowledged the Gemini CLI finding as valid but had not shipped a patch**; **OpenAI closed the Codex report as "Not Applicable"**; **Cursor closed the CLI report as "Informative"** (i.e., not treated as a vulnerability) just eight days after the report. Note this is **not** the same bug as AWS Kiro's CVE-2026-10591 — that Cymulate-reported Kiro finding is a related but distinct config-auto-execute flaw (a poisoned `.vscode/tasks.json` running on folder-open), already patched in Kiro 0.11, and structurally closer to this repo's "AI coding tool auto-executes workspace config" class than to the binary-planting class documented here.
+
+**Net effect:** the git.exe/binary-planting root cause that Mindgard found in Cursor Desktop is now known to recur, unpatched as of this sweep, in at least three more widely-used AI coding CLIs (Cursor CLI, Gemini CLI, Codex Desktop). If you use any of these tools on Windows, the "check for a planted binary before opening an untrusted repo" mitigation below applies regardless of which specific tool you're running.
+
 ## Am I affected?
-You are affected if you run **Cursor on Windows** and ever open a repository from an untrusted source (a public GitHub repo, a fork, a coding-challenge template, a contributor's PR branch checked out locally, etc.) — no patched version exists as of this writing.
+Cursor Desktop's specific bug was silently patched 2026-07-13 — update to the latest Cursor Desktop build. **Cursor CLI, Google Gemini CLI, and OpenAI Codex Desktop remain unpatched as of this sweep** for the same binary-planting class; if you run any of those on Windows and open repositories from untrusted sources, treat the mitigation below as still necessary.
 
 ```powershell
 # Before opening any unfamiliar repo in Cursor on Windows — check for a planted git.exe
@@ -53,3 +61,6 @@ This is the same "git clone → code execution" shape already tracked across thi
 - [Mindgard — Cursor 0day: When Full Disclosure Becomes the Only Protection Left](https://mindgard.ai/blog/cursor-0day-when-full-disclosure-becomes-the-only-protection-left) — primary disclosure, PoC details, full timeline.
 - [Developers Digest — Cursor 0-Day: git.exe Vulnerability](https://www.developersdigest.tech/blog/cursor-0day-git-exe-vulnerability) — independent summary, affected-version detail, CVE cross-references.
 - [Cryptobriefing — Cursor Vulnerability Poses Code Execution Risk](https://cryptobriefing.com/cursor-vulnerability-code-execution-risk/) — independent corroboration.
+- [Security Online — Cursor Zero-Day Vulnerability Remains Unpatched After Seven Months](https://securityonline.info/cursor-zero-day-vulnerability/) — independent corroboration of the disclosure timeline; noted the exploit stopped working on 2026-07-13 during re-testing, ahead of the public writeup.
+- [Cymulate — When AI Tools Become the Backdoor: Zero-Click RCE via Prompt Injection](https://cymulate.com/blog/zero-click-rce-prompt-injection-ai-tools/) — primary source for the Cursor CLI / Gemini CLI / Codex Desktop binary-planting findings and vendor-response details (Google acknowledged/no patch, OpenAI closed as Not Applicable, Cursor CLI closed as Informative).
+- [AWS Security Bulletin 2026-037-AWS — CVE-2026-10591](https://aws.amazon.com/security/security-bulletins/2026-037-aws/) — the related-but-distinct Kiro IDE config-auto-execute finding from the same Cymulate research effort, patched in Kiro 0.11.
