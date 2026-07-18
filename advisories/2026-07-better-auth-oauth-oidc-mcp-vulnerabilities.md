@@ -2,7 +2,7 @@
 id: 2026-07-better-auth-oauth-oidc-mcp-vulnerabilities
 title: "better-auth — 13+ OAuth/OIDC/SSO/SCIM advisories including a critical MCP-plugin refresh-token bypass (CVE-2026-53512)"
 date_disclosed: 2026-06-02
-last_updated: 2026-07-08
+last_updated: 2026-07-18
 severity: high
 status: patched
 ecosystems: [npm, nextjs, auth]
@@ -58,6 +58,15 @@ You are affected if you run **better-auth < 1.6.11** (core OAuth/OIDC issues), *
 | Deprecated, migrate off | `oidcProvider` and `mcp` plugins (removed in 1.7) |
 | Total advisories | 13 (2026-06-02) + 4 (2026-06-26) |
 
+## Update — 2026-07-18: two more `@better-auth/sso` CVEs, published the same day, fixed in the same 1.6.11 you should already be on
+
+Two additional CVEs in `@better-auth/sso` were published on **2026-07-15** — both patched in the **same 1.6.11 release** already recommended above, so anyone who updated in response to CVE-2026-53512 is already fixed, but anyone still on an older build has more exposure than previously documented here:
+
+- **CVE-2026-53513** (GHSA-5rr4-8452-hf4v, CVSS 9.6, critical) — the `POST /sso/register` endpoint accepts attacker-controlled `oidcConfig.userInfoEndpoint`, `tokenEndpoint`, and `jwksEndpoint` URLs when `skipDiscovery: true` is set, persists them on the `ssoProvider` row with no origin validation, then issues **server-side fetches to those URLs** during the OIDC callback and reflects the response body back through the user profile — a non-blind SSRF reachable by any authenticated session. This reaches internal-only endpoints: cloud metadata services (AWS IMDS), Redis, admin panels bound to localhost. Worse, if `trustEmailVerified: true` is configured (a common convenience setting), a crafted `userInfo` response with `emailVerified: true` and an attacker-chosen email triggers OAuth auto-linking against any pre-existing account with that email — turning the SSRF into full **account takeover**. Mitigate immediately by setting `sso({ providersLimit: 0 })` to block self-registration, gating `/sso/register` at your reverse proxy, and setting `trustEmailVerified: false`.
+- **CVE-2026-53515** (GHSA-gv74-j8m3-fg5f, CVSS 7.1, high) — from `1.2.10` until `1.6.11`, `registerSSOProvider` checked only for organization-membership when handling `POST /sso/register`, not an owner/admin role — **any** organization member could attach an attacker-controlled OIDC/SAML provider to the organization, which then drives `/sso/callback/{providerId}` provisioning for that org.
+
+Both are fixed in **better-auth ≥ 1.6.11**, same as CVE-2026-53512. If you already updated for the June batch, you're covered; if not, these two raise the urgency — CVE-2026-53513 in particular is a higher CVSS than the original headline CVE.
+
 ## If you are affected
 
 1. **Update `better-auth` and every scoped plugin package you use** to the versions above.
@@ -78,3 +87,6 @@ You are affected if you run **better-auth < 1.6.11** (core OAuth/OIDC issues), *
 - [GitHub — better-auth/better-auth security advisories](https://github.com/better-auth/better-auth/security) — full advisory index with GHSA IDs and severities.
 - [GitLab Advisory Database — CVE-2026-53512](https://advisories.gitlab.com/npm/better-auth/CVE-2026-53512/) — canonical CVE record for the MCP/OIDC refresh-token bypass; CVSS 9.1, CWE-287/306/345/863, fixed version 1.6.11.
 - [GitHub Security Advisory — GHSA-rjg6-39jm-rgg4](https://github.com/better-auth/better-auth/security/advisories/GHSA-rjg6-39jm-rgg4) — SCIM provider-ID collision advisory; affected/fixed versions, disclosure date 2026-06-26.
+- [GitHub Security Advisory — GHSA-5rr4-8452-hf4v (CVE-2026-53513)](https://github.com/better-auth/better-auth/security/advisories/GHSA-5rr4-8452-hf4v) — `@better-auth/sso` SSRF via unvalidated OIDC endpoints on provider registration; vendor advisory, CVSS 9.6.
+- [GitLab Advisory Database — CVE-2026-53513](https://advisories.gitlab.com/npm/@better-auth/sso/CVE-2026-53513/) — independent corroboration of the SSRF advisory.
+- [Security Online — Better Auth SSRF Flaw CVE-2026-53513 (CVSS 9.6) Threatens 19M-Download Auth Library](https://securityonline.info/better-auth-ssrf-cve-2026-53513/) — independent write-up with attack-chain detail (SSRF → account takeover via `trustEmailVerified`).
