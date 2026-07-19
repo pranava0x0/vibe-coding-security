@@ -918,14 +918,15 @@ def build_llms_ctx_txt(pages: list[Page]) -> str:
         )
 
         # Extract just TL;DR section if present (truncated to keep this variant compact).
-        # 2026-07-08: tightened from 500/450 to 420/380 chars — the corpus grew past the
-        # llms-ctx.txt size cap (tests/test_llms.py); trim per-entry length here as the
-        # corpus grows rather than bumping the cap, per this repo's standing guidance.
+        # 2026-07-19: tightened from 420/380 to 395/355 chars — the corpus grew past the
+        # llms-ctx.txt size cap (tests/test_llms.py) again after the Rogue Agent advisory;
+        # trim per-entry length here as the corpus grows rather than bumping the cap, per
+        # this repo's standing guidance.
         tldr = _extract_section(p.body, "TL;DR") or p.description
         tldr = tldr.strip()
-        tldr_short = tldr[:420] + "…" if len(tldr) > 420 else tldr
+        tldr_short = tldr[:395] + "…" if len(tldr) > 395 else tldr
         affected = _extract_section(p.body, "Am I affected?")
-        affected_short = affected[:380] + "…" if affected and len(affected) > 380 else affected
+        affected_short = affected[:355] + "…" if affected and len(affected) > 355 else affected
 
         lines.append(f"## {p.title}")
         lines.append("")
