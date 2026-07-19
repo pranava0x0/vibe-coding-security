@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-07-07 | [Rogue Agent — shared Cloud Run execution environment let one Dialogflow CX agent hijack every agent in a GCP project](2026-07-rogue-agent-dialogflow-cx-shared-execution.md) | high | patched |
 | 2026-07-08 | [n8n — 10-advisory security batch: host-level RCE via expression evaluator, SSO privilege escalation, AI-agent sandbox bypass](2026-07-n8n-july-security-advisory-batch.md) | high | patched |
 | 2026-07-15 | [PromptFiction — Claude Desktop's claude:// URI auto-submitted hidden prompts with zero clicks, chainable with Claudy Day](2026-07-promptfiction-claude-desktop.md) | high | patched |
 | 2026-07-14 | [Cursor IDE — a git.exe planted in a repo root auto-executes on open; silently patched in Desktop, still unpatched in Cursor CLI, Gemini CLI, Codex](2026-07-cursor-git-exe-autoexec.md) | high | patched |

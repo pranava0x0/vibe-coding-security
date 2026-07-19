@@ -2,11 +2,15 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-07-18. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-07-19. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-07-07 — Rogue Agent: a shared Cloud Run execution environment let one Dialogflow CX agent hijack every agent in a GCP project (patched, no CVE)
+Varonis Threat Labs disclosed that Google Dialogflow CX's **Playbook Code Blocks** feature ran all agents in a GCP project inside **one shared, Google-managed Cloud Run service** rather than per-agent isolation. A user holding only `dialogflow.playbooks.update` on a single agent could overwrite the shared `code_execution_env.py` runtime file, injecting code that then ran for **every Code Block execution across every agent in the project** — reading live conversations and pushing attacker-authored phishing messages, with the overwrite invisible to Cloud Logging. The shared environment's public egress also let Code Blocks exfiltrate data past a VPC Service Controls perimeter, and an exposed Instance Metadata Service leaked the environment's own service-account tokens. Reported via Google VRP in November 2025; Google shipped a partial fix in April 2026 and fully resolved the shared-runtime design flaw in June 2026. No CVE assigned; Google reports no evidence of in-the-wild exploitation.
+→ [advisories/2026-07-rogue-agent-dialogflow-cx-shared-execution.md](advisories/2026-07-rogue-agent-dialogflow-cx-shared-execution.md)
 
 ### 2026-07-15 — Suno (AI music generator) named as a new Shai-Hulud "Second Coming" victim, disclosed 8 months later via hacker-to-journalist leak, not vendor postmortem
 A hacker ("ellie.191") leaked Suno's internal source code (2023–2024) and a customer data set (emails, phone numbers, Stripe payment details, reportedly hundreds of thousands of accounts) to [404 Media](https://www.404media.co/hack-reveals-suno-ai-music-generator-scraped-youtube-deezer-and-genius/), published 2026-07-15. The hacker **claims** — not independently forensically confirmed — that initial access came from stealing an employee's credentials via the **Shai-Hulud npm supply-chain worm**, the same campaign this repo already tracks in [Shai-Hulud "The Second Coming" (Nov 2025)](advisories/2025-11-shai-hulud-second-coming.md). Suno says it identified the incident in **November 2025** — inside that wave's window — and called it "limited" and "quickly contained" with outdated code, concluding no user notification was legally required; it never proactively disclosed. Filed as an update to the existing Second Coming advisory rather than a standalone entry, since the claimed compromise timing falls inside that wave.
