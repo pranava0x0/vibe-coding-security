@@ -4,6 +4,9 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-07-13 | [MemGhost — a single malicious email plants persistent false memories in AI agents (research, OpenClaw + Claude Code SDK)](2026-07-memghost-ai-agent-memory-poisoning.md) | high | active |
+| 2026-07-17 | [On-chain backdoor in a malicious TRAE IDE extension — Ethereum smart contract as C2 (juannegro.solidity)](2026-07-trae-solidity-extension-onchain-c2.md) | high | unconfirmed |
+| 2026-06-15 | [Pickle in the Middle — Google Cloud Vertex AI SDK bucket-squatting enables cross-tenant model hijack and RCE](2026-06-vertex-ai-pickle-in-the-middle.md) | critical | patched |
 | 2026-07-07 | [Rogue Agent — shared Cloud Run execution environment let one Dialogflow CX agent hijack every agent in a GCP project](2026-07-rogue-agent-dialogflow-cx-shared-execution.md) | high | patched |
 | 2026-07-08 | [n8n — 10-advisory security batch: host-level RCE via expression evaluator, SSO privilege escalation, AI-agent sandbox bypass](2026-07-n8n-july-security-advisory-batch.md) | high | patched |
 | 2026-07-15 | [PromptFiction — Claude Desktop's claude:// URI auto-submitted hidden prompts with zero clicks, chainable with Claudy Day](2026-07-promptfiction-claude-desktop.md) | high | patched |
