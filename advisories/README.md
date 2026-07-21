@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-07-20 | [Next.js July 2026 Security Release — 9 CVEs: middleware bypass (Turbopack+single-locale), SSRF, cache confusion](2026-07-nextjs-july-security-release.md) | high | patched |
 | 2026-07-13 | [MemGhost — a single malicious email plants persistent false memories in AI agents (research, OpenClaw + Claude Code SDK)](2026-07-memghost-ai-agent-memory-poisoning.md) | high | active |
 | 2026-07-17 | [On-chain backdoor in a malicious TRAE IDE extension — Ethereum smart contract as C2 (juannegro.solidity)](2026-07-trae-solidity-extension-onchain-c2.md) | high | unconfirmed |
 | 2026-06-15 | [Pickle in the Middle — Google Cloud Vertex AI SDK bucket-squatting enables cross-tenant model hijack and RCE](2026-06-vertex-ai-pickle-in-the-middle.md) | critical | patched |
@@ -17,7 +18,7 @@ One file per incident. Latest at the top.
 | 2026-07-09 | [AI-SDK-name typosquats on npm harvest git/SSH/cloud identity — anthropic-toolkit, ai-sdk-helpers, @langgraphjs/toolkit and more](2026-07-ai-sdk-typosquat-npm-recon.md) | high | contained |
 | 2026-07-14 | [AsyncAPI npm compromise — GitHub Actions "pwn request" steals CI token, publishes Miasma RAT through the project's own OIDC pipeline](2026-07-asyncapi-miasma-npm-github-actions.md) | critical | active |
 | 2026-07-08 | [HalluSquatting — pre-registering AI-hallucinated package/skill/repo names weaponizes coding-agent trust](2026-07-hallusquatting-ai-agent-hallucination.md) | high | active |
-| 2026-07-14 | [Microsoft July Patch Tuesday — GitHub Copilot JetBrains plugin CVE-2026-50510 + M365 Copilot mobile CVE-2026-48561](2026-07-microsoft-copilot-patch-tuesday-cves.md) | high | patched |
+| 2026-07-14 | [Microsoft July Patch Tuesday — GitHub Copilot JetBrains plugin CVE-2026-50510 + M365 Copilot mobile CVE-2026-48561 + cross-tenant EoP CVE-2026-41106](2026-07-microsoft-copilot-patch-tuesday-cves.md) | high | patched |
 | 2026-07-11 | [jscrambler npm compromise — Rust infostealer that survives --ignore-scripts, targets Claude Desktop/Cursor/Windsurf configs](2026-07-jscrambler-npm-preinstall-infostealer.md) | high | contained |
 | 2026-05-28 | [Zapocalypse — five-stage exploit chain turns a free Zapier account into NPM publish rights on zapier.com's own JS bundle](2026-05-zapier-zapocalypse-exploit-chain.md) | critical | patched |
 | 2026-07-08 | [Injective Labs SDK npm compromise — compromised contributor account plants wallet-key stealer](2026-07-injective-labs-npm-wallet-stealer.md) | high | contained |
