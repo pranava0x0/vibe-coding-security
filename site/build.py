@@ -719,9 +719,12 @@ def build_llms_txt(pages: list[Page], full_bytes: int | None = None, ctx_bytes: 
         # roughly flat as the advisory corpus grows, instead of every sweep
         # eventually re-hitting LLMS_TXT_MAX_BYTES the way llms-full.txt/
         # llms-ctx.txt repeatedly have. (2026-07-16)
+        # 2026-07-22: tightened from 160 to 145 chars — the corpus grew past the
+        # llms.txt size cap (tests/test_llms.py) again; trim per-entry length as
+        # the corpus grows rather than bumping the cap, per standing guidance.
         desc = p.description
-        if len(desc) > 160:
-            desc = desc[:159].rsplit(" ", 1)[0] + "…"
+        if len(desc) > 145:
+            desc = desc[:144].rsplit(" ", 1)[0] + "…"
         lines.append(
             f"- [{p.title}]({_page_html_url(p)}) ([md]({_page_md_url(p)})){meta}: {desc}"
         )
@@ -918,15 +921,15 @@ def build_llms_ctx_txt(pages: list[Page]) -> str:
         )
 
         # Extract just TL;DR section if present (truncated to keep this variant compact).
-        # 2026-07-19: tightened from 420/380 to 395/355 chars — the corpus grew past the
-        # llms-ctx.txt size cap (tests/test_llms.py) again after the Rogue Agent advisory;
-        # trim per-entry length here as the corpus grows rather than bumping the cap, per
-        # this repo's standing guidance.
+        # 2026-07-22: tightened from 395/355 to 370/330 chars — the corpus grew past the
+        # llms-ctx.txt size cap (tests/test_llms.py) again after the Azure DevOps MCP and
+        # NextAuth.js advisories; trim per-entry length here as the corpus grows rather
+        # than bumping the cap, per this repo's standing guidance.
         tldr = _extract_section(p.body, "TL;DR") or p.description
         tldr = tldr.strip()
-        tldr_short = tldr[:395] + "…" if len(tldr) > 395 else tldr
+        tldr_short = tldr[:370] + "…" if len(tldr) > 370 else tldr
         affected = _extract_section(p.body, "Am I affected?")
-        affected_short = affected[:355] + "…" if affected and len(affected) > 355 else affected
+        affected_short = affected[:330] + "…" if affected and len(affected) > 330 else affected
 
         lines.append(f"## {p.title}")
         lines.append("")
