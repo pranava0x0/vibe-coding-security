@@ -1,8 +1,8 @@
 ---
 id: 2026-07-n8n-july-security-advisory-batch
-title: "n8n — 10-advisory security batch: host-level RCE via expression evaluator, SSO privilege escalation to instance owner, AI-agent sandbox bypass"
+title: "n8n — 10-advisory security batch: host-level RCE via expression evaluator, SSO privilege escalation to instance owner, AI-agent sandbox bypass (plus a second 10-advisory batch two weeks later)"
 date_disclosed: 2026-07-08
-last_updated: 2026-07-17
+last_updated: 2026-07-23
 severity: high
 status: patched
 ecosystems: [npm, n8n, ai-agents]
@@ -79,3 +79,22 @@ You're exposed if you self-host n8n **< 1.123.64 / < 2.29.8 / < 2.30.1** (check 
 - [The Hacker News — n8n Token Exchange Flaw Could Let Attackers Log In as Users From Another Issuer](https://thehackernews.com/2026/07/n8n-token-exchange-flaw-could-let.html) — independent corroboration of CVE-2026-59208 only (published 2026-07-16); no independent coverage found for the 2026-07-08 batch of 10 as of this sweep — sourced solely from n8n's own vendor advisory pages.
 
 **Sourcing note:** the ten 2026-07-08 advisories are corroborated only by n8n's own GitHub Security Advisories (a single vendor domain, ten separate first-party pages, no assigned CVEs yet). No independent aggregator or research-firm coverage of this specific batch was found as of 2026-07-17. Treated here as a verified vendor disclosure (not a disputed incident claim) given the precision of the CVSS vectors and fixed-version data on each page, but flagged per this repo's two-independent-source standard for full advisories.
+
+## Update — 2026-07-22: a second 10-advisory batch, two weeks after the first, fixed in a new release train
+
+n8n's own GitHub Security Advisories page published **ten more advisories on 2026-07-22** (all authored by the same maintainer, `csuermann`, as the July 8 batch) — none carry an assigned CVE as of this sweep. All are fixed in **n8n ≥ 1.123.67 / ≥ 2.31.5 / ≥ 2.32.1** (a later release train than the July 8 batch's 1.123.64/2.29.8/2.30.1 — upgrading again is required even if you already patched for July 8). Three of the ten were fetched and verified directly; the rest are listed from the advisories index page. Ranked by severity:
+
+- **GHSA-gv7g-jm28-cr3m — Expression sandbox escape via arrow-function bodies enabling command execution (CVSS 4.0: 8.7, High).** An authenticated user with workflow create/modify permissions can bypass the expression sandbox using specially crafted arrow functions, triggering arbitrary OS command execution on the n8n host — no user interaction required. This is a *different* expression-engine bypass from the July 8 batch's legacy-evaluator sanitizer bypass (GHSA-pm35-fqvh-cq5g above); together the two disclosures mean n8n's expression sandbox has had two independent RCE-class escapes patched in the same month.
+- **GHSA-rcv6-pvrj-4xcg — Authenticated code execution in the n8n Git node (CVSS 4.0: 8.7, High).** An authenticated user with workflow create/execute permissions can stage a malicious local Git repository and exploit default Git hook behavior to execute arbitrary commands as the n8n process user, via the built-in Git node.
+- **GHSA-xwx6-jjhv-84p8 — Prototype Pollution via Dot-Notation Field Names Leads to Instance-Wide Denial of Service (High).**
+- **GHSA-xmc9-4f2h-jf9c — Edit Image Node Format Injection Allows Arbitrary File Write (High).**
+- **GHSA-cj9h-qx8g-pq2g — Shared-Workflow Editor Can Exfiltrate Credentials via Inline Sub-Workflow JSON (High).**
+- **GHSA-2x35-3fw4-9jr4 — Send Email Node Arbitrary File Read and SSRF via Nodemailer Content-Object Type Confusion (High).**
+- **GHSA-9cmh-xcqm-5hqr — Cross-Tenant Module-Cache Poisoning in the JS Task Runner (CVSS 5.8, Moderate).** All multi-user instances share one module cache across users' Code-node executions in the JS task runner; a malicious user with Code-node access can poison a cached module and alter *other users'* Code-node execution results — a cross-tenant isolation break (not a sandbox escape or RCE on its own).
+- **GHSA-652q-gvq3-74qv — Snowflake Node executeQuery Operation Allows SQL Injection via Unparameterized Expression Interpolation (Moderate).**
+- **GHSA-vhf8-cg2h-cg3p — SSRF Protection Bypass via MCP Client Node (Moderate).**
+- **GHSA-hx4h-vr3m-45vh — Prototype Pollution via VM Expression Engine Sandbox Escape Leads to Denial of Service (Moderate).**
+
+**Am I affected (update):** if you're running n8n **1.123.64–1.123.66**, **2.29.8–2.31.4**, or **2.30.1–2.32.0** (i.e., already patched for the July 8 batch but not this one), you're still exposed to the two high-severity items above. Upgrade again to **≥ 1.123.67 / ≥ 2.31.5 / ≥ 2.32.1**. No independent aggregator coverage of this second batch was found as of this sweep — sourced solely from n8n's own vendor advisory pages, same sourcing caveat as the July 8 batch above.
+
+Sources for this update: [n8n GitHub Security Advisories — overview page](https://github.com/n8n-io/n8n/security/advisories) (fetched directly, 2026-07-22 batch); [GHSA-gv7g-jm28-cr3m](https://github.com/n8n-io/n8n/security/advisories/GHSA-gv7g-jm28-cr3m); [GHSA-rcv6-pvrj-4xcg](https://github.com/n8n-io/n8n/security/advisories/GHSA-rcv6-pvrj-4xcg); [GHSA-9cmh-xcqm-5hqr](https://github.com/n8n-io/n8n/security/advisories/GHSA-9cmh-xcqm-5hqr) — all three fetched and verified directly.
