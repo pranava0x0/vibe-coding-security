@@ -2,7 +2,7 @@
 id: ongoing-vibe-platform-exposure
 title: "Vibe-coded app data exposure — Lovable, Bolt, Replit, Base44 pattern issues"
 date_disclosed: 2025
-last_updated: 2026-07-14
+last_updated: 2026-07-23
 severity: high
 status: ongoing
 ecosystems: [lovable, bolt, replit, v0, supabase, base44]
@@ -82,6 +82,10 @@ This is the same underlying 48-day-open BOLA report already summarized in this a
 
 Base44 patched the vulnerability promptly after Wiz's responsible disclosure. Wiz characterized the issue as a **"critical" access-control flaw** affecting the platform's multi-tenant isolation layer — the same class of bug (BOLA / broken object-level authorization at the platform layer, not individual app layer) that has appeared in Lovable (48-day-open BOLA report) and Replit (public Repl defaults). The pattern: vibe-coding platforms are building multi-tenant infrastructure at speed, and access-control mistakes at the platform level have wider blast radius than in any individual app they host.
 
+## July 2026 — Theori's Xint Code study: authorization flaws double as AI-hardened apps grow (greenfield vs. brownfield)
+
+Security firm **Theori** published findings from its **Xint Code** AI-code-scanning platform (published 2026-07-22) comparing three AI-assisted development scenarios rather than just scanning apps after the fact: a **greenfield app built from a well-written spec** (experienced-developer oversight), a **greenfield app built from a minimal "just build this" prompt** (casual/vibe-coded), and a **brownfield app** — the legacy PHP forum **Gnuboard7**, migrated to a Laravel + React stack and then AI-hardened. Each was scanned for 30 minutes combining runtime and source analysis. Combined result: **434 exploitable vulnerabilities** — **196** in the two greenfield apps, **238** in the hardened brownfield app. By category: **93 denial-of-service/rate-limiting** flaws, **88 authorization/IDOR** flaws, **54 access-boundary/traversal/SSRF** flaws, and **23 critical-severity** findings (11 hardcoded secrets, 6 debug-mode RCE). The headline finding for larger/legacy codebases specifically: **IDOR/authorization flaws made up only 11% of findings in the small greenfield apps but 28% in the larger brownfield app** — fine-grained authorization holds up while an app is small and breaks down as it grows, even when the AI was explicitly asked to harden the code rather than just extend it. Consistent with, and adds a controlled-comparison methodology to, the RedAccess/Escape.tech findings already tracked in this advisory.
+
 ## Sources
 - [Vibe Eval — Vibe Coding Security: Risks, Vulnerabilities, and Fixes (2026)](https://vibe-eval.com/vibe-coding-security-risks)
 - [The Next Web — Lovable security crisis: 48 days of exposed projects, closed bug reports](https://thenextweb.com/news/lovable-vibe-coding-security-crisis-exposed)
@@ -97,3 +101,4 @@ Base44 patched the vulnerability promptly after Wiz's responsible disclosure. Wi
 - [VentureBeat — Vibe coding exposed 380,000 corporate apps — 5,000 held sensitive data](https://venturebeat.com/security/vibe-coded-apps-shadow-ai-s3-bucket-crisis-ciso-audit-framework)
 - [IANS Research — Easy-to-Build, Easy-to-Expose: How Vibe Coding Is Creating New Data Risks](https://www.iansresearch.com/resources/all-blogs/post/security-blog/2026/05/15/easy-to-build--easy-to-expose--how-vibe-coding-is-creating-new-data-risks)
 - [Futurism — Vibe Coded Apps Are Spilling Users' Personal Information Directly Into the Maw of Greedy Hackers](https://futurism.com/artificial-intelligence/vibe-coded-apps-spilling-personal-information)
+- [SecurityWeek — Vibe-Coded Apps Riddled With Exploitable Security Flaws](https://www.securityweek.com/vibe-coded-apps-riddled-with-exploitable-security-flaws/) — Theori Xint Code study, fetched directly; greenfield-vs-brownfield methodology, 434 total findings.

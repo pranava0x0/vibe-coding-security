@@ -2,7 +2,7 @@
 id: 2026-07-better-auth-oauth-oidc-mcp-vulnerabilities
 title: "better-auth — 13+ OAuth/OIDC/SSO/SCIM advisories including a critical MCP-plugin refresh-token bypass (CVE-2026-53512)"
 date_disclosed: 2026-06-02
-last_updated: 2026-07-18
+last_updated: 2026-07-23
 severity: high
 status: patched
 ecosystems: [npm, nextjs, auth]
@@ -67,6 +67,15 @@ Two additional CVEs in `@better-auth/sso` were published on **2026-07-15** — b
 
 Both are fixed in **better-auth ≥ 1.6.11**, same as CVE-2026-53512. If you already updated for the June batch, you're covered; if not, these two raise the urgency — CVE-2026-53513 in particular is a higher CVSS than the original headline CVE.
 
+## Update — 2026-07-23: two more CVE numbers assigned to items already in this batch
+
+Two items from the original 2026-06-02 disclosure that were previously tracked here only by GHSA ID have now had CVE numbers assigned — no new vulnerability, just canonical IDs for context already covered above:
+
+- **CVE-2026-45337** (GHSA-cq3f-vc6p-68fh, high) — the `deviceAuthorization` plugin's device-flow endpoints treated any authenticated session as the owner of a pending device code: `GET /device` never claimed the row, and `POST /device/approve` / `POST /device/deny` silently accepted any caller when the row's `userId` was unset. An authenticated attacker who learned a valid `user_code` before the legitimate user finished approving could bind the polling device to their own account (account takeover) or deny the legitimate sign-in. Fixed in **1.6.11** — `GET /device` now claims the row for the calling session, and approve/deny require strict owner equality.
+- **CVE-2026-53516** (GHSA-g38m-r43w-p2q7, this repo's ID for the pre-account-hijacking item referenced above) — the OAuth callback's auto-link gate in `handleOAuthUserInfo` implicitly links an incoming OAuth identity to an existing local account whenever the provider asserts `email_verified: true`, without also checking that the local account's own `emailVerified` flag is true. An attacker who pre-registers an unverified account at the victim's email address, then waits for the victim to sign in via Google/GitHub/SSO, gets their OAuth identity silently attached to the attacker-controlled row — full persistent account takeover, and `requireEmailVerification: true` does not mitigate it. Fixed in **1.6.11**: implicit linking now refuses to attach an OAuth identity to a local account with `emailVerified: false`.
+
+No new update action required beyond what's already recommended below — both are covered by the same **better-auth ≥ 1.6.11** upgrade.
+
 ## If you are affected
 
 1. **Update `better-auth` and every scoped plugin package you use** to the versions above.
@@ -90,3 +99,7 @@ Both are fixed in **better-auth ≥ 1.6.11**, same as CVE-2026-53512. If you alr
 - [GitHub Security Advisory — GHSA-5rr4-8452-hf4v (CVE-2026-53513)](https://github.com/better-auth/better-auth/security/advisories/GHSA-5rr4-8452-hf4v) — `@better-auth/sso` SSRF via unvalidated OIDC endpoints on provider registration; vendor advisory, CVSS 9.6.
 - [GitLab Advisory Database — CVE-2026-53513](https://advisories.gitlab.com/npm/@better-auth/sso/CVE-2026-53513/) — independent corroboration of the SSRF advisory.
 - [Security Online — Better Auth SSRF Flaw CVE-2026-53513 (CVSS 9.6) Threatens 19M-Download Auth Library](https://securityonline.info/better-auth-ssrf-cve-2026-53513/) — independent write-up with attack-chain detail (SSRF → account takeover via `trustEmailVerified`).
+- [GitLab Advisory Database — CVE-2026-45337](https://advisories.gitlab.com/npm/better-auth/CVE-2026-45337/) — canonical CVE record for the device-authorization owner-binding bug.
+- [GitHub Security Advisory — GHSA-cq3f-vc6p-68fh (CVE-2026-45337)](https://github.com/better-auth/better-auth/security/advisories/GHSA-cq3f-vc6p-68fh) — vendor advisory, fetched directly.
+- [GitLab Advisory Database — CVE-2026-53516](https://advisories.gitlab.com/npm/better-auth/CVE-2026-53516/) — canonical CVE record for the OAuth pre-account-hijacking bug.
+- [better-auth — Security update: June 2026](https://better-auth.com/blog/security-update-june-2026) — vendor's own post listing both GHSA IDs (GHSA-cq3f-vc6p-68fh, GHSA-g38m-r43w-p2q7) alongside the rest of the June batch; fetched directly to confirm both were part of the already-disclosed batch, not new vulnerabilities.
