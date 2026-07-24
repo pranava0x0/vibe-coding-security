@@ -2,11 +2,15 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-07-23. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-07-24. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-06-04 → 2026-07-23 — AgentForger: a single ChatGPT link CSRF'd a fully autonomous, attacker-controlled Workspace Agent (patched, resurfaced in mainstream press 6 weeks later)
+Zenity Labs disclosed **AgentForger**: OpenAI's ChatGPT Agent Builder accepted two URL parameters (`template_name`, `initial_assistant_prompt`) that created and immediately ran a fully autonomous agent with **no confirmation step** — a single crafted link, clicked by a logged-in employee with any one enterprise connector already authorized (Outlook, Gmail, Slack, Drive, SharePoint, Teams, Calendar), spun up an agent using the most privileged "Chief of Staff" template, flipped all approval gates to "never ask," scheduled itself to poll an attacker's inbox every 5 minutes for new `TASK`-prefixed instructions, and inherited the victim's live connector access with **no new OAuth consent screen**. Reported via Bugcrowd 2026-06-04, fixed by OpenAI in 4 days (2026-06-08); no evidence of pre-patch exploitation. Same connector-chaining lethal-trifecta pattern this repo already tracks for Claude Desktop and GitHub Agentic Workflows, here on OpenAI's own first-party agent-builder product. Got a fresh wave of mainstream coverage on 2026-07-23 (The Register, CSO Online, BusinessWire), six weeks after the original fix.
+→ [advisories/2026-07-agentforger-chatgpt-workspace-agent-csrf.md](advisories/2026-07-agentforger-chatgpt-workspace-agent-csrf.md)
 
 ### 2026-07-21 — Azure DevOps MCP server — invisible HTML comments in PR descriptions hijack AI review agents across projects (MSRC triaged, no fix yet)
 Manifold Security disclosed that Microsoft's official **Azure DevOps MCP server** doesn't apply the "spotlighting" untrusted-content delimiters to its `repo_get_pull_request_by_id` tool — so an attacker with contributor access to just **one** project can hide instructions in an **invisible HTML comment** inside a PR description (rendered as nothing in the Azure DevOps web UI, but returned verbatim via the API) and hijack a reviewer's AI agent into acting **across projects** the attacker can't reach directly, using the victim's own credentials. Validated against both **GitHub Copilot CLI** and **Claude Code**. Microsoft/MSRC acknowledged and triaged the report but has not shipped a fix as of this writing — no CVE assigned. Same underlying class this repo already tracks as [Comment and Control](advisories/2026-04-comment-and-control-pr-injection.md) and [GitLost](advisories/2026-07-gitlost-github-agentic-workflows-injection.md), now confirmed on a separate Microsoft product. Scope your Azure DevOps MCP credentials to the minimum project set and grep PR descriptions for hidden `<!-- -->` content before letting an agent process them.

@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-06-04 | [AgentForger — a single ChatGPT link CSRF'd a fully autonomous, attacker-controlled Workspace Agent](2026-07-agentforger-chatgpt-workspace-agent-csrf.md) | high | patched |
 | 2026-07-21 | [Azure DevOps MCP server — invisible HTML comments in PR descriptions hijack AI review agents across projects](2026-07-azure-devops-mcp-pr-injection.md) | high | active |
 | 2026-07-20 | [NextAuth.js / Auth.js — 4 advisories including a homoglyph bypass that redirects magic-link sign-in to an attacker's inbox](2026-07-nextauth-magic-link-homoglyph-bypass.md) | high | unconfirmed |
 | 2026-07-20 | [Next.js July 2026 Security Release — 9 CVEs: middleware bypass (Turbopack+single-locale), SSRF, cache confusion](2026-07-nextjs-july-security-release.md) | high | patched |
