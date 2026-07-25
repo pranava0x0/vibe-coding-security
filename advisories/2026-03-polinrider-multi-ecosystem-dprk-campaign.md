@@ -2,7 +2,7 @@
 id: 2026-03-polinrider-multi-ecosystem-dprk-campaign
 title: "PolinRider — ongoing DPRK-linked campaign backdoors npm, Packagist, Go, and a Chrome extension via maintainer-account takeover (Mar 2026–ongoing)"
 date_disclosed: 2026-03-01
-last_updated: 2026-07-04
+last_updated: 2026-07-25
 severity: high
 status: active
 ecosystems: [npm, packagist, go, chrome-extension]
@@ -25,6 +25,9 @@ First flagged by the OpenSourceMalware team around **2026-03**, PolinRider invol
 **Scale (as of 2026-07-01, per The Hacker News):** 108 unique packages/extensions across 162 release artifacts — 19 npm packages, 10 Composer/Packagist packages, 61 Go modules, and 1 Chrome extension. Socket's independent tracking (as of the same period) counted 80 Go modules, 10 Packagist packages, 1 Chrome extension, plus additional npm packages — the exact per-ecosystem counts vary slightly by tracker as the campaign is still growing; both sources agree the campaign spans all four ecosystems and remains active. As of **2026-04-11**, the broader activity (including the pre-PolinRider BeaverTail-loader phase) had touched **1,951 public GitHub repositories across 1,047 unique maintainer accounts** ([The Hacker News](https://thehackernews.com/2026/07/north-korean-hackers-publish-108.html)). A confirmed recent wave hit GitHub user **`Xpos587`**'s repositories (`git2md`, `markfetch`) and organization **`7span`**/Packagist namespace **`sevenspan`** (`react-list`) with synchronized modifications around **2026-06-23 10:00 UTC** ([Socket](https://socket.dev/blog/polinrider-north-korea-linked-supply-chain-campaign-expands)).
 
 **Status: ongoing.** Socket explicitly tracks this as a live, growing campaign at a dedicated tracking page, with new compromises surfacing regularly.
+
+### Update 2026-07-25 — disputed link to ChainVeil/ViteVenom npm typosquat waves
+Researcher outlet **OpenSourceMalware** published an analysis ([ChainVeil and ViteVenom are DPRK's PolinRider Campaign](https://opensourcemalware.com/blog/chainveil-and-vitevenom-dprk-polinrider-campaign), 2026-07-17) arguing that the **ChainVeil** (May–June 2026, Tailwind CSS/Sass typosquats) and **ViteVenom** (June–July 2026, Vite typosquats) npm campaigns — see the new standalone writeup at [2026-07-chainveil-vitevenom-npm-blockchain-c2.md](2026-07-chainveil-vitevenom-npm-blockchain-c2.md) — share blockchain-wallet infrastructure with PolinRider, based on wallet addresses OpenSourceMalware says it had independently tracked before either campaign's public report. **This is a contested claim, not a confirmed one:** Checkmarx Zero, the primary researcher who discovered and named both ChainVeil and ViteVenom, attributes them to a distinct operator it calls "SuccessKey" and makes no DPRK or PolinRider attribution in either of its own writeups. Noting the dispute here rather than merging the campaigns — a single party's claimed infrastructure overlap is not sufficient to override the original discoverer's own attribution.
 
 ## Am I affected?
 
