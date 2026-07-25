@@ -1,17 +1,17 @@
 ---
 id: 2026-07-microsoft-copilot-patch-tuesday-cves
-title: "Microsoft July 2026 Patch Tuesday — GitHub Copilot JetBrains plugin CVE-2026-50510 + M365 Copilot mobile CVE-2026-48561 + M365 Copilot cross-tenant EoP CVE-2026-41106 (all patched)"
+title: "Microsoft July 2026 Patch Tuesday — GitHub Copilot JetBrains plugin CVE-2026-50510 + M365 Copilot mobile CVE-2026-48561 + M365 Copilot cross-tenant EoP CVE-2026-41106 + M365 Copilot RCE CVE-2026-50517 (all patched)"
 date_disclosed: 2026-07-14
-last_updated: 2026-07-21
-severity: high
+last_updated: 2026-07-25
+severity: critical
 status: patched
 ecosystems: [github-copilot, m365-copilot]
 tools_affected: [github-copilot-jetbrains, microsoft-365-copilot-ios, microsoft-365-copilot-android, edge-android, microsoft-365-copilot]
-tags: [cve, patch-tuesday, github-copilot, microsoft-365-copilot, prompt-injection, jetbrains, cross-tenant]
+tags: [cve, patch-tuesday, github-copilot, microsoft-365-copilot, prompt-injection, jetbrains, cross-tenant, deserialization, rce]
 ---
 
 ## TL;DR
-Microsoft's **July 2026 Patch Tuesday** (2026-07-14, 622 CVEs total — the largest single Patch Tuesday on record) shipped fixes for three unrelated Copilot-family flaws: **CVE-2026-50510** (CVSS 7.8) — the **GitHub Copilot plugin for JetBrains IDEs** mishandled resource names (CWE-641) in a way that, with user interaction, allows full local compromise; **CVE-2026-48561** (CVSS 9.6) — **Microsoft 365 Copilot for iOS/Android**, reachable via **Microsoft Edge for Android**, would silently accept and act on prompts injected by a malicious website with no confirmation and no origin check; and **CVE-2026-41106** (CVSS 9.3, critical) — an **elevation-of-privilege flaw in Microsoft 365 Copilot itself** where a URL-redirection-to-untrusted-site weakness (CWE-601) could let an attacker cross tenant-isolation boundaries. All three were addressed by the same Patch Tuesday date, and Microsoft says none were exploited in the wild. No action needed beyond updating (CVE-2026-41106 was fixed server-side with zero customer action required) — but all three are useful reminders that "Copilot" now spans multiple, independently-vulnerable surfaces (IDE plugin, mobile app, browser integration, core cloud service) that each need their own security tracking.
+Microsoft's **July 2026 Patch Tuesday** (2026-07-14, 622 CVEs total — the largest single Patch Tuesday on record) shipped fixes for three unrelated Copilot-family flaws: **CVE-2026-50510** (CVSS 7.8) — the **GitHub Copilot plugin for JetBrains IDEs** mishandled resource names (CWE-641) in a way that, with user interaction, allows full local compromise; **CVE-2026-48561** (CVSS 9.6) — **Microsoft 365 Copilot for iOS/Android**, reachable via **Microsoft Edge for Android**, would silently accept and act on prompts injected by a malicious website with no confirmation and no origin check; and **CVE-2026-41106** (CVSS 9.3, critical) — an **elevation-of-privilege flaw in Microsoft 365 Copilot itself** where a URL-redirection-to-untrusted-site weakness (CWE-601) could let an attacker cross tenant-isolation boundaries. A fourth, unrelated CVE published over a week later on **2026-07-23** — **CVE-2026-50517** (CVSS **9.9**, the highest in this batch) — is a deserialization-of-untrusted-data flaw in Microsoft 365 Copilot allowing unauthenticated-adjacent remote code execution with no user interaction. All four are cloud-service or client fixes with no reported in-the-wild exploitation. No action needed beyond updating clients (the two service-side CVEs, 41106 and 50517, required/require zero customer action) — but all four are useful reminders that "Copilot" now spans multiple, independently-vulnerable surfaces (IDE plugin, mobile app, browser integration, core cloud service) that each need their own security tracking.
 
 ## What happened
 
@@ -26,15 +26,18 @@ This is a **different flaw** from this repo's already-tracked **[Microsoft 365 C
 ### CVE-2026-41106 — Microsoft 365 Copilot cross-tenant elevation of privilege (update 2026-07-21)
 A **critical (CVSS 9.3)** elevation-of-privilege flaw in the core Microsoft 365 Copilot service itself: a URL-redirection-to-untrusted-site weakness (CWE-601) undermined tenant-isolation trust boundaries. Reporting describes an authenticated attacker with some existing M365 access potentially able to reach Copilot's integrations with SharePoint and Entra ID to access data across organizational (tenant) boundaries — a third, distinct Copilot-family CVE from the same July 14 Patch Tuesday batch that this advisory hadn't originally captured. This is a **cloud-service-side fix**: Microsoft applied the patch on its own infrastructure, so **no customer action is required** and there is no client version to check. Microsoft reports no evidence of in-the-wild exploitation.
 
+### CVE-2026-50517 — Microsoft 365 Copilot remote code execution via deserialization (update 2026-07-25)
+Published **2026-07-23** (confirmed on [NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-50517)) — the highest-severity Copilot-family flaw tracked in this advisory: **CVSS 9.9**, a deserialization-of-untrusted-data weakness (CWE-502) in Microsoft 365 Copilot that Microsoft's own advisory describes as letting an "authorized attacker" execute code over the network with no user interaction required. This is a **separate CVE from the July 14 Patch Tuesday batch above** — it published over a week later and is not part of that batch. Like CVE-2026-41106, this is an "exclusively-hosted service" flaw: Microsoft owns the fix server-side, and as of this writing has not published a detailed remediation statement or confirmed the patch is fully deployed, so treat any M365 Copilot deployment as the responsibility of Microsoft's own rollout rather than something a customer can directly verify. No PoC or in-the-wild exploitation has been reported.
+
 ## Am I affected?
 - **GitHub Copilot JetBrains plugin:** check your plugin version in `Settings → Plugins → GitHub Copilot`. If it's below **1.13.0-251**, update immediately.
 - **Microsoft 365 Copilot mobile / Edge for Android:** update both apps from your platform's app store. Confirm Edge for Android is **≥ 150.0.4078.65**.
-- **Microsoft 365 Copilot (CVE-2026-41106):** no client-side action possible or needed — the fix is already live service-side. If you operate a multi-tenant M365 environment, this is a good prompt to review Copilot permission scopes, SharePoint external-sharing settings, and Entra ID cross-tenant access policies as defense-in-depth.
+- **Microsoft 365 Copilot (CVE-2026-41106, CVE-2026-50517):** no client-side action possible or needed for either — both are cloud-service-side fixes. If you operate a multi-tenant M365 environment, this is a good prompt to review Copilot permission scopes, SharePoint external-sharing settings, and Entra ID cross-tenant access policies as defense-in-depth, and to watch the MSRC advisory page for confirmation that CVE-2026-50517's fix has fully rolled out.
 
-None of the three flaws has a known IOC set or confirmed in-the-wild exploitation — there's no forensic triage step beyond confirming you're on the patched client versions (and, for CVE-2026-41106, nothing to confirm at all).
+None of the four flaws has a known IOC set or confirmed in-the-wild exploitation — there's no forensic triage step beyond confirming you're on the patched client versions (and, for the two cloud-service-side CVEs, nothing to confirm at all).
 
 ## If you are affected
-Update is the fix for the two client-side CVEs; there is no rotation or containment step required since Microsoft reports no exploitation occurred for any of the three, and CVE-2026-41106 required no customer action in the first place.
+Update is the fix for the two client-side CVEs; there is no rotation or containment step required since Microsoft reports no exploitation occurred for any of the four, and the two cloud-service-side CVEs (CVE-2026-41106, CVE-2026-50517) required no customer action in the first place.
 
 ## Prevention
 → [prevention/package-vetting-checklist.md](../prevention/package-vetting-checklist.md) — for the JetBrains plugin flaw, the same discipline that applies to any "don't blindly open unfamiliar repos/PRs in an AI-integrated IDE" guidance applies here.
@@ -49,3 +52,5 @@ Update is the fix for the two client-side CVEs; there is no rotation or containm
 - [NotebookCheck — Microsoft Copilot: Websites could secretly issue commands to the AI](https://www.notebookcheck.net/Microsoft-Copilot-Websites-could-secretly-issue-commands-to-the-AI.1343346.0.html)
 - [Windows News — Microsoft flags CVE-2026-41106: Copilot privilege escalation could cross tenant boundaries](https://windowsnews.ai/article/microsoft-flags-cve-2026-41106-copilot-privilege-escalation-could-cross-tenant-boundaries.433548)
 - [SOCRadar — July 2026 Patch Tuesday: 622 Vulnerabilities, 3 Zero-Days](https://socradar.io/blog/july-2026-patch-tuesday-zero-day/)
+- [NVD — CVE-2026-50517](https://nvd.nist.gov/vuln/detail/CVE-2026-50517) — canonical CVE record: CVSS 9.9, CWE-502 deserialization, publish date 2026-07-23.
+- [Windows News — Microsoft 365 Copilot RCE Flaw Confirmed: Steps Every Admin Should Take Today](https://windowsnews.ai/article/microsoft-365-copilot-rce-flaw-confirmed-steps-every-admin-should-take-today.440229) — independent corroboration and admin-response guidance for CVE-2026-50517.
