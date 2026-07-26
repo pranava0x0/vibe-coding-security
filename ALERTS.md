@@ -2,11 +2,15 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-07-25. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-07-26. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-07-23 — SharedRoot: Claude Cowork's local macOS VM shares the entire host filesystem read-write with an attacker who reaches guest-root (CVE-2026-46331, Anthropic: "Informative", no fix)
+Security researcher Oren Yomtov (Accomplish AI) disclosed **SharedRoot**: code running inside Claude Cowork's local Linux VM sandbox on macOS can escape to **read-write access on the entire host Mac filesystem** — SSH keys, cloud credentials, user files. Cowork mounts host `/` into the VM via `virtiofs` at `/mnt/.virtiofs-root`, intended to be visible only to guest-root. The chain: `unshare` into a new user namespace for `CAP_NET_ADMIN` → trigger the `act_pedit` traffic-control kernel module → exploit **CVE-2026-46331** ("pedit COW," a real Linux kernel partial-copy-on-write bug, CVSS 7.8) to corrupt the page cache of a root-owned helper binary → the root `coworkd` daemon re-execs the poisoned binary, handing the session user guest-root and full access to the host mount. Yomtov demonstrated it by connecting a folder and sending "one short message." An estimated **~500,000 macOS users** ran local Cowork sessions exposed to this before Anthropic closed the report as **"Informative"** with no dedicated fix — the practical mitigation is that current Cowork **defaults to cloud execution**, which doesn't use this architecture; anyone still on local execution mode remains exposed.
+→ [advisories/2026-07-sharedroot-claude-cowork-macos-vm-escape.md](advisories/2026-07-sharedroot-claude-cowork-macos-vm-escape.md)
 
 ### 2026-07-21 → 07-22 — FakeAgent: a legitimate claude.ai Artifact used as a fake "Claude Desktop" installer, deploys SectopRAT via DLL sideloading (29+ orgs, contained)
 Huntress disclosed **FakeAgent**: a Bing search ad for "Claude Desktop app" led victims to a **public Claude Artifact hosted directly on claude.ai** (~7,100 views before takedown), which redirected to a fake `ClaudeDesktop.exe`. The "installer" is really JetBrains' legitimate `jcef_helper.exe`, abused via **DLL sideloading** to load a malicious `libcef.dll` that deploys the **SectopRAT (ArechClient2)** infostealer, with C2 concealed in Ethereum blockchain transactions ("EtherHiding") and GPU/DirectX-based anti-VM checks. At least **29 organizations** compromised in two days. Anthropic removed the Artifact after Huntress's report; no product vulnerability was involved — this abused Claude.ai's Artifact-hosting feature as a malware-distribution shell. Huntress ties the actor to prior StealC/Operation-Endgame-seized infrastructure and an April 2026 Docker Hub campaign using the identical sideloading technique.
@@ -407,6 +411,10 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 ---
 
 ## 🟠 RECENT — verify exposure
+
+### 2026-05-06 — ZiChatBot: 3 trojanized PyPI packages use the Zulip chat API as C2, suspected OceanLotus/APT32 (contained)
+Kaspersky disclosed **ZiChatBot**: a backdoor hidden in three typosquatted PyPI packages (`uuid32-utils`, `colorinal`, `termncolor`, ~2,480 combined downloads) uploaded in July 2025 and undetected for nearly ten months. Instead of a dedicated C2 server, the payload authenticates to the public team-chat platform **Zulip** (`helper.zulipchat.com`) and relays commands/exfil over its REST API — the same "trusted chat platform as C2" pattern already tracked in [Operation Navy Ghost's Telegram-as-C2](advisories/2026-06-operation-navy-ghost-pyrogram.md), now confirmed generalizing to a second messaging platform. Kaspersky's KTAE engine found 64% dropper-code similarity to a previously attributed OceanLotus/APT32 sample but calls the attribution unconfirmed. Zulip has deactivated the abused organization; no confirmed infections reported despite the long dwell time.
+→ [advisories/2026-05-zichatbot-pypi-zulip-c2.md](advisories/2026-05-zichatbot-pypi-zulip-c2.md)
 
 ### 2026-05-27 → 2026-07-01 — Dependency-confusion recon campaign — now 4 waves, escalated to full credential theft (active)
 Microsoft Threat Intelligence disclosed a single operator (aliases `mr.4nd3r50n`, `ce-rwb`, `t-in-one`) publishing **33 packages in two bursts on 2026-05-28** and **12 more on 2026-05-29** under **9 organizational scopes mirroring real internal corporate namespaces**. `postinstall` hooks fetched an obfuscated **reconnaissance-only** payload from `oob.moika.tech`. See the 🔴 ACTIVE entry above — SafeDep's tracking now shows this is a reused template across **4 waves through 2026-07-01**, and the latest wave (`@marketfront`) **escalated to full credential exfiltration** (SSH keys, cloud credentials, K8s/Docker config). npm has taken down each wave's accounts/packages as found, but the template keeps resurfacing with new scope names.
