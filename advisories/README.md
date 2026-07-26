@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-07-23 | [SharedRoot — Claude Cowork's local macOS VM shares the host filesystem read-write with guest-root (CVE-2026-46331)](2026-07-sharedroot-claude-cowork-macos-vm-escape.md) | high | active |
 | 2026-07-23 | [FakeAgent — a legitimate claude.ai Artifact used as a fake "Claude Desktop" installer, deploys SectopRAT via DLL sideloading](2026-07-fakeagent-claude-artifact-malvertising.md) | high | contained |
 | 2026-07-23 | [Hermes AI agent in "YOLO mode" runs unattended post-exploitation against Thailand's Ministry of Finance](2026-07-hermes-hades-thailand-finance-ministry.md) | high | unconfirmed |
 | 2026-07-14 | [ChainVeil / ViteVenom — two npm typosquat waves impersonating Tailwind CSS and Vite tooling, four-tier blockchain C2](2026-07-chainveil-vitevenom-npm-blockchain-c2.md) | medium | contained |
@@ -98,6 +99,7 @@ One file per incident. Latest at the top.
 | 2026-05 | [WhiteCobra — VS Code / Cursor / Windsurf / Open VSX crypto-stealer campaign (July 2025 → ongoing)](2026-05-whitecobra-vscode-extensions.md) | high | active |
 | 2026-05 | [PCPJack — credential-stealing counter-worm that removes TeamPCP infections](2026-05-pcpjack-counter-worm.md) | high | active |
 | 2026-05-06 | [ClaudeBleed — Claude in Chrome extension hijack](2026-05-claudebleed-chrome-extension.md) | high | mitigated |
+| 2026-05-06 | [ZiChatBot — 3 trojanized PyPI packages use the Zulip chat API as C2, suspected OceanLotus/APT32](2026-05-zichatbot-pypi-zulip-c2.md) | medium | contained |
 | 2026-05-13 | [OpenClaw "Claw Chain" — 4 sandbox-escape CVEs](2026-05-openclaw-claw-chain.md) | critical | patched |
 | 2026-05-13 | [Systemic MCP stdio RCE class](2026-05-mcp-stdio-systemic-rce.md) | high | mitigated |
 | 2026-05-14 | [node-ipc compromise](2026-05-node-ipc-compromise.md) | critical | active |

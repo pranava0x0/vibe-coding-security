@@ -923,15 +923,16 @@ def build_llms_ctx_txt(pages: list[Page]) -> str:
         )
 
         # Extract just TL;DR section if present (truncated to keep this variant compact).
-        # 2026-07-22: tightened from 395/355 to 370/330 chars — the corpus grew past the
-        # llms-ctx.txt size cap (tests/test_llms.py) again after the Azure DevOps MCP and
-        # NextAuth.js advisories; trim per-entry length here as the corpus grows rather
-        # than bumping the cap, per this repo's standing guidance.
+        # 2026-07-22: tightened from 395/355 to 370/330 chars. 2026-07-26: tightened
+        # further to 350/310 chars — the corpus grew past the llms-ctx.txt size cap
+        # (tests/test_llms.py) again after the SharedRoot and ZiChatBot advisories;
+        # trim per-entry length here as the corpus grows rather than bumping the cap,
+        # per this repo's standing guidance.
         tldr = _extract_section(p.body, "TL;DR") or p.description
         tldr = tldr.strip()
-        tldr_short = tldr[:370] + "…" if len(tldr) > 370 else tldr
+        tldr_short = tldr[:350] + "…" if len(tldr) > 350 else tldr
         affected = _extract_section(p.body, "Am I affected?")
-        affected_short = affected[:330] + "…" if affected and len(affected) > 330 else affected
+        affected_short = affected[:310] + "…" if affected and len(affected) > 310 else affected
 
         lines.append(f"## {p.title}")
         lines.append("")
