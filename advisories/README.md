@@ -19,6 +19,7 @@ One file per incident. Latest at the top.
 | 2026-07-08 | [n8n — 10-advisory security batch: host-level RCE via expression evaluator, SSO privilege escalation, AI-agent sandbox bypass](2026-07-n8n-july-security-advisory-batch.md) | high | patched |
 | 2026-07-15 | [PromptFiction — Claude Desktop's claude:// URI auto-submitted hidden prompts with zero clicks, chainable with Claudy Day](2026-07-promptfiction-claude-desktop.md) | high | patched |
 | 2026-07-14 | [Cursor IDE — a git.exe planted in a repo root auto-executes on open; silently patched in Desktop, still unpatched in Cursor CLI, Gemini CLI, Codex](2026-07-cursor-git-exe-autoexec.md) | high | patched |
+| 2026-02-11 | [AWS Kiro IDE — prompt injection lets the agent rewrite its own MCP config, achieving RCE (CVE-2026-10591)](2026-07-kiro-mcp-config-self-rewrite-rce.md) | high | patched |
 | 2026-05-21 | [Cursor's own GHSA page: 4 more sandbox-escape advisories, one still unpatched](2026-07-cursor-sandbox-escape-batch.md) | high | active |
 | 2026-07-16 | [Hugging Face discloses a weekend-long intrusion run almost entirely by an autonomous AI agent](2026-07-huggingface-agentic-intrusion.md) | high | contained |
 | 2026-07-13 | [SANS ISC documents internet-wide scanning for exposed MCP servers and AI-coding-tool credential files](2026-07-mcp-scanning-campaign-sans.md) | medium | active |

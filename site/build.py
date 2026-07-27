@@ -724,9 +724,11 @@ def build_llms_txt(pages: list[Page], full_bytes: int | None = None, ctx_bytes: 
         # the corpus grows rather than bumping the cap, per standing guidance.
         # 2026-07-25: tightened from 145 to 130 chars — same reason, 3 more
         # advisories pushed the index past the 80KB cap again.
+        # 2026-07-27: tightened from 130 to 122 chars — same reason, 1 more
+        # advisory pushed the index past the 80KB cap again.
         desc = p.description
-        if len(desc) > 130:
-            desc = desc[:129].rsplit(" ", 1)[0] + "…"
+        if len(desc) > 122:
+            desc = desc[:121].rsplit(" ", 1)[0] + "…"
         lines.append(
             f"- [{p.title}]({_page_html_url(p)}) ([md]({_page_md_url(p)})){meta}: {desc}"
         )
