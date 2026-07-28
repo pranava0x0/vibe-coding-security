@@ -2,11 +2,15 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-07-27. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-07-28. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-01-09 → 2026-07-21/22 — Langflow CVE-2026-0770: a fourth unauthenticated root RCE, actively exploited, added to CISA KEV — still no patch 8+ months after report
+Trend Research (Peter Girnus, William Gamazo Sanchez, Alfredo Oliveira) found that Langflow's `validate_code()` function passes an attacker-controlled `exec_globals` parameter straight into Python's `exec()` with **no authentication** — a single HTTP request to the `validate` endpoint runs arbitrary code as **root**. Reported to the vendor 2025-07-18, publicly disclosed via ZDI on 2026-01-09 (**CVE-2026-0770**, CVSS 9.8/NVD, GHSA-g22f-v6f7-2hrh) — but **no patched version has ever been published**; ZDI's own advisory says "the only salient mitigation strategy is to restrict interaction with the product." The flaw sat quiet until in-the-wild exploitation began 2026-06-27 (220+ attempts from 64 source IPs, attempting malware deployment and AWS-credential/env-var/container-metadata harvesting), prompting CISA to add it to the **Known Exploited Vulnerabilities** catalog (sources disagree: 2026-07-21 vs 2026-07-22) with a BOD 26-04 federal deadline of ~2026-07-24/25. Distinct from the three other Langflow CVEs already tracked in this repo (CVE-2026-33017, CVE-2026-27966, CVE-2026-55255) — different endpoint, different code path, and unlike those, **still unpatched**. If you run Langflow at all, take it off any network it doesn't strictly need.
+→ [advisories/2026-07-langflow-cve-2026-0770-exec-globals-rce.md](advisories/2026-07-langflow-cve-2026-0770-exec-globals-rce.md)
 
 ### 2026-07-23 — SharedRoot: Claude Cowork's local macOS VM shares the entire host filesystem read-write with an attacker who reaches guest-root (CVE-2026-46331, Anthropic: "Informative", no fix)
 Security researcher Oren Yomtov (Accomplish AI) disclosed **SharedRoot**: code running inside Claude Cowork's local Linux VM sandbox on macOS can escape to **read-write access on the entire host Mac filesystem** — SSH keys, cloud credentials, user files. Cowork mounts host `/` into the VM via `virtiofs` at `/mnt/.virtiofs-root`, intended to be visible only to guest-root. The chain: `unshare` into a new user namespace for `CAP_NET_ADMIN` → trigger the `act_pedit` traffic-control kernel module → exploit **CVE-2026-46331** ("pedit COW," a real Linux kernel partial-copy-on-write bug, CVSS 7.8) to corrupt the page cache of a root-owned helper binary → the root `coworkd` daemon re-execs the poisoned binary, handing the session user guest-root and full access to the host mount. Yomtov demonstrated it by connecting a folder and sending "one short message." An estimated **~500,000 macOS users** ran local Cowork sessions exposed to this before Anthropic closed the report as **"Informative"** with no dedicated fix — the practical mitigation is that current Cowork **defaults to cloud execution**, which doesn't use this architecture; anyone still on local execution mode remains exposed.

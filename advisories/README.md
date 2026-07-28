@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-01-09 | [Langflow CVE-2026-0770 — unauthenticated root RCE via exec_globals in validate_code(), added to CISA KEV 8+ months later, still no patch](2026-07-langflow-cve-2026-0770-exec-globals-rce.md) | critical | active |
 | 2026-07-23 | [SharedRoot — Claude Cowork's local macOS VM shares the host filesystem read-write with guest-root (CVE-2026-46331)](2026-07-sharedroot-claude-cowork-macos-vm-escape.md) | high | active |
 | 2026-07-23 | [FakeAgent — a legitimate claude.ai Artifact used as a fake "Claude Desktop" installer, deploys SectopRAT via DLL sideloading](2026-07-fakeagent-claude-artifact-malvertising.md) | high | contained |
 | 2026-07-23 | [Hermes AI agent in "YOLO mode" runs unattended post-exploitation against Thailand's Ministry of Finance](2026-07-hermes-hades-thailand-finance-ministry.md) | high | unconfirmed |
