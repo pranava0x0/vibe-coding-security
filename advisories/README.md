@@ -4,6 +4,9 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-06-08 | [AWS Bedrock AgentCore — 3 CVEs including a recurring argument-injection bug the first patch didn't fully close](2026-07-aws-bedrock-agentcore-cve-cluster.md) | high | patched |
+| 2026-06-01 | [Vitest Browser Mode — unauthenticated Chrome DevTools Protocol proxy leads to RCE (CVE-2026-53633, CVSS 9.8, public PoC)](2026-07-vitest-browser-mode-cdp-rce.md) | critical | patched |
+| 2026-02-04 | [GitHub Codespaces auto-executes devcontainer.json / tasks.json / settings.json on repo open — Microsoft calls it "by design"](2026-02-github-codespaces-devcontainer-autoexec.md) | high | active |
 | 2026-01-09 | [Langflow CVE-2026-0770 — unauthenticated root RCE via exec_globals in validate_code(), added to CISA KEV 8+ months later, still no patch](2026-07-langflow-cve-2026-0770-exec-globals-rce.md) | critical | active |
 | 2026-07-23 | [SharedRoot — Claude Cowork's local macOS VM shares the host filesystem read-write with guest-root (CVE-2026-46331)](2026-07-sharedroot-claude-cowork-macos-vm-escape.md) | high | active |
 | 2026-07-23 | [FakeAgent — a legitimate claude.ai Artifact used as a fake "Claude Desktop" installer, deploys SectopRAT via DLL sideloading](2026-07-fakeagent-claude-artifact-malvertising.md) | high | contained |
@@ -19,7 +22,7 @@ One file per incident. Latest at the top.
 | 2026-07-07 | [Rogue Agent — shared Cloud Run execution environment let one Dialogflow CX agent hijack every agent in a GCP project](2026-07-rogue-agent-dialogflow-cx-shared-execution.md) | high | patched |
 | 2026-07-08 | [n8n — 10-advisory security batch: host-level RCE via expression evaluator, SSO privilege escalation, AI-agent sandbox bypass](2026-07-n8n-july-security-advisory-batch.md) | high | patched |
 | 2026-07-15 | [PromptFiction — Claude Desktop's claude:// URI auto-submitted hidden prompts with zero clicks, chainable with Claudy Day](2026-07-promptfiction-claude-desktop.md) | high | patched |
-| 2026-07-14 | [Cursor IDE — a git.exe planted in a repo root auto-executes on open; silently patched in Desktop, still unpatched in Cursor CLI, Gemini CLI, Codex](2026-07-cursor-git-exe-autoexec.md) | high | patched |
+| 2026-07-14 | [Cursor IDE — a git.exe planted in a repo root auto-executes on open; CVE-2026-63093 assigned but patch status disputed](2026-07-cursor-git-exe-autoexec.md) | high | active |
 | 2026-02-11 | [AWS Kiro IDE — prompt injection lets the agent rewrite its own MCP config, achieving RCE (CVE-2026-10591)](2026-07-kiro-mcp-config-self-rewrite-rce.md) | high | patched |
 | 2026-05-21 | [Cursor's own GHSA page: 4 more sandbox-escape advisories, one still unpatched](2026-07-cursor-sandbox-escape-batch.md) | high | active |
 | 2026-07-16 | [Hugging Face discloses a weekend-long intrusion run almost entirely by an autonomous AI agent](2026-07-huggingface-agentic-intrusion.md) | high | contained |
@@ -27,7 +30,7 @@ One file per incident. Latest at the top.
 | 2026-07-09 | [AI-SDK-name typosquats on npm harvest git/SSH/cloud identity — anthropic-toolkit, ai-sdk-helpers, @langgraphjs/toolkit and more](2026-07-ai-sdk-typosquat-npm-recon.md) | high | contained |
 | 2026-07-14 | [AsyncAPI npm compromise — GitHub Actions "pwn request" steals CI token, publishes Miasma RAT through the project's own OIDC pipeline](2026-07-asyncapi-miasma-npm-github-actions.md) | critical | active |
 | 2026-07-08 | [HalluSquatting — pre-registering AI-hallucinated package/skill/repo names weaponizes coding-agent trust](2026-07-hallusquatting-ai-agent-hallucination.md) | high | active |
-| 2026-07-14 | [Microsoft July Patch Tuesday — GitHub Copilot JetBrains plugin CVE-2026-50510 + M365 Copilot mobile CVE-2026-48561 + cross-tenant EoP CVE-2026-41106 + RCE CVE-2026-50517](2026-07-microsoft-copilot-patch-tuesday-cves.md) | critical | patched |
+| 2026-07-14 | [Microsoft July Patch Tuesday — GitHub Copilot JetBrains plugin CVE-2026-50510 + M365 Copilot mobile CVE-2026-48561 + cross-tenant EoP CVE-2026-41106 + RCE CVE-2026-50517 + VS Code credential leak CVE-2026-47282](2026-07-microsoft-copilot-patch-tuesday-cves.md) | critical | patched |
 | 2026-07-11 | [jscrambler npm compromise — Rust infostealer that survives --ignore-scripts, targets Claude Desktop/Cursor/Windsurf configs](2026-07-jscrambler-npm-preinstall-infostealer.md) | high | contained |
 | 2026-05-28 | [Zapocalypse — five-stage exploit chain turns a free Zapier account into NPM publish rights on zapier.com's own JS bundle](2026-05-zapier-zapocalypse-exploit-chain.md) | critical | patched |
 | 2026-07-08 | [Injective Labs SDK npm compromise — compromised contributor account plants wallet-key stealer](2026-07-injective-labs-npm-wallet-stealer.md) | high | contained |

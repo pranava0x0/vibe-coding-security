@@ -1,13 +1,13 @@
 ---
 id: 2026-07-microsoft-copilot-patch-tuesday-cves
-title: "Microsoft July 2026 Patch Tuesday — GitHub Copilot JetBrains plugin CVE-2026-50510 + M365 Copilot mobile CVE-2026-48561 + M365 Copilot cross-tenant EoP CVE-2026-41106 + M365 Copilot RCE CVE-2026-50517 (all patched)"
+title: "Microsoft July 2026 Patch Tuesday — GitHub Copilot JetBrains plugin CVE-2026-50510 + M365 Copilot mobile CVE-2026-48561 + M365 Copilot cross-tenant EoP CVE-2026-41106 + M365 Copilot RCE CVE-2026-50517 + VS Code Copilot credential leak CVE-2026-47282 (all patched)"
 date_disclosed: 2026-07-14
-last_updated: 2026-07-25
+last_updated: 2026-07-29
 severity: critical
 status: patched
 ecosystems: [github-copilot, m365-copilot]
-tools_affected: [github-copilot-jetbrains, microsoft-365-copilot-ios, microsoft-365-copilot-android, edge-android, microsoft-365-copilot]
-tags: [cve, patch-tuesday, github-copilot, microsoft-365-copilot, prompt-injection, jetbrains, cross-tenant, deserialization, rce]
+tools_affected: [github-copilot-jetbrains, microsoft-365-copilot-ios, microsoft-365-copilot-android, edge-android, microsoft-365-copilot, vscode]
+tags: [cve, patch-tuesday, github-copilot, microsoft-365-copilot, prompt-injection, jetbrains, cross-tenant, deserialization, rce, credential-leak, vscode]
 ---
 
 ## TL;DR
@@ -29,12 +29,16 @@ A **critical (CVSS 9.3)** elevation-of-privilege flaw in the core Microsoft 365 
 ### CVE-2026-50517 — Microsoft 365 Copilot remote code execution via deserialization (update 2026-07-25)
 Published **2026-07-23** (confirmed on [NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-50517)) — the highest-severity Copilot-family flaw tracked in this advisory: **CVSS 9.9**, a deserialization-of-untrusted-data weakness (CWE-502) in Microsoft 365 Copilot that Microsoft's own advisory describes as letting an "authorized attacker" execute code over the network with no user interaction required. This is a **separate CVE from the July 14 Patch Tuesday batch above** — it published over a week later and is not part of that batch. Like CVE-2026-41106, this is an "exclusively-hosted service" flaw: Microsoft owns the fix server-side, and as of this writing has not published a detailed remediation statement or confirmed the patch is fully deployed, so treat any M365 Copilot deployment as the responsibility of Microsoft's own rollout rather than something a customer can directly verify. No PoC or in-the-wild exploitation has been reported.
 
+### CVE-2026-47282 — VS Code / GitHub Copilot sign-in token disclosure (update 2026-07-29)
+A fifth Copilot-family flaw from the same July 14 Patch Tuesday batch this advisory hadn't previously captured: **insufficiently protected credentials** (CWE-522) in **Visual Studio Code and GitHub Copilot** could disclose a user's **sign-in access token** to an unauthorized attacker over a network. Microsoft rates it **CVSS 3.1 base score 6.5 (medium)** — lower than the other four flaws in this advisory — and exploitation requires the victim to be enticed into opening a malicious file in VS Code (local-vector, user-interaction-required, not a zero-click flaw). Published 2026-07-14 alongside the JetBrains-plugin CVE; **affects VS Code versions before 1.128.1**, fixed in **1.128.1**. A leaked sign-in token could grant an attacker the same data/service access the victim's account has, so treat it with the same urgency as any other credential-disclosure bug even though the CVSS band is lower than its Patch Tuesday siblings.
+
 ## Am I affected?
 - **GitHub Copilot JetBrains plugin:** check your plugin version in `Settings → Plugins → GitHub Copilot`. If it's below **1.13.0-251**, update immediately.
 - **Microsoft 365 Copilot mobile / Edge for Android:** update both apps from your platform's app store. Confirm Edge for Android is **≥ 150.0.4078.65**.
 - **Microsoft 365 Copilot (CVE-2026-41106, CVE-2026-50517):** no client-side action possible or needed for either — both are cloud-service-side fixes. If you operate a multi-tenant M365 environment, this is a good prompt to review Copilot permission scopes, SharePoint external-sharing settings, and Entra ID cross-tenant access policies as defense-in-depth, and to watch the MSRC advisory page for confirmation that CVE-2026-50517's fix has fully rolled out.
+- **VS Code / GitHub Copilot (CVE-2026-47282):** check `Help → About` in VS Code. If it's below **1.128.1**, update — and avoid opening untrusted files in VS Code until you do.
 
-None of the four flaws has a known IOC set or confirmed in-the-wild exploitation — there's no forensic triage step beyond confirming you're on the patched client versions (and, for the two cloud-service-side CVEs, nothing to confirm at all).
+None of the five flaws has a known IOC set or confirmed in-the-wild exploitation — there's no forensic triage step beyond confirming you're on the patched client versions (and, for the two cloud-service-side CVEs, nothing to confirm at all).
 
 ## If you are affected
 Update is the fix for the two client-side CVEs; there is no rotation or containment step required since Microsoft reports no exploitation occurred for any of the four, and the two cloud-service-side CVEs (CVE-2026-41106, CVE-2026-50517) required no customer action in the first place.
@@ -54,3 +58,5 @@ Update is the fix for the two client-side CVEs; there is no rotation or containm
 - [SOCRadar — July 2026 Patch Tuesday: 622 Vulnerabilities, 3 Zero-Days](https://socradar.io/blog/july-2026-patch-tuesday-zero-day/)
 - [NVD — CVE-2026-50517](https://nvd.nist.gov/vuln/detail/CVE-2026-50517) — canonical CVE record: CVSS 9.9, CWE-502 deserialization, publish date 2026-07-23.
 - [Windows News — Microsoft 365 Copilot RCE Flaw Confirmed: Steps Every Admin Should Take Today](https://windowsnews.ai/article/microsoft-365-copilot-rce-flaw-confirmed-steps-every-admin-should-take-today.440229) — independent corroboration and admin-response guidance for CVE-2026-50517.
+- [MSRC — CVE-2026-47282](https://msrc.microsoft.com/update-guide/vulnerability/CVE-2026-47282) — canonical vendor record for the VS Code/GitHub Copilot credential-disclosure flaw.
+- [Windows Forum — CVE-2026-47282: Update VS Code to 1.128.1 to Protect Copilot Credentials](https://windowsforum.com/threads/cve-2026-47282-update-vs-code-to-1-128-1-to-protect-copilot-credentials.438181/) — independent corroboration of affected/patched version and CVSS 6.5 rating.
