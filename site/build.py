@@ -726,9 +726,11 @@ def build_llms_txt(pages: list[Page], full_bytes: int | None = None, ctx_bytes: 
         # advisories pushed the index past the 80KB cap again.
         # 2026-07-27: tightened from 130 to 122 chars — same reason, 1 more
         # advisory pushed the index past the 80KB cap again.
+        # 2026-07-29: tightened from 122 to 108 chars — same reason, 3 more
+        # advisories pushed the index past the 80KB cap again.
         desc = p.description
-        if len(desc) > 122:
-            desc = desc[:121].rsplit(" ", 1)[0] + "…"
+        if len(desc) > 108:
+            desc = desc[:107].rsplit(" ", 1)[0] + "…"
         lines.append(
             f"- [{p.title}]({_page_html_url(p)}) ([md]({_page_md_url(p)})){meta}: {desc}"
         )
@@ -847,11 +849,14 @@ def build_llms_full_txt(pages: list[Page]) -> str:
             # full write-up remains one click away via the per-page mirror. This
             # is the "real fix" flagged as open since 2026-06-19 (repeated cap
             # bumps instead of broader trimming).
+            # 2026-07-29: tightened the age threshold from 120 to 90 days — the
+            # corpus grew past LLMS_FULL_MAX_BYTES again after 3 more advisories;
+            # trim more aggressively as the corpus grows, per standing guidance.
             _age = _advisory_age_days(p.frontmatter)
             _trim_status = p.frontmatter.get("status") in ("patched", "contained", "mitigated")
             if p.section == "advisories" and (
                 p.frontmatter.get("status") == "historical"
-                or (_trim_status and _age is not None and _age > 120)
+                or (_trim_status and _age is not None and _age > 90)
             ):
                 tldr = _extract_section(p.body, "TL;DR") or p.description
                 out.append((tldr or "").strip())

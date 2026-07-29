@@ -2,12 +2,12 @@
 id: 2026-07-cursor-git-exe-autoexec
 title: "Cursor IDE — a git.exe planted in a repo root auto-executes on open; silently patched in Desktop, still unpatched in Cursor CLI, Gemini CLI, Codex"
 date_disclosed: 2026-07-14
-last_updated: 2026-07-27
+last_updated: 2026-07-29
 severity: high
-status: patched
+status: active
 ecosystems: [cursor]
 tools_affected: [cursor]
-tags: [zero-click-rce, windows, git-hijacking, unpatched, ai-ide, disclosure-stonewalled]
+tags: [zero-click-rce, windows, git-hijacking, unpatched, ai-ide, disclosure-stonewalled, cve-2026-63093]
 ---
 
 ## TL;DR
@@ -33,8 +33,12 @@ Separately, and distinct from the above: **Cymulate Research Labs** disclosed (r
 
 **Net effect:** the git.exe/binary-planting root cause that Mindgard found in Cursor Desktop is now known to recur, unpatched as of this sweep, in at least three more widely-used AI coding CLIs (Cursor CLI, Gemini CLI, Codex Desktop). If you use any of these tools on Windows, the "check for a planted binary before opening an untrusted repo" mitigation below applies regardless of which specific tool you're running.
 
+## Update — 2026-07-29: a CVE was assigned (CVE-2026-63093) — and sources now disagree on whether Cursor Desktop is actually patched
+
+**CVE-2026-63093** (CWE-426, Untrusted Search Path) was published to NVD on **2026-07-17**, formally assigning a CVE number to the same Cursor-for-Windows git.exe binary-planting bug this advisory has tracked since Mindgard's initial disclosure — CVSS **8.8** (v3.1) / **8.7** (v4.0), affecting **Cursor for Windows 3.2.16**. This is a genuine accuracy-bar discrepancy worth stating explicitly rather than resolving one way: **NVD's own CVE record, as of publication, lists no patched version** and marks the entry "Awaiting Enrichment" — directly contradicting this advisory's prior note (from the 2026-07-18 update, above) that Cursor silently fixed Cursor Desktop on 2026-07-13. TechRepublic's 2026-07-24 writeup on the new CVE also states the flaw "was quietly fixed on July 13," matching this advisory's original claim — but The Hacker News (2026-07-15/26) and several other outlets (GBHackers, Latest Hacking News, Security Online) independently report the bug as **still unpatched** as of **2026-07-26**, with Mindgard's own re-tests confirming it live against the **current Cursor release (3.11, shipped 2026-07-10)**, not just the older 3.2.16 build named in the CVE record. No vendor advisory, changelog entry, or confirmed patched version number has been published by Cursor itself to resolve this discrepancy. **Status changed from `patched` to `active`** to reflect that the weight of independent, directly-fetched evidence (NVD + The Hacker News + Mindgard's own re-test) says unpatched, against a single secondary source (TechRepublic) claiming otherwise — treat the mitigation below as still necessary until Cursor publishes an unambiguous fixed-version statement.
+
 ## Am I affected?
-Cursor Desktop's specific bug was silently patched 2026-07-13 — update to the latest Cursor Desktop build. **Cursor CLI, Google Gemini CLI, and OpenAI Codex Desktop remain unpatched as of this sweep** for the same binary-planting class; if you run any of those on Windows and open repositories from untrusted sources, treat the mitigation below as still necessary.
+**Patch status is disputed as of 2026-07-29 — see the update above.** Do not assume Cursor Desktop is safe merely by being on a recent build; NVD's CVE-2026-63093 record lists no fixed version, and independent researchers report the bug still reproduces against Cursor 3.11 (the latest release as of 2026-07-10). **Cursor CLI, Google Gemini CLI, and OpenAI Codex Desktop remain unpatched as of this sweep** for the same binary-planting class; if you run any of these tools on Windows and open repositories from untrusted sources, the mitigation below is still necessary regardless of which tool or version you're on.
 
 ```powershell
 # Before opening any unfamiliar repo in Cursor on Windows — check for a planted git.exe
@@ -64,3 +68,6 @@ This is the same "git clone → code execution" shape already tracked across thi
 - [Security Online — Cursor Zero-Day Vulnerability Remains Unpatched After Seven Months](https://securityonline.info/cursor-zero-day-vulnerability/) — independent corroboration of the disclosure timeline; noted the exploit stopped working on 2026-07-13 during re-testing, ahead of the public writeup.
 - [Cymulate — When AI Tools Become the Backdoor: Zero-Click RCE via Prompt Injection](https://cymulate.com/blog/zero-click-rce-prompt-injection-ai-tools/) — primary source for the Cursor CLI / Gemini CLI / Codex Desktop binary-planting findings and vendor-response details (Google acknowledged/no patch, OpenAI closed as Not Applicable, Cursor CLI closed as Informative).
 - [AWS Security Bulletin 2026-037-AWS — CVE-2026-10591](https://aws.amazon.com/security/security-bulletins/2026-037-aws/) — the related-but-distinct Kiro IDE config-auto-execute finding, patched in Kiro v0.11.130; see [dedicated advisory](2026-07-kiro-mcp-config-self-rewrite-rce.md) for the full writeup and correct researcher attribution.
+- [NVD — CVE-2026-63093](https://nvd.nist.gov/vuln/detail/CVE-2026-63093) — canonical CVE record confirming CVSS 8.8/8.7, CWE-426, affected version Cursor for Windows 3.2.16, and no patched version listed as of the "Awaiting Enrichment" record.
+- [TechRepublic — Cursor Quietly Patches High-Severity Git Vulnerability After Seven-Month Delay](https://www.techrepublic.com/article/news-cursor-git-code-execution-vulnerability-cve-2026-63093/) — states the flaw was fixed 2026-07-13, contradicting NVD and the sources below.
+- [The Hacker News — Cursor Flaw Lets Malicious Cloned Repositories Trigger Windows Code Execution](https://thehackernews.com/2026/07/cursor-flaw-lets-malicious-cloned.html) — reports the flaw as still unpatched as of 2026-07-15/26, with Mindgard's re-test against the current Cursor 3.11 release.
