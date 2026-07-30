@@ -2,11 +2,15 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-07-29. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-07-30. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-07-29 — RufRoot: Ruflo's unauthenticated MCP bridge lets one HTTP request run shell commands and poison agent memory (CVE-2026-59726, CVSS 10.0, patched within 24 hours)
+Noma Security disclosed **RufRoot**: Ruflo (formerly Claude Flow), an open-source multi-agent orchestration harness for Claude Code and OpenAI Codex with ~67,000 GitHub stars and roughly 10M downloads, shipped a default Docker configuration that bound its MCP "bridge" to `0.0.0.0:3001` with **zero authentication**. A single unauthenticated HTTP POST to `/mcp` could invoke any of **233 exposed tools** — including a raw shell-execute tool — for full remote code execution, LLM API key theft, conversation harvesting, and persistent AI-memory poisoning. **CVE-2026-59726**, CVSS **10.0**, confirmed via NVD (GHSA-c4hm-4h84-2cf3). Reported 2026-06-30, patched within 24 hours in **v3.16.3**, publicly disclosed 2026-07-29. Because the exposed tool set included a memory-write primitive, a version bump alone doesn't confirm a previously-exposed instance is clean — Noma's guidance is to also rotate every LLM API credential the container held and audit the memory store for injected content from before the patch.
+→ [advisories/2026-07-ruflo-mcp-bridge-rufroot-rce.md](advisories/2026-07-ruflo-mcp-bridge-rufroot-rce.md)
 
 ### 2026-06-08 → 2026-07-23 — AWS Bedrock AgentCore: 3 CVEs across the CLI and Python SDK, including a recurring argument-injection bug the first patch didn't fully close
 AWS's own security bulletins disclosed **three separate CVEs** in Amazon Bedrock AgentCore, the SDK/CLI toolchain for building AI agents on AWS: **CVE-2026-11393** (critical, CVSS 9.0) — a code-injection flaw in the AgentCore CLI's `agentcore add agent --type import` command via unescaped triple-quote characters, patched 0.14.2; and **two rounds of the same bug** in the Python SDK's Code Interpreter `install_packages()` helper — **CVE-2026-12530** (June 17, patched 1.6.1) followed by **CVE-2026-16796** (July 23, just five days before this sweep, patched 1.18.1) after the first fix left the argument-injection technique exploitable through version 1.18.0. If you upgraded only to 1.6.1 in response to the June CVE, you were still exposed for another month — a clean case of this repo's "incomplete fix ≠ patched" pattern.

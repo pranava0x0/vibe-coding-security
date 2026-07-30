@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-07-29 | [RufRoot: Ruflo's unauthenticated MCP bridge lets one HTTP request run shell commands and poison agent memory (CVE-2026-59726, CVSS 10.0, patched 3.16.3)](2026-07-ruflo-mcp-bridge-rufroot-rce.md) | critical | patched |
 | 2026-06-08 | [AWS Bedrock AgentCore — 3 CVEs including a recurring argument-injection bug the first patch didn't fully close](2026-07-aws-bedrock-agentcore-cve-cluster.md) | high | patched |
 | 2026-06-01 | [Vitest Browser Mode — unauthenticated Chrome DevTools Protocol proxy leads to RCE (CVE-2026-53633, CVSS 9.8, public PoC)](2026-07-vitest-browser-mode-cdp-rce.md) | critical | patched |
 | 2026-02-04 | [GitHub Codespaces auto-executes devcontainer.json / tasks.json / settings.json on repo open — Microsoft calls it "by design"](2026-02-github-codespaces-devcontainer-autoexec.md) | high | active |
