@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-07-29",
+  "last_updated": "2026-07-30",
   "notes": "Sweep on 2026-07-29 added 0 new sources, reweighted 14 existing (endorlabs.com, advisories.gitlab.com, sentinelone.com, securityonline.info, techrepublic.com, thehackernews.com, nvd.nist.gov, github.com, aws.amazon.com, theregister.com, orca.security, securityweek.com, msrc.microsoft.com, windowsforum.com \u2014 all directly fetched/used for the 3 new advisories and 3 updates this run). 3 new advisories: (1) 2026-07-vitest-browser-mode-cdp-rce -- CVE-2026-53633 (CVSS 9.8), an unauthenticated Chrome DevTools Protocol proxy in Vitest Browser Mode leading to RCE via vite.config.ts overwrite, public PoC circulating; GHSA and NVD disagree on publish date (2026-06-01 vs 2026-07-14) and secondary sources disagree on weekly download count (57M vs 53M) -- both stated per accuracy bar rather than picked. (2) 2026-07-aws-bedrock-agentcore-cve-cluster -- 3 CVEs across AWS Bedrock AgentCore's CLI and Python SDK (CVE-2026-11393 critical code injection, CVE-2026-12530 and CVE-2026-16796 -- the same install_packages() argument-injection root cause recurring a month after the first patch, confirmed via direct NVD/GitLab Advisory Database fetches) -- a clean instance of this repo's 'incomplete fix != patched' caution. (3) 2026-02-github-codespaces-devcontainer-autoexec -- backfilled a genuine gap: Orca Security's Feb 2026 finding that GitHub Codespaces auto-executes devcontainer.json/tasks.json/settings.json on repo/PR open with no workspace-trust gate, Microsoft confirmed 'by design,' no CVE, no fix -- sixth entry in this repo's tracked 'AI coding tool auto-executes workspace config on open' systemic class, verified via grep that it had never been written up despite fitting the class precisely. 3 advisories updated: 2026-07-cursor-git-exe-autoexec.md (CVE-2026-63093 assigned 2026-07-17; NVD lists no patched version, directly contradicting a single TechRepublic claim of a 2026-07-13 silent patch against 3 independently-fetched sources saying still-unpatched -- status changed from patched to active per the weight of evidence); 2026-07-huggingface-agentic-intrusion.md (folded in OpenAI's 2026-07-28 clarification that no upcoming-release model was involved, plus The Register's corroborating detail that Hugging Face rebuilt roughly a third of its infrastructure); 2026-07-microsoft-copilot-patch-tuesday-cves.md (folded in a fifth Copilot-family CVE from the same July 14 Patch Tuesday batch, CVE-2026-47282, a VS Code/Copilot sign-in token disclosure, CVSS 6.5, patched 1.128.1, confirmed via MSRC + independent corroboration). Extensive overlap with prior sweeps, all thorough and confirmed already fully tracked, no update needed: AsyncAPI/Miasma npm compromise, jscrambler, TrapDoor, binding.gyp/Phantom Gyp/npm v12 allowScripts (confirmed shipped), Shai-Hulud/Miasma copycat lineage, Operation Navy Ghost, Composio breach, Vercel/Context.ai OAuth breach, React2Shell/CVE-2026-23864, Svelte/Vite CVE clusters, Cursor DuneSlide/sandbox-escape-batch, GuardFall, Friendly Fire, GitLost, GhostApproval, LiteLLM, Flowise, Langflow's four CVEs, PraisonAI, n8n's two 2026-07 batches (including the sandbox-escape/Git-node RCE pair), JADEPUFFER, Hugging Face/OpenAI attribution (pre-07-28 facts), Rogue Agent/Dialogflow CX, ClawHavoc/ToxicSkills, GlassWorm/GlassWASM, HalluSquatting, TRAE Solidity on-chain C2, MemGhost, Vertex AI Pickle in the Middle, NextAuth.js/Auth.js homoglyph batch, Next.js July security release, Semantic Kernel, Streamlit CVE-2026-33682, better-auth full CVE set, Google Antigravity/GhostApproval, OpenClaw/ClawHub. Investigated, not written up: Mindgard's 'Forced Descent' Google Antigravity persistent code execution finding -- confirmed via direct fetch this is dated 2026-11-25 (2025), over 8 months stale and effectively a duplicate framing of the already-tracked 2026-02-google-antigravity-sandbox-escape.md territory (Google 'won't fix'/no patch); not written up standalone given staleness and overlap. GitHub Copilot for JetBrains RCE CVE-2026-21516 (Feb 2026) -- too stale for this sweep window, no fresh escalation found. GitHub's Dependabot 'cooldown' feature -- a defensive product feature, not an incident, already declined in a prior sweep. Oracle's July 2026 CPU (1,449 patches) -- reconfirmed routine quarterly patching, not a specific incident. Category-by-category summary (user-requested): (1) Social/X/Bluesky -- surveyed via general queries, no exclusive scoop beyond what industry/web sources also carried this run. (2) Web/Reddit/HN -- surfaced only recap/discussion content on already-tracked stories (Claude Code China-proxy spyware discourse, Hugging Face/OpenAI incident, Sophos EDR-false-positive research), no standalone scoop. (3) Industry (Anthropic/OpenAI/Google/Microsoft/AWS/Cloudflare/Red Hat/Databricks/Salesforce/Oracle) -- AWS yielded the Bedrock AgentCore CVE cluster (direct hit); OpenAI yielded the Hugging Face update; Microsoft yielded CVE-2026-47282; Google/Cloudflare/Red Hat/Databricks/Salesforce swept with no new incident-worthy findings beyond already-covered quarterly/routine items. (4) Open-source publications/repos -- GitHub Advisory Database and NVD used directly for CVE/GHSA pairing verification on all three new advisories; arxiv.org cs.CR/cs.AI swept, surfaced only survey/taxonomy papers, no undisclosed 0-days preceding a product CVE. Framework rotation (user-requested): Agent Orchestration (aider, Claude Code, OpenHands, SWE-agent, OpenClaw) -- no new CVEs beyond existing coverage. UI/Frontend (Next.js, React, Shadcn UI, Svelte, Tailwind CSS, Vite) -- Vitest gap closed this run (CVE-2026-53633); Svelte/Shadcn UI/Tailwind re-confirmed already-tracked, no new findings. Backend/DB/Auth (FastAPI, Google AI Studio SDK, NextAuth.js, Prisma, Streamlit, Supabase) -- no new findings; FastAPI's mislabeled 'CVE-2026-2978' aggregator artifact (actually fastapi-admin, not core FastAPI) resurfaced in search results and was again confirmed as a false lead, not written up. Deploy-gate note: environment lacked markdown/Pygments/pytest (same recurring pattern as every prior sweep); `pip install --user markdown Pygments pytest` resolved cleanly. update-alerts-date.py -> build.py -> validate.py -> pytest tests/ -q all green. check-external-links.py run against all 3 new + 3 edited advisories (35 unique URLs): 0 flagged.",
   "sources": {
     "socket.dev": {
@@ -130,8 +130,8 @@
     },
     "thehackernews.com": {
       "weight": 20,
-      "hits": 67,
-      "last_hit": "2026-07-29",
+      "hits": 68,
+      "last_hit": "2026-07-30",
       "ecosystems": [
         "agentforger",
         "ai-agents",
@@ -497,8 +497,8 @@
     },
     "nvd.nist.gov": {
       "weight": 20,
-      "hits": 31,
-      "last_hit": "2026-07-29",
+      "hits": 32,
+      "last_hit": "2026-07-30",
       "ecosystems": [
         "aws-mcp",
         "axios",
@@ -556,7 +556,8 @@
         "starlette",
         "supabase",
         "svelte",
-        "windsurf"
+        "windsurf",
+        "mcp"
       ],
       "tier": "official",
       "_added": "2026-05-19"
@@ -2349,12 +2350,13 @@
       "_added": "2026-06-30"
     },
     "noma.security": {
-      "weight": 8,
-      "hits": 1,
-      "last_hit": "2026-07-08",
+      "weight": 9,
+      "hits": 2,
+      "last_hit": "2026-07-30",
       "ecosystems": [
         "github-agentic-workflows",
-        "prompt-injection"
+        "prompt-injection",
+        "mcp"
       ],
       "tier": "research",
       "_added": "2026-07-08"
