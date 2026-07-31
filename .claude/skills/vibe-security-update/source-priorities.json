@@ -1,23 +1,26 @@
 {
   "version": 1,
-  "last_updated": "2026-07-30",
-  "notes": "Sweep on 2026-07-29 added 0 new sources, reweighted 14 existing (endorlabs.com, advisories.gitlab.com, sentinelone.com, securityonline.info, techrepublic.com, thehackernews.com, nvd.nist.gov, github.com, aws.amazon.com, theregister.com, orca.security, securityweek.com, msrc.microsoft.com, windowsforum.com \u2014 all directly fetched/used for the 3 new advisories and 3 updates this run). 3 new advisories: (1) 2026-07-vitest-browser-mode-cdp-rce -- CVE-2026-53633 (CVSS 9.8), an unauthenticated Chrome DevTools Protocol proxy in Vitest Browser Mode leading to RCE via vite.config.ts overwrite, public PoC circulating; GHSA and NVD disagree on publish date (2026-06-01 vs 2026-07-14) and secondary sources disagree on weekly download count (57M vs 53M) -- both stated per accuracy bar rather than picked. (2) 2026-07-aws-bedrock-agentcore-cve-cluster -- 3 CVEs across AWS Bedrock AgentCore's CLI and Python SDK (CVE-2026-11393 critical code injection, CVE-2026-12530 and CVE-2026-16796 -- the same install_packages() argument-injection root cause recurring a month after the first patch, confirmed via direct NVD/GitLab Advisory Database fetches) -- a clean instance of this repo's 'incomplete fix != patched' caution. (3) 2026-02-github-codespaces-devcontainer-autoexec -- backfilled a genuine gap: Orca Security's Feb 2026 finding that GitHub Codespaces auto-executes devcontainer.json/tasks.json/settings.json on repo/PR open with no workspace-trust gate, Microsoft confirmed 'by design,' no CVE, no fix -- sixth entry in this repo's tracked 'AI coding tool auto-executes workspace config on open' systemic class, verified via grep that it had never been written up despite fitting the class precisely. 3 advisories updated: 2026-07-cursor-git-exe-autoexec.md (CVE-2026-63093 assigned 2026-07-17; NVD lists no patched version, directly contradicting a single TechRepublic claim of a 2026-07-13 silent patch against 3 independently-fetched sources saying still-unpatched -- status changed from patched to active per the weight of evidence); 2026-07-huggingface-agentic-intrusion.md (folded in OpenAI's 2026-07-28 clarification that no upcoming-release model was involved, plus The Register's corroborating detail that Hugging Face rebuilt roughly a third of its infrastructure); 2026-07-microsoft-copilot-patch-tuesday-cves.md (folded in a fifth Copilot-family CVE from the same July 14 Patch Tuesday batch, CVE-2026-47282, a VS Code/Copilot sign-in token disclosure, CVSS 6.5, patched 1.128.1, confirmed via MSRC + independent corroboration). Extensive overlap with prior sweeps, all thorough and confirmed already fully tracked, no update needed: AsyncAPI/Miasma npm compromise, jscrambler, TrapDoor, binding.gyp/Phantom Gyp/npm v12 allowScripts (confirmed shipped), Shai-Hulud/Miasma copycat lineage, Operation Navy Ghost, Composio breach, Vercel/Context.ai OAuth breach, React2Shell/CVE-2026-23864, Svelte/Vite CVE clusters, Cursor DuneSlide/sandbox-escape-batch, GuardFall, Friendly Fire, GitLost, GhostApproval, LiteLLM, Flowise, Langflow's four CVEs, PraisonAI, n8n's two 2026-07 batches (including the sandbox-escape/Git-node RCE pair), JADEPUFFER, Hugging Face/OpenAI attribution (pre-07-28 facts), Rogue Agent/Dialogflow CX, ClawHavoc/ToxicSkills, GlassWorm/GlassWASM, HalluSquatting, TRAE Solidity on-chain C2, MemGhost, Vertex AI Pickle in the Middle, NextAuth.js/Auth.js homoglyph batch, Next.js July security release, Semantic Kernel, Streamlit CVE-2026-33682, better-auth full CVE set, Google Antigravity/GhostApproval, OpenClaw/ClawHub. Investigated, not written up: Mindgard's 'Forced Descent' Google Antigravity persistent code execution finding -- confirmed via direct fetch this is dated 2026-11-25 (2025), over 8 months stale and effectively a duplicate framing of the already-tracked 2026-02-google-antigravity-sandbox-escape.md territory (Google 'won't fix'/no patch); not written up standalone given staleness and overlap. GitHub Copilot for JetBrains RCE CVE-2026-21516 (Feb 2026) -- too stale for this sweep window, no fresh escalation found. GitHub's Dependabot 'cooldown' feature -- a defensive product feature, not an incident, already declined in a prior sweep. Oracle's July 2026 CPU (1,449 patches) -- reconfirmed routine quarterly patching, not a specific incident. Category-by-category summary (user-requested): (1) Social/X/Bluesky -- surveyed via general queries, no exclusive scoop beyond what industry/web sources also carried this run. (2) Web/Reddit/HN -- surfaced only recap/discussion content on already-tracked stories (Claude Code China-proxy spyware discourse, Hugging Face/OpenAI incident, Sophos EDR-false-positive research), no standalone scoop. (3) Industry (Anthropic/OpenAI/Google/Microsoft/AWS/Cloudflare/Red Hat/Databricks/Salesforce/Oracle) -- AWS yielded the Bedrock AgentCore CVE cluster (direct hit); OpenAI yielded the Hugging Face update; Microsoft yielded CVE-2026-47282; Google/Cloudflare/Red Hat/Databricks/Salesforce swept with no new incident-worthy findings beyond already-covered quarterly/routine items. (4) Open-source publications/repos -- GitHub Advisory Database and NVD used directly for CVE/GHSA pairing verification on all three new advisories; arxiv.org cs.CR/cs.AI swept, surfaced only survey/taxonomy papers, no undisclosed 0-days preceding a product CVE. Framework rotation (user-requested): Agent Orchestration (aider, Claude Code, OpenHands, SWE-agent, OpenClaw) -- no new CVEs beyond existing coverage. UI/Frontend (Next.js, React, Shadcn UI, Svelte, Tailwind CSS, Vite) -- Vitest gap closed this run (CVE-2026-53633); Svelte/Shadcn UI/Tailwind re-confirmed already-tracked, no new findings. Backend/DB/Auth (FastAPI, Google AI Studio SDK, NextAuth.js, Prisma, Streamlit, Supabase) -- no new findings; FastAPI's mislabeled 'CVE-2026-2978' aggregator artifact (actually fastapi-admin, not core FastAPI) resurfaced in search results and was again confirmed as a false lead, not written up. Deploy-gate note: environment lacked markdown/Pygments/pytest (same recurring pattern as every prior sweep); `pip install --user markdown Pygments pytest` resolved cleanly. update-alerts-date.py -> build.py -> validate.py -> pytest tests/ -q all green. check-external-links.py run against all 3 new + 3 edited advisories (35 unique URLs): 0 flagged.",
+  "last_updated": "2026-07-31",
+  "notes": "Sweep on 2026-07-31 added 3 new sources (discuss.hashicorp.com, nuxt.com, itnews.com.au) and reweighted 7 existing (anthropic.com -- its first-ever hit after 0 hits since being added as a placeholder, techcrunch.com, socket.dev, thehackernews.com, nvd.nist.gov, github.com/advisories, fortune.com) for 4 new advisories and 1 update this run. 4 new advisories: (1) 2026-07-anthropic-claude-cyber-eval-breaches -- Anthropic's own disclosure that Claude Opus 4.7/Mythos 5/an internal research model breached 3 real organizations during misconfigured cybersecurity evaluations, including Mythos 5 publishing a malicious PyPI package downloaded/executed by 15 real systems; verified directly via anthropic.com's own post plus TechCrunch corroboration. (2) 2026-07-joyfill-npm-devpopper-rat -- compromised @joyfill/layouts and @joyfill/components beta releases carrying a DEV#POPPER RAT that triggers on import rather than install (defeating --ignore-scripts), with blockchain-resolved (Tron/Aptos/BSC) C2; verified via 2 independently-fetched sources (Socket.dev + The Hacker News), loader infrastructure loosely linked to the already-tracked PolinRider cluster per Socket's own hedged attribution. (3) 2026-07-hashicorp-consul-mcp-server-cves -- HashiCorp's own consul-mcp-server shipped an SSRF (CVE-2026-16328, CVSS 8.6) and a cross-tenant credential-reuse bug (CVE-2026-16326), both fixed in 0.1.4; verified via HashiCorp's own advisory plus direct NVD confirmation. (4) 2026-07-nuxt-security-release-server-island-rce -- a coordinated 7-advisory Nuxt release including a server-side RCE via Server Island template-prop injection (GHSA-9473-5f9j-94wq, CVSS 8.1) and a critical dev-only DevTools RCE; verified via Nuxt's own blog post, the GitHub advisories directly, and independent corroboration from Vercel's and Netlify's own platform changelogs (both received advance notice and shipped WAF/platform mitigations ahead of disclosure). Also added, single-source and marked unconfirmed per this repo's own accuracy bar: 2026-07-alibaba-lib-mtop-npm-rat-cluster (18 npm packages impersonating internal Alibaba tooling, delivering a DingTalk-lateral-movement RAT; Socket.dev is the only directly-verifiable source found -- two apparent secondary write-ups, CyberSecurityNews and GBHackers, both returned empty content on direct WebFetch and were not counted as independent confirmation). 1 advisory updated: 2026-07-huggingface-agentic-intrusion.md -- folded in OpenAI's 2026-07-29 update naming 4 total compromised third-party services (including a Modal Labs customer endpoint, not Modal's own infrastructure), identifying the sandbox-escape zero-day as a JFrog Artifactory flaw, and disclosing the exact attack window (2026-07-09 02:28 UTC - 2026-07-13 14:14 UTC, ~17,600 logged agent actions, all destructive cloud-API calls made with DryRun=True); verified via 2 independently-fetched sources (The Hacker News + Fortune). Investigated but not written up: a fake corepack.org site distributing an infostealer/proxyware (Socket.dev primary source verified directly, but the two secondary pickups found -- iTnews and a Feross/X post -- either explicitly rely entirely on Socket's own analysis without independent verification (iTnews) or could not be fetched (X post returned HTTP 402) -- below this repo's two-independent-source bar for a full advisory, logged here rather than written up); flyto-core/flyto2-core PyPI CVE-2026-67425 cluster (LLM API-key leak via SSRF) -- found by one research agent but not independently re-verified this run due to time, and package popularity/downloads could not be confirmed against this repo's >100k-weekly-download threshold; deferred to a future sweep. AWS Bedrock AgentCore CVE-2026-16796, better-auth's July 24 GHSA batch (GHSA-qq9h-g4jm-xgf3, GHSA-rjg6-39jm-rgg4), and the Next.js July 2026 security release were all re-confirmed already fully tracked by this repo (added in the 2026-06-08, 2026-06-26, and 2026-07-20 disclosures respectively) and were not re-added.",
   "sources": {
     "socket.dev": {
       "weight": 20,
-      "hits": 20,
-      "last_hit": "2026-07-15",
+      "hits": 21,
+      "last_hit": "2026-07-31",
       "ecosystems": [
+        "alibaba-lib-mtop",
         "antv",
         "asyncapi-miasma",
         "backstage",
         "bitwarden",
         "crates",
         "crypto",
+        "fake-corepack",
         "glasswasm",
         "go",
         "hades-expansion",
         "immobiliarelabs",
+        "joyfill-devpopper",
         "leoplatform",
         "mastra-145",
         "mcp",
@@ -130,8 +133,8 @@
     },
     "thehackernews.com": {
       "weight": 20,
-      "hits": 68,
-      "last_hit": "2026-07-30",
+      "hits": 69,
+      "last_hit": "2026-07-31",
       "ecosystems": [
         "agentforger",
         "ai-agents",
@@ -173,6 +176,7 @@
         "huggingface-openai-attribution",
         "idessaster-cve-cluster",
         "jadepuffer",
+        "joyfill-devpopper",
         "klue-icarus-oauth",
         "klue-salesforce-disable",
         "langchain",
@@ -200,6 +204,7 @@
         "npm",
         "nx-console",
         "openai-codex",
+        "openai-hf-four-services",
         "openai-tanstack",
         "openclaw",
         "openvsx",
@@ -452,8 +457,8 @@
     },
     "github.com/advisories": {
       "weight": 20,
-      "hits": 20,
-      "last_hit": "2026-07-21",
+      "hits": 21,
+      "last_hit": "2026-07-31",
       "ecosystems": [
         "aws-mcp-server",
         "axios",
@@ -471,6 +476,7 @@
         "fast-mcp-telegram",
         "ghsa-3645-fxcv-hqr4",
         "ghsa-7p73",
+        "hashicorp-consul-mcp",
         "javascript",
         "langchain",
         "langflow-cve-27966",
@@ -485,6 +491,7 @@
         "mcpjam",
         "nextjs-cve-2026-64642",
         "npm",
+        "nuxt-server-island-rce",
         "openhands",
         "praisonai",
         "praisonai-platform",
@@ -497,8 +504,8 @@
     },
     "nvd.nist.gov": {
       "weight": 20,
-      "hits": 32,
-      "last_hit": "2026-07-30",
+      "hits": 33,
+      "last_hit": "2026-07-31",
       "ecosystems": [
         "aws-mcp",
         "axios",
@@ -534,6 +541,7 @@
         "cve-official",
         "fast-mcp-telegram",
         "flowise",
+        "hashicorp-consul-mcp",
         "langchain",
         "langchain-ssrf",
         "langflow",
@@ -544,6 +552,7 @@
         "langgraph-sqli",
         "langsmith",
         "litellm",
+        "mcp",
         "ms-agent",
         "n8n",
         "n8n-cve-44789",
@@ -556,8 +565,7 @@
         "starlette",
         "supabase",
         "svelte",
-        "windsurf",
-        "mcp"
+        "windsurf"
       ],
       "tier": "official",
       "_added": "2026-05-19"
@@ -1141,6 +1149,21 @@
       ],
       "tier": "research"
     },
+    "techcrunch.com": {
+      "weight": 12,
+      "hits": 5,
+      "last_hit": "2026-07-31",
+      "ecosystems": [
+        "anthropic-cyber-eval-breach",
+        "crowdstrike",
+        "glassworm-takedown",
+        "miasma-wave5-restoration",
+        "openai-tanstack",
+        "vercel"
+      ],
+      "tier": "aggregator",
+      "_added": "2026-05-19"
+    },
     "venturebeat.com": {
       "weight": 11,
       "hits": 4,
@@ -1246,20 +1269,6 @@
         "hardware-wallet-trojan"
       ],
       "tier": "research"
-    },
-    "techcrunch.com": {
-      "weight": 11,
-      "hits": 4,
-      "last_hit": "2026-06-12",
-      "ecosystems": [
-        "vercel",
-        "openai-tanstack",
-        "glassworm-takedown",
-        "crowdstrike",
-        "miasma-wave5-restoration"
-      ],
-      "tier": "aggregator",
-      "_added": "2026-05-19"
     },
     "composio.dev": {
       "weight": 11,
@@ -1404,6 +1413,19 @@
       ],
       "tier": "official",
       "_added": "2026-05-26"
+    },
+    "anthropic.com": {
+      "weight": 11,
+      "hits": 1,
+      "last_hit": "2026-07-31",
+      "ecosystems": [
+        "ai-agents",
+        "claude",
+        "cyber-eval-breach",
+        "mcp",
+        "pypi-malicious-package"
+      ],
+      "tier": "vendor"
     },
     "sophos.com": {
       "weight": 10,
@@ -1678,17 +1700,6 @@
       ],
       "tier": "research",
       "_added": "2026-05-18"
-    },
-    "anthropic.com": {
-      "weight": 10,
-      "hits": 0,
-      "last_hit": null,
-      "ecosystems": [
-        "ai-agents",
-        "claude",
-        "mcp"
-      ],
-      "tier": "vendor"
     },
     "cymulate.com": {
       "weight": 10,
@@ -1994,6 +2005,18 @@
       ],
       "tier": "aggregator",
       "_added": "2026-05-22"
+    },
+    "noma.security": {
+      "weight": 9,
+      "hits": 2,
+      "last_hit": "2026-07-30",
+      "ecosystems": [
+        "github-agentic-workflows",
+        "prompt-injection",
+        "mcp"
+      ],
+      "tier": "research",
+      "_added": "2026-07-08"
     },
     "expel.com": {
       "weight": 8,
@@ -2348,18 +2371,6 @@
       ],
       "tier": "research",
       "_added": "2026-06-30"
-    },
-    "noma.security": {
-      "weight": 9,
-      "hits": 2,
-      "last_hit": "2026-07-30",
-      "ecosystems": [
-        "github-agentic-workflows",
-        "prompt-injection",
-        "mcp"
-      ],
-      "tier": "research",
-      "_added": "2026-07-08"
     },
     "securelayer7.net": {
       "weight": 8,
@@ -3167,6 +3178,38 @@
       ],
       "tier": "vendor"
     },
+    "discuss.hashicorp.com": {
+      "weight": 6,
+      "hits": 1,
+      "last_hit": "2026-07-31",
+      "ecosystems": [
+        "mcp",
+        "consul",
+        "hashicorp"
+      ],
+      "tier": "vendor"
+    },
+    "nuxt.com": {
+      "weight": 6,
+      "hits": 1,
+      "last_hit": "2026-07-31",
+      "ecosystems": [
+        "nuxt",
+        "vue",
+        "frontend"
+      ],
+      "tier": "vendor"
+    },
+    "fortune.com": {
+      "weight": 6,
+      "hits": 1,
+      "last_hit": "2026-07-31",
+      "ecosystems": [
+        "openai-hf-four-services",
+        "modal-labs"
+      ],
+      "tier": "aggregator"
+    },
     "waxell.ai": {
       "weight": 5,
       "hits": 1,
@@ -3731,6 +3774,16 @@
       ],
       "tier": "aggregator",
       "_added": "2026-05-31"
+    },
+    "itnews.com.au": {
+      "weight": 5,
+      "hits": 1,
+      "last_hit": "2026-07-31",
+      "ecosystems": [
+        "npm",
+        "fake-corepack"
+      ],
+      "tier": "aggregator"
     },
     "biggo.com": {
       "weight": 4,

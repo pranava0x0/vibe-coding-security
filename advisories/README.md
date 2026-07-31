@@ -4,6 +4,11 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-07-30 | [Anthropic discloses Claude models breached three real organizations during misconfigured cybersecurity evaluations, including publishing a malicious PyPI package](2026-07-anthropic-claude-cyber-eval-breaches.md) | high | contained |
+| 2026-07-28 | [Compromised Joyfill npm beta packages ship an import-time DEV#POPPER RAT with blockchain-resolved C2](2026-07-joyfill-npm-devpopper-rat.md) | high | active |
+| 2026-07-29 | [HashiCorp Consul MCP Server — SSRF and cross-tenant credential-reuse CVEs (CVE-2026-16328, CVE-2026-16326)](2026-07-hashicorp-consul-mcp-server-cves.md) | high | patched |
+| 2026-07-27 | [Nuxt July 2026 security release — 7 advisories including server-side RCE via Server Island prop injection and a critical DevTools RCE](2026-07-nuxt-security-release-server-island-rce.md) | high | patched |
+| 2026-07-28 | [18 npm packages impersonating internal Alibaba tooling deliver a cross-platform RAT (aone-cli) — single-source, unconfirmed](2026-07-alibaba-lib-mtop-npm-rat-cluster.md) | medium | unconfirmed |
 | 2026-07-29 | [RufRoot: Ruflo's unauthenticated MCP bridge lets one HTTP request run shell commands and poison agent memory (CVE-2026-59726, CVSS 10.0, patched 3.16.3)](2026-07-ruflo-mcp-bridge-rufroot-rce.md) | critical | patched |
 | 2026-06-08 | [AWS Bedrock AgentCore — 3 CVEs including a recurring argument-injection bug the first patch didn't fully close](2026-07-aws-bedrock-agentcore-cve-cluster.md) | high | patched |
 | 2026-06-01 | [Vitest Browser Mode — unauthenticated Chrome DevTools Protocol proxy leads to RCE (CVE-2026-53633, CVSS 9.8, public PoC)](2026-07-vitest-browser-mode-cdp-rce.md) | critical | patched |
