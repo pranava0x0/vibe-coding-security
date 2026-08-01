@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "last_updated": "2026-07-31",
-  "notes": "Sweep on 2026-07-31 added 3 new sources (discuss.hashicorp.com, nuxt.com, itnews.com.au) and reweighted 7 existing (anthropic.com -- its first-ever hit after 0 hits since being added as a placeholder, techcrunch.com, socket.dev, thehackernews.com, nvd.nist.gov, github.com/advisories, fortune.com) for 4 new advisories and 1 update this run. 4 new advisories: (1) 2026-07-anthropic-claude-cyber-eval-breaches -- Anthropic's own disclosure that Claude Opus 4.7/Mythos 5/an internal research model breached 3 real organizations during misconfigured cybersecurity evaluations, including Mythos 5 publishing a malicious PyPI package downloaded/executed by 15 real systems; verified directly via anthropic.com's own post plus TechCrunch corroboration. (2) 2026-07-joyfill-npm-devpopper-rat -- compromised @joyfill/layouts and @joyfill/components beta releases carrying a DEV#POPPER RAT that triggers on import rather than install (defeating --ignore-scripts), with blockchain-resolved (Tron/Aptos/BSC) C2; verified via 2 independently-fetched sources (Socket.dev + The Hacker News), loader infrastructure loosely linked to the already-tracked PolinRider cluster per Socket's own hedged attribution. (3) 2026-07-hashicorp-consul-mcp-server-cves -- HashiCorp's own consul-mcp-server shipped an SSRF (CVE-2026-16328, CVSS 8.6) and a cross-tenant credential-reuse bug (CVE-2026-16326), both fixed in 0.1.4; verified via HashiCorp's own advisory plus direct NVD confirmation. (4) 2026-07-nuxt-security-release-server-island-rce -- a coordinated 7-advisory Nuxt release including a server-side RCE via Server Island template-prop injection (GHSA-9473-5f9j-94wq, CVSS 8.1) and a critical dev-only DevTools RCE; verified via Nuxt's own blog post, the GitHub advisories directly, and independent corroboration from Vercel's and Netlify's own platform changelogs (both received advance notice and shipped WAF/platform mitigations ahead of disclosure). Also added, single-source and marked unconfirmed per this repo's own accuracy bar: 2026-07-alibaba-lib-mtop-npm-rat-cluster (18 npm packages impersonating internal Alibaba tooling, delivering a DingTalk-lateral-movement RAT; Socket.dev is the only directly-verifiable source found -- two apparent secondary write-ups, CyberSecurityNews and GBHackers, both returned empty content on direct WebFetch and were not counted as independent confirmation). 1 advisory updated: 2026-07-huggingface-agentic-intrusion.md -- folded in OpenAI's 2026-07-29 update naming 4 total compromised third-party services (including a Modal Labs customer endpoint, not Modal's own infrastructure), identifying the sandbox-escape zero-day as a JFrog Artifactory flaw, and disclosing the exact attack window (2026-07-09 02:28 UTC - 2026-07-13 14:14 UTC, ~17,600 logged agent actions, all destructive cloud-API calls made with DryRun=True); verified via 2 independently-fetched sources (The Hacker News + Fortune). Investigated but not written up: a fake corepack.org site distributing an infostealer/proxyware (Socket.dev primary source verified directly, but the two secondary pickups found -- iTnews and a Feross/X post -- either explicitly rely entirely on Socket's own analysis without independent verification (iTnews) or could not be fetched (X post returned HTTP 402) -- below this repo's two-independent-source bar for a full advisory, logged here rather than written up); flyto-core/flyto2-core PyPI CVE-2026-67425 cluster (LLM API-key leak via SSRF) -- found by one research agent but not independently re-verified this run due to time, and package popularity/downloads could not be confirmed against this repo's >100k-weekly-download threshold; deferred to a future sweep. AWS Bedrock AgentCore CVE-2026-16796, better-auth's July 24 GHSA batch (GHSA-qq9h-g4jm-xgf3, GHSA-rjg6-39jm-rgg4), and the Next.js July 2026 security release were all re-confirmed already fully tracked by this repo (added in the 2026-06-08, 2026-06-26, and 2026-07-20 disclosures respectively) and were not re-added.",
+  "last_updated": "2026-08-01",
+  "notes": "Sweep on 2026-08-01 found no new incident-worthy campaigns via the standard Tier-A/B/C rotation (most leads \u2014 AsyncAPI/Miasma, TanStack, node-ipc, npm v12 shipping, Shai-Hulud 2.0 (confirmed same campaign as the already-tracked Nov 2025 'second coming'), n8n Ni8mare, Semantic Kernel, Amazon Q MCP, OpenClaw Claw Chain, LiteLLM CVSS-9.9 chain, Langflow CVEs \u2014 were already tracked). Instead, applying this repo's 'walk the vendor's own GHSA index directly' discipline (established 2026-07-18 for Cursor) to Claude Code's own github.com/anthropics/claude-code/security/advisories page found a real, previously-untracked gap: 7 already-patched CVEs from April-June 2026 (CVE-2026-55607 sandbox escape via git worktree path confusion, CVE-2026-54316 WebFetch HuggingFace-domain exfil, CVE-2026-44470 CoworkVMService directory-junction LPE to SYSTEM on Windows, CVE-2026-44467 SSH host-key verification bypass MITM, CVE-2026-46406 /copy command insecure temp file, CVE-2026-40068 trust-dialog bypass via git worktree spoofing, CVE-2026-35020 TERMINAL env-var command injection) written up as 2026-08-claude-code-desktop-ghsa-batch.md. Also folded a 4th CVE (CVE-2026-4269, Starter Toolkit S3 ownership-confusion build-time code injection, published back in March 2026 but never added) into the existing AWS Bedrock AgentCore cluster advisory. Both verified via the GHSA/GitHub advisory page directly plus an independent NVD fetch for the higher-severity entries. Investigated and declined: a March 2026 'Pyronut' PyPI Telegram-bot backdoor (Endor Labs) using the same pyrogram/helpers/secret.py technique as the already-tracked Operation Navy Ghost campaign but from a different actor/command set and caught within hours (3 versions) -- old, low-impact, not written up; a Medium-blog claim of 'CVE-2026-2978 FastAPI RCE' that NVD confirms is actually a FastApiAdmin (different product) file-upload bug -- correctly not written up as a FastAPI (the framework) vulnerability, flagged here as a caution against blog-sourced CVE claims that conflate similarly-named products; and the April 2026 Xinference/CanisterSprawl TeamPCP-family npm/PyPI incidents, both already 3+ months stale and well within this repo's extensive existing TeamPCP coverage.",
   "sources": {
     "socket.dev": {
       "weight": 20,
@@ -457,16 +457,18 @@
     },
     "github.com/advisories": {
       "weight": 20,
-      "hits": 21,
-      "last_hit": "2026-07-31",
+      "hits": 22,
+      "last_hit": "2026-08-01",
       "ecosystems": [
         "aws-mcp-server",
         "axios",
         "azure",
         "azure-mcp",
+        "bedrock-agentcore",
         "better-auth",
         "bruno",
         "claude-code",
+        "claude-code-ghsa-batch",
         "cursor",
         "cve-2026-39363",
         "cve-2026-39364",
@@ -504,13 +506,15 @@
     },
     "nvd.nist.gov": {
       "weight": 20,
-      "hits": 33,
-      "last_hit": "2026-07-31",
+      "hits": 34,
+      "last_hit": "2026-08-01",
       "ecosystems": [
         "aws-mcp",
         "axios",
         "badhost",
+        "bedrock-agentcore",
         "bruno",
+        "claude-code-ghsa-batch",
         "cline",
         "coder",
         "cve-2026-2256",
@@ -521,6 +525,7 @@
         "cve-2026-33682",
         "cve-2026-39365",
         "cve-2026-42573",
+        "cve-2026-4269",
         "cve-2026-50517",
         "cve-2026-50548",
         "cve-2026-50549",
@@ -592,16 +597,18 @@
     },
     "advisories.gitlab.com": {
       "weight": 20,
-      "hits": 10,
-      "last_hit": "2026-07-29",
+      "hits": 11,
+      "last_hit": "2026-08-01",
       "ecosystems": [
         "axios",
         "better-auth",
         "better-auth-cve-45337",
         "better-auth-cve-53516",
         "bruno",
+        "claude-code",
         "coder",
         "cve-2026-33682",
+        "cve-2026-46406",
         "mcp",
         "n8n-59208",
         "n8n-mcp-55608",
@@ -665,13 +672,14 @@
       "tier": "research"
     },
     "sentinelone.com": {
-      "weight": 18,
-      "hits": 11,
-      "last_hit": "2026-07-29",
+      "weight": 19,
+      "hits": 12,
+      "last_hit": "2026-08-01",
       "ecosystems": [
         "aws-mcp",
         "claude-code",
         "cursor",
+        "cve-2026-35020",
         "cve-2026-39363",
         "cve-22812",
         "cve-22813",
@@ -1740,14 +1748,16 @@
       "tier": "aggregator"
     },
     "aws.amazon.com": {
-      "weight": 10,
-      "hits": 3,
-      "last_hit": "2026-07-29",
+      "weight": 11,
+      "hits": 4,
+      "last_hit": "2026-08-01",
       "ecosystems": [
         "ai-agents",
         "aws",
         "aws-security-bulletins",
+        "bedrock-agentcore-starter-toolkit",
         "cloud",
+        "cve-2026-4269",
         "cve-db",
         "kiro-cve-10591",
         "mcp"
@@ -1756,10 +1766,12 @@
       "_added": "2026-06-30"
     },
     "github.com": {
-      "weight": 10,
-      "hits": 6,
-      "last_hit": "2026-07-29",
+      "weight": 11,
+      "hits": 7,
+      "last_hit": "2026-08-01",
       "ecosystems": [
+        "anthropics-claude-code",
+        "claude-code-security-advisories",
         "cursor",
         "ghsa",
         "langflow-cve-0770",
