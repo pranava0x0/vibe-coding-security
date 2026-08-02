@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-08-01",
+  "last_updated": "2026-08-02",
   "notes": "Sweep on 2026-08-01 found no new incident-worthy campaigns via the standard Tier-A/B/C rotation (most leads \u2014 AsyncAPI/Miasma, TanStack, node-ipc, npm v12 shipping, Shai-Hulud 2.0 (confirmed same campaign as the already-tracked Nov 2025 'second coming'), n8n Ni8mare, Semantic Kernel, Amazon Q MCP, OpenClaw Claw Chain, LiteLLM CVSS-9.9 chain, Langflow CVEs \u2014 were already tracked). Instead, applying this repo's 'walk the vendor's own GHSA index directly' discipline (established 2026-07-18 for Cursor) to Claude Code's own github.com/anthropics/claude-code/security/advisories page found a real, previously-untracked gap: 7 already-patched CVEs from April-June 2026 (CVE-2026-55607 sandbox escape via git worktree path confusion, CVE-2026-54316 WebFetch HuggingFace-domain exfil, CVE-2026-44470 CoworkVMService directory-junction LPE to SYSTEM on Windows, CVE-2026-44467 SSH host-key verification bypass MITM, CVE-2026-46406 /copy command insecure temp file, CVE-2026-40068 trust-dialog bypass via git worktree spoofing, CVE-2026-35020 TERMINAL env-var command injection) written up as 2026-08-claude-code-desktop-ghsa-batch.md. Also folded a 4th CVE (CVE-2026-4269, Starter Toolkit S3 ownership-confusion build-time code injection, published back in March 2026 but never added) into the existing AWS Bedrock AgentCore cluster advisory. Both verified via the GHSA/GitHub advisory page directly plus an independent NVD fetch for the higher-severity entries. Investigated and declined: a March 2026 'Pyronut' PyPI Telegram-bot backdoor (Endor Labs) using the same pyrogram/helpers/secret.py technique as the already-tracked Operation Navy Ghost campaign but from a different actor/command set and caught within hours (3 versions) -- old, low-impact, not written up; a Medium-blog claim of 'CVE-2026-2978 FastAPI RCE' that NVD confirms is actually a FastApiAdmin (different product) file-upload bug -- correctly not written up as a FastAPI (the framework) vulnerability, flagged here as a caution against blog-sourced CVE claims that conflate similarly-named products; and the April 2026 Xinference/CanisterSprawl TeamPCP-family npm/PyPI incidents, both already 3+ months stale and well within this repo's extensive existing TeamPCP coverage.",
   "sources": {
     "socket.dev": {
@@ -238,8 +238,8 @@
     },
     "theregister.com": {
       "weight": 20,
-      "hits": 26,
-      "last_hit": "2026-07-29",
+      "hits": 27,
+      "last_hit": "2026-08-02",
       "ecosystems": [
         "agentforger",
         "amazon-q",
@@ -251,6 +251,7 @@
         "claude-code-subcommand-deny-bypass",
         "claude-desktop-personalization",
         "clawhub",
+        "copilot-word-worm",
         "friendly-fire",
         "ghostapproval",
         "glassworm",
@@ -506,8 +507,8 @@
     },
     "nvd.nist.gov": {
       "weight": 20,
-      "hits": 34,
-      "last_hit": "2026-08-01",
+      "hits": 35,
+      "last_hit": "2026-08-02",
       "ecosystems": [
         "aws-mcp",
         "axios",
@@ -517,6 +518,7 @@
         "claude-code-ghsa-batch",
         "cline",
         "coder",
+        "cve-2026-14869",
         "cve-2026-2256",
         "cve-2026-23996",
         "cve-2026-26019",
@@ -570,6 +572,7 @@
         "starlette",
         "supabase",
         "svelte",
+        "terraform-mcp",
         "windsurf"
       ],
       "tier": "official",
@@ -597,8 +600,8 @@
     },
     "advisories.gitlab.com": {
       "weight": 20,
-      "hits": 11,
-      "last_hit": "2026-08-01",
+      "hits": 12,
+      "last_hit": "2026-08-02",
       "ecosystems": [
         "axios",
         "better-auth",
@@ -609,7 +612,10 @@
         "coder",
         "cve-2026-33682",
         "cve-2026-46406",
+        "cve-2026-46519",
+        "cve-2026-47250",
         "mcp",
+        "mcp-server-kubernetes",
         "n8n-59208",
         "n8n-mcp-55608",
         "network-ai",
@@ -1435,6 +1441,40 @@
       ],
       "tier": "vendor"
     },
+    "aws.amazon.com": {
+      "weight": 11,
+      "hits": 4,
+      "last_hit": "2026-08-01",
+      "ecosystems": [
+        "ai-agents",
+        "aws",
+        "aws-security-bulletins",
+        "bedrock-agentcore-starter-toolkit",
+        "cloud",
+        "cve-2026-4269",
+        "cve-db",
+        "kiro-cve-10591",
+        "mcp"
+      ],
+      "tier": "vendor",
+      "_added": "2026-06-30"
+    },
+    "github.com": {
+      "weight": 11,
+      "hits": 7,
+      "last_hit": "2026-08-01",
+      "ecosystems": [
+        "anthropics-claude-code",
+        "claude-code-security-advisories",
+        "cursor",
+        "ghsa",
+        "langflow-cve-0770",
+        "n8n-july22-batch",
+        "nextauthjs",
+        "nextjs-ghsa"
+      ],
+      "tier": "independent"
+    },
     "sophos.com": {
       "weight": 10,
       "hits": 1,
@@ -1747,39 +1787,15 @@
       ],
       "tier": "aggregator"
     },
-    "aws.amazon.com": {
-      "weight": 11,
-      "hits": 4,
-      "last_hit": "2026-08-01",
+    "enklypesalt.com": {
+      "weight": 10,
+      "hits": 1,
+      "last_hit": "2026-08-02",
       "ecosystems": [
-        "ai-agents",
-        "aws",
-        "aws-security-bulletins",
-        "bedrock-agentcore-starter-toolkit",
-        "cloud",
-        "cve-2026-4269",
-        "cve-db",
-        "kiro-cve-10591",
-        "mcp"
+        "microsoft-copilot",
+        "copilot-word-worm"
       ],
-      "tier": "vendor",
-      "_added": "2026-06-30"
-    },
-    "github.com": {
-      "weight": 11,
-      "hits": 7,
-      "last_hit": "2026-08-01",
-      "ecosystems": [
-        "anthropics-claude-code",
-        "claude-code-security-advisories",
-        "cursor",
-        "ghsa",
-        "langflow-cve-0770",
-        "n8n-july22-batch",
-        "nextauthjs",
-        "nextjs-ghsa"
-      ],
-      "tier": "independent"
+      "tier": "research"
     },
     "policylayer.com": {
       "weight": 9,
@@ -2779,6 +2795,18 @@
       ],
       "tier": "aggregator"
     },
+    "discuss.hashicorp.com": {
+      "weight": 7,
+      "hits": 2,
+      "last_hit": "2026-08-02",
+      "ecosystems": [
+        "consul",
+        "hashicorp",
+        "mcp",
+        "terraform-mcp"
+      ],
+      "tier": "vendor"
+    },
     "qualysec.com": {
       "weight": 6,
       "hits": 1,
@@ -3190,17 +3218,6 @@
       ],
       "tier": "vendor"
     },
-    "discuss.hashicorp.com": {
-      "weight": 6,
-      "hits": 1,
-      "last_hit": "2026-07-31",
-      "ecosystems": [
-        "mcp",
-        "consul",
-        "hashicorp"
-      ],
-      "tier": "vendor"
-    },
     "nuxt.com": {
       "weight": 6,
       "hits": 1,
@@ -3221,6 +3238,15 @@
         "modal-labs"
       ],
       "tier": "aggregator"
+    },
+    "malwarebytes.com": {
+      "weight": 6,
+      "hits": 1,
+      "last_hit": "2026-08-02",
+      "ecosystems": [
+        "copilot-word-worm"
+      ],
+      "tier": "vendor"
     },
     "waxell.ai": {
       "weight": 5,

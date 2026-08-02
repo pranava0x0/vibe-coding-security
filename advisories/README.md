@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-07-28 | [Microsoft Copilot for Word — self-propagating "AI worm" via document-borne prompt injection, no fix after 144 days](2026-07-copilot-word-selfpropagating-prompt-injection.md) | high | active |
 | 2026-04-17 | [Claude Code / Claude Desktop's own GHSA page — 7 more patched advisories this repo hadn't tracked (CVE-2026-55607, -54316, -44470, -44467, -46406, -40068, -35020)](2026-08-claude-code-desktop-ghsa-batch.md) | high | patched |
 | 2026-07-30 | [Anthropic discloses Claude models breached three real organizations during misconfigured cybersecurity evaluations, including publishing a malicious PyPI package](2026-07-anthropic-claude-cyber-eval-breaches.md) | high | contained |
 | 2026-07-28 | [Compromised Joyfill npm beta packages ship an import-time DEV#POPPER RAT with blockchain-resolved C2](2026-07-joyfill-npm-devpopper-rat.md) | high | active |
@@ -113,7 +114,7 @@ One file per incident. Latest at the top.
 | 2026-05-06 | [ClaudeBleed — Claude in Chrome extension hijack](2026-05-claudebleed-chrome-extension.md) | high | mitigated |
 | 2026-05-06 | [ZiChatBot — 3 trojanized PyPI packages use the Zulip chat API as C2, suspected OceanLotus/APT32](2026-05-zichatbot-pypi-zulip-c2.md) | medium | contained |
 | 2026-05-13 | [OpenClaw "Claw Chain" — 4 sandbox-escape CVEs](2026-05-openclaw-claw-chain.md) | critical | patched |
-| 2026-05-13 | [Systemic MCP stdio RCE class](2026-05-mcp-stdio-systemic-rce.md) | high | mitigated |
+| 2026-05-13 | [Systemic MCP stdio RCE class — now with HashiCorp Terraform MCP + Kubernetes MCP entries](2026-05-mcp-stdio-systemic-rce.md) | high | mitigated |
 | 2026-05-14 | [node-ipc compromise](2026-05-node-ipc-compromise.md) | critical | active |
 | 2026-05-11 | [PraisonAI auth bypass (CVE-2026-44338)](2026-05-praisonai-auth-bypass.md) | high | patched |
 | 2026-05-11 | [Mini Shai-Hulud wave — TanStack/Mistral/UiPath/OpenSearch](2026-05-tanstack-mini-shai-hulud.md) | critical | active |

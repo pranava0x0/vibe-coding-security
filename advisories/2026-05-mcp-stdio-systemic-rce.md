@@ -2,7 +2,7 @@
 id: 2026-05-mcp-stdio-systemic-rce
 title: "Systemic MCP stdio RCE class — 200,000+ servers exposed (May 2026)"
 date_disclosed: 2026-05
-last_updated: 2026-07-17
+last_updated: 2026-08-02
 severity: high
 status: mitigated
 ecosystems: [mcp, anthropic-mcp]
@@ -53,6 +53,10 @@ Microsoft's own MCP server has now had **two** disclosures in this class:
 
 **Named instance — `n8n-mcp` default-scope backup exposure (CVE-2026-55608, CVSS 4.2, medium):** a narrower follow-on to the cross-tenant backup flaw above (CVE-2026-54052) in the same package. In multi-tenant HTTP mode (`ENABLE_MULTI_TENANT=true`), an authenticated tenant could, under certain conditions, still reach n8n-mcp's **local default-scope** `workflow_versions` backups — leftover from single-tenant deployments or migrations — instead of being confined strictly to its own tenant scope. This is a distinct GHSA (`GHSA-2cf7-hpwf-47h9`) from CVE-2026-54052's (`GHSA-j6r7-6fhx-77wx`), confirmed by fetching both pages directly. Published **2026-07-14**; affects **< 2.57.4**, fixed in **2.57.4**. Same tenant-isolation-assumed-but-not-enforced root cause as CVE-2026-54052, scoped to a narrower leftover-data case.
 
+**Named instance — HashiCorp Terraform MCP Server, three CVEs (HCSEC-2026-23, CVE-2026-14869 / CVE-2026-16496 / CVE-2026-16498):** HashiCorp's own official MCP server for Terraform, disclosed **2026-07-28**, joining `consul-mcp-server` as the second HashiCorp first-party MCP server with a coordinated multi-CVE bulletin. **CVE-2026-14869 (SSRF, CVSS 8.6)** — the streamable-HTTP transport lets an **unauthenticated** remote client redirect the server's Terraform API requests, and its server-side authorization token, to an attacker-controlled endpoint (confirmed on [NVD](https://nvd.nist.gov/vuln/detail/CVE-2026-14869): CVSS vector `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:N`, published 2026-07-28). **CVE-2026-16496 (authorization bypass)** — in stateful transport mode, a user who obtains another user's MCP session ID can have their own tool calls executed using that other user's Terraform credentials. **CVE-2026-16498 (cross-tenant credential reuse)** — in stateless transport mode, one user's Terraform token can be reused to execute tool calls on behalf of subsequent, unrelated users. All three affect **0.2.1 through 1.0.0**, fixed in **1.1.0**.
+
+**Named instance — `mcp-server-kubernetes`, presentation-layer-only access control + flag-injection token theft (CVE-2026-46519, CVE-2026-47250):** a popular community MCP server (npm) that exposes Kubernetes cluster operations to AI agents. **CVE-2026-46519 (CVSS 8.8, GHSA-cr22-wjx7-2w6m)** — the server's access-control env vars (`ALLOW_ONLY_READONLY_TOOLS`, `ALLOW_ONLY_NON_DESTRUCTIVE_TOOLS`, `ALLOWED_TOOLS`) are enforced only at tool **discovery** (`tools/list`) and not at tool **execution** (`tools/call`) — any client that already knows a restricted tool's name can invoke it directly, making the "restriction" cosmetic. **CVE-2026-47250 (CVSS 6.1, GHSA-6mx4-4h42-r8vh)** — the `kubectl_generic` tool passes user-supplied flags to `kubectl` with no allowlist, letting an attacker with limited cluster access inject structured content into logs that, when a privileged operator later processes those logs through the MCP server, redirects `kubectl`'s **bearer token** to an attacker-controlled endpoint — capturing the operator's full RBAC-scoped credentials. Both affect versions before their respective fixes: **3.6.0** (CVE-2026-46519) and **3.7.0** (CVE-2026-47250). Same "presentation-layer check, not an execution-layer boundary" root cause already tracked in this advisory's other entries, applied here to Kubernetes-scoped tool access control specifically.
+
 ## Am I affected?
 You are exposed by the class issue if:
 
@@ -69,6 +73,8 @@ You are exposed by the class issue if:
 - You run **`n8n-mcp` ≤ 2.56.0** in multi-tenant HTTP mode (CVE-2026-54052) — any authenticated user can read/delete other tenants' workflow-version backups, which embed credential references; upgrade to **≥ 2.56.1**.
 - You run **`@andrea9293/mcp-documentation-server` ≤ 1.13.0** (CVE-2026-54504) — its Web UI/API binds `0.0.0.0:3080` with no authentication; upgrade to **≥ 1.13.1** or bind to `127.0.0.1`.
 - You run **`n8n-mcp` < 2.57.4** in multi-tenant HTTP mode (CVE-2026-55608) — an authenticated tenant may still reach default-scope workflow-version backups; upgrade to **≥ 2.57.4**.
+- You run **HashiCorp `terraform-mcp-server` 0.2.1–1.0.0** (CVE-2026-14869 / -16496 / -16498) — unauthenticated SSRF plus two credential-reuse bugs across stateful/stateless modes; upgrade to **≥ 1.1.0** and rotate the Terraform token the server was configured with.
+- You run **`mcp-server-kubernetes` before 3.6.0 / 3.7.0** (CVE-2026-46519 / CVE-2026-47250) — your `ALLOWED_TOOLS`-style restrictions are cosmetic, and log-processing workflows can leak kubeconfig bearer tokens; upgrade to **≥ 3.7.0** and rotate any operator kubeconfig tokens used with the server.
 
 ```bash
 # Find MCP servers configured in your tools
@@ -93,6 +99,8 @@ lsof -iTCP -sTCP:LISTEN -P -n 2>/dev/null | grep -iE 'mcp|model-context'
 5d. **Update `n8n-mcp` to ≥ 2.56.1** (CVE-2026-54052) if you run multi-tenant HTTP mode; the update includes a migration that isolates and clears previously un-scoped backups. Rotate any credential references that were embedded in workflow-version snapshots readable by other tenants.
 5e. **Update `@andrea9293/mcp-documentation-server` to ≥ 1.13.1** (CVE-2026-54504), or at minimum bind its Web UI/API to `127.0.0.1` instead of `0.0.0.0` until you can upgrade.
 5f. **Update `n8n-mcp` to ≥ 2.57.4** (CVE-2026-55608) if you run multi-tenant HTTP mode; this is on top of the ≥ 2.56.1 upgrade for CVE-2026-54052 above.
+5g. **Update HashiCorp `terraform-mcp-server` to ≥ 1.1.0** (CVE-2026-14869 / -16496 / -16498) and rotate the Terraform API token the server held, since the SSRF could have exfiltrated it before you patched.
+5h. **Update `mcp-server-kubernetes` to ≥ 3.7.0** and rotate any kubeconfig bearer tokens used with it (CVE-2026-46519 / CVE-2026-47250); don't rely on `ALLOWED_TOOLS`-style env vars as a security boundary until confirmed patched.
 6. **For Apache Doris MCP:** apply the patch + the CVE tracker recommendations.
 7. **For Alibaba RDS MCP:** since Alibaba declined to patch, do not deploy without an isolating proxy that filters MCP messages.
 8. **Do not expose stdio MCPs to network sockets.** If you've wrapped one with a proxy / HTTP gateway, audit the proxy's input validation.
@@ -142,3 +150,7 @@ OX Security calls this "The Mother of All AI Supply Chains" — making the case 
 - [GB Hackers — Critical fast-mcp-telegram Vulnerability Lets Attackers Access Telegram Session Without Token](https://gbhackers.com/critical-fast-mcp-telegram-vulnerability/) — independent corroboration, exploitation scenario.
 - [GitHub Advisory Database — GHSA-j6r7-6fhx-77wx: n8n-mcp cross-tenant workflow-version-backup exposure (CVE-2026-54052)](https://github.com/advisories/GHSA-j6r7-6fhx-77wx) — canonical description, CVSS 9.9, affected/fixed versions; CVE↔GHSA pairing verified directly.
 - [GitHub Advisory Database — GHSA-6f5r-5672-72j7: @andrea9293/mcp-documentation-server missing authentication (CVE-2026-54504)](https://github.com/advisories/GHSA-6f5r-5672-72j7) — canonical description, CVSS 8.8, affected/fixed versions; CVE↔GHSA pairing verified directly.
+- [HashiCorp Discuss — HCSEC-2026-23: Multiple Vulnerabilities Impacting HashiCorp Terraform MCP Server](https://discuss.hashicorp.com/t/hcsec-2026-23-multiple-vulnerabilities-impacting-hashicorp-terraform-mcp-server/77606) — primary vendor advisory, published 2026-07-28: all three CVE descriptions, affected/fixed versions.
+- [NVD — CVE-2026-14869](https://nvd.nist.gov/vuln/detail/CVE-2026-14869) — canonical CVE record, CVSS 8.6 (`AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:N/A:N`), published 2026-07-28.
+- [GitLab Advisory Database — CVE-2026-46519: MCP Server Kubernetes Tool Access Control Bypass](https://advisories.gitlab.com/npm/mcp-server-kubernetes/CVE-2026-46519/) — CVSS 8.8, GHSA-cr22-wjx7-2w6m, affected/fixed versions.
+- [GitLab Advisory Database — CVE-2026-47250: MCP Server Kubernetes kubectl-generic flag injection](https://advisories.gitlab.com/npm/mcp-server-kubernetes/CVE-2026-47250/) — CVSS 6.1, GHSA-6mx4-4h42-r8vh, affected/fixed versions.
