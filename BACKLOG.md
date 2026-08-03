@@ -1,5 +1,11 @@
 # Backlog
 
+> **2026-08-03:** A full architecture review (threat-taxonomy expansion beyond package
+> downloads, data flow, build modularization, search/SEO, robots/llms.txt contract,
+> ASD-STE100 plain-language style) lives in [plans/2026-08-architecture/](plans/2026-08-architecture/00-overview.md).
+> It consolidates and sequences several high-priority items below; consult it before
+> picking up structured-IOC, search, or llms.txt work.
+
 > Ideas for future improvements. Priority: **high** / **medium** / **low**.
 > Sourced from competitive analysis (Socket, OSV.dev, GHSA, ahrefs.com, simonwillison.net, news.ycombinator.com, Mintlify docs, Anthropic docs, Vercel/v0 changelogs). The 2026-06-01 research batch below also draws on Sigstore, deps.dev, OpenSSF Scorecard, FIRST EPSS, CISA KEV, the OSV schema, purl/PEP 740, pnpm/npm/uv docs, and the Internet Archive.
 
