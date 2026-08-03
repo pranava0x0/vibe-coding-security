@@ -3,6 +3,25 @@
 > Ideas for future improvements. Priority: **high** / **medium** / **low**.
 > Sourced from competitive analysis (Socket, OSV.dev, GHSA, ahrefs.com, simonwillison.net, news.ycombinator.com, Mintlify docs, Anthropic docs, Vercel/v0 changelogs). The 2026-06-01 research batch below also draws on Sigstore, deps.dev, OpenSSF Scorecard, FIRST EPSS, CISA KEV, the OSV schema, purl/PEP 740, pnpm/npm/uv docs, and the Internet Archive.
 
+## Planned work
+
+Several high-priority items below are now fully specified in an architecture
+review written 2026-08-03. Read the
+[overview](plans/2026-08-architecture/README.md) first; it explains the
+recommended order and what blocks what.
+
+| # | Spec | Backlog items it absorbs |
+|---|---|---|
+| 01 | [Threat taxonomy + anti-patterns](plans/2026-08-architecture/01-threat-taxonomy-and-anti-patterns.md) | controlled vocabulary (new); model/dataset supply chain (new) |
+| 02 | [Data flow: IOC frontmatter](plans/2026-08-architecture/02-data-flow-ioc-frontmatter.md) | structured IOC frontmatter · OSV export + osv.dev source · `iocs.json` · `integrity.txt` |
+| 03 | [Build emitter registry](plans/2026-08-architecture/03-build-emitter-registry.md) | — (new; unblocks 02's emitters) |
+| 04 | [Search + SEO](plans/2026-08-architecture/04-search-and-seo.md) | client-side search · filter chips · per-package pages · per-CVE pages |
+| 05 | [Crawler policy + llms.txt budget](plans/2026-08-architecture/05-crawler-policy-and-llms-budget.md) | llms.txt cap treadmill (see correction below) |
+| 06 | [Plain language (ASD-STE100)](plans/2026-08-architecture/06-plain-language.md) | — (new) |
+
+> ⚠ **Spec 05 is time-critical.** `llms-ctx.txt` measured 83 bytes under its cap
+> on 2026-08-03. The next advisory added will fail CI and block the deploy.
+
 ## High
 
 - **Client-side search.** `search.json` already ships; needs a 200-line UI (search box in the topbar, fuzzy match via fzf-lite or pagefind). Patterns to imitate: [news.ycombinator.com](https://hn.algolia.com/), [OSV.dev](https://osv.dev/list). Make it instant on type (< 50ms), keyboard-driven (`/` to focus), and accessible (ARIA live region).
@@ -76,7 +95,7 @@
 
 - **Pre-commit guardrail in the sweep skill (DONE — skill + CI-on-PR; a git hook is the remaining option).** The skill mandates running `build.py → validate.py → pytest` before committing, and `.github/workflows/ci.yml` now runs that same gate on every `pull_request` (so a PR can't merge red — previously only `push` to `main` was gated, by `deploy-site.yml`). Still worth adding a local `pre-commit` / `pre-push` hook so a future *automated* sweep that commits straight to `main` (bypassing PRs) can't skip the gate either. _(medium · low)_
 - **Add external-link checking to CI.** `tools/check-external-links.py` now exits non-zero on `404 + no Wayback` and ignores localhost/private/test URLs, so it can gate. It's not in `ci.yml` yet because it's network-dependent (flaky in CI) and slow (~1.8s/URL). Options: run it only on advisory files changed in the PR (`git diff --name-only`), nightly, or as a non-blocking annotation. _(medium · medium)_
-- **Trim historical-status advisories from `llms-full.txt` / `llms-ctx.txt` at build time.** The size caps were bumped again (50→64KB / 640→896KB / 96→128KB) but `llms-full.txt` is ~790KB (~200K tokens) and has outgrown "one Claude paste." Real fix: exclude `status: historical` (and maybe `patched` older than N months) from the concatenated files, keeping them in per-page mirrors. Stops the cap-bumping treadmill. _(high · medium)_
+- **~~Trim historical-status advisories from `llms-full.txt` / `llms-ctx.txt` at build time.~~ SUPERSEDED — the fix as written is a no-op.** Verified 2026-08-03: **zero advisories have `status: historical`** (distribution is patched 39 / active 32 / contained 25 / mitigated 6 / ongoing 2 / unconfirmed 2). Excluding `historical` would trim nothing and the next sweep would still fail. Also verified: `llms-ctx.txt` is at **130,989 B against a 131,072 B cap — 83 bytes of headroom**, and grows ~1.2KB per advisory, so the next advisory breaks the deploy. The real fix is a two-tier bounded output (recent N in full + one-line pointers for the rest), which makes the files O(1) rather than O(n) in corpus size. Fully specified in **[plans/2026-08-architecture/05-crawler-policy-and-llms-budget.md](plans/2026-08-architecture/05-crawler-policy-and-llms-budget.md)** — ship that first. _(high · medium)_
 - **Auto-bump (or assert) `README.md` "Last full sweep".** It drifts behind `ALERTS.md` "Last refreshed" because daily sweeps don't touch it (was 2026-06-12 while ALERTS said 2026-06-19). Either derive it in `build.py` or add a `validate.py` check that the two dates match. _(medium · low)_
 - **Author the playbooks the sweeps keep wanting.** Broken links pointed at non-existent playbooks that are clearly desired by advisory authors — write them and re-point: `playbooks/if-you-ran-malicious-postinstall.md` (referenced 4×: postinstall/build-script credential theft), `playbooks/if-your-local-ai-agent-was-exploited.md` (Cline/OpenCode-class 1-click RCE), `playbooks/if-your-webapp-was-compromised.md` (RCE in a deployed app), `playbooks/if-you-ran-an-unpatched-ai-framework.md` (Langflow/LiteLLM-class — rotate every brokered provider key). _(medium · medium)_
 - **`prevention/prompt-injection-defense.md` — the biggest prevention gap.** ~8 advisories are injection-class (InversePrompt, Comment-and-Control, CurXecute/MCPoison, Agentjacking, TrapDoor, ClawHavoc, PromptSnatcher) but there's no prevention doc. Cover: lethal-trifecta framing, "two parsers one string" class, agent-config files as a *write*-target (grep `.cursorrules`/`CLAUDE.md`/`AGENTS.md`/`SKILL.md`/`.github/copilot-instructions.md` for zero-width/bidi/variation-selector Unicode and diff on every dep change), MCP tool-description/tool-definition poisoning, and the CSA "Agent Context Poisoning: SKILL.md" note. _(high · medium)_
