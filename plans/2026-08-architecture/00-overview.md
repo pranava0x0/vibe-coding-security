@@ -59,12 +59,21 @@ laptops every day (`--dangerously-skip-permissions`, creds in env, full network)
 
 | Order | Spec | Why first/later | Effort |
 |---|---|---|---|
+| **0** | **05 §2 llms.txt size budget** | **Time-critical — see below** | **M** |
 | 1 | 01 taxonomy + anti-patterns doc | Unblocks everything; pure content + schema | M |
 | 2 | 02 data flow (structured IOC frontmatter) | Already top of BACKLOG; enabler for feeds/OSV | M |
 | 3 | 03 build modularization | Do before adding more emitters | M |
-| 4 | 05 robots/llms contract | Small, high leverage, mostly config + tests | S |
+| 4 | 05 §1/§3 robots contract + discovery | Small, high leverage, mostly config + tests | S |
 | 5 | 06 STE style guide + linter | Content debt grows daily; start the ratchet early | S–M |
 | 6 | 04 search + SEO | Biggest UI lift; depends on 02/03 | M–L |
+
+> ⚠ **[Spec 05](05-robots-llms-scraping.md) §2 jumps the queue.** Measured 2026-08-03
+> on `d32a766`: `llms.txt` is at 97.4% of cap and `llms-full.txt` at 97.2%, with a
+> measured marginal cost of 449 B and 7,149 B per new advisory. At the stated ~15
+> advisories/month that is **~9 days of headroom each** before CI fails and the deploy
+> blocks. The 2026-07-14/17/29 age-trim lowered the slope but left it positive; the
+> count-bounded fix in §2 is what makes these files O(1) in corpus size. The rest of
+> Spec 05 (crawler allowlist, discovery) stays at its original position.
 
 ## Non-goals (unchanged from BACKLOG "Considered but not doing")
 
