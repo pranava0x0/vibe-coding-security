@@ -2,7 +2,7 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-08-02. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-08-03. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
@@ -344,10 +344,6 @@ A compromised npm contributor access token let attackers publish malicious versi
 StepSecurity and Snyk flagged a new wave of the Miasma / Shai-Hulud worm lineage on **2026-06-03**, using **`binding.gyp` / node-gyp** (rather than `preinstall`/`postinstall` lifecycle hooks) to execute malicious code at install time — a technique StepSecurity named **"Phantom Gyp."** Snyk tracks it as *Node-gyp Supply Chain Compromise June 2026*: **57 packages / 286+ malicious versions**, with **`@vapi-ai/server-sdk` (408K+ monthly downloads)** as the highest-profile victim. The worm also **forges SLSA v1 provenance attestations** on repackaged packages — a green provenance badge is not safety. **`--ignore-scripts` alone does NOT block this** — the binding.gyp native-build step runs regardless. Fourth copycat wave of the open-sourced Mini Shai-Hulud worm.
 → [advisories/2026-06-phantom-gyp-miasma-wave4.md](advisories/2026-06-phantom-gyp-miasma-wave4.md)
 
-### 2026-06-01 — Cline CVE-2026-44211 — cross-origin WebSocket hijack → 1-click RCE (CVSS 9.7)
-**CVE-2026-44211** (CVSS 9.7) — **Cline** (the VS Code AI coding agent, widely used for Claude/GPT-4 coding assistance) starts a WebSocket server on **port 3484 with no authentication and no origin validation**. Any webpage the developer visits can connect and issue arbitrary shell commands. Affects **Cline ≤ 2.13.0**. Same "localhost is not a security boundary" root cause as OpenClaw CVE-2026-25253, OpenCode CVE-2026-22812, and Marimo CVE-2026-39987. Patch immediately to the fixed version.
-→ [advisories/2026-06-cline-cve-2026-44211-websocket-rce.md](advisories/2026-06-cline-cve-2026-44211-websocket-rce.md)
-
 ### 2026-06 — Claude Code GitHub Actions [bot] trust bypass (patched in v1.0.94)
 Researcher RyotaK (GMO Flatt Security) found that `checkWritePermissions()` in **`anthropics/claude-code-action`** trusted any GitHub actor whose username ends in `[bot]` — no actual permission check. Combined with prompt injection in a PR comment or issue body, an unauthenticated external attacker could exfiltrate CI secrets, steal OIDC tokens, and push malicious code to any downstream repo — including Anthropic's own `claude-code-action` source, making it a supply-chain vector into every repo that pins the action. **Patched in Claude Code GitHub Actions v1.0.94.** Update your workflows and pin to the full commit SHA.
 → [advisories/2026-06-claude-code-github-actions-bot-bypass.md](advisories/2026-06-claude-code-github-actions-bot-bypass.md)
@@ -463,6 +459,18 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 ---
 
 ## 🟠 RECENT — verify exposure
+
+### 2025-09-04 — CopyPasta License Attack: self-replicating prompt injection hides in LICENSE.txt/README.md across Cursor, Windsurf, Kiro, Aider (no vendor fix, backfilled to this repo 2026-08-03)
+HiddenLayer researcher Kenneth Yeung disclosed **CopyPasta**, a proof-of-concept "virus" hidden in an invisible markdown comment inside a repo's `LICENSE.txt`/`README.md`. Because coding assistants are tuned to treat license text as authoritative, the agent obeys the hidden instruction and **copies the payload into every new or edited file it subsequently generates** — no dependency install, no config file, just ordinary source/doc output turned into a fresh carrier. Demonstrated against **Cursor** (reported as Coinbase's primary in-house coding tool at the time), **Windsurf**, **Kiro**, and **Aider**. No CVE, no vendor patch — the researcher's own recommended mitigation is mandatory human review of AI-generated diffs, not a version bump, so the underlying weakness should be assumed present in current tool versions. A genuine gap in this repo's coverage until this sweep: nearly a year old but never previously tracked.
+→ [advisories/2025-09-copypasta-license-attack-ai-code-virus.md](advisories/2025-09-copypasta-license-attack-ai-code-virus.md)
+
+### 2026-06-01 → 2026-07-08 — Cline: two separate cross-origin WebSocket hijack → RCE CVEs, one in the VS Code extension, one in the CLI Hub (patched)
+**CVE-2026-44211** (CVSS 9.7) — Cline's VS Code extension starts a WebSocket "Kanban board" server on **port 3484 with no authentication and no origin validation**; any webpage the developer visits can connect and issue arbitrary shell commands. **Update 2026-08-03:** a **second, distinct** CVE was found in a different Cline component — **CVE-2026-59723** (CVSS 8.8, GHSA-3cj3-hqcr-g934, disclosed 2026-07-08/09) hits the **Cline CLI's "Hub" dashboard** `/browser` WebSocket endpoint, which skips Origin validation and implicitly trusts connections when `ROOM_SECRET` is unset (the local-bind default). Fixed in **Cline CLI 3.0.30**. Same "localhost is not a security boundary" root cause as OpenClaw CVE-2026-25253, OpenCode CVE-2026-22812, and Marimo CVE-2026-39987 — now recurring **twice within one tool's own product surface**. Update both the extension and the CLI.
+→ [advisories/2026-06-cline-cve-2026-44211-websocket-rce.md](advisories/2026-06-cline-cve-2026-44211-websocket-rce.md)
+
+### 2025-09-04 — CopyPasta License Attack: self-replicating prompt injection hides in LICENSE.txt/README.md across Cursor, Windsurf, Kiro, Aider (no vendor fix, backfilled to this repo 2026-08-03)
+HiddenLayer researcher Kenneth Yeung disclosed **CopyPasta**, a proof-of-concept "virus" hidden in an invisible markdown comment inside a repo's `LICENSE.txt`/`README.md`. Because coding assistants are tuned to treat license text as authoritative, the agent obeys the hidden instruction and **copies the payload into every new or edited file it subsequently generates** — no dependency install, no config file, just ordinary source/doc output turned into a fresh carrier. Demonstrated against **Cursor** (reported as Coinbase's primary in-house coding tool at the time), **Windsurf**, **Kiro**, and **Aider**. No CVE, no vendor patch — the researcher's own recommended mitigation is mandatory human review of AI-generated diffs, not a version bump, so the underlying weakness should be assumed present in current tool versions. A genuine gap in this repo's coverage until this sweep: nearly a year old but never previously tracked.
+→ [advisories/2025-09-copypasta-license-attack-ai-code-virus.md](advisories/2025-09-copypasta-license-attack-ai-code-virus.md)
 
 ### 2026-05-06 — ZiChatBot: 3 trojanized PyPI packages use the Zulip chat API as C2, suspected OceanLotus/APT32 (contained)
 Kaspersky disclosed **ZiChatBot**: a backdoor hidden in three typosquatted PyPI packages (`uuid32-utils`, `colorinal`, `termncolor`, ~2,480 combined downloads) uploaded in July 2025 and undetected for nearly ten months. Instead of a dedicated C2 server, the payload authenticates to the public team-chat platform **Zulip** (`helper.zulipchat.com`) and relays commands/exfil over its REST API — the same "trusted chat platform as C2" pattern already tracked in [Operation Navy Ghost's Telegram-as-C2](advisories/2026-06-operation-navy-ghost-pyrogram.md), now confirmed generalizing to a second messaging platform. Kaspersky's KTAE engine found 64% dropper-code similarity to a previously attributed OceanLotus/APT32 sample but calls the attribution unconfirmed. Zulip has deactivated the abused organization; no confirmed infections reported despite the long dwell time.

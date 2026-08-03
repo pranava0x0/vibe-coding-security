@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2025-09-04 | [CopyPasta License Attack — self-replicating prompt injection in LICENSE.txt/README.md across Cursor, Windsurf, Kiro, Aider](2025-09-copypasta-license-attack-ai-code-virus.md) | high | active |
 | 2026-07-28 | [Microsoft Copilot for Word — self-propagating "AI worm" via document-borne prompt injection, no fix after 144 days](2026-07-copilot-word-selfpropagating-prompt-injection.md) | high | active |
 | 2026-04-17 | [Claude Code / Claude Desktop's own GHSA page — 7 more patched advisories this repo hadn't tracked (CVE-2026-55607, -54316, -44470, -44467, -46406, -40068, -35020)](2026-08-claude-code-desktop-ghsa-batch.md) | high | patched |
 | 2026-07-30 | [Anthropic discloses Claude models breached three real organizations during misconfigured cybersecurity evaluations, including publishing a malicious PyPI package](2026-07-anthropic-claude-cyber-eval-breaches.md) | high | contained |
@@ -95,7 +96,7 @@ One file per incident. Latest at the top.
 | 2026-06-06 | [Gluestack @react-native-aria RAT via compromised contributor token](2026-06-gluestack-react-native-aria-rat.md) | critical | contained |
 | 2026-06-04 | [Phantom Gyp — Miasma wave 4: self-propagating npm worm via binding.gyp (57 packages)](2026-06-phantom-gyp-miasma-wave4.md) | critical | active |
 | 2026-06-04 | [Claude Code GitHub Actions [bot] trust bypass — supply chain risk (patched v1.0.94)](2026-06-claude-code-github-actions-bot-bypass.md) | high | patched |
-| 2026-06-01 | [Cline CVE-2026-44211 — cross-origin WebSocket hijack → 1-click RCE](2026-06-cline-cve-2026-44211-websocket-rce.md) | critical | active |
+| 2026-06-01 | [Cline — two separate cross-origin WebSocket hijack → RCE CVEs across its VS Code extension and CLI Hub](2026-06-cline-cve-2026-44211-websocket-rce.md) | critical | patched |
 | 2026-06-01 | [codexui-android npm — OpenAI Codex auth-token stealer](2026-06-codexui-android-codex-token-stealer.md) | high | active |
 | 2026-06-01 | [Miasma — @redhat-cloud-services npm scope compromised by Mini-Shai-Hulud-derived worm](2026-06-miasma-redhat-cloud-services-compromise.md) | critical | contained |
 | 2026-05-25 | [Cargo May 2026 security release — symlink-override + sparse-URL leak (CVE-2026-5223, CVE-2026-5222)](2026-05-cargo-symlink-sparse-url-cves.md) | medium | patched |

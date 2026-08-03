@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "last_updated": "2026-08-02",
-  "notes": "Sweep on 2026-08-01 found no new incident-worthy campaigns via the standard Tier-A/B/C rotation (most leads \u2014 AsyncAPI/Miasma, TanStack, node-ipc, npm v12 shipping, Shai-Hulud 2.0 (confirmed same campaign as the already-tracked Nov 2025 'second coming'), n8n Ni8mare, Semantic Kernel, Amazon Q MCP, OpenClaw Claw Chain, LiteLLM CVSS-9.9 chain, Langflow CVEs \u2014 were already tracked). Instead, applying this repo's 'walk the vendor's own GHSA index directly' discipline (established 2026-07-18 for Cursor) to Claude Code's own github.com/anthropics/claude-code/security/advisories page found a real, previously-untracked gap: 7 already-patched CVEs from April-June 2026 (CVE-2026-55607 sandbox escape via git worktree path confusion, CVE-2026-54316 WebFetch HuggingFace-domain exfil, CVE-2026-44470 CoworkVMService directory-junction LPE to SYSTEM on Windows, CVE-2026-44467 SSH host-key verification bypass MITM, CVE-2026-46406 /copy command insecure temp file, CVE-2026-40068 trust-dialog bypass via git worktree spoofing, CVE-2026-35020 TERMINAL env-var command injection) written up as 2026-08-claude-code-desktop-ghsa-batch.md. Also folded a 4th CVE (CVE-2026-4269, Starter Toolkit S3 ownership-confusion build-time code injection, published back in March 2026 but never added) into the existing AWS Bedrock AgentCore cluster advisory. Both verified via the GHSA/GitHub advisory page directly plus an independent NVD fetch for the higher-severity entries. Investigated and declined: a March 2026 'Pyronut' PyPI Telegram-bot backdoor (Endor Labs) using the same pyrogram/helpers/secret.py technique as the already-tracked Operation Navy Ghost campaign but from a different actor/command set and caught within hours (3 versions) -- old, low-impact, not written up; a Medium-blog claim of 'CVE-2026-2978 FastAPI RCE' that NVD confirms is actually a FastApiAdmin (different product) file-upload bug -- correctly not written up as a FastAPI (the framework) vulnerability, flagged here as a caution against blog-sourced CVE claims that conflate similarly-named products; and the April 2026 Xinference/CanisterSprawl TeamPCP-family npm/PyPI incidents, both already 3+ months stale and well within this repo's extensive existing TeamPCP coverage.",
+  "last_updated": "2026-08-03",
+  "notes": "Sweep on 2026-08-03 backfilled a genuine ~11-month coverage gap: CopyPasta License Attack (HiddenLayer, disclosed 2025-09-04) -- a self-replicating prompt-injection virus hidden in LICENSE.txt/README.md markdown comments, demonstrated against Cursor, Windsurf, Kiro, and Aider, no CVE/no vendor patch. Also found and folded in a second, distinct Cline CVE (CVE-2026-59723, Cline CLI Hub dashboard WebSocket, disclosed 2026-07-08/09, fixed 3.0.30) into the existing Cline CVE-2026-44211 advisory -- same missing-Origin-validation root cause recurring in a second Cline component. Extensive re-verification of the standard Tier-A/B/C rotation (npm/PyPI/Crates.io supply chain, MCP, Cursor/Claude Code/OpenClaw/aider/OpenHands/SWE-agent CVEs, Next.js/React/Svelte/Vite/Shadcn/Tailwind, Supabase/Prisma/NextAuth/FastAPI/Streamlit/Google AI Studio SDK, n8n/Zapier/Pipedream/Composio, industry-vendor blogs, social/Substack/HN) found everything else already tracked -- confirms this repo's daily-sweep cadence is keeping current; the two genuine finds both came from directly reading a primary research writeup (HiddenLayer) and a vendor's own GHSA page (GitHub) rather than the aggregator search rotation, reinforcing the standing 'read primary sources directly' practice.",
   "sources": {
     "socket.dev": {
       "weight": 20,
@@ -133,8 +133,8 @@
     },
     "thehackernews.com": {
       "weight": 20,
-      "hits": 69,
-      "last_hit": "2026-07-31",
+      "hits": 70,
+      "last_hit": "2026-08-03",
       "ecosystems": [
         "agentforger",
         "ai-agents",
@@ -153,6 +153,7 @@
         "claudebleed-reopened",
         "clawhub",
         "cline",
+        "cline-cve-59723",
         "codexui-android",
         "copilot",
         "cordyceps",
@@ -627,6 +628,34 @@
       "tier": "official",
       "_added": "2026-05-18"
     },
+    "sentinelone.com": {
+      "weight": 20,
+      "hits": 13,
+      "last_hit": "2026-08-03",
+      "ecosystems": [
+        "aws-mcp",
+        "claude-code",
+        "cline-cve-59723",
+        "cursor",
+        "cve-2026-35020",
+        "cve-2026-39363",
+        "cve-2026-44211",
+        "cve-22812",
+        "cve-22813",
+        "cve-41265",
+        "cve-db",
+        "cve-official",
+        "flowise",
+        "langflow-cve-0770",
+        "mcp",
+        "n8n-mcp",
+        "opencode",
+        "openhands",
+        "supabase",
+        "vite"
+      ],
+      "tier": "research"
+    },
     "microsoft.com": {
       "weight": 19,
       "hits": 6,
@@ -674,32 +703,6 @@
         "shai-hulud-copycat",
         "vercel",
         "windsurf"
-      ],
-      "tier": "research"
-    },
-    "sentinelone.com": {
-      "weight": 19,
-      "hits": 12,
-      "last_hit": "2026-08-01",
-      "ecosystems": [
-        "aws-mcp",
-        "claude-code",
-        "cursor",
-        "cve-2026-35020",
-        "cve-2026-39363",
-        "cve-22812",
-        "cve-22813",
-        "cve-41265",
-        "cve-db",
-        "cve-official",
-        "flowise",
-        "langflow-cve-0770",
-        "mcp",
-        "n8n-mcp",
-        "opencode",
-        "openhands",
-        "supabase",
-        "vite"
       ],
       "tier": "research"
     },
@@ -1178,6 +1181,23 @@
       "tier": "aggregator",
       "_added": "2026-05-19"
     },
+    "github.com": {
+      "weight": 12,
+      "hits": 8,
+      "last_hit": "2026-08-03",
+      "ecosystems": [
+        "anthropics-claude-code",
+        "claude-code-security-advisories",
+        "cline-cve-59723-ghsa",
+        "cursor",
+        "ghsa",
+        "langflow-cve-0770",
+        "n8n-july22-batch",
+        "nextauthjs",
+        "nextjs-ghsa"
+      ],
+      "tier": "independent"
+    },
     "venturebeat.com": {
       "weight": 11,
       "hits": 4,
@@ -1458,22 +1478,6 @@
       ],
       "tier": "vendor",
       "_added": "2026-06-30"
-    },
-    "github.com": {
-      "weight": 11,
-      "hits": 7,
-      "last_hit": "2026-08-01",
-      "ecosystems": [
-        "anthropics-claude-code",
-        "claude-code-security-advisories",
-        "cursor",
-        "ghsa",
-        "langflow-cve-0770",
-        "n8n-july22-batch",
-        "nextauthjs",
-        "nextjs-ghsa"
-      ],
-      "tier": "independent"
     },
     "sophos.com": {
       "weight": 10,
@@ -1797,6 +1801,21 @@
       ],
       "tier": "research"
     },
+    "hiddenlayer.com": {
+      "weight": 10,
+      "hits": 1,
+      "last_hit": "2026-08-03",
+      "ecosystems": [
+        "copypasta",
+        "cursor",
+        "windsurf",
+        "kiro",
+        "aider",
+        "prompt-injection"
+      ],
+      "tier": "research",
+      "_added": "2026-08-03"
+    },
     "policylayer.com": {
       "weight": 9,
       "hits": 1,
@@ -2044,6 +2063,21 @@
         "mcp"
       ],
       "tier": "research",
+      "_added": "2026-07-08"
+    },
+    "gbhackers.com": {
+      "weight": 9,
+      "hits": 5,
+      "last_hit": "2026-08-03",
+      "ecosystems": [
+        "claude-cowork",
+        "fast-mcp-telegram",
+        "mcp",
+        "nextjs",
+        "payment-sdk-typosquat",
+        "cline-cve-59723"
+      ],
+      "tier": "aggregator",
       "_added": "2026-07-08"
     },
     "expel.com": {
@@ -2434,20 +2468,6 @@
       ],
       "tier": "aggregator"
     },
-    "gbhackers.com": {
-      "weight": 8,
-      "hits": 4,
-      "last_hit": "2026-07-21",
-      "ecosystems": [
-        "claude-cowork",
-        "fast-mcp-telegram",
-        "mcp",
-        "nextjs",
-        "payment-sdk-typosquat"
-      ],
-      "tier": "aggregator",
-      "_added": "2026-07-08"
-    },
     "msrc.microsoft.com": {
       "weight": 8,
       "hits": 1,
@@ -2807,6 +2827,18 @@
       ],
       "tier": "vendor"
     },
+    "decrypt.co": {
+      "weight": 7,
+      "hits": 3,
+      "last_hit": "2026-08-03",
+      "ecosystems": [
+        "claude-code",
+        "npm-worm",
+        "shai-hulud",
+        "copypasta"
+      ],
+      "tier": "aggregator"
+    },
     "qualysec.com": {
       "weight": 6,
       "hits": 1,
@@ -3140,17 +3172,6 @@
       "tier": "research",
       "_added": "2026-05-30"
     },
-    "decrypt.co": {
-      "weight": 6,
-      "hits": 2,
-      "last_hit": "2026-07-17",
-      "ecosystems": [
-        "claude-code",
-        "npm-worm",
-        "shai-hulud"
-      ],
-      "tier": "aggregator"
-    },
     "manifold.security": {
       "weight": 6,
       "hits": 2,
@@ -3247,6 +3268,17 @@
         "copilot-word-worm"
       ],
       "tier": "vendor"
+    },
+    "coindesk.com": {
+      "weight": 6,
+      "hits": 1,
+      "last_hit": "2026-08-03",
+      "ecosystems": [
+        "copypasta",
+        "cursor"
+      ],
+      "tier": "aggregator",
+      "_added": "2026-08-03"
     },
     "waxell.ai": {
       "weight": 5,
