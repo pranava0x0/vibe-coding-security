@@ -4,6 +4,9 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-08-04 | [keyv/cacheable npm worm — Shai-Hulud-lineage credential stealer plants Claude Code + VS Code auto-run hooks](2026-08-keyv-mini-shai-hulud-npm-worm.md) | critical | active |
+| 2025-12-27 | [ShadowPrompt — zero-click prompt injection via Claude's Chrome extension, any website could hijack it](2025-12-shadowprompt-claude-chrome-extension.md) | high | patched |
+| 2026-03-04 | [GitHub.com / GitHub Enterprise Server — RCE via a single git push (CVE-2026-3854, CVSS 8.7)](2026-04-github-git-push-injection-rce.md) | critical | patched |
 | 2025-09-04 | [CopyPasta License Attack — self-replicating prompt injection in LICENSE.txt/README.md across Cursor, Windsurf, Kiro, Aider](2025-09-copypasta-license-attack-ai-code-virus.md) | high | active |
 | 2026-07-28 | [Microsoft Copilot for Word — self-propagating "AI worm" via document-borne prompt injection, no fix after 144 days](2026-07-copilot-word-selfpropagating-prompt-injection.md) | high | active |
 | 2026-04-17 | [Claude Code / Claude Desktop's own GHSA page — 7 more patched advisories this repo hadn't tracked (CVE-2026-55607, -54316, -44470, -44467, -46406, -40068, -35020)](2026-08-claude-code-desktop-ghsa-batch.md) | high | patched |

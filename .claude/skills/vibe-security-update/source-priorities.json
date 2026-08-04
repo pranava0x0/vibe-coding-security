@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-08-03",
+  "last_updated": "2026-08-04",
   "notes": "Sweep on 2026-08-03 backfilled a genuine ~11-month coverage gap: CopyPasta License Attack (HiddenLayer, disclosed 2025-09-04) -- a self-replicating prompt-injection virus hidden in LICENSE.txt/README.md markdown comments, demonstrated against Cursor, Windsurf, Kiro, and Aider, no CVE/no vendor patch. Also found and folded in a second, distinct Cline CVE (CVE-2026-59723, Cline CLI Hub dashboard WebSocket, disclosed 2026-07-08/09, fixed 3.0.30) into the existing Cline CVE-2026-44211 advisory -- same missing-Origin-validation root cause recurring in a second Cline component. Extensive re-verification of the standard Tier-A/B/C rotation (npm/PyPI/Crates.io supply chain, MCP, Cursor/Claude Code/OpenClaw/aider/OpenHands/SWE-agent CVEs, Next.js/React/Svelte/Vite/Shadcn/Tailwind, Supabase/Prisma/NextAuth/FastAPI/Streamlit/Google AI Studio SDK, n8n/Zapier/Pipedream/Composio, industry-vendor blogs, social/Substack/HN) found everything else already tracked -- confirms this repo's daily-sweep cadence is keeping current; the two genuine finds both came from directly reading a primary research writeup (HiddenLayer) and a vendor's own GHSA page (GitHub) rather than the aggregator search rotation, reinforcing the standing 'read primary sources directly' practice.",
   "sources": {
     "socket.dev": {
@@ -104,8 +104,8 @@
     },
     "aikido.dev": {
       "weight": 20,
-      "hits": 15,
-      "last_hit": "2026-07-04",
+      "hits": 16,
+      "last_hit": "2026-08-04",
       "ecosystems": [
         "antv",
         "codexui-android",
@@ -133,8 +133,8 @@
     },
     "thehackernews.com": {
       "weight": 20,
-      "hits": 70,
-      "last_hit": "2026-08-03",
+      "hits": 71,
+      "last_hit": "2026-08-04",
       "ecosystems": [
         "agentforger",
         "ai-agents",
@@ -581,8 +581,8 @@
     },
     "wiz.io": {
       "weight": 20,
-      "hits": 10,
-      "last_hit": "2026-07-15",
+      "hits": 11,
+      "last_hit": "2026-08-04",
       "ecosystems": [
         "asyncapi-miasma",
         "base44-wiz",
@@ -983,6 +983,33 @@
       "tier": "aggregator",
       "_added": "2026-05-18"
     },
+    "socradar.io": {
+      "weight": 13,
+      "hits": 6,
+      "last_hit": "2026-08-04",
+      "ecosystems": [
+        "copilot-patch-tuesday",
+        "cursor",
+        "cve-2026-41106",
+        "cve-25253",
+        "langchain",
+        "npm",
+        "openclaw"
+      ],
+      "tier": "research"
+    },
+    "orca.security": {
+      "weight": 13,
+      "hits": 5,
+      "last_hit": "2026-08-04",
+      "ecosystems": [
+        "npm",
+        "pypi",
+        "miasma",
+        "redhat"
+      ],
+      "tier": "research"
+    },
     "reversinglabs.com": {
       "weight": 12,
       "hits": 2,
@@ -1139,33 +1166,6 @@
       "tier": "research",
       "_added": "2026-05-18"
     },
-    "socradar.io": {
-      "weight": 12,
-      "hits": 5,
-      "last_hit": "2026-07-21",
-      "ecosystems": [
-        "copilot-patch-tuesday",
-        "cursor",
-        "cve-2026-41106",
-        "cve-25253",
-        "langchain",
-        "npm",
-        "openclaw"
-      ],
-      "tier": "research"
-    },
-    "orca.security": {
-      "weight": 12,
-      "hits": 4,
-      "last_hit": "2026-07-29",
-      "ecosystems": [
-        "npm",
-        "pypi",
-        "miasma",
-        "redhat"
-      ],
-      "tier": "research"
-    },
     "techcrunch.com": {
       "weight": 12,
       "hits": 5,
@@ -1197,6 +1197,27 @@
         "nextjs-ghsa"
       ],
       "tier": "independent"
+    },
+    "koi.ai": {
+      "weight": 12,
+      "hits": 6,
+      "last_hit": "2026-08-04",
+      "ecosystems": [
+        "mcp",
+        "clawhub",
+        "openclaw",
+        "atomic-stealer",
+        "vscode",
+        "openvsx",
+        "cursor",
+        "windsurf",
+        "whitecobra",
+        "lummastealer",
+        "open-sesame",
+        "glassworm-macos",
+        "hardware-wallet-trojan"
+      ],
+      "tier": "research"
     },
     "venturebeat.com": {
       "weight": 11,
@@ -1280,27 +1301,6 @@
         "github",
         "vscode",
         "shai-hulud-3"
-      ],
-      "tier": "research"
-    },
-    "koi.ai": {
-      "weight": 11,
-      "hits": 5,
-      "last_hit": "2026-06-12",
-      "ecosystems": [
-        "mcp",
-        "clawhub",
-        "openclaw",
-        "atomic-stealer",
-        "vscode",
-        "openvsx",
-        "cursor",
-        "windsurf",
-        "whitecobra",
-        "lummastealer",
-        "open-sesame",
-        "glassworm-macos",
-        "hardware-wallet-trojan"
       ],
       "tier": "research"
     },
