@@ -734,9 +734,14 @@ def build_llms_txt(pages: list[Page], full_bytes: int | None = None, ctx_bytes: 
         # advisories pushed the index past the 80KB cap again.
         # 2026-08-03: tightened from 88 to 75 chars — 1 new advisory + 1
         # updated advisory pushed the index 1 byte past the 80KB cap again.
+        # 2026-08-05: tightened from 75 to 65 chars — 2 new advisories pushed
+        # the index 174 bytes past the 80KB cap again. This per-entry-char-trim
+        # approach is a stopgap; spec 05 (plans/2026-08-architecture/
+        # 05-robots-llms-scraping.md) proposes a count-bounded two-tier
+        # replacement that hasn't been implemented yet — see BACKLOG.md.
         desc = p.description
-        if len(desc) > 75:
-            desc = desc[:74].rsplit(" ", 1)[0] + "…"
+        if len(desc) > 65:
+            desc = desc[:64].rsplit(" ", 1)[0] + "…"
         lines.append(
             f"- [{p.title}]({_page_html_url(p)}) ([md]({_page_md_url(p)})){meta}: {desc}"
         )

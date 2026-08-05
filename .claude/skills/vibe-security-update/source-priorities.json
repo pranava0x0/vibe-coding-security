@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-08-04",
+  "last_updated": "2026-08-05",
   "notes": "Sweep on 2026-08-03 backfilled a genuine ~11-month coverage gap: CopyPasta License Attack (HiddenLayer, disclosed 2025-09-04) -- a self-replicating prompt-injection virus hidden in LICENSE.txt/README.md markdown comments, demonstrated against Cursor, Windsurf, Kiro, and Aider, no CVE/no vendor patch. Also found and folded in a second, distinct Cline CVE (CVE-2026-59723, Cline CLI Hub dashboard WebSocket, disclosed 2026-07-08/09, fixed 3.0.30) into the existing Cline CVE-2026-44211 advisory -- same missing-Origin-validation root cause recurring in a second Cline component. Extensive re-verification of the standard Tier-A/B/C rotation (npm/PyPI/Crates.io supply chain, MCP, Cursor/Claude Code/OpenClaw/aider/OpenHands/SWE-agent CVEs, Next.js/React/Svelte/Vite/Shadcn/Tailwind, Supabase/Prisma/NextAuth/FastAPI/Streamlit/Google AI Studio SDK, n8n/Zapier/Pipedream/Composio, industry-vendor blogs, social/Substack/HN) found everything else already tracked -- confirms this repo's daily-sweep cadence is keeping current; the two genuine finds both came from directly reading a primary research writeup (HiddenLayer) and a vendor's own GHSA page (GitHub) rather than the aggregator search rotation, reinforcing the standing 'read primary sources directly' practice.",
   "sources": {
     "socket.dev": {
@@ -133,8 +133,8 @@
     },
     "thehackernews.com": {
       "weight": 20,
-      "hits": 71,
-      "last_hit": "2026-08-04",
+      "hits": 72,
+      "last_hit": "2026-08-05",
       "ecosystems": [
         "agentforger",
         "ai-agents",
@@ -167,6 +167,7 @@
         "friendly-fire",
         "ghostapproval",
         "github",
+        "github-codespaces",
         "gitlost",
         "glassworm",
         "glassworm-macos",
@@ -219,6 +220,7 @@
         "react2shell",
         "redhat",
         "rogue-agent",
+        "roguepilot",
         "rollup-polyfill-lazarus",
         "sandworm-mode",
         "searchleak",
@@ -280,8 +282,8 @@
     },
     "securityweek.com": {
       "weight": 20,
-      "hits": 37,
-      "last_hit": "2026-07-29",
+      "hits": 38,
+      "last_hit": "2026-08-05",
       "ecosystems": [
         "agentforger",
         "ai-agents",
@@ -299,6 +301,7 @@
         "cordyceps",
         "dify-difytap",
         "gemini-cli",
+        "github-codespaces",
         "gluestack",
         "hades",
         "hallusquatting",
@@ -325,6 +328,7 @@
         "pcpjack",
         "praisonai",
         "react-native-aria",
+        "roguepilot",
         "salesforce",
         "salesloft-drift-oauth",
         "sandbox",
@@ -459,9 +463,10 @@
     },
     "github.com/advisories": {
       "weight": 20,
-      "hits": 22,
-      "last_hit": "2026-08-01",
+      "hits": 23,
+      "last_hit": "2026-08-05",
       "ecosystems": [
+        "adx-mcp-server",
         "aws-mcp-server",
         "axios",
         "azure",
@@ -472,6 +477,7 @@
         "claude-code",
         "claude-code-ghsa-batch",
         "cursor",
+        "cve-2026-33980",
         "cve-2026-39363",
         "cve-2026-39364",
         "cve-2026-42573",
@@ -480,6 +486,7 @@
         "fast-mcp-telegram",
         "ghsa-3645-fxcv-hqr4",
         "ghsa-7p73",
+        "ghsa-vphc-468g-8rfp",
         "hashicorp-consul-mcp",
         "javascript",
         "langchain",
@@ -630,13 +637,16 @@
     },
     "sentinelone.com": {
       "weight": 20,
-      "hits": 13,
-      "last_hit": "2026-08-03",
+      "hits": 14,
+      "last_hit": "2026-08-05",
       "ecosystems": [
+        "adx-mcp-server",
         "aws-mcp",
+        "azure-mcp",
         "claude-code",
         "cline-cve-59723",
         "cursor",
+        "cve-2026-33980",
         "cve-2026-35020",
         "cve-2026-39363",
         "cve-2026-44211",
@@ -999,14 +1009,17 @@
       "tier": "research"
     },
     "orca.security": {
-      "weight": 13,
-      "hits": 5,
-      "last_hit": "2026-08-04",
+      "weight": 14,
+      "hits": 6,
+      "last_hit": "2026-08-05",
       "ecosystems": [
+        "copilot",
+        "github-codespaces",
+        "miasma",
         "npm",
         "pypi",
-        "miasma",
-        "redhat"
+        "redhat",
+        "roguepilot"
       ],
       "tier": "research"
     },
@@ -1765,16 +1778,19 @@
       "tier": "research"
     },
     "endorlabs.com": {
-      "weight": 10,
-      "hits": 4,
-      "last_hit": "2026-07-29",
+      "weight": 11,
+      "hits": 5,
+      "last_hit": "2026-08-05",
       "ecosystems": [
-        "nextjs",
-        "react",
-        "nginx-ui",
-        "mcp",
         "bitwarden",
-        "npm"
+        "mcp",
+        "nextjs",
+        "nginx-ui",
+        "npm",
+        "pypi",
+        "pyronut",
+        "react",
+        "telegram-bot"
       ],
       "tier": "research",
       "_added": "2026-05-18"
@@ -4215,6 +4231,48 @@
         "claude-code"
       ],
       "tier": "independent"
+    },
+    "aisi.gov.uk": {
+      "weight": 5,
+      "hits": 1,
+      "last_hit": "2026-08-05",
+      "ecosystems": [
+        "ai-agent",
+        "anthropic",
+        "openai",
+        "aisi"
+      ],
+      "tier": "official"
+    },
+    "ibtimes.co.uk": {
+      "weight": 5,
+      "hits": 1,
+      "last_hit": "2026-08-05",
+      "ecosystems": [
+        "ai-agent",
+        "aisi"
+      ],
+      "tier": "aggregator"
+    },
+    "cnn.com": {
+      "weight": 5,
+      "hits": 1,
+      "last_hit": "2026-08-05",
+      "ecosystems": [
+        "ai-agent",
+        "aisi"
+      ],
+      "tier": "aggregator"
+    },
+    "benzinga.com": {
+      "weight": 5,
+      "hits": 1,
+      "last_hit": "2026-08-05",
+      "ecosystems": [
+        "ai-agent",
+        "aisi"
+      ],
+      "tier": "aggregator"
     }
   }
 }

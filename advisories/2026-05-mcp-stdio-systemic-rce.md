@@ -2,7 +2,7 @@
 id: 2026-05-mcp-stdio-systemic-rce
 title: "Systemic MCP stdio RCE class — 200,000+ servers exposed (May 2026)"
 date_disclosed: 2026-05
-last_updated: 2026-08-02
+last_updated: 2026-08-05
 severity: high
 status: mitigated
 ecosystems: [mcp, anthropic-mcp]
@@ -29,6 +29,8 @@ Three database-targeting MCPs were also disclosed by the same researcher on **20
 Microsoft's own MCP server has now had **two** disclosures in this class:
 - **CVE-2026-26118** — Server-Side Request Forgery in Azure MCP Server letting an authorized attacker elevate privileges over the network (patched in the March 2026 update).
 - **CVE-2026-32211 (CVSS 9.1)** — **missing authentication** on a critical Azure MCP Server function: any unauthenticated network-reachable attacker can read sensitive data (config, API keys, auth tokens, project data). Published 2026-04-03; at disclosure **no patch** was available, only network-control mitigation. Same root failure as nginx-ui MCPwn — an MCP surface trusted by default.
+
+**Update 2026-08-05 — a third "Azure + MCP" CVE, but a different (community) project this time:** **CVE-2026-33980 / GHSA-vphc-468g-8rfp (CVSS 8.3)** is a **KQL injection** in `adx-mcp-server` — a **community-maintained** (pab1it0) MCP server for Azure Data Explorer, distinct from Microsoft's own first-party Azure MCP Server covered by the two CVEs above. Three tool handlers (`get_table_schema`, `sample_table_data`, `get_table_details`) build Kusto queries by directly interpolating the caller-supplied `table_name` via Python f-strings, with no validation — letting an attacker, or a prompt-injected AI agent calling the tool, execute arbitrary KQL against the connected Azure Data Explorer cluster. Publicly disclosed 2026-03-27; patched in commit `0abe0ee5`. This reinforces the pattern already tracked here: "cloud-provider MCP" now spans both a vendor's own first-party server and multiple independent community wrappers targeting the same cloud service, each accumulating its own, separate CVE stream — check which one you're running before assuming a vendor patch covers you.
 
 **Named instance — Atlassian `mcp-atlassian` "MCPwnfluence" (CVE-2026-27825 + CVE-2026-27826):** Pluto Security chained two flaws in the most widely used Atlassian MCP server (**4M+ downloads, 4.4K+ stars**) into **unauthenticated RCE as root in two requests**. `mcp-atlassian`'s HTTP transport (`--transport streamable-http`) **defaults to binding `0.0.0.0` with zero authentication**, so anyone who can reach the port can invoke any tool.
 - **CVE-2026-27826 (CVSS 8.2)** — SSRF: middleware honors the `X-Atlassian-Jira-Url` / `X-Atlassian-Confluence-Url` headers without validation, letting an attacker point requests at arbitrary internal destinations.
@@ -133,6 +135,8 @@ OX Security calls this "The Mother of All AI Supply Chains" — making the case 
 - [GitHub Advisory Database — CVE-2026-26118: Azure MCP Server SSRF privilege escalation](https://github.com/advisories/GHSA-hhfx-wfvq-7g9c)
 - [Windows News — CVE-2026-32211: Critical Azure MCP Server Authentication Flaw (CVSS 9.1)](https://windowsnews.ai/article/cve-2026-32211-critical-azure-mcp-server-authentication-flaw-exposes-sensitive-data-cvss-91.409622)
 - [GitLab Advisory Database — CVE-2026-46701: network-ai Unauthenticated Cross-Origin MCP Tool Invocation via Empty Default Secret](https://advisories.gitlab.com/npm/network-ai/CVE-2026-46701/)
+- [GitHub Advisory Database — GHSA-vphc-468g-8rfp: Azure Data Explorer MCP Server KQL Injection (CVE-2026-33980)](https://github.com/advisories/GHSA-vphc-468g-8rfp) — canonical CVE/GHSA pairing, affected tool handlers, patch commit.
+- [SentinelOne — CVE-2026-33980: Azure Data Explorer MCP Server SQLi Flaw](https://www.sentinelone.com/vulnerability-database/cve-2026-33980/) — CVSS score, disclosure date, independent corroboration.
 - [GitHub Advisory Database — CVE-2026-23744: RCE in MCPJam inspector due to exposed HTTP endpoint (GHSA-232v-j27c-5pp6)](https://github.com/advisories/GHSA-232v-j27c-5pp6)
 - [The Vulnerable MCP Project — MCPJam Inspector RCE (CVE-2026-23744)](https://vulnerablemcp.info/vuln/cve-2026-23744-mcpjam-inspector-rce.html) — binds 0.0.0.0, no auth, no user interaction; fixed 1.4.3.
 - [SentinelOne — CVE-2026-5058: aws-mcp-server RCE Vulnerability](https://www.sentinelone.com/vulnerability-database/cve-2026-5058/) — unauthenticated command injection in allowed-commands handling, CVSS 9.8.
