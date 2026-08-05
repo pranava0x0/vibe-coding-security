@@ -2,7 +2,7 @@
 id: 2026-06-operation-navy-ghost-pyrogram
 title: "Operation Navy Ghost — 8 fake pyrogram packages on PyPI target Telegram bot developers with full-server backdoor using Telegram as C2 (Jun 2026)"
 date_disclosed: 2026-06-25
-last_updated: 2026-06-30
+last_updated: 2026-08-05
 severity: high
 status: unconfirmed
 ecosystems: [pypi, python]
@@ -118,6 +118,12 @@ python -c "import pyrogram; import os; print(os.path.join(os.path.dirname(pyrogr
 ## Technique note
 
 The **Telegram-as-C2** pattern is distinct from every other PyPI backdoor tracked in this repo. Prior campaigns exfiltrate to attacker-controlled servers (GitHub Gists, disposable SSH tunnels, Google Calendar dead-drops, AI-vendor API host camouflage). This campaign uses the **victim's own bot token** to relay control through Telegram's infrastructure — which is allowlisted in virtually every corporate egress policy for bot deployments. Network-layer egress monitoring that flags unknown IPs or unexpected domains will not catch this technique.
+
+## Update 2026-08-05 — a second, unrelated Telegram-bot-framework backdoor confirms the caution's own prediction
+
+**Pyronut** (Endor Labs, disclosed 2026-03-18) is a **separate, single-source** incident, not part of Operation Navy Ghost — different package name, different publisher, no shared IOCs with the packages/accounts listed above — but it targets the exact same demographic (developers building Telegram bots on top of `pyrogram`) with a similar impersonation strategy: `pyronut` copies pyrogram's project description and code to look legitimate, then patches the `Client.start()` method to silently import a hidden backdoor module every time a Telegram client starts. Unlike Navy Ghost's install-time-style trojan, Pyronut's payload fires at **runtime**, on every bot startup, and grants two hardcoded attacker Telegram accounts arbitrary Python and shell execution on the host. Endor Labs identified and had the three malicious versions (2.0.184–2.0.186) quarantined the same day they were published, limiting exposure. This repo has not found independent corroboration beyond Endor Labs' own writeup and its direct aggregator mirrors, so treat the specifics as **unconfirmed** pending a second independent source — but the pattern itself (Telegram bot developers on PyPI as a repeat target, C2/persistence riding the developer's own trusted messaging integration) is now observed twice in under a year and matches this advisory's own prediction that the technique would generalize to other Python Telegram bot frameworks.
+
+- [Endor Labs — Malicious 'Pyronut' Package Backdoors Telegram Bots with Remote Code Execution](https://www.endorlabs.com/learn/malicious-pyronut-package-backdoors-telegram-bots-with-remote-code-execution) — sole source for the Pyronut incident; package versions, discovery date, backdoor mechanism.
 
 ## Sources
 
