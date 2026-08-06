@@ -1,18 +1,18 @@
 ---
 id: 2026-08-claude-code-desktop-ghsa-batch
-title: "Claude Code / Claude Desktop's own GHSA index: 7 more advisories (Apr–Jun 2026) this repo hadn't tracked"
-date_disclosed: 2026-04-17
-last_updated: 2026-08-01
+title: "Claude Code / Claude Desktop's own GHSA index: 8 more advisories (Feb–Jun 2026) this repo hadn't tracked"
+date_disclosed: 2026-02-06
+last_updated: 2026-08-06
 severity: high
 status: patched
 ecosystems: [claude-code, claude-desktop, anthropic]
 tools_affected: ["Claude Code CLI / Agent SDK", "Claude Desktop for Windows", "Claude Cowork / CoworkVMService"]
-tags: [sandbox-escape, privilege-escalation, mitm, data-exfiltration, symlink, directory-junction, cve, ghsa, claude-code, claude-desktop]
+tags: [sandbox-escape, privilege-escalation, mitm, data-exfiltration, symlink, directory-junction, command-injection, cve, ghsa, claude-code, claude-desktop]
 ---
 
 ## TL;DR
 
-A direct audit of `github.com/anthropics/claude-code/security/advisories` — the same "walk the vendor's own GHSA index" discipline this repo applied to Cursor on 2026-07-18 — turned up **7 patched CVEs from April–June 2026** that had not surfaced in this repo's prior aggregator-focused sweeps, on top of the already-tracked InversePrompt cluster. All are fixed and most ship automatically via Claude Code's auto-update, but two (**CVE-2026-44470**, **CVE-2026-44467**) affect Claude Desktop for Windows specifically and require a manual update if auto-update is disabled.
+A direct audit of `github.com/anthropics/claude-code/security/advisories` — the same "walk the vendor's own GHSA index" discipline this repo applied to Cursor on 2026-07-18 — turned up **8 patched CVEs from February–June 2026** that had not surfaced in this repo's prior aggregator-focused sweeps, on top of the already-tracked InversePrompt cluster. All are fixed and most ship automatically via Claude Code's auto-update, but two (**CVE-2026-44470**, **CVE-2026-44467**) affect Claude Desktop for Windows specifically and require a manual update if auto-update is disabled.
 
 ## What happened
 
@@ -46,7 +46,13 @@ Folder-trust determination read the git worktree `commondir` file without valida
 
 Claude Code CLI and the Claude Agent SDK for Python built a shell command incorporating the `TERMINAL` environment variable without sanitizing shell metacharacters, executable via normal CLI usage or the deep-link handler, running arbitrary commands under the invoking user's privileges. Affected: Claude Code `<= 2.1.91`, Claude Agent SDK for Python `<= 0.1.55`. Patched: Claude Code **2.1.92**, Claude Agent SDK **0.1.56**.
 
-All seven are distinct from the CVEs already listed in this repo's [Claude Code InversePrompt cluster](2025-08-claude-code-inverseprompt.md) (CVE-2025-54794, CVE-2025-54795, CVE-2025-52882, CVE-2025-59536, CVE-2026-21852, CVE-2026-33068, CVE-2026-24887, CVE-2026-35021, CVE-2026-39861, CVE-2026-35603, CVE-2026-25723) and the [git.exe / DuneSlide-class](2026-07-cursor-git-exe-autoexec.md) findings tracked elsewhere in this repo.
+### CVE-2026-25722 (GHSA-66q4-vfjg-2qhh) — Command injection via directory change bypasses write protection, CVSS 7.7, published 2026-02-06
+
+Claude Code's write-protection guardrail (which blocks unapproved writes to sensitive directories like `.claude/`) didn't properly re-validate the working directory after a `cd` command changed it — an attacker able to get untrusted content into the context window could have the agent `cd` into a protected directory and then write/modify files there without triggering the approval check. Combines **CWE-20** (improper input validation) and **CWE-78** (OS command injection). Affected: `< 2.0.57`. Patched: **2.0.57**. Reported via HackerOne (nil221) — one of this repo's earliest-dated finds in this batch, predating even the April 2026 CVEs above by two months, and found via this sweep's index walk rather than any prior aggregator query.
+
+**Update (2026-08-06):** added this eighth entry, found on a follow-up pass of Cursor's *and* Claude Code's own GHSA indexes in the same sweep — two other candidate GHSA IDs found in that pass (GHSA-5cwg-9f6j-9jvx / CVE-2026-35603, GHSA-mmgp-wc2j-qcv7 / CVE-2026-33068) turned out to already be listed (without full write-ups) in the InversePrompt cluster advisory's CVE roster — confirmed via direct grep before treating them as new, per this repo's standing "verify the actual IOC/CVE list, don't trust a prior summary" discipline.
+
+All eight are distinct from the CVEs already listed in this repo's [Claude Code InversePrompt cluster](2025-08-claude-code-inverseprompt.md) (CVE-2025-54794, CVE-2025-54795, CVE-2025-52882, CVE-2025-59536, CVE-2026-21852, CVE-2026-33068, CVE-2026-24887, CVE-2026-35021, CVE-2026-39861, CVE-2026-35603, CVE-2026-25723) and the [git.exe / DuneSlide-class](2026-07-cursor-git-exe-autoexec.md) findings tracked elsewhere in this repo.
 
 ## Am I affected?
 
@@ -54,7 +60,7 @@ All seven are distinct from the CVEs already listed in this repo's [Claude Code 
 # Check your Claude Code CLI version
 claude --version
 
-# Fixes for all seven land at or before 2.1.163 — anything below that on a manual-update install is exposed to at least one
+# Fixes for all eight land at or before 2.1.163 — anything below that on a manual-update install is exposed to at least one
 # Claude Agent SDK for Python — check for TERMINAL-injection fix
 pip show claude-agent-sdk 2>/dev/null | grep -i version   # need >= 0.1.56
 
@@ -62,7 +68,7 @@ pip show claude-agent-sdk 2>/dev/null | grep -i version   # need >= 0.1.56
 # Help > About Claude in the desktop app
 ```
 
-Users on Claude Code's standard auto-update have already received all seven fixes; this advisory matters mainly for pinned/manual-update installs, CI images that bake in a specific Claude Code version, and Claude Desktop for Windows users who've disabled auto-update.
+Users on Claude Code's standard auto-update have already received all eight fixes; this advisory matters mainly for pinned/manual-update installs, CI images that bake in a specific Claude Code version, and Claude Desktop for Windows users who've disabled auto-update.
 
 ## If you are affected
 
@@ -95,3 +101,4 @@ This is the same lesson the Cursor GHSA index audit produced: **a vendor's own G
 - [GitHub — Trust Dialog Bypass via Git Worktree Spoofing Allows Arbitrary Code Execution (GHSA-q5hj-mxqh-vv77, CVE-2026-40068)](https://github.com/anthropics/claude-code/security/advisories/GHSA-q5hj-mxqh-vv77)
 - [GitHub Advisory Database — CVE-2026-35020 (GHSA-jgg3-qqhf-7rx7)](https://github.com/advisories/GHSA-jgg3-qqhf-7rx7)
 - [SentinelOne — CVE-2026-35020: Claude CLI OS Command Injection Vulnerability](https://www.sentinelone.com/vulnerability-database/cve-2026-35020/)
+- [GitHub — Command Injection via Directory Change Bypasses Write Protection (GHSA-66q4-vfjg-2qhh, CVE-2026-25722)](https://github.com/anthropics/claude-code/security/advisories/GHSA-66q4-vfjg-2qhh)

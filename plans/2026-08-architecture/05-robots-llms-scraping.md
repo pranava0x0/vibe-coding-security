@@ -1,3 +1,10 @@
+> **§2 implemented 2026-08-06** (commit history: `site/build.py`, `tests/test_llms.py`) after
+> `llms.txt` breached its cap outright. `LLMS_TXT_TIER1`/`LLMS_CTX_TIER1`/`LLMS_FULL_TIER1`
+> ended up set to 15 each (lower than the 60/40/60 sketched below) because the
+> active/ongoing advisory count (58 of 176) turned out to dominate Tier 1's size on its
+> own — see `BACKLOG.md`'s "Implemented spec 05's count-bounded llms.txt fix" entry for
+> current measurements. The rest of this document (§1, §3, §4) is not yet implemented.
+
 # Spec 05 — robots.txt / llms.txt: a deliberate, tested contract with AI crawlers
 
 **Goal.** Maximize legitimate scraping and LLM ingestion of this site — the opposite of
