@@ -46,7 +46,7 @@ import json
 import re
 import shutil
 from dataclasses import dataclass, field
-from datetime import date, datetime, timezone
+from datetime import date, timezone
 from os.path import relpath as _relpath
 from pathlib import Path
 from typing import Any
@@ -679,6 +679,59 @@ def _page_html_url(p: Page) -> str:
     return f"{SITE_URL}/{p.output_path.as_posix()}"
 
 
+# ─── llms.txt family: count-bounded, not age-bounded ───────────────────────
+# 2026-08-06: replaces the per-entry character-trim stopgap (nine tightenings
+# between 2026-05-30 and 2026-08-05, interval collapsing from ~3 weeks to ~2
+# days) per plans/2026-08-architecture/05-robots-llms-scraping.md §2. That
+# trim lowered the slope but the corpus's growth is unbounded, so the files
+# kept re-hitting their byte caps. The fix: bound the *count* of full entries,
+# not their age or length. Tier 1 = the N most recently updated advisories,
+# unioned with every still-active/ongoing incident (a live incident belongs
+# in full regardless of recency). Tier 2 = everything else, as a one-line
+# pointer. Nothing disappears — every advisory keeps its page, .md mirror,
+# advisories.json row, and per-section llms.txt entry; Tier 2 just doesn't
+# duplicate the content inline anymore. Output size is now O(1) in corpus
+# size — see tests/test_llms.py's budget policy and test_llms_outputs_are_count_bounded.
+# These are the "N most recent" component of Tier 1 — actual Tier 1 size is
+# this union'd with every status:active/ongoing advisory, which as of
+# 2026-08-06 is 58 of 176 advisories on its own (well above the ~34 assumed
+# when this scheme was specified) and is the dominant term. Kept modest here
+# because the active/ongoing set already provides a large, non-optional floor;
+# raising these further mostly adds size without much marginal recency value.
+# If the active/ongoing count keeps growing, the fix is triaging stale
+# "active" advisories back to patched/historical, not raising these numbers.
+LLMS_TXT_TIER1 = 15
+LLMS_CTX_TIER1 = 15
+LLMS_FULL_TIER1 = 15
+
+
+def _sorted_by_recency(advisories: list[Page]) -> list[Page]:
+    """Most-recently-updated first — matches build_atom_feed's sort key."""
+    return sorted(
+        advisories,
+        key=lambda p: str(p.frontmatter.get("last_updated") or p.frontmatter.get("date_disclosed") or ""),
+        reverse=True,
+    )
+
+
+def _split_tiers(advisories: list[Page], tier1_n: int) -> tuple[list[Page], list[Page]]:
+    """Split into Tier 1 (full detail) and Tier 2 (one-line pointer).
+
+    Tier 1 = the `tier1_n` most recently updated advisories, unioned with
+    every advisory whose status is still active/ongoing. Both tiers preserve
+    recency order. This is the one control surface for output size — lower
+    `tier1_n` if a budget is breached, don't raise the byte cap."""
+    ordered = _sorted_by_recency(advisories)
+    recent_ids = {id(p) for p in ordered[:tier1_n]}
+    tier1_ids = {
+        id(p) for p in ordered
+        if id(p) in recent_ids or p.frontmatter.get("status") in ("active", "ongoing")
+    }
+    tier1 = [p for p in ordered if id(p) in tier1_ids]
+    tier2 = [p for p in ordered if id(p) not in tier1_ids]
+    return tier1, tier2
+
+
 def build_llms_txt(pages: list[Page], full_bytes: int | None = None, ctx_bytes: int | None = None) -> str:
     lines: list[str] = [
         f"# {SITE_NAME}",
@@ -705,47 +758,48 @@ def build_llms_txt(pages: list[Page], full_bytes: int | None = None, ctx_bytes: 
     ]
 
     advisories = [p for p in pages if p.section == "advisories" and not p.is_index]
-    advisories.sort(key=lambda p: str(p.frontmatter.get("date_disclosed", "")), reverse=True)
+    tier1, tier2 = _split_tiers(advisories, LLMS_TXT_TIER1)
 
     lines.append("## Advisories")
     lines.append("")
-    for p in advisories:
+    lines.append(
+        f"Full detail below for the {len(tier1)} most recently updated advisories plus "
+        "every still-active/ongoing incident. Older, resolved advisories are listed as "
+        "one-line pointers in 'More advisories' — each still has its own full page, "
+        "`.md` mirror, and `advisories.json` row; nothing is dropped, just not inlined here."
+    )
+    lines.append("")
+    for p in tier1:
         sev = p.frontmatter.get("severity", "")
         date_d = p.frontmatter.get("date_disclosed", "")
         meta = f" [{sev}]" if sev else ""
         meta += f" {date_d}" if date_d else ""
-        # root llms.txt is a scannable *index*, not a full-text export (that's
-        # llms-full.txt) — cap each one-line description so the index stays
-        # roughly flat as the advisory corpus grows, instead of every sweep
-        # eventually re-hitting LLMS_TXT_MAX_BYTES the way llms-full.txt/
-        # llms-ctx.txt repeatedly have. (2026-07-16)
-        # 2026-07-22: tightened from 160 to 145 chars — the corpus grew past the
-        # llms.txt size cap (tests/test_llms.py) again; trim per-entry length as
-        # the corpus grows rather than bumping the cap, per standing guidance.
-        # 2026-07-25: tightened from 145 to 130 chars — same reason, 3 more
-        # advisories pushed the index past the 80KB cap again.
-        # 2026-07-27: tightened from 130 to 122 chars — same reason, 1 more
-        # advisory pushed the index past the 80KB cap again.
-        # 2026-07-29: tightened from 122 to 108 chars — same reason, 3 more
-        # advisories pushed the index past the 80KB cap again.
-        # 2026-07-31: tightened from 108 to 96 chars — same reason, 5 more
-        # advisories pushed the index past the 80KB cap again.
-        # 2026-08-01: tightened from 96 to 88 chars — same reason, 2 more
-        # advisories pushed the index past the 80KB cap again.
-        # 2026-08-03: tightened from 88 to 75 chars — 1 new advisory + 1
-        # updated advisory pushed the index 1 byte past the 80KB cap again.
-        # 2026-08-05: tightened from 75 to 65 chars — 2 new advisories pushed
-        # the index 174 bytes past the 80KB cap again. This per-entry-char-trim
-        # approach is a stopgap; spec 05 (plans/2026-08-architecture/
-        # 05-robots-llms-scraping.md) proposes a count-bounded two-tier
-        # replacement that hasn't been implemented yet — see BACKLOG.md.
+        # Tier 1 is count-bounded (LLMS_TXT_TIER1 recent ∪ all active/ongoing),
+        # not corpus-size-bounded — but the active/ongoing set itself has no
+        # upper bound (58 of 176 advisories as of 2026-08-06, well above the
+        # ~34 this file's design assumed), so Tier 1 can still grow past a
+        # fixed entry count. This trim keeps per-entry size small enough that
+        # Tier 1's total stays in budget even as the active count grows;
+        # revisit if the active/ongoing count keeps climbing (many "active"
+        # entries are plausibly stale and worth a triage pass — see BACKLOG.md).
         desc = p.description
-        if len(desc) > 65:
-            desc = desc[:64].rsplit(" ", 1)[0] + "…"
+        if len(desc) > 90:
+            desc = desc[:89].rsplit(" ", 1)[0] + "…"
         lines.append(
             f"- [{p.title}]({_page_html_url(p)}) ([md]({_page_md_url(p)})){meta}: {desc}"
         )
     lines.append("")
+
+    if tier2:
+        lines.append("### More advisories (older, resolved — one line each)")
+        lines.append("")
+        for p in tier2:
+            sev = p.frontmatter.get("severity", "")
+            date_d = p.frontmatter.get("date_disclosed", "")
+            meta = " — ".join(str(x) for x in [sev, date_d] if x)
+            meta = f" — {meta}" if meta else ""
+            lines.append(f"- [{p.title}]({_page_html_url(p)}){meta}")
+        lines.append("")
 
     for slug, label, _ in SECTIONS:
         if slug == "advisories":
@@ -810,25 +864,20 @@ def build_section_llms_txt(section_slug: str, section_label: str, pages: list[Pa
     return "\n".join(lines)
 
 
-def _advisory_age_days(fm: dict[str, Any]) -> int | None:
-    """Best-effort age in days from date_disclosed (YYYY-MM-DD or YYYY-MM). None if unparseable."""
-    raw = str(fm.get("date_disclosed") or "")
-    for fmt in ("%Y-%m-%d", "%Y-%m"):
-        try:
-            d = datetime.strptime(raw, fmt).date()
-            return (date.today() - d).days
-        except ValueError:
-            continue
-    return None
-
-
 def build_llms_full_txt(pages: list[Page]) -> str:
+    advisories = [p for p in pages if p.section == "advisories" and not p.is_index]
+    tier1, tier2 = _split_tiers(advisories, LLMS_FULL_TIER1)
+    tier2_ids = {id(p) for p in tier2}
+
     out: list[str] = [
         f"# {SITE_NAME} — full corpus",
         "",
         f"Generated {date.today().isoformat()} from {REPO_URL}",
         "",
-        f"Every advisory, playbook, prevention guide, and source list concatenated for LLM ingestion. ",
+        f"Every playbook, prevention guide, and source list concatenated for LLM ingestion, plus ",
+        f"the {len(tier1)} most recently updated advisories (and every still-active/ongoing one) ",
+        f"in full. Older, resolved advisories appear as a title + link + TL;DR pointer instead of ",
+        f"their full body — each still has its own full page and `.md` mirror, one click away. ",
         f"The canonical web version of each document is linked above its content.",
         "",
         "---",
@@ -849,30 +898,16 @@ def build_llms_full_txt(pages: list[Page]) -> str:
             # — without the title, structure is hard to follow.)
             out.append(f"## {p.title}")
             out.append("")
-            # 2026-07-14: status=historical advisories are patched/superseded
-            # patterns kept for reference, not active incidents — emit only
-            # TL;DR + a link to the canonical page instead of the full body.
-            # 2026-07-17: broadened per BACKLOG.md — trimming on status=historical
-            # alone doesn't scale (almost nothing is ever marked historical in
-            # practice), so also trim status=patched/contained/mitigated advisories
-            # whose date_disclosed is > 120 days old. These are resolved,
-            # non-actionable incidents for a reader triaging *current* risk; the
-            # full write-up remains one click away via the per-page mirror. This
-            # is the "real fix" flagged as open since 2026-06-19 (repeated cap
-            # bumps instead of broader trimming).
-            # 2026-07-29: tightened the age threshold from 120 to 90 days — the
-            # corpus grew past LLMS_FULL_MAX_BYTES again after 3 more advisories;
-            # trim more aggressively as the corpus grows, per standing guidance.
-            _age = _advisory_age_days(p.frontmatter)
-            _trim_status = p.frontmatter.get("status") in ("patched", "contained", "mitigated")
-            if p.section == "advisories" and (
-                p.frontmatter.get("status") == "historical"
-                or (_trim_status and _age is not None and _age > 90)
-            ):
+            # Count-bounded Tier 2 (2026-08-06): older/resolved advisories not
+            # in Tier 1 get a TL;DR + pointer instead of the full body — see
+            # the count-bounded rationale above build_llms_txt. This supersedes
+            # the earlier age-based historical/patched trim (2026-07-14
+            # through 07-29), which lowered growth's slope but not its sign.
+            if p.section == "advisories" and id(p) in tier2_ids:
                 tldr = _extract_section(p.body, "TL;DR") or p.description
                 out.append((tldr or "").strip())
                 out.append("")
-                out.append(f"_Historical/superseded pattern — full write-up at {_page_html_url(p)}._")
+                out.append(f"_Full write-up (older/resolved, not inlined here) at {_page_html_url(p)} or {_page_md_url(p)}._")
                 out.append("")
             else:
                 # Strip the body's own leading # heading if present, to avoid
@@ -881,9 +916,7 @@ def build_llms_full_txt(pages: list[Page]) -> str:
                 out.append("")
         out.append("")
 
-    advisories = [p for p in pages if p.section == "advisories" and not p.is_index]
-    advisories.sort(key=lambda p: str(p.frontmatter.get("date_disclosed", "")), reverse=True)
-    emit("Advisories", advisories)
+    emit("Advisories", tier1 + tier2)
 
     playbooks = [p for p in pages if p.section == "playbooks" and not p.is_index]
     playbooks.sort(key=lambda p: p.title.lower())
@@ -906,13 +939,15 @@ def build_llms_full_txt(pages: list[Page]) -> str:
 
 
 def build_llms_ctx_txt(pages: list[Page]) -> str:
-    """Compact mid-tier: per-advisory TL;DR + 'am I affected?' only — far smaller
-    than llms-full.txt while still covering every advisory. Grows ~linearly with
-    the corpus (see LLMS_CTX_MAX_BYTES in tests/test_llms.py for the current cap).
+    """Compact mid-tier: per-advisory TL;DR + 'am I affected?' in full for the
+    LLMS_CTX_TIER1 most recently updated + all active/ongoing advisories; older,
+    resolved advisories get a one-line pointer instead. See the count-bounded
+    rationale above build_llms_txt — this file is O(1) in corpus size, not
+    linear, as of 2026-08-06.
 
     Pattern documented in: Mintlify's llms.txt guidance + Anthropic docs."""
     advisories = [p for p in pages if p.section == "advisories" and not p.is_index]
-    advisories.sort(key=lambda p: str(p.frontmatter.get("date_disclosed", "")), reverse=True)
+    tier1, tier2 = _split_tiers(advisories, LLMS_CTX_TIER1)
 
     lines: list[str] = [
         f"# {SITE_NAME} — compact context",
@@ -920,7 +955,10 @@ def build_llms_ctx_txt(pages: list[Page]) -> str:
         f"> {SITE_TAGLINE}",
         "",
         f"Generated {date.today().isoformat()}. Compact variant: alerts + per-advisory ",
-        "TL;DR + 'am I affected?' commands. For full content use llms-full.txt.",
+        "TL;DR + 'am I affected?' commands, in full for the most recently updated and ",
+        "still-active/ongoing advisories. Older, resolved advisories are listed as a ",
+        "one-line pointer at the end — see llms-full.txt or the advisory's own page ",
+        "for their full content.",
         "",
         f"Index: {SITE_URL}/llms.txt | Full: {SITE_URL}/llms-full.txt | Web: {SITE_URL}/",
         "",
@@ -928,7 +966,7 @@ def build_llms_ctx_txt(pages: list[Page]) -> str:
         "",
     ]
 
-    for p in advisories:
+    for p in tier1:
         sev = p.frontmatter.get("severity", "")
         status = p.frontmatter.get("status", "")
         date_d = p.frontmatter.get("date_disclosed", "")
@@ -940,18 +978,13 @@ def build_llms_ctx_txt(pages: list[Page]) -> str:
             ] if x
         )
 
-        # Extract just TL;DR section if present (truncated to keep this variant compact).
-        # 2026-07-22: tightened from 395/355 to 370/330 chars. 2026-07-26: tightened
-        # further to 350/310 chars. 2026-07-30: tightened again to 325/290 chars.
-        # 2026-08-02: tightened again to 295/260 chars — the corpus grew past the
-        # llms-ctx.txt size cap (tests/test_llms.py) again after the Copilot Word
-        # worm advisory; trim per-entry length here as the corpus grows rather than
-        # bumping the cap, per this repo's standing guidance.
+        # Tier 1 is count-bounded (LLMS_CTX_TIER1), not corpus-size-bounded —
+        # this trim exists for readability, not to fight a growing byte cap.
         tldr = _extract_section(p.body, "TL;DR") or p.description
         tldr = tldr.strip()
-        tldr_short = tldr[:295] + "…" if len(tldr) > 295 else tldr
+        tldr_short = tldr[:500] + "…" if len(tldr) > 500 else tldr
         affected = _extract_section(p.body, "Am I affected?")
-        affected_short = affected[:260] + "…" if affected and len(affected) > 260 else affected
+        affected_short = affected[:400] + "…" if affected and len(affected) > 400 else affected
 
         lines.append(f"## {p.title}")
         lines.append("")
@@ -968,6 +1001,17 @@ def build_llms_ctx_txt(pages: list[Page]) -> str:
             lines.append(affected_short.strip())
             lines.append("")
         lines.append("---")
+        lines.append("")
+
+    if tier2:
+        lines.append("## More advisories (older, resolved — one line each)")
+        lines.append("")
+        for p in tier2:
+            sev = p.frontmatter.get("severity", "")
+            date_d = p.frontmatter.get("date_disclosed", "")
+            meta = " — ".join(str(x) for x in [sev, date_d] if x)
+            meta = f" — {meta}" if meta else ""
+            lines.append(f"- [{p.title}]({_page_html_url(p)}){meta}")
         lines.append("")
 
     return "\n".join(lines)

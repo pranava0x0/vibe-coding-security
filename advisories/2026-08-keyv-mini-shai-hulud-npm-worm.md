@@ -1,17 +1,17 @@
 ---
 id: 2026-08-keyv-mini-shai-hulud-npm-worm
-title: "keyv / cacheable npm worm — Shai-Hulud-lineage credential stealer plants Claude Code + VS Code auto-run hooks (Aug 2026, active)"
+title: "keyv / cacheable npm worm ('ChainDrop') — Shai-Hulud-lineage credential stealer plants Claude Code + VS Code auto-run hooks (Aug 2026)"
 date_disclosed: 2026-08-04
-last_updated: 2026-08-04
+last_updated: 2026-08-06
 severity: critical
 status: active
 ecosystems: [npm, claude-code, vscode]
 tools_affected: [keyv, cacheable, cache-manager, flat-cache, file-entry-cache, cacheable-request, "@cacheable/*", claude-code, vscode]
-tags: [supply-chain, credential-theft, worm, shai-hulud, ai-agent-config-poisoning, provenance-abuse, ethereum-c2, github-actions]
+tags: [supply-chain, credential-theft, worm, shai-hulud, chaindrop, ai-agent-config-poisoning, provenance-abuse, ethereum-c2, github-actions]
 ---
 
 ## TL;DR
-An attacker compromised the GitHub maintainer account behind **keyv** and its sibling `@cacheable`-family caching packages (a combined dependency tree with hundreds of millions of downloads) and published poisoned releases carrying a **Shai-Hulud-lineage credential-stealing worm** — the same release also planted `.claude/settings.json` and `.vscode/tasks.json` auto-run hooks in affected repos. It's still unfolding as of this writing: package/version counts are climbing hour to hour, no fixed version has been announced, and researchers disagree on exact scope.
+An attacker compromised the GitHub maintainer account behind **keyv** and its sibling `@cacheable`-family caching packages (a combined dependency tree with hundreds of millions of downloads) and published poisoned releases carrying a **Shai-Hulud-lineage credential-stealing worm** — the same release also planted `.claude/settings.json` and `.vscode/tasks.json` auto-run hooks in affected repos. **Microsoft's own Security Blog has since named the campaign "ChainDrop"** and confirmed it spread to **400+ packages across multiple, unrelated publisher accounts** — not just the original keyv/cacheable maintainer — via stolen npm tokens propagating the worm publisher-to-publisher. Package/version counts climbed for the first ~48 hours before stabilizing; as of this update, still no single official "fixed" release exists — pin to a version predating 2026-08-04 rather than trusting `latest`.
 
 ## What happened
 Starting around **2026-08-03 15:00 UTC**, Wiz observed C2-resolution traffic to public Ethereum RPC nodes tied to this campaign; at **2026-08-04 ~09:00 UTC**, the attacker used a compromised GitHub maintainer account to push malicious commits directly to the `keyv` repository's default branch and cut a new release, `keyv@6.0.0` ([Aikido](https://www.aikido.dev/blog/keyv-and-friends-compromised-in-npm-supply-chain-attack); [Wiz](https://www.wiz.io/blog/keyv-and-cacheable-npm-supply-chain-attack)). The same maintainer account owns a cluster of related caching packages — `cache-manager`, `cacheable-request`, `flat-cache`, `file-entry-cache`, `cacheable`, `@cacheable/memory`, `@cacheable/node-cache`, `@cacheable/utils`, `@cacheable/net` — all of which received poisoned releases in the same window.
@@ -30,6 +30,8 @@ Starting around **2026-08-03 15:00 UTC**, Wiz observed C2-resolution traffic to 
 **Attribution.** Researchers describe the malware as a descendant of the "Mini" Shai-Hulud family with code/infrastructure similarities to the TeamPCP and `antv` (self-minted Sigstore attestation) campaigns already tracked in this repo, and note the same IDE-hook mechanism appeared in an April 2026 PyPI (`lightning`) compromise. No named actor or initial-access vector for the maintainer account itself has been confirmed as of this writing.
 
 **No official patched version has been published by the maintainers, npm, or GitHub as of this writing.** `latest` tags on affected packages may still resolve to a malicious version — pin to a known-good version predating this incident rather than trusting `latest`.
+
+**Update (2026-08-06) — "ChainDrop," and confirmation the worm spread beyond the original maintainer account.** Microsoft's Security Blog published its own technical analysis on 2026-08-04, naming the campaign **ChainDrop** and confirming it as a **self-propagating worm**: "one stolen [npm] token can produce malicious patch releases across every package available to that publisher," and Microsoft's own count puts the confirmed scope at **more than 400 packages compromised across multiple unrelated publisher accounts** — i.e., the worm didn't stay contained to the keyv/`@cacheable` maintainer's own packages, it used stolen tokens harvested from early victims to poison further, unrelated publishers' packages in turn. Microsoft's writeup adds two technical details not in the original reporting: the credential-harvesting payload encrypts stolen data with **AES-256-GCM** before exfiltration, and Microsoft's recommended mitigation is to **update to npm CLI v12** (which defaults to blocking unapproved lifecycle scripts) and to **enable the `min-release-age` setting** so a freshly-published version of any dependency isn't installed until it's had time to be flagged. Combined download-volume estimates across all cited sources (Aikido, Wiz, Microsoft) remain in the **~2 billion monthly installs** range for the affected package set as a whole.
 
 ## Am I affected?
 ```bash
@@ -78,3 +80,4 @@ If any of the above match, treat every credential the affected machine or CI run
 - [Aikido Security — Keyv and friends compromised in npm supply chain attack](https://www.aikido.dev/blog/keyv-and-friends-compromised-in-npm-supply-chain-attack) — primary technical writeup: payload structure, credential targets, exfil GitHub-repo marker, IOC hashes.
 - [The Hacker News — Keyv-Linked npm Worm Poisons Hundreds of Packages, Plants Claude Code and VS Code Hooks](https://thehackernews.com/2026/08/keyv-linked-npm-worm-poisons-hundreds.html) — SafeDep-sourced version/package counts, `.claude`/`.vscode` hook mechanism and workspace-trust caveat, provenance-abuse detail.
 - [Wiz — keyv and cacheable npm Package Hijacked in Supply Chain Attack](https://www.wiz.io/blog/keyv-and-cacheable-npm-supply-chain-attack) — timeline, Ethereum RPC C2 resolution, C2 domain IOCs, campaign attribution/lineage, IOC hash list (github.com/wiz-sec-public/wiz-research-iocs).
+- [Microsoft Security Blog — ChainDrop supply chain compromise: Anatomy of a self-propagating worm](https://www.microsoft.com/en-us/security/blog/2026/08/04/chaindrop-supply-chain-compromise-anatomy-self-propagating-worm/) — vendor naming ("ChainDrop"), 400+ packages across multiple unrelated publishers, AES-256-GCM exfil detail, npm v12 / `min-release-age` mitigation guidance.
