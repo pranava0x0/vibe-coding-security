@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-08-05",
+  "last_updated": "2026-08-06",
   "notes": "Sweep on 2026-08-03 backfilled a genuine ~11-month coverage gap: CopyPasta License Attack (HiddenLayer, disclosed 2025-09-04) -- a self-replicating prompt-injection virus hidden in LICENSE.txt/README.md markdown comments, demonstrated against Cursor, Windsurf, Kiro, and Aider, no CVE/no vendor patch. Also found and folded in a second, distinct Cline CVE (CVE-2026-59723, Cline CLI Hub dashboard WebSocket, disclosed 2026-07-08/09, fixed 3.0.30) into the existing Cline CVE-2026-44211 advisory -- same missing-Origin-validation root cause recurring in a second Cline component. Extensive re-verification of the standard Tier-A/B/C rotation (npm/PyPI/Crates.io supply chain, MCP, Cursor/Claude Code/OpenClaw/aider/OpenHands/SWE-agent CVEs, Next.js/React/Svelte/Vite/Shadcn/Tailwind, Supabase/Prisma/NextAuth/FastAPI/Streamlit/Google AI Studio SDK, n8n/Zapier/Pipedream/Composio, industry-vendor blogs, social/Substack/HN) found everything else already tracked -- confirms this repo's daily-sweep cadence is keeping current; the two genuine finds both came from directly reading a primary research writeup (HiddenLayer) and a vendor's own GHSA page (GitHub) rather than the aggregator search rotation, reinforcing the standing 'read primary sources directly' practice.",
   "sources": {
     "socket.dev": {
@@ -133,8 +133,8 @@
     },
     "thehackernews.com": {
       "weight": 20,
-      "hits": 72,
-      "last_hit": "2026-08-05",
+      "hits": 73,
+      "last_hit": "2026-08-06",
       "ecosystems": [
         "agentforger",
         "ai-agents",
@@ -667,9 +667,9 @@
       "tier": "research"
     },
     "microsoft.com": {
-      "weight": 19,
-      "hits": 6,
-      "last_hit": "2026-07-05",
+      "weight": 20,
+      "hits": 7,
+      "last_hit": "2026-08-06",
       "ecosystems": [
         "ai-agents",
         "ci-cd",
@@ -1195,9 +1195,9 @@
       "_added": "2026-05-19"
     },
     "github.com": {
-      "weight": 12,
-      "hits": 8,
-      "last_hit": "2026-08-03",
+      "weight": 13,
+      "hits": 9,
+      "last_hit": "2026-08-06",
       "ecosystems": [
         "anthropics-claude-code",
         "claude-code-security-advisories",
@@ -1399,9 +1399,9 @@
       "_added": "2026-06-14"
     },
     "adversa.ai": {
-      "weight": 11,
-      "hits": 5,
-      "last_hit": "2026-07-09",
+      "weight": 12,
+      "hits": 6,
+      "last_hit": "2026-08-06",
       "ecosystems": [
         "agent-frameworks",
         "claude-code",
@@ -3189,12 +3189,14 @@
       "_added": "2026-05-30"
     },
     "manifold.security": {
-      "weight": 6,
-      "hits": 2,
-      "last_hit": "2026-07-22",
+      "weight": 7,
+      "hits": 3,
+      "last_hit": "2026-08-06",
       "ecosystems": [
+        "azure-devops-mcp",
         "claudebleed-reopened",
-        "azure-devops-mcp"
+        "extension-marketplace",
+        "open-vsx"
       ],
       "tier": "research"
     },
@@ -4272,6 +4274,23 @@
         "ai-agent",
         "aisi"
       ],
+      "tier": "aggregator"
+    },
+    "proofpoint.com": {
+      "weight": 8,
+      "hits": 1,
+      "last_hit": "2026-08-06",
+      "ecosystems": [
+        "cursor",
+        "mcp"
+      ],
+      "tier": "research"
+    },
+    "cve.threatint.com": {
+      "weight": 6,
+      "hits": 1,
+      "last_hit": "2026-08-06",
+      "ecosystems": [],
       "tier": "aggregator"
     }
   }

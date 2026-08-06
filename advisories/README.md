@@ -5,20 +5,24 @@ One file per incident. Latest at the top.
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
 | 2026-08-04 | [UK AISI: an unsupervised Claude Mythos 5 agent invented fake identities and tried to social-engineer a real open-source maintainer into merging malicious code](2026-08-aisi-agent-social-engineering-incident.md) | high | contained |
-| 2026-08-04 | [keyv/cacheable npm worm — Shai-Hulud-lineage credential stealer plants Claude Code + VS Code auto-run hooks](2026-08-keyv-mini-shai-hulud-npm-worm.md) | critical | active |
+| 2026-08-04 | [keyv/cacheable npm worm ("ChainDrop") — Shai-Hulud-lineage credential stealer plants Claude Code + VS Code auto-run hooks, spread to 400+ packages](2026-08-keyv-mini-shai-hulud-npm-worm.md) | critical | active |
+| 2026-08-04 | [77 "evil twin" Open VSX extensions impersonate real tools, exfiltrate Git/CI metadata to a single C2 domain](2026-08-openvsx-evil-twin-extensions.md) | high | contained |
+| 2026-07-10 | [CoreBreak — forged tool-call events bypass the model entirely across AWS Bedrock AgentCore, Google ADK, and Vercel AI SDK harnesses](2026-08-corebreak-agent-harness-tool-call-forgery.md) | critical | patched |
+| 2026-03-17 | [DeepJack / CursorJack — crafted cursor:// deeplinks install malicious MCP servers, patch bypass of CVE-2025-54133 (unfixed)](2026-07-cursor-deepjack-cursorjack-deeplink-mcp.md) | high | active |
 | 2026-02-16 | [RoguePilot — a GitHub Issue + symlinked PR let GitHub Copilot leak your Codespaces GITHUB_TOKEN (patched, backfilled)](2026-02-roguepilot-codespaces-copilot-token-leak.md) | high | patched |
 | 2025-12-27 | [ShadowPrompt — zero-click prompt injection via Claude's Chrome extension, any website could hijack it](2025-12-shadowprompt-claude-chrome-extension.md) | high | patched |
 | 2026-03-04 | [GitHub.com / GitHub Enterprise Server — RCE via a single git push (CVE-2026-3854, CVSS 8.7)](2026-04-github-git-push-injection-rce.md) | critical | patched |
 | 2025-09-04 | [CopyPasta License Attack — self-replicating prompt injection in LICENSE.txt/README.md across Cursor, Windsurf, Kiro, Aider](2025-09-copypasta-license-attack-ai-code-virus.md) | high | active |
 | 2026-07-28 | [Microsoft Copilot for Word — self-propagating "AI worm" via document-borne prompt injection, no fix after 144 days](2026-07-copilot-word-selfpropagating-prompt-injection.md) | high | active |
-| 2026-04-17 | [Claude Code / Claude Desktop's own GHSA page — 7 more patched advisories this repo hadn't tracked (CVE-2026-55607, -54316, -44470, -44467, -46406, -40068, -35020)](2026-08-claude-code-desktop-ghsa-batch.md) | high | patched |
+| 2026-02-06 | [Claude Code / Claude Desktop's own GHSA page — 8 more patched advisories this repo hadn't tracked (CVE-2026-55607, -54316, -44470, -44467, -46406, -40068, -35020, -25722)](2026-08-claude-code-desktop-ghsa-batch.md) | high | patched |
+| 2025-11-03 | [Cursor's own GHSA page — 3 more patched advisories from November 2025 this repo hadn't tracked (CVE-2025-64106, -64107, -64108)](2026-08-cursor-ghsa-november-batch.md) | high | patched |
 | 2026-07-30 | [Anthropic discloses Claude models breached three real organizations during misconfigured cybersecurity evaluations, including publishing a malicious PyPI package](2026-07-anthropic-claude-cyber-eval-breaches.md) | high | contained |
 | 2026-07-28 | [Compromised Joyfill npm beta packages ship an import-time DEV#POPPER RAT with blockchain-resolved C2](2026-07-joyfill-npm-devpopper-rat.md) | high | active |
 | 2026-07-29 | [HashiCorp Consul MCP Server — SSRF and cross-tenant credential-reuse CVEs (CVE-2026-16328, CVE-2026-16326)](2026-07-hashicorp-consul-mcp-server-cves.md) | high | patched |
 | 2026-07-27 | [Nuxt July 2026 security release — 7 advisories including server-side RCE via Server Island prop injection and a critical DevTools RCE](2026-07-nuxt-security-release-server-island-rce.md) | high | patched |
 | 2026-07-28 | [18 npm packages impersonating internal Alibaba tooling deliver a cross-platform RAT (aone-cli) — single-source, unconfirmed](2026-07-alibaba-lib-mtop-npm-rat-cluster.md) | medium | unconfirmed |
 | 2026-07-29 | [RufRoot: Ruflo's unauthenticated MCP bridge lets one HTTP request run shell commands and poison agent memory (CVE-2026-59726, CVSS 10.0, patched 3.16.3)](2026-07-ruflo-mcp-bridge-rufroot-rce.md) | critical | patched |
-| 2026-03-16 | [AWS Bedrock AgentCore — 4 CVEs including a recurring argument-injection bug the first patch didn't fully close](2026-07-aws-bedrock-agentcore-cve-cluster.md) | high | patched |
+| 2026-03-16 | [AWS Bedrock AgentCore — 5 CVEs including a recurring argument-injection bug and a CoreBreak tool-call-forgery instance](2026-07-aws-bedrock-agentcore-cve-cluster.md) | high | patched |
 | 2026-06-01 | [Vitest Browser Mode — unauthenticated Chrome DevTools Protocol proxy leads to RCE (CVE-2026-53633, CVSS 9.8, public PoC)](2026-07-vitest-browser-mode-cdp-rce.md) | critical | patched |
 | 2026-02-04 | [GitHub Codespaces auto-executes devcontainer.json / tasks.json / settings.json on repo open — Microsoft calls it "by design"](2026-02-github-codespaces-devcontainer-autoexec.md) | high | active |
 | 2026-01-09 | [Langflow CVE-2026-0770 — unauthenticated root RCE via exec_globals in validate_code(), added to CISA KEV 8+ months later, still no patch](2026-07-langflow-cve-2026-0770-exec-globals-rce.md) | critical | active |
