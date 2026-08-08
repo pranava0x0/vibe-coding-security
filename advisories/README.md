@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2025-12-27 | [PleaseFix / Intent Collision — zero-click hijack of Claude in Chrome, ChatGPT Atlas, Gemini, Perplexity Comet, Copilot Edge (Black Hat USA 2026)](2026-08-pleasefix-agentic-browser-hijack.md) | high | active |
 | 2026-08-04 | [UK AISI: an unsupervised Claude Mythos 5 agent invented fake identities and tried to social-engineer a real open-source maintainer into merging malicious code](2026-08-aisi-agent-social-engineering-incident.md) | high | contained |
 | 2026-08-04 | [keyv/cacheable npm worm ("ChainDrop") — Shai-Hulud-lineage credential stealer plants Claude Code + VS Code auto-run hooks, spread to 400+ packages](2026-08-keyv-mini-shai-hulud-npm-worm.md) | critical | active |
 | 2026-08-04 | [77 "evil twin" Open VSX extensions impersonate real tools, exfiltrate Git/CI metadata to a single C2 domain](2026-08-openvsx-evil-twin-extensions.md) | high | contained |
@@ -36,7 +37,8 @@ One file per incident. Latest at the top.
 | 2026-07-20 | [Next.js July 2026 Security Release — 9 CVEs: middleware bypass (Turbopack+single-locale), SSRF, cache confusion](2026-07-nextjs-july-security-release.md) | high | patched |
 | 2026-07-13 | [MemGhost — a single malicious email plants persistent false memories in AI agents (research, OpenClaw + Claude Code SDK)](2026-07-memghost-ai-agent-memory-poisoning.md) | high | active |
 | 2026-07-17 | [On-chain backdoor in a malicious TRAE IDE extension — Ethereum smart contract as C2 (juannegro.solidity)](2026-07-trae-solidity-extension-onchain-c2.md) | high | unconfirmed |
-| 2026-06-15 | [Pickle in the Middle — Google Cloud Vertex AI SDK bucket-squatting enables cross-tenant model hijack and RCE](2026-06-vertex-ai-pickle-in-the-middle.md) | critical | patched |
+| 2026-07-20 | [PostCSS sourceMappingURL arbitrary file read (CVE-2026-45623) — reachable through Tailwind CSS's build pipeline](2026-07-postcss-tailwind-sourcemappingurl-file-read.md) | high | patched |
+| 2026-06-15 | [Pickle in the Middle — Google Cloud Vertex AI SDK bucket-squatting RCE, plus an unrelated stored-XSS CVE (CVE-2026-2472) in the same SDK](2026-06-vertex-ai-pickle-in-the-middle.md) | critical | patched |
 | 2026-07-07 | [Rogue Agent — shared Cloud Run execution environment let one Dialogflow CX agent hijack every agent in a GCP project](2026-07-rogue-agent-dialogflow-cx-shared-execution.md) | high | patched |
 | 2026-07-08 | [n8n — 10-advisory security batch: host-level RCE via expression evaluator, SSO privilege escalation, AI-agent sandbox bypass](2026-07-n8n-july-security-advisory-batch.md) | high | patched |
 | 2026-07-15 | [PromptFiction — Claude Desktop's claude:// URI auto-submitted hidden prompts with zero clicks, chainable with Claudy Day](2026-07-promptfiction-claude-desktop.md) | high | patched |
@@ -123,7 +125,7 @@ One file per incident. Latest at the top.
 | 2026-05 | [PCPJack — credential-stealing counter-worm that removes TeamPCP infections](2026-05-pcpjack-counter-worm.md) | high | active |
 | 2026-05-06 | [ClaudeBleed — Claude in Chrome extension hijack](2026-05-claudebleed-chrome-extension.md) | high | mitigated |
 | 2026-05-06 | [ZiChatBot — 3 trojanized PyPI packages use the Zulip chat API as C2, suspected OceanLotus/APT32](2026-05-zichatbot-pypi-zulip-c2.md) | medium | contained |
-| 2026-05-13 | [OpenClaw "Claw Chain" — 4 sandbox-escape CVEs](2026-05-openclaw-claw-chain.md) | critical | patched |
+| 2026-05-13 | [OpenClaw "Claw Chain" — 4 sandbox-escape CVEs, plus a March 2026 device-pairing privilege-escalation CVE (CVE-2026-33579)](2026-05-openclaw-claw-chain.md) | critical | patched |
 | 2026-05-13 | [Systemic MCP stdio RCE class — now with HashiCorp Terraform MCP + Kubernetes MCP entries](2026-05-mcp-stdio-systemic-rce.md) | high | mitigated |
 | 2026-05-14 | [node-ipc compromise](2026-05-node-ipc-compromise.md) | critical | active |
 | 2026-05-11 | [PraisonAI auth bypass (CVE-2026-44338)](2026-05-praisonai-auth-bypass.md) | high | patched |

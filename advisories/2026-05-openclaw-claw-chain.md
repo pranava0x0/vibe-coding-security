@@ -1,17 +1,17 @@
 ---
 id: 2026-05-openclaw-claw-chain
-title: "OpenClaw 'Claw Chain' — 4 chainable sandbox-escape flaws (May 2026)"
+title: "OpenClaw 'Claw Chain' — 4 chainable sandbox-escape flaws (May 2026), plus a March 2026 device-pairing privilege-escalation CVE"
 date_disclosed: 2026-05-13
-last_updated: 2026-05-18
+last_updated: 2026-08-08
 severity: critical
 status: patched
 ecosystems: [ai-agents]
 tools_affected: [openclaw]
-tags: [cve, sandbox-escape, race-condition, allowlist-bypass, ai-agent, claw-chain, cyera]
+tags: [cve, sandbox-escape, race-condition, allowlist-bypass, ai-agent, claw-chain, cyera, privilege-escalation]
 ---
 
 ## TL;DR
-Cyera Research disclosed **four chainable vulnerabilities** in **OpenClaw** — the autonomous AI agent that rocketed to 135K+ GitHub stars in early 2026 — collectively dubbed **"Claw Chain."** The chain (CVE-2026-44112, -44113, -44115, -44118) lets an attacker bypass the OpenShell managed sandbox, read & write outside the mount root, execute disallowed commands through here-doc shell-expansion bypass, and impersonate the agent owner to control gateway, cron, and execution environment. SecurityScorecard previously reported **~245,000 publicly accessible OpenClaw instances**, with 63% of them running with **no authentication at all** and ~35% flagged as vulnerable. Patched in **OpenClaw 2026.4.22**. If you exposed an instance to the internet, assume full compromise.
+Cyera Research disclosed **four chainable vulnerabilities** in **OpenClaw** — the autonomous AI agent that rocketed to 135K+ GitHub stars in early 2026 — collectively dubbed **"Claw Chain."** The chain (CVE-2026-44112, -44113, -44115, -44118) lets an attacker bypass the OpenShell managed sandbox, read & write outside the mount root, execute disallowed commands through here-doc shell-expansion bypass, and impersonate the agent owner to control gateway, cron, and execution environment. SecurityScorecard previously reported **~245,000 publicly accessible OpenClaw instances**, with 63% of them running with **no authentication at all** and ~35% flagged as vulnerable. Patched in **OpenClaw 2026.4.22**. If you exposed an instance to the internet, assume full compromise. **Update (2026-08-08):** a separate, earlier-fixed device-pairing bug — **CVE-2026-33579** (patched in **2026.3.28**, about a month before Claw Chain) — is folded in below; check both fix versions independently.
 
 ## What happened
 OpenClaw ships an "OpenShell" managed sandbox that's supposed to confine agent-issued shell commands to a tmpfs mount and an allowlist. Cyera found four design flaws that, chained, neutralize the sandbox entirely:
@@ -66,6 +66,13 @@ ls -la ~/.openclaw/gateway.yaml ~/.openclaw/env 2>/dev/null
    - Audit any data the agent had access to for unauthorized reads/writes.
 4. Audit cron / scheduled tasks / gateway config for backdoor entries.
 
+## Update — 2026-08-08: CVE-2026-33579, device-pairing privilege escalation (fixed 2026.3.28, predates Claw Chain)
+A distinct, unrelated bug — **CVE-2026-33579** (CVSS 3.1: 8.1 High / CVSS 4.0: 8.6 High) — sits in OpenClaw's device-pairing approval flow rather than the OpenShell sandbox. The `/pair approve` command path fails to forward the *approving caller's own* security scopes into the core authorization check, so a low-privilege account holding only pairing rights (not admin) can approve a *pending device request that asks for broader scopes*, including full `operator.admin`. The exploit sequence: register a new device, submit a pairing request that asks for `operator.admin` in its desired scopes, then approve it with a low-privilege caller — the missing scope-forwarding check lets the approval succeed anyway, handing the new device admin-level control. Root cause: improper authorization validation (CWE-863) in `extensions/device-pair/index.ts` and `src/infra/device-pairing.ts`. **Fixed in OpenClaw 2026.3.28** — note this predates the Claw Chain fix (2026.4.22) by about a month, so an instance patched only against Claw Chain (i.e., already on ≥ 2026.4.22) is *also* covered here, but one patched only against this bug (≥ 2026.3.28 but < 2026.4.22) is **not** covered against Claw Chain.
+
+```bash
+openclaw --version 2>/dev/null   # confirm >= 2026.3.28 for this CVE, >= 2026.4.22 for Claw Chain
+```
+
 ## Prevention
 → [prevention/agent-sandboxing.md](../prevention/agent-sandboxing.md)
 → [prevention/mcp-hygiene.md](../prevention/mcp-hygiene.md)
@@ -83,3 +90,5 @@ ls -la ~/.openclaw/gateway.yaml ~/.openclaw/env 2>/dev/null
 - [Reco — OpenClaw: The AI Agent Security Crisis Unfolding Right Now](https://www.reco.ai/blog/openclaw-the-ai-agent-security-crisis-unfolding-right-now)
 - [Oasis Security — ClawJacked: OpenClaw Vulnerability Enables Full Agent Takeover](https://www.oasis.security/blog/openclaw-vulnerability)
 - [Sangfor — OpenClaw Security Risks: From Vulnerabilities to Supply Chain Abuse](https://www.sangfor.com/blog/cybersecurity/openclaw-ai-agent-security-risks-2026)
+- [SentinelOne — CVE-2026-33579: OpenClaw Privilege Escalation Vulnerability](https://www.sentinelone.com/vulnerability-database/cve-2026-33579/) — CVSS scoring, CWE classification, affected/fixed version.
+- [DEV Community — OpenClaw CVE-2026-33579: Unauthorized Privilege Escalation via `/pair approve` Command Fixed](https://dev.to/olgabyte/openclaw-cve-2026-33579-unauthorized-privilege-escalation-via-pair-approve-command-fixed-l48) — exploit sequence and affected source files.
