@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "last_updated": "2026-08-06",
-  "notes": "Sweep on 2026-08-03 backfilled a genuine ~11-month coverage gap: CopyPasta License Attack (HiddenLayer, disclosed 2025-09-04) -- a self-replicating prompt-injection virus hidden in LICENSE.txt/README.md markdown comments, demonstrated against Cursor, Windsurf, Kiro, and Aider, no CVE/no vendor patch. Also found and folded in a second, distinct Cline CVE (CVE-2026-59723, Cline CLI Hub dashboard WebSocket, disclosed 2026-07-08/09, fixed 3.0.30) into the existing Cline CVE-2026-44211 advisory -- same missing-Origin-validation root cause recurring in a second Cline component. Extensive re-verification of the standard Tier-A/B/C rotation (npm/PyPI/Crates.io supply chain, MCP, Cursor/Claude Code/OpenClaw/aider/OpenHands/SWE-agent CVEs, Next.js/React/Svelte/Vite/Shadcn/Tailwind, Supabase/Prisma/NextAuth/FastAPI/Streamlit/Google AI Studio SDK, n8n/Zapier/Pipedream/Composio, industry-vendor blogs, social/Substack/HN) found everything else already tracked -- confirms this repo's daily-sweep cadence is keeping current; the two genuine finds both came from directly reading a primary research writeup (HiddenLayer) and a vendor's own GHSA page (GitHub) rather than the aggregator search rotation, reinforcing the standing 'read primary sources directly' practice.",
+  "last_updated": "2026-08-08",
+  "notes": "Sweep on 2026-08-08 added PleaseFix/Intent Collision (Zenity Labs, Black Hat USA 2026) -- a zero-click agentic-browser hijack class spanning Claude in Chrome, ChatGPT Atlas, Gemini, Perplexity Comet, and Copilot Edge, mostly unpatched -- and CVE-2026-45623 (PostCSS sourceMappingURL arbitrary file read, reachable via Tailwind CSS's build pipeline) as new advisories. Folded CVE-2026-2472 (Vertex AI SDK stored XSS, distinct from the existing Pickle in the Middle RCE) and CVE-2026-33579 (OpenClaw device-pairing privilege escalation, distinct from Claw Chain) into their existing product advisories as second, unrelated CVE entries -- both patterns already established by prior sweeps for CVE-batch files. Enriched the keyv/cacheable ChainDrop advisory with the publicly-named compromised maintainer account, lineage confirmation to April/May 2026 waves, and a first-ever government-body advisory (Singapore CSA). New primary-source discovery this run: labs.zenity.io (Zenity Labs' own research blog) is now the canonical source for the PleaseFix/Intent Collision class and the earlier ClaudeBleed-adjacent findings -- add to future sweeps' researcher-blog rotation.",
   "sources": {
     "socket.dev": {
       "weight": 20,
@@ -103,11 +103,12 @@
       "tier": "research"
     },
     "aikido.dev": {
-      "weight": 20,
+      "weight": 19,
       "hits": 16,
-      "last_hit": "2026-08-04",
+      "last_hit": "2026-08-06",
       "ecosystems": [
         "antv",
+        "chaindrop-update",
         "codexui-android",
         "crates",
         "durabletask",
@@ -132,7 +133,7 @@
       "tier": "research"
     },
     "thehackernews.com": {
-      "weight": 20,
+      "weight": 19,
       "hits": 73,
       "last_hit": "2026-08-06",
       "ecosystems": [
@@ -148,6 +149,7 @@
         "azure-devops-mcp",
         "base44",
         "bitwarden",
+        "chaindrop-update",
         "cisa-kev-langflow",
         "claude-cowork",
         "claudebleed-reopened",
@@ -212,6 +214,7 @@
         "openvsx",
         "openvsx-open-sesame",
         "pcpjack",
+        "pleasefix",
         "polinrider",
         "praisonai",
         "promptsnatcher-chrome-ai",
@@ -282,8 +285,8 @@
     },
     "securityweek.com": {
       "weight": 20,
-      "hits": 38,
-      "last_hit": "2026-08-05",
+      "hits": 39,
+      "last_hit": "2026-08-08",
       "ecosystems": [
         "agentforger",
         "ai-agents",
@@ -326,6 +329,7 @@
         "openai-tanstack",
         "openclaw",
         "pcpjack",
+        "pleasefix",
         "praisonai",
         "react-native-aria",
         "roguepilot",
@@ -341,8 +345,8 @@
     },
     "cybersecuritynews.com": {
       "weight": 20,
-      "hits": 40,
-      "last_hit": "2026-07-21",
+      "hits": 41,
+      "last_hit": "2026-08-08",
       "ecosystems": [
         "amazon-q",
         "anthropic",
@@ -391,6 +395,7 @@
         "openclaw",
         "openvsx-open-sesame",
         "pcpjack",
+        "pleasefix",
         "praisonai",
         "praisonai-mcp-rce",
         "praisonai-platform",
@@ -587,12 +592,13 @@
       "_added": "2026-05-19"
     },
     "wiz.io": {
-      "weight": 20,
+      "weight": 19,
       "hits": 11,
-      "last_hit": "2026-08-04",
+      "last_hit": "2026-08-06",
       "ecosystems": [
         "asyncapi-miasma",
         "base44-wiz",
+        "chaindrop-update",
         "cloud",
         "durabletask",
         "friendly-fire",
@@ -608,8 +614,8 @@
     },
     "advisories.gitlab.com": {
       "weight": 20,
-      "hits": 12,
-      "last_hit": "2026-08-02",
+      "hits": 13,
+      "last_hit": "2026-08-08",
       "ecosystems": [
         "axios",
         "better-auth",
@@ -629,16 +635,18 @@
         "network-ai",
         "npm",
         "openhands",
+        "postcss-tailwind",
         "pypi",
-        "streamlit-ssrf"
+        "streamlit-ssrf",
+        "vertex-ai-xss"
       ],
       "tier": "official",
       "_added": "2026-05-18"
     },
     "sentinelone.com": {
       "weight": 20,
-      "hits": 14,
-      "last_hit": "2026-08-05",
+      "hits": 15,
+      "last_hit": "2026-08-08",
       "ecosystems": [
         "adx-mcp-server",
         "aws-mcp",
@@ -659,19 +667,22 @@
         "langflow-cve-0770",
         "mcp",
         "n8n-mcp",
+        "openclaw-33579",
         "opencode",
         "openhands",
         "supabase",
+        "vertex-ai-xss",
         "vite"
       ],
       "tier": "research"
     },
     "microsoft.com": {
-      "weight": 20,
+      "weight": 19,
       "hits": 7,
       "last_hit": "2026-08-06",
       "ecosystems": [
         "ai-agents",
+        "chaindrop-update",
         "ci-cd",
         "claude-code",
         "github-actions",
@@ -1195,9 +1206,9 @@
       "_added": "2026-05-19"
     },
     "github.com": {
-      "weight": 13,
-      "hits": 9,
-      "last_hit": "2026-08-06",
+      "weight": 14,
+      "hits": 10,
+      "last_hit": "2026-08-08",
       "ecosystems": [
         "anthropics-claude-code",
         "claude-code-security-advisories",
@@ -1207,7 +1218,8 @@
         "langflow-cve-0770",
         "n8n-july22-batch",
         "nextauthjs",
-        "nextjs-ghsa"
+        "nextjs-ghsa",
+        "vertex-ai-xss-poc"
       ],
       "tier": "independent"
     },
@@ -1606,16 +1618,17 @@
       "tier": "aggregator"
     },
     "miggo.io": {
-      "weight": 10,
-      "hits": 4,
-      "last_hit": "2026-06-03",
+      "weight": 11,
+      "hits": 5,
+      "last_hit": "2026-08-08",
       "ecosystems": [
-        "semantic-kernel",
-        "langchain",
         "axios",
         "bruno",
+        "cve-25750",
+        "langchain",
         "langsmith",
-        "cve-25750"
+        "postcss-tailwind",
+        "semantic-kernel"
       ],
       "tier": "research",
       "_added": "2026-05-18"
@@ -4292,6 +4305,27 @@
       "last_hit": "2026-08-06",
       "ecosystems": [],
       "tier": "aggregator"
+    },
+    "businesswire.com": {
+      "weight": 6,
+      "hits": 1,
+      "last_hit": "2026-08-08",
+      "ecosystems": [
+        "pleasefix"
+      ],
+      "tier": "aggregator",
+      "_added": "2026-08-08"
+    },
+    "csa.gov.sg": {
+      "weight": 6,
+      "hits": 1,
+      "last_hit": "2026-08-08",
+      "ecosystems": [
+        "chaindrop-update",
+        "keyv-cacheable"
+      ],
+      "tier": "official",
+      "_added": "2026-08-08"
     }
   }
 }
