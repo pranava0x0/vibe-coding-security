@@ -4,6 +4,8 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-04-22 | [CanisterWorm — self-propagating npm worm hits Namastex Labs' Automagik AI-agent packages, uses an Internet Computer canister as a dead drop](2026-04-canisterworm-namastex-npm.md) | high | contained |
+| 2026-02-25 | [Google API keys silently gain Gemini access when a project enables the Generative Language API — 2,863 leaked keys exposed](2026-02-google-api-key-gemini-scope-escalation.md) | high | mitigated |
 | 2025-12-27 | [PleaseFix / Intent Collision — zero-click hijack of Claude in Chrome, ChatGPT Atlas, Gemini, Perplexity Comet, Copilot Edge (Black Hat USA 2026)](2026-08-pleasefix-agentic-browser-hijack.md) | high | active |
 | 2026-08-04 | [UK AISI: an unsupervised Claude Mythos 5 agent invented fake identities and tried to social-engineer a real open-source maintainer into merging malicious code](2026-08-aisi-agent-social-engineering-incident.md) | high | contained |
 | 2026-08-04 | [keyv/cacheable npm worm ("ChainDrop") — Shai-Hulud-lineage credential stealer plants Claude Code + VS Code auto-run hooks, spread to 400+ packages](2026-08-keyv-mini-shai-hulud-npm-worm.md) | critical | active |
