@@ -1,18 +1,19 @@
 {
   "version": 1,
-  "last_updated": "2026-08-08",
-  "notes": "Sweep on 2026-08-08 added PleaseFix/Intent Collision (Zenity Labs, Black Hat USA 2026) -- a zero-click agentic-browser hijack class spanning Claude in Chrome, ChatGPT Atlas, Gemini, Perplexity Comet, and Copilot Edge, mostly unpatched -- and CVE-2026-45623 (PostCSS sourceMappingURL arbitrary file read, reachable via Tailwind CSS's build pipeline) as new advisories. Folded CVE-2026-2472 (Vertex AI SDK stored XSS, distinct from the existing Pickle in the Middle RCE) and CVE-2026-33579 (OpenClaw device-pairing privilege escalation, distinct from Claw Chain) into their existing product advisories as second, unrelated CVE entries -- both patterns already established by prior sweeps for CVE-batch files. Enriched the keyv/cacheable ChainDrop advisory with the publicly-named compromised maintainer account, lineage confirmation to April/May 2026 waves, and a first-ever government-body advisory (Singapore CSA). New primary-source discovery this run: labs.zenity.io (Zenity Labs' own research blog) is now the canonical source for the PleaseFix/Intent Collision class and the earlier ClaudeBleed-adjacent findings -- add to future sweeps' researcher-blog rotation.",
+  "last_updated": "2026-08-09",
+  "notes": "Sweep on 2026-08-09 added two backfill advisories: CanisterWorm (Socket.dev, npm worm hitting Namastex Labs' Automagik AI-agent packages, first use of an Internet Computer Protocol canister as blockchain C2) and a Google API key / Gemini silent-scope-escalation finding (Truffle Security, 2,863 leaked AIza... keys silently gaining Gemini access when a project enables the Generative Language API -- directly relevant to the user-requested Google AI Studio SDK framework coverage). Updated the Hugging Face agentic-intrusion advisory with Hugging Face's own technical timeline post (HDF5/Jinja2-fsspec injection vectors, eleven-node CSI-driver fleet, gzip+base64+XOR C2, mesh-VPN spread; also corrected a secondary-source 'swarm of agents' overstatement against the primary source's 'single agent' framing). Updated the n8n July batch advisory with GitGuardian's 2026-08-05 research (4,576 leaked API tokens, 321 live instances accepting them, 129 weak-encryption-key instances) plus a backfilled CVE-2026-25053 (Git-node arbitrary file read -> encryption-key theft, CVSS 9.4, patched Feb 2026, never previously tracked). New primary source discovered this run: trufflesecurity.com (Truffle Security's own research blog, weight 10) -- add to researcher-blog rotation for future credential/secret-scanning findings.",
   "sources": {
     "socket.dev": {
       "weight": 20,
-      "hits": 21,
-      "last_hit": "2026-07-31",
+      "hits": 22,
+      "last_hit": "2026-08-09",
       "ecosystems": [
         "alibaba-lib-mtop",
         "antv",
         "asyncapi-miasma",
         "backstage",
         "bitwarden",
+        "canisterworm",
         "crates",
         "crypto",
         "fake-corepack",
@@ -25,6 +26,7 @@
         "mastra-145",
         "mcp",
         "miasma-wave6",
+        "namastex",
         "npm",
         "payment-sdk-typosquat",
         "polinrider",
@@ -2288,14 +2290,16 @@
       "_added": "2026-05-21"
     },
     "blog.gitguardian.com": {
-      "weight": 8,
-      "hits": 1,
-      "last_hit": "2026-05-21",
+      "weight": 9,
+      "hits": 2,
+      "last_hit": "2026-08-09",
       "ecosystems": [
         "npm",
         "pypi",
         "docker",
-        "supply-chain"
+        "supply-chain",
+        "n8n",
+        "credential-hygiene"
       ],
       "tier": "research",
       "_added": "2026-05-21"
@@ -3237,14 +3241,28 @@
       "_added": "2026-07-17"
     },
     "huggingface.co": {
-      "weight": 6,
-      "hits": 1,
-      "last_hit": "2026-07-18",
+      "weight": 7,
+      "hits": 2,
+      "last_hit": "2026-08-09",
       "ecosystems": [
         "ai-vendor-infra",
-        "datasets"
+        "datasets",
+        "agentic-intrusion-timeline"
       ],
       "tier": "vendor"
+    },
+    "trufflesecurity.com": {
+      "weight": 10,
+      "hits": 1,
+      "last_hit": "2026-08-09",
+      "ecosystems": [
+        "google-cloud",
+        "gemini",
+        "api-key-leak",
+        "google-ai-studio-sdk"
+      ],
+      "tier": "research",
+      "_added": "2026-08-09"
     },
     "opensourcemalware.com": {
       "weight": 6,
