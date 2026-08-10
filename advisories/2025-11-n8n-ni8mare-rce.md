@@ -2,7 +2,7 @@
 id: 2025-11-n8n-ni8mare-rce
 title: "n8n Ni8mare + RCE cluster — CVSS 10.0 unauth takeover of workflow automation (Nov 2025 → June 2026)"
 date_disclosed: 2025-11-09
-last_updated: 2026-06-18
+last_updated: 2026-08-10
 severity: critical
 status: patched
 ecosystems: [npm, self-hosted]
@@ -24,7 +24,7 @@ Estimated exposed instances at disclosure: **~26,512 to 100,000** (GreyNoise and
 
 **CVE-2026-25049 (February 2026)**
 
-A second critical flaw (CVSS 9.4) was disclosed in February 2026. It bypasses mitigations added for the prior December 2025 fix (CVE-2025-68613). An **authenticated** attacker with permissions to create or modify workflows could use crafted expressions in workflow parameters to trigger system command execution. Public exploits published.
+A second critical flaw (CVSS 9.4, some sources report 9.9) was disclosed on **2026-02-04**. It bypasses mitigations added for the prior December 2025 fix (CVE-2025-68613): that earlier fix added a `FunctionThisSanitizer` to block direct property-access patterns like `obj.constructor`, but the sanitizer only recognized regular-function AST nodes. **Arrow functions** (`const {constructor} = () => {}`) produce a different AST node type — an `ObjectPattern` via destructuring, rather than a `MemberExpression` — that the sanitizer never checked, and because arrow functions inherit `this` lexically from their enclosing scope, the payload reaches the unsanitized global context anyway. **Update (added 2026-08-10, no new CVE — additional technical depth on an already-tracked finding):** researchers note this is actually exploitable **unauthenticated**, not just by an authenticated workflow editor as originally summarized — an attacker configures a workflow with a public, no-auth webhook, embeds the destructuring-based payload in a connected node, and activates it; any subsequent HTTP request to the webhook URL executes attacker-chosen system commands as the n8n process, with no login required at all. Patched in **n8n 1.123.17 / 2.5.2**. Public PoCs are available; researchers describe the failure as "every layer said 'this looks safe,' and together they allowed something that was not safe at all" — n8n's expression sandbox has now had this same class of AST-node gap patched at least twice.
 
 **March 2026 RCE + credential exposure cluster**
 
@@ -129,6 +129,8 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:5678/healthz
 - [NVD — CVE-2026-44789](https://nvd.nist.gov/vuln/detail/CVE-2026-44789), [CVE-2026-44790](https://nvd.nist.gov/vuln/detail/CVE-2026-44790), [CVE-2026-44791](https://nvd.nist.gov/vuln/detail/CVE-2026-44791) — official CVE records.
 - [GitHub Advisory — GHSA-v364-rw7m-3263 (CVE-2026-21877, authenticated file-write → RCE, fixed 1.121.3)](https://github.com/advisories/GHSA-v364-rw7m-3263)
 - [NVD — CVE-2026-21877](https://nvd.nist.gov/vuln/detail/CVE-2026-21877) — CVSS 10.0 authenticated arbitrary file write.
+- [SecureLayer7 — A Deep Dive into CVE-2026-25049: n8n Remote Code Execution](https://blog.securelayer7.net/cve-2026-25049/) — added 2026-08-10: AST-node root cause, arrow-function/destructuring bypass mechanics, unauthenticated-via-public-webhook exploitation path, relationship to CVE-2025-68613.
+- [Endor Labs — CVE-2026-25049 Expression Escape Vulnerability Leading to RCE in n8n](https://www.endorlabs.com/learn/cve-2026-25049-n8n-rce) — added 2026-08-10: independent confirmation, patched-version detail.
 - [CISA KEV — CVE-2025-68613](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) — added March 2026; ~24,700 exposed instances observed.
 - [The Hacker News — n8n CVE-2026-27577 Expression Compiler Sandbox Escape](https://thehackernews.com/2026/06/n8n-cve-2026-27577.html) — June 2026 sandbox escape in expression compiler (CVSS 9.4).
 - [GitHub Advisory — CVE-2026-27493 n8n Form node double-evaluation pre-auth RCE](https://github.com/advisories?query=n8n+CVE-2026-27493) — June 2026 pre-auth RCE via public Form node endpoints.
