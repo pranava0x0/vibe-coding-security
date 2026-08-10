@@ -4,6 +4,10 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-08-05 | [Flooding Dropper — ~850 npm packages deliver a cross-platform RAT via require()-time execution, targeting Russian fintech developers](2026-08-flooding-dropper-wel1dropper-npm.md) | high | contained |
+| 2026-08-05 | [Paperclip AI agent orchestration platform — self-registration to unauthenticated RCE via malicious agent import (CVE-2026-41679, CVSS 10.0)](2026-08-paperclip-ai-agent-orchestration-cves.md) | critical | patched |
+| 2026-08-05 | [Atlassian Rovo — indirect prompt injection exfiltrates Jira/Confluence data; the admin "disable web search" toggle doesn't stop it (unpatched)](2026-08-atlassian-rovo-data-exfiltration.md) | high | active |
+| 2026-04-24 | [Gemini CLI "TrustIssues" — a public GitHub issue reaches CI secrets via --yolo mode tool-allowlist bypass (CVE-2026-12537, CVSS 10.0)](2026-04-gemini-cli-trustissues-cve-2026-12537.md) | critical | patched |
 | 2026-04-22 | [CanisterWorm — self-propagating npm worm hits Namastex Labs' Automagik AI-agent packages, uses an Internet Computer canister as a dead drop](2026-04-canisterworm-namastex-npm.md) | high | contained |
 | 2026-02-25 | [Google API keys silently gain Gemini access when a project enables the Generative Language API — 2,863 leaked keys exposed](2026-02-google-api-key-gemini-scope-escalation.md) | high | mitigated |
 | 2025-12-27 | [PleaseFix / Intent Collision — zero-click hijack of Claude in Chrome, ChatGPT Atlas, Gemini, Perplexity Comet, Copilot Edge (Black Hat USA 2026)](2026-08-pleasefix-agentic-browser-hijack.md) | high | active |

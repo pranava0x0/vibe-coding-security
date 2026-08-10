@@ -2,7 +2,7 @@
 id: 2026-07-nuxt-security-release-server-island-rce
 title: "Nuxt July 2026 security release — 7 advisories including server-side RCE via Server Island prop injection and a critical DevTools RCE"
 date_disclosed: 2026-07-27
-last_updated: 2026-07-27
+last_updated: 2026-08-10
 severity: high
 status: patched
 ecosystems: [npm, javascript, vue]
@@ -28,7 +28,14 @@ Nuxt's own security post ([nuxt.com/blog/v4-5-security](https://nuxt.com/blog/v4
 | **GHSA-7c4v-fwgw-9rf7** | Low | Dev-server path disclosure. |
 | **GHSA-279x-mwfv-vcqv** | Critical (dev-tooling only) | Remote code execution in `@nuxt/devtools`, all versions — fixed in `@nuxt/devtools` 3.3.1. |
 
-No CVE numbers have been assigned to any of these as of this sweep; all are tracked by GHSA ID only. Vercel received advance notice and deployed platform-wide WAF mitigations for apps hosted on Vercel ahead of public disclosure ([Vercel changelog](https://vercel.com/changelog/nuxt-july-2026-security-advisory)); Netlify also published guidance for its users ([Netlify changelog](https://www.netlify.com/changelog/2026-07-27-nuxt-security-vulnerabilities/)). Socket.dev additionally released free backport patches for older Nuxt release lines that won't receive an official fix.
+No CVE numbers had been assigned to any of these as of the original 2026-07-27 sweep; all were tracked by GHSA ID only at that time. Vercel received advance notice and deployed platform-wide WAF mitigations for apps hosted on Vercel ahead of public disclosure ([Vercel changelog](https://vercel.com/changelog/nuxt-july-2026-security-advisory)); Netlify also published guidance for its users ([Netlify changelog](https://www.netlify.com/changelog/2026-07-27-nuxt-security-vulnerabilities/)). Socket.dev additionally released free backport patches for older Nuxt release lines that won't receive an official fix.
+
+**Update (2026-08-05) — CVE numbers assigned to the same July batch, plus one companion advisory clarifying an earlier incomplete fix.** MITRE/NVD formally assigned CVE numbers to this same 7-advisory batch on 2026-08-05, fixed in the same **3.21.10 / 4.5.1** release as the original disclosure (no new patch was needed — these are retroactive CVE-ID assignments, not a second release):
+- **CVE-2026-71320** = GHSA-9473-5f9j-94wq (the headline Server Island RCE)
+- **CVE-2026-71318** = GHSA-48hr-524c-v5w3 (unauthorized component instantiation)
+- **CVE-2026-71316** = GHSA-wm8w-6qjm-cv43 (cross-user SSR payload disclosure)
+- **CVE-2026-71314** and **CVE-2026-71321** = the two server-component DoS advisories (unbounded `v-for` expansion causing OOM; unauthenticated CPU exhaustion from parsing/hashing the island endpoint body before hash validation)
+- **CVE-2026-71315** (GHSA-mm7m-92g8-7m47 territory) is a distinct, related advisory: Nuxt's route-rule matching **lowercases the lookup path but not the route-rule key**, so a mixed-case `routeRules` entry silently fails to match and drops its `appMiddleware` authorization gate — described as an **incomplete fix for an earlier, separate CVE (CVE-2026-53721)** not previously tracked in this repo. Affected **3.21.7–3.21.9** and **4.4.7–4.5.0**; fixed in the same **3.21.10 / 4.5.1** release as the rest of this batch. If you protect any route via `routeRules` + `appMiddleware` with a mixed-case path segment (e.g. `/Admin/**`), confirm you're on ≥3.21.10/4.5.1 — this is the kind of case-sensitivity gap that's easy to miss in a routine version bump.
 
 ## Am I affected?
 
