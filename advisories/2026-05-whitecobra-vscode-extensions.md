@@ -2,7 +2,7 @@
 id: 2026-05-whitecobra-vscode-extensions
 title: "WhiteCobra — recurring VS Code / Cursor / Windsurf / Open VSX crypto-stealer campaign (July 2025 → ongoing)"
 date_disclosed: 2025-07-01
-last_updated: 2026-06-05
+last_updated: 2026-08-11
 severity: high
 status: active
 ecosystems: [vscode, cursor, windsurf, openvsx]
@@ -32,6 +32,8 @@ WhiteCobra has published at least **24 malicious extensions** across the VS Code
 5. Credentials exfiltrated to attacker C2; WhiteCobra converts crypto access to cash.
 
 **Why `--ignore-scripts` doesn't help:** This attack installs via extension activation (VS Code extension marketplace install), not npm package install. The delivery is the IDE's own extension system.
+
+**Update, 2026-08-10 — "Solidity Pro" extensions (`helper-beeps.solidity-pro`, `web3devtoolsx.solidity-pro`).** Yeeth Security identified a new pair of Open VSX extensions using the same social-engineering lure (Solidity tooling) and explicitly attributed them to the WhiteCobra playbook. The two extensions show a payload evolution within their own version history: **v1.0.0–v2.4.x** beaconed to Cloudflare Workers endpoints to fetch and execute an encrypted Python payload outside the extension host; **v3.0.0+** dropped that stage in favor of a direct infostealer that exfiltrates via a **Telegram bot upload** (no separate C2 server, no child process, harder to catch on network-egress monitoring alone). Target credentials expanded beyond crypto wallets to GitHub/GitLab/AWS/Cloudflare/OpenAI tokens and 1Password MFA tokens, plus MetaMask/Phantom/Rabby/Coinbase/Trust/Keplr wallets, Bitcoin WIF/xprv keys, and SSH keys. Both extensions randomize a 12–72h activation delay before running, to evade marketplace scan windows and sandboxed analysis. Removed from Open VSX by publication; both use throwaway publisher accounts consistent with WhiteCobra's documented sub-3-hour redeploy cadence.
 
 **Connection to the Open Sesame vulnerability:** The Open VSX "Open Sesame" flaw (disclosed February 8, 2026, patched in version 0.32.0) allowed malicious extensions to bypass pre-publish security scanning by triggering a scanner-failure condition misinterpreted as "no scanners configured." This vulnerability likely lowered the barrier for WhiteCobra extensions to pass automated review checks. The flaw was found by Koi Security researcher Oran Simhony.
 
@@ -76,4 +78,5 @@ find ~/Library -name "*.log" -newer /tmp/last_week -size +1k 2>/dev/null | head 
 - [BleepingComputer — "Malicious crypto-stealing VSCode extensions resurface on OpenVSX"](https://www.bleepingcomputer.com/news/security/malicious-crypto-stealing-vscode-extensions-resurface-on-openvsx/) — ongoing campaign persistence.
 - [BleepingComputer — "Malicious VSCode extension in Cursor IDE led to $500K crypto theft"](https://www.bleepingcomputer.com/news/security/malicious-vscode-extension-in-cursor-ide-led-to-500k-crypto-theft/) — initial incident, Zak Cole account, July 2025.
 - [The Hacker News — "Open VSX Bug Let Malicious VS Code Extensions Bypass Pre-Publish Security Checks"](https://thehackernews.com/2026/03/open-vsx-bug-let-malicious-vs-code.html) — Open Sesame vulnerability context.
+- [The Hacker News — "Solidity Pro VS Code Extensions Steal Crypto Wallets and Developer Credentials"](https://thehackernews.com/2026/08/solidity-pro-vs-code-extensions-steal.html) — Yeeth Security's technical analysis of `helper-beeps.solidity-pro`/`web3devtoolsx.solidity-pro`, version-history payload shift, Telegram-bot exfiltration, explicit WhiteCobra attribution.
 - Cross-reference: [2026-01-vscode-fork-recommended-extension-hijack.md](2026-01-vscode-fork-recommended-extension-hijack.md), [2025-10-glassworm-vscode-worm.md](2025-10-glassworm-vscode-worm.md).

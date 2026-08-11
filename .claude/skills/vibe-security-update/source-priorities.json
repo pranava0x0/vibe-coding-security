@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-08-10",
+  "last_updated": "2026-08-11",
   "notes": "Sweep on 2026-08-10 added four new advisories and enriched two existing ones. NEW: Gemini CLI 'TrustIssues' (CVE-2026-12537, CVSS 10.0, backfilled -- disclosed/patched April 2026 by Pillar Security/Novee Security, resurfaced at Black Hat USA 2026 alongside the already-tracked Claude Code CVE-2026-54316); Atlassian Rovo indirect-prompt-injection data exfiltration (PromptArmor, unpatched, admin toggle doesn't work); Paperclip AI agent-orchestration platform (CVE-2026-41679 CVSS 10.0 + 2 more, self-registration to unauthenticated RCE via malicious agent import, patched 2026.416.0); Flooding Dropper / WEL1DROPPER npm campaign (~846 packages, require()-time execution not install-time, targets Russian fintech developers). UPDATED: Nuxt July 2026 batch got CVE numbers assigned 2026-08-05 (CVE-2026-71314/71316/71318/71320/71321) plus one new companion advisory (CVE-2026-71315, incomplete fix for an earlier route-rule bypass). n8n Ni8mare advisory enriched with the AST/arrow-function root-cause detail for CVE-2026-25049 (already tracked, just thinly) -- corrected an initial mistaken duplicate-advisory attempt against the July batch file before catching it via direct grep, consistent with the skill's 'verify before treating something as new' discipline. New primary source discovered this run: promptarmor.com (weight 8) -- AI-agent indirect-prompt-injection research, add to researcher-blog rotation.",
   "sources": {
     "socket.dev": {
@@ -106,8 +106,8 @@
     },
     "thehackernews.com": {
       "weight": 20,
-      "hits": 74,
-      "last_hit": "2026-08-10",
+      "hits": 75,
+      "last_hit": "2026-08-11",
       "ecosystems": [
         "agentforger",
         "ai-agents",
@@ -140,6 +140,7 @@
         "dify-difytap",
         "duneslide",
         "flooding-dropper",
+        "flooding-dropper-update",
         "friendly-fire",
         "gemini-cli-trustissues",
         "ghostapproval",
@@ -163,6 +164,7 @@
         "langflow",
         "langflow-cve-5027",
         "langflow-cve-55255-kev",
+        "langflow-cve-9198-kev",
         "langgraph-rce-chain",
         "langsmith",
         "leoplatform",
@@ -207,6 +209,7 @@
         "shai-hulud-3",
         "shai-hulud-copycat",
         "skillcloak",
+        "solidity-pro-whitecobra",
         "streamlit-ssrf",
         "trapdoor",
         "trivy",
@@ -220,13 +223,14 @@
     },
     "theregister.com": {
       "weight": 20,
-      "hits": 27,
-      "last_hit": "2026-08-02",
+      "hits": 28,
+      "last_hit": "2026-08-11",
       "ecosystems": [
         "agentforger",
         "amazon-q",
         "aur-atomic-arch",
         "binding-gyp-removal",
+        "checkpoint-agent-framework-cluster",
         "claude-code",
         "claude-code-cve-25723",
         "claude-code-nvdb-china",
@@ -261,8 +265,8 @@
     },
     "securityweek.com": {
       "weight": 20,
-      "hits": 40,
-      "last_hit": "2026-08-10",
+      "hits": 41,
+      "last_hit": "2026-08-11",
       "ecosystems": [
         "agentforger",
         "ai-agents",
@@ -281,6 +285,7 @@
         "dify-difytap",
         "gemini-cli",
         "gemini-cli-trustissues",
+        "ghostjacking",
         "github-codespaces",
         "gluestack",
         "hades",
@@ -1078,6 +1083,21 @@
       "tier": "research",
       "_added": "2026-05-18"
     },
+    "pillar.security": {
+      "weight": 13,
+      "hits": 5,
+      "last_hit": "2026-08-11",
+      "ecosystems": [
+        "ai-agents",
+        "antigravity",
+        "cursor",
+        "gemini-cli",
+        "gemini-cli-trustissues",
+        "google-adk-agent-to-agent"
+      ],
+      "tier": "research",
+      "_added": "2026-05-18"
+    },
     "reversinglabs.com": {
       "weight": 12,
       "hits": 2,
@@ -1255,20 +1275,6 @@
       ],
       "tier": "research"
     },
-    "pillar.security": {
-      "weight": 12,
-      "hits": 4,
-      "last_hit": "2026-08-10",
-      "ecosystems": [
-        "ai-agents",
-        "antigravity",
-        "cursor",
-        "gemini-cli",
-        "gemini-cli-trustissues"
-      ],
-      "tier": "research",
-      "_added": "2026-05-18"
-    },
     "adversa.ai": {
       "weight": 12,
       "hits": 6,
@@ -1321,6 +1327,37 @@
       ],
       "tier": "research",
       "_added": "2026-05-18"
+    },
+    "tenetsecurity.ai": {
+      "weight": 12,
+      "hits": 3,
+      "last_hit": "2026-08-11",
+      "ecosystems": [
+        "agentjacking",
+        "ai-agents",
+        "ghostjacking",
+        "indirect-prompt-injection",
+        "mcp",
+        "prompt-injection",
+        "sentry"
+      ],
+      "tier": "research",
+      "_added": "2026-06-14"
+    },
+    "sonatype.com": {
+      "weight": 12,
+      "hits": 3,
+      "last_hit": "2026-08-11",
+      "ecosystems": [
+        "flooding-dropper",
+        "flooding-dropper-update",
+        "miasma",
+        "npm",
+        "redhat",
+        "supply-chain"
+      ],
+      "tier": "research",
+      "_added": "2026-06-02"
     },
     "venturebeat.com": {
       "weight": 11,
@@ -1460,21 +1497,6 @@
       "tier": "vendor",
       "_added": "2026-06-04"
     },
-    "tenetsecurity.ai": {
-      "weight": 11,
-      "hits": 2,
-      "last_hit": "2026-06-17",
-      "ecosystems": [
-        "mcp",
-        "agentjacking",
-        "sentry",
-        "ai-agents",
-        "prompt-injection",
-        "indirect-prompt-injection"
-      ],
-      "tier": "research",
-      "_added": "2026-06-14"
-    },
     "cyberpress.org": {
       "weight": 11,
       "hits": 7,
@@ -1551,20 +1573,6 @@
       ],
       "tier": "research",
       "_added": "2026-05-18"
-    },
-    "sonatype.com": {
-      "weight": 11,
-      "hits": 2,
-      "last_hit": "2026-08-10",
-      "ecosystems": [
-        "flooding-dropper",
-        "miasma",
-        "npm",
-        "redhat",
-        "supply-chain"
-      ],
-      "tier": "research",
-      "_added": "2026-06-02"
     },
     "sophos.com": {
       "weight": 10,
@@ -1873,6 +1881,17 @@
       "tier": "research",
       "_added": "2026-08-09"
     },
+    "ibm.com": {
+      "weight": 10,
+      "hits": 1,
+      "last_hit": "2026-08-11",
+      "ecosystems": [
+        "langflow",
+        "cve-2026-9198"
+      ],
+      "tier": "vendor",
+      "_added": "2026-08-11"
+    },
     "policylayer.com": {
       "weight": 9,
       "hits": 1,
@@ -2164,6 +2183,17 @@
       "tier": "research",
       "_added": "2026-07-08"
     },
+    "blog.checkpoint.com": {
+      "weight": 9,
+      "hits": 2,
+      "last_hit": "2026-08-11",
+      "ecosystems": [
+        "checkpoint-agent-framework-cluster",
+        "cursor",
+        "langgraph"
+      ],
+      "tier": "research"
+    },
     "expel.com": {
       "weight": 8,
       "hits": 1,
@@ -2195,15 +2225,6 @@
         "replit"
       ],
       "tier": "independent"
-    },
-    "blog.checkpoint.com": {
-      "weight": 8,
-      "hits": 1,
-      "last_hit": "2026-05-16",
-      "ecosystems": [
-        "cursor"
-      ],
-      "tier": "research"
     },
     "lakera.ai": {
       "weight": 8,
@@ -2944,6 +2965,20 @@
       ],
       "tier": "vendor"
     },
+    "gigazine.net": {
+      "weight": 7,
+      "hits": 3,
+      "last_hit": "2026-08-11",
+      "ecosystems": [
+        "ai-agents",
+        "atlassian-rovo",
+        "badhost",
+        "google-adk-agent-to-agent",
+        "starlette"
+      ],
+      "tier": "aggregator",
+      "_added": "2026-05-28"
+    },
     "qualysec.com": {
       "weight": 6,
       "hits": 1,
@@ -3365,19 +3400,6 @@
       "tier": "aggregator",
       "_added": "2026-08-03"
     },
-    "gigazine.net": {
-      "weight": 6,
-      "hits": 2,
-      "last_hit": "2026-08-10",
-      "ecosystems": [
-        "ai-agents",
-        "atlassian-rovo",
-        "badhost",
-        "starlette"
-      ],
-      "tier": "aggregator",
-      "_added": "2026-05-28"
-    },
     "cve.threatint.com": {
       "weight": 6,
       "hits": 1,
@@ -3405,6 +3427,29 @@
       ],
       "tier": "official",
       "_added": "2026-08-08"
+    },
+    "bloomberg.com": {
+      "weight": 6,
+      "hits": 1,
+      "last_hit": "2026-08-11",
+      "ecosystems": [
+        "ai-vendor-infrastructure",
+        "kimi-k3",
+        "agentic-threat-actor"
+      ],
+      "tier": "aggregator",
+      "_added": "2026-08-11"
+    },
+    "engadget.com": {
+      "weight": 6,
+      "hits": 1,
+      "last_hit": "2026-08-11",
+      "ecosystems": [
+        "ai-vendor-infrastructure",
+        "kimi-k3"
+      ],
+      "tier": "aggregator",
+      "_added": "2026-08-11"
     },
     "waxell.ai": {
       "weight": 5,

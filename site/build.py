@@ -776,15 +776,16 @@ def build_llms_txt(pages: list[Page], full_bytes: int | None = None, ctx_bytes: 
         meta += f" {date_d}" if date_d else ""
         # Tier 1 is count-bounded (LLMS_TXT_TIER1 recent ∪ all active/ongoing),
         # not corpus-size-bounded — but the active/ongoing set itself has no
-        # upper bound (58 of 176 advisories as of 2026-08-06, well above the
-        # ~34 this file's design assumed), so Tier 1 can still grow past a
-        # fixed entry count. This trim keeps per-entry size small enough that
-        # Tier 1's total stays in budget even as the active count grows;
-        # revisit if the active/ongoing count keeps climbing (many "active"
-        # entries are plausibly stale and worth a triage pass — see BACKLOG.md).
+        # upper bound (62 of 190 advisories as of 2026-08-11, up from 58 of 176
+        # on 2026-08-06), so Tier 1 can still grow past a fixed entry count.
+        # This trim keeps per-entry size small enough that Tier 1's total
+        # stays in budget even as the active count grows; tightened 90->70
+        # chars 2026-08-11 when the active-count growth alone breached the
+        # cap. If this keeps recurring, the active/ongoing count itself needs
+        # a triage pass (many are plausibly stale) — see BACKLOG.md.
         desc = p.description
-        if len(desc) > 90:
-            desc = desc[:89].rsplit(" ", 1)[0] + "…"
+        if len(desc) > 70:
+            desc = desc[:69].rsplit(" ", 1)[0] + "…"
         lines.append(
             f"- [{p.title}]({_page_html_url(p)}) ([md]({_page_md_url(p)})){meta}: {desc}"
         )

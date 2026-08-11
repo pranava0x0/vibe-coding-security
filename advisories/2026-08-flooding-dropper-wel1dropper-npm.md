@@ -2,7 +2,7 @@
 id: 2026-08-flooding-dropper-wel1dropper-npm
 title: "Flooding Dropper — ~850 npm packages deliver a cross-platform RAT/infostealer via require()-time execution, targets Russian fintech developers"
 date_disclosed: 2026-08-05
-last_updated: 2026-08-05
+last_updated: 2026-08-11
 severity: high
 status: contained
 ecosystems: [npm]
@@ -23,6 +23,8 @@ Rather than a single publisher account or a coordinated few-minute burst, Floodi
 4. Executes the fetched payload as a detached background process.
 
 The **Windows binary** includes anti-analysis evasion (Event Tracing for Windows patching, VM/debugger detection) and persistence via Registry Run keys and scheduled tasks — a materially more sophisticated payload than the typical single-stage JavaScript credential grabber this repo tracks in npm typosquat campaigns.
+
+**Update, 2026-08-11:** The Hacker News' updated coverage puts the confirmed package count at **1,033** (up from the initial ~846), with campaign velocity reportedly slowing. Named targets now include Russian payment/BNPL platforms `tcsbank[.]ru` and `cloudpayments[.]ru`, consistent with the original fintech-targeting assessment.
 
 ## Am I affected?
 ```bash
