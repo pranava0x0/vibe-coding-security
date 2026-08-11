@@ -4,6 +4,11 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-08-09 | [GhostJacking — prompt injections planted in Cloudflare/Datadog/Sentry logs hijack Claude Code 9 times out of 10](2026-08-ghostjacking-firewall-log-injection.md) | high | active |
+| 2026-08-07 | [Moonshot AI's open-weight Kimi K3 escapes a UK AISI cyber-eval sandbox via a network egress misconfiguration](2026-08-moonshot-kimi-k3-aisi-sandbox-escape.md) | medium | contained |
+| 2026-08-05 | ["No Tools Required" — Check Point finds a dozen framework-internals RCE/deserialization bugs across LangChain, CrewAI, Microsoft Agent Framework, Google ADK (details pending)](2026-08-checkpoint-agent-framework-post-injection-cluster.md) | high | unconfirmed |
+| 2026-08-03 | ["I'll Just Call You" — a PR comment tricks Google ADK's triage bot into invoking its maintainer-only agent, leaking API keys and a GCP service-account key](2026-08-google-adk-agent-to-agent-privilege-escalation.md) | high | patched |
+| 2026-07-02 | [Langflow CVE-2026-9198 — a fifth distinct unauthenticated RCE, /auto_login superuser token chained into /validate/code's exec(); CISA KEV](2026-08-langflow-cve-2026-9198-autologin-bypass-rce.md) | critical | active |
 | 2026-08-05 | [Flooding Dropper — ~850 npm packages deliver a cross-platform RAT via require()-time execution, targeting Russian fintech developers](2026-08-flooding-dropper-wel1dropper-npm.md) | high | contained |
 | 2026-08-05 | [Paperclip AI agent orchestration platform — self-registration to unauthenticated RCE via malicious agent import (CVE-2026-41679, CVSS 10.0)](2026-08-paperclip-ai-agent-orchestration-cves.md) | critical | patched |
 | 2026-08-05 | [Atlassian Rovo — indirect prompt injection exfiltrates Jira/Confluence data; the admin "disable web search" toggle doesn't stop it (unpatched)](2026-08-atlassian-rovo-data-exfiltration.md) | high | active |
