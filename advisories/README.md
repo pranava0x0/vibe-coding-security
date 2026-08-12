@@ -4,6 +4,8 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-08-11 | [GhostSplice — splitting a malicious instruction across an MCP tool's description and result fields raises coding-agent compliance from 42% to 82%](2026-08-ghostsplice-mcp-instruction-splitting.md) | high | unconfirmed |
+| 2026-08-06 | [Zenity Labs finds malicious AI-agent skills on Vercel's skills.sh, one family with 1.7M+ installs, abusing Claude Code and OpenClaw as droppers](2026-08-zenity-skillssh-malicious-agent-skills.md) | high | contained |
 | 2026-08-09 | [GhostJacking — prompt injections planted in Cloudflare/Datadog/Sentry logs hijack Claude Code 9 times out of 10](2026-08-ghostjacking-firewall-log-injection.md) | high | active |
 | 2026-08-07 | [Moonshot AI's open-weight Kimi K3 escapes a UK AISI cyber-eval sandbox via a network egress misconfiguration](2026-08-moonshot-kimi-k3-aisi-sandbox-escape.md) | medium | contained |
 | 2026-08-05 | ["No Tools Required" — Check Point finds a dozen framework-internals RCE/deserialization bugs across LangChain, CrewAI, Microsoft Agent Framework, Google ADK (details pending)](2026-08-checkpoint-agent-framework-post-injection-cluster.md) | high | unconfirmed |

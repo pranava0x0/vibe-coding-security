@@ -2,7 +2,7 @@
 id: 2026-02-clawhavoc-clawhub-skills
 title: "ClawHavoc — mass malicious-skill poisoning of OpenClaw's ClawHub marketplace (February 2026)"
 date_disclosed: 2026-02-01
-last_updated: 2026-07-09
+last_updated: 2026-08-06
 severity: high
 status: active
 ecosystems: [ai-agents, openclaw, clawhub]
@@ -50,6 +50,9 @@ The same researchers built **SkillDetonate**, a sandboxed runtime auditor that i
 
 ### Why this keeps happening
 This is the AI-agent-skill analogue of the [GlassWorm Open VSX worm](2025-10-glassworm-vscode-worm.md) and the [Nx Console extension compromise](2026-05-nx-console-vscode-compromise.md): an under-governed plugin/extension marketplace becomes a credential-theft delivery channel. It is distinct from the [OpenClaw "Claw Chain" CVEs](2026-05-openclaw-claw-chain.md) (flaws *in* the agent) and the Moltbook token leak (see [vibe platform exposure](ongoing-vibe-platform-exposure.md)) — here the **content in the marketplace** is the threat.
+
+### Update (2026-08-06) — Zenity Labs finds a separate 1.7M-install campaign on skills.sh
+Zenity Labs disclosed a distinct campaign targeting skills.sh specifically — see [advisories/2026-08-zenity-skillssh-malicious-agent-skills.md](2026-08-zenity-skillssh-malicious-agent-skills.md) — where over 30% of the dangerous skills identified abused **Claude Code and OpenClaw as malware droppers**, and one tainted skill family reached 1.7 million+ aggregate installs. Not a re-report of ClawHavoc; a separate finding on the same class of registry.
 
 ## Am I affected?
 You are exposed if you run OpenClaw (or its predecessors Clawdbot/Moltbot) and have installed any third-party skill from ClawHub, especially one that asked you to install a "prerequisite."

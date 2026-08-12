@@ -700,7 +700,7 @@ def _page_html_url(p: Page) -> str:
 # raising these further mostly adds size without much marginal recency value.
 # If the active/ongoing count keeps growing, the fix is triaging stale
 # "active" advisories back to patched/historical, not raising these numbers.
-LLMS_TXT_TIER1 = 15
+LLMS_TXT_TIER1 = 11
 LLMS_CTX_TIER1 = 15
 LLMS_FULL_TIER1 = 15
 
