@@ -2,7 +2,7 @@
 id: 2026-03-trivy-litellm-supply-chain
 title: "TeamPCP breaches Trivy GitHub Actions → LiteLLM 1.82.7–1.82.8 backdoored (March 2026)"
 date_disclosed: 2026-03-12
-last_updated: 2026-06-03
+last_updated: 2026-08-13
 severity: critical
 status: contained
 ecosystems: [pypi, ci-cd, github-actions]
@@ -31,6 +31,18 @@ A separate CI pipeline at Cisco was also caught by the compromised Trivy action;
 - **Dependent CI workflows:** 1,705 PyPI packages traced their release pipelines to `trivy-action`; additional npm / Docker / internal projects not fully enumerated
 - **LiteLLM exposure window:** ~3 hours (1.82.7 + 1.82.8)
 - **LiteLLM daily downloads:** ~3.4M
+
+## Update — 2026-08-13: CloudSEK reassesses impact at 2,500+ orgs / 434,000 CI/CD pipelines
+
+CloudSEK's **2026-08-11** retrospective report reassesses the blast radius far beyond the original ~3-hour PyPI exposure window. Per CloudSEK's own analysis:
+
+- **2,500+ organizations** and **434,000 CI/CD pipelines** exposed to credential harvesting via the poisoned Trivy (and Checkmarx KICS) scanner actions.
+- The malware dropped by the poisoned action is now tracked by Google as **SANDCLOCK**.
+- CloudSEK's own package-exposure window estimate for the backdoored LiteLLM PyPI releases is **~40 minutes** — shorter than earlier ~3-hour estimates in this advisory, reflecting a refined timeline from CloudSEK's investigation, not a correction of a factual error in the original reporting.
+- Named high-confidence exposures include **Cisco Systems** (327 secrets across 1,900 CI runs), **X Corp/Twitter** (3,459 secrets), **Deloitte** (462 secrets), and **Orange S.A.** (180 secrets across 5,642 runs), plus "dozens of Fortune 500 companies" across tech, finance, manufacturing, and energy.
+- The **FBI issued FLASH-20260702-01** (2026-07-02), warning that credentials harvested in this breach are likely to be weaponized by affiliated threat actors **long after** the original intrusion — i.e., treat exposure as ongoing risk, not a closed incident, even though the malicious PyPI packages themselves were removed within the original ~3-hour/40-minute window.
+
+This does not change the advisory's `status` (still `contained` — the malicious packages and poisoned action tags were removed), but materially raises the stakes of the "rotate every secret" guidance below: assume any credential exposed to a `trivy-action`-by-tag pipeline in the March 2026 window is still being actively exploited by downstream actors, five months later.
 
 ## Am I affected?
 
@@ -76,3 +88,4 @@ If any CI workflow ran `aquasecurity/trivy-action` by tag (not SHA) between **20
 - [Snyk Security — Supply chain attack on trivy-action: how pinning to SHA protects you](https://snyk.io/blog/supply-chain-attack-trivy-action-sha-pinning/)
 - [The Register — Security scanner becomes supply chain attack vector in TeamPCP campaign](https://www.theregister.com/2026/03/13/teampcp_trivy_litellm_supply_chain/)
 - [SecurityWeek — TeamPCP Turns Security Scanner Into Supply Chain Attack Vector](https://www.securityweek.com/teampcp-turns-security-scanner-into-supply-chain-attack-vector/)
+- [CloudSEK — AI Supply Chain Breach: 2,500+ Companies, 434,000 CI/CD Pipelines](https://www.cloudsek.com/blog/ai-supply-chain-breach-2500-companies-434000-cicd-pipelines) (2026-08-11 impact-scope retrospective)
