@@ -780,13 +780,14 @@ def build_llms_txt(pages: list[Page], full_bytes: int | None = None, ctx_bytes: 
         # on 2026-08-11), so Tier 1 can still grow past a fixed entry count.
         # This trim keeps per-entry size small enough that Tier 1's total
         # stays in budget even as the active count grows; tightened 90->70
-        # chars 2026-08-11, then 70->60 chars 2026-08-13 when the previous
-        # margin was exhausted by one new advisory. If this keeps recurring,
-        # the active/ongoing count itself needs a triage pass (many are
-        # plausibly stale) — see BACKLOG.md.
+        # chars 2026-08-11, then 70->60 chars 2026-08-13, then 60->52 chars
+        # 2026-08-14 when the previous margin was exhausted by one new
+        # active-status advisory (Metabase CVE-2026-72898). If this keeps
+        # recurring, the active/ongoing count itself needs a triage pass
+        # (many are plausibly stale) — see BACKLOG.md.
         desc = p.description
-        if len(desc) > 60:
-            desc = desc[:59].rsplit(" ", 1)[0] + "…"
+        if len(desc) > 52:
+            desc = desc[:51].rsplit(" ", 1)[0] + "…"
         lines.append(
             f"- [{p.title}]({_page_html_url(p)}) ([md]({_page_md_url(p)})){meta}: {desc}"
         )

@@ -4,6 +4,9 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-08-06 | [Metabase CVE-2026-72898 — unauthenticated SQLi (CVSS 10.0), CISA KEV, breached n8n customer data](2026-08-metabase-sqli-n8n-breach.md) | critical | active |
+| 2026-08-11 | [Microsoft August 2026 Patch Tuesday — critical elevation-of-privilege CVEs in Azure SRE Agent and Copilot Cowork](2026-08-microsoft-august-patch-tuesday-ai-agent-cves.md) | critical | patched |
+| 2026-08-11 | [AI-agent-assisted SharePoint exploit chain — JWT auth bypass + unsafe deserialization RCE (CVE-2026-55040, CVE-2026-63520)](2026-08-sharepoint-ai-assisted-exploit-chain.md) | high | patched |
 | 2026-08-11 | [GhostSplice — splitting a malicious instruction across an MCP tool's description and result fields raises coding-agent compliance from 42% to 82%](2026-08-ghostsplice-mcp-instruction-splitting.md) | high | unconfirmed |
 | 2026-08-10 | [Research: encrypted reasoning-trace replay across OpenAI/Anthropic/Google APIs recovers 182 credentials from public AI-agent transcripts](2026-08-reasoning-trace-replay-credential-leak.md) | medium | unconfirmed |
 | 2026-08-06 | [Zenity Labs finds malicious AI-agent skills on Vercel's skills.sh, one family with 1.7M+ installs, abusing Claude Code and OpenClaw as droppers](2026-08-zenity-skillssh-malicious-agent-skills.md) | high | contained |
