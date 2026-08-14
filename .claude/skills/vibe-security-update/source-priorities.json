@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "last_updated": "2026-08-13",
-  "notes": "Sweep on 2026-08-10 added four new advisories and enriched two existing ones. NEW: Gemini CLI 'TrustIssues' (CVE-2026-12537, CVSS 10.0, backfilled -- disclosed/patched April 2026 by Pillar Security/Novee Security, resurfaced at Black Hat USA 2026 alongside the already-tracked Claude Code CVE-2026-54316); Atlassian Rovo indirect-prompt-injection data exfiltration (PromptArmor, unpatched, admin toggle doesn't work); Paperclip AI agent-orchestration platform (CVE-2026-41679 CVSS 10.0 + 2 more, self-registration to unauthenticated RCE via malicious agent import, patched 2026.416.0); Flooding Dropper / WEL1DROPPER npm campaign (~846 packages, require()-time execution not install-time, targets Russian fintech developers). UPDATED: Nuxt July 2026 batch got CVE numbers assigned 2026-08-05 (CVE-2026-71314/71316/71318/71320/71321) plus one new companion advisory (CVE-2026-71315, incomplete fix for an earlier route-rule bypass). n8n Ni8mare advisory enriched with the AST/arrow-function root-cause detail for CVE-2026-25049 (already tracked, just thinly) -- corrected an initial mistaken duplicate-advisory attempt against the July batch file before catching it via direct grep, consistent with the skill's 'verify before treating something as new' discipline. New primary source discovered this run: promptarmor.com (weight 8) -- AI-agent indirect-prompt-injection research, add to researcher-blog rotation.",
+  "last_updated": "2026-08-14",
+  "notes": "Sweep on 2026-08-14 covered the user's 14 requested topics (npm/PyPI compromise, malicious MCP servers, Cursor/Claude Code CVEs, Lovable/Bolt/v0/Replit, AI coding assistant incidents, Rust crates.io build.rs, .cursorrules/CLAUDE.md poisoning, AI agent framework CVEs, AI-agent-platform breaches, React Server Components RCE, binding.gyp/node-gyp, npm v12 allowScripts). No genuinely new incident met the 2-independent-source bar for a NEW advisory this run -- everything found in the 24-48h window (keyv/cacheable ChainDrop count refinements, Flooding Dropper ~800-package figure, Alibaba lib-mtop, Cursor CVE-2026-26268, binding.gyp June wave, Composio breach, Semantic Kernel CVEs, PraisonAI, React2Shell) was already tracked. UPDATED 2 existing advisories with previously-uncaptured verified detail found via direct NVD/vendor-page checks: (1) huggingface-agentic-intrusion.md -- the JFrog Artifactory zero-days OpenAI's models chained now have confirmed CVE numbers (CVE-2026-65617, -65923, -66018) and a patched version (Artifactory 7.161.15), closing a gap the 2026-07-29 update had left unconfirmed; (2) openclaw-claw-chain.md -- two further, earlier, previously-untracked OpenClaw CVEs found via a direct NVD walk: CVE-2026-32922 (device.token.rotate privilege escalation, fixed 2026.3.11) and CVE-2026-24763 (Docker sandbox PATH command injection, fixed 2026.1.29), both distinct from the already-tracked Claw Chain cluster and CVE-2026-33579. New source added: armosec.io (weight 5) -- cloud/AI-agent vulnerability research, primary source for CVE-2026-32922 detail.",
   "sources": {
     "socket.dev": {
       "weight": 20,
@@ -267,8 +267,8 @@
     },
     "securityweek.com": {
       "weight": 20,
-      "hits": 41,
-      "last_hit": "2026-08-11",
+      "hits": 42,
+      "last_hit": "2026-08-14",
       "ecosystems": [
         "agentforger",
         "ai-agents",
@@ -295,6 +295,7 @@
         "huggingface-openai-attribution",
         "ironworm",
         "jadepuffer",
+        "jfrog-artifactory-cve",
         "klue-hackers-hacked",
         "klue-icarus-oauth",
         "klue-more-victims",
@@ -4450,6 +4451,15 @@
         "claude-code"
       ],
       "tier": "independent"
+    },
+    "armosec.io": {
+      "weight": 5,
+      "hits": 1,
+      "last_hit": "2026-08-14",
+      "ecosystems": [
+        "openclaw-cve-32922"
+      ],
+      "tier": "research"
     }
   }
 }

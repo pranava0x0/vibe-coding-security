@@ -2,7 +2,7 @@
 id: 2026-05-openclaw-claw-chain
 title: "OpenClaw 'Claw Chain' — 4 chainable sandbox-escape flaws (May 2026), plus a March 2026 device-pairing privilege-escalation CVE"
 date_disclosed: 2026-05-13
-last_updated: 2026-08-08
+last_updated: 2026-08-14
 severity: critical
 status: patched
 ecosystems: [ai-agents]
@@ -73,6 +73,23 @@ A distinct, unrelated bug — **CVE-2026-33579** (CVSS 3.1: 8.1 High / CVSS 4.0:
 openclaw --version 2>/dev/null   # confirm >= 2026.3.28 for this CVE, >= 2026.4.22 for Claw Chain
 ```
 
+## Update — 2026-08-14: two more, earlier OpenClaw CVEs found via a direct vendor/NVD check, unrelated to Claw Chain or CVE-2026-33579
+A routine cross-check against NVD and ArmoSec's vulnerability writeups turned up **two further, distinct OpenClaw CVEs** predating both the Claw Chain cluster (fixed 2026.4.22) and CVE-2026-33579 (fixed 2026.3.28) — neither previously tracked in this repo:
+
+- **CVE-2026-32922** (CVSS 3.1: 9.9 / CVSS 4.0: 9.4) — a privilege-escalation bug in the device-pairing subsystem's **`device.token.rotate`** function: a caller holding only the limited `operator.pairing` scope could invoke this function and receive back a fully-privileged `operator.admin` token, with no scope check on the returned token's privilege level. Reported 2026-02-19, fixed and a GitHub Security Advisory published 2026-03-13, CVE published 2026-03-29. **Fixed in OpenClaw 2026.3.11** — the earliest fix among all five OpenClaw CVEs this repo now tracks. Same general class as CVE-2026-33579 (device-pairing scope-forwarding failure) but a different function, different CVE, and fixed roughly six weeks earlier.
+- **CVE-2026-24763** (CVSS 3.1: 8.8) — a command-injection flaw in OpenClaw's **Docker sandbox execution mechanism**, caused by unsafe handling of the `PATH` environment variable when constructing shell commands; an authenticated user able to control environment variables could manipulate command execution inside the container. Published 2026-02-02, **fixed in OpenClaw 2026.1.29**.
+
+Both confirmed via NVD directly (CVE-2026-32922, CVE-2026-24763) and cross-referenced against ArmoSec's writeup — satisfying this repo's independent-source bar. Any OpenClaw instance running a version older than **2026.1.29** is now confirmed exposed to at least five independently-patched CVEs in this repo's tracking (this one, CVE-2026-24763's fix; plus CVE-2026-32922 at 2026.3.11; CVE-2026-33579 at 2026.3.28; and the Claw Chain cluster at 2026.4.22) — the practical guidance is unchanged: run the latest OpenClaw release, don't assume "patched for Claw Chain" covers earlier bugs.
+
+```bash
+openclaw --version 2>/dev/null
+# Confirmed-vulnerable-below thresholds, oldest to newest fix:
+#   < 2026.1.29  — CVE-2026-24763 (Docker sandbox PATH command injection)
+#   < 2026.3.11  — CVE-2026-32922 (device.token.rotate privilege escalation)
+#   < 2026.3.28  — CVE-2026-33579 (device-pairing /pair approve scope-forwarding)
+#   < 2026.4.22  — Claw Chain (CVE-2026-44112/-44113/-44115/-44118)
+```
+
 ## Prevention
 → [prevention/agent-sandboxing.md](../prevention/agent-sandboxing.md)
 → [prevention/mcp-hygiene.md](../prevention/mcp-hygiene.md)
@@ -92,3 +109,5 @@ openclaw --version 2>/dev/null   # confirm >= 2026.3.28 for this CVE, >= 2026.4.
 - [Sangfor — OpenClaw Security Risks: From Vulnerabilities to Supply Chain Abuse](https://www.sangfor.com/blog/cybersecurity/openclaw-ai-agent-security-risks-2026)
 - [SentinelOne — CVE-2026-33579: OpenClaw Privilege Escalation Vulnerability](https://www.sentinelone.com/vulnerability-database/cve-2026-33579/) — CVSS scoring, CWE classification, affected/fixed version.
 - [DEV Community — OpenClaw CVE-2026-33579: Unauthorized Privilege Escalation via `/pair approve` Command Fixed](https://dev.to/olgabyte/openclaw-cve-2026-33579-unauthorized-privilege-escalation-via-pair-approve-command-fixed-l48) — exploit sequence and affected source files.
+- [ArmoSec — CVE-2026-32922: Critical Privilege Escalation in OpenClaw](https://www.armosec.io/blog/cve-2026-32922-openclaw-privilege-escalation-cloud-security/) — fetched directly for the 2026-08-14 update: `device.token.rotate` scope-check bypass, disclosure timeline, fixed version.
+- [NVD — CVE-2026-32922](https://nvd.nist.gov/vuln/detail/CVE-2026-32922), [NVD — CVE-2026-24763](https://nvd.nist.gov/vuln/detail/CVE-2026-24763) — fetched directly to confirm both CVEs independently for the 2026-08-14 update.
