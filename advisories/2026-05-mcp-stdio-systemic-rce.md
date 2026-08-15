@@ -2,7 +2,7 @@
 id: 2026-05-mcp-stdio-systemic-rce
 title: "Systemic MCP stdio RCE class — 200,000+ servers exposed (May 2026)"
 date_disclosed: 2026-05
-last_updated: 2026-08-14
+last_updated: 2026-08-15
 severity: high
 status: mitigated
 ecosystems: [mcp, anthropic-mcp]
@@ -61,6 +61,8 @@ Microsoft's own MCP server has now had **two** disclosures in this class:
 
 **Named instance — `stata-mcp` unauthenticated command injection (CVE-2026-55071, CVSS 8.4, GHSA-49m4-vp58-wgc9):** a niche MCP server (PyPI) that bridges the Stata statistical-software CLI to Claude Code, Cursor, Codex, and OpenClaw. Its `ado_package_install` tool concatenates the caller-supplied `package` parameter unsanitized into a Stata command string; a newline plus Stata's shell-escape feature (`!`) yields OS-level command execution under the account running the MCP server (CWE-94). Enabled by default in the tool's `all` profile — no non-default configuration needed to be exploitable. Affects **< 1.19.0**, fixed in **1.19.0**. Sourced solely from the GitHub/GitLab advisory-database mirrors of the same underlying GHSA record (no independent journalism coverage found as of this sweep) — flagging for awareness given the low-adoption, specialist nature of the tool, but the same "caller-supplied string reaches a shell with no sanitization" root cause as every other entry here.
 
+**Named instance — `@ooples/token-optimizer-mcp`, unauthenticated command injection + path traversal (CVE-2026-55157, CVE-2026-55156):** an npm MCP server marketed for reducing token usage across Claude Code, Claude Desktop, and 16 other CLI clients. **CVE-2026-55157 / GHSA-49mq-fc6q-3h46** (CVSS 8.4, high, CWE-78) — the `smart_user` tool's `get-user-info` operation interpolates a caller-supplied username directly into a shell command (`getent passwd "${username}" || grep "^${username}:" /etc/passwd`); double-quoting doesn't stop POSIX shells from evaluating `$(...)`/backtick command substitution inside the quoted string, so any MCP client invoking this tool can run arbitrary shell commands with the server process's privileges. **CVE-2026-55156 / GHSA-76pc-mqxp-3rq5** (CVSS 5.3, moderate) — a separate, unauthenticated path-traversal bug in the server's dashboard: the `/api/session-summary` and `/api/session-events` endpoints build filesystem paths by interpolating an unsanitized `sessionId` query parameter via `path.join`, letting a remote caller read arbitrary `.jsonl` files (including session logs with tool invocations and token-usage data) with no authentication or user interaction. Both affect **< 5.1.0**, fixed in **5.1.0**. Same two root causes this advisory already tracks elsewhere — a caller-supplied string reaching a shell with no sanitization, and a caller-supplied string reaching a filesystem path with no normalization — recurring in a single package.
+
 ## Am I affected?
 You are exposed by the class issue if:
 
@@ -79,6 +81,8 @@ You are exposed by the class issue if:
 - You run **`n8n-mcp` < 2.57.4** in multi-tenant HTTP mode (CVE-2026-55608) — an authenticated tenant may still reach default-scope workflow-version backups; upgrade to **≥ 2.57.4**.
 - You run **HashiCorp `terraform-mcp-server` 0.2.1–1.0.0** (CVE-2026-14869 / -16496 / -16498) — unauthenticated SSRF plus two credential-reuse bugs across stateful/stateless modes; upgrade to **≥ 1.1.0** and rotate the Terraform token the server was configured with.
 - You run **`mcp-server-kubernetes` before 3.6.0 / 3.7.0** (CVE-2026-46519 / CVE-2026-47250) — your `ALLOWED_TOOLS`-style restrictions are cosmetic, and log-processing workflows can leak kubeconfig bearer tokens; upgrade to **≥ 3.7.0** and rotate any operator kubeconfig tokens used with the server.
+- You run **`stata-mcp` < 1.19.0** (CVE-2026-55071) with the `all` tool profile enabled — unauthenticated command injection via `ado_package_install`; upgrade to **≥ 1.19.0**.
+- You run **`@ooples/token-optimizer-mcp` < 5.1.0** (CVE-2026-55157 / CVE-2026-55156) — command injection via `smart_user`'s `get-user-info` and unauthenticated path traversal via its dashboard API; upgrade to **≥ 5.1.0**.
 
 ```bash
 # Find MCP servers configured in your tools
@@ -106,6 +110,7 @@ lsof -iTCP -sTCP:LISTEN -P -n 2>/dev/null | grep -iE 'mcp|model-context'
 5g. **Update HashiCorp `terraform-mcp-server` to ≥ 1.1.0** (CVE-2026-14869 / -16496 / -16498) and rotate the Terraform API token the server held, since the SSRF could have exfiltrated it before you patched.
 5h. **Update `mcp-server-kubernetes` to ≥ 3.7.0** and rotate any kubeconfig bearer tokens used with it (CVE-2026-46519 / CVE-2026-47250); don't rely on `ALLOWED_TOOLS`-style env vars as a security boundary until confirmed patched.
 5i. **Update `stata-mcp` to ≥ 1.19.0** (CVE-2026-55071) if you use it; don't enable the `all` tool profile against an MCP server you haven't reviewed for input sanitization.
+5j. **Update `@ooples/token-optimizer-mcp` to ≥ 5.1.0** (CVE-2026-55157 / CVE-2026-55156); if you can't upgrade immediately, don't expose its dashboard API off-host and avoid calling `smart_user`'s `get-user-info` operation.
 6. **For Apache Doris MCP:** apply the patch + the CVE tracker recommendations.
 7. **For Alibaba RDS MCP:** since Alibaba declined to patch, do not deploy without an isolating proxy that filters MCP messages.
 8. **Do not expose stdio MCPs to network sockets.** If you've wrapped one with a proxy / HTTP gateway, audit the proxy's input validation.
@@ -163,3 +168,5 @@ OX Security calls this "The Mother of All AI Supply Chains" — making the case 
 - [GitLab Advisory Database — CVE-2026-47250: MCP Server Kubernetes kubectl-generic flag injection](https://advisories.gitlab.com/npm/mcp-server-kubernetes/CVE-2026-47250/) — CVSS 6.1, GHSA-6mx4-4h42-r8vh, affected/fixed versions.
 - [GitLab Advisory Database — CVE-2026-55071: stata-mcp unauthenticated command injection](https://advisories.gitlab.com/pypi/stata-mcp/CVE-2026-55071/) — CVSS 8.4, affected/fixed versions.
 - [GitHub Advisory Database — GHSA-49m4-vp58-wgc9: stata-mcp command injection via ado_package_install](https://github.com/advisories/GHSA-49m4-vp58-wgc9) — canonical GHSA record, CVE↔GHSA pairing verified directly.
+- [GitHub Advisory Database — GHSA-49mq-fc6q-3h46: @ooples/token-optimizer-mcp command injection (CVE-2026-55157)](https://github.com/advisories/GHSA-49mq-fc6q-3h46) — fetched directly for the 2026-08-15 update; canonical description, CVSS 8.4, affected/fixed versions.
+- [GitHub Advisory Database — GHSA-76pc-mqxp-3rq5: @ooples/token-optimizer-mcp path traversal (CVE-2026-55156)](https://github.com/advisories/GHSA-76pc-mqxp-3rq5) — fetched directly for the 2026-08-15 update; canonical description, CVSS 5.3, affected/fixed versions.

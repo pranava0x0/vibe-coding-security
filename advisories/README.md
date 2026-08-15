@@ -142,8 +142,8 @@ One file per incident. Latest at the top.
 | 2026-05 | [PCPJack — credential-stealing counter-worm that removes TeamPCP infections](2026-05-pcpjack-counter-worm.md) | high | active |
 | 2026-05-06 | [ClaudeBleed — Claude in Chrome extension hijack](2026-05-claudebleed-chrome-extension.md) | high | mitigated |
 | 2026-05-06 | [ZiChatBot — 3 trojanized PyPI packages use the Zulip chat API as C2, suspected OceanLotus/APT32](2026-05-zichatbot-pypi-zulip-c2.md) | medium | contained |
-| 2026-05-13 | [OpenClaw "Claw Chain" — 4 sandbox-escape CVEs, plus a March 2026 device-pairing privilege-escalation CVE (CVE-2026-33579)](2026-05-openclaw-claw-chain.md) | critical | patched |
-| 2026-05-13 | [Systemic MCP stdio RCE class — now with HashiCorp Terraform MCP + Kubernetes MCP entries](2026-05-mcp-stdio-systemic-rce.md) | high | mitigated |
+| 2026-05-13 | [OpenClaw "Claw Chain" — 9 CVEs/batches spanning Feb–May 2026: sandbox escapes, device-pairing/token-rotation privilege escalation, an SSRF/path-traversal batch, and an unconfirmed prompt-injection RCE](2026-05-openclaw-claw-chain.md) | critical | patched |
+| 2026-05-13 | [Systemic MCP stdio RCE class — now with HashiCorp Terraform MCP + Kubernetes MCP + Token Optimizer MCP entries](2026-05-mcp-stdio-systemic-rce.md) | high | mitigated |
 | 2026-05-14 | [node-ipc compromise](2026-05-node-ipc-compromise.md) | critical | active |
 | 2026-05-11 | [PraisonAI auth bypass (CVE-2026-44338)](2026-05-praisonai-auth-bypass.md) | high | patched |
 | 2026-05-11 | [Mini Shai-Hulud wave — TanStack/Mistral/UiPath/OpenSearch](2026-05-tanstack-mini-shai-hulud.md) | critical | active |

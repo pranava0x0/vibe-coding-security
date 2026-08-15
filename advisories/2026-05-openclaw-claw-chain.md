@@ -2,7 +2,7 @@
 id: 2026-05-openclaw-claw-chain
 title: "OpenClaw 'Claw Chain' — 4 chainable sandbox-escape flaws (May 2026), plus a March 2026 device-pairing privilege-escalation CVE"
 date_disclosed: 2026-05-13
-last_updated: 2026-08-14
+last_updated: 2026-08-15
 severity: critical
 status: patched
 ecosystems: [ai-agents]
@@ -31,6 +31,22 @@ Why this matters: each step looks like normal agent behaviour to traditional sec
 | Running with no authentication | ~63% (~154K hosts) |
 | Flagged vulnerable | ~35.4% (~87K hosts) |
 | Fixed in | `OpenClaw 2026.4.22` |
+
+## Update — 2026-08-15: two more previously-untracked OpenClaw CVE batches found — a six-vulnerability Endor Labs disclosure (Feb 2026, patched within two weeks) and a critical prompt-injection RCE (Mar 2026, patch status unclear)
+
+A direct search turned up two further OpenClaw vulnerability disclosures this repo hadn't tracked, both predating the already-tracked Claw Chain cluster:
+
+**Endor Labs six-vulnerability batch (disclosed 2026-02-03/05, patched 2026-02-14/15):** using AI-assisted static analysis (data-flow tracing) against OpenClaw's source, Endor Labs found six distinct flaws, four with assigned CVEs:
+- **CVE-2026-26322 / GHSA-g6q9-8fvw-f7rf** (CVSS 7.6, high) — SSRF in OpenClaw's Gateway tool, which accepts a user-supplied URL to establish outbound WebSocket connections with no destination validation.
+- **CVE-2026-26319 / GHSA-4hg8-92x6-h2f3** (CVSS 7.5, high) — missing authentication on the Telnyx webhook handler (CWE-306).
+- **CVE-2026-26329 / GHSA-cv7m-c9jx-vg7q** (high, no CVSS published) — path traversal in the browser-upload tool: a user-controlled path is passed directly to Playwright's file-handling API without validation (CWE-22).
+- **GHSA-56f2-hvwg-5743** (CVSS 7.6, high, no CVE assigned) — a second SSRF, in the image tool.
+- **GHSA-pg2v-8xwh-qhcc** (CVSS 6.5, moderate, no CVE assigned) — SSRF in Urbit authentication handling.
+- **GHSA-c37p-4qqg-3p76** (CVSS 6.5, moderate, no CVE assigned) — Twilio webhook authentication bypass (CWE-306).
+
+Per Endor Labs' own writeup, OpenClaw's maintainers responded quickly: the first patch shipped **2026-02-14 (v2026.2.2)**, with the remaining fixes landing **2026-02-15 (v2026.2.14)**, the same day the advisories were published. All six had confirmed working proof-of-concept exploits per the researchers.
+
+**CVE-2026-30741 (published 2026-03-11, GHSA-rvp5-mqmc-q4g6, CVSS 9.8 critical):** an unauthenticated remote code execution flaw in "OpenClaw Agent Platform v2026.2.6" via **request-side prompt injection** (CWE-94) — a lack of integrity validation on upstream API responses lets an attacker poison the request stream and induce the underlying model to generate unauthorized terminal commands that execute via MCP tools with no human confirmation and no user interaction required. **Accuracy note:** unlike every other OpenClaw CVE this advisory tracks, the GHSA record itself states "No package listed" and lists both the affected-version range and the patched version as **Unknown** — GitHub's own page notes Dependabot alerts aren't supported on this advisory because it lacks a package from a supported ecosystem. NVD (published 2026-03-11) and independent vulnerability-database mirrors (SentinelOne, Tenable) confirm the CVSS 9.8 score and CWE-94 classification but add no version/patch detail beyond "v2026.2.6 and earlier." Treat this one as **`status: unconfirmed`** for patch status specifically — the vulnerability class (RCE via prompt injection into MCP tool calls) is consistent with OpenClaw's other tracked findings, but there is no vendor statement or independent researcher writeup confirming a fixed version.
 
 ## Am I affected?
 
@@ -111,3 +127,7 @@ openclaw --version 2>/dev/null
 - [DEV Community — OpenClaw CVE-2026-33579: Unauthorized Privilege Escalation via `/pair approve` Command Fixed](https://dev.to/olgabyte/openclaw-cve-2026-33579-unauthorized-privilege-escalation-via-pair-approve-command-fixed-l48) — exploit sequence and affected source files.
 - [ArmoSec — CVE-2026-32922: Critical Privilege Escalation in OpenClaw](https://www.armosec.io/blog/cve-2026-32922-openclaw-privilege-escalation-cloud-security/) — fetched directly for the 2026-08-14 update: `device.token.rotate` scope-check bypass, disclosure timeline, fixed version.
 - [NVD — CVE-2026-32922](https://nvd.nist.gov/vuln/detail/CVE-2026-32922), [NVD — CVE-2026-24763](https://nvd.nist.gov/vuln/detail/CVE-2026-24763) — fetched directly to confirm both CVEs independently for the 2026-08-14 update.
+- [Endor Labs — How AI SAST Traced Data Flows to Uncover Six OpenClaw Vulnerabilities](https://www.endorlabs.com/learn/how-ai-sast-traced-data-flows-to-uncover-six-openclaw-vulnerabilities) — primary source for the 2026-08-15 update: all six CVE/GHSA IDs, CVSS scores, disclosure/patch timeline (2026-02-03/05 → 2026-02-14/15).
+- [Infosecurity Magazine — Researchers Reveal Six New OpenClaw Vulnerabilities](https://www.infosecurity-magazine.com/news/researchers-six-new-openclaw/) — independent corroboration of the six-vulnerability batch.
+- [GitHub Advisory Database — GHSA-rvp5-mqmc-q4g6 (CVE-2026-30741)](https://github.com/advisories/GHSA-rvp5-mqmc-q4g6) — fetched directly for the 2026-08-15 update; confirms the advisory lists no package, no affected-version range, and no patched version.
+- [NVD — CVE-2026-30741](https://nvd.nist.gov/vuln/detail/CVE-2026-30741) — CVSS 9.8, CWE-94, published 2026-03-11, fetched directly.
