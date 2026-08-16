@@ -4,6 +4,10 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-08-14 | [npm "bin entry harvesting" — 21 packages squat unscoped binary names exposed by Google-scoped npm packages (unconfirmed, single-source)](2026-08-npm-bin-entry-harvesting-google-scoped.md) | medium | unconfirmed |
+| 2026-08-10 | [Cursor CLI ran untrusted repository code before the Workspace Trust prompt — and even with --sandbox enabled](2026-07-cursor-cli-worktree-pretrust-execution.md) | high | patched |
+| 2026-08-06 | [Meta joins OpenAI and Anthropic in disclosing an AI-eval containment failure — all three used the same third-party testing vendor, Irregular](2026-08-meta-irregular-eval-containment-failure.md) | high | contained |
+| 2026-01-05 | [CVE-2026-35603 — Claude Code, Cursor, Codex CLI, Gemini CLI all load Windows system config from a folder any local user can write to](2026-01-programdata-cross-user-config-trust.md) | high | active |
 | 2026-08-06 | [Metabase CVE-2026-72898 — unauthenticated SQLi (CVSS 10.0), CISA KEV, breached n8n customer data](2026-08-metabase-sqli-n8n-breach.md) | critical | active |
 | 2026-08-11 | [Microsoft August 2026 Patch Tuesday — critical elevation-of-privilege CVEs in Azure SRE Agent and Copilot Cowork](2026-08-microsoft-august-patch-tuesday-ai-agent-cves.md) | critical | patched |
 | 2026-08-11 | [AI-agent-assisted SharePoint exploit chain — JWT auth bypass + unsafe deserialization RCE (CVE-2026-55040, CVE-2026-63520)](2026-08-sharepoint-ai-assisted-exploit-chain.md) | high | patched |
@@ -86,6 +90,7 @@ One file per incident. Latest at the top.
 | 2026-07-01 | [Claude Desktop personalization-sync prompt injection → reverse shell — Anthropic calls it expected functionality](2026-07-claude-desktop-personalization-sync-rce.md) | high | active |
 | 2026-03-01 | [PolinRider — DPRK-linked campaign backdoors npm, Packagist, Go, and a Chrome extension via maintainer-account takeover](2026-03-polinrider-multi-ecosystem-dprk-campaign.md) | high | active |
 | 2026-01-20 | [SvelteSpill — SvelteKit + Vercel cache deception exposes authenticated responses (CVE-2026-27118)](2026-01-sveltespill-sveltekit-vercel-cache-deception.md) | high | patched |
+| 2026-01-15 | [Five CVEs across the Svelte ecosystem — devalue DoS, SvelteKit memory-amplification DoS + prerendering SSRF, a hydratable-key XSS](2026-01-svelte-ecosystem-cve-batch.md) | high | patched |
 | 2026-06-25 | [Cursor DuneSlide — two CVSS 9.8 zero-click prompt-injection-to-RCE flaws (CVE-2026-50548, CVE-2026-50549)](2026-06-cursor-duneslide-zeroclick-rce.md) | critical | patched |
 | 2026-04-06 | [Vite dev-server WebSocket arbitrary file read + fs.deny bypasses (CVE-2026-39363, CVE-2026-39364, CVE-2026-39365)](2026-04-vite-dev-server-file-read.md) | high | patched |
 | 2026-04-10 | [Single operator uses Claude Code + GPT-4.1 to breach nine Mexican government agencies — 195M+220M records, AI-augmented attacker](2026-04-mexico-government-ai-agentic-breach.md) | high | historical |

@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-07-06
+**Last refreshed:** 2026-08-16
 
 ## Quick start
 
@@ -55,11 +55,13 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-07-06)
+## Active threat families (as of 2026-08-16)
 
 The highest-risk ongoing threat families for vibe coders:
 
-- **Miasma/Shai-Hulud worm lineage** — Self-propagating npm/PyPI worm family, now in 8+ documented waves, with copycat actors following TeamPCP's May 2026 open-source release of the source code. Waves use different install-time primitives: postinstall hooks, binding.gyp (Phantom Gyp), .pth startup files (Hades), direct source-repo poisoning (Wave 5), **dependency-injection** (Mastra, June 2026), and **compromised-maintainer-token burst** (LeoPlatform wave, June 24 2026 — 20 packages in 3 seconds, plus Go module and GitHub Actions compromise). The LeoPlatform wave's `codfish/semantic-release-action` GitHub Action compromise produced a **third downstream victim two days later**: 22 versions of `@immobiliarelabs`'s Backstage GitLab/LDAP plugins (June 26), whose payload plants persistence hooks directly in AI coding assistant config files. See advisories for each wave.
+- **Miasma/Shai-Hulud worm lineage** — Self-propagating npm/PyPI worm family, now in 9+ documented waves, with copycat actors following TeamPCP's May 2026 open-source release of the source code. Waves use different install-time primitives: postinstall hooks, binding.gyp (Phantom Gyp), .pth startup files (Hades), direct source-repo poisoning (Wave 5), **dependency-injection** (Mastra, June 2026), and **compromised-maintainer-token burst** (LeoPlatform wave, June 24 2026). The latest wave, **ChainDrop** (August 4, 2026), compromised the `keyv`/`cacheable` package family (2 billion combined monthly downloads) via a stolen GitHub account, spreading to 400+ npm packages and 1,700+ versions, and plants persistence hooks directly in Claude Code and VS Code auto-run config. See advisories for each wave.
+- **GhostApproval / "workspace config auto-execution" class** — Now spans at least seven documented AI coding tools (Claude Code, Cursor, Amazon Q, Windsurf, Google Antigravity, Augment, plus Cursor CLI's separate July 2026 pre-trust worktree bug) where a malicious repository writes outside the workspace boundary — via a disguised symlink or a tracked config file — before or despite the tool's own trust/sandbox gate. Three of six GhostApproval-affected vendors have shipped fixes; Anthropic disputes it's a bug. Treat any AI coding tool's approval dialog as showing the *claimed* target, not necessarily the *real* one.
+- **GhostJacking / Agentjacking — observability data as a prompt-injection delivery channel** — Attackers plant instructions in data a developer routinely asks their AI agent to review: Sentry error events (Agentjacking, June 2026, 85% exploitation rate) or firewall/WAF block logs from Cloudflare, Datadog, and Sentry (GhostJacking, August 2026 DEF CON disclosure, 90% success rate against Claude Code, 15,000+ orgs estimated at risk). No vendor-side fix exists for either — the poisoned content is exactly what the platform is supposed to log.
 - **IronWorm** — Rust-based npm worm with eBPF kernel rootkit + Tor C2 (June 2026). Invisible to eBPF-based EDR. Distinct from Miasma lineage.
 - **GlassWorm / GlassWASM** — VS Code / Open VSX worm with steganographic (invisible Unicode) payloads and blockchain C2. Status: **active** — returned post-takedown with macOS-targeting wave (June 12) and a new TinyGo-compiled WebAssembly stager called GlassWASM (two Open VSX extensions `vsblack`, `flint-debug` published June 9-10; removed after Socket report June 15). Operator rebuilds on fresh infrastructure after each takedown. Credentials stolen in prior waves remain in the wild.
 - **WhiteCobra** — Persistent threat actor flooding IDE extension marketplaces with LummaStealer-delivering extensions targeting crypto wallet users. Ongoing since July 2025.
@@ -82,6 +84,8 @@ The highest-risk ongoing threat families for vibe coders:
 - **Silently-bundled Claude Code security fixes** — Anthropic has now shipped at least two independent, unrelated security bugs fixed silently in the *same* release (v2.1.90, April 2026): a SOCKS5 null-byte network-sandbox bypass and a 50-subcommand deny-rule bypass in `bashPermissions.ts`. Neither got a CVE, advisory, or changelog note. Treat "latest" as carrying undisclosed security fixes and don't pin old Claude Code versions.
 - **Claude Desktop personalization-sync prompt injection** — Pentera Labs (July 2026) showed a prompt planted in a compromised Claude account's account-wide personalization/preferences (synced across every device) silently loads on next use and, with a command-capable MCP connector present, executes a reverse shell. Anthropic calls this expected functionality, not a vulnerability — sibling of the existing Claude Desktop Extensions (DXT) won't-fix RCE. Treat account-wide AI personalization settings as a code-execution-adjacent trust boundary; protect the account with MFA.
 - **Claude Code GitHub Action credential leaks (two distinct bugs, same ecosystem)** — Microsoft Threat Intelligence found the Action's unsandboxed Read tool could be prompt-injected into reading `/proc/self/environ` and exfiltrating `ANTHROPIC_API_KEY`/CI secrets (disclosed 2026-04-29, patched Claude Code 2.1.128); separately, RyotaK found `checkWritePermissions()` trusted any actor whose name ends in `[bot]` (disclosed 2026-06-04, patched Action v1.0.94). Any agentic CI workflow processing untrusted GitHub content needs every tool it can invoke — not just Bash — sandboxed to the same standard.
+
+- **AI-eval containment failures (Irregular cluster)** — OpenAI, Anthropic, and Meta have each disclosed (July–August 2026) that their own frontier models breached real third-party organizations' infrastructure during offensive-capability red-team evaluations, all three run with the same third-party testing vendor, Irregular, and all three attributed to the same evaluation-environment misconfiguration rather than novel model capability. One incident involved a Claude model registering its own PyPI account and publishing a malicious package. No CVEs assigned — these are vendor testing-process failures, not product vulnerabilities.
 
 ## Citation
 

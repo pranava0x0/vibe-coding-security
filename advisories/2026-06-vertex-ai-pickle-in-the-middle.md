@@ -2,7 +2,7 @@
 id: 2026-06-vertex-ai-pickle-in-the-middle
 title: "Pickle in the Middle — Google Cloud Vertex AI SDK bucket-squatting enables cross-tenant model hijack and RCE (patched), plus an unrelated stored-XSS CVE in the same SDK"
 date_disclosed: 2026-06-15
-last_updated: 2026-08-08
+last_updated: 2026-08-16
 severity: critical
 status: patched
 ecosystems: [pypi, google-cloud, vertex-ai]
@@ -30,7 +30,7 @@ This chains a classic bucket-squatting/name-guessing weakness (the same class of
   - **v1.144.0** (2026-03-31) — added a random UUID4 suffix to auto-generated staging bucket names, eliminating predictability.
   - **v1.148.0** (2026-04-15) — added explicit bucket-ownership verification in `Model.upload()`, closing the bucket-squatting primitive even if a name were somehow guessed.
 
-No CVE identifier or CVSS score was published alongside the primary disclosure as of this writing.
+No CVE identifier or CVSS score was published alongside the primary disclosure as of this writing. **Update (2026-08-16): a CVE has since been assigned — CVE-2026-2473** (GHSA-wh2j-26j7-9728), covering Vertex AI Experiments specifically, affecting `google-cloud-aiplatform` **1.21.0 up to (but not including) 1.133.0**, fixed in **1.133.0**. Confirmed directly against the GitHub Advisory Database record and cross-checked with Tenable's and SentinelOne's independent vulnerability-database entries — same predictable-bucket-naming root cause as the primary finding above, just formally tracked under this ID for the Experiments code path.
 
 ## Am I affected?
 
@@ -65,3 +65,5 @@ You're exposed to CVE-2026-2472 if your version is `>= 1.98.0` and `< 1.131.0` a
 - [The Hacker News — Google Vertex AI SDK Flaw Let Attackers Hijack Model Uploads via Bucket Squatting](https://thehackernews.com/2026/06/google-vertex-ai-sdk-flaw-let-attackers.html) — independent corroboration, disclosure timeline.
 - [GitLab Advisory Database — CVE-2026-2472: Google Cloud Vertex AI SDK affected by Stored Cross-Site Scripting (XSS)](https://advisories.gitlab.com/pkg/pypi/google-cloud-aiplatform/CVE-2026-2472/) — canonical affected/patched version range for the XSS finding.
 - [SentinelOne Vulnerability Database — CVE-2026-2472](https://www.sentinelone.com/vulnerability-database/cve-2026-2472/) — independent corroboration of the finding and GCP-2026-011 advisory reference.
+- [GitHub Advisory Database — GHSA-wh2j-26j7-9728 (CVE-2026-2473)](https://github.com/advisories/GHSA-wh2j-26j7-9728) — added 2026-08-16: canonical CVE↔GHSA pairing for the Vertex AI Experiments bucket-squatting finding, confirmed affected/patched version range.
+- [Tenable — CVE-2026-2473](https://www.tenable.com/cve/CVE-2026-2473) — added 2026-08-16: independent corroboration.
