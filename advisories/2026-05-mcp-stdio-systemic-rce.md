@@ -2,7 +2,7 @@
 id: 2026-05-mcp-stdio-systemic-rce
 title: "Systemic MCP stdio RCE class — 200,000+ servers exposed (May 2026)"
 date_disclosed: 2026-05
-last_updated: 2026-08-15
+last_updated: 2026-08-16
 severity: high
 status: mitigated
 ecosystems: [mcp, anthropic-mcp]
@@ -63,6 +63,8 @@ Microsoft's own MCP server has now had **two** disclosures in this class:
 
 **Named instance — `@ooples/token-optimizer-mcp`, unauthenticated command injection + path traversal (CVE-2026-55157, CVE-2026-55156):** an npm MCP server marketed for reducing token usage across Claude Code, Claude Desktop, and 16 other CLI clients. **CVE-2026-55157 / GHSA-49mq-fc6q-3h46** (CVSS 8.4, high, CWE-78) — the `smart_user` tool's `get-user-info` operation interpolates a caller-supplied username directly into a shell command (`getent passwd "${username}" || grep "^${username}:" /etc/passwd`); double-quoting doesn't stop POSIX shells from evaluating `$(...)`/backtick command substitution inside the quoted string, so any MCP client invoking this tool can run arbitrary shell commands with the server process's privileges. **CVE-2026-55156 / GHSA-76pc-mqxp-3rq5** (CVSS 5.3, moderate) — a separate, unauthenticated path-traversal bug in the server's dashboard: the `/api/session-summary` and `/api/session-events` endpoints build filesystem paths by interpolating an unsanitized `sessionId` query parameter via `path.join`, letting a remote caller read arbitrary `.jsonl` files (including session logs with tool invocations and token-usage data) with no authentication or user interaction. Both affect **< 5.1.0**, fixed in **5.1.0**. Same two root causes this advisory already tracks elsewhere — a caller-supplied string reaching a shell with no sanitization, and a caller-supplied string reaching a filesystem path with no normalization — recurring in a single package.
 
+**Named instance — `mcp-contextforge-gateway` SSRF via DNS-rebinding TOCTOU (CVE-2026-53708, GHSA-9hgc-g3w5-67cm, CVSS 6.6):** an MCP gateway/proxy server (PyPI) whose `/admin/gateways/test` endpoint validates a target URL's DNS resolution once, then lets its HTTP client independently re-resolve DNS at actual connection time — a classic time-of-check/time-of-use gap (CWE-367) combined with reliance on the initial DNS answer as a security boundary (CWE-350). An attacker who controls a domain can pass DNS validation with a benign public IP, then have the record change (rebind) by the time the HTTP client actually connects, landing the gateway's request against `169.254.169.254` or another internal/private address it was supposed to be blocked from reaching (CWE-918, SSRF). Affects **< 1.0.3**, fixed in **1.0.3**. Same DNS-rebinding-defeats-SSRF-allowlist pattern this repo has tracked in other AI-adjacent gateway products; add to the general "any MCP gateway doing its own SSRF-protection URL validation must re-validate the resolved IP at connection time, not just at initial check time" lesson.
+
 ## Am I affected?
 You are exposed by the class issue if:
 
@@ -83,6 +85,7 @@ You are exposed by the class issue if:
 - You run **`mcp-server-kubernetes` before 3.6.0 / 3.7.0** (CVE-2026-46519 / CVE-2026-47250) — your `ALLOWED_TOOLS`-style restrictions are cosmetic, and log-processing workflows can leak kubeconfig bearer tokens; upgrade to **≥ 3.7.0** and rotate any operator kubeconfig tokens used with the server.
 - You run **`stata-mcp` < 1.19.0** (CVE-2026-55071) with the `all` tool profile enabled — unauthenticated command injection via `ado_package_install`; upgrade to **≥ 1.19.0**.
 - You run **`@ooples/token-optimizer-mcp` < 5.1.0** (CVE-2026-55157 / CVE-2026-55156) — command injection via `smart_user`'s `get-user-info` and unauthenticated path traversal via its dashboard API; upgrade to **≥ 5.1.0**.
+- You run **`mcp-contextforge-gateway` < 1.0.3** (CVE-2026-53708) — its `/admin/gateways/test` endpoint's SSRF protection is bypassable via DNS rebinding; upgrade to **≥ 1.0.3**.
 
 ```bash
 # Find MCP servers configured in your tools
@@ -170,3 +173,5 @@ OX Security calls this "The Mother of All AI Supply Chains" — making the case 
 - [GitHub Advisory Database — GHSA-49m4-vp58-wgc9: stata-mcp command injection via ado_package_install](https://github.com/advisories/GHSA-49m4-vp58-wgc9) — canonical GHSA record, CVE↔GHSA pairing verified directly.
 - [GitHub Advisory Database — GHSA-49mq-fc6q-3h46: @ooples/token-optimizer-mcp command injection (CVE-2026-55157)](https://github.com/advisories/GHSA-49mq-fc6q-3h46) — fetched directly for the 2026-08-15 update; canonical description, CVSS 8.4, affected/fixed versions.
 - [GitHub Advisory Database — GHSA-76pc-mqxp-3rq5: @ooples/token-optimizer-mcp path traversal (CVE-2026-55156)](https://github.com/advisories/GHSA-76pc-mqxp-3rq5) — fetched directly for the 2026-08-15 update; canonical description, CVSS 5.3, affected/fixed versions.
+- [GitLab Advisory Database — mcp-contextforge-gateway CVE-2026-53708](https://advisories.gitlab.com/pypi/mcp-contextforge-gateway/CVE-2026-53708/) — fetched directly for the 2026-08-16 update; GHSA pairing, CVSS 6.6 vector, affected/fixed versions, DNS-rebinding mechanism.
+- [DailyCVE — MCP Gateway Admin API Server-Side Request Forgery (SSRF) via DNS Rebinding (CVE-2026-53708)](https://dailycve.com/mcp-gateway-admin-api-server-side-request-forgery-ssrf-via-dns-rebinding-cve-2026-53708-medium-dc-aug2026-1499/) — independent corroboration.

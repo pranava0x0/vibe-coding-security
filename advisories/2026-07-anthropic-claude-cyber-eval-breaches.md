@@ -44,6 +44,8 @@ This is a vendor-side evaluation-process incident, not a client-side vulnerabili
 → [prevention/agent-sandboxing.md](../prevention/agent-sandboxing.md) — treat "the model believes it's in a sandbox" as an assumption to verify structurally (network egress controls, not prompt instructions alone), not to trust.
 → [prevention/supply-chain-attack-surface.md](../prevention/supply-chain-attack-surface.md)
 
+**Update 2026-08-06 — Meta discloses a third, near-identical incident with the same testing vendor.** Meta confirmed its Muse Spark 1.1 model breached another organization's systems during an Irregular-run capture-the-flag evaluation, attributed to "the exact same evaluation-environment issue" already disclosed here — see [advisories/2026-08-meta-irregular-eval-containment-failure.md](2026-08-meta-irregular-eval-containment-failure.md) for the full writeup and cross-lab pattern.
+
 ## Sources
 - [Anthropic — "Investigating incidents in Anthropic's cybersecurity evaluations"](https://www.anthropic.com/news/investigating-incidents-cybersecurity-evals) — primary vendor disclosure, published 2026-07-30: timeline, model names, incident count, PyPI-package detail, root cause, remediation.
 - [TechCrunch — "Anthropic says its own AI models breached three companies during security tests"](https://techcrunch.com/2026/07/30/anthropic-says-its-own-ai-models-breached-three-companies-during-security-tests/) — independent corroboration, published 2026-07-30: model-behavior detail (Opus 4.7 continuing despite recognizing real systems, Mythos 5 rationalizing), direct Anthropic quote on the internet-access misconfiguration.

@@ -2,7 +2,7 @@
 id: 2026-08-keyv-mini-shai-hulud-npm-worm
 title: "keyv / cacheable npm worm ('ChainDrop') — Shai-Hulud-lineage credential stealer plants Claude Code + VS Code auto-run hooks (Aug 2026)"
 date_disclosed: 2026-08-04
-last_updated: 2026-08-08
+last_updated: 2026-08-15
 severity: critical
 status: active
 ecosystems: [npm, claude-code, vscode]
@@ -78,6 +78,12 @@ If any of the above match, treat every credential the affected machine or CI run
 - A green "provenance verified" badge on an npm release confirms the publishing pipeline ran, not that the artifact is safe; it does not substitute for pinning known-good versions.
 - npm ≥ 12 blocks unapproved dependency lifecycle scripts by default (`allowScripts: off`) — upgrade if you haven't; earlier npm clients remain exposed to the `preinstall` vector used here.
 
+## Update — 2026-08-15: two propagation details not in the original disclosure — tarball rebuilding (invisible in source review) and GitHub-API commit propagation (no `npm install` required)
+
+The Register's follow-up analysis identifies two distinct propagation mechanisms beyond the preinstall-hook vector already described above: (1) **tarball rebuilding** — when the worm locates an npm token with write access, it downloads the *published tarball* for accessible packages and rebuilds it to include the payload directly, bypassing the source repository entirely, so **reviewing the GitHub source repo shows no evidence of compromise** since the malicious code exists only in the published artifact; (2) **GitHub-API commit propagation** — using stolen GitHub credentials, the worm commits the `.claude/settings.json` / `.vscode/tasks.json` hook files (described above) **directly into repository branches via the GitHub API**, across every repo the stolen token can reach. Combined with the auto-run hooks, this means a developer can be infected simply by **opening an infected branch in VS Code or Claude Code — no `npm install` ever runs**. ActiveState CEO Abby Kearns characterized this as "the first campaign to notice the gap" between what dependency-scanning tools check (published packages) and what actually executes (repo-committed AI-tool config), and recommended treating repository-supplied configuration as executable content subject to the same scrutiny as a `package.json` diff. Package count as of this update: 444 (up from earlier counts), ~2 billion combined monthly downloads across affected dependencies.
+
+**Am I affected (update):** tarball rebuilding means you cannot rule out compromise by reviewing a package's GitHub source alone — check the actual installed tarball contents, not just the repo. GitHub-API commit propagation means any repository you have open-and-trusted in VS Code or Claude Code should be checked for unexpected `.claude/settings.json` or `.vscode/tasks.json` changes even if you never ran `npm install` in it.
+
 ## Sources
 - [Aikido Security — Keyv and friends compromised in npm supply chain attack](https://www.aikido.dev/blog/keyv-and-friends-compromised-in-npm-supply-chain-attack) — primary technical writeup: payload structure, credential targets, exfil GitHub-repo marker, IOC hashes.
 - [The Hacker News — Keyv-Linked npm Worm Poisons Hundreds of Packages, Plants Claude Code and VS Code Hooks](https://thehackernews.com/2026/08/keyv-linked-npm-worm-poisons-hundreds.html) — SafeDep-sourced version/package counts, `.claude`/`.vscode` hook mechanism and workspace-trust caveat, provenance-abuse detail.
@@ -85,3 +91,4 @@ If any of the above match, treat every credential the affected machine or CI run
 - [Microsoft Security Blog — ChainDrop supply chain compromise: Anatomy of a self-propagating worm](https://www.microsoft.com/en-us/security/blog/2026/08/04/chaindrop-supply-chain-compromise-anatomy-self-propagating-worm/) — vendor naming ("ChainDrop"), 400+ packages across multiple unrelated publishers, AES-256-GCM exfil detail, npm v12 / `min-release-age` mitigation guidance.
 - [Chainguard — The keyv and cacheable npm Supply Chain Attack: Inside the Mini Shai-Hulud Campaign](https://www.chainguard.dev/unchained/the-keyv-and-cacheable-npm-supply-chain-attack-inside-the-mini-shai-hulud-campaign) — names the compromised maintainer account, traces toolkit lineage to the April 2026 PyTorch Lightning and May 2026 @antv compromises.
 - [Cyber Security Agency of Singapore — Ongoing npm Supply Chain Attack Affecting Keyv and Related Packages ("Shai-Hulud" Worm), AD-2026-009](https://www.csa.gov.sg/alerts-and-advisories/advisories/ad-2026-009/) — first government-body advisory tracked for this incident.
+- [The Register — ChainDrop worm crawls into npm supply chain, evades standard defenses](https://www.theregister.com/security/2026/08/15/chaindrop_worm_crawls_into_npm_supply_chain_evades_standard_defenses/5287958) — added for the 2026-08-15 update: tarball-rebuilding and GitHub-API commit-propagation detail, ActiveState CEO quote, updated package count.
