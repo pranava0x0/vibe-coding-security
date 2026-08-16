@@ -700,7 +700,7 @@ def _page_html_url(p: Page) -> str:
 # raising these further mostly adds size without much marginal recency value.
 # If the active/ongoing count keeps growing, the fix is triaging stale
 # "active" advisories back to patched/historical, not raising these numbers.
-LLMS_TXT_TIER1 = 10
+LLMS_TXT_TIER1 = 8
 LLMS_CTX_TIER1 = 15
 LLMS_FULL_TIER1 = 15
 
@@ -781,13 +781,14 @@ def build_llms_txt(pages: list[Page], full_bytes: int | None = None, ctx_bytes: 
         # This trim keeps per-entry size small enough that Tier 1's total
         # stays in budget even as the active count grows; tightened 90->70
         # chars 2026-08-11, then 70->60 chars 2026-08-13, then 60->52 chars
-        # 2026-08-14 when the previous margin was exhausted by one new
-        # active-status advisory (Metabase CVE-2026-72898). If this keeps
+        # 2026-08-14, then 52->40->34 chars 2026-08-16 when 64 active/ongoing
+        # advisories (up from 62 on 2026-08-13) exhausted the prior margin
+        # again. Also lowered LLMS_TXT_TIER1 10->8 same day. If this keeps
         # recurring, the active/ongoing count itself needs a triage pass
         # (many are plausibly stale) — see BACKLOG.md.
         desc = p.description
-        if len(desc) > 52:
-            desc = desc[:51].rsplit(" ", 1)[0] + "…"
+        if len(desc) > 34:
+            desc = desc[:33].rsplit(" ", 1)[0] + "…"
         lines.append(
             f"- [{p.title}]({_page_html_url(p)}) ([md]({_page_md_url(p)})){meta}: {desc}"
         )
