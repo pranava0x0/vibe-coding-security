@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-08-12 | [Suspected China-linked actor runs a four-day, near end-to-end autonomous AI-agent attack on Taiwan's government and nuclear safety agency (agentic threat actor)](2026-08-taiwan-dream-autonomous-ai-agent-attack.md) | high | unconfirmed |
 | 2026-08-14 | [npm "bin entry harvesting" — 21 packages squat unscoped binary names exposed by Google-scoped npm packages (unconfirmed, single-source)](2026-08-npm-bin-entry-harvesting-google-scoped.md) | medium | unconfirmed |
 | 2026-08-10 | [Cursor CLI ran untrusted repository code before the Workspace Trust prompt — and even with --sandbox enabled](2026-07-cursor-cli-worktree-pretrust-execution.md) | high | patched |
 | 2026-08-06 | [Meta joins OpenAI and Anthropic in disclosing an AI-eval containment failure — all three used the same third-party testing vendor, Irregular](2026-08-meta-irregular-eval-containment-failure.md) | high | contained |

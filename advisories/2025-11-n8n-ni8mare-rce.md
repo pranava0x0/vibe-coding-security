@@ -2,7 +2,7 @@
 id: 2025-11-n8n-ni8mare-rce
 title: "n8n Ni8mare + RCE cluster — CVSS 10.0 unauth takeover of workflow automation (Nov 2025 → June 2026)"
 date_disclosed: 2025-11-09
-last_updated: 2026-08-10
+last_updated: 2026-08-17
 severity: critical
 status: patched
 ecosystems: [npm, self-hosted]
@@ -30,12 +30,16 @@ A second critical flaw (CVSS 9.4, some sources report 9.9) was disclosed on **20
 
 The Hacker News reported additional critical n8n flaws in March 2026 that allow RCE and exposure of stored credentials. These appear to be separate from the Nov/Feb cluster.
 
+**April 2026 (backfilled this sweep) — CVE-2026-42232: XML node prototype pollution → RCE, the bug CVE-2026-44791 (below) later bypassed**
+
+Published to n8n's own GitHub Security Advisories page on **2026-04-22** as **GHSA-hqr4-h3xv-9m3r** (CVSS 9.4): an authenticated user with workflow create/modify permissions could achieve **global prototype pollution via the XML node** — the parser fails to sanitize keys such as `__proto__`, `constructor`, and `prototype` when converting XML structures into JavaScript objects, and chaining the polluted prototype with other nodes yields arbitrary code execution. Fixed in **n8n 1.123.32 / 2.17.4 / 2.18.1**. Confirmed independently via [SentinelOne's vulnerability database](https://www.sentinelone.com/vulnerability-database/cve-2026-42232/) and Singapore's CSA advisory AL-2026-057. This predates and is distinct from the June 2026 cluster below — CVE-2026-44791 (below) is n8n's own follow-up fix for a **bypass** of this same patch.
+
 **June 2026 — n8n node-level RCE cluster (CVE-2026-44789, CVE-2026-44790, CVE-2026-44791)**
 
 Three additional critical flaws were disclosed in June 2026, all fixed in n8n **1.123.43 / 2.20.7 / 2.22.1**:
 - **CVE-2026-44789** (HTTP Request node prototype pollution): user-controlled pagination parameters in the HTTP Request node pollute the JavaScript prototype, bypassing sandbox restrictions and enabling arbitrary code execution.
 - **CVE-2026-44790** (Git node argument injection): the Git node passes user-supplied branch and tag names directly into shell arguments without sanitization, allowing a workflow editor to inject shell commands that read arbitrary files or execute code on the n8n host.
-- **CVE-2026-44791** (XML node RCE): a separate code-execution class in the XML processing node; full technical details pending coordinated disclosure.
+- **CVE-2026-44791** (XML node patch bypass): despite the April 2026 fix for CVE-2026-42232 above, attackers could still reach prototype pollution through the XML node via an alternate code path.
 
 Affected: n8n **< 1.123.43** (v1 release line) **/ < 2.20.7 / < 2.22.1** (v2 release lines). Upgrade immediately.
 
@@ -115,6 +119,8 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:5678/healthz
 
 ## Sources
 
+- [GitHub Security Advisories — n8n has XML Node Prototype Pollution that leads to RCE (GHSA-hqr4-h3xv-9m3r / CVE-2026-42232)](https://github.com/n8n-io/n8n/security/advisories/GHSA-hqr4-h3xv-9m3r) — primary source for the April 2026 backfill: CVE↔GHSA pairing, CVSS score, affected/patched versions confirmed directly on n8n's own advisory page.
+- [SentinelOne Vulnerability Database — CVE-2026-42232](https://www.sentinelone.com/vulnerability-database/cve-2026-42232/) — independent corroboration.
 - [BleepingComputer — "Max severity Ni8mare flaw lets hackers hijack n8n servers"](https://www.bleepingcomputer.com/news/security/max-severity-ni8mare-flaw-lets-hackers-hijack-n8n-servers/) — Ni8mare CVE-2026-21858 detail, 26,512 instances, GreyNoise exploitation data.
 - [The Hacker News — "Critical n8n Vulnerability (CVSS 10.0) Allows Unauthenticated Attackers to Take Full Control"](https://thehackernews.com/2026/01/critical-n8n-vulnerability-cvss-100.html) — broad coverage.
 - [CyberSecurityNews — "Ni8mare Vulnerability Let Attackers Hijack n8n Servers"](https://cybersecuritynews.com/ni8mare-hijack-n8n-servers/) — 26,512 hosts exposed figure.

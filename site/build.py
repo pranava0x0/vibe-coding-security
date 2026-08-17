@@ -783,12 +783,13 @@ def build_llms_txt(pages: list[Page], full_bytes: int | None = None, ctx_bytes: 
         # chars 2026-08-11, then 70->60 chars 2026-08-13, then 60->52 chars
         # 2026-08-14, then 52->40->34 chars 2026-08-16 when 64 active/ongoing
         # advisories (up from 62 on 2026-08-13) exhausted the prior margin
-        # again. Also lowered LLMS_TXT_TIER1 10->8 same day. If this keeps
-        # recurring, the active/ongoing count itself needs a triage pass
-        # (many are plausibly stale) — see BACKLOG.md.
+        # again, then 34->30 chars 2026-08-17 when one more new advisory
+        # exhausted it again. If this keeps recurring, the active/ongoing
+        # count itself needs a triage pass (many are plausibly stale) —
+        # see BACKLOG.md.
         desc = p.description
-        if len(desc) > 34:
-            desc = desc[:33].rsplit(" ", 1)[0] + "…"
+        if len(desc) > 30:
+            desc = desc[:29].rsplit(" ", 1)[0] + "…"
         lines.append(
             f"- [{p.title}]({_page_html_url(p)}) ([md]({_page_md_url(p)})){meta}: {desc}"
         )
