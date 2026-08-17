@@ -2,7 +2,7 @@
 id: 2026-03-trivy-litellm-supply-chain
 title: "TeamPCP breaches Trivy GitHub Actions → LiteLLM 1.82.7–1.82.8 backdoored (March 2026)"
 date_disclosed: 2026-03-12
-last_updated: 2026-08-13
+last_updated: 2026-08-17
 severity: critical
 status: contained
 ecosystems: [pypi, ci-cd, github-actions]
@@ -81,11 +81,16 @@ If any CI workflow ran `aquasecurity/trivy-action` by tag (not SHA) between **20
 → **Security tools are not immune to supply-chain attacks.** `trivy-action`, `snyk-action`, `semgrep-action` etc. run with the same CI permissions as any other action. Pin them with the same rigor you'd apply to a code dependency.
 → **Scope CI secrets minimally.** The `GITHUB_TOKEN` used in a scanning step should have read-only scope if the action only needs to read code. A `PYPI_TOKEN` should never be present in the same job as a security-scanner step.
 
+## Update — 2026-08-13: Hudson Rock independently corroborates CloudSEK's victim-mapping scale via direct analysis of the raw exfiltration archive
+
+Hudson Rock reports it obtained and independently analyzed the attacker's own stolen-credential archive: **153 GB across 433,909 files**, containing **118,829 CI-runner memory dumps** that Hudson Rock attributes to **2,488 distinct corporate domains** using "hard infrastructure markers rather than simple committer emails." This closely corroborates CloudSEK's **2,500+ organizations / 434,000 CI/CD pipelines** figure (added in the 2026-08-13 update above) via an independent methodology and a different data source (the raw archive itself, rather than CloudSEK's own analysis) — Hudson Rock characterizes the two figures as "essentially" agreeing on scale. This does not change `status` (still `contained`); it's independent confirmation that the CloudSEK figures above reflect the real scale of the archive rather than an overestimate from a single analysis.
+
 ## Sources
+- [Help Net Security — LiteLLM breach: stolen credentials leak](https://www.helpnetsecurity.com/2026/08/13/litellm-breach-stolen-credentials-leak/) — added for the 2026-08-13 Hudson Rock update: archive size, file/dump counts, org attribution, methodology comparison with CloudSEK.
 - [The Hacker News — TeamPCP Poisons Trivy Security Scanner GitHub Action, Backdoors LiteLLM PyPI Packages](https://thehackernews.com/2026/03/teampcp-poisons-trivy-security-scanner.html)
-- [BleepingComputer — Trivy GitHub Action compromised, LiteLLM 1.82.7/1.82.8 backdoored](https://www.bleepingcomputer.com/news/security/trivy-github-action-compromised-litellm-backdoored-march-2026/)
-- [StepSecurity — Compromised GitHub Actions: aquasecurity/trivy-action tag-force-push attack](https://www.stepsecurity.io/blog/compromised-github-actions-trivy-action-tag-force-push)
-- [Snyk Security — Supply chain attack on trivy-action: how pinning to SHA protects you](https://snyk.io/blog/supply-chain-attack-trivy-action-sha-pinning/)
-- [The Register — Security scanner becomes supply chain attack vector in TeamPCP campaign](https://www.theregister.com/2026/03/13/teampcp_trivy_litellm_supply_chain/)
-- [SecurityWeek — TeamPCP Turns Security Scanner Into Supply Chain Attack Vector](https://www.securityweek.com/teampcp-turns-security-scanner-into-supply-chain-attack-vector/)
+- [BleepingComputer — Popular LiteLLM PyPI package compromised in TeamPCP supply chain attack](https://www.bleepingcomputer.com/news/security/popular-litellm-pypi-package-compromised-in-teampcp-supply-chain-attack/) — replaces a dead citation URL found and fixed this sweep (2026-08-17); confirms the 1.82.7/1.82.8 backdoor, base64-encoded payload, and `.pth`-based persistence.
+- [StepSecurity — 10 Layers Deep: How StepSecurity Stops TeamPCP's Trivy Supply Chain Attack on GitHub Actions](https://www.stepsecurity.io/blog/10-layers-deep-how-stepsecurity-stops-teampcps-trivy-supply-chain-attack-on-github-actions) — replaces a dead citation URL found and fixed this sweep (2026-08-17); confirms the tag-force-push mechanism and SHA-pinning defense.
+- [Snyk — How a Poisoned Security Scanner Became the Key to Backdooring LiteLLM](https://snyk.io/blog/poisoned-security-scanner-backdooring-litellm/) — replaces a dead citation URL found and fixed this sweep (2026-08-17).
+- [The Register — 1K+ cloud environments infected via Trivy attack](https://www.theregister.com/2026/03/24/1k_cloud_environments_infected_following/) — replaces a dead citation URL found and fixed this sweep (2026-08-17); confirms >1,000 infected cloud environments and the LiteLLM/KICS "snowball effect."
+- [SecurityWeek — Aqua's Trivy Vulnerability Scanner Hit by Supply Chain Attack](https://www.securityweek.com/aquas-trivy-vulnerability-scanner-hit-by-supply-chain-attack/) — replaces a dead citation URL found and fixed this sweep (2026-08-17); confirms the initial March 1 GitHub Actions compromise and March 21 secondary attack timeline.
 - [CloudSEK — AI Supply Chain Breach: 2,500+ Companies, 434,000 CI/CD Pipelines](https://www.cloudsek.com/blog/ai-supply-chain-breach-2500-companies-434000-cicd-pipelines) (2026-08-11 impact-scope retrospective)
