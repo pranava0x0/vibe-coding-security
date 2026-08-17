@@ -2,7 +2,7 @@
 id: 2026-08-keyv-mini-shai-hulud-npm-worm
 title: "keyv / cacheable npm worm ('ChainDrop') — Shai-Hulud-lineage credential stealer plants Claude Code + VS Code auto-run hooks (Aug 2026)"
 date_disclosed: 2026-08-04
-last_updated: 2026-08-15
+last_updated: 2026-08-17
 severity: critical
 status: active
 ecosystems: [npm, claude-code, vscode]
@@ -84,7 +84,14 @@ The Register's follow-up analysis identifies two distinct propagation mechanisms
 
 **Am I affected (update):** tarball rebuilding means you cannot rule out compromise by reviewing a package's GitHub source alone — check the actual installed tarball contents, not just the repo. GitHub-API commit propagation means any repository you have open-and-trusted in VS Code or Claude Code should be checked for unexpected `.claude/settings.json` or `.vscode/tasks.json` changes even if you never ran `npm install` in it.
 
+## Update — 2026-08-09 (backfilled this sweep): first observed Shai-Hulud-lineage payload delivered through the official MCP Registry
+
+OX Security reports a distinct new distribution vector for the same worm lineage tracked in this advisory: a clean-looking PyPI-linked **MCP server named "V.A.P.E"** (marketed as cryptocurrency-chain security tooling) was listed on the **official Model Context Protocol Registry** (`registry.modelcontextprotocol.io`) — the first documented case of a Shai-Hulud-lineage payload reaching victims through the official MCP Registry rather than npm/PyPI directly. The linked PyPI package itself stays clean to evade automated scanners; the malicious payload lives in the associated GitHub repository (`jUXTAPOSITION1/V.A.P.E`), embedded in `.vscode/settings.json` / `.claude/settings.json` — the same auto-run-hook mechanism described above. **Opening or cloning the repository in Claude Code or VS Code triggers the malware**, harvesting developer tokens, cloud credentials, and session keys to further propagate the worm. OX Security identified five actively-distributing repositories at time of writing: `techtoboggan/claude-desktop-hardened-linux`, `rainb0w-clwn/node-cache-manager-fs-binary-ts`, `diegobbarbosa09/Automacao_swaglabs_cypress`, `evilgodfahim/kal`, and `jUXTAPOSITION1/V.A.P.E` itself — several using names that mimic legitimate `cache-manager`/Claude-tooling projects, extending this campaign's targeting of AI-coding-tool users beyond package names into repository and MCP-listing names.
+
+**Am I affected (update):** if you use the official MCP Registry to discover MCP servers, do not assume a registry listing implies safety — check any MCP server's *linked repository* (not just its package) for `.vscode/settings.json` / `.claude/settings.json` before opening it in an editor, and cross-reference the five repository names above directly.
+
 ## Sources
+- [OX Security — Shai-Hulud Outbreak Debrief: The Worm Evolves into MCP](https://www.ox.security/blog/shai-hulud-outbreak-debrief-the-worm-evolves-into-mcp/) — primary source for the 2026-08-09 update: V.A.P.E MCP Registry listing, five named repositories, trigger mechanism.
 - [Aikido Security — Keyv and friends compromised in npm supply chain attack](https://www.aikido.dev/blog/keyv-and-friends-compromised-in-npm-supply-chain-attack) — primary technical writeup: payload structure, credential targets, exfil GitHub-repo marker, IOC hashes.
 - [The Hacker News — Keyv-Linked npm Worm Poisons Hundreds of Packages, Plants Claude Code and VS Code Hooks](https://thehackernews.com/2026/08/keyv-linked-npm-worm-poisons-hundreds.html) — SafeDep-sourced version/package counts, `.claude`/`.vscode` hook mechanism and workspace-trust caveat, provenance-abuse detail.
 - [Wiz — keyv and cacheable npm Package Hijacked in Supply Chain Attack](https://www.wiz.io/blog/keyv-and-cacheable-npm-supply-chain-attack) — timeline, Ethereum RPC C2 resolution, C2 domain IOCs, campaign attribution/lineage, IOC hash list (github.com/wiz-sec-public/wiz-research-iocs).
