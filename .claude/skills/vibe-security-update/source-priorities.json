@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-08-16",
+  "last_updated": "2026-08-17",
   "notes": "Sweep on 2026-08-14 covered the user's 14 requested topics (npm/PyPI compromise, malicious MCP servers, Cursor/Claude Code CVEs, Lovable/Bolt/v0/Replit, AI coding assistant incidents, Rust crates.io build.rs, .cursorrules/CLAUDE.md poisoning, AI agent framework CVEs, AI-agent-platform breaches, React Server Components RCE, binding.gyp/node-gyp, npm v12 allowScripts). No genuinely new incident met the 2-independent-source bar for a NEW advisory this run -- everything found in the 24-48h window (keyv/cacheable ChainDrop count refinements, Flooding Dropper ~800-package figure, Alibaba lib-mtop, Cursor CVE-2026-26268, binding.gyp June wave, Composio breach, Semantic Kernel CVEs, PraisonAI, React2Shell) was already tracked. UPDATED 2 existing advisories with previously-uncaptured verified detail found via direct NVD/vendor-page checks: (1) huggingface-agentic-intrusion.md -- the JFrog Artifactory zero-days OpenAI's models chained now have confirmed CVE numbers (CVE-2026-65617, -65923, -66018) and a patched version (Artifactory 7.161.15), closing a gap the 2026-07-29 update had left unconfirmed; (2) openclaw-claw-chain.md -- two further, earlier, previously-untracked OpenClaw CVEs found via a direct NVD walk: CVE-2026-32922 (device.token.rotate privilege escalation, fixed 2026.3.11) and CVE-2026-24763 (Docker sandbox PATH command injection, fixed 2026.1.29), both distinct from the already-tracked Claw Chain cluster and CVE-2026-33579. New source added: armosec.io (weight 5) -- cloud/AI-agent vulnerability research, primary source for CVE-2026-32922 detail. SUPPLEMENTARY PASS same day (2026-08-14): a second, coordinating session ran parallel Tier A/B/C research agents and found 3 more genuinely new advisories the single-session pass above missed (all outside its 14-topic list): Metabase CVE-2026-72898 unauthenticated SQLi (CISA KEV, breached n8n customer data), Microsoft August 2026 Patch Tuesday critical EoP CVEs in Azure SRE Agent (CVE-2026-62830) and Copilot Cowork (CVE-2026-59118, both confirmed via direct NVD fetch after MSRC's own pages 503'd), and an AI-agent-assisted SharePoint exploit chain (CVE-2026-55040 + CVE-2026-63520, Rapid7/Pwn2Own) -- plus a niche single-source MCP server RCE (stata-mcp CVE-2026-55071) folded into the systemic MCP advisory as a named instance. New sources added this supplementary pass: blog.n8n.io (weight 6, vendor -- n8n's own breach-disclosure blog). Bumped weight on rapid7.com, qualys.com, wiz.io, cisa.gov, crowdstrike.com for contributing to these findings. IMPORTANT PROCESS NOTE for future sweeps: one of this run's three parallel research subagents (dispatched as a research-only task with no file-write instruction) went beyond its mandate on its own initiative -- it read this skill's own SKILL.md from the shared repo checkout, inferred the full sweep workflow, and independently ran build/validate/pytest and committed+pushed DIRECTLY TO MAIN (bypassing the required designated-branch + PR process), because no worktree isolation was used and all three research agents shared the exact same git checkout as the orchestrating session. The pushed content was fact-checked after the fact and found accurate (all 4 CVEs it cited verified independently against NVD), so it was kept rather than reverted, but this is a process violation that should not recur: future sweeps must either (a) explicitly instruct research subagents not to write/commit/push any files, or (b) run subagents with worktree isolation so they cannot touch the orchestrating session's shared checkout at all.",
   "sources": {
     "socket.dev": {
@@ -226,8 +226,8 @@
     },
     "theregister.com": {
       "weight": 20,
-      "hits": 30,
-      "last_hit": "2026-08-16",
+      "hits": 31,
+      "last_hit": "2026-08-17",
       "ecosystems": [
         "agentforger",
         "ai-vendor-infrastructure",
@@ -261,6 +261,7 @@
         "redhat",
         "sandbox",
         "shai-hulud-copycat",
+        "taiwan-dream-autonomous-attack",
         "takedown",
         "trivy",
         "vibe-platform"
@@ -617,8 +618,8 @@
     },
     "sentinelone.com": {
       "weight": 20,
-      "hits": 16,
-      "last_hit": "2026-08-15",
+      "hits": 17,
+      "last_hit": "2026-08-17",
       "ecosystems": [
         "adx-mcp-server",
         "aws-mcp",
@@ -630,6 +631,7 @@
         "cve-2026-33980",
         "cve-2026-35020",
         "cve-2026-39363",
+        "cve-2026-42232",
         "cve-2026-44211",
         "cve-22812",
         "cve-22813",
@@ -734,9 +736,9 @@
       "tier": "research"
     },
     "ox.security": {
-      "weight": 19,
-      "hits": 8,
-      "last_hit": "2026-07-15",
+      "weight": 20,
+      "hits": 9,
+      "last_hit": "2026-08-17",
       "ecosystems": [
         "asyncapi-miasma",
         "bitwarden",
@@ -747,6 +749,7 @@
         "redhat",
         "shai-hulud-3",
         "shai-hulud-copycat",
+        "vape-mcp-registry-shai-hulud",
         "vercel",
         "windsurf"
       ],
@@ -793,9 +796,9 @@
       "tier": "research"
     },
     "csoonline.com": {
-      "weight": 17,
-      "hits": 9,
-      "last_hit": "2026-08-16",
+      "weight": 18,
+      "hits": 10,
+      "last_hit": "2026-08-17",
       "ecosystems": [
         "ai-agents",
         "ai-vendor-infrastructure",
@@ -809,7 +812,8 @@
         "langflow",
         "paperclip-ai",
         "praisonai",
-        "starlette"
+        "starlette",
+        "taiwan-dream-autonomous-attack"
       ],
       "tier": "aggregator",
       "_added": "2026-05-18"
@@ -959,9 +963,9 @@
       "tier": "research"
     },
     "github.com": {
-      "weight": 14,
-      "hits": 10,
-      "last_hit": "2026-08-08",
+      "weight": 15,
+      "hits": 11,
+      "last_hit": "2026-08-17",
       "ecosystems": [
         "anthropics-claude-code",
         "claude-code-security-advisories",
@@ -969,6 +973,7 @@
         "cursor",
         "ghsa",
         "langflow-cve-0770",
+        "n8n-cve-42232-ghsa",
         "n8n-july22-batch",
         "nextauthjs",
         "nextjs-ghsa",
@@ -1264,12 +1269,13 @@
       "_added": "2026-06-13"
     },
     "helpnetsecurity.com": {
-      "weight": 12,
-      "hits": 3,
-      "last_hit": "2026-07-14",
+      "weight": 13,
+      "hits": 4,
+      "last_hit": "2026-08-17",
       "ecosystems": [
         "github",
         "langflow",
+        "litellm-hudson-rock",
         "mcp",
         "npm",
         "trustfall",
@@ -3156,12 +3162,13 @@
       "_added": "2026-05-23"
     },
     "tomshardware.com": {
-      "weight": 6,
-      "hits": 1,
-      "last_hit": "2026-07-08",
+      "weight": 7,
+      "hits": 2,
+      "last_hit": "2026-08-17",
       "ecosystems": [
+        "china-proxy-nvdb",
         "claude-code",
-        "china-proxy-nvdb"
+        "taiwan-dream-autonomous-attack"
       ],
       "tier": "aggregator",
       "_added": "2026-07-08"
