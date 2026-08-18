@@ -2,7 +2,7 @@
 id: 2026-07-better-auth-oauth-oidc-mcp-vulnerabilities
 title: "better-auth — 13+ OAuth/OIDC/SSO/SCIM advisories including a critical MCP-plugin refresh-token bypass (CVE-2026-53512)"
 date_disclosed: 2026-06-02
-last_updated: 2026-07-23
+last_updated: 2026-08-18
 severity: high
 status: patched
 ecosystems: [npm, nextjs, auth]
@@ -76,6 +76,15 @@ Two items from the original 2026-06-02 disclosure that were previously tracked h
 
 No new update action required beyond what's already recommended below — both are covered by the same **better-auth ≥ 1.6.11** upgrade.
 
+## Update — 2026-08-18: two more previously-untracked better-auth CVEs found via a direct page-walk of the vendor's own advisory list, one from the same MCP/OIDC plugins already flagged as this advisory's headline risk
+
+Two more better-auth advisories, missed by prior sweeps' search-query rotation, surfaced this run via a direct walk of better-auth's own GitHub Security Advisories list (the same discipline this repo now applies to Cursor and Claude Code):
+
+- **GHSA-9h47-pqcx-hjr4 (CVSS 8.7, high, published 2026-05-31).** The same deprecated `oidcProvider` and `mcp` plugins already flagged above for CVE-2026-53512 ship **insecure cryptographic defaults**: the OIDC discovery document advertises `"none"` as an acceptable token-signing algorithm, and the plugins accept PKCE in **plain** (unhashed) form by default despite metadata claiming otherwise — a violation of OAuth 2.1 / RFC 9700. A relying party that reads the discovery document without independently pinning an algorithm may accept unsigned tokens outright; an authorization code sent as plain-text PKCE is vulnerable to interception if the URL leaks through browser history, proxy logs, or a Referer header. **Note on ID discrepancy:** at least one third-party aggregator (TheHackerWire) reports this issue under the label "CVE-2026-67336, published August 1, 2026" — but GitHub's own advisory page for GHSA-9h47-pqcx-hjr4 lists **no CVE number** and a **May 31, 2026** publish date. Per this repo's accuracy bar, the GHSA record is treated as authoritative; the CVE label and August date are noted here only as reported by the secondary source, not confirmed. Fixed in the same **1.6.11** release as CVE-2026-53512 — if you already upgraded for that CVE, you're covered for this one too, but the migrate-off-deprecated-plugins guidance below applies doubly now that this plugin pair has two independent critical/high-severity findings.
+- **CVE-2026-45364 (GHSA-p6v2-xcpg-h6xw, CVSS 7.3, high, published 2026-05-11, predates the June batch above).** The core rate limiter keyed requests by the caller's literal textual IP address with no normalization, so an attacker with an IPv6 allocation could bypass rate limiting on authentication endpoints (sign-in, sign-up, password-reset) by rotating through addresses within their own `/64` (or larger) prefix — each textually-distinct address gets its own fresh rate-limit bucket even though it's the same attacker on the same network block. This turns better-auth's brute-force protection into a per-address limit rather than a per-attacker limit for any deployment reachable over IPv6. Fixed in **1.4.17** and **1.5.0-beta.9** — note this is an *older* fix line than the 1.6.11 releases covering every other CVE in this advisory; confirm you're past both fix points, not just 1.6.11.
+
+**Am I affected (update):** if you're already on better-auth ≥ 1.6.11 you're covered for GHSA-9h47-pqcx-hjr4; separately confirm you're past 1.4.17/1.5.0-beta.9 for CVE-2026-45364 (any 1.6.x release supersedes both). If you deploy behind IPv6-reachable infrastructure, audit your rate-limit configuration for IP-prefix-aware bucketing rather than trusting exact-address keying.
+
 ## If you are affected
 
 1. **Update `better-auth` and every scoped plugin package you use** to the versions above.
@@ -103,3 +112,5 @@ No new update action required beyond what's already recommended below — both a
 - [GitHub Security Advisory — GHSA-cq3f-vc6p-68fh (CVE-2026-45337)](https://github.com/better-auth/better-auth/security/advisories/GHSA-cq3f-vc6p-68fh) — vendor advisory, fetched directly.
 - [GitLab Advisory Database — CVE-2026-53516](https://advisories.gitlab.com/npm/better-auth/CVE-2026-53516/) — canonical CVE record for the OAuth pre-account-hijacking bug.
 - [better-auth — Security update: June 2026](https://better-auth.com/blog/security-update-june-2026) — vendor's own post listing both GHSA IDs (GHSA-cq3f-vc6p-68fh, GHSA-g38m-r43w-p2q7) alongside the rest of the June batch; fetched directly to confirm both were part of the already-disclosed batch, not new vulnerabilities.
+- [GitHub Security Advisory — GHSA-9h47-pqcx-hjr4](https://github.com/better-auth/better-auth/security/advisories/GHSA-9h47-pqcx-hjr4) — primary source for the `alg=none`/plain-PKCE insecure-defaults finding; fetched directly, confirms no CVE assigned and a 2026-05-31 publish date.
+- [GitHub Security Advisory — GHSA-p6v2-xcpg-h6xw (CVE-2026-45364)](https://github.com/better-auth/better-auth/security/advisories/GHSA-p6v2-xcpg-h6xw) — primary source for the IPv6 rate-limiter bypass; affected/fixed versions, CVSS 7.3.

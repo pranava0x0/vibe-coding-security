@@ -2,7 +2,7 @@
 id: 2025-09-qix-compromise
 title: "qix npm account compromise — chalk, debug, ansi-styles (September 2025)"
 date_disclosed: 2025-09-08
-last_updated: 2026-05-16
+last_updated: 2026-08-18
 severity: critical
 status: contained
 ecosystems: [npm]
@@ -40,7 +40,12 @@ For browser-shipped builds: re-bundle from a clean lockfile, invalidate CDN cach
 → [prevention/npm-hardening.md](../prevention/npm-hardening.md) — pin exact versions in lockfile, use `npm ci`
 → [prevention/credential-hygiene.md](../prevention/credential-hygiene.md) — for maintainers: hardware 2FA, look-alike-domain awareness
 
+## Update — 2026-08-18: formally attributed to the same DPRK-linked actor behind the March 2026 Axios compromise
+
+Amazon Threat Intelligence published a report on **2026-07-29** publicly tying this incident — and a March 2025 `typo-crypto` package compromise not previously covered in this repo — to the **same DPRK-linked threat actor** already attributed to the [March 2026 Axios compromise](2026-03-axios-compromise.md), tracked under the aliases **SAPPHIRE SLEET, STARDUST CHOLLIMA, BlueNoroff, CageyChameleon, and Alluring Pisces**. AWS states plainly: "the debug and chalk incidents haven't previously been connected to it... this is the first time these compromises have been publicly tied to this DPRK-linked threat actor" — whereas the Axios compromise had already carried this attribution. Amazon's attribution rests on shared TTPs across all four incidents: trojanized npm packages, `postinstall`-hook execution, code reuse across payloads, and a consistent initial-access pattern of socially engineering a trusted maintainer before publishing the malicious update — the same phishing-for-2FA-reset playbook used against Josh Junon (qix) here. This confirms a single operator ran at least four separate npm supply-chain compromises across a 13-month span (March 2025 → March 2026) using the same toolkit and access technique, rather than four unrelated incidents.
+
 ## Sources
+- [AWS Security Blog — Amazon identifies North Korean hacker group behind open-source supply chain attacks](https://aws.amazon.com/blogs/security/amazon-identifies-north-korean-hacker-group-behind-open-source-supply-chain-attacks/) — primary source for the 2026-08-18 update: threat-actor aliases, attribution of debug/chalk/typo-crypto to the same actor as Axios, shared-TTP analysis.
 - [Socket — npm Author Qix Compromised via Phishing](https://socket.dev/blog/npm-author-qix-compromised-in-major-supply-chain-attack)
 - [StepSecurity — 20+ Popular NPM Packages Compromised](https://www.stepsecurity.io/blog/20-popular-npm-packages-compromised-chalk-debug-strip-ansi-color-convert-wrap-ansi)
 - [Phoenix Security — Largest NPM Compromise in History](https://phoenix.security/qix-npm-compromise/)
