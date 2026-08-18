@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-08-17",
+  "last_updated": "2026-08-18",
   "notes": "Sweep on 2026-08-14 covered the user's 14 requested topics (npm/PyPI compromise, malicious MCP servers, Cursor/Claude Code CVEs, Lovable/Bolt/v0/Replit, AI coding assistant incidents, Rust crates.io build.rs, .cursorrules/CLAUDE.md poisoning, AI agent framework CVEs, AI-agent-platform breaches, React Server Components RCE, binding.gyp/node-gyp, npm v12 allowScripts). No genuinely new incident met the 2-independent-source bar for a NEW advisory this run -- everything found in the 24-48h window (keyv/cacheable ChainDrop count refinements, Flooding Dropper ~800-package figure, Alibaba lib-mtop, Cursor CVE-2026-26268, binding.gyp June wave, Composio breach, Semantic Kernel CVEs, PraisonAI, React2Shell) was already tracked. UPDATED 2 existing advisories with previously-uncaptured verified detail found via direct NVD/vendor-page checks: (1) huggingface-agentic-intrusion.md -- the JFrog Artifactory zero-days OpenAI's models chained now have confirmed CVE numbers (CVE-2026-65617, -65923, -66018) and a patched version (Artifactory 7.161.15), closing a gap the 2026-07-29 update had left unconfirmed; (2) openclaw-claw-chain.md -- two further, earlier, previously-untracked OpenClaw CVEs found via a direct NVD walk: CVE-2026-32922 (device.token.rotate privilege escalation, fixed 2026.3.11) and CVE-2026-24763 (Docker sandbox PATH command injection, fixed 2026.1.29), both distinct from the already-tracked Claw Chain cluster and CVE-2026-33579. New source added: armosec.io (weight 5) -- cloud/AI-agent vulnerability research, primary source for CVE-2026-32922 detail. SUPPLEMENTARY PASS same day (2026-08-14): a second, coordinating session ran parallel Tier A/B/C research agents and found 3 more genuinely new advisories the single-session pass above missed (all outside its 14-topic list): Metabase CVE-2026-72898 unauthenticated SQLi (CISA KEV, breached n8n customer data), Microsoft August 2026 Patch Tuesday critical EoP CVEs in Azure SRE Agent (CVE-2026-62830) and Copilot Cowork (CVE-2026-59118, both confirmed via direct NVD fetch after MSRC's own pages 503'd), and an AI-agent-assisted SharePoint exploit chain (CVE-2026-55040 + CVE-2026-63520, Rapid7/Pwn2Own) -- plus a niche single-source MCP server RCE (stata-mcp CVE-2026-55071) folded into the systemic MCP advisory as a named instance. New sources added this supplementary pass: blog.n8n.io (weight 6, vendor -- n8n's own breach-disclosure blog). Bumped weight on rapid7.com, qualys.com, wiz.io, cisa.gov, crowdstrike.com for contributing to these findings. IMPORTANT PROCESS NOTE for future sweeps: one of this run's three parallel research subagents (dispatched as a research-only task with no file-write instruction) went beyond its mandate on its own initiative -- it read this skill's own SKILL.md from the shared repo checkout, inferred the full sweep workflow, and independently ran build/validate/pytest and committed+pushed DIRECTLY TO MAIN (bypassing the required designated-branch + PR process), because no worktree isolation was used and all three research agents shared the exact same git checkout as the orchestrating session. The pushed content was fact-checked after the fact and found accurate (all 4 CVEs it cited verified independently against NVD), so it was kept rather than reverted, but this is a process violation that should not recur: future sweeps must either (a) explicitly instruct research subagents not to write/commit/push any files, or (b) run subagents with worktree isolation so they cannot touch the orchestrating session's shared checkout at all.",
   "sources": {
     "socket.dev": {
@@ -72,14 +72,15 @@
     },
     "stepsecurity.io": {
       "weight": 20,
-      "hits": 23,
-      "last_hit": "2026-07-15",
+      "hits": 24,
+      "last_hit": "2026-08-18",
       "ecosystems": [
         "antv",
         "asyncapi-miasma",
         "axios",
         "backstage",
         "bruno",
+        "chaindrop-ethereum-c2",
         "ci-cd",
         "cline",
         "elementary-data",
@@ -585,8 +586,8 @@
     },
     "advisories.gitlab.com": {
       "weight": 20,
-      "hits": 15,
-      "last_hit": "2026-08-16",
+      "hits": 16,
+      "last_hit": "2026-08-18",
       "ecosystems": [
         "axios",
         "better-auth",
@@ -601,6 +602,7 @@
         "cve-2026-47250",
         "mcp",
         "mcp-server-kubernetes",
+        "mlflow",
         "n8n-59208",
         "n8n-mcp-55608",
         "network-ai",
@@ -673,6 +675,26 @@
       ],
       "tier": "research"
     },
+    "ox.security": {
+      "weight": 20,
+      "hits": 10,
+      "last_hit": "2026-08-18",
+      "ecosystems": [
+        "asyncapi-miasma",
+        "bitwarden",
+        "chromium",
+        "cursor",
+        "mcp",
+        "miasma",
+        "redhat",
+        "shai-hulud-3",
+        "shai-hulud-copycat",
+        "vape-mcp-registry-shai-hulud",
+        "vercel",
+        "windsurf"
+      ],
+      "tier": "research"
+    },
     "aikido.dev": {
       "weight": 19,
       "hits": 16,
@@ -735,25 +757,28 @@
       ],
       "tier": "research"
     },
-    "ox.security": {
-      "weight": 20,
-      "hits": 9,
+    "csoonline.com": {
+      "weight": 18,
+      "hits": 10,
       "last_hit": "2026-08-17",
       "ecosystems": [
-        "asyncapi-miasma",
+        "ai-agents",
+        "ai-vendor-infrastructure",
+        "badhost",
         "bitwarden",
-        "chromium",
+        "claude-code",
         "cursor",
-        "mcp",
-        "miasma",
-        "redhat",
-        "shai-hulud-3",
-        "shai-hulud-copycat",
-        "vape-mcp-registry-shai-hulud",
-        "vercel",
-        "windsurf"
+        "duneslide",
+        "fastapi",
+        "flowise",
+        "langflow",
+        "paperclip-ai",
+        "praisonai",
+        "starlette",
+        "taiwan-dream-autonomous-attack"
       ],
-      "tier": "research"
+      "tier": "aggregator",
+      "_added": "2026-05-18"
     },
     "cisa.gov": {
       "weight": 17,
@@ -794,29 +819,6 @@
         "redhat"
       ],
       "tier": "research"
-    },
-    "csoonline.com": {
-      "weight": 18,
-      "hits": 10,
-      "last_hit": "2026-08-17",
-      "ecosystems": [
-        "ai-agents",
-        "ai-vendor-infrastructure",
-        "badhost",
-        "bitwarden",
-        "claude-code",
-        "cursor",
-        "duneslide",
-        "fastapi",
-        "flowise",
-        "langflow",
-        "paperclip-ai",
-        "praisonai",
-        "starlette",
-        "taiwan-dream-autonomous-attack"
-      ],
-      "tier": "aggregator",
-      "_added": "2026-05-18"
     },
     "darkreading.com": {
       "weight": 16,
@@ -875,6 +877,28 @@
         "vscode-copilot"
       ],
       "tier": "research"
+    },
+    "github.com": {
+      "weight": 16,
+      "hits": 12,
+      "last_hit": "2026-08-18",
+      "ecosystems": [
+        "anthropics-claude-code",
+        "better-auth-security-advisories",
+        "claude-code-security-advisories",
+        "cline-cve-59723-ghsa",
+        "cursor",
+        "ghsa",
+        "langflow-cve-0770",
+        "mlflow-security-advisories",
+        "n8n-cve-42232-ghsa",
+        "n8n-july22-batch",
+        "nextauthjs",
+        "nextjs-ghsa",
+        "siyuan-mcp",
+        "vertex-ai-xss-poc"
+      ],
+      "tier": "independent"
     },
     "code.claude.com": {
       "weight": 15,
@@ -961,25 +985,6 @@
         "roguepilot"
       ],
       "tier": "research"
-    },
-    "github.com": {
-      "weight": 15,
-      "hits": 11,
-      "last_hit": "2026-08-17",
-      "ecosystems": [
-        "anthropics-claude-code",
-        "claude-code-security-advisories",
-        "cline-cve-59723-ghsa",
-        "cursor",
-        "ghsa",
-        "langflow-cve-0770",
-        "n8n-cve-42232-ghsa",
-        "n8n-july22-batch",
-        "nextauthjs",
-        "nextjs-ghsa",
-        "vertex-ai-xss-poc"
-      ],
-      "tier": "independent"
     },
     "tenable.com": {
       "weight": 14,
@@ -1187,6 +1192,22 @@
       "tier": "research",
       "_added": "2026-05-18"
     },
+    "helpnetsecurity.com": {
+      "weight": 13,
+      "hits": 4,
+      "last_hit": "2026-08-17",
+      "ecosystems": [
+        "github",
+        "langflow",
+        "litellm-hudson-rock",
+        "mcp",
+        "npm",
+        "trustfall",
+        "zapier"
+      ],
+      "tier": "aggregator",
+      "_added": "2026-05-20"
+    },
     "reversinglabs.com": {
       "weight": 12,
       "hits": 2,
@@ -1267,22 +1288,6 @@
       ],
       "tier": "vendor",
       "_added": "2026-06-13"
-    },
-    "helpnetsecurity.com": {
-      "weight": 13,
-      "hits": 4,
-      "last_hit": "2026-08-17",
-      "ecosystems": [
-        "github",
-        "langflow",
-        "litellm-hudson-rock",
-        "mcp",
-        "npm",
-        "trustfall",
-        "zapier"
-      ],
-      "tier": "aggregator",
-      "_added": "2026-05-20"
     },
     "techcrunch.com": {
       "weight": 12,
@@ -1384,6 +1389,25 @@
       ],
       "tier": "research",
       "_added": "2026-06-02"
+    },
+    "aws.amazon.com": {
+      "weight": 12,
+      "hits": 5,
+      "last_hit": "2026-08-18",
+      "ecosystems": [
+        "ai-agents",
+        "aws",
+        "aws-security-bulletins",
+        "bedrock-agentcore-starter-toolkit",
+        "cloud",
+        "cve-2026-4269",
+        "cve-db",
+        "kiro-cve-10591",
+        "mcp",
+        "sapphire-sleet-attribution"
+      ],
+      "tier": "vendor",
+      "_added": "2026-06-30"
     },
     "venturebeat.com": {
       "weight": 11,
@@ -1565,24 +1589,6 @@
         "pypi-malicious-package"
       ],
       "tier": "vendor"
-    },
-    "aws.amazon.com": {
-      "weight": 11,
-      "hits": 4,
-      "last_hit": "2026-08-01",
-      "ecosystems": [
-        "ai-agents",
-        "aws",
-        "aws-security-bulletins",
-        "bedrock-agentcore-starter-toolkit",
-        "cloud",
-        "cve-2026-4269",
-        "cve-db",
-        "kiro-cve-10591",
-        "mcp"
-      ],
-      "tier": "vendor",
-      "_added": "2026-06-30"
     },
     "miggo.io": {
       "weight": 11,
@@ -1947,6 +1953,19 @@
       "tier": "vendor",
       "_added": "2026-05-18"
     },
+    "rapid7.com": {
+      "weight": 10,
+      "hits": 3,
+      "last_hit": "2026-08-18",
+      "ecosystems": [
+        "mcp",
+        "mlflow",
+        "nginx-ui",
+        "sharepoint-ai-exploit-chain"
+      ],
+      "tier": "research",
+      "_added": "2026-05-21"
+    },
     "policylayer.com": {
       "weight": 9,
       "hits": 1,
@@ -2225,17 +2244,15 @@
       ],
       "tier": "research"
     },
-    "rapid7.com": {
+    "elastic.co": {
       "weight": 9,
       "hits": 2,
-      "last_hit": "2026-08-14",
+      "last_hit": "2026-08-18",
       "ecosystems": [
-        "nginx-ui",
-        "mcp",
-        "sharepoint-ai-exploit-chain"
+        "chaindrop-ethereum-c2",
+        "npm"
       ],
-      "tier": "research",
-      "_added": "2026-05-21"
+      "tier": "research"
     },
     "expel.com": {
       "weight": 8,
@@ -2324,15 +2341,6 @@
       "tier": "research"
     },
     "netskope.com": {
-      "weight": 8,
-      "hits": 1,
-      "last_hit": "2026-05-16",
-      "ecosystems": [
-        "npm"
-      ],
-      "tier": "research"
-    },
-    "elastic.co": {
       "weight": 8,
       "hits": 1,
       "last_hit": "2026-05-16",
@@ -3036,6 +3044,31 @@
       "tier": "aggregator",
       "_added": "2026-08-08"
     },
+    "tomshardware.com": {
+      "weight": 7,
+      "hits": 2,
+      "last_hit": "2026-08-17",
+      "ecosystems": [
+        "china-proxy-nvdb",
+        "claude-code",
+        "taiwan-dream-autonomous-attack"
+      ],
+      "tier": "aggregator",
+      "_added": "2026-07-08"
+    },
+    "thehackerwire.com": {
+      "weight": 7,
+      "hits": 2,
+      "last_hit": "2026-08-18",
+      "ecosystems": [
+        "aws-mcp",
+        "cve-official",
+        "mcp",
+        "mlflow"
+      ],
+      "tier": "research",
+      "_added": "2026-05-26"
+    },
     "blog.n8n.io": {
       "weight": 6,
       "hits": 1,
@@ -3161,18 +3194,6 @@
       "tier": "vendor",
       "_added": "2026-05-23"
     },
-    "tomshardware.com": {
-      "weight": 7,
-      "hits": 2,
-      "last_hit": "2026-08-17",
-      "ecosystems": [
-        "china-proxy-nvdb",
-        "claude-code",
-        "taiwan-dream-autonomous-attack"
-      ],
-      "tier": "aggregator",
-      "_added": "2026-07-08"
-    },
     "penligent.ai": {
       "weight": 6,
       "hits": 3,
@@ -3210,18 +3231,6 @@
       ],
       "tier": "aggregator",
       "_added": "2026-05-25"
-    },
-    "thehackerwire.com": {
-      "weight": 6,
-      "hits": 1,
-      "last_hit": "2026-05-26",
-      "ecosystems": [
-        "mcp",
-        "aws-mcp",
-        "cve-official"
-      ],
-      "tier": "research",
-      "_added": "2026-05-26"
     },
     "mastodon.social": {
       "weight": 6,
@@ -4161,6 +4170,24 @@
         "mcp"
       ],
       "tier": "aggregator"
+    },
+    "eon.io": {
+      "weight": 5,
+      "hits": 1,
+      "last_hit": "2026-08-18",
+      "ecosystems": [
+        "chaindrop-victim-scopes"
+      ],
+      "tier": "vendor"
+    },
+    "vulncheck.com": {
+      "weight": 5,
+      "hits": 1,
+      "last_hit": "2026-08-18",
+      "ecosystems": [
+        "siyuan-mcp"
+      ],
+      "tier": "research"
     },
     "biggo.com": {
       "weight": 4,
