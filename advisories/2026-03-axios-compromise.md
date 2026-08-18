@@ -2,7 +2,7 @@
 id: 2026-03-axios-compromise
 title: "Axios npm package compromise (March 2026)"
 date_disclosed: 2026-03-31
-last_updated: 2026-05-22
+last_updated: 2026-08-18
 severity: critical
 status: contained
 ecosystems: [npm]
@@ -48,7 +48,12 @@ If your `package.json` uses `"axios": "^1.x.x"` and you installed between 2026-0
 ## Prevention
 → [prevention/npm-hardening.md](../prevention/npm-hardening.md) — pin exact versions, use `npm ci` not `npm install` in CI
 
+## Update — 2026-08-18: same actor now formally tied to the September 2025 qix (chalk/debug) compromise and a March 2025 typo-crypto incident
+
+Amazon Threat Intelligence's 2026-07-29 report confirms this compromise and the [September 2025 qix/chalk/debug compromise](../advisories/2025-09-qix-compromise.md) were carried out by the same DPRK-linked actor (tracked as SAPPHIRE SLEET / STARDUST CHOLLIMA / BlueNoroff / CageyChameleon / Alluring Pisces), along with a previously-unlinked March 2025 `typo-crypto` package compromise — four npm supply-chain incidents across 13 months from one operator using a consistent playbook (socially engineer a trusted maintainer, publish a trojanized `postinstall`-hook update, reuse code across payloads). See the qix-compromise advisory for full attribution detail.
+
 ## Sources
+- [AWS Security Blog — Amazon identifies North Korean hacker group behind open-source supply chain attacks](https://aws.amazon.com/blogs/security/amazon-identifies-north-korean-hacker-group-behind-open-source-supply-chain-attacks/) — cross-campaign attribution linking this incident to qix/chalk/debug and typo-crypto.
 - [Microsoft Security Blog — Mitigating the Axios npm supply chain compromise](https://www.microsoft.com/en-us/security/blog/2026/04/01/mitigating-the-axios-npm-supply-chain-compromise/)
 - [Trend Micro — Axios NPM Package Compromised](https://www.trendmicro.com/en_us/research/26/c/axios-npm-package-compromised.html)
 - [Sophos — Axios npm package compromised to deploy malware](https://www.sophos.com/en-us/blog/axios-npm-package-compromised-to-deploy-malware)

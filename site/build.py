@@ -787,9 +787,11 @@ def build_llms_txt(pages: list[Page], full_bytes: int | None = None, ctx_bytes: 
         # exhausted it again. If this keeps recurring, the active/ongoing
         # count itself needs a triage pass (many are plausibly stale) —
         # see BACKLOG.md.
+        # then 30->24 chars 2026-08-18 when the new MLflow advisory
+        # exhausted it again.
         desc = p.description
-        if len(desc) > 30:
-            desc = desc[:29].rsplit(" ", 1)[0] + "…"
+        if len(desc) > 24:
+            desc = desc[:23].rsplit(" ", 1)[0] + "…"
         lines.append(
             f"- [{p.title}]({_page_html_url(p)}) ([md]({_page_md_url(p)})){meta}: {desc}"
         )
