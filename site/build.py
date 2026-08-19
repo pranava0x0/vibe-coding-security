@@ -788,10 +788,12 @@ def build_llms_txt(pages: list[Page], full_bytes: int | None = None, ctx_bytes: 
         # count itself needs a triage pass (many are plausibly stale) —
         # see BACKLOG.md.
         # then 30->24 chars 2026-08-18 when the new MLflow advisory
-        # exhausted it again.
+        # exhausted it again, then 24->14 chars 2026-08-19 when two new
+        # advisories (CoSnitch, NullReceiver) plus the better-auth/NextAuth
+        # updates exhausted it again. Cutting deeper this time for margin.
         desc = p.description
-        if len(desc) > 24:
-            desc = desc[:23].rsplit(" ", 1)[0] + "…"
+        if len(desc) > 14:
+            desc = desc[:13].rsplit(" ", 1)[0] + "…"
         lines.append(
             f"- [{p.title}]({_page_html_url(p)}) ([md]({_page_md_url(p)})){meta}: {desc}"
         )
