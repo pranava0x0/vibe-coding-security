@@ -2,7 +2,7 @@
 id: 2026-07-better-auth-oauth-oidc-mcp-vulnerabilities
 title: "better-auth — 13+ OAuth/OIDC/SSO/SCIM advisories including a critical MCP-plugin refresh-token bypass (CVE-2026-53512)"
 date_disclosed: 2026-06-02
-last_updated: 2026-08-18
+last_updated: 2026-08-19
 severity: high
 status: patched
 ecosystems: [npm, nextjs, auth]
@@ -85,6 +85,15 @@ Two more better-auth advisories, missed by prior sweeps' search-query rotation, 
 
 **Am I affected (update):** if you're already on better-auth ≥ 1.6.11 you're covered for GHSA-9h47-pqcx-hjr4; separately confirm you're past 1.4.17/1.5.0-beta.9 for CVE-2026-45364 (any 1.6.x release supersedes both). If you deploy behind IPv6-reachable infrastructure, audit your rate-limit configuration for IP-prefix-aware bucketing rather than trusting exact-address keying.
 
+## Update — 2026-08-19: two more `@better-auth/scim` and `@better-auth/sso` advisories, published 2026-07-07 and 2026-08-11
+
+Two more better-auth advisories not previously tracked here, found this sweep — one a third distinct `@better-auth/scim` bug (beyond the provider-ID collision already covered above), one a fourth distinct `@better-auth/sso` bug (beyond the two July SSO CVEs already covered above):
+
+- **GHSA-j8v8-g9cx-5qf4 (CVSS 8.3, high, published 2026-07-07).** `@better-auth/scim` doesn't bind **non-organization** SCIM providers to the user who created them in the default configuration. Any authenticated user could read another user's non-org SCIM provider's metadata, list its connections, delete it, or — worse — **regenerate its bearer token**, which rotates the credential and silently revokes the legitimate owner's access while handing the attacker a valid replacement token. Fixed in **1.7.0-beta.4**. No CVE assigned as of this writing.
+- **GHSA-8c5h-wx78-2cfg (CVSS 8.1, high, published 2026-08-11).** `@better-auth/sso` has two chainable domain-verification flaws: (1) when domain verification is disabled, the plugin still accepts an **unverified** provider domain for automatic organization assignment, letting an authenticated attacker add themselves to organizations they don't control; (2) a **TOCTOU race condition** lets a concurrent SSO-provider update apply a completed DNS domain-ownership proof to a *different* domain than the one actually tested — an attacker can "verify" a domain they don't own by racing an update against someone else's legitimate verification. Fixed in **1.4.8 / 1.6.27 / 1.7.0-rc.5**. No CVE assigned as of this writing.
+
+Both were verified directly against better-auth's own GitHub Security Advisories page (the same page-walk discipline already applied elsewhere in this advisory). Neither has independent aggregator coverage found this sweep, so — consistent with this repo's single-source standard — treat these two specific findings as `unconfirmed` pending a second source, even though the parent advisory as a whole remains `patched` based on the CVE-bearing findings already covered above. If you run `@better-auth/scim` or `@better-auth/sso` at all, update past the fixed versions above regardless.
+
 ## If you are affected
 
 1. **Update `better-auth` and every scoped plugin package you use** to the versions above.
@@ -114,3 +123,6 @@ Two more better-auth advisories, missed by prior sweeps' search-query rotation, 
 - [better-auth — Security update: June 2026](https://better-auth.com/blog/security-update-june-2026) — vendor's own post listing both GHSA IDs (GHSA-cq3f-vc6p-68fh, GHSA-g38m-r43w-p2q7) alongside the rest of the June batch; fetched directly to confirm both were part of the already-disclosed batch, not new vulnerabilities.
 - [GitHub Security Advisory — GHSA-9h47-pqcx-hjr4](https://github.com/better-auth/better-auth/security/advisories/GHSA-9h47-pqcx-hjr4) — primary source for the `alg=none`/plain-PKCE insecure-defaults finding; fetched directly, confirms no CVE assigned and a 2026-05-31 publish date.
 - [GitHub Security Advisory — GHSA-p6v2-xcpg-h6xw (CVE-2026-45364)](https://github.com/better-auth/better-auth/security/advisories/GHSA-p6v2-xcpg-h6xw) — primary source for the IPv6 rate-limiter bypass; affected/fixed versions, CVSS 7.3.
+- [GitLab Advisory Database — GHSA-j8v8-g9cx-5qf4](https://advisories.gitlab.com/npm/@better-auth/scim/GHSA-j8v8-g9cx-5qf4/) — primary source for the non-org SCIM provider owner-binding bug; CVSS 8.3, affected/fixed versions.
+- [GitHub — better-auth/better-auth security advisories index](https://github.com/better-auth/better-auth/security/advisories) — confirmed GHSA-8c5h-wx78-2cfg as the sole August 2026 entry at time of this sweep.
+- [GitHub Security Advisory — GHSA-8c5h-wx78-2cfg](https://github.com/better-auth/better-auth/security/advisories/GHSA-8c5h-wx78-2cfg) — primary source for the `@better-auth/sso` domain-verification bypass and TOCTOU race; CVSS 8.1, affected/fixed versions.
