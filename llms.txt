@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-08-19
+**Last refreshed:** 2026-08-20
 
 ## Quick start
 
@@ -55,11 +55,12 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-08-19)
+## Active threat families (as of 2026-08-20)
 
 The highest-risk ongoing threat families for vibe coders:
 
 - **Miasma/Shai-Hulud worm lineage** — Self-propagating npm/PyPI worm family, now in 9+ documented waves, with copycat actors following TeamPCP's May 2026 open-source release of the source code. Waves use different install-time primitives: postinstall hooks, binding.gyp (Phantom Gyp), .pth startup files (Hades), direct source-repo poisoning (Wave 5), **dependency-injection** (Mastra, June 2026), and **compromised-maintainer-token burst** (LeoPlatform wave, June 24 2026). The latest wave, **ChainDrop** (August 4, 2026), compromised the `keyv`/`cacheable` package family (2 billion combined monthly downloads) via a stolen GitHub account, spreading to 400+ npm packages and 1,700+ versions, and plants persistence hooks directly in Claude Code and VS Code auto-run config. See advisories for each wave.
+- **crates.io `build.rs` build-time execution** — A compromised maintainer account published malicious `arrayref@0.3.10` (~244M all-time downloads), `append-only-vec@0.1.9`, and `internment@0.8.7` on **2026-08-20**, each adding one dependency line on `proc-macro1` — a typosquat of `proc-macro2` under an account impersonating author David Tolnay. The fake crate's `build.rs` downloads and runs a per-platform infostealer (Chromium passwords, browser crypto-wallet extension storage, macOS LaunchAgent persistence, shell C2) at **compile time**, so building is enough; no crate function need be called. Malicious versions were live 86–107 minutes. **Cargo has no `--ignore-scripts` equivalent** — build scripts cannot be disabled, so treat `cargo build` against unvetted dependencies as code execution and build in disposable containers. Largest crates.io compromise by download count to date.
 - **GhostApproval / "workspace config auto-execution" class** — Now spans at least seven documented AI coding tools (Claude Code, Cursor, Amazon Q, Windsurf, Google Antigravity, Augment, plus Cursor CLI's separate July 2026 pre-trust worktree bug) where a malicious repository writes outside the workspace boundary — via a disguised symlink or a tracked config file — before or despite the tool's own trust/sandbox gate. Three of six GhostApproval-affected vendors have shipped fixes; Anthropic disputes it's a bug. Treat any AI coding tool's approval dialog as showing the *claimed* target, not necessarily the *real* one.
 - **GhostJacking / Agentjacking — observability data as a prompt-injection delivery channel** — Attackers plant instructions in data a developer routinely asks their AI agent to review: Sentry error events (Agentjacking, June 2026, 85% exploitation rate) or firewall/WAF block logs from Cloudflare, Datadog, and Sentry (GhostJacking, August 2026 DEF CON disclosure, 90% success rate against Claude Code, 15,000+ orgs estimated at risk). No vendor-side fix exists for either — the poisoned content is exactly what the platform is supposed to log.
 - **IronWorm** — Rust-based npm worm with eBPF kernel rootkit + Tor C2 (June 2026). Invisible to eBPF-based EDR. Distinct from Miasma lineage.

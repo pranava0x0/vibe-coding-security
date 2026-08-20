@@ -4,6 +4,10 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-08-20 | [arrayref (244M downloads) and append-only-vec hijacked on crates.io to pull a build-time infostealer via a typosquatted proc-macro1 dependency](2026-08-arrayref-proc-macro1-crates-io.md) | critical | contained |
+| 2026-03-09 | [@siteboon/claude-code-ui — three command-injection CVEs, including unauthenticated RCE from a default JWT secret (backfill)](2026-08-siteboon-claude-code-ui-rce-batch.md) | critical | patched |
+| 2026-05-20 | [VIPER-MCP — automated audit of 39,884 MCP server repos finds 106 confirmed zero-days, 67 CVEs assigned](2026-08-viper-mcp-mass-audit-106-zerodays.md) | high | ongoing |
+| 2026-06-23 | [An autonomous agent found and exploited a Snowflake CI flaw that Copilot's review and GitHub Advanced Security both passed as clean](2026-08-wiz-red-agent-snowflake-copilot-review.md) | high | patched |
 | 2026-08-02 | [MLflow — unauthenticated SSRF (CVSS 9.3) into cloud metadata plus two authorization-bypass CVEs, all fixed in 3.15.0](2026-08-mlflow-webhook-ssrf-authz-batch.md) | critical | patched |
 | 2026-08-18 | [CoSnitch — one-click data exfiltration from Microsoft Copilot Personal via an undocumented autorun URL parameter (CVE-2026-24301)](2026-08-cosnitch-microsoft-copilot-oneclick-exfil.md) | critical | patched |
 | 2026-08-10 | [NullReceiver — DPRK-linked npm malware hides C2 IPs inside blank Ethereum transactions, two packages impersonate Tailwind CSS/PostCSS plugins](2026-08-nullreceiver-npm-ethereum-c2.md) | high | contained |
