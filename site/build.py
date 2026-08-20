@@ -701,6 +701,9 @@ def _page_html_url(p: Page) -> str:
 # If the active/ongoing count keeps growing, the fix is triaging stale
 # "active" advisories back to patched/historical, not raising these numbers.
 LLMS_TXT_TIER1 = 8
+# Hard cap on Tier-1 membership for llms.txt (see _split_tiers). Added 2026-08-20
+# in place of trimming descriptions further; 14 chars was already unreadable.
+LLMS_TXT_TIER1_MAX = 40
 LLMS_CTX_TIER1 = 15
 LLMS_FULL_TIER1 = 15
 
@@ -714,13 +717,24 @@ def _sorted_by_recency(advisories: list[Page]) -> list[Page]:
     )
 
 
-def _split_tiers(advisories: list[Page], tier1_n: int) -> tuple[list[Page], list[Page]]:
+def _split_tiers(
+    advisories: list[Page], tier1_n: int, tier1_max: int | None = None
+) -> tuple[list[Page], list[Page]]:
     """Split into Tier 1 (full detail) and Tier 2 (one-line pointer).
 
     Tier 1 = the `tier1_n` most recently updated advisories, unioned with
     every advisory whose status is still active/ongoing. Both tiers preserve
     recency order. This is the one control surface for output size — lower
-    `tier1_n` if a budget is breached, don't raise the byte cap."""
+    `tier1_n` if a budget is breached, don't raise the byte cap.
+
+    `tier1_max` hard-caps Tier 1 membership, keeping the most recent and
+    demoting the rest to Tier 2 (they stay listed, just as one-liners).
+    Added 2026-08-20: the active/ongoing union has no upper bound (65 of 197
+    advisories today), so it grew past every fixed entry count and the
+    per-entry description trim had been cut to 14 chars over six consecutive
+    sweeps without stopping the recurrence. Capping membership bounds the
+    file in corpus size as originally intended, without misreporting any
+    advisory's status to fit a budget."""
     ordered = _sorted_by_recency(advisories)
     recent_ids = {id(p) for p in ordered[:tier1_n]}
     tier1_ids = {
@@ -728,6 +742,10 @@ def _split_tiers(advisories: list[Page], tier1_n: int) -> tuple[list[Page], list
         if id(p) in recent_ids or p.frontmatter.get("status") in ("active", "ongoing")
     }
     tier1 = [p for p in ordered if id(p) in tier1_ids]
+    if tier1_max is not None and len(tier1) > tier1_max:
+        keep = {id(p) for p in tier1[:tier1_max]}
+        tier1 = [p for p in tier1 if id(p) in keep]
+        tier1_ids = keep
     tier2 = [p for p in ordered if id(p) not in tier1_ids]
     return tier1, tier2
 
@@ -758,7 +776,7 @@ def build_llms_txt(pages: list[Page], full_bytes: int | None = None, ctx_bytes: 
     ]
 
     advisories = [p for p in pages if p.section == "advisories" and not p.is_index]
-    tier1, tier2 = _split_tiers(advisories, LLMS_TXT_TIER1)
+    tier1, tier2 = _split_tiers(advisories, LLMS_TXT_TIER1, LLMS_TXT_TIER1_MAX)
 
     lines.append("## Advisories")
     lines.append("")
@@ -791,9 +809,13 @@ def build_llms_txt(pages: list[Page], full_bytes: int | None = None, ctx_bytes: 
         # exhausted it again, then 24->14 chars 2026-08-19 when two new
         # advisories (CoSnitch, NullReceiver) plus the better-auth/NextAuth
         # updates exhausted it again. Cutting deeper this time for margin.
+        # Restored 14->36 chars 2026-08-20: with LLMS_TXT_TIER1_MAX capping
+        # membership, this file no longer grows with the active/ongoing count,
+        # so the description no longer has to be trimmed to unreadability.
+        # 36 (not 60) keeps ~3KB of budget margin for future sweeps.
         desc = p.description
-        if len(desc) > 14:
-            desc = desc[:13].rsplit(" ", 1)[0] + "…"
+        if len(desc) > 36:
+            desc = desc[:35].rsplit(" ", 1)[0] + "…"
         lines.append(
             f"- [{p.title}]({_page_html_url(p)}) ([md]({_page_md_url(p)})){meta}: {desc}"
         )
