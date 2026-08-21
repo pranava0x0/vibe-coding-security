@@ -2,7 +2,7 @@
 id: 2026-07-nextjs-july-security-release
 title: "Next.js July 2026 Security Release — 9 CVEs (4 high, 5 medium): middleware bypass, SSRF, cache confusion (patch to 16.2.11 / 15.5.21)"
 date_disclosed: 2026-07-20
-last_updated: 2026-07-21
+last_updated: 2026-08-21
 severity: high
 status: patched
 ecosystems: [npm, javascript]
@@ -59,9 +59,22 @@ Next.js is the default framework behind a large fraction of Lovable, Bolt, v0, a
 → Pin a Dependabot / Renovate auto-merge policy for `next` security releases now that they're on a predictable monthly cadence.
 → Avoid building `rewrites()`/`redirects()` destination hostnames from any request-controlled value (headers, query params, path segments).
 
+## Update — 2026-08-21: Vercel pre-announces an **August 26** release fixing one **critical** vulnerability
+
+On **2026-08-20**, Vercel published the second pre-announcement under the same Security Release Program described above. Everything it discloses (fetched directly from the Next.js blog):
+
+- **Release date:** 2026-08-26.
+- **Scope:** **one critical-severity vulnerability.** No CVE id, no affected-version range, and no technical detail are disclosed yet — that is the program working as designed, since publishing a target list before a patch exists helps attackers more than defenders.
+- **Versions that will ship:** **16.3.3** and **15.5.24**, published alongside the full advisory.
+
+**What to do before 2026-08-26.** There is nothing to patch yet and no way to tell whether your app is in scope, so the useful work is preparation rather than mitigation: confirm which Next.js line each of your apps is on, make sure you can cut an upgrade to 16.3.3 / 15.5.24 the same day rather than waiting for a sprint boundary, and note that this is the **first critical-rated** Next.js issue since the [May 2026 13-CVE rollup](2026-05-nextjs-react-security-release.md) — the July batch topped out at high. Given this repo's tracked history of Next.js middleware-auth bypasses (CVE-2025-29927, CVE-2026-44574, CVE-2026-64642 above), an app whose authorization lives *only* in middleware is worth reviewing now regardless of what the 26th turns out to bring.
+
+This entry will be updated with the actual CVE detail once the release publishes.
+
 ## Sources
 - [Next.js — Security Release and Our Next Patch Release (announcement, 2026-07-13)](https://nextjs.org/blog/next-security-release-program)
 - [Next.js — July 2026 Security Release (full CVE list, published 2026-07-20)](https://nextjs.org/blog/july-2026-security-release)
 - [GitHub Security Advisories — vercel/next.js (GHSA-6gpp-xcg3-4w24, GHSA-p9j2-gv94-2wf4, GHSA-89xv-2m56-2m9x, GHSA-m99w-x7hq-7vfj, GHSA-4c39-4ccg-62r3, GHSA-68g3-v927-f742, GHSA-4633-3j49-mh5q, GHSA-q8wf-6r8g-63ch, GHSA-955p-x3mx-jcvp)](https://github.com/vercel/next.js/security/advisories)
 - [Cybersecurity News — Next.js Launches Monthly Security Release Program as First Update Patches 9 Vulnerabilities](https://cybersecuritynews.com/next-js-monthly-security-updates/)
 - [GBHackers — Next.js Announces July Security Release to Fix 4 High-Severity and 5 Medium Flaws](https://gbhackers.com/next-js-announces-july-security-release/)
+- [Next.js — Upcoming Next.js August Security Release (pre-announcement, published 2026-08-20)](https://nextjs.org/blog/upcoming-nextjs-security-release-august-2026) — added 2026-08-21: the 2026-08-26 date, the single critical-severity count, and the 16.3.3 / 15.5.24 target versions.
