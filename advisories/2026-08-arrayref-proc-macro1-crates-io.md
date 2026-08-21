@@ -2,7 +2,7 @@
 id: 2026-08-arrayref-proc-macro1-crates-io
 title: "arrayref (244M downloads) and append-only-vec hijacked on crates.io to pull a build-time infostealer via a typosquatted proc-macro1 dependency (August 2026)"
 date_disclosed: 2026-08-20
-last_updated: 2026-08-20
+last_updated: 2026-08-21
 severity: critical
 status: contained
 ecosystems: [crates-io, rust]
@@ -40,6 +40,16 @@ The following attacker-published crates were **deleted entirely** from crates.io
 Stage 2 is a credential stealer with remote-control capability: it extracts saved passwords from **Chromium-based browsers (Chrome, Brave, Edge)**, reads **browser-extension storage where cryptocurrency wallets keep data**, installs a **macOS LaunchAgent for persistence**, and accepts `Shell`, `runscript`, and `ShellX` commands from its C2 ([Aikido](https://www.aikido.dev/blog/two-popular-rust-crates-arrayref-and-append-only-vec-compromised-in-supply-chain-attack)).
 
 **On attribution:** the Rust team stated it does **not** believe the `arrayref` author acted maliciously — the account (in good standing since 2009) or its credentials were most likely compromised. The account was locked as a precaution and the legitimate yanked versions were restored.
+
+**Update (2026-08-21) — Wiz reports substantial infrastructure overlap with DPRK campaigns.** Wiz published its own analysis on 2026-08-20 claiming three concrete overlaps with North Korean supply-chain activity, none of which contradicts the Rust team's account-compromise assessment (Wiz likewise frames the entry point as stolen maintainer credentials):
+
+1. **Shared C2 URI path.** The `arrayref` payloads beacon to the path `/49890878`, which Wiz says was also used in the [Mastra npm compromise](2026-06-mastra-ai-npm-compromise.md) — attributed by Microsoft to **DPRK / Sapphire Sleet**. Wiz reports the IP also shares an SSL issuer with infrastructure from that campaign.
+2. **Overlap with the axios compromise.** A victim-reported C2 IP appears in Google Cloud Threat Intelligence's analysis of **UNC1069**'s [axios npm attack](2026-03-axios-compromise.md), which Mandiant links to North Korea.
+3. **Shared hosting preference.** Both campaigns used the same **23.254.164.0/23 Hostwinds LLC** range — consistent with this incident's C2 at `23.254.165.112`.
+
+Treat this as **overlap, not formal attribution**: no vendor has formally attributed this incident to a named threat actor, and infrastructure reuse is a weaker signal than payload identity. It is, however, a reason to check whether your org appears in the victim sets of the two cross-linked npm incidents — this repo's standing "trace the leaked token forward" discipline applies across ecosystems, not just within npm.
+
+Also refined this sweep: The Hacker News reports the exact `arrayref` download figures as **245,385,500 all-time** and **53,905,601 in the preceding 90 days** — the 90-day number is the one that matters for "how many builds could plausibly have resolved this," and it is the first precise recent-activity figure published for this incident.
 
 **Why this matters for this repo's audience.** `build.rs` is the Rust analogue of an npm `postinstall` hook or a PyPI import-time exec — and it is the *fourth* install/build-time execution primitive this repo tracks (see [prevention/supply-chain-attack-surface.md](../prevention/supply-chain-attack-surface.md)). Critically, **`cargo` has no `--ignore-scripts` equivalent**: build scripts are a core part of how Cargo compiles native code, so there is no flag a developer can pass to opt out. Any CI runner, container build, or developer laptop that ran `cargo build` against a tree resolving these versions during the ~2-hour window executed attacker code. This is the same shape as the [TrapDoor cross-ecosystem campaign](2026-05-trapdoor-cross-ecosystem-stealer.md) and the [onering crate compromise](2026-06-onering-rust-crate-compromise.md), but at a far larger download scale — by download count this is the largest crates.io compromise reported to date.
 
@@ -105,3 +115,5 @@ Network IOC — any outbound connection to **`23.254.165.112`** (ports **9089** 
 - [Supply chain attack on arrayref — Rust Blog (Rust Security Response WG)](https://blog.rust-lang.org/2026/08/20/supply-chain-attack-on-arrayref/) — primary vendor disclosure: timeline, exact affected versions and exposure windows, deleted crates, account-compromise assessment, recommended user check.
 - [Malicious Rust Crate arrayref Runs a Build-Time Payload — SafeDep](https://safedep.io/arrayref-proc-macro1-rust-build-time-malware/) — technical analysis of `build.rs`: base64-fragmented C2 address, TLS-verification bypass, per-platform binaries, Unix/Windows execution paths, SHA-256 hashes.
 - [Two popular Rust crates arrayref and append-only-vec compromised in Supply Chain Attack — Aikido](https://www.aikido.dev/blog/two-popular-rust-crates-arrayref-and-append-only-vec-compromised-in-supply-chain-attack) — download counts, the `dtolnay`-impersonating typosquat account, stage-2 stealer capabilities (Chromium passwords, wallet extension storage, macOS LaunchAgent persistence, C2 command set).
+- [Rust Supply Chain Attack on arrayref: Significant Overlap with DPRK Campaigns — Wiz](https://www.wiz.io/blog/rust-supply-chain-attack-on-arrayref-significant-overlap-with-dprk-campaigns) — added 2026-08-21: the three claimed DPRK infrastructure overlaps (shared `/49890878` C2 path with the Mastra campaign, shared SSL issuer, UNC1069/axios IP overlap, Hostwinds 23.254.164.0/23 range).
+- [Rust Supply Chain Attack Puts Build-Time Malware in Crates with 245 Million Downloads — The Hacker News](https://thehackernews.com/2026/08/rust-supply-chain-attack-puts-build.html) — added 2026-08-21: exact download figures (245,385,500 all-time / 53,905,601 in 90 days), per-crate publish/deletion timestamps, and confirmation that no vendor has formally attributed the incident to a named actor.

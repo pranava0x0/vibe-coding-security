@@ -2,9 +2,9 @@
 id: 2026-08-mlflow-webhook-ssrf-authz-batch
 title: "MLflow — critical unauthenticated SSRF (CVSS 9.3) plus two authorization-bypass CVEs, all fixed in 3.15.0"
 date_disclosed: 2026-08-02
-last_updated: 2026-08-18
+last_updated: 2026-08-21
 severity: critical
-status: patched
+status: active
 ecosystems: [pypi, mlflow]
 tools_affected: [mlflow]
 tags: [cve, ssrf, authorization-bypass, credential-hub, ml-tooling, dns-rebinding]
@@ -56,9 +56,19 @@ If your MLflow server runs on cloud infrastructure (AWS/GCP/Azure), a pre-3.15.0
 - When mixing web frameworks in one server process (Flask + FastAPI, as MLflow does), treat every new route addition as a checklist item to confirm it's covered by the authorization middleware — don't assume coverage is automatic just because older routes are protected.
 - Block outbound requests to `169.254.169.254` and other metadata/loopback addresses from any process that fetches user- or webhook-supplied URLs, as defense in depth against SSRF-guard bypasses like this one.
 
+
+## Update — 2026-08-19: CISA adds CVE-2026-64849 to the Known Exploited Vulnerabilities catalog
+
+Confirmed directly in [CISA's KEV feed](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) (catalogVersion 2026.08.21): **CVE-2026-64849**, listed as "MLflow Server-Side Request Forgery Vulnerability", **`dateAdded` 2026-08-19**, **`dueDate` 2026-09-02**.
+
+This moves the unauthenticated webhook-test SSRF from "critical but no public exploitation reported" to **confirmed exploited in the wild**, seventeen days after the fix shipped in MLflow 3.15.0. Federal civilian agencies have a 2026-09-02 remediation deadline under BOD 26-04; everyone else should read the KEV listing as evidence that the window for an unhurried upgrade has closed.
+
+**This advisory's `status` is therefore changed from `patched` to `active`** — the vendor fix exists and is complete, but attackers are using this against unpatched instances now. If your MLflow Tracking Server has any network reachability beyond a fully trusted host and is not on **3.15.0+**, treat it as a live incident rather than a scheduled upgrade: the exploit is a single unauthenticated request that reflects cloud-metadata responses straight back to the caller, so assume credential theft rather than merely probing.
+
 ## Sources
 - [GitHub Security Advisory — GHSA-7gwp-5pfp-969j: Unauthenticated full-read SSRF in MLflow webhook delivery](https://github.com/mlflow/mlflow/security/advisories/GHSA-7gwp-5pfp-969j) — primary source for CVE-2026-64849: mechanism, CVSS 9.3, affected/patched versions.
 - [GitHub Security Advisory — GHSA-gqch-g4w5-7qcw: CreateModelVersion source validation does not check READ permission on referenced run_id](https://github.com/mlflow/mlflow/security/advisories/GHSA-gqch-g4w5-7qcw) — primary source for CVE-2026-69148.
 - [GitHub Security Advisory — GHSA-3p64-6gvh-82v5: LogInputs endpoint bypasses per-run UPDATE authorization in MLflow basic-auth](https://github.com/mlflow/mlflow/security/advisories/GHSA-3p64-6gvh-82v5) — primary source for CVE-2026-69146.
 - [GitLab Advisory Database — CVE-2026-64849](https://advisories.gitlab.com/pypi/mlflow/CVE-2026-64849/) — independent corroboration of CVSS score, mechanism, and patched version.
 - [Rapid7 Vulnerability & Exploit Database — CVE-2026-64849](https://www.rapid7.com/db/vulnerabilities/cve-2026-64849/) — independent corroboration.
+- [CISA — Known Exploited Vulnerabilities catalog (JSON feed, catalogVersion 2026.08.21)](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) — added 2026-08-21, fetched directly: confirms CVE-2026-64849 KEV entry, dateAdded 2026-08-19, dueDate 2026-09-02.

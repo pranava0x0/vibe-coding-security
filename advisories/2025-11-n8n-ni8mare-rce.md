@@ -1,8 +1,8 @@
 ---
 id: 2025-11-n8n-ni8mare-rce
-title: "n8n Ni8mare + RCE cluster — CVSS 10.0 unauth takeover of workflow automation (Nov 2025 → June 2026)"
+title: "n8n Ni8mare + RCE cluster — CVSS 10.0 unauth takeover of workflow automation (Nov 2025 → August 2026)"
 date_disclosed: 2025-11-09
-last_updated: 2026-08-17
+last_updated: 2026-08-21
 severity: critical
 status: patched
 ecosystems: [npm, self-hosted]
@@ -12,7 +12,7 @@ tags: [rce, unauth, workflow-automation, credential-theft, ai-agents, oauth-pivo
 
 ## TL;DR
 
-**Ni8mare** (CVE-2026-21858, CVSS 10.0) is an unauthenticated remote code execution vulnerability in **n8n**, the popular self-hosted workflow automation platform, letting any network-reachable attacker take full control of an n8n instance — and everything it has OAuth access to (Google Drive, Slack, GitHub, HubSpot, etc.). ~26,500 exposed instances observed in the wild. Patched in **n8n 1.121.0** (November 18, 2025). A follow-on authenticated bypass (CVE-2026-25049) was found in February 2026 and **exploited in the wild**. June 2026 added **CVE-2026-27577** (CVSS 9.4, expression compiler sandbox escape) and **CVE-2026-27493** (pre-auth RCE via Form node double-evaluation on public endpoints). **Upgrade to the latest n8n release.**
+**Ni8mare** (CVE-2026-21858, CVSS 10.0) is an unauthenticated remote code execution vulnerability in **n8n**, the popular self-hosted workflow automation platform, letting any network-reachable attacker take full control of an n8n instance — and everything it has OAuth access to (Google Drive, Slack, GitHub, HubSpot, etc.). ~26,500 exposed instances observed in the wild. Patched in **n8n 1.121.0** (November 18, 2025). A follow-on authenticated bypass (CVE-2026-25049) was found in February 2026 and **exploited in the wild**. A separate five-CVE sandbox-escape batch (CVE-2026-27493 / -27494 / -27495 / -27497 / -27577) was published **2026-02-25**, headlined by an **unauthenticated** expression-evaluation bug in the Form node (CVE-2026-27493, CVSS 9.5) — all five fixed in **1.123.22 / 2.9.3 / 2.10.1**. *(Corrected 2026-08-21: this advisory previously dated that batch to June 2026 and gave no fixed versions.)* A further **nine-advisory batch landed 2026-08-19**, none carrying a CVE, including two more sandbox escapes to host RCE — fixed in **1.123.73 / 2.35.4 / 2.36.2**. **Upgrade to the latest n8n release**, and bump the `isolated-vm` sandbox underneath it at the same time (see [the August 2026 sandbox-escape advisory](2026-08-vm2-isolated-vm-sandbox-escapes.md)).
 
 ## What happened
 
@@ -51,23 +51,22 @@ A second CVSS 10.0 vulnerability (**CVE-2026-21877**, GHSA-v364-rw7m-3263) was d
 
 **CVE-2025-68613** (the December 2025 authentication-bypass patch that preceded Ni8mare) was added to the **CISA Known Exploited Vulnerabilities (KEV) catalog** in March 2026 after CISA observed active exploitation targeting approximately **24,700 exposed n8n instances**. If you are a US federal agency or contractor, this CVE carried a mandatory remediation deadline; consult your compliance team.
 
-**June 2026 — CVE-2026-27577 (CVSS 9.4): expression compiler sandbox escape**
+**February 2026 (five-CVE sandbox-escape batch — dating and patched versions corrected 2026-08-21)**
 
-A sandbox escape vulnerability in n8n's **expression compiler** allows a workflow editor with access to create or modify workflows to break out of the sandboxed JavaScript execution context and achieve arbitrary code execution on the n8n host. The expression compiler evaluates user-supplied JavaScript expressions in n8n workflow nodes; insufficient sandboxing of the compiler's internals allows a crafted expression to escape the intended execution environment. Fixed in the latest n8n release; check the GitHub advisory for the minimum fixed version.
+Earlier revisions of this advisory dated the five-CVE February sandbox-escape cluster to June 2026 and said only "fixed in the latest n8n release." Both were wrong. Fetching each advisory directly (GHSA and NVD, links below) shows all five were **published 2026-02-25** as one coordinated batch, and all five share the same affected range and the same fix:
 
-**June 2026 — CVE-2026-27493: Form node double-evaluation → pre-auth RCE via public endpoints**
+- **Affected:** n8n `< 1.123.22`, `>= 2.0.0 < 2.9.3`, `>= 2.10.0 < 2.10.1`
+- **Patched:** **1.123.22 / 2.9.3 / 2.10.1**
 
-n8n's **Form node** (used to create public-facing HTML forms that trigger workflows) passes user-submitted form field values into the workflow execution context without adequate sanitization. A double-evaluation bug allows an attacker who submits a crafted form response to a public n8n Form endpoint to inject expressions that the n8n engine evaluates with the workflow's full privileges — achieving **pre-authenticated remote code execution** via any publicly accessible Form node. Because n8n Form endpoints can be exposed to the internet intentionally (they're the whole point of the Form node), this affects any n8n instance with a public Form trigger, not just misconfigured ones. Fixed in the latest n8n release.
+The five:
 
-**June 2026 — CVE-2026-27495 (CVSS 9.4): JS Task Runner sandbox escape**
+- **CVE-2026-27493** (GHSA-75g8-rv7v-32f7, **CVSS 9.5**) — *Unauthenticated Expression Evaluation via Form Node.* A **double-evaluation** bug: user input is interpolated into an HTML template on the first evaluation pass, and the second pass scans that rendered output for expression syntax and evaluates it as code. An unauthenticated attacker submitting crafted form data to a public Form node gets arbitrary expression evaluation — and, chained with any of the sandbox escapes below, RCE. Note the precondition the earlier write-up omitted: it requires a workflow where **a form field value begins with `=` and interpolates user-provided input**, so not every public Form node is exploitable.
+- **CVE-2026-27577** (GHSA-vpcf-gvg4-6qwr, **CVSS 9.4**) — *Expression Sandbox Escape Leads to RCE.* An authenticated workflow editor escapes the expression sandbox and runs system commands on the host. Root cause: the AST rewriter's `switch` statement was missing the `SpreadElement` node type, so the `process` identifier survived rewriting unmodified and reached the runtime as a bare global.
+- **CVE-2026-27494** (**CVSS 3.1: 9.9** / CVSS 4.0: 7.1) — *Python Code node sandbox escape.* Not "pending coordinated disclosure" as this advisory previously stated; NVD published full details 2026-02-25 with NIST's own CVSS 3.1 assessment added 2026-03-05. File exfiltration or RCE; full host compromise on instances using internal Task Runners.
+- **CVE-2026-27495** (**CVSS 3.1: 9.9** / CVSS 4.0: 9.4, CWE-94) — *JavaScript Task Runner sandbox escape.* Same shape as CVE-2026-27494 but via the JS runner rather than the Python one.
+- **CVE-2026-27497** (**CVSS 3.1: 8.8**, not 9.4 as previously stated here; CWE-89 + CWE-94) — *Merge node SQL query mode.* An authenticated workflow editor executes arbitrary code and writes arbitrary files on the n8n host.
 
-n8n's **JavaScript Task Runner** node executes arbitrary user-supplied JavaScript in a sandboxed environment intended to prevent access to the host filesystem and network. **CVE-2026-27495** (CVSS 9.4) breaks out of this sandbox: a crafted JavaScript payload bypasses the isolation primitive and achieves arbitrary code execution on the n8n host. Any authenticated workflow editor can exploit this by adding a JS Task Runner node with a malicious script. Fixed in the latest n8n release.
-
-**June 2026 — CVE-2026-27497 (CVSS 9.4): Merge node SQL mode → arbitrary code / file write**
-
-n8n's **Merge node** in SQL aggregation mode processes user-controlled SQL expressions that are insufficiently sanitized. **CVE-2026-27497** (CVSS 9.4) allows an authenticated workflow editor to inject SQL that causes n8n to write arbitrary content to arbitrary host filesystem paths — yielding persistent code execution via the same arbitrary-file-write → cron / startup-path chain as CVE-2026-21877. Fixed in the latest n8n release.
-
-**June 2026 — CVE-2026-27494**: Details pending coordinated disclosure as of 2026-06-18. Severity reported as critical; associated with the same June 2026 n8n vulnerability batch as CVE-2026-27493 / CVE-2026-27495 / CVE-2026-27497. Upgrade to the latest n8n release to cover all concurrent fixes.
+Practical consequence of the correction: if you read the earlier version of this page and concluded you were covered because you upgraded at some point in June, **check your actual version against 1.123.22 / 2.9.3 / 2.10.1** — the fix landed months earlier than this advisory claimed, but so did the disclosure, meaning the exposure window for anyone on an older line has been open considerably longer than stated.
 
 **Why this matters for vibe coders and AI agent builders:**
 
@@ -117,6 +116,27 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:5678/healthz
 - **Apply least-privilege OAuth grants.** Don't grant n8n `service_role` or full write access to services where read-only would suffice for your workflows.
 - **Audit stored credentials regularly** — run `Settings → Credentials → list` and remove any you no longer use.
 
+
+## Update — 2026-08-19: a nine-advisory batch, none with a CVE, including two more sandbox escapes to host RCE
+
+n8n published **nine security advisories on its own GHSA index on 2026-08-19**, **none of which carry a CVE** — so CVE-driven scanning will not surface any of them. All nine share the same affected range and fix:
+
+- **Affected:** n8n `< 1.123.73`, `< 2.35.4`, `< 2.36.2`
+- **Patched:** **1.123.73 / 2.35.4 / 2.36.2**
+
+The four most serious, each verified on its own advisory page:
+
+- **GHSA-9x83-43r8-5hwc** (CVSS 8.7) — **`$fromAI` prototype leak → RCE in the n8n main process.** The AI-tool-argument helper resolved placeholder names without ownership validation and permitted reserved keys, leaking live host-prototype references on primitive inputs. A low-privileged workflow builder walks the prototype chain to the `Function` constructor and executes arbitrary code **in the main process**. Note what this one is: the helper that exists specifically to let an *LLM* supply tool arguments.
+- **GHSA-fg85-4wv2-p98j** (CVSS 7.2) — **expression-sandbox bypass with process-wide persistence.** Free identifiers in spread, computed-key, switch-case, and class-extension positions resolved to process globals instead of being rewritten, exposing 30+ host globals. Mutations **persist process-wide across all later expression evaluations until restart** — so one hostile expression contaminates every subsequent workflow run in that process. (Structurally the same missing-AST-case family as CVE-2026-27577 above, which suggests the rewriter's node coverage is worth auditing rather than patching case-by-case.)
+- **GHSA-mwp5-2m32-r54h** (CVSS 7.7) — **Git node command execution from a malicious repository.** The node reset only a fixed list of command-bearing git config keys, omitting the content-filter and merge-driver families, so a malicious repo executes commands during ordinary Add/Commit/Checkout/Pull as the n8n process user. Third distinct Git-node finding in this advisory.
+- **GHSA-4r56-g65c-fm83** (CVSS 7.2) — **credential exfiltration via inline workflow JSON.** Credential validation didn't inspect inline workflow JSON across all sub-workflow-executing node types, so a shared-workflow editor — **or any user creating workflows via the REST API, Public API, or MCP** — embeds a node referencing a credential they don't hold; when a user who *does* hold it runs the workflow, the secret resolves and can be shipped to an attacker destination. The MCP path is the one to notice: an agent with workflow-creation access is enough.
+
+Also in the batch (titles and severities from n8n's advisory index): **GHSA-wxwj-8wv6-vpw2** (Elasticsearch/Firestore query injection, Moderate), **GHSA-95ph-833c-4wrp** (Gmail/Brevo local file read + SSRF, High), **GHSA-vrv8-j27g-g7cr** (Strapi/SeaTable/Mailcheck leak decrypted credentials, High), **GHSA-jp9j-jr97-w9pj** (SSRF check validates `uri` while axios dispatches `url` — a textbook instance of this repo's ["two parsers, one string"](2026-05-starlette-badhost-host-header-bypass.md) class, Moderate), and **GHSA-jmmj-93rg-6j39** (Insights API authorization, Moderate).
+
+**Separately — a CVE was assigned to the August 5 MCP node-schema path traversal.** n8n disclosed it on **2026-08-05** as **GHSA-6h4x-896x-fw5m** (CVSS 8.7, affected `< 2.33.4` and `< 2.34.1`, fixed **2.33.4 / 2.34.1**) with no CVE at the time. On **2026-08-20** the GitHub Advisory Database published **GHSA-h5rm-9fhh-5phj** carrying **CVE-2026-77068** (CVSS 8.7, CWE-22) for the same underlying issue: `@n8n/workflow-sdk`'s node-schema loader derives a schema module path from an attacker-supplied node-type string with no traversal check, giving a basic member RCE in the n8n main process. **Two GHSA ids, one vulnerability** — flagged here so a reader tracking both doesn't double-count or assume the second is a new bug.
+
+**Do not patch this in isolation.** n8n runs untrusted JavaScript in **`isolated-vm`**, which shipped its own critical sandbox escape in the same window — see [the vm2 / isolated-vm sandbox-escape advisory](2026-08-vm2-isolated-vm-sandbox-escapes.md). Treat the n8n upgrade and the sandbox dependency bump as one event.
+
 ## Sources
 
 - [GitHub Security Advisories — n8n has XML Node Prototype Pollution that leads to RCE (GHSA-hqr4-h3xv-9m3r / CVE-2026-42232)](https://github.com/n8n-io/n8n/security/advisories/GHSA-hqr4-h3xv-9m3r) — primary source for the April 2026 backfill: CVE↔GHSA pairing, CVSS score, affected/patched versions confirmed directly on n8n's own advisory page.
@@ -138,8 +158,19 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:5678/healthz
 - [SecureLayer7 — A Deep Dive into CVE-2026-25049: n8n Remote Code Execution](https://blog.securelayer7.net/cve-2026-25049/) — added 2026-08-10: AST-node root cause, arrow-function/destructuring bypass mechanics, unauthenticated-via-public-webhook exploitation path, relationship to CVE-2025-68613.
 - [Endor Labs — CVE-2026-25049 Expression Escape Vulnerability Leading to RCE in n8n](https://www.endorlabs.com/learn/cve-2026-25049-n8n-rce) — added 2026-08-10: independent confirmation, patched-version detail.
 - [CISA KEV — CVE-2025-68613](https://www.cisa.gov/known-exploited-vulnerabilities-catalog) — added March 2026; ~24,700 exposed instances observed.
-- [The Hacker News — n8n CVE-2026-27577 Expression Compiler Sandbox Escape](https://thehackernews.com/2026/06/n8n-cve-2026-27577.html) — June 2026 sandbox escape in expression compiler (CVSS 9.4).
-- [GitHub Advisory — CVE-2026-27493 n8n Form node double-evaluation pre-auth RCE](https://github.com/advisories?query=n8n+CVE-2026-27493) — June 2026 pre-auth RCE via public Form node endpoints.
-- [NVD — CVE-2026-27495](https://nvd.nist.gov/vuln/detail/CVE-2026-27495) — CVSS 9.4, JS Task Runner sandbox escape.
-- [NVD — CVE-2026-27497](https://nvd.nist.gov/vuln/detail/CVE-2026-27497) — CVSS 9.4, Merge node SQL mode arbitrary code/file write.
-- [NVD — CVE-2026-27494](https://nvd.nist.gov/vuln/detail/CVE-2026-27494) — additional June 2026 n8n CVE; details pending coordinated disclosure.
+Sources for the 2026-08-21 correction of the February sandbox-escape batch (each fetched directly this sweep; the earlier "June 2026 / fixed in latest release" text was not supported by any of them):
+
+- [GitHub Advisory Database — GHSA-75g8-rv7v-32f7 (CVE-2026-27493)](https://github.com/advisories/GHSA-75g8-rv7v-32f7) — CVE↔GHSA pairing, CVSS 9.5, published 2026-02-25, affected ranges and patched versions, and the "form field value begins with `=`" precondition.
+- [GitHub Advisory Database — GHSA-vpcf-gvg4-6qwr (CVE-2026-27577)](https://github.com/advisories/GHSA-vpcf-gvg4-6qwr) — CVSS 9.4, published 2026-02-25, same affected/patched ranges.
+- [Pillar Security — Zero Click Unauthenticated RCE in n8n: A Contact Form That Executes Shell Commands](https://www.pillar.security/blog/zero-click-unauthenticated-rce-in-n8n-a-contact-form-that-executes-shell-commands) — primary researcher write-up; double-evaluation root cause for CVE-2026-27493 and the missing `SpreadElement` AST-rewriter case for CVE-2026-27577.
+- [NVD — CVE-2026-27494](https://nvd.nist.gov/vuln/detail/CVE-2026-27494) — Python Code node sandbox escape; fully analyzed (not "pending disclosure"), CVSS 3.1 9.9, NIST assessment added 2026-03-05.
+- [NVD — CVE-2026-27495](https://nvd.nist.gov/vuln/detail/CVE-2026-27495) — JS Task Runner sandbox escape, CVSS 3.1 9.9 / CVSS 4.0 9.4, CWE-94.
+- [NVD — CVE-2026-27497](https://nvd.nist.gov/vuln/detail/CVE-2026-27497) — Merge node SQL query mode, CVSS 3.1 **8.8** (this advisory previously said 9.4), CWE-89 + CWE-94.
+Sources for the 2026-08-19 batch (added 2026-08-21):
+
+- [n8n GitHub Security Advisories index](https://github.com/n8n-io/n8n/security/advisories) — the nine same-day advisories, their severities, and the shared 1.123.73 / 2.35.4 / 2.36.2 fix line.
+- [GHSA-9x83-43r8-5hwc](https://github.com/n8n-io/n8n/security/advisories/GHSA-9x83-43r8-5hwc) — `$fromAI` prototype leak to `Function` constructor, CVSS 8.7.
+- [GHSA-fg85-4wv2-p98j](https://github.com/n8n-io/n8n/security/advisories/GHSA-fg85-4wv2-p98j) — expression-sandbox bypass, 30+ host globals, process-wide persistence until restart, CVSS 7.2.
+- [GHSA-mwp5-2m32-r54h](https://github.com/n8n-io/n8n/security/advisories/GHSA-mwp5-2m32-r54h) — Git node content-filter / merge-driver config keys not reset, CVSS 7.7.
+- [GHSA-4r56-g65c-fm83](https://github.com/n8n-io/n8n/security/advisories/GHSA-4r56-g65c-fm83) — inline-workflow-JSON credential validation gap reachable via REST/Public API/MCP, CVSS 7.2.
+- [GitHub Advisory Database — GHSA-h5rm-9fhh-5phj (CVE-2026-77068)](https://github.com/advisories/GHSA-h5rm-9fhh-5phj) and [n8n GHSA-6h4x-896x-fw5m](https://github.com/n8n-io/n8n/security/advisories/GHSA-6h4x-896x-fw5m) — the two advisory ids covering the single `@n8n/workflow-sdk` node-schema path-traversal issue.
