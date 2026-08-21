@@ -4,6 +4,10 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-08-17 | [Ray CVE-2025-62593 — a `Mozilla` User-Agent prefix was the browser-attack defense; DNS rebinding turns any web page into RCE on your AI compute cluster (CISA KEV)](2026-08-ray-cve-2025-62593-kev.md) | critical | patched |
+| 2026-08-07 | [Both JavaScript sandboxes AI workflow platforms run untrusted code in broke in the same fortnight — vm2 (host DNS hijack) and isolated-vm (type confusion → host RCE)](2026-08-vm2-isolated-vm-sandbox-escapes.md) | critical | patched |
+| 2026-08-17 | [August 2026 agent-framework and MCP-server CVE batch — Spring AI tool-authorization bypass, PyCharm's unauthenticated Jupyter MCP, Splunk MCP RCE, LangChain SitemapLoader SSRF](2026-08-agent-framework-mcp-cve-batch.md) | high | patched |
+| 2026-07-30 | [knaithe/KnYuan — an autonomous DeepSeek+Hermes agent mass-scanned 460+ targets for Langflow, n8n and Marimo RCEs; the AI-tool exploits failed only where auth was on](2026-08-knaithe-hermes-autonomous-ai-scanning.md) | high | active |
 | 2026-08-20 | [arrayref (244M downloads) and append-only-vec hijacked on crates.io to pull a build-time infostealer via a typosquatted proc-macro1 dependency](2026-08-arrayref-proc-macro1-crates-io.md) | critical | contained |
 | 2026-03-09 | [@siteboon/claude-code-ui — three command-injection CVEs, including unauthenticated RCE from a default JWT secret (backfill)](2026-08-siteboon-claude-code-ui-rce-batch.md) | critical | patched |
 | 2026-05-20 | [VIPER-MCP — automated audit of 39,884 MCP server repos finds 106 confirmed zero-days, 67 CVEs assigned](2026-08-viper-mcp-mass-audit-106-zerodays.md) | high | ongoing |

@@ -706,6 +706,15 @@ LLMS_TXT_TIER1 = 8
 LLMS_TXT_TIER1_MAX = 40
 LLMS_CTX_TIER1 = 15
 LLMS_FULL_TIER1 = 15
+# Hard cap on Tier-1 membership for llms-full.txt. Added 2026-08-21, applying
+# the same fix the 2026-08-20 sweep made for llms.txt (LLMS_TXT_TIER1_MAX) but
+# never extended to this file. Same root cause: Tier 1 is the active/ongoing
+# union, which is unbounded (67 of 212 advisories today) and had grown past the
+# byte budget on its own. Capping membership makes the file O(1) in corpus size
+# instead of O(active advisories); demoted entries stay listed as TL;DR +
+# pointer, and no advisory's status is altered to fit a budget. If this budget
+# is breached again, lower this number.
+LLMS_FULL_TIER1_MAX = 60
 
 
 def _sorted_by_recency(advisories: list[Page]) -> list[Page]:
@@ -897,7 +906,7 @@ def build_section_llms_txt(section_slug: str, section_label: str, pages: list[Pa
 
 def build_llms_full_txt(pages: list[Page]) -> str:
     advisories = [p for p in pages if p.section == "advisories" and not p.is_index]
-    tier1, tier2 = _split_tiers(advisories, LLMS_FULL_TIER1)
+    tier1, tier2 = _split_tiers(advisories, LLMS_FULL_TIER1, LLMS_FULL_TIER1_MAX)
     tier2_ids = {id(p) for p in tier2}
 
     out: list[str] = [
