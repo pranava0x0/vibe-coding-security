@@ -703,7 +703,9 @@ def _page_html_url(p: Page) -> str:
 LLMS_TXT_TIER1 = 8
 # Hard cap on Tier-1 membership for llms.txt (see _split_tiers). Added 2026-08-20
 # in place of trimming descriptions further; 14 chars was already unreadable.
-LLMS_TXT_TIER1_MAX = 40
+# Lowered 40->36 2026-08-22: two new advisories pushed the active/ongoing union
+# past budget again; per the policy above, lower this number, not the trim.
+LLMS_TXT_TIER1_MAX = 36
 LLMS_CTX_TIER1 = 15
 LLMS_FULL_TIER1 = 15
 # Hard cap on Tier-1 membership for llms-full.txt. Added 2026-08-21, applying
