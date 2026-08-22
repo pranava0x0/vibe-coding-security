@@ -4,6 +4,8 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-08-10 | [One Pyodide sandbox-escape flaw broke n8n, Grist, Cohere Terrarium, and Hugging Face smolagents — DEF CON 34 backfill, four CVEs](2026-08-pyodide-sandbox-escape-cluster.md) | critical | patched |
+| 2026-05-19 | [Nuxt's May 2026 security release — four CVEs in the /__nuxt_island/* endpoint, including a route-middleware auth bypass (predates the July batch)](2026-05-nuxt-island-endpoint-cve-batch.md) | high | patched |
 | 2026-08-17 | [Ray CVE-2025-62593 — a `Mozilla` User-Agent prefix was the browser-attack defense; DNS rebinding turns any web page into RCE on your AI compute cluster (CISA KEV)](2026-08-ray-cve-2025-62593-kev.md) | critical | patched |
 | 2026-08-07 | [Both JavaScript sandboxes AI workflow platforms run untrusted code in broke in the same fortnight — vm2 (host DNS hijack) and isolated-vm (type confusion → host RCE)](2026-08-vm2-isolated-vm-sandbox-escapes.md) | critical | patched |
 | 2026-08-17 | [August 2026 agent-framework and MCP-server CVE batch — Spring AI tool-authorization bypass, PyCharm's unauthenticated Jupyter MCP, Splunk MCP RCE, LangChain SitemapLoader SSRF](2026-08-agent-framework-mcp-cve-batch.md) | high | patched |
