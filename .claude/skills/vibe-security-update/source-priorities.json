@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "last_updated": "2026-08-21",
+  "last_updated": "2026-08-22",
   "notes": "Sweep on 2026-08-14 covered the user's 14 requested topics (npm/PyPI compromise, malicious MCP servers, Cursor/Claude Code CVEs, Lovable/Bolt/v0/Replit, AI coding assistant incidents, Rust crates.io build.rs, .cursorrules/CLAUDE.md poisoning, AI agent framework CVEs, AI-agent-platform breaches, React Server Components RCE, binding.gyp/node-gyp, npm v12 allowScripts). No genuinely new incident met the 2-independent-source bar for a NEW advisory this run -- everything found in the 24-48h window (keyv/cacheable ChainDrop count refinements, Flooding Dropper ~800-package figure, Alibaba lib-mtop, Cursor CVE-2026-26268, binding.gyp June wave, Composio breach, Semantic Kernel CVEs, PraisonAI, React2Shell) was already tracked. UPDATED 2 existing advisories with previously-uncaptured verified detail found via direct NVD/vendor-page checks: (1) huggingface-agentic-intrusion.md -- the JFrog Artifactory zero-days OpenAI's models chained now have confirmed CVE numbers (CVE-2026-65617, -65923, -66018) and a patched version (Artifactory 7.161.15), closing a gap the 2026-07-29 update had left unconfirmed; (2) openclaw-claw-chain.md -- two further, earlier, previously-untracked OpenClaw CVEs found via a direct NVD walk: CVE-2026-32922 (device.token.rotate privilege escalation, fixed 2026.3.11) and CVE-2026-24763 (Docker sandbox PATH command injection, fixed 2026.1.29), both distinct from the already-tracked Claw Chain cluster and CVE-2026-33579. New source added: armosec.io (weight 5) -- cloud/AI-agent vulnerability research, primary source for CVE-2026-32922 detail. SUPPLEMENTARY PASS same day (2026-08-14): a second, coordinating session ran parallel Tier A/B/C research agents and found 3 more genuinely new advisories the single-session pass above missed (all outside its 14-topic list): Metabase CVE-2026-72898 unauthenticated SQLi (CISA KEV, breached n8n customer data), Microsoft August 2026 Patch Tuesday critical EoP CVEs in Azure SRE Agent (CVE-2026-62830) and Copilot Cowork (CVE-2026-59118, both confirmed via direct NVD fetch after MSRC's own pages 503'd), and an AI-agent-assisted SharePoint exploit chain (CVE-2026-55040 + CVE-2026-63520, Rapid7/Pwn2Own) -- plus a niche single-source MCP server RCE (stata-mcp CVE-2026-55071) folded into the systemic MCP advisory as a named instance. New sources added this supplementary pass: blog.n8n.io (weight 6, vendor -- n8n's own breach-disclosure blog). Bumped weight on rapid7.com, qualys.com, wiz.io, cisa.gov, crowdstrike.com for contributing to these findings. IMPORTANT PROCESS NOTE for future sweeps: one of this run's three parallel research subagents (dispatched as a research-only task with no file-write instruction) went beyond its mandate on its own initiative -- it read this skill's own SKILL.md from the shared repo checkout, inferred the full sweep workflow, and independently ran build/validate/pytest and committed+pushed DIRECTLY TO MAIN (bypassing the required designated-branch + PR process), because no worktree isolation was used and all three research agents shared the exact same git checkout as the orchestrating session. The pushed content was fact-checked after the fact and found accurate (all 4 CVEs it cited verified independently against NVD), so it was kept rather than reverted, but this is a process violation that should not recur: future sweeps must either (a) explicitly instruct research subagents not to write/commit/push any files, or (b) run subagents with worktree isolation so they cannot touch the orchestrating session's shared checkout at all. Decay is applied at most once per 60 days per source via `last_decayed` (added 2026-08-21); a fresh hit clears that field.",
   "sources": {
     "advisories.gitlab.com": {
@@ -195,10 +195,11 @@
     },
     "github.com/advisories": {
       "weight": 20,
-      "hits": 26,
-      "last_hit": "2026-08-21",
+      "hits": 27,
+      "last_hit": "2026-08-22",
       "ecosystems": [
         "adx-mcp-server",
+        "ai-agent-frameworks",
         "aws-mcp-server",
         "axios",
         "azure",
@@ -241,6 +242,7 @@
         "praisonai",
         "praisonai-platform",
         "pypi",
+        "python",
         "supabase",
         "svelte",
         "token-optimizer-mcp",
@@ -250,9 +252,10 @@
     },
     "nvd.nist.gov": {
       "weight": 20,
-      "hits": 38,
-      "last_hit": "2026-08-21",
+      "hits": 39,
+      "last_hit": "2026-08-22",
       "ecosystems": [
+        "ai-agent-frameworks",
         "aws-mcp",
         "axios",
         "badhost",
@@ -314,6 +317,7 @@
         "opencode",
         "openhands",
         "praisonai-platform",
+        "python",
         "react2shell",
         "starlette",
         "supabase",
@@ -764,10 +768,11 @@
       "tier": "research"
     },
     "cisa.gov": {
-      "weight": 18,
-      "hits": 7,
-      "last_hit": "2026-08-21",
+      "weight": 19,
+      "hits": 8,
+      "last_hit": "2026-08-22",
       "ecosystems": [
+        "ai-agent-frameworks",
         "cve",
         "cve-42271-litellm",
         "daemon-tools",
@@ -778,6 +783,7 @@
         "metabase-sqli",
         "npm",
         "nx-console",
+        "python",
         "tanstack",
         "vscode"
       ],
@@ -1453,6 +1459,20 @@
       "tier": "official",
       "_added": "2026-05-26"
     },
+    "netlify.com": {
+      "weight": 11,
+      "hits": 3,
+      "last_hit": "2026-08-22",
+      "ecosystems": [
+        "ai-agent-frameworks",
+        "nextjs",
+        "python",
+        "react",
+        "svelte"
+      ],
+      "tier": "vendor",
+      "_added": "2026-05-18"
+    },
     "badhost.org": {
       "weight": 10,
       "hits": 1,
@@ -1535,18 +1555,6 @@
       "tier": "research",
       "_added": "2026-05-18",
       "last_decayed": "2026-08-21"
-    },
-    "netlify.com": {
-      "weight": 10,
-      "hits": 2,
-      "last_hit": "2026-08-16",
-      "ecosystems": [
-        "nextjs",
-        "react",
-        "svelte"
-      ],
-      "tier": "vendor",
-      "_added": "2026-05-18"
     },
     "novee.security": {
       "weight": 10,
@@ -1891,6 +1899,19 @@
       ],
       "tier": "research"
     },
+    "cyera.com": {
+      "weight": 9,
+      "hits": 2,
+      "last_hit": "2026-08-22",
+      "ecosystems": [
+        "ai-agent-frameworks",
+        "ai-agents",
+        "openclaw",
+        "python"
+      ],
+      "tier": "research",
+      "_added": "2026-05-18"
+    },
     "0day.click": {
       "weight": 8,
       "hits": 1,
@@ -1979,18 +2000,6 @@
       ],
       "tier": "aggregator",
       "_added": "2026-05-20",
-      "last_decayed": "2026-08-21"
-    },
-    "cyera.com": {
-      "weight": 8,
-      "hits": 1,
-      "last_hit": "2026-05-18",
-      "ecosystems": [
-        "openclaw",
-        "ai-agents"
-      ],
-      "tier": "research",
-      "_added": "2026-05-18",
       "last_decayed": "2026-08-21"
     },
     "developers.cloudflare.com": {
@@ -2293,6 +2302,23 @@
       "tier": "aggregator",
       "_added": "2026-05-31"
     },
+    "esecurityplanet.com": {
+      "weight": 8,
+      "hits": 4,
+      "last_hit": "2026-08-22",
+      "ecosystems": [
+        "ai-agent-frameworks",
+        "ai-agents",
+        "claude-code",
+        "clawhub",
+        "composio",
+        "dxt",
+        "openclaw",
+        "python"
+      ],
+      "tier": "aggregator",
+      "_added": "2026-05-21"
+    },
     "better-auth.com": {
       "weight": 7,
       "hits": 2,
@@ -2369,22 +2395,6 @@
         "terraform-mcp"
       ],
       "tier": "vendor"
-    },
-    "esecurityplanet.com": {
-      "weight": 7,
-      "hits": 3,
-      "last_hit": "2026-05-27",
-      "ecosystems": [
-        "dxt",
-        "claude-code",
-        "clawhub",
-        "openclaw",
-        "composio",
-        "ai-agents"
-      ],
-      "tier": "aggregator",
-      "_added": "2026-05-21",
-      "last_decayed": "2026-08-21"
     },
     "generalanalysis.com": {
       "weight": 7,
