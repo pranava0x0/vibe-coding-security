@@ -2,7 +2,7 @@
 id: ongoing-vibe-platform-exposure
 title: "Vibe-coded app data exposure — Lovable, Bolt, Replit, Base44 pattern issues"
 date_disclosed: 2025
-last_updated: 2026-07-23
+last_updated: 2026-08-23
 severity: high
 status: ongoing
 ecosystems: [lovable, bolt, replit, v0, supabase, base44]
@@ -21,6 +21,8 @@ This isn't one incident — it's a pattern. The common shapes:
 - **BOLA / IDOR.** Endpoints accept user-provided IDs without authorization checks — fetch `/users/2` even though you're user 1.
 - **Public Repls leaking secrets.** Replit projects default to public unless paid; new users paste API keys into `index.js` and ship them to GitHub indirectly.
 - **Hallucinated auth.** The agent writes auth-looking code that doesn't actually authenticate. Endpoints feel protected; they aren't.
+- **RLS enabled with no policies attached — a configuration warning, not exposure by itself.** Distinct from "RLS off": Supabase's linter flags it separately (`rls_enabled_no_policy`), and for ordinary roles a *read* — and an `UPDATE`/`DELETE` — with no matching policy is default-deny (empty result or zero rows affected, not an error). Only `INSERT` fails loudly, with a genuine RLS-violation error, and the fix people reach for when that happens is often disabling RLS entirely rather than modeling the missing policy. A policy count also says nothing about bypass roles — `service_role`, `BYPASSRLS`, or the table owner unless `FORCE ROW LEVEL SECURITY` is set — which skip RLS regardless.
+- **Orphaned backend projects.** A side-project or demo backend (Supabase/Firebase/etc.) outlives the frontend that used to call it — the app gets abandoned, redirected, or never finished, but the backend project stays live and reachable indefinitely, along with whatever RLS/policy state (or lack of it) it shipped with.
 
 ## Am I affected?
 If you've shipped a Lovable / Bolt / Replit / v0 app to real users without a security review, treat this as a "yes" until proven otherwise.
