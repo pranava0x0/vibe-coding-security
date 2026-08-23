@@ -2,11 +2,15 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-08-22. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-08-23. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-07-13 → 2026-08-21 — JSONata, the "safe expression" engine n8n embeds, ships two CVSS 9.3 sandbox-escape RCEs
+**JSONata** — a 1.3M-weekly-download npm package that workflow-automation platforms (most notably **n8n**, which ships it as a built-in expression mode) and other low-code/AI tools embed specifically because it's marketed as a *safe* way to evaluate untrusted user expressions — shipped **CVE-2026-77414** (GHSA-2943-5xfg-gq5f) and **CVE-2026-77415** (GHSA-66mm-25pp-rfff), both **CVSS 9.3 (v4.0) / 9.8 (v3.1)**, published to GHSA/NVD **2026-08-21** (originally filed 2026-07-13, reporter **c0rydoras**). CVE-2026-77414: a **bypassable `hasOwnProperty` check in `environment.lookup`** lets a crafted expression shadow local lookup methods and walk the prototype chain into the host realm. CVE-2026-77415: overwriting the built-in `$clone`, destructuring JSONata lambdas, and abusing `applyProcedure`'s custom argument handling chain together into arbitrary code execution. Fixed in **1.8.8** and **2.2.1**. Same root lesson as the vm2/isolated-vm cluster below: **"we sandbox untrusted input with library X" just failed again**, and because the vulnerable path only fires when the application evaluates an expression — not at install time — standard `--ignore-scripts` hygiene does nothing to stop it.
+→ [advisories/2026-08-jsonata-sandbox-escape-rce.md](advisories/2026-08-jsonata-sandbox-escape-rce.md)
 
 ### 2026-08-10 — One Pyodide flaw broke the "safe Python sandbox" in seven products at once: n8n, Grist, Cohere Terrarium, Hugging Face smolagents and more (DEF CON 34, backfilled)
 Cyera researchers presenting at **DEF CON 34** showed that the same root-cause flaw — sandbox restrictions that don't account for Python's **`ctypes`** module and Emscripten's exported runtime functions — broke Pyodide-based "safe Python" sandboxes in **seven independent products**: n8n, Grist, Cohere's Terrarium, Hugging Face's smolagents, `langchain-sandbox`, `stlite`, and `cibuildwheel`. Four CVEs, CVSS 8.3–9.9: **n8n CVE-2025-68668** ("N8Scape," 9.9, any workflow-editor user → host RCE, fixed 2.0.0), **Grist CVE-2026-24002** ("Cellbreak," 9.1, malicious spreadsheet formula → arbitrary process execution, fixed 1.7.9), **Cohere Terrarium CVE-2026-5752** (9.3, JS prototype-chain traversal → root on host, fixed v1.0.1 — note: at least one aggregator misreports this as "CVE-2026-61522"; the GitHub advisory itself confirms CVE-2026-5752), and **smolagents**, reported as CVE-2026-10613 (8.3) but **unconfirmed by this sweep** — NVD shows it `RESERVED` and Hugging Face has published no advisory for it. If your product's threat model for "what if the model/user writes malicious Python" is "it runs in Pyodide," that answer just failed in seven places at once.
