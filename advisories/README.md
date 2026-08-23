@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-07-13 | [JSONata — the "safe expression" engine n8n embeds ships two CVSS 9.3 sandbox-escape RCEs (CVE-2026-77414, CVE-2026-77415)](2026-08-jsonata-sandbox-escape-rce.md) | critical | patched |
 | 2026-08-10 | [One Pyodide sandbox-escape flaw broke n8n, Grist, Cohere Terrarium, and Hugging Face smolagents — DEF CON 34 backfill, four CVEs](2026-08-pyodide-sandbox-escape-cluster.md) | critical | patched |
 | 2026-05-19 | [Nuxt's May 2026 security release — four CVEs in the /__nuxt_island/* endpoint, including a route-middleware auth bypass (predates the July batch)](2026-05-nuxt-island-endpoint-cve-batch.md) | high | patched |
 | 2026-08-17 | [Ray CVE-2025-62593 — a `Mozilla` User-Agent prefix was the browser-attack defense; DNS rebinding turns any web page into RCE on your AI compute cluster (CISA KEV)](2026-08-ray-cve-2025-62593-kev.md) | critical | patched |
