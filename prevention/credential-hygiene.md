@@ -134,4 +134,5 @@ A 30-minute audit every quarter is cheaper than one incident:
 - What's in my password manager I no longer use? Cull.
 - What tokens does my GitHub account have? Rotate / delete unused. [github.com/settings/tokens](https://github.com/settings/tokens)
 - What OAuth apps have access to my GitHub / Google / AWS / Stripe accounts? Revoke unused.
+- What backend/database projects (Supabase, Firebase, PlanetScale, Neon, Railway, etc.) are still running for apps I no longer actively ship or link to? Pause or delete the ones nothing points at anymore, and rotate any public/anon key that was ever committed or bundled before you do — see [playbooks/auditing-a-vibe-coded-repo.md](../playbooks/auditing-a-vibe-coded-repo.md).
 - Run [`trufflehog filesystem ~`](https://github.com/trufflesecurity/trufflehog#filesystem-scan) to find creds you forgot.

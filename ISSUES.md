@@ -10,6 +10,12 @@ _None open._
 
 ## Fixed
 
+### Backend-misconfiguration coverage gap — 2026-08-23
+Prompted by a personalized exposure audit of the maintainer's other projects, which surfaced two misconfiguration classes the audit playbook and pattern-class advisory didn't yet distinguish.
+- **Coverage gap: "RLS off" and "RLS enabled with zero policies" were treated as one check.** [`playbooks/auditing-a-vibe-coded-repo.md`](playbooks/auditing-a-vibe-coded-repo.md) item 2 only tested the `rowsecurity` boolean; added a `pg_policies` count query and explanation for the distinct, quieter `rls_enabled_no_policy` gap Supabase's own linter flags separately. Root cause: content gap.
+- **Coverage gap: no guidance on orphaned/abandoned backend projects.** Added item 13 to the same playbook plus a quarterly-audit bullet to [`prevention/credential-hygiene.md`](prevention/credential-hygiene.md): old demo/side-project backends (Supabase/Firebase/etc.) that outlive their frontend and stay live with a valid public key. Root cause: content gap — the checklist assumed one app always has one still-linked backend.
+- Also added a CORS note covering hosting/template defaults (not just app code) and a new item on default over-disclosure in AI-generated bios/portfolio pages. Both new recurring patterns folded into [`advisories/ongoing-vibe-platform-exposure.md`](advisories/ongoing-vibe-platform-exposure.md)'s "what's recurring" list and the sweep skill's query set (`.claude/skills/vibe-security-update/SKILL.md`) so future automated sweeps watch for real-world incidents matching them.
+
 ### Supply-chain coverage gap + CI self-hardening — 2026-06-01
 Prompted by a personalized exposure audit of the maintainer's other repos, which surfaced pathway categories this knowledge base didn't yet represent or practice.
 - **Coverage gap: no CI/CD prevention guide.** Added [`prevention/ci-cd-hardening.md`](prevention/ci-cd-hardening.md) (SHA-pin actions, least-privilege `permissions:`, third-party-action-with-write-token anti-pattern, dangerous triggers, script injection, OIDC publishing) and [`prevention/supply-chain-attack-surface.md`](prevention/supply-chain-attack-surface.md) (a map of all 11 pathways external code/data enters, each linked to its deep guide). Wired both into `prevention/README.md`, `README.md`, `npm-hardening.md`, and `CHANGELOG.md`. Root cause: content gap — GitHub Actions is a top supply-chain vector (Megalodon, elementary-data, Comment-and-Control advisories) but had no dedicated guide.
