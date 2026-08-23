@@ -885,7 +885,7 @@ LLMs invent package names that don't exist. Attackers register them. Next user w
 → [advisories/ongoing-slopsquatting.md](advisories/ongoing-slopsquatting.md)
 
 ### Ongoing — Lovable / Bolt / Replit data exposure patterns
-Lovable BOLA left open 48 days. Bolt env-var leakage. Replit public repls leaking secrets. RLS misconfigurations across thousands of vibe-coded apps, including RLS-enabled-but-policy-less tables and orphaned backend projects left publicly reachable after their frontend was retired. **May 2026:** RedAccess scanned 380K vibe-coded apps and found ~5K leaking medical / financial / customer-service data. Class issue, not single incident. (Replit shipped Security Agent in April 2026 and Workspace Security Center 2.0 on May 8, 2026 — partial defender response.)
+Lovable BOLA left open 48 days. Bolt env-var leakage. Replit public repls leaking secrets. RLS misconfigurations across thousands of vibe-coded apps, including old, orphaned backend projects still live — and still carrying whatever misconfiguration they shipped with — long after their frontend was retired. **May 2026:** RedAccess scanned 380K vibe-coded apps and found ~5K leaking medical / financial / customer-service data. Class issue, not single incident. (Replit shipped Security Agent in April 2026 and Workspace Security Center 2.0 on May 8, 2026 — partial defender response.)
 → [advisories/ongoing-vibe-platform-exposure.md](advisories/ongoing-vibe-platform-exposure.md)
 
 ---
