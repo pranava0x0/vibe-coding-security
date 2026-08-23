@@ -30,6 +30,8 @@ The format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/
   - **`prevention/ci-cd-hardening.md`** — GitHub Actions / CI supply-chain hardening: SHA-pin actions, least-privilege `permissions:`, the third-party-action-with-write-token anti-pattern, dangerous triggers, script injection, and OIDC publishing.
 
 ### Changed
+- **`playbooks/auditing-a-vibe-coded-repo.md`** expanded to a 14-point audit: the Supabase RLS check now distinguishes "RLS off" from "RLS enabled with zero policies attached" (a separate Supabase linter finding most boolean checks miss), the CORS check now covers hosting/template defaults inherited onto future dynamic endpoints, and two new items cover orphaned/abandoned backend projects left live after their frontend is retired, and default over-disclosure in AI-generated bios/profile pages.
+- **`advisories/ongoing-vibe-platform-exposure.md`** and the sweep skill's query set (`.claude/skills/vibe-security-update/SKILL.md`) updated to track the same two recurring patterns (RLS-enabled-but-policy-less tables, orphaned backend projects) going forward.
 - **Site title** displayed as "Vibe Coding · Security Issue Tracking" (was "vibe-coding-security"). Repo URL slug unchanged.
 - **Footer** now exposes the full set of LLM/feed format links.
 - **`robots.txt`** explicit comment: AI/LLM training allowed.

@@ -23,7 +23,7 @@ Vibe-coded apps fail in predictable ways. Recent research:
 
 The agent that wrote the code is the *worst* auditor of it. Do this with a fresh-context agent or a human.
 
-## The 12-point audit (do this in order)
+## The 14-point audit (do this in order)
 
 ### 1. Secrets in client bundles
 
@@ -51,6 +51,19 @@ ALTER TABLE my_table ENABLE ROW LEVEL SECURITY;
 CREATE POLICY "users see own rows" ON my_table
   FOR SELECT USING (auth.uid() = user_id);
 ```
+
+**`rowsecurity = true` isn't the finish line — and a policy count of zero isn't automatically a leak, either.** A table can have RLS *enabled* with **zero policies** attached; Supabase's own linter flags this as a separate finding (`rls_enabled_no_policy`). What follows assumes the role already has the base table `GRANT` — Supabase's `anon`/`authenticated` roles carry it by default, and RLS is a second, independent gate checked only *after* that privilege check passes; revoke the `GRANT` instead and you get a flat "permission denied for table" error before RLS is ever consulted, not the outcomes below. Given that grant, most of RLS-on-no-policy is silent: a **read** (`SELECT`) with no matching policy is default-deny — an empty result, not an error — and so are `UPDATE`/`DELETE`, which just report zero rows affected once the implicit-deny filter excludes every row before any check runs. The one loud exception is **`INSERT`**: it has no existing row to filter, so it hits the implicit `WITH CHECK (false)` directly and Postgres raises a real row-level-security-violation error. That `INSERT` error is exactly why this state is fragile: the fix people reach for when a write starts throwing it is often disabling RLS entirely rather than writing the missing policy, which removes the only protection in one step. The other thing a policy count alone won't show: **bypass roles** — `service_role`, any role with `BYPASSRLS`, and the table owner *unless* `FORCE ROW LEVEL SECURITY` is set on the table (check `relforcerowsecurity` in `pg_class`) — all of these skip RLS checking no matter how many policies exist, so the credential that actually matters here is whichever one can bypass, not the anon key. Find the unmodeled tables directly:
+
+```sql
+SELECT t.schemaname, t.tablename, COUNT(p.policyname) AS policy_count
+FROM pg_tables t
+LEFT JOIN pg_policies p ON p.schemaname = t.schemaname AND p.tablename = t.tablename
+WHERE t.schemaname = 'public' AND t.rowsecurity = true
+GROUP BY t.schemaname, t.tablename
+HAVING COUNT(p.policyname) = 0;
+```
+
+For each row returned: either the default-deny is deliberate (fine — note it somewhere so a future "fix" doesn't disable RLS instead), or it needs explicit per-owner/per-role policies. Separately, audit **where the bypass-capable key** (`service_role` / admin) **is actually used** — that's the one whose exposure would matter, not the anon key. Storage buckets need the same check: Supabase Storage RLS is configured separately from table RLS.
 
 See [Supabase — Defense in Depth for MCP Servers](https://supabase.com/blog/defense-in-depth-mcp).
 
@@ -122,7 +135,9 @@ For every direct dep in `package.json`, spot-check the registry page:
 grep -rE "Access-Control-Allow-Origin.*\\*|cors\\(\\)|origin:\\s*['\"]\\*['\"]" app/ pages/ api/ src/ 2>/dev/null
 ```
 
-`*` on a route that requires auth = CSRF surface. Lock to specific origins.
+`*` on a route that requires auth is worth a close look — see the header-rule check below for what it actually risks (and doesn't). Default to locking anything not intentionally public down to specific origins.
+
+Also check hosting/framework **header rules**, not just app code — `vercel.json`, `netlify.toml`, a framework's static-export config. CORS headers attach per matched route, they don't spread across an origin on their own — check the rule's **path matcher**: a wildcard scoped to genuinely static paths is harmless, while a global/catch-all matcher (e.g. `"source": "/(.*)"`) means any endpoint added later under that host is covered by the same rule the moment its path matches. Don't overrate what a literal `*` origin risks, though: browsers refuse to honor a wildcard `Access-Control-Allow-Origin` on a **cookie-based, credentialed** request at all, and a **bearer-token** endpoint isn't exploitable through CORS alone either — an attacker's page can't attach a token it doesn't already have, and browsers don't send `Authorization` ambiently the way they do cookies. (If arbitrary pages *can* read that token, that's a separate token-exposure bug to chase down, not a CORS one.) What a stray wildcard actually risks is more mundane: any origin's JS can read a response that was assumed to be same-origin-only. The higher-severity CORS bug — **reflecting the request's `Origin` header back** with `Access-Control-Allow-Credentials: true` — isn't caught by this grep at all and is worth its own check on any endpoint that sets CORS headers dynamically. Either way, don't treat CORS as a CSRF control: a state-changing endpoint needs its own anti-CSRF check regardless, since a simple (non-preflighted) cross-origin request can still be sent whether or not the response can be read back.
 
 ### 10. SSRF in any fetch the server makes
 
@@ -147,6 +162,24 @@ If you accept file uploads:
 No per-IP or per-user rate limit = credential-stuffing surface + free-tier abuse surface. Vercel, Cloudflare, Supabase Edge Functions all have built-in options.
 
 [OWASP — Authentication Cheat Sheet § Rate Limiting](https://cheatsheetseries.owasp.org/cheatsheets/Authentication_Cheat_Sheet.html#rate-limiting).
+
+### 13. Orphaned backend projects still live
+
+Vibe coders spin up a lot of throwaway/demo projects — one Supabase/Firebase/PlanetScale/etc. project per idea. When the frontend for one gets abandoned, redirected, or never finished, the backend project is easy to forget about entirely:
+
+- List every backend project under your account(s) directly in the platform's own console — not just the ones a currently-live site links to. A route returning your app's normal 404 doesn't mean the backend behind it is gone; check the backend platform, not the frontend route.
+- For each project with no live, linked frontend: does it still hold real or plausible user data? Is it still reachable — is its anon/publishable key (meant to be public; safe only insofar as its RLS/policies actually gate it, per item 2) still discoverable anywhere?
+- If it's retired: **pause or delete the project** — that's what actually shuts off a public anon/publishable key, not "rotating" it, since rotation just churns a value that was never meant to be secret. Confirm Storage buckets are removed or locked down too. If a *secret* key (service_role, admin, any provider API key) was ever exposed for that project — client bundle, public commit — that's a distinct and more urgent problem regardless of what happens to the project: rotate it immediately (see item 1).
+- If it's still needed: it gets the full audit above (RLS + policies, secrets, auth) like any active project. "Nothing links to it anymore" is not a security boundary.
+
+### 14. Default over-disclosure in AI-generated bios and profile pages
+
+Portfolio-site and resume generators — and general-purpose agents asked to "write an About page" — tend to maximize disclosure by default (full name, employer, role, past employers, team/program names, a full graph of linked social and professional profiles) because that reads as more complete output. None of it is a vulnerability by itself, but it's a decision a human should make deliberately, not one an agent should default into:
+
+- Review each fact the generated bio states against "would I say this to a stranger, unprompted, indefinitely" — a public page doesn't expire on its own.
+- Prefer generalizing an over-specific claim (exact employer, title, internal program name) when precision isn't needed for the page's purpose.
+- Don't let the agent add contact details, internal identifiers, or scheduling/availability info "for completeness."
+- Re-review bio/profile content whenever a new project or press mention gets added — disclosure tends to creep upward as more gets appended over time, not downward.
 
 ## Automated help
 
