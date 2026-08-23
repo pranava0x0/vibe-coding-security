@@ -52,7 +52,7 @@ CREATE POLICY "users see own rows" ON my_table
   FOR SELECT USING (auth.uid() = user_id);
 ```
 
-**`rowsecurity = true` isn't the finish line.** A table can have RLS *enabled* with **zero policies** attached — Supabase's own linter flags this as a separate finding (`rls_enabled_no_policy`) because it means access was never explicitly modeled, not that it's necessarily locked down. Depending on the role's table-level `GRANT`s, a client holding the anon/publishable key can still get a non-error response back instead of a clean deny. Check policy counts directly, not just the boolean:
+**`rowsecurity = true` isn't the finish line — and a policy count of zero isn't automatically a leak, either.** A table can have RLS *enabled* with **zero policies** attached; Supabase's own linter flags this as a separate finding (`rls_enabled_no_policy`). For ordinary `anon`/`authenticated` roles this is actually default-deny — with no matching policy they get an empty result back, not an error and not your data, regardless of table-level `GRANT`s. The real problems are two-layer: (1) it's fragile — when a read "looks broken" the fix people reach for is often disabling RLS entirely rather than writing the missing policy, which removes the only protection in one step; (2) a policy count says nothing about **bypass roles** — the table owner, `service_role`, or any role with `BYPASSRLS` skips RLS checking no matter how many policies exist, so the credential that actually matters here is whichever one can bypass, not the anon key. Find the unmodeled tables directly:
 
 ```sql
 SELECT t.schemaname, t.tablename, COUNT(p.policyname) AS policy_count
@@ -63,7 +63,7 @@ GROUP BY t.schemaname, t.tablename
 HAVING COUNT(p.policyname) = 0;
 ```
 
-Any row returned is RLS-on-but-unmodeled — decide the real policy (deny-by-default, then explicit per-owner/per-role grants) instead of leaving it implicit. Storage buckets need the same check: Supabase Storage RLS is configured separately from table RLS.
+For each row returned: either the default-deny is deliberate (fine — note it somewhere so a future "fix" doesn't disable RLS instead), or it needs explicit per-owner/per-role policies. Separately, audit **where the bypass-capable key** (`service_role` / admin) **is actually used** — that's the one whose exposure would matter, not the anon key. Storage buckets need the same check: Supabase Storage RLS is configured separately from table RLS.
 
 See [Supabase — Defense in Depth for MCP Servers](https://supabase.com/blog/defense-in-depth-mcp).
 
@@ -137,7 +137,7 @@ grep -rE "Access-Control-Allow-Origin.*\\*|cors\\(\\)|origin:\\s*['\"]\\*['\"]" 
 
 `*` on a route that requires auth = CSRF surface. Lock to specific origins.
 
-Also check hosting/framework **defaults**, not just app code — `vercel.json`, `netlify.toml`, a framework's static-export config. A wildcard header inherited from a template is harmless on a purely static response, but it travels with the origin: the first dynamic or authenticated endpoint you add later inherits it silently unless someone scopes it down first.
+Also check hosting/framework **header rules**, not just app code — `vercel.json`, `netlify.toml`, a framework's static-export config. CORS headers attach per matched route, they don't spread across an origin on their own — the thing to check is the rule's **path matcher**. A wildcard scoped to genuinely static paths (`/assets/*`, a specific file) is fine. A global or catch-all matcher (e.g. `"source": "/(.*)"`) is the landmine: any dynamic or authenticated endpoint you add later under that same host is covered by the same rule the moment its path matches, with no separate step required to "inherit" it.
 
 ### 10. SSRF in any fetch the server makes
 
@@ -168,8 +168,8 @@ No per-IP or per-user rate limit = credential-stuffing surface + free-tier abuse
 Vibe coders spin up a lot of throwaway/demo projects — one Supabase/Firebase/PlanetScale/etc. project per idea. When the frontend for one gets abandoned, redirected, or never finished, the backend project is easy to forget about entirely:
 
 - List every backend project under your account(s) directly in the platform's own console — not just the ones a currently-live site links to. A route returning your app's normal 404 doesn't mean the backend behind it is gone; check the backend platform, not the frontend route.
-- For each project with no live, linked frontend: does it still hold real or plausible user data? Is its anon/publishable key still discoverable anywhere (an old commit, a cached build, an indexed page)?
-- If it's retired: pause or delete the project, confirm Storage buckets are removed or locked down too, and treat any key that was ever public as burned — rotate/revoke it even after the project itself is gone.
+- For each project with no live, linked frontend: does it still hold real or plausible user data? Is it still reachable — is its anon/publishable key (meant to be public; safe only insofar as its RLS/policies actually gate it, per item 2) still discoverable anywhere?
+- If it's retired: **pause or delete the project** — that's what actually shuts off a public anon/publishable key, not "rotating" it, since rotation just churns a value that was never meant to be secret. Confirm Storage buckets are removed or locked down too. If a *secret* key (service_role, admin, any provider API key) was ever exposed for that project — client bundle, public commit — that's a distinct and more urgent problem regardless of what happens to the project: rotate it immediately (see item 1).
 - If it's still needed: it gets the full audit above (RLS + policies, secrets, auth) like any active project. "Nothing links to it anymore" is not a security boundary.
 
 ### 14. Default over-disclosure in AI-generated bios and profile pages

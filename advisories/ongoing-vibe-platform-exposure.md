@@ -21,8 +21,8 @@ This isn't one incident — it's a pattern. The common shapes:
 - **BOLA / IDOR.** Endpoints accept user-provided IDs without authorization checks — fetch `/users/2` even though you're user 1.
 - **Public Repls leaking secrets.** Replit projects default to public unless paid; new users paste API keys into `index.js` and ship them to GitHub indirectly.
 - **Hallucinated auth.** The agent writes auth-looking code that doesn't actually authenticate. Endpoints feel protected; they aren't.
-- **RLS enabled with no policies attached.** A distinct gap from "RLS off" — Supabase's linter flags it separately (`rls_enabled_no_policy`) because access was never explicitly modeled. Depending on table-level `GRANT`s, a client can still get a non-error response back instead of a clean deny, and most "is RLS on?" checks (a boolean flag) miss it entirely.
-- **Orphaned backend projects.** A side-project or demo backend (Supabase/Firebase/etc.) outlives the frontend that used to call it — the app gets abandoned, redirected, or never finished, but the backend project (and any public/anon key that was ever exposed in a bundle or commit) stays live and reachable indefinitely.
+- **RLS enabled with no policies attached.** A distinct gap from "RLS off" — Supabase's linter flags it separately (`rls_enabled_no_policy`). For ordinary roles this is default-deny, not an open door — the actual risk is fragility (the fix for a "broken" read is often disabling RLS entirely rather than modeling the missing policy) and that a policy count says nothing about bypass roles (`service_role`, table owner), which skip RLS regardless.
+- **Orphaned backend projects.** A side-project or demo backend (Supabase/Firebase/etc.) outlives the frontend that used to call it — the app gets abandoned, redirected, or never finished, but the backend project stays live and reachable indefinitely, along with whatever RLS/policy state (or lack of it) it shipped with.
 
 ## Am I affected?
 If you've shipped a Lovable / Bolt / Replit / v0 app to real users without a security review, treat this as a "yes" until proven otherwise.
