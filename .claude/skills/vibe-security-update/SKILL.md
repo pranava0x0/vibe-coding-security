@@ -148,15 +148,35 @@ Always bump `last_updated` in frontmatter when touched.
 - Not relevant to vibe coding audience (e.g., kernel CVE, generic enterprise vuln)
 - Single unconfirmed source (need ≥2 independent for a full advisory)
 
-### Step 3 — Update ALERTS.md
+### Step 3 — Update ALERTS.md and advisories/README.md
 
-For every NEW or UPDATED advisory:
+Both files index the same underlying advisories and both need to stay current — `ALERTS.md` is the scannable feed, `advisories/README.md` is the flat table-of-contents (`| Date disclosed | ID | Severity | Status |`). Neither is auto-generated from the advisory files, so both drift silently unless touched explicitly on every run.
 
-- Insert/move into the right tier (🔴 active / 🟠 recent / 🟡 historical) by date:
+For every **NEW** advisory:
+
+- **ALERTS.md** — insert into the right tier (🔴 active / 🟠 recent / 🟡 historical) by date:
   - 🔴 active = last 14 days OR malware still propagating
   - 🟠 recent = last 12 months
   - 🟡 historical = older OR pattern-class
-- Maintain latest-on-top within each tier.
+  - Maintain latest-on-top within each tier.
+- **advisories/README.md** — add one new row: `| date_disclosed | [title](filename.md) | severity | status |`. Match the frontmatter's `date_disclosed`, `severity`, and `status` fields exactly — don't hand-write a different date or severity than what's in the advisory file itself.
+
+For every **UPDATED** advisory whose `severity` or `status` changed (e.g. `patched` → `active` after a KEV escalation, or a severity bump after a new CVSS score lands):
+
+- Update the corresponding **ALERTS.md** entry's tier if the status change moves it (e.g. a re-escalation to active moves it back to 🔴), and update the summary text.
+- Update that advisory's existing row in **advisories/README.md** to match the new `severity`/`status` — don't leave a stale value there even though the row's link still resolves. A row that still says `patched` after the advisory body says `active` is a silent regression a reader following the table won't catch.
+
+An update that only adds sources or IOCs without changing `severity`/`status` does not require a README row edit — the row's four columns don't carry that detail.
+
+**Before moving on, spot-check that README.md has a row for every advisory file added or touched this run** — a quick way to check the whole corpus (not just this run's changes) is still in sync:
+
+```bash
+# Every advisories/*.md filename (except README.md itself) should appear as a link target in README.md
+comm -23 <(ls advisories/*.md | xargs -n1 basename | grep -v '^README.md$' | sort) \
+         <(grep -oE '\]\([A-Za-z0-9_.-]+\.md\)' advisories/README.md | tr -d '()]' | sed 's/^]//;s/^(//' | sort -u)
+```
+
+Empty output means every advisory file has at least one README row. Any filenames printed are missing rows — add them before Step 6's gate, since a missing row is a real content gap this repo's automated checks do **not** currently catch (`validate.py` checks `advisories.json`'s count against the `.md` file count, not `advisories/README.md`'s).
 
 **After all advisories are added/updated, programmatically update the `Last refreshed:` date:**
 
