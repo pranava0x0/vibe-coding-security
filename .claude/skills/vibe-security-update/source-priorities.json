@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "last_updated": "2026-08-25",
-  "notes": "Sweep 2026-08-25: 21 Tier-A/B/C WebSearch queries plus targeted WebFetch verification (CISA KEV JSON feed, GHSA advisory-index page-walks for anthropics/claude-code and cursor/cursor) found the repo's existing coverage essentially current -- nearly every candidate (ChainDrop/keyv, arrayref/proc-macro1 crates.io, Nuxt August patch batch, Ruflo CVE-2026-59726, LangSmith AgentSmith [too old, Nov 2024], Open VSX evil-twin extensions, reasoning-trace-replay, Claude in Chrome/PleaseFix Gmail hijack, Wiz Red Agent/Snowflake) resolved to already-tracked advisories on direct grep verification before being set aside. One genuinely new item: Novee Security's Black Hat USA 2026 talk (presented by Elad Meged, 2026-08-06) covers THREE tools under the 'GitHub issue reaches CI secrets' framing, not the two (Claude Code, Gemini CLI) this repo already tracked -- the third is OpenAI Codex, via a distinct AGENTS.md/shared-checkout mechanism with no CVE assigned and a fix that covers only OpenAI's own repo. Folded into the existing 2026-04-gemini-cli-trustissues-cve-2026-12537.md advisory as a dated update rather than a new file, since it's the same disclosure event/researcher/framing. Decay is applied at most once per 60 days per source via `last_decayed`; a fresh hit clears that field.",
+  "last_updated": "2026-08-26",
+  "notes": "Sweep 2026-08-26: 27 Tier-A/B/C WebSearch queries plus targeted WebFetch verification (CISA KEV JSON feed, unpkg/Cloudflare-CAPTCHA campaign detail, OpenClaw Argus-audit/Moltbook framing check) found the repo essentially fully current -- every candidate this run (ChainDrop/keyv, arrayref/proc-macro1 DPRK-overlap update already applied last sweep, Tenable agentic-AI-threat-cluster synthesis, knaithe/Hermes Citrix+Marimo detail, OpenClaw 512-vuln/Moltbook Jan-Apr 2026 audit, Cursor DuneSlide/sandbox-escape batch, Open VSX evil-twin extensions, CISA KEV additions through 2026-08-25) resolved to already-tracked advisories on direct verification. One candidate (24 npm packages abusing unpkg mirrors as a Cloudflare-CAPTCHA phishing host, OX Security, 2026-08-25) was evaluated and set aside as out of audience scope -- it targets general web users via npm-as-CDN abuse, not developers installing the packages, and involves no AI-coding-tool or credential-theft angle. Decay applied per the last_decayed/last_hit bookkeeping: darkreading.com and lyrie.ai crossed the 60-day threshold (2 sources, both -1).",
   "sources": {
     "advisories.gitlab.com": {
       "weight": 20,
@@ -924,7 +924,7 @@
       "tier": "research"
     },
     "darkreading.com": {
-      "weight": 16,
+      "weight": 15,
       "hits": 11,
       "last_hit": "2026-06-25",
       "ecosystems": [
@@ -944,7 +944,8 @@
         "trustfall",
         "cordyceps"
       ],
-      "tier": "aggregator"
+      "tier": "aggregator",
+      "last_decayed": "2026-08-26"
     },
     "code.claude.com": {
       "weight": 15,
@@ -3600,7 +3601,7 @@
       "tier": "vendor"
     },
     "lyrie.ai": {
-      "weight": 5,
+      "weight": 4,
       "hits": 1,
       "last_hit": "2026-06-25",
       "ecosystems": [
@@ -3610,7 +3611,8 @@
         "cursor"
       ],
       "tier": "research",
-      "_added": "2026-06-25"
+      "_added": "2026-06-25",
+      "last_decayed": "2026-08-26"
     },
     "mindgard.ai": {
       "weight": 5,
