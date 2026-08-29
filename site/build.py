@@ -705,7 +705,9 @@ LLMS_TXT_TIER1 = 8
 # in place of trimming descriptions further; 14 chars was already unreadable.
 # Lowered 40->36 2026-08-22: two new advisories pushed the active/ongoing union
 # past budget again; per the policy above, lower this number, not the trim.
-LLMS_TXT_TIER1_MAX = 36
+# Lowered 36->34 2026-08-29: a new active advisory pushed the union past budget
+# again; per the same policy, lower this number, not the trim.
+LLMS_TXT_TIER1_MAX = 34
 LLMS_CTX_TIER1 = 15
 LLMS_FULL_TIER1 = 15
 # Hard cap on Tier-1 membership for llms-full.txt. Added 2026-08-21, applying
