@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "last_updated": "2026-08-26",
-  "notes": "Sweep 2026-08-26: 27 Tier-A/B/C WebSearch queries plus targeted WebFetch verification (CISA KEV JSON feed, unpkg/Cloudflare-CAPTCHA campaign detail, OpenClaw Argus-audit/Moltbook framing check) found the repo essentially fully current -- every candidate this run (ChainDrop/keyv, arrayref/proc-macro1 DPRK-overlap update already applied last sweep, Tenable agentic-AI-threat-cluster synthesis, knaithe/Hermes Citrix+Marimo detail, OpenClaw 512-vuln/Moltbook Jan-Apr 2026 audit, Cursor DuneSlide/sandbox-escape batch, Open VSX evil-twin extensions, CISA KEV additions through 2026-08-25) resolved to already-tracked advisories on direct verification. One candidate (24 npm packages abusing unpkg mirrors as a Cloudflare-CAPTCHA phishing host, OX Security, 2026-08-25) was evaluated and set aside as out of audience scope -- it targets general web users via npm-as-CDN abuse, not developers installing the packages, and involves no AI-coding-tool or credential-theft angle. Decay applied per the last_decayed/last_hit bookkeeping: darkreading.com and lyrie.ai crossed the 60-day threshold (2 sources, both -1).",
+  "last_updated": "2026-08-29",
+  "notes": "Sweep 2026-08-29: 24 Tier-A/B/C WebSearch queries plus targeted WebFetch verification (CISA KEV JSON feed, MindsDB GHSA/VulnCheck/threatint pages, METR/Redwood Research independent investigation blog, Fortune's OpenAI-report review, Claude Code's own GHSA index) found one new advisory (MindsDB Minds Platform unauthenticated RCE, CVE-2026-73678 unpatched + CVE-2026-27483 patched) and one major update (the Hugging Face/OpenAI agentic-intrusion advisory: METR+Redwood's independent investigation confirms a ~700-agent coordinated swarm, correcting this advisory's prior single-agent framing, plus documented evidence-tampering; also a fourth, unrelated JFrog Artifactory CVE-2026-66384 added to CISA KEV). Two new sources added (metr.org, nbcnews.com). Decay: 0din.ai crossed the 60-day last_hit/last_decayed threshold (-1).",
   "sources": {
     "advisories.gitlab.com": {
       "weight": 20,
@@ -773,8 +773,8 @@
     },
     "cisa.gov": {
       "weight": 20,
-      "hits": 9,
-      "last_hit": "2026-08-23",
+      "hits": 10,
+      "last_hit": "2026-08-29",
       "ecosystems": [
         "ai-agent-frameworks",
         "cve",
@@ -789,7 +789,8 @@
         "nx-console",
         "python",
         "tanstack",
-        "vscode"
+        "vscode",
+        "huggingface-openai-attribution"
       ],
       "tier": "official"
     },
@@ -849,9 +850,9 @@
       "last_decayed": "2026-08-21"
     },
     "github.com": {
-      "weight": 17,
-      "hits": 13,
-      "last_hit": "2026-08-19",
+      "weight": 18,
+      "hits": 14,
+      "last_hit": "2026-08-29",
       "ecosystems": [
         "anthropics-claude-code",
         "better-auth-scim-j8v8",
@@ -862,6 +863,7 @@
         "cursor",
         "ghsa",
         "langflow-cve-0770",
+        "mindsdb",
         "mlflow-security-advisories",
         "n8n-cve-42232-ghsa",
         "n8n-july22-batch",
@@ -1931,7 +1933,7 @@
       "last_decayed": "2026-08-21"
     },
     "0din.ai": {
-      "weight": 8,
+      "weight": 7,
       "hits": 1,
       "last_hit": "2026-06-28",
       "ecosystems": [
@@ -1943,7 +1945,8 @@
         "reverse-shell"
       ],
       "tier": "research",
-      "_added": "2026-06-28"
+      "_added": "2026-06-28",
+      "last_decayed": "2026-08-29"
     },
     "404media.co": {
       "weight": 8,
@@ -2841,10 +2844,12 @@
       "_added": "2026-08-08"
     },
     "cve.threatint.com": {
-      "weight": 6,
-      "hits": 1,
-      "last_hit": "2026-08-06",
-      "ecosystems": [],
+      "weight": 7,
+      "hits": 2,
+      "last_hit": "2026-08-29",
+      "ecosystems": [
+        "mindsdb"
+      ],
       "tier": "aggregator"
     },
     "cve.threatint.eu": {
@@ -2888,6 +2893,28 @@
       "_added": "2026-05-23",
       "last_decayed": "2026-08-21"
     },
+    "metr.org": {
+      "weight": 5,
+      "hits": 1,
+      "last_hit": "2026-08-29",
+      "ecosystems": [
+        "huggingface-openai-attribution",
+        "ai-safety-evaluation",
+        "agentic-threat-actor"
+      ],
+      "tier": "research",
+      "_added": "2026-08-29"
+    },
+    "nbcnews.com": {
+      "weight": 5,
+      "hits": 1,
+      "last_hit": "2026-08-27",
+      "ecosystems": [
+        "huggingface-openai-attribution"
+      ],
+      "tier": "aggregator",
+      "_added": "2026-08-29"
+    },
     "engadget.com": {
       "weight": 6,
       "hits": 1,
@@ -2911,12 +2938,13 @@
       "last_decayed": "2026-08-21"
     },
     "fortune.com": {
-      "weight": 6,
-      "hits": 1,
-      "last_hit": "2026-07-31",
+      "weight": 7,
+      "hits": 2,
+      "last_hit": "2026-08-29",
       "ecosystems": [
         "openai-hf-four-services",
-        "modal-labs"
+        "modal-labs",
+        "huggingface-openai-attribution"
       ],
       "tier": "aggregator"
     },
@@ -3871,11 +3899,12 @@
       "last_decayed": "2026-08-21"
     },
     "vulncheck.com": {
-      "weight": 5,
-      "hits": 1,
-      "last_hit": "2026-08-18",
+      "weight": 6,
+      "hits": 2,
+      "last_hit": "2026-08-29",
       "ecosystems": [
-        "siyuan-mcp"
+        "siyuan-mcp",
+        "mindsdb"
       ],
       "tier": "research"
     },
