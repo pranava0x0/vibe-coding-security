@@ -9,7 +9,19 @@ The format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/
 
 ## [Unreleased]
 
+### Changed — sweep skill restructure (2026-08-29)
+
+Prompted by two recurring failures in the automated daily sweeps: research subagents being rejected by Sonnet 5's cyber-safeguards classifier, and a Step 0 preamble that had grown past a context window.
+
+- **Sweep per-run context cost cut ~90% (~345K → ~33K tokens).** Step 0 required reading `SKILL.md` + `runs.log.md` + `ALERTS.md` + `source-priorities.json` + `advisories/README.md` — ~345K tokens, more than fits in a context window, so it truncated silently on every run. It now reads five small files and greps the rest.
+- **`SKILL.md` split three ways** (193KB → 46KB): process stays in [`SKILL.md`](.claude/skills/vibe-security-update/SKILL.md); the bare search strings move to [`references/queries.md`](.claude/skills/vibe-security-update/references/queries.md) (the only file that may be delegated to a subagent); the 68 named attack classes and per-query technique notes move to [`references/triage-patterns.md`](.claude/skills/vibe-security-update/references/triage-patterns.md), loaded at triage time in the main session only.
+- **Explicit scope and delegation rules** added to `SKILL.md`: no probing/scanning/enumerating third-party systems, no checking whether a named org is affected, no exploit-code collection, IOCs framed as defender signals; Tier A/B never delegated; research agents read-only and isolated; only the orchestrating session writes or pushes.
+- **`runs.log.md` rotated** (769KB → 66KB): newest 7 entries stay live, older 90 move to `runs.archive.md` (grep-only, never read). Run *n* had been re-reading all *n−1* prior entries — roughly 10.7M tokens of re-reading across 93 runs. New entries use a structured YAML header plus ≤300 words of prose.
+- **New [`LEARNINGS.md`](.claude/skills/vibe-security-update/LEARNINGS.md)** — durable rules distilled from ~97 runs, read at Step 0. Previously these were scattered through run-log prose that no run read far enough back to reach.
+
 ### Added
+- **`tools/sweep_context.py`** — generates `advisory-index.jsonl` (one greppable line per advisory: id, dates, status, ecosystems, tools, tags, every CVE/GHSA id in the body) and `source-priorities.top.json` (top 25 by weight). Triage now answers "is this already tracked?" with a `grep` instead of reading two human-facing indexes end to end.
+- **`tests/test_sweep_context.py`** — guards the Step 0 context budget, run-log rotation, index freshness and coverage, and that technique detail stays out of the delegable query file.
 - **LLM-friendly outputs (Mintlify / Anthropic pattern):**
   - **Per-page `.md` mirrors** alongside every `.html` page — replace `.html` with `.md` in any URL to get the raw markdown source without re-parsing HTML.
   - **Per-section `llms.txt`** at `advisories/llms.txt`, `playbooks/llms.txt`, `prevention/llms.txt`, `sources/llms.txt`, `tools/llms.txt`.
@@ -18,6 +30,7 @@ The format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/
 - **`advisory-schema.json`** — JSON Schema (draft 2020-12) for advisory frontmatter.
 - **Versioned API** at `api/v1/advisories.json` and `api/v1/index.json`.
 - **JSON-LD ItemList** schema on the advisories index page.
+- **Budget-driven `llms*.txt` sizing.** `build.py` now binary-searches the largest Tier-1 membership that fits each byte budget (`_fit_tier1_max`) instead of a hardcoded `LLMS_*_TIER1_MAX` a human lowered every few sweeps (`40 → 36 → 34` in nine days, after the per-entry description trim had ratcheted `90 → … → 14` chars over eight sweeps). Caps and headroom now live in `build.py` and are imported by `tests/test_llms.py`, so build target and test threshold cannot drift. Coverage went up at the same caps: `llms-full.txt` Tier 1 60 → 72 advisories in full detail.
 - **Sitemap hints** — `changefreq` + `priority` per URL.
 - **Page actions** — "View raw markdown" + "Edit on GitHub" on every page.
 - **`<link rel="alternate" type="text/markdown">`** on every page so tools can discover the markdown variant.
