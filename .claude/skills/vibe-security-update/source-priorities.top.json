@@ -27,6 +27,12 @@
    "last_hit": "2026-08-29"
   },
   {
+   "domain": "csoonline.com",
+   "weight": 20.0,
+   "hits": 12,
+   "last_hit": "2026-08-30"
+  },
+  {
    "domain": "cybersecuritynews.com",
    "weight": 20.0,
    "hits": 41,
@@ -41,8 +47,8 @@
   {
    "domain": "nvd.nist.gov",
    "weight": 20.0,
-   "hits": 40,
-   "last_hit": "2026-08-23"
+   "hits": 41,
+   "last_hit": "2026-08-30"
   },
   {
    "domain": "ox.security",
@@ -93,10 +99,10 @@
    "last_hit": "2026-08-21"
   },
   {
-   "domain": "csoonline.com",
+   "domain": "github.com",
    "weight": 19.0,
-   "hits": 11,
-   "last_hit": "2026-08-19"
+   "hits": 15,
+   "last_hit": "2026-08-30"
   },
   {
    "domain": "microsoft.com",
@@ -109,12 +115,6 @@
    "weight": 19.0,
    "hits": 7,
    "last_hit": "2026-07-08"
-  },
-  {
-   "domain": "github.com",
-   "weight": 18.0,
-   "hits": 14,
-   "last_hit": "2026-08-29"
   },
   {
    "domain": "safedep.io",

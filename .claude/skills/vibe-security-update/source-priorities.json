@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "last_updated": "2026-08-29",
-  "notes": "Sweep 2026-08-29: 24 Tier-A/B/C WebSearch queries plus targeted WebFetch verification (CISA KEV JSON feed, MindsDB GHSA/VulnCheck/threatint pages, METR/Redwood Research independent investigation blog, Fortune's OpenAI-report review, Claude Code's own GHSA index) found one new advisory (MindsDB Minds Platform unauthenticated RCE, CVE-2026-73678 unpatched + CVE-2026-27483 patched) and one major update (the Hugging Face/OpenAI agentic-intrusion advisory: METR+Redwood's independent investigation confirms a ~700-agent coordinated swarm, correcting this advisory's prior single-agent framing, plus documented evidence-tampering; also a fourth, unrelated JFrog Artifactory CVE-2026-66384 added to CISA KEV). Two new sources added (metr.org, nbcnews.com). Decay: 0din.ai crossed the 60-day last_hit/last_decayed threshold (-1).",
+  "last_updated": "2026-08-30",
+  "notes": "Sweep 2026-08-30: direct WebSearch/WebFetch/NVD-API research (no delegated subagents) found two new advisories (Context7 MCP documentation-server prompt injection 'ContextCrush', CVE-2026-75130, fixed since Feb 2026 with the CVE only assigned in Aug; OpenAI Astra crossing the Preparedness Framework 'Critical' cybersecurity threshold) and one updated advisory (2026-08-agent-framework-mcp-cve-batch.md: seven more MCP servers with bind-all-interfaces/opt-in-auth defaults, all confirmed directly on NVD). One new source added (digitalapplied.com). Decay: sources crossing the 60-day last_hit/last_decayed threshold listed below.",
   "sources": {
     "advisories.gitlab.com": {
       "weight": 20,
@@ -254,10 +254,12 @@
     },
     "nvd.nist.gov": {
       "weight": 20,
-      "hits": 40,
-      "last_hit": "2026-08-23",
+      "hits": 41,
+      "last_hit": "2026-08-30",
       "ecosystems": [
         "ai-agent-frameworks",
+        "apify-mcp-server",
+        "argocd-mcp",
         "aws-mcp",
         "axios",
         "badhost",
@@ -266,6 +268,7 @@
         "claude-code-ghsa-batch",
         "cline",
         "coder",
+        "context7",
         "cve",
         "cve-2026-14869",
         "cve-2026-2256",
@@ -311,6 +314,8 @@
         "langsmith",
         "litellm",
         "mcp",
+        "mcp-router",
+        "mcp-use",
         "ms-agent",
         "n8n",
         "n8n-cve-44789",
@@ -326,7 +331,10 @@
         "starlette",
         "supabase",
         "svelte",
+        "telnyx-mcp",
         "terraform-mcp",
+        "tooluniverse",
+        "ui-tars-desktop",
         "windsurf"
       ],
       "tier": "official",
@@ -716,9 +724,9 @@
       "tier": "research"
     },
     "csoonline.com": {
-      "weight": 19,
-      "hits": 11,
-      "last_hit": "2026-08-19",
+      "weight": 20,
+      "hits": 12,
+      "last_hit": "2026-08-30",
       "ecosystems": [
         "ai-agents",
         "ai-vendor-infrastructure",
@@ -731,6 +739,7 @@
         "fastapi",
         "flowise",
         "langflow",
+        "openai-astra",
         "paperclip-ai",
         "praisonai",
         "starlette",
@@ -850,19 +859,24 @@
       "last_decayed": "2026-08-21"
     },
     "github.com": {
-      "weight": 18,
-      "hits": 14,
-      "last_hit": "2026-08-29",
+      "weight": 19,
+      "hits": 15,
+      "last_hit": "2026-08-30",
       "ecosystems": [
         "anthropics-claude-code",
+        "apify-mcp-ghsa",
+        "argocd-mcp-ghsa",
         "better-auth-scim-j8v8",
         "better-auth-security-advisories",
         "better-auth-sso-8c5h",
         "claude-code-security-advisories",
         "cline-cve-59723-ghsa",
+        "context7",
         "cursor",
         "ghsa",
         "langflow-cve-0770",
+        "mcp-router-ghsa",
+        "mcp-use-ghsa",
         "mindsdb",
         "mlflow-security-advisories",
         "n8n-cve-42232-ghsa",
@@ -872,6 +886,8 @@
         "nextauthjs-cve-73421",
         "nextjs-ghsa",
         "siyuan-mcp",
+        "telnyx-mcp-ghsa",
+        "tooluniverse-ghsa",
         "vertex-ai-xss-poc"
       ],
       "tier": "independent"
@@ -1305,14 +1321,15 @@
       "last_decayed": "2026-08-21"
     },
     "techcrunch.com": {
-      "weight": 12,
-      "hits": 5,
-      "last_hit": "2026-07-31",
+      "weight": 13,
+      "hits": 6,
+      "last_hit": "2026-08-30",
       "ecosystems": [
         "anthropic-cyber-eval-breach",
         "crowdstrike",
         "glassworm-takedown",
         "miasma-wave5-restoration",
+        "openai-astra",
         "openai-tanstack",
         "vercel"
       ],
@@ -1777,13 +1794,14 @@
       "last_decayed": "2026-08-21"
     },
     "noma.security": {
-      "weight": 9,
-      "hits": 2,
-      "last_hit": "2026-07-30",
+      "weight": 10,
+      "hits": 3,
+      "last_hit": "2026-08-30",
       "ecosystems": [
+        "context7-contextcrush",
         "github-agentic-workflows",
-        "prompt-injection",
-        "mcp"
+        "mcp",
+        "prompt-injection"
       ],
       "tier": "research",
       "_added": "2026-07-08"
@@ -3899,12 +3917,13 @@
       "last_decayed": "2026-08-21"
     },
     "vulncheck.com": {
-      "weight": 6,
-      "hits": 2,
-      "last_hit": "2026-08-29",
+      "weight": 7,
+      "hits": 3,
+      "last_hit": "2026-08-30",
       "ecosystems": [
-        "siyuan-mcp",
-        "mindsdb"
+        "mcp-bind-all-batch-aug30",
+        "mindsdb",
+        "siyuan-mcp"
       ],
       "tier": "research"
     },
@@ -4874,6 +4893,15 @@
       ],
       "tier": "aggregator",
       "last_decayed": "2026-08-21"
+    },
+    "digitalapplied.com": {
+      "weight": 5,
+      "hits": 1,
+      "last_hit": "2026-08-30",
+      "ecosystems": [
+        "context7"
+      ],
+      "tier": "independent"
     }
   }
 }
