@@ -1,0 +1,156 @@
+{
+ "count": 25,
+ "note": "top 25 by weight; regenerate with tools/sweep_context.py",
+ "sources": [
+  {
+   "domain": "advisories.gitlab.com",
+   "weight": 20.0,
+   "hits": 19,
+   "last_hit": "2026-08-23"
+  },
+  {
+   "domain": "aikido.dev",
+   "weight": 20.0,
+   "hits": 18,
+   "last_hit": "2026-08-21"
+  },
+  {
+   "domain": "bleepingcomputer.com",
+   "weight": 20.0,
+   "hits": 30,
+   "last_hit": "2026-07-28"
+  },
+  {
+   "domain": "cisa.gov",
+   "weight": 20.0,
+   "hits": 10,
+   "last_hit": "2026-08-29"
+  },
+  {
+   "domain": "cybersecuritynews.com",
+   "weight": 20.0,
+   "hits": 41,
+   "last_hit": "2026-08-08"
+  },
+  {
+   "domain": "github.com/advisories",
+   "weight": 20.0,
+   "hits": 28,
+   "last_hit": "2026-08-23"
+  },
+  {
+   "domain": "nvd.nist.gov",
+   "weight": 20.0,
+   "hits": 40,
+   "last_hit": "2026-08-23"
+  },
+  {
+   "domain": "ox.security",
+   "weight": 20.0,
+   "hits": 11,
+   "last_hit": "2026-08-21"
+  },
+  {
+   "domain": "securityweek.com",
+   "weight": 20.0,
+   "hits": 42,
+   "last_hit": "2026-08-14"
+  },
+  {
+   "domain": "sentinelone.com",
+   "weight": 20.0,
+   "hits": 17,
+   "last_hit": "2026-08-17"
+  },
+  {
+   "domain": "socket.dev",
+   "weight": 20.0,
+   "hits": 23,
+   "last_hit": "2026-08-21"
+  },
+  {
+   "domain": "stepsecurity.io",
+   "weight": 20.0,
+   "hits": 24,
+   "last_hit": "2026-08-18"
+  },
+  {
+   "domain": "thehackernews.com",
+   "weight": 20.0,
+   "hits": 81,
+   "last_hit": "2026-08-25"
+  },
+  {
+   "domain": "theregister.com",
+   "weight": 20.0,
+   "hits": 32,
+   "last_hit": "2026-08-19"
+  },
+  {
+   "domain": "wiz.io",
+   "weight": 20.0,
+   "hits": 14,
+   "last_hit": "2026-08-21"
+  },
+  {
+   "domain": "csoonline.com",
+   "weight": 19.0,
+   "hits": 11,
+   "last_hit": "2026-08-19"
+  },
+  {
+   "domain": "microsoft.com",
+   "weight": 19.0,
+   "hits": 7,
+   "last_hit": "2026-08-06"
+  },
+  {
+   "domain": "sysdig.com",
+   "weight": 19.0,
+   "hits": 7,
+   "last_hit": "2026-07-08"
+  },
+  {
+   "domain": "github.com",
+   "weight": 18.0,
+   "hits": 14,
+   "last_hit": "2026-08-29"
+  },
+  {
+   "domain": "safedep.io",
+   "weight": 18.0,
+   "hits": 11,
+   "last_hit": "2026-08-20"
+  },
+  {
+   "domain": "snyk.io",
+   "weight": 18.0,
+   "hits": 24,
+   "last_hit": "2026-06-19"
+  },
+  {
+   "domain": "unit42.paloaltonetworks.com",
+   "weight": 17.0,
+   "hits": 6,
+   "last_hit": "2026-08-21"
+  },
+  {
+   "domain": "blog.rust-lang.org",
+   "weight": 16.0,
+   "hits": 3,
+   "last_hit": "2026-08-21"
+  },
+  {
+   "domain": "checkmarx.com",
+   "weight": 16.0,
+   "hits": 6,
+   "last_hit": "2026-07-25"
+  },
+  {
+   "domain": "code.claude.com",
+   "weight": 15.0,
+   "hits": 3,
+   "last_hit": "2026-07-17"
+  }
+ ]
+}

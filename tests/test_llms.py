@@ -29,22 +29,31 @@ import build as _build  # type: ignore  # noqa: E402
 # if these caps start failing again, check whether the active/ongoing count
 # has grown before assuming the N-most-recent knob needs to shrink further.
 #
-# If a cap is breached, the correct fixes, in order:
-#   1. Lower the Tier-1 "N most recent" count in site/build.py. That is the
-#      intended control surface.
-#   2. Tighten per-advisory truncation limits (also in site/build.py).
-#   3. Triage stale `status: active`/`ongoing` advisories back to
-#      patched/historical — every one of them is a mandatory Tier-1 entry
-#      regardless of age, so a growing active count inflates all three files.
-#   4. Only then, and only with a written rationale here, raise a cap.
+# Update 2026-08-29 — the manual knob is gone; the build solves for the budget.
+# Capping Tier-1 membership by hand just moved the treadmill rather than ending
+# it: LLMS_TXT_TIER1_MAX went 40 -> 36 -> 34 in nine days, and the per-entry
+# description trim ratcheted 90 -> 70 -> 60 -> 52 -> 40 -> 34 -> 30 -> 24 -> 14
+# chars over eight consecutive sweeps before that. Both were a human solving
+# "fit the budget" by hand, and each turn of the ratchet silently cut how much
+# of the corpus the index covered.
 #
-# HEADROOM_FRACTION makes the test fail while there is still room to think. A
-# build at 85% of budget is a warning; the previous regime only reported
-# failure at 100%, one advisory too late.
-LLMS_TXT_MAX_BYTES = 80 * 1024
-LLMS_CTX_MAX_BYTES = 152 * 1024
-LLMS_FULL_MAX_BYTES = 1152 * 1024
-HEADROOM_FRACTION = 0.15  # must stay under 85% of cap
+# site/build.py now binary-searches the largest Tier-1 membership that fits the
+# budget (see _fit_tier1_max), so by construction a build cannot exceed it.
+# Coverage went the other way where the budget had room: llms-full.txt Tier 1
+# went 60 -> 72 advisories in full detail. llms.txt solves to 34 -- the same
+# value the hand-tuning had converged to -- so its output is byte-identical; the
+# gain there is that it re-solves itself instead of failing CI on the next sweep.
+#
+# The caps and headroom now live in site/build.py and are imported here, so the
+# build target and this assertion cannot drift apart. If one of these fails now
+# it means something real: either the fitter was unwired, or even TIER1_FLOOR
+# no longer fits — in which case the fix is to triage stale `status: active` /
+# `ongoing` advisories back to patched/historical (each is a mandatory Tier-1
+# entry regardless of age), NOT to raise a cap.
+LLMS_TXT_MAX_BYTES = _build.LLMS_TXT_CAP
+LLMS_CTX_MAX_BYTES = _build.LLMS_CTX_CAP
+LLMS_FULL_MAX_BYTES = _build.LLMS_FULL_CAP
+HEADROOM_FRACTION = _build.HEADROOM_FRACTION
 
 
 def test_llms_txt_starts_with_title(llms_txt):
@@ -83,6 +92,33 @@ def test_llms_outputs_are_count_bounded():
     assert _build.LLMS_TXT_TIER1 <= 60
     assert _build.LLMS_CTX_TIER1 <= 40
     assert _build.LLMS_FULL_TIER1 <= 60
+
+
+def test_llms_budgets_are_derived_from_caps():
+    """The build's budget and this file's cap must be the same number.
+
+    They used to be two hand-maintained constants in two files; whenever they
+    drifted, the build happily emitted something the test then rejected."""
+    for cap, budget in [
+        (_build.LLMS_TXT_CAP, _build.LLMS_TXT_BUDGET),
+        (_build.LLMS_CTX_CAP, _build.LLMS_CTX_BUDGET),
+        (_build.LLMS_FULL_CAP, _build.LLMS_FULL_BUDGET),
+    ]:
+        assert budget == int(cap * (1 - _build.HEADROOM_FRACTION))
+
+
+def test_tier1_membership_is_solved_not_hardcoded():
+    """Guards the fix for the cap treadmill.
+
+    The old `LLMS_*_TIER1_MAX` constants were hand-lowered every few sweeps to
+    keep the build under budget, each time cutting corpus coverage. If someone
+    reintroduces a hardcoded membership cap, the ratchet is back."""
+    assert hasattr(_build, "_fit_tier1_max"), "budget-fitting removed from build.py"
+    reintroduced = [n for n in dir(_build) if n.endswith("_TIER1_MAX")]
+    assert not reintroduced, (
+        f"hardcoded Tier-1 caps are back: {reintroduced}. Membership is solved "
+        "for against the byte budget by _fit_tier1_max — don't hand-tune it."
+    )
 
 
 def test_llms_full_contains_every_advisory(parsed_advisories, llms_full_txt):
