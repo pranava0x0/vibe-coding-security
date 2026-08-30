@@ -39,8 +39,10 @@ import build as _build  # type: ignore  # noqa: E402
 #
 # site/build.py now binary-searches the largest Tier-1 membership that fits the
 # budget (see _fit_tier1_max), so by construction a build cannot exceed it.
-# Coverage went the other way as a result: llms.txt Tier 1 went 34 -> 74
-# advisories in full detail, llms-full.txt 60 -> 79, at the same caps.
+# Coverage went the other way where the budget had room: llms-full.txt Tier 1
+# went 60 -> 72 advisories in full detail. llms.txt solves to 34 -- the same
+# value the hand-tuning had converged to -- so its output is byte-identical; the
+# gain there is that it re-solves itself instead of failing CI on the next sweep.
 #
 # The caps and headroom now live in site/build.py and are imported here, so the
 # build target and this assertion cannot drift apart. If one of these fails now

@@ -164,8 +164,10 @@ covered, and CI only complained after the fact.
 
 Since **2026-08-29** `build.py` binary-searches the largest Tier-1 membership
 that fits the budget (`_fit_tier1_max`), so a build cannot exceed one by
-construction. Coverage went *up* as a result (llms.txt Tier 1 34 → 74 at the
-same cap). **If a cap test fails now, it means something real** — triage stale
+construction. Coverage went *up* where the budget had room (`llms-full.txt`
+Tier 1 60 → 72 at the same cap); `llms.txt` solves to 34, the same value the
+hand-tuning had converged to, so its output is byte-identical and the gain is
+that it re-solves itself instead of failing CI. **If a cap test fails now, it means something real** — triage stale
 `status: active`/`ongoing` advisories back to `patched`/`historical`. Never
 raise a cap; never reintroduce a hardcoded membership constant.
 

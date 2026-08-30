@@ -107,11 +107,23 @@ def test_generated_state_is_current():
 
 
 def test_advisory_index_covers_every_advisory():
+    """One index row per advisory file, with unique ids.
+
+    Deliberately does not compare ids to filename stems: nothing in this repo
+    enforces that they match, so doing so would fail on a legitimate rename
+    rather than on the failure that matters here — an advisory missing from the
+    index, which makes triage report it as new and file a duplicate."""
     index_path = SKILL_DIR / "advisory-index.jsonl"
-    indexed = {json.loads(line)["id"] for line in index_path.read_text(encoding="utf-8").splitlines() if line.strip()}
-    on_disk = {p.stem for p in (REPO_ROOT / "advisories").glob("*.md") if p.name != "README.md"}
-    missing = on_disk - indexed
-    assert not missing, f"advisories absent from the index (triage would call them new): {sorted(missing)[:10]}"
+    rows = [json.loads(line) for line in index_path.read_text(encoding="utf-8").splitlines() if line.strip()]
+    ids = [r["id"] for r in rows]
+    on_disk = [p for p in (REPO_ROOT / "advisories").glob("*.md") if p.name != "README.md"]
+
+    assert len(rows) == len(on_disk), (
+        f"index has {len(rows)} rows for {len(on_disk)} advisory files — "
+        "run `python3 tools/sweep_context.py` and commit the result."
+    )
+    duplicates = sorted({i for i in ids if ids.count(i) > 1})
+    assert not duplicates, f"duplicate ids in the index (a lookup would find the wrong advisory): {duplicates}"
 
 
 def test_technique_detail_is_out_of_the_delegable_query_file():
