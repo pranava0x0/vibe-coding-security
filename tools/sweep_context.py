@@ -59,6 +59,17 @@ TITLE_MAX = 120
 CVE_RE = re.compile(r"\bCVE-\d{4}-\d{4,7}\b")
 GHSA_RE = re.compile(r"\bGHSA-[23456789cfghjmpqrvwx]{4}-[23456789cfghjmpqrvwx]{4}-[23456789cfghjmpqrvwx]{4}\b")
 
+# Inline code spans in an advisory body are where package, product, and campaign
+# names live (`chalk-tempalte`, `proc-macro1`, `@scope/pkg`). Without them the
+# index answers "not tracked" for a name that is only in the prose — and Step 2
+# treats a miss as proof a finding is new, so that becomes a duplicate advisory.
+# This is the fast path only: it cannot catch a name that never appears in
+# backticks (e.g. "SiYuan"), which is why Step 2 also requires a corpus grep
+# before concluding anything is new.
+CODE_SPAN_RE = re.compile(r"`([^`\n]{2,60})`")
+# Identifier-shaped only: no whitespace, and not a shell/path/flag fragment.
+NAME_RE = re.compile(r"^[A-Za-z0-9@][A-Za-z0-9._@/+-]*$")
+
 
 def parse_frontmatter(text: str) -> tuple[dict[str, Any], str]:
     """Split a `---`-delimited YAML frontmatter block off the body."""
@@ -74,6 +85,21 @@ def parse_frontmatter(text: str) -> tuple[dict[str, Any], str]:
     except yaml.YAMLError:
         return {}, body
     return (data if isinstance(data, dict) else {}), body
+
+
+def extract_names(body: str) -> list[str]:
+    """Identifier-shaped inline code spans from an advisory body.
+
+    Package, product, and campaign names that appear nowhere in the frontmatter
+    are the index's main blind spot; nearly all of them are written in
+    backticks. Filtered to identifier shapes so command lines, paths with
+    spaces, and prose fragments don't land in the index."""
+    names = {
+        span.strip()
+        for span in CODE_SPAN_RE.findall(body)
+        if NAME_RE.match(span.strip()) and not span.strip().startswith((".", "/", "-"))
+    }
+    return sorted(names)
 
 
 def _as_list(value: Any) -> list[str]:
@@ -108,6 +134,8 @@ def build_advisory_index() -> list[dict[str, Any]]:
                 # candidate without reading a single advisory body.
                 "cve": sorted(set(CVE_RE.findall(body))),
                 "ghsa": sorted(set(GHSA_RE.findall(body))),
+                # Body-only package/product/campaign names — see extract_names.
+                "names": extract_names(body),
             }
         )
     # Most recently updated first — matches how a sweep scans for overlap.

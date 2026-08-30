@@ -169,7 +169,15 @@ grep -i 'CVE-2026-12345' .claude/skills/vibe-security-update/advisory-index.json
 grep -i 'langflow'       .claude/skills/vibe-security-update/advisory-index.jsonl
 ```
 
-A hit means the incident is tracked — open that advisory to decide NEW vs UPDATE. No hit means it's genuinely new. This replaces reading `ALERTS.md` end to end and, unlike reading, it cannot silently truncate.
+A hit means the incident is tracked — open that advisory to decide NEW vs UPDATE. This replaces reading `ALERTS.md` end to end and, unlike reading, it cannot silently truncate.
+
+**An index miss is not proof. Confirm against the corpus before filing anything as new:**
+
+```bash
+grep -ril 'siyuan' advisories/*.md      # authoritative — searches full bodies
+```
+
+The index carries frontmatter fields plus every CVE/GHSA id and every identifier-shaped `` `code span` `` in the body. That covers most names, but **not one written only in prose**: `SiYuan` appears in [`2026-05-mcp-stdio-systemic-rce.md`](advisories/2026-05-mcp-stdio-systemic-rce.md) and `chalk-tempalte` in [`2026-05-shai-hulud-copycat-wave.md`](advisories/2026-05-shai-hulud-copycat-wave.md); before the `names` field only the second was findable, and neither was findable from frontmatter alone. Treating a miss as proof is exactly how a duplicate advisory gets filed — the failure this index exists to prevent. The corpus grep is cheap and exhaustive; run it on every candidate that misses.
 
 **Now load [`references/triage-patterns.md`](references/triage-patterns.md)** — the named attack classes and per-query notes. It belongs here, at triage and write-up, not in the search step, and it stays in this session.
 

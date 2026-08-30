@@ -126,6 +126,47 @@ def test_advisory_index_covers_every_advisory():
     assert not duplicates, f"duplicate ids in the index (a lookup would find the wrong advisory): {duplicates}"
 
 
+def test_index_carries_body_only_names():
+    """Package/campaign names living only in an advisory body must be findable.
+
+    Step 2 greps this index to decide whether a candidate is already tracked.
+    Frontmatter alone does not carry these: `chalk-tempalte` appears only in the
+    body of the Shai-Hulud copycat advisory, so before the `names` field a sweep
+    searching that published name got no hit — and a miss is what Step 2 reads
+    as 'this is new'. That path files a duplicate advisory, which is the exact
+    failure this index exists to prevent."""
+    index = (SKILL_DIR / "advisory-index.jsonl").read_text(encoding="utf-8")
+    assert "chalk-tempalte" in index, (
+        "body-only package names are missing from the index — check extract_names()"
+    )
+
+
+def test_step2_requires_a_corpus_grep_before_filing_new():
+    """The index is a fast path, never the authority.
+
+    It cannot carry a name written only in prose — `SiYuan` in
+    2026-05-mcp-stdio-systemic-rce.md is the standing counterexample, and no
+    code-span extraction will ever find it. So Step 2 must tell the sweep to
+    confirm a miss against the corpus. This asserts that instruction is still
+    there, because deleting it silently re-opens the duplicate-advisory path."""
+    corpus_hits = [
+        p.name for p in (REPO_ROOT / "advisories").glob("*.md")
+        if "siyuan" in p.read_text(encoding="utf-8").lower()
+    ]
+    assert corpus_hits, "counterexample gone — pick a new prose-only name for this guard"
+    index = (SKILL_DIR / "advisory-index.jsonl").read_text(encoding="utf-8")
+    assert "SiYuan" not in index, (
+        "SiYuan is now indexed, so it no longer demonstrates the gap — "
+        "find another prose-only name or drop this guard"
+    )
+
+    skill = (SKILL_DIR / "SKILL.md").read_text(encoding="utf-8")
+    assert "An index miss is not proof" in skill, "Step 2 lost its corpus-fallback rule"
+    assert "grep -ril" in skill and "advisories/*.md" in skill, (
+        "Step 2 no longer shows the corpus grep that confirms a miss"
+    )
+
+
 def test_technique_detail_is_out_of_the_delegable_query_file():
     """`references/queries.md` is the one file that may be delegated.
 
