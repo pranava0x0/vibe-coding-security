@@ -4,6 +4,8 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-08-07 | [OpenAI Astra — unreleased model may have crossed the 'Critical' cybersecurity capability threshold in OpenAI's Preparedness Framework, first frontier model to trigger the tier](2026-08-openai-astra-critical-cyber-threshold.md) | high | mitigated |
+| 2026-02-18 | [Context7 MCP documentation server — attacker-registered library docs inject instructions into every connected coding agent ("ContextCrush," CVE-2026-75130); fixed since February, CVE only assigned in August](2026-08-context7-contextcrush-prompt-injection.md) | high | patched |
 | 2026-08-14 | [MindsDB Minds Platform — unpatched CVSS 10.0 unauthenticated RCE via prompt injection into an unsandboxed scratchpad tool (CVE-2026-73678), plus a patched file-upload RCE (CVE-2026-27483)](2026-08-mindsdb-minds-platform-unauthenticated-rce.md) | critical | active |
 | 2026-07-13 | [JSONata — the "safe expression" engine n8n embeds ships two CVSS 9.3 sandbox-escape RCEs (CVE-2026-77414, CVE-2026-77415)](2026-08-jsonata-sandbox-escape-rce.md) | critical | patched |
 | 2026-08-10 | [One Pyodide sandbox-escape flaw broke n8n, Grist, Cohere Terrarium, and Hugging Face smolagents — DEF CON 34 backfill, four CVEs](2026-08-pyodide-sandbox-escape-cluster.md) | critical | patched |
