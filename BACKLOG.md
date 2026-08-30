@@ -105,6 +105,15 @@ Found and verified in-window but not written up because the run hit its candidat
 - **Gogs CVE-2026-52813** (path traversal → RCE via unvalidated org names in `UserPath()`, escalated to RCE via nested bare repo + Git hooks; fixed 0.14.3) plus **CVE-2026-52810**, an unpatched Git HTTP authorization bypass granting write access to read-only repos. Self-hosted git forge — one step removed from the core audience, but a source-of-truth compromise.
 - **Socket's "Offside Wallet Theft Factory"** (2026-08-19) — 77 malicious Firefox extensions, 40 confirmed wallet stealers, with nine benign shells that later mutated into stealers *under the same extension ID*. Browser-extension rather than IDE marketplace, but the same reviewed-marketplace trust failure as the Open VSX evil-twin cluster.
 
+## Sweep-skill follow-ups (2026-08-29)
+
+Deferred from the sweep restructure (context cost, delegation rules, budget-fitting — see [ISSUES.md](ISSUES.md) and [`.claude/skills/vibe-security-update/LEARNINGS.md`](.claude/skills/vibe-security-update/LEARNINGS.md)).
+
+- **Triage stale `status: active`/`ongoing` advisories.** *(high)* Now the single remaining lever on output size, and the 2026-08-06 entry under **High** predicted exactly this. The active/ongoing union is a mandatory Tier-1 member regardless of age and is the dominant term in all three `llms*.txt` budgets. Budget-fitting (`_fit_tier1_max`) makes the squeeze graceful instead of a CI failure, but it cannot create room: every advisory left `active` after its campaign wound down or its fix shipped costs a *newer* advisory its full-detail slot. A pass re-classifying to `patched`/`historical` buys coverage back directly.
+- **Generate `advisories/README.md` from `advisory-index.jsonl`.** *(medium)* SKILL.md Step 3 says neither `ALERTS.md` nor `advisories/README.md` is auto-generated and both "drift silently unless touched explicitly on every run", and documents a `comm`-based spot-check because `validate.py` checks `advisories.json`'s count, not README rows. The index now carries everything a row needs (date, title, severity, status). Generating the table removes a whole class of hand-maintenance from every sweep.
+- **Let `validate.py` assert README-row coverage from the index.** *(medium)* Cheaper interim step than generating the file: fail the gate when an advisory has no row, closing the acknowledged check gap without changing authorship.
+- **Consider a structured-format backfill for `runs.archive.md`.** *(low)* The 90 archived entries are prose averaging ~9.8KB. They are grep-only and never loaded, so this buys little beyond consistency — worth doing only if the archive ever becomes a data source.
+
 ## Considered but not doing
 
 - **Comments on advisories.** Spam risk vs. signal. People can open GitHub issues.

@@ -49,6 +49,7 @@ from dataclasses import dataclass, field
 from datetime import date, timezone
 from os.path import relpath as _relpath
 from pathlib import Path
+from collections.abc import Callable
 from typing import Any
 from xml.sax.saxutils import escape as xml_escape
 
@@ -701,24 +702,43 @@ def _page_html_url(p: Page) -> str:
 # If the active/ongoing count keeps growing, the fix is triaging stale
 # "active" advisories back to patched/historical, not raising these numbers.
 LLMS_TXT_TIER1 = 8
-# Hard cap on Tier-1 membership for llms.txt (see _split_tiers). Added 2026-08-20
-# in place of trimming descriptions further; 14 chars was already unreadable.
-# Lowered 40->36 2026-08-22: two new advisories pushed the active/ongoing union
-# past budget again; per the policy above, lower this number, not the trim.
-# Lowered 36->34 2026-08-29: a new active advisory pushed the union past budget
-# again; per the same policy, lower this number, not the trim.
-LLMS_TXT_TIER1_MAX = 34
 LLMS_CTX_TIER1 = 15
 LLMS_FULL_TIER1 = 15
-# Hard cap on Tier-1 membership for llms-full.txt. Added 2026-08-21, applying
-# the same fix the 2026-08-20 sweep made for llms.txt (LLMS_TXT_TIER1_MAX) but
-# never extended to this file. Same root cause: Tier 1 is the active/ongoing
-# union, which is unbounded (67 of 212 advisories today) and had grown past the
-# byte budget on its own. Capping membership makes the file O(1) in corpus size
-# instead of O(active advisories); demoted entries stay listed as TL;DR +
-# pointer, and no advisory's status is altered to fit a budget. If this budget
-# is breached again, lower this number.
-LLMS_FULL_TIER1_MAX = 60
+
+# Byte budgets, and the end of the hand-tuned-knob era.
+#
+# Tier-1 membership used to be a hardcoded integer a human lowered every time
+# a sweep breached a cap: LLMS_TXT_TIER1_MAX went 40 -> 36 -> 34 in nine days
+# (2026-08-20/22/29), and before that the per-entry description trim ratcheted
+# 90 -> 70 -> 60 -> 52 -> 40 -> 34 -> 30 -> 24 -> 14 chars across eight
+# consecutive sweeps. Both knobs were solving for the same thing — "fit the
+# byte budget" — by hand, and each adjustment silently reduced how much of the
+# corpus the index actually covered.
+#
+# The budget is the real constraint; membership is just the variable that
+# satisfies it. So the build now *solves* for the largest Tier 1 that fits
+# (see _fit_tier1_max). Coverage is maximized for whatever budget exists, the
+# knob never needs editing again, and a growing active/ongoing set costs
+# coverage gradually and visibly instead of via a surprise CI failure.
+#
+# Caps and headroom live here, and tests/test_llms.py imports them, so the
+# build target and the test threshold cannot drift apart. HEADROOM_FRACTION
+# keeps a margin below the hard cap: a build that fills its budget exactly is
+# still well clear of the number that would break a consumer.
+LLMS_TXT_CAP = 80 * 1024
+LLMS_CTX_CAP = 152 * 1024
+LLMS_FULL_CAP = 1152 * 1024
+HEADROOM_FRACTION = 0.15
+
+LLMS_TXT_BUDGET = int(LLMS_TXT_CAP * (1 - HEADROOM_FRACTION))
+LLMS_CTX_BUDGET = int(LLMS_CTX_CAP * (1 - HEADROOM_FRACTION))
+LLMS_FULL_BUDGET = int(LLMS_FULL_CAP * (1 - HEADROOM_FRACTION))
+
+# Floor on Tier-1 membership: below this the file stops being useful as an
+# index at all. If a render at the floor still exceeds budget, the build emits
+# it anyway and the test cap fails loudly — that is a real signal (the
+# active/ongoing set needs a triage pass), not something to paper over.
+TIER1_FLOOR = 8
 
 
 def _sorted_by_recency(advisories: list[Page]) -> list[Page]:
@@ -763,7 +783,61 @@ def _split_tiers(
     return tier1, tier2
 
 
+def _fit_tier1_max(render: Callable[[int], str], hi: int, budget: int) -> str:
+    """Render at the largest Tier-1 membership that fits `budget` bytes.
+
+    Output size grows monotonically with Tier-1 membership (promoting an
+    advisory from a one-line pointer to full detail can only add bytes), so a
+    binary search finds the maximum in O(log n) renders and is fully
+    deterministic — same corpus in, same bytes out, which test_build_is_deterministic
+    depends on.
+
+    Replaces the manual LLMS_*_TIER1_MAX constants; see the budget block above
+    for why. If even TIER1_FLOOR doesn't fit, the floor render is returned so
+    the byte-cap test fails visibly rather than the index silently shrinking
+    to nothing."""
+    floor_render = render(TIER1_FLOOR)
+    if len(floor_render.encode("utf-8")) > budget:
+        return floor_render
+    best = floor_render
+    lo, high = TIER1_FLOOR, max(TIER1_FLOOR, hi)
+    while lo < high:
+        mid = (lo + high + 1) // 2
+        candidate = render(mid)
+        if len(candidate.encode("utf-8")) <= budget:
+            lo, best = mid, candidate
+        else:
+            high = mid - 1
+    return best
+
+
+def _advisory_pages(pages: list[Page]) -> list[Page]:
+    return [p for p in pages if p.section == "advisories" and not p.is_index]
+
+
+def _natural_tier1_size(pages: list[Page], tier1_n: int) -> int:
+    """Tier-1 membership the tier rule asks for, before any budget trimming.
+
+    This is the upper bound handed to _fit_tier1_max, so a file renders exactly
+    as the rule specifies and is trimmed *only* when that would breach budget.
+    Passing the whole corpus instead would let a file inflate past its own
+    definition just because budget was available — which matters for
+    llms-ctx.txt, whose entire purpose is being compact."""
+    tier1, _ = _split_tiers(_advisory_pages(pages), tier1_n)
+    return len(tier1)
+
+
 def build_llms_txt(pages: list[Page], full_bytes: int | None = None, ctx_bytes: int | None = None) -> str:
+    return _fit_tier1_max(
+        lambda n: _render_llms_txt(pages, full_bytes, ctx_bytes, n),
+        hi=_natural_tier1_size(pages, LLMS_TXT_TIER1),
+        budget=LLMS_TXT_BUDGET,
+    )
+
+
+def _render_llms_txt(
+    pages: list[Page], full_bytes: int | None, ctx_bytes: int | None, tier1_max: int
+) -> str:
     lines: list[str] = [
         f"# {SITE_NAME}",
         "",
@@ -788,8 +862,8 @@ def build_llms_txt(pages: list[Page], full_bytes: int | None = None, ctx_bytes: 
         "",
     ]
 
-    advisories = [p for p in pages if p.section == "advisories" and not p.is_index]
-    tier1, tier2 = _split_tiers(advisories, LLMS_TXT_TIER1, LLMS_TXT_TIER1_MAX)
+    advisories = _advisory_pages(pages)
+    tier1, tier2 = _split_tiers(advisories, LLMS_TXT_TIER1, tier1_max)
 
     lines.append("## Advisories")
     lines.append("")
@@ -909,8 +983,16 @@ def build_section_llms_txt(section_slug: str, section_label: str, pages: list[Pa
 
 
 def build_llms_full_txt(pages: list[Page]) -> str:
-    advisories = [p for p in pages if p.section == "advisories" and not p.is_index]
-    tier1, tier2 = _split_tiers(advisories, LLMS_FULL_TIER1, LLMS_FULL_TIER1_MAX)
+    return _fit_tier1_max(
+        lambda n: _render_llms_full_txt(pages, n),
+        hi=_natural_tier1_size(pages, LLMS_FULL_TIER1),
+        budget=LLMS_FULL_BUDGET,
+    )
+
+
+def _render_llms_full_txt(pages: list[Page], tier1_max: int) -> str:
+    advisories = _advisory_pages(pages)
+    tier1, tier2 = _split_tiers(advisories, LLMS_FULL_TIER1, tier1_max)
     tier2_ids = {id(p) for p in tier2}
 
     out: list[str] = [
@@ -985,13 +1067,24 @@ def build_llms_full_txt(pages: list[Page]) -> str:
 def build_llms_ctx_txt(pages: list[Page]) -> str:
     """Compact mid-tier: per-advisory TL;DR + 'am I affected?' in full for the
     LLMS_CTX_TIER1 most recently updated + all active/ongoing advisories; older,
-    resolved advisories get a one-line pointer instead. See the count-bounded
-    rationale above build_llms_txt — this file is O(1) in corpus size, not
-    linear, as of 2026-08-06.
+    resolved advisories get a one-line pointer instead.
+
+    Tier-1 membership is solved for against LLMS_CTX_BUDGET rather than fixed
+    (see the budget block above) — this file had no membership cap at all and
+    was at 71% of its test cap, i.e. next in line for the same manual ratchet
+    llms.txt and llms-full.txt each went through.
 
     Pattern documented in: Mintlify's llms.txt guidance + Anthropic docs."""
-    advisories = [p for p in pages if p.section == "advisories" and not p.is_index]
-    tier1, tier2 = _split_tiers(advisories, LLMS_CTX_TIER1)
+    return _fit_tier1_max(
+        lambda n: _render_llms_ctx_txt(pages, n),
+        hi=_natural_tier1_size(pages, LLMS_CTX_TIER1),
+        budget=LLMS_CTX_BUDGET,
+    )
+
+
+def _render_llms_ctx_txt(pages: list[Page], tier1_max: int) -> str:
+    advisories = _advisory_pages(pages)
+    tier1, tier2 = _split_tiers(advisories, LLMS_CTX_TIER1, tier1_max)
 
     lines: list[str] = [
         f"# {SITE_NAME} — compact context",
