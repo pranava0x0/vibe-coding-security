@@ -111,16 +111,16 @@
    "last_hit": "2026-08-06"
   },
   {
+   "domain": "safedep.io",
+   "weight": 19.0,
+   "hits": 12,
+   "last_hit": "2026-08-31"
+  },
+  {
    "domain": "sysdig.com",
    "weight": 19.0,
    "hits": 7,
    "last_hit": "2026-07-08"
-  },
-  {
-   "domain": "safedep.io",
-   "weight": 18.0,
-   "hits": 11,
-   "last_hit": "2026-08-20"
   },
   {
    "domain": "snyk.io",
