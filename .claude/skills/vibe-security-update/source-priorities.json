@@ -579,17 +579,17 @@
   "blog.gitguardian.com": {
    "_added": "2026-05-21",
    "ecosystems": [
+    "credential-hygiene",
+    "docker",
+    "n8n",
     "npm",
     "pypi",
-    "docker",
-    "supply-chain",
-    "n8n",
-    "credential-hygiene"
+    "supply-chain"
    ],
-   "hits": 2,
-   "last_hit": "2026-08-09",
+   "hits": 3,
+   "last_hit": "2026-09-02",
    "tier": "research",
-   "weight": 9
+   "weight": 10
   },
   "blog.kilo.ai": {
    "_added": "2026-05-18",
@@ -748,7 +748,9 @@
     "cve",
     "cve-42271-litellm",
     "daemon-tools",
+    "gitea",
     "github",
+    "huggingface-openai-attribution",
     "kev",
     "litellm",
     "megalodon",
@@ -757,11 +759,10 @@
     "nx-console",
     "python",
     "tanstack",
-    "vscode",
-    "huggingface-openai-attribution"
+    "vscode"
    ],
-   "hits": 10,
-   "last_hit": "2026-08-29",
+   "hits": 11,
+   "last_hit": "2026-09-02",
    "tier": "official",
    "weight": 20
   },
@@ -1198,10 +1199,12 @@
     "dxt",
     "elementary-data",
     "fastapi",
+    "gitea",
     "hades",
     "hallusquatting",
     "idessaster-cve-cluster",
     "jetbrains-plugins-ai-key-theft",
+    "jfrog-artifactory",
     "klue-icarus-oauth",
     "langchain",
     "langchain-ssrf",
@@ -1238,8 +1241,8 @@
     "streamlit-ssrf",
     "trapdoor"
    ],
-   "hits": 41,
-   "last_hit": "2026-08-08",
+   "hits": 42,
+   "last_hit": "2026-09-02",
    "tier": "aggregator",
    "weight": 20
   },
@@ -2011,6 +2014,7 @@
   "helpnetsecurity.com": {
    "_added": "2026-05-20",
    "ecosystems": [
+    "gitea",
     "github",
     "langflow",
     "litellm-hudson-rock",
@@ -2019,10 +2023,10 @@
     "trustfall",
     "zapier"
    ],
-   "hits": 4,
-   "last_hit": "2026-08-17",
+   "hits": 5,
+   "last_hit": "2026-09-02",
    "tier": "aggregator",
-   "weight": 13
+   "weight": 14
   },
   "hiddenlayer.com": {
    "_added": "2026-08-03",
@@ -2867,6 +2871,7 @@
     "cve-official",
     "fast-mcp-telegram",
     "flowise",
+    "gitea",
     "hashicorp-consul-mcp",
     "jsonata",
     "langchain",
@@ -2903,8 +2908,8 @@
     "ui-tars-desktop",
     "windsurf"
    ],
-   "hits": 41,
-   "last_hit": "2026-08-30",
+   "hits": 42,
+   "last_hit": "2026-09-02",
    "tier": "official",
    "weight": 20
   },
@@ -3660,6 +3665,7 @@
     "gemini-cli",
     "gemini-cli-trustissues",
     "ghostjacking",
+    "gitea",
     "github-codespaces",
     "gluestack",
     "hades",
@@ -3667,6 +3673,7 @@
     "huggingface-openai-attribution",
     "ironworm",
     "jadepuffer",
+    "jfrog-artifactory",
     "jfrog-artifactory-cve",
     "klue-hackers-hacked",
     "klue-icarus-oauth",
@@ -3699,8 +3706,8 @@
     "whitecobra",
     "zenity-pleasefix-update"
    ],
-   "hits": 42,
-   "last_hit": "2026-08-14",
+   "hits": 43,
+   "last_hit": "2026-09-02",
    "tier": "aggregator",
    "weight": 20
   },
@@ -3877,6 +3884,7 @@
     "miasma-wave6",
     "namastex",
     "npm",
+    "openapi-react-query-codegen",
     "payment-sdk-typosquat",
     "polinrider",
     "pypi",
@@ -3884,8 +3892,8 @@
     "solana-fakefix",
     "trapdoor"
    ],
-   "hits": 23,
-   "last_hit": "2026-08-21",
+   "hits": 24,
+   "last_hit": "2026-09-02",
    "tier": "research",
    "weight": 20
   },
@@ -3991,6 +3999,7 @@
     "node-gyp",
     "npm",
     "nx-console",
+    "openapi-react-query-codegen",
     "phantom-gyp",
     "pypi-mcp",
     "redhat",
@@ -3998,8 +4007,8 @@
     "vapi-ai",
     "vscode"
    ],
-   "hits": 24,
-   "last_hit": "2026-08-18",
+   "hits": 25,
+   "last_hit": "2026-09-02",
    "tier": "research",
    "weight": 20
   },
@@ -4293,6 +4302,7 @@
     "huggingface-openai-attribution",
     "idessaster-cve-cluster",
     "jadepuffer",
+    "jfrog-artifactory",
     "joyfill-devpopper",
     "klue-icarus-oauth",
     "klue-salesforce-disable",
@@ -4358,8 +4368,8 @@
     "vsxploit",
     "whitecobra"
    ],
-   "hits": 81,
-   "last_hit": "2026-08-25",
+   "hits": 82,
+   "last_hit": "2026-09-02",
    "tier": "aggregator",
    "weight": 20
   },
@@ -4416,6 +4426,7 @@
     "friendly-fire",
     "ghostapproval",
     "glassworm",
+    "jfrog-artifactory",
     "klue-hackernone-snyk",
     "litellm-trivy",
     "lovable",
@@ -4437,8 +4448,8 @@
     "trivy",
     "vibe-platform"
    ],
-   "hits": 32,
-   "last_hit": "2026-08-19",
+   "hits": 33,
+   "last_hit": "2026-09-02",
    "tier": "aggregator",
    "weight": 20
   },
@@ -4902,6 +4913,15 @@
    "last_hit": "2026-05-16",
    "tier": "research",
    "weight": 5
+  },
+  "ionix.io": {
+   "weight": 6,
+   "hits": 1,
+   "last_hit": "2026-09-02",
+   "ecosystems": [
+    "jfrog-artifactory"
+   ],
+   "tier": "aggregator"
   }
  },
  "version": 1
