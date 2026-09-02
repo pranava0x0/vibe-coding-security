@@ -14,24 +14,6 @@
 
 ---
 
-## 2026-08-22
-
-- **Queries run:** 22 (deep: 12, medium: 8, shallow: 2) via direct `WebSearch`, plus ~10 targeted `WebFetch` verification calls against primary sources (NVD, GHSA pages, vendor blogs) before write-up, plus one direct CISA KEV JSON feed fetch.
-- **New advisories:** 2
-  - `2026-08-pyodide-sandbox-escape-cluster.md` — DEF CON 34 (2026-08-10) backfill: Cyera researchers showed the same Pyodide sandbox-escape root cause (Python `ctypes` + Emscripten exports not accounted for) breaks the "safe Python sandbox" in **seven** independent products — n8n (CVE-2025-68668, 9.9, already in this repo but not cross-linked to the wider research), Grist (CVE-2026-24002, 9.1, likewise), **Cohere Terrarium and Hugging Face smolagents, both newly tracked**. **Accuracy-bar catch:** the secondary aggregator (eSecurityPlanet) cites Cohere Terrarium's CVE as "CVE-2026-61522" — that ID does not resolve on NVD or GitHub; fetching the GitHub Security Advisory directly (GHSA-cmpr-pw8g-6q6c) confirmed the real ID is **CVE-2026-5752** (matching CVSS 9.3 and description), so the advisory uses the verified ID and documents the aggregator's error explicitly rather than silently repeating it. The smolagents CVE (reported as CVE-2026-10613) could **not** be independently confirmed — NVD shows it `RESERVED` and Hugging Face's own GHSA index lists no advisories at all — so the advisory states that CVE number as unconfirmed while still recording the underlying finding (corroborated by the DEF CON talk itself and multiple secondary write-ups naming smolagents as one of the seven affected products).
-  - `2026-05-nuxt-island-endpoint-cve-batch.md` — a **second, earlier** Nuxt security release (2026-05-19, four CVEs: CVE-2026-47200 route-middleware-bypass via island endpoints, CVE-2026-46342 cache-poisoning XSS, CVE-2026-45670 incomplete dev-server-over-LAN fix, CVE-2026-45669 reflected XSS in `navigateTo`) distinct from the already-tracked July 2026 Server Island RCE batch — same `/__nuxt_island/*` attack surface, different bugs, two months apart. Found by direct "Nuxt CVE {year}" query surfacing CVE numbers the "Nuxt security advisory" phrasing alone hadn't caught; cross-checked against `github.com/nuxt/nuxt/security/advisories` to confirm the May and July batches are genuinely separate GHSA sets, not a database re-publish of the same release (per the "GHSA publication date is not a disclosure date" caution).
-- **Updated advisories:** 0 (both candidates were genuinely new; no existing advisory needed a status/IOC update this sweep beyond the routine ALERTS.md/README/llms.txt feed entries).
-- **Sources gained weight:** esecurityplanet.com, cyera.com, nvd.nist.gov, github.com/advisories, netlify.com, cisa.gov (all +1; all pre-existing in source-priorities.json, no new sources discovered this run).
-- **New sources added:** 0.
-- **Category-by-category summary (user-requested source-type coverage):** (1) **Social media (X, Bluesky)** — same standing gap as every prior sweep: no native browsing/API access, only search-indexed snippets; nothing exclusive surfaced. (2) **Web (Reddit, Hacker News)** — `reddit.com` remains blocked for `WebFetch` in this environment (not covered, not "clean"); HN-specific results reached via other channels only. (3) **Industry** — CISA's KEV JSON feed fetched directly (0 new entries added 2026-08-21 or 2026-08-22 — only a Zimbra CVE unrelated to this repo's scope); Anthropic/OpenAI/Microsoft/Google/Cloudflare/Red Hat/Databricks/Salesforce/Oracle direct queries surfaced only already-tracked items (CoSnitch, the Open Secure AI Alliance formation, Cloudflare's Agents Week — none advisory-worthy on their own). (4) **Open-source publications/repos** — GitHub's own security-advisories pages were the primary source for both new advisories (Nuxt's and, indirectly, Cohere Terrarium's); arXiv queries surfaced general agent-security research (POISE, SOK taxonomy) without a specific new incident to write up.
-- **Framework rotation (user-requested):** *Agent orchestration* (aider, Claude Code, OpenHands, SWE-agent, OpenClaw) — Claude Code/Cursor/Kiro/Gemini CLI results all resolved to already-tracked advisories (CVE-2026-54316, DuneSlide, Kiro MCP self-rewrite, GhostApproval, subcommand-deny-bypass); no new findings. *UI/Frontend* (Next.js, React, Shadcn UI, Svelte, Tailwind, Vite, Nuxt) — **Nuxt is this sweep's yield** (see above); Svelte, Vite, and Next.js direct CVE queries all resolved to already-tracked batches; Shadcn/Tailwind CVE queries returned nothing framework-specific. *Backend/DB/Auth* (FastAPI, Google AI Studio SDK, NextAuth.js, Prisma, Streamlit, Supabase) — FastAPI CVE-2026-2978/CVE-2026-23996 checked and **excluded**: both are for third-party ecosystem packages (`FastApiAdmin`, `fastapi-api-key`), not core FastAPI, and don't meet this repo's "core framework" bar; Streamlit, Supabase, NextAuth.js all confirmed already tracked; no Prisma or Google AI Studio SDK-specific CVEs found this sweep.
-- **Skipped / already-tracked candidates (verified by grep against `advisories/*.md` before being set aside):** ChainDrop/keyv npm worm, arrayref/proc-macro1 crates.io compromise, Open VSX 77 "evil twin" extensions, npm bin-entry-harvesting (Google-scoped), Operation Navy Ghost/Pyronut, Phantom Gyp binding.gyp wave, CoSnitch (Microsoft Copilot), Langflow CVE-2026-9198 KEV entry, Claude Code CVE-2026-54316 / Gemini CLI CVE-2026-12537 pairing, Cursor DuneSlide and CVE-2026-26268, GhostApproval symlink cluster, Composio/Zapocalypse/n8n GitGuardian-token findings, Supabase CVE-2026-31813, NextAuth CVE-2026-73421.
-- **Deploy-gate note — `llms.txt` budget breached again, same structural fix applied a third time.** `dist/llms.txt` exceeded its budget by 155 B after adding the two new advisories (both landed in the active/ongoing Tier-1 union). Per the standing policy, lowered **`LLMS_TXT_TIER1_MAX` 40→36** (not the description trim, not the byte cap) — file dropped to 69,217 B, ~415 B margin. `llms-full.txt` and `llms-ctx.txt` were not breached this run.
-- Environment lacked `markdown`/`Pygments`/`pytest` (same recurring note as every prior sweep); `pip install --user markdown Pygments pytest` resolved cleanly. Full gate green: `update-alerts-date.py` → `build.py` → `validate.py` ("All checks passed.") → `pytest tests/ -q` (all passed).
-- `check-external-links.py` run against both new advisories (13 unique URLs): **1 flagged and fixed** — the Cyera N8Scape research URL was missing its `-cve-2025-68668` slug suffix; corrected against the exact URL from search results and re-verified (0 flagged after the fix).
-- **Source-priority decay:** checked all sources against the `last_decayed`/`last_hit` bookkeeping added 2026-08-21; none crossed the 60-day threshold yet (0 decayed this run), confirming last sweep's fix is working as intended (small, infrequent batches going forward rather than one recurring mass re-decay).
-- **Standing item for the user — branch cleanup requested but blocked.** The user's task this run explicitly asked to "clean up branches." Checked all 17 `claude/eloquent-lovelace-*` branches on the remote: 6 are fully merged into `main` (`0lfsvd`, `9glx55`, `hvg100`, `ij3s6j`, `qelfe6`, `t6hfri` — safe to delete) and 10 remain unmerged (may hold in-progress or abandoned work from other sessions — not deleted without review). `git push origin --delete` still returns **403** under this session's credentials (same as every sweep since 2026-08-18), and a fresh check of the GitHub MCP server's tool list this run confirms it still exposes no branch-delete method. This session's own designated branch (`claude/eloquent-lovelace-3s4xhz`) was found to already be a merged ancestor of `main` at session start (its prior PR, #81, had merged) and was restarted fresh from `origin/main` per the standing instruction for that case. **Cleanup still needs a session with broader repo permissions (branch-delete scope) or a manual prune by the user** — this is the fifth consecutive sweep to note this exact blocker.
-
 ## 2026-08-23
 
 - **Queries run:** 30 (deep: 12, medium: 12, shallow: 6) via direct `WebSearch`, plus ~7 targeted `WebFetch` verification calls against primary sources (NVD, GHSA pages, GitLab Advisory Database) before write-up, plus one direct CISA KEV JSON feed fetch.
@@ -181,3 +163,41 @@ fully-merged branch (`claude/eloquent-lovelace-o3cag1`, prior sweep's branch, 0 
 ahead/behind main) — same recurring 403/no-delete-tool situation documented since 2026-08-18,
 not re-attempted. This session's designated branch was reset fresh from `origin/main` per
 the standard merged-branch procedure.
+
+## 2026-09-02
+
+```yaml
+queries: {deep: 16, medium: 10, shallow: 7}
+new: [2026-08-openapi-react-query-codegen-comment-triggered-publish, 2026-08-gitea-diffpatch-git-hook-rce]
+updated: [2026-07-huggingface-agentic-intrusion, 2025-11-n8n-ni8mare-rce]
+sources_added: [ionix.io]
+sources_weighted: [socket.dev, stepsecurity.io, cybersecuritynews.com, helpnetsecurity.com, securityweek.com, cisa.gov, nvd.nist.gov, theregister.com, thehackernews.com, blog.gitguardian.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, bleepingcomputer.com-403]
+```
+
+**Notes (≤300 words).** Full-coverage sweep per this run's explicit ask (social/web/industry/OSS
+sources; agent-orchestration, frontend, and backend/auth/DB framework lists). All research via
+direct `WebSearch`/`WebFetch` calls in this session — no delegated subagents, so the
+delegation-classifier risk in `LEARNINGS.md` §1 didn't apply. Two genuinely new incidents:
+`@7nohe/openapi-react-query-codegen` (150K weekly downloads, comment-triggered npm publish
+workflow abuse — no stolen token needed, confirmed via Socket and StepSecurity direct fetches),
+and Gitea's `diffpatch` git-hook RCE (CVE-2026-60004, CVSS 9.8, CISA KEV addition 2026-08-25,
+confirmed present in the KEV feed's own JSON this run). Two Artifactory/n8n updates folded into
+their existing "home" advisories per the established pattern of not spinning up redundant new
+files for the same product: a fifth, unrelated JFrog Artifactory CVE (CVE-2026-82329,
+unauthenticated admin-token-minting auth bypass, exploited within days) added to
+`2026-07-huggingface-agentic-intrusion.md`; GitGuardian's n8n API-token/weak-encryption-key
+credential-hygiene research (4,576 leaked tokens, 321 exploitable instances, 129 weak-key
+instances) added to `2025-11-n8n-ni8mare-rce.md`. **One accuracy-bar catch:** The Hacker News'
+coverage of the GitGuardian n8n research claimed leaked tokens turn up alongside
+`.claude/settings.json` files specifically — fetching GitGuardian's own post directly showed no
+such claim there, so it was dropped rather than repeated (same "verify the outlet named" failure
+mode already in `LEARNINGS.md` §6, logged as another instance). Everything else surfaced this
+run (GhostSplice, TrapDoor, evil-twin Open VSX, npm bin-entry-harvesting, Streamlit
+CVE-2026-33682, Google AI Studio API-key scope escalation, n8n Ni8mare/JSONata/Pyodide/vm2
+clusters, and the broad Mini-Shai-Hulud/TeamPCP/OpenClaw/Cursor/Claude-Code CVE landscape)
+confirmed already tracked via `advisory-index.jsonl` + corpus grep — this repo's existing
+coverage remains current. CISA KEV feed fetched directly (dateAdded ≥ 2026-08-26): only PaperCut
+(×2), ownCloud, Linux kernel, and JFrog CVE-2026-66384 (already tracked) — Gitea's KEV addition
+predates this window (2026-08-25) but was still new to this repo. No source-priority decay
+crossed the 60-day threshold this run.

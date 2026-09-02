@@ -2,7 +2,7 @@
 id: 2025-11-n8n-ni8mare-rce
 title: "n8n Ni8mare + RCE cluster — CVSS 10.0 unauth takeover of workflow automation (Nov 2025 → August 2026)"
 date_disclosed: 2025-11-09
-last_updated: 2026-08-21
+last_updated: 2026-09-02
 severity: critical
 status: patched
 ecosystems: [npm, self-hosted]
@@ -137,6 +137,8 @@ Also in the batch (titles and severities from n8n's advisory index): **GHSA-wxwj
 
 **Do not patch this in isolation.** n8n runs untrusted JavaScript in **`isolated-vm`**, which shipped its own critical sandbox escape in the same window — see [the vm2 / isolated-vm sandbox-escape advisory](2026-08-vm2-isolated-vm-sandbox-escapes.md). Treat the n8n upgrade and the sandbox dependency bump as one event.
 
+**Update 2026-09-02 — a credential-hygiene research finding, not a new CVE: thousands of n8n API tokens and weak encryption keys sitting in public GitHub commits give attackers a way in that skips every patch above entirely.** GitGuardian scanned public GitHub commits since April 2025 and found **4,576 unique n8n API tokens** across **1,255 hostnames**; of **896** instances still reachable at test time, **321 (≈36%)** accepted at least one leaked token outright — no exploit required. Separately, scanning **31,793** internet-facing n8n instances found via Shodan, GitGuardian identified **129** instances still using previously-leaked, known-weak `N8N_ENCRYPTION_KEY` values. That key is described as the instance's "central trust anchor": it protects stored credentials at rest, feeds JWT signing, and derives the public instance ID — recovering it (by testing candidate weak keys against leaked JWTs) enables offline decryption of every credential the instance holds plus forged session tokens. GitGuardian lists four concrete attack pathways stacking on top of the CVEs already documented above: weak-key recovery via offline JWT verification, direct abuse of a leaked API token (workflow creation, credential inspection, execution-data access), exploiting **CVE-2026-25053** (the Git-node arbitrary file read from the July batch above) once inside, and session forgery against OIDC/pending users with predictable password components ([GitGuardian](https://blog.gitguardian.com/n8n-security-encryption-key-compromise/)). Note: The Hacker News' coverage of this research additionally claims leaked n8n tokens turn up alongside `.claude/settings.json` files specifically — that specific claim does **not** appear in GitGuardian's own post as fetched for this update, so it is not repeated here as a sourced fact (per this repo's rule that a search summary's attribution must be verified against the outlet it names before repeating). The practical takeaway holds regardless: an `N8N_ENCRYPTION_KEY` or API token committed to a public (or formerly-public) repo is a full-instance compromise independent of whether the instance is patched, because n8n tokens issued before **1.78.0** (February 2025) have no expiration and remain valid indefinitely once leaked.
+
 ## Sources
 
 - [GitHub Security Advisories — n8n has XML Node Prototype Pollution that leads to RCE (GHSA-hqr4-h3xv-9m3r / CVE-2026-42232)](https://github.com/n8n-io/n8n/security/advisories/GHSA-hqr4-h3xv-9m3r) — primary source for the April 2026 backfill: CVE↔GHSA pairing, CVSS score, affected/patched versions confirmed directly on n8n's own advisory page.
@@ -152,6 +154,8 @@ Also in the batch (titles and severities from n8n's advisory index): **GHSA-wxwj
 - Cross-reference: [2026-05-mcp-stdio-systemic-rce.md](2026-05-mcp-stdio-systemic-rce.md) (n8n-mcp SSRF), [2026-05-composio-ai-agent-platform-breach.md](2026-05-composio-ai-agent-platform-breach.md) (same "workflow broker as credential hub" pattern).
 - [GitLab Advisory Database — CVE-2026-44789: n8n HTTP Request Node pagination prototype pollution → RCE](https://advisories.gitlab.com/npm/n8n/CVE-2026-44789/) — June 2026 cluster (CVE-2026-44789 / CVE-2026-44790 / CVE-2026-44791); prototype pollution, Git-node argument injection, XML node RCE; fixed in 1.123.43 / 2.20.7 / 2.22.1.
 - [CyberSecurityNews — Critical n8n Vulnerabilities Expose Automation Nodes to Full RCE](https://cybersecuritynews.com/n8n-rce-vulnerabilities/) — CVE-2026-44789 / CVE-2026-44790 / CVE-2026-44791 prototype-pollution + node-RCE detail.
+- [GitGuardian — n8n Security: How Leaked API Keys Expose Your Encryption Key](https://blog.gitguardian.com/n8n-security-encryption-key-compromise/) — fetched directly for the 2026-09-02 update: primary research source, token/instance/weak-key counts, four attack pathways, `N8N_ENCRYPTION_KEY` role.
+- [The Hacker News — Leaked n8n API Tokens Exposed Live Instances to Credential Theft](https://thehackernews.com/2026/08/leaked-n8n-api-tokens-exposed-live.html) — corroborating coverage, published 2026-08-05.
 - [NVD — CVE-2026-44789](https://nvd.nist.gov/vuln/detail/CVE-2026-44789), [CVE-2026-44790](https://nvd.nist.gov/vuln/detail/CVE-2026-44790), [CVE-2026-44791](https://nvd.nist.gov/vuln/detail/CVE-2026-44791) — official CVE records.
 - [GitHub Advisory — GHSA-v364-rw7m-3263 (CVE-2026-21877, authenticated file-write → RCE, fixed 1.121.3)](https://github.com/advisories/GHSA-v364-rw7m-3263)
 - [NVD — CVE-2026-21877](https://nvd.nist.gov/vuln/detail/CVE-2026-21877) — CVSS 10.0 authenticated arbitrary file write.
