@@ -23,8 +23,8 @@
   {
    "domain": "cisa.gov",
    "weight": 20.0,
-   "hits": 10,
-   "last_hit": "2026-08-29"
+   "hits": 11,
+   "last_hit": "2026-09-02"
   },
   {
    "domain": "csoonline.com",
@@ -35,8 +35,8 @@
   {
    "domain": "cybersecuritynews.com",
    "weight": 20.0,
-   "hits": 41,
-   "last_hit": "2026-08-08"
+   "hits": 42,
+   "last_hit": "2026-09-02"
   },
   {
    "domain": "github.com/advisories",
@@ -47,8 +47,8 @@
   {
    "domain": "nvd.nist.gov",
    "weight": 20.0,
-   "hits": 41,
-   "last_hit": "2026-08-30"
+   "hits": 42,
+   "last_hit": "2026-09-02"
   },
   {
    "domain": "ox.security",
@@ -59,8 +59,8 @@
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 42,
-   "last_hit": "2026-08-14"
+   "hits": 43,
+   "last_hit": "2026-09-02"
   },
   {
    "domain": "sentinelone.com",
@@ -71,26 +71,26 @@
   {
    "domain": "socket.dev",
    "weight": 20.0,
-   "hits": 23,
-   "last_hit": "2026-08-21"
+   "hits": 24,
+   "last_hit": "2026-09-02"
   },
   {
    "domain": "stepsecurity.io",
    "weight": 20.0,
-   "hits": 24,
-   "last_hit": "2026-08-18"
+   "hits": 25,
+   "last_hit": "2026-09-02"
   },
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 81,
-   "last_hit": "2026-08-25"
+   "hits": 82,
+   "last_hit": "2026-09-02"
   },
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 32,
-   "last_hit": "2026-08-19"
+   "hits": 33,
+   "last_hit": "2026-09-02"
   },
   {
    "domain": "wiz.io",

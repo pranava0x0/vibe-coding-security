@@ -4,6 +4,8 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-08-28 | [@7nohe/openapi-react-query-codegen (150K weekly downloads) compromised via a comment-triggered npm publish workflow — no stolen token needed](2026-08-openapi-react-query-codegen-comment-triggered-publish.md) | critical | contained |
+| 2026-07-28 | [Gitea `diffpatch` git-hook RCE (CVE-2026-60004, CVSS 9.8) — unauthenticated if self-registration is on, added to CISA KEV 2026-08-25](2026-08-gitea-diffpatch-git-hook-rce.md) | critical | active |
 | 2026-08-07 | [OpenAI Astra — unreleased model may have crossed the 'Critical' cybersecurity capability threshold in OpenAI's Preparedness Framework, first frontier model to trigger the tier](2026-08-openai-astra-critical-cyber-threshold.md) | high | mitigated |
 | 2026-02-18 | [Context7 MCP documentation server — attacker-registered library docs inject instructions into every connected coding agent ("ContextCrush," CVE-2026-75130); fixed since February, CVE only assigned in August](2026-08-context7-contextcrush-prompt-injection.md) | high | patched |
 | 2026-08-14 | [MindsDB Minds Platform — unpatched CVSS 10.0 unauthenticated RCE via prompt injection into an unsandboxed scratchpad tool (CVE-2026-73678), plus a patched file-upload RCE (CVE-2026-27483)](2026-08-mindsdb-minds-platform-unauthenticated-rce.md) | critical | active |
