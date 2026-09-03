@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-09-02 | [Kestra OSS — unauthenticated RCE via '/configs' auth-filter bypass (CVE-2026-49869, CISA KEV)](2026-09-kestra-auth-bypass-rce-kev.md) | critical | active |
 | 2026-08-28 | [@7nohe/openapi-react-query-codegen (150K weekly downloads) compromised via a comment-triggered npm publish workflow — no stolen token needed](2026-08-openapi-react-query-codegen-comment-triggered-publish.md) | critical | contained |
 | 2026-07-28 | [Gitea `diffpatch` git-hook RCE (CVE-2026-60004, CVSS 9.8) — unauthenticated if self-registration is on, added to CISA KEV 2026-08-25](2026-08-gitea-diffpatch-git-hook-rce.md) | critical | active |
 | 2026-08-07 | [OpenAI Astra — unreleased model may have crossed the 'Critical' cybersecurity capability threshold in OpenAI's Preparedness Framework, first frontier model to trigger the tier](2026-08-openai-astra-critical-cyber-threshold.md) | high | mitigated |

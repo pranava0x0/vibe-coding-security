@@ -2,12 +2,12 @@
 id: 2026-05-starlette-badhost-host-header-bypass
 title: "BadHost — Starlette host-header auth bypass blasts FastAPI, vLLM, LiteLLM, MCP servers (CVE-2026-48710)"
 date_disclosed: 2026-05-22
-last_updated: 2026-05-28
+last_updated: 2026-09-03
 severity: critical
 status: patched
 ecosystems: [pypi, fastapi, mcp, ai-agents]
 tools_affected: [starlette, fastapi, vllm, litellm, mcp-python-sdk, text-generation-inference, openai-compatible-proxies]
-tags: [cve, authentication-bypass, host-header, two-parsers-one-string, framework-level, mcp, fastapi]
+tags: [cve, authentication-bypass, host-header, two-parsers-one-string, framework-level, mcp, fastapi, cisa-kev]
 ---
 
 ## TL;DR
@@ -117,6 +117,10 @@ curl -sk -H 'Host: foo?' -o /dev/null -w '%{http_code}\n' https://your-host/admi
 → **Validate the `Host` header at the edge.** Put a reverse proxy or ASGI middleware that enforces RFC-grammar `Host` values *before* your auth middleware runs.
 → **MCP-over-HTTP needs the same network posture as any other public API** — auth on every endpoint, allowlists by IP, not "MCP is local-only." (See [advisories/2026-05-mcp-stdio-systemic-rce.md](2026-05-mcp-stdio-systemic-rce.md) for the broader systemic MCP-exposure class.)
 
+## September 2026 update — added to CISA KEV, confirmed exploited in the wild
+
+**CISA added CVE-2026-48710 to its Known Exploited Vulnerabilities catalog on 2026-09-02** (one of seven CVEs added that day), listed as "HTTP Request/Response Smuggling Vulnerability" — CISA's categorical label for the same Host-header/path-desync flaw described above. This confirms in-the-wild exploitation roughly 3.5 months after the coordinated disclosure and the Starlette 1.0.1 patch. Status remains `patched` (the fix has been available since 2026-05-21), but any instance still running Starlette ≤ 1.0.0 should now be treated as an active exploitation target, not a theoretical risk — see the credential-rotation guidance above.
+
 ## Sources
 - [badhost.org — BadHost: CVE-2026-48710 (X41 D-Sec, Persistent Security Industries, Bintech)](https://badhost.org/) — canonical writeup + free scanner.
 - [OSTIF — Disclosing the BADHOST Vulnerability in Starlette](https://ostif.org/disclosing-the-badhost-vulnerability-in-starlette/) — coordinated-disclosure narrative; vLLM-audit context.
@@ -136,3 +140,5 @@ curl -sk -H 'Host: foo?' -o /dev/null -w '%{http_code}\n' https://your-host/admi
 - [AI Weekly — Starlette BadHost flaw breaks AI agent auth](https://aiweekly.co/alerts/starlette-badhost-flaw-breaks-ai-agent-auth) — AI-industry coverage.
 - [Tenable — CVE-2026-48710](https://www.tenable.com/cve/CVE-2026-48710) — CVE catalog.
 - [ITdaily — 'BadHost' vulnerability threatens millions of AI agents and MCP servers](https://itdaily.com/news/security/badhost-vulnerability-threatens-ai-agents-mcp-servers/) — MCP angle.
+- [CISA — Adds Seven Known Exploited Vulnerabilities to Catalog (2026-09-02)](https://www.cisa.gov/news-events/alerts/2026/09/02/cisa-adds-seven-known-exploited-vulnerabilities-catalog) — KEV listing for CVE-2026-48710.
+- [The Hacker News — CISA Adds Seven Exploited Flaws as Attackers Deploy Reverse Shells and Crypto Miners](https://thehackernews.com/2026/09/cisa-adds-seven-exploited-flaws-as.html) — KEV batch coverage.

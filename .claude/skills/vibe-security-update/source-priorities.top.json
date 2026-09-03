@@ -5,8 +5,8 @@
   {
    "domain": "advisories.gitlab.com",
    "weight": 20.0,
-   "hits": 19,
-   "last_hit": "2026-08-23"
+   "hits": 20,
+   "last_hit": "2026-09-03"
   },
   {
    "domain": "aikido.dev",
@@ -23,8 +23,8 @@
   {
    "domain": "cisa.gov",
    "weight": 20.0,
-   "hits": 11,
-   "last_hit": "2026-09-02"
+   "hits": 12,
+   "last_hit": "2026-09-03"
   },
   {
    "domain": "csoonline.com",
@@ -47,8 +47,8 @@
   {
    "domain": "nvd.nist.gov",
    "weight": 20.0,
-   "hits": 42,
-   "last_hit": "2026-09-02"
+   "hits": 43,
+   "last_hit": "2026-09-03"
   },
   {
    "domain": "ox.security",
@@ -83,8 +83,8 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 82,
-   "last_hit": "2026-09-02"
+   "hits": 83,
+   "last_hit": "2026-09-03"
   },
   {
    "domain": "theregister.com",

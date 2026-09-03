@@ -1,5 +1,5 @@
 {
- "last_updated": "2026-08-31",
+ "last_updated": "2026-09-03",
  "notes": "Sweep 2026-08-30: direct WebSearch/WebFetch/NVD-API research (no delegated subagents) found two new advisories (Context7 MCP documentation-server prompt injection 'ContextCrush', CVE-2026-75130, fixed since Feb 2026 with the CVE only assigned in Aug; OpenAI Astra crossing the Preparedness Framework 'Critical' cybersecurity threshold) and one updated advisory (2026-08-agent-framework-mcp-cve-batch.md: seven more MCP servers with bind-all-interfaces/opt-in-auth defaults, all confirmed directly on NVD). One new source added (digitalapplied.com). Decay: sources crossing the 60-day last_hit/last_decayed threshold listed below.",
  "sources": {
   "0day.click": {
@@ -49,7 +49,8 @@
    "hits": 2,
    "last_hit": "2026-07-04",
    "tier": "research",
-   "weight": 6
+   "weight": 5,
+   "last_decayed": "2026-09-03"
   },
   "access.redhat.com": {
    "_added": "2026-05-20",
@@ -136,8 +137,8 @@
     "svelte",
     "vertex-ai-xss"
    ],
-   "hits": 19,
-   "last_hit": "2026-08-23",
+   "hits": 20,
+   "last_hit": "2026-09-03",
    "tier": "official",
    "weight": 20
   },
@@ -761,8 +762,8 @@
     "tanstack",
     "vscode"
    ],
-   "hits": 11,
-   "last_hit": "2026-09-02",
+   "hits": 12,
+   "last_hit": "2026-09-03",
    "tier": "official",
    "weight": 20
   },
@@ -2908,8 +2909,8 @@
     "ui-tars-desktop",
     "windsurf"
    ],
-   "hits": 42,
-   "last_hit": "2026-09-02",
+   "hits": 43,
+   "last_hit": "2026-09-03",
    "tier": "official",
    "weight": 20
   },
@@ -4111,7 +4112,8 @@
    "hits": 2,
    "last_hit": "2026-07-04",
    "tier": "aggregator",
-   "weight": 5
+   "weight": 4,
+   "last_decayed": "2026-09-03"
   },
   "techradar.com": {
    "_added": "2026-05-31",
@@ -4368,8 +4370,8 @@
     "vsxploit",
     "whitecobra"
    ],
-   "hits": 82,
-   "last_hit": "2026-09-02",
+   "hits": 83,
+   "last_hit": "2026-09-03",
    "tier": "aggregator",
    "weight": 20
   },
