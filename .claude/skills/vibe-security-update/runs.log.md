@@ -224,3 +224,8 @@ covered by the existing ClawHavoc/zenity-skillssh advisories already tracking th
 scale; logged here rather than spun into a redundant low-yield file. FastAPI/NextAuth.js/Prisma/
 Streamlit/Google AI Studio SDK direct queries returned nothing framework-specific and new this run.
 No source-priority decay crossed the 60-day threshold beyond the routine 2 sources this run.
+**Branch cleanup:** confirmed 4 stale `claude/eloquent-lovelace-*` branches (`ilp5b9`, `o3cag1`,
+`v8dj3u`, and this run's own `r7xawf` post-merge) all correspond to closed/squash-merged PRs
+(#89, #88, #90, #91) via `list_pull_requests`. `git push origin --delete` on all four returned
+the same **403** documented in every sweep since 2026-08-18; no GitHub MCP tool in this session's
+list exposes branch deletion either. Still blocked on tooling/permissions, not a data problem.
