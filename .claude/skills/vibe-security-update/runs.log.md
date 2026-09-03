@@ -14,23 +14,6 @@
 
 ---
 
-## 2026-08-23
-
-- **Queries run:** 30 (deep: 12, medium: 12, shallow: 6) via direct `WebSearch`, plus ~7 targeted `WebFetch` verification calls against primary sources (NVD, GHSA pages, GitLab Advisory Database) before write-up, plus one direct CISA KEV JSON feed fetch.
-- **New advisories:** 1
-  - `2026-08-jsonata-sandbox-escape-rce.md` — **CVE-2026-77414** (GHSA-2943-5xfg-gq5f) and **CVE-2026-77415** (GHSA-66mm-25pp-rfff), both CVSS 9.3 (v4.0) / 9.8 (v3.1) sandbox-escape RCEs in **JSONata** (1.3M weekly npm downloads), the expression engine n8n embeds as a built-in "safe" way to evaluate untrusted user expressions. Published to GHSA/NVD 2026-08-21 (filed 2026-07-13, reporter c0rydoras). Fixed in 1.8.8 / 2.2.1. Verified independently via GitHub Advisory Database, NVD, and GitLab Advisory Database directly (all three fetched, not paraphrased from an aggregator) before write-up — CVSS v4 vs v3.1 scores differ between sources (9.3 vs 9.8) and the advisory states both. Same structural lesson as the already-tracked vm2/isolated-vm sandbox-escape cluster three weeks earlier (2026-08-vm2-isolated-vm-sandbox-escapes.md), cross-referenced explicitly. Zero prior coverage of this CVE pair in this repo before today.
-- **Updated advisories:** 0 — every other candidate this sweep resolved to an already-tracked incident (verified by grep against `advisories/*.md` before being set aside, not assumed from memory).
-- **Sources gained weight:** github.com/advisories, nvd.nist.gov, advisories.gitlab.com, cisa.gov (all +1; all pre-existing, no new sources discovered this run).
-- **New sources added:** 0.
-- **Category-by-category summary (user-requested source-type coverage):** (1) **Social media (X, Bluesky)** — same standing gap as every prior sweep: no native browsing/API access, only search-indexed snippets (one X post surfaced via the substack/x.com/bsky.app query, a general "vibe coding security checklist" thread with no new incident). (2) **Web (Reddit, HN)** — `reddit.com` remains blocked for `WebFetch` in this environment (not covered, not "clean"); no HN-exclusive findings surfaced via other channels. (3) **Industry** — CISA's KEV JSON feed fetched directly (dateAdded ≥ 2026-08-16): 8 entries, of which MLflow CVE-2026-64849, SharePoint CVE-2026-55040, and Ray CVE-2025-62593 are already tracked with their KEV status reflected; the rest (Zimbra, TrueConf, Microsoft IKE, VMware vCenter, Apple macOS) are out of scope. Direct queries against Anthropic, Cloudflare, Red Hat, Databricks, Salesforce, Oracle surfaced only non-security product/partnership announcements (Cloudflare Agents Week, Salesforce/Databricks partnership) — no new security disclosures from this batch of vendors this run. (4) **Open-source publications/repos** — GitHub Advisory Database + NVD + GitLab Advisory Database were the primary sources for the new jsonata advisory; arXiv queries surfaced general agent-security papers already summarized in prior sweeps' "deferred" notes, nothing new to add.
-- **Framework rotation (user-requested):** *Agent orchestration* (aider, Claude Code, OpenHands, SWE-agent, OpenClaw, OpenClaw/ClawHub skill marketplace) — OpenHands CVE-2026-33718 and ClawHavoc/ToxicSkills results both already tracked; no new findings. *UI/Frontend* (Next.js, React, Shadcn UI, Svelte, Tailwind, Vite, Nuxt) — React2Shell (CVE-2025-55182) and its DoS follow-up (CVE-2026-23864) both already tracked; Nuxt/Svelte/Vite/Shadcn/Tailwind direct queries surfaced nothing new. *Backend/DB/Auth* (FastAPI, Google AI Studio SDK, NextAuth.js, Prisma, Streamlit, Supabase) — no core-framework CVEs found this sweep for any of the six; Prisma specifically returned no security-relevant results at all. **This sweep's one new finding (jsonata) falls outside the named framework list but is the expression engine embedded by n8n**, which is in-scope via the "core vibe-coding web stack" and "AI-agent framework" advisory criteria.
-- **Skipped / already-tracked candidates (verified by grep against `advisories/*.md` before being set aside):** ChainDrop/keyv npm worm (2026-08-04), Shai-Hulud copycats generally, arrayref/proc-macro1, Cursor CVE-2026-63093/CVE-2026-48124/DuneSlide/CVE-2026-26268/sandbox-escape batch, Claude Code subcommand-deny-bypass prompt injection, Hugging Face agentic intrusion, Kiro MCP config self-rewrite, GitHub Agentic Workflows (GitLost), Lovable BOLA (48-day / "76-day" framing checked directly — same underlying April 2026 incident, no new material fact), node-ipc, AsyncAPI/Miasma, LiteLLM/Hades/TeamPCP, Microsoft durabletask, TanStack/Mini Shai-Hulud, langchain-core CVE-2025-68664, binding.gyp/Phantom Gyp, npm v12 shipping (already documented as confirmed-shipped), n8n Ni8mare/N8scape CVE batch, Open VSX GlassWorm/evil-twin extensions, better-auth/NextAuth CVEs, PleaseFix/Intent Collision, ClawHavoc/ToxicSkills, Google AI Studio/Vertex AI XSS (CVE-2026-2472), Composio breach, Amazon Q/GhostApproval, Gemini CLI CVSS-10 GHSA-wpqr, Azure SRE Agent/Copilot Cowork August Patch Tuesday CVEs, npm bin-entry-harvesting, Operation Navy Ghost/Pyronut Telegram C2.
-- **Standing item for the user — designated branch was a merged ancestor of `main` at session start.** This session's branch (`claude/eloquent-lovelace-9mwatm`) was already a clean ancestor of `origin/main` (its prior PR had merged) and was restarted fresh from `origin/main` via `git checkout -B` per the standing instruction for that case, rather than stacking on merged history.
-- **Standing item for the user — branch cleanup still blocked.** 17+ stale `claude/eloquent-lovelace-*` branches remain on the remote from prior sessions. Checked all of them this run: **6 are fully merged into `main`** (`0lfsvd`, `9glx55`, `hvg100`, `ij3s6j`, `qelfe6`, `t6hfri` — safe to delete) and the rest remain unmerged (may hold in-progress or abandoned work — not deleted without review). This session's GitHub MCP tool list was searched again and still exposes no branch-delete method; tested `git push origin --delete claude/eloquent-lovelace-0lfsvd` directly and it still returns **403** (same pattern documented in every sweep since 2026-08-18). Cleanup continues to need either broader repo permissions (branch-delete scope) or a manual prune by the user.
-- Environment lacked `markdown`/`Pygments`/`pytest` (same recurring note as every prior sweep); `pip install --user markdown Pygments pytest` resolved cleanly. Full gate green: `update-alerts-date.py` → `build.py` → `validate.py` ("All checks passed.") → `pytest tests/ -q` (all passed, no failures).
-- `check-external-links.py` run against the new advisory (5 unique URLs): **0 flagged**.
-- **Source-priority decay:** checked all sources against `last_decayed`/`last_hit` bookkeeping; 0 crossed the 60-day threshold this run.
-
 ## 2026-08-25
 
 - **Queries run:** 21 (deep: 16, medium: 5) via direct `WebSearch`, plus ~7 targeted `WebFetch` verification calls (Novee Security primary blog, The Hacker News, CISA KEV JSON feed, GHSA advisory-index page-walks for `anthropics/claude-code` and `cursor/cursor`) before write-up.
@@ -201,3 +184,43 @@ coverage remains current. CISA KEV feed fetched directly (dateAdded ≥ 2026-08-
 (×2), ownCloud, Linux kernel, and JFrog CVE-2026-66384 (already tracked) — Gitea's KEV addition
 predates this window (2026-08-25) but was still new to this repo. No source-priority decay
 crossed the 60-day threshold this run.
+
+## 2026-09-03
+
+```yaml
+queries: {deep: 16, medium: 8, shallow: 6}
+new: [2026-09-kestra-auth-bypass-rce-kev]
+updated: [2026-04-litellm-sql-injection, 2026-05-starlette-badhost-host-header-bypass]
+sources_added: []
+sources_weighted: [cisa.gov, thehackernews.com, nvd.nist.gov, advisories.gitlab.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only]
+```
+
+**Notes (≤300 words).** Full-coverage sweep per this run's explicit ask. All research via direct
+`WebSearch`/`WebFetch` in this session — no delegated subagents. The CISA KEV JSON feed (fetched
+directly, dateAdded ≥ 2026-08-27) surfaced a **7-CVE batch added 2026-09-02** that produced all
+three of this run's changes: **Kestra OSS CVE-2026-49869** (new advisory — CVSS 10.0 unauthenticated
+RCE via an `endsWith("/configs")` auth-filter suffix-match bypass; Kestra wasn't previously tracked
+at all, confirmed via corpus grep before writing). **LiteLLM CVE-2026-59822** (MCP OAuth2-passthrough
+auth bypass, CWE-287) folded as a dated update into the existing `2026-04-litellm-sql-injection.md`
+rather than a new file, per the established LiteLLM pattern — The Hacker News' KEV-batch coverage
+says it's chained with the already-tracked CVE-2026-42271 to deploy XMRig miners, with Wiz linking
+the activity to Qilin ransomware; that attribution came from a single secondary source (THN) so it's
+stated as reported, not independently re-confirmed against Wiz directly. **Starlette CVE-2026-48710
+("BadHost")**, already fully tracked as `patched`, got a same-day KEV-addition update (status left
+`patched` since the fix predates today by ~3.5 months; noted as now confirmed under active
+exploitation) — both LiteLLM and BadHost entries were also relocated from their prior ALERTS.md
+tiers up into 🔴 ACTIVE alongside the new Kestra entry, since a fresh KEV addition is "malware still
+propagating" under the tier-9,10 rule even though the advisory `status` field itself didn't change.
+Extensively cross-checked against `advisory-index.jsonl` + corpus grep before writing anything: Cursor
+DuneSlide/CVE-2026-63093/26268, OpenClaw Claw Chain (CVE-2026-32922/33579), arrayref/crates.io,
+Phantom Gyp, Svelte CVE-2026-42573 + ecosystem batch, Open VSX evil-twin, Vercel/Context.ai OAuth
+breach, Next.js/React CVE-2026-44578/23864/23869/23870, Semantic Kernel RCE, OpenHands
+CVE-2026-33718, and the `@7nohe/openapi-react-query-codegen` "150K weekly downloads" story (matched
+directly to the already-tracked 2026-08-28 advisory via package-name confirmation, not just theme)
+all confirmed already tracked with no new material fact. **Deferred, not written up:** Unit 42's
+Feb–May 2026 finding of 5 malicious ClawHub skills evading VirusTotal/ClawScan — thematically
+covered by the existing ClawHavoc/zenity-skillssh advisories already tracking this pattern at larger
+scale; logged here rather than spun into a redundant low-yield file. FastAPI/NextAuth.js/Prisma/
+Streamlit/Google AI Studio SDK direct queries returned nothing framework-specific and new this run.
+No source-priority decay crossed the 60-day threshold beyond the routine 2 sources this run.
