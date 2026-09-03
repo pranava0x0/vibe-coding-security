@@ -2,12 +2,12 @@
 id: 2026-04-litellm-sql-injection
 title: "LiteLLM proxy pre-auth SQL injection — CVE-2026-42208 (April 2026, CISA KEV) + CVE-2026-42271 (June 2026, actively exploited)"
 date_disclosed: 2026-04-24
-last_updated: 2026-06-22
+last_updated: 2026-09-03
 severity: critical
 status: patched
-ecosystems: [pypi, ai-agents, llm-proxy]
+ecosystems: [pypi, ai-agents, llm-proxy, mcp]
 tools_affected: [litellm, berriai-litellm]
-tags: [cve, sql-injection, pre-auth, ai-proxy, cisa-kev, rapid-exploitation, credential-theft]
+tags: [cve, sql-injection, pre-auth, ai-proxy, cisa-kev, rapid-exploitation, credential-theft, cryptomining, mcp]
 ---
 
 ## TL;DR
@@ -98,6 +98,14 @@ Separately, **CVE-2026-42271** (CVSS 3.1: 8.8 / CVSS 4.0: 8.7; **CISA KEV added 
 
 **Remediation:** Upgrade to the latest LiteLLM release (≥ 1.84.0 for all four known CVEs). Given active exploitation, treat any internet-facing LiteLLM instance as potentially compromised and rotate all upstream provider keys regardless of patch status.
 
+## September 2026 update — CVE-2026-59822: MCP auth-bypass chained with CVE-2026-42271 to deploy XMRig, CISA KEV
+
+**CVE-2026-59822** (CVSS 3.1: 8.2 / CVSS 4.0: 8.8; CWE-287 Improper Authentication) — LiteLLM's **MCP Streamable HTTP endpoint** supports OAuth2 passthrough for upstream MCP servers, but the fallback path on a failed LiteLLM key check replaces it with an **empty `UserAPIKeyAuth()` object** instead of rejecting the request. An unauthenticated attacker who sends a fabricated `Authorization` header reaches MCP tooling — listing and calling configured MCP tools and any services they're wired to — without a valid LiteLLM key. Affects **all versions before 1.84.0**; fixed in **1.84.0** (GHSA-7488-6r32-c95q).
+
+**CISA added CVE-2026-59822 to its Known Exploited Vulnerabilities catalog on 2026-09-02**, one of seven CVEs added that day. Per The Hacker News' coverage of the KEV batch, attackers chain CVE-2026-59822 with the **already-tracked CVE-2026-42271** (MCP command-injection, above) to breach LiteLLM gateways and deploy **XMRig cryptocurrency miners** — fingerprinting the host and killing competing miner processes before deploying their own. Wiz reportedly links this activity to the **Qilin ransomware group**, and has observed honeypot probing against LiteLLM's model-enumeration endpoints. Treat any internet-facing LiteLLM instance below 1.84.0 as a live cryptomining target, not just a theoretical risk.
+
+**Remediation:** upgrade to LiteLLM ≥ 1.84.0 (supersedes all prior version guidance in this advisory). If the instance was internet-facing and unpatched, check for unexpected CPU load, unfamiliar processes, and outbound connections to mining pools in addition to the credential-rotation steps above.
+
 ## Sources
 - [GitHub Advisory — GHSA / NVD CVE-2026-42208](https://nvd.nist.gov/vuln/detail/CVE-2026-42208) — canonical CVE record.
 - [NVD — CVE-2026-42271](https://nvd.nist.gov/vuln/detail/CVE-2026-42271) — command injection, CVSS 8.7, actively exploited.
@@ -114,3 +122,6 @@ Separately, **CVE-2026-42271** (CVSS 3.1: 8.8 / CVSS 4.0: 8.7; **CISA KEV added 
 - [Trend Micro — Your AI Stack Just Handed Over Your Root Keys: Inside the litellm PyPI Breach](https://www.trendmicro.com/en_us/research/26/c/your-ai-stack-just-handed-over-your-root-keys-inside-the-litellm-pypi-breach.html) — impact framing.
 - [GitLab Advisory Database — CVE-2026-49468: LiteLLM authentication bypass via Host header injection](https://advisories.gitlab.com/pypi/litellm/CVE-2026-49468/) — official advisory; affects < 1.84.0.
 - [NVD — CVE-2026-49468](https://nvd.nist.gov/vuln/detail/CVE-2026-49468) — Host header auth bypass, affects LiteLLM < 1.84.0.
+- [GitLab Advisory Database — CVE-2026-59822: LiteLLM MCP Authentication Bypass via OAuth2 Passthrough Fallback](https://advisories.gitlab.com/pypi/litellm/CVE-2026-59822/) — official advisory; description, affected/fixed versions, GHSA-7488-6r32-c95q.
+- [CISA — Adds Seven Known Exploited Vulnerabilities to Catalog (2026-09-02)](https://www.cisa.gov/news-events/alerts/2026/09/02/cisa-adds-seven-known-exploited-vulnerabilities-catalog) — KEV listing for CVE-2026-59822.
+- [The Hacker News — CISA Adds Seven Exploited Flaws as Attackers Deploy Reverse Shells and Crypto Miners](https://thehackernews.com/2026/09/cisa-adds-seven-exploited-flaws-as.html) — CVE-2026-59822 + CVE-2026-42271 chaining, XMRig deployment, Wiz/Qilin attribution.
