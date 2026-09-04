@@ -1,6 +1,6 @@
 {
- "last_updated": "2026-09-03",
- "notes": "Sweep 2026-08-30: direct WebSearch/WebFetch/NVD-API research (no delegated subagents) found two new advisories (Context7 MCP documentation-server prompt injection 'ContextCrush', CVE-2026-75130, fixed since Feb 2026 with the CVE only assigned in Aug; OpenAI Astra crossing the Preparedness Framework 'Critical' cybersecurity threshold) and one updated advisory (2026-08-agent-framework-mcp-cve-batch.md: seven more MCP servers with bind-all-interfaces/opt-in-auth defaults, all confirmed directly on NVD). One new source added (digitalapplied.com). Decay: sources crossing the 60-day last_hit/last_decayed threshold listed below.",
+ "last_updated": "2026-09-04",
+ "notes": "Sweep 2026-09-04: direct WebSearch/WebFetch research (no delegated subagents) found two new advisories \u2014 GitSpawn (Manifold Security cross-vendor git-config pre-trust RCE cluster: Claude Code/Cursor/Codex/goose/Qwen Code/Grok Build/Hermes Agent, CVE-2026-72718 + CVE-2026-19592/19590/19593 + CVE-2026-71963) and aider .aider.conf.yml test-cmd/lint-cmd unauthenticated command execution (CVE-2026-85674, unpatched, marked unconfirmed pending a vendor advisory). No advisories updated. New sources added: manifold.security, paddo.dev, radar.offseq.com. Everything else this run (npm/PyPI/crates supply-chain waves, Cursor/OpenClaw/OpenHands/Supabase/React/Streamlit CVEs, Vercel/Zapier/Semantic Kernel/Google Gemini API-key incidents, n8n batches) cross-checked against advisory-index.jsonl and confirmed already tracked \u2014 see runs.log.md for the full triage list.",
  "sources": {
   "0day.click": {
    "_added": "2026-05-19",
@@ -47,10 +47,10 @@
     "rollup-polyfill-lazarus"
    ],
    "hits": 2,
+   "last_decayed": "2026-09-03",
    "last_hit": "2026-07-04",
    "tier": "research",
-   "weight": 5,
-   "last_decayed": "2026-09-03"
+   "weight": 5
   },
   "access.redhat.com": {
    "_added": "2026-05-20",
@@ -1201,6 +1201,7 @@
     "elementary-data",
     "fastapi",
     "gitea",
+    "gitspawn",
     "hades",
     "hallusquatting",
     "idessaster-cve-cluster",
@@ -1242,8 +1243,8 @@
     "streamlit-ssrf",
     "trapdoor"
    ],
-   "hits": 42,
-   "last_hit": "2026-09-02",
+   "hits": 43,
+   "last_hit": "2026-09-04",
    "tier": "aggregator",
    "weight": 20
   },
@@ -1802,6 +1803,7 @@
   },
   "github.com": {
    "ecosystems": [
+    "aider",
     "anthropics-claude-code",
     "apify-mcp-ghsa",
     "argocd-mcp-ghsa",
@@ -1813,6 +1815,8 @@
     "context7",
     "cursor",
     "ghsa",
+    "gitspawn",
+    "goose",
     "langflow-cve-0770",
     "mcp-router-ghsa",
     "mcp-use-ghsa",
@@ -1829,10 +1833,10 @@
     "tooluniverse-ghsa",
     "vertex-ai-xss-poc"
    ],
-   "hits": 15,
-   "last_hit": "2026-08-30",
+   "hits": 16,
+   "last_hit": "2026-09-04",
    "tier": "independent",
-   "weight": 19
+   "weight": 20
   },
   "github.com/RedHatInsights": {
    "_added": "2026-06-02",
@@ -2178,6 +2182,15 @@
    "tier": "aggregator",
    "weight": 4
   },
+  "ionix.io": {
+   "ecosystems": [
+    "jfrog-artifactory"
+   ],
+   "hits": 1,
+   "last_hit": "2026-09-02",
+   "tier": "aggregator",
+   "weight": 6
+  },
   "ipenewsletter.substack.com": {
    "_added": "2026-05-18",
    "ecosystems": [
@@ -2470,15 +2483,22 @@
   "manifold.security": {
    "ecosystems": [
     "azure-devops-mcp",
+    "claude-code",
     "claudebleed-reopened",
     "cursor",
     "extension-marketplace",
-    "open-vsx"
+    "git-config-abuse",
+    "goose",
+    "grok-build",
+    "hermes-agent",
+    "open-vsx",
+    "openai-codex",
+    "qwen-code"
    ],
-   "hits": 4,
-   "last_hit": "2026-08-16",
+   "hits": 5,
+   "last_hit": "2026-09-04",
    "tier": "research",
-   "weight": 8
+   "weight": 9
   },
   "mastodon.social": {
    "_added": "2026-05-27",
@@ -3084,6 +3104,17 @@
    "tier": "research",
    "weight": 20
   },
+  "paddo.dev": {
+   "_added": "2026-09-04",
+   "ecosystems": [
+    "claude-code",
+    "git-config-abuse"
+   ],
+   "hits": 1,
+   "last_hit": "2026-09-04",
+   "tier": "independent",
+   "weight": 5
+  },
   "paloaltonetworks.com": {
    "ecosystems": [
     "npm",
@@ -3306,15 +3337,17 @@
   "radar.offseq.com": {
    "_added": "2026-05-30",
    "ecosystems": [
+    "aider",
     "cve-22812",
     "nextauth-cve-73421",
+    "openai-codex",
     "opencode",
     "threat-intel"
    ],
-   "hits": 2,
-   "last_hit": "2026-08-19",
+   "hits": 3,
+   "last_hit": "2026-09-04",
    "tier": "research",
-   "weight": 6
+   "weight": 7
   },
   "rapid7.com": {
    "_added": "2026-05-21",
@@ -4110,10 +4143,10 @@
     "trapdoor"
    ],
    "hits": 2,
+   "last_decayed": "2026-09-03",
    "last_hit": "2026-07-04",
    "tier": "aggregator",
-   "weight": 4,
-   "last_decayed": "2026-09-03"
+   "weight": 4
   },
   "techradar.com": {
    "_added": "2026-05-31",
@@ -4222,9 +4255,10 @@
     "claude-code"
    ],
    "hits": 1,
+   "last_decayed": "2026-09-04",
    "last_hit": "2026-07-05",
    "tier": "aggregator",
-   "weight": 5
+   "weight": 4
   },
   "theblock.co": {
    "_added": "2026-05-25",
@@ -4270,6 +4304,7 @@
     "bitwarden",
     "chaindrop-update",
     "cisa-kev-langflow",
+    "claude-code",
     "claude-cowork",
     "claudebleed-reopened",
     "clawhub",
@@ -4295,6 +4330,7 @@
     "github",
     "github-codespaces",
     "gitlost",
+    "gitspawn",
     "glassworm",
     "glassworm-macos",
     "gluestack",
@@ -4370,8 +4406,8 @@
     "vsxploit",
     "whitecobra"
    ],
-   "hits": 83,
-   "last_hit": "2026-09-03",
+   "hits": 84,
+   "last_hit": "2026-09-04",
    "tier": "aggregator",
    "weight": 20
   },
@@ -4915,15 +4951,6 @@
    "last_hit": "2026-05-16",
    "tier": "research",
    "weight": 5
-  },
-  "ionix.io": {
-   "weight": 6,
-   "hits": 1,
-   "last_hit": "2026-09-02",
-   "ecosystems": [
-    "jfrog-artifactory"
-   ],
-   "tier": "aggregator"
   }
  },
  "version": 1

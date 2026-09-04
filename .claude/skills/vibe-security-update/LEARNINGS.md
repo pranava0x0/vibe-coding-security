@@ -171,7 +171,24 @@ that it re-solves itself instead of failing CI. **If a cap test fails now, it me
 `status: active`/`ongoing` advisories back to `patched`/`historical`. Never
 raise a cap; never reintroduce a hardcoded membership constant.
 
-## 10. Expect Codex PR review to take several rounds on technical claims
+## 10. Smaller AI-coding tools often have no vendor security-advisory channel at all — the GitHub issue *is* the primary source
+
+Not every AI coding tool discloses through a GHSA index or a security blog. On **2026-09-04**,
+aider's CVE-2026-85674 (`.aider.conf.yml` `test-cmd`/`lint-cmd` auto-exec) had no GitHub Security
+Advisory, no vendor blog post, and no independent researcher writeup — checking
+`github.com/<org>/<repo>/security/advisories` returned "no published advisories." The only sources
+were the reporter's own GitHub issue and the bare CVE record (an aggregator page reflecting the
+CNA's assignment, not independent research). Two unmerged fix PRs sitting open for months served as
+corroboration that the maintainers accepted the report as real, without constituting a second
+*independent* source in the aggregator-republication sense.
+
+**Rule:** for a tool this size, don't wait for a GHSA/blog that may never come. Treat a detailed,
+technically-specific GitHub issue as the primary source, and a CVE-record assignment (even from an
+aggregator page) as adequate secondary confirmation that a numbering authority validated it — but
+mark the advisory `status: unconfirmed` and say explicitly that no vendor advisory exists yet,
+rather than either skipping the finding or overstating confidence by treating it as fully confirmed.
+
+## 11. Expect Codex PR review to take several rounds on technical claims
 
 On PR #85 each round's fix revealed the next inaccuracy — four rounds, ten
 findings, all on Postgres RLS and CORS semantics. Round 1's correction was

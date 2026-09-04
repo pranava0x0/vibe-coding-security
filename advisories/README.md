@@ -4,6 +4,8 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-09-04 | [aider auto-loads a repo's .aider.conf.yml and runs its test-cmd/lint-cmd with no confirmation (CVE-2026-85674, unpatched)](2026-09-aider-conf-yml-command-execution.md) | high | unconfirmed |
+| 2026-09-01 | [GitSpawn — repo-local git config (core.fsmonitor and others) runs code in 7 AI coding agents before any trust prompt](2026-09-gitspawn-git-config-agent-rce-cluster.md) | critical | active |
 | 2026-09-02 | [Kestra OSS — unauthenticated RCE via '/configs' auth-filter bypass (CVE-2026-49869, CISA KEV)](2026-09-kestra-auth-bypass-rce-kev.md) | critical | active |
 | 2026-08-28 | [@7nohe/openapi-react-query-codegen (150K weekly downloads) compromised via a comment-triggered npm publish workflow — no stolen token needed](2026-08-openapi-react-query-codegen-comment-triggered-publish.md) | critical | contained |
 | 2026-07-28 | [Gitea `diffpatch` git-hook RCE (CVE-2026-60004, CVSS 9.8) — unauthenticated if self-registration is on, added to CISA KEV 2026-08-25](2026-08-gitea-diffpatch-git-hook-rce.md) | critical | active |
