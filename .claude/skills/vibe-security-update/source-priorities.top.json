@@ -35,8 +35,14 @@
   {
    "domain": "cybersecuritynews.com",
    "weight": 20.0,
-   "hits": 42,
-   "last_hit": "2026-09-02"
+   "hits": 43,
+   "last_hit": "2026-09-04"
+  },
+  {
+   "domain": "github.com",
+   "weight": 20.0,
+   "hits": 16,
+   "last_hit": "2026-09-04"
   },
   {
    "domain": "github.com/advisories",
@@ -83,8 +89,8 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 83,
-   "last_hit": "2026-09-03"
+   "hits": 84,
+   "last_hit": "2026-09-04"
   },
   {
    "domain": "theregister.com",
@@ -97,12 +103,6 @@
    "weight": 20.0,
    "hits": 14,
    "last_hit": "2026-08-21"
-  },
-  {
-   "domain": "github.com",
-   "weight": 19.0,
-   "hits": 15,
-   "last_hit": "2026-08-30"
   },
   {
    "domain": "microsoft.com",
