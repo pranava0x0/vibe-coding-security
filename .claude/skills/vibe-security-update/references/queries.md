@@ -121,7 +121,10 @@ Rotate a different subset each sweep; the lists are a floor, not a ceiling.
   Salesforce, Oracle
 - **Researcher blogs (upstream of aggregators):** 0day.click, cyata.ai,
   layerxsecurity.com, pillar.security, oasis.security, tenetsecurity.ai,
-  labs.zenity.io, novee.security, danusminimus.github.io, oddguan.com
+  labs.zenity.io, novee.security, danusminimus.github.io, oddguan.com,
+  manifold.security (cross-vendor AI-coding-CLI pre-trust-execution findings —
+  Cursor CLI worktree Aug 2026, GitSpawn Sept 2026), paddo.dev (independent
+  technical follow-up/retest blog, not just restatement)
 
 ## Known source-access gaps
 

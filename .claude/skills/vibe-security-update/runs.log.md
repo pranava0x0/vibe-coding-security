@@ -14,23 +14,6 @@
 
 ---
 
-## 2026-08-25
-
-- **Queries run:** 21 (deep: 16, medium: 5) via direct `WebSearch`, plus ~7 targeted `WebFetch` verification calls (Novee Security primary blog, The Hacker News, CISA KEV JSON feed, GHSA advisory-index page-walks for `anthropics/claude-code` and `cursor/cursor`) before write-up.
-- **New advisories:** 0 — every candidate this sweep resolved to an already-tracked incident, verified by grep against `advisories/*.md` before being set aside (not assumed from memory).
-- **Updated advisories:** 1
-  - `2026-04-gemini-cli-trustissues-cve-2026-12537.md` — the Black Hat USA 2026 talk this advisory already tracks (Elad Meged/Novee Security, "GitHub issue reaches CI secrets") actually names **three** affected tools, not two: **OpenAI Codex** joins the already-tracked Claude Code and Gemini CLI findings, via a distinct mechanism — a multi-pass Codex workflow sharing one checkout, where an injected first pass writes a malicious `AGENTS.md` that a triggered second pass reads as trusted instructions. No CVE assigned; OpenAI patched only its own repo (separate checkouts per pass), and per Novee's own writeup the fix does not propagate to any external repo running the same pattern. Two independent sources (novee.security primary, thehackernews.com corroborating) — see the advisory's 2026-08-25 update section.
-- **Sources gained weight:** novee.security (+1, weight 10→11; new ecosystems `gemini-cli-trustissues`, `openai-codex-agents-md`), thehackernews.com (+1 hit, already at weight cap 20).
-- **New sources added:** 0.
-- **Category-by-category summary (user-requested source-type coverage):** (1) **Social media (X, Bluesky)** — same standing gap as every prior sweep: no native browsing/API access, only search-indexed snippets (an X post from Prajwal Tomar and a Retool post surfaced via the substack/x.com/bsky.app query, both general vibe-coding-security checklists, no new incident). (2) **Web (Reddit, HN)** — `reddit.com` remains blocked for `WebFetch` in this environment (not covered, not "clean"); no HN-exclusive findings surfaced via other channels. (3) **Industry** — CISA's KEV JSON feed fetched directly (dateAdded ≥ 2026-08-18): 9 entries, of which MLflow CVE-2026-64849 and SharePoint CVE-2026-55040 are already tracked with their KEV status reflected; the rest (Oracle, Zimbra, TrueConf, Microsoft IKE, VMware vCenter, Apple macOS) are out of scope. Direct queries against Anthropic, Red Hat, Databricks, Salesforce, Oracle, Cloudflare surfaced only non-security product news (Claude Security plugin launch, Open Secure AI Alliance partners, a Claude platform outage) — no new security disclosures from this vendor batch this run. GHSA advisory-index page-walks for `anthropics/claude-code` and `cursor/cursor` (per the standing "walk the vendor's own GHSA index" practice) turned up zero advisories published in August 2026 and confirmed every pre-August entry shown is already tracked in this repo's existing GHSA-batch advisories — a clean pass, not a gap. (4) **Open-source publications/repos** — `github.com/advisories` npm-critical query resolved to the already-tracked JSONata sandbox-escape pair; arXiv queries surfaced general agent-supply-chain research already summarized in prior sweeps, nothing new to add.
-- **Framework rotation (user-requested):** *Agent orchestration* (aider, Claude Code, OpenHands, SWE-agent, OpenClaw) — this sweep's one finding (Codex/AGENTS.md) falls here; ClawHub/OpenClaw skill-marketplace results and n8n/Zapier/Composio/LangSmith results all resolved to already-tracked advisories (LangSmith's one seemingly-new "AgentSmith" result checked directly against Noma... actually against the primary noma.security-adjacent writeup and found to be a Nov 2024-patched, June 2025-disclosed finding — far outside this repo's active window, correctly left untracked). *UI/Frontend* (Next.js, React, Shadcn UI, Svelte, Tailwind, Vite, Nuxt) — a "Nuxt Security Patch Releases" result describing a regression from CVE-2026-53721, a route-rule bypass, and CPU/memory exhaustion in the island renderer was checked directly against the existing `2026-07-nuxt-security-release-server-island-rce.md` advisory and found to be the **same** batch (CVE-2026-71315/-71314/-71321) already fully documented there, not a new August release — correctly not duplicated. React2Shell/CVE-2026-23864 and Svelte/Vite/Shadcn/Tailwind direct queries surfaced nothing new. *Backend/DB/Auth* (FastAPI, Google AI Studio SDK, NextAuth.js, Prisma, Streamlit, Supabase) — Supabase CVE-2026-31813 and the FastAPI/Starlette BadHost findings both already tracked; the FastAPI CVE-2026-2978 "RCE" result is a single-author Medium post with no CNA/NVD record found on cross-check — left untracked pending a primary source; no Prisma-specific findings this sweep either.
-- **Skipped / already-tracked candidates (verified by grep against `advisories/*.md` before being set aside):** ChainDrop/keyv npm worm (2026-08-04, already covered under the Miasma/Shai-Hulud lineage advisories), arrayref/proc-macro1 crates.io compromise, binding.gyp June wave, Operation Navy Ghost/Pyronut Telegram-bot PyPI backdoors, TrapDoor `.cursorrules`/`CLAUDE.md` poisoning, Open VSX 77 "evil twin" extensions (uploaded Jul 26–Aug 1, removed Aug 3), Cursor DuneSlide/CVE-2026-26268/CVE-2026-63093/git.exe autoexec/cursor-cli-worktree-pretrust/sandbox-escape-batch, Ruflo CVE-2026-59726 (RufRoot), Kiro MCP config self-rewrite, Cursor deepjack/cursorjack deeplink MCP install, symjack symlink cluster, reasoning-trace-replay (OpenAI/Anthropic/Google reasoning-decode research), Claude in Chrome/PleaseFix Gmail-to-Slack/X/Claude.ai account takeover, Wiz Red Agent/Snowflake Copilot Autofix review, Hugging Face/Anthropic/Meta agentic-eval containment failures, AISI social-engineering incident, n8n leaked API tokens (GitGuardian), JSONata sandbox-escape pair, MLflow webhook SSRF batch, SharePoint CVE-2026-55040/CVE-2026-63520 exploit chain, Azure SRE Agent CVE-2026-62830 / Copilot Cowork CVE-2026-59118 August Patch Tuesday, Gemini CLI CVE-2026-0628 Chrome panel hijack.
-- **Branch cleanup — resolved.** The user's task explicitly asked to "clean up branches." `git fetch origin --prune` this run found **zero** stale `claude/eloquent-lovelace-*` branches remaining on the remote — only `origin/main` exists. Every branch flagged as safe-to-delete or pending review in the five prior sweeps (2026-08-18 through 2026-08-23) has been removed, apparently by the user directly or a session with broader repo permissions, since this session's GitHub MCP tool list still exposes no branch-delete method and this repo's designated-branch workflow gives this session no reason to have deleted them itself. This closes the standing item noted in every sweep since 2026-08-18.
-- Environment lacked `markdown`/`Pygments`/`pytest` (same recurring note as every prior sweep); `pip install --user markdown Pygments pytest` resolved cleanly. Full gate green: `update-alerts-date.py` → `build.py` → `validate.py` ("All checks passed.") → `pytest tests/ -q` (all passed, no failures).
-- `check-external-links.py` run against the edited advisory (6 unique URLs): **0 flagged**.
-- **Source-priority decay:** checked all sources against `last_decayed`/`last_hit` bookkeeping; 0 crossed the 60-day threshold this run.
-- **Post-merge correction to the branch-cleanup note above:** after merging this sweep's designated branch (`claude/eloquent-lovelace-qo0kn9`) into `main` and pushing, `git push origin --delete claude/eloquent-lovelace-qo0kn9` still returned **403** — the same permission gap documented in every sweep since 2026-08-18 persists for this session's own credentials, it just wasn't exercised until now since the branch didn't exist remotely until this run's push. So the remote is not actually at zero stale branches after this sweep; it is back to exactly one (this run's own, now-merged branch), for the same reason as always. The "zero remaining" statement above was accurate only as a description of the *prior* sweeps' backlog, which does appear genuinely cleared.
-
 ## 2026-08-26
 
 - **Queries run:** 27 (deep: 15, medium: 8, shallow: 4) via direct `WebSearch`, plus targeted `WebFetch` verification (CISA KEV JSON feed fetched directly, the unpkg/Cloudflare-CAPTCHA npm-phishing campaign writeup, the OpenClaw "512 vulnerabilities"/Moltbook framing) before deciding what to write up.
@@ -229,3 +212,40 @@ No source-priority decay crossed the 60-day threshold beyond the routine 2 sourc
 (#89, #88, #90, #91) via `list_pull_requests`. `git push origin --delete` on all four returned
 the same **403** documented in every sweep since 2026-08-18; no GitHub MCP tool in this session's
 list exposes branch deletion either. Still blocked on tooling/permissions, not a data problem.
+
+## 2026-09-04
+
+```yaml
+queries: {deep: 16, medium: 8, shallow: 6}
+new: [2026-09-gitspawn-git-config-agent-rce-cluster, 2026-09-aider-conf-yml-command-execution]
+updated: []
+sources_added: [manifold.security, paddo.dev, radar.offseq.com]
+sources_weighted: [github.com, thehackernews.com, cybersecuritynews.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only]
+```
+
+**Notes (≤300 words).** User explicitly asked for a source-category sweep (social/web/industry/
+open-source, all cited) plus an explicit framework rotation including aider/OpenHands/SWE-agent/
+OpenClaw and FastAPI/NextAuth.js/Prisma/Streamlit/Supabase/Google AI Studio SDK. All research via
+direct `WebSearch`/`WebFetch` in this session, no delegated subagents. Two new advisories, both
+genuinely current (published 2026-09-01 and 2026-09-04, i.e. within the last 72h of this sweep).
+**GitSpawn** (Manifold Security, Francisco Rosales): AI coding agents run eager `git status`-class
+context-gathering commands that don't strip a repo's local `.git/config`, so `core.fsmonitor` (and
+an undisclosed second sink) becomes a pre-trust RCE primitive across 7 agents. Verified the
+Goose↔GHSA-r5pp-p5r8-466r↔CVE-2026-72718 pairing directly on GitHub's advisory page (not just
+aggregator prose, per the standing CVE/GHSA-pairing caution) and cross-checked against the
+already-tracked `2026-08-claude-code-desktop-ghsa-batch.md` to confirm CVE-2026-55607 (git-worktree
+path confusion, already patched/tracked) is a **different** mechanism from GitSpawn's two Claude
+Code findings, not a duplicate — explicitly noted in the new advisory to prevent future conflation.
+Flagged an unresolved source disagreement on Cursor's patch status (Manifold/THN say patched;
+CyberSecurityNews/hacklido say still vulnerable) rather than picking one silently. **aider**
+CVE-2026-85674 (`.aider.conf.yml` `test-cmd`/`lint-cmd` auto-exec, unpatched): thinner sourcing —
+primary is the reporter's own GitHub issue (#5254) plus two unmerged fix PRs showing community
+acceptance of the bug, secondary is the CVE record itself (no vendor GHSA exists yet) — marked
+`status: unconfirmed` per the two-source accuracy bar rather than overstating confidence.
+Extensively cross-checked against `advisory-index.jsonl` + corpus grep before writing anything:
+every Tier A/B candidate this run (npm/PyPI/crates.io supply-chain waves incl. arrayref, Phantom
+Gyp, TrapDoor, Operation Navy Ghost; Cursor/OpenClaw/OpenHands/Supabase-Auth/React-RSC/Streamlit/
+Vite CVEs; Vercel-Context.ai, Zapier Zapocalypse, Semantic Kernel, Gemini-API-key-scope-escalation,
+n8n batches; Open VSX evil-twin) resolved to an already-tracked incident — none written up twice.
+No source-priority decay beyond the routine single source (`the420.in`, 60-day threshold) this run.
