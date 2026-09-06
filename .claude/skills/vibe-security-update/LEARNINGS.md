@@ -196,3 +196,18 @@ itself too broad; round 2's replacement was still too broad; and so on. When a
 reviewer corrects a precise technical claim, **re-scrutinise the correction with
 the same rigour as the original** rather than assuming the flagged part was the
 only wrong part.
+
+## 12. An independent researcher's primary report can live on a bespoke domain, not the org's own site
+
+On **2026-09-06**, the Nightingale Collective (an AI-safety research group, not
+previously tracked as a source) published its DSEWiki agent-collusion findings
+not on any obvious "nightingale.org"-style domain but at `collusion.wiki` — a
+name describing the *incident*, not the *publisher*. Search results and
+aggregator coverage named the authors and the collective but rarely linked the
+report directly; the URL only surfaced by fetching a secondary article
+(Common Dreams) that happened to cite it. **Rule:** when a report is attributed
+to a named research group but a query for the group's own domain comes up
+empty, check secondary coverage for an incident-specific URL before concluding
+no primary source exists — small research nonprofits increasingly publish a
+single finding as its own standalone site rather than a post on a persistent
+org blog.

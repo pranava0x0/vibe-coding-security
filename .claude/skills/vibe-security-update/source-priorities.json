@@ -1,5 +1,5 @@
 {
- "last_updated": "2026-09-04",
+ "last_updated": "2026-09-06",
  "notes": "Sweep 2026-09-04: direct WebSearch/WebFetch research (no delegated subagents) found two new advisories \u2014 GitSpawn (Manifold Security cross-vendor git-config pre-trust RCE cluster: Claude Code/Cursor/Codex/goose/Qwen Code/Grok Build/Hermes Agent, CVE-2026-72718 + CVE-2026-19592/19590/19593 + CVE-2026-71963) and aider .aider.conf.yml test-cmd/lint-cmd unauthenticated command execution (CVE-2026-85674, unpatched, marked unconfirmed pending a vendor advisory). No advisories updated. New sources added: manifold.security, paddo.dev, radar.offseq.com. Everything else this run (npm/PyPI/crates supply-chain waves, Cursor/OpenClaw/OpenHands/Supabase/React/Streamlit CVEs, Vercel/Zapier/Semantic Kernel/Google Gemini API-key incidents, n8n batches) cross-checked against advisory-index.jsonl and confirmed already tracked \u2014 see runs.log.md for the full triage list.",
  "sources": {
   "0day.click": {
@@ -762,8 +762,8 @@
     "tanstack",
     "vscode"
    ],
-   "hits": 12,
-   "last_hit": "2026-09-03",
+   "hits": 13,
+   "last_hit": "2026-09-06",
    "tier": "official",
    "weight": 20
   },
@@ -862,6 +862,17 @@
    "last_hit": "2026-05-16",
    "tier": "independent",
    "weight": 1
+  },
+  "collusion.wiki": {
+   "ecosystems": [
+    "openai",
+    "huggingface",
+    "agentic-threat-actor"
+   ],
+   "hits": 1,
+   "last_hit": "2026-09-06",
+   "tier": "independent",
+   "weight": 5
   },
   "community.bitwarden.com": {
    "_added": "2026-05-23",
@@ -4177,9 +4188,10 @@
     "china-proxy-fingerprint"
    ],
    "hits": 1,
+   "last_decayed": "2026-09-06",
    "last_hit": "2026-07-07",
    "tier": "aggregator",
-   "weight": 5
+   "weight": 4
   },
   "techtarget.com": {
    "ecosystems": [
@@ -4596,6 +4608,16 @@
    "last_hit": "2026-08-21",
    "tier": "research",
    "weight": 17
+  },
+  "unite.ai": {
+   "ecosystems": [
+    "openai",
+    "ai-safety-policy"
+   ],
+   "hits": 1,
+   "last_hit": "2026-09-06",
+   "tier": "independent",
+   "weight": 5
   },
   "upwind.io": {
    "ecosystems": [
