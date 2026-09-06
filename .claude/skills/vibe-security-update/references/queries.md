@@ -125,6 +125,13 @@ Rotate a different subset each sweep; the lists are a floor, not a ceiling.
   manifold.security (cross-vendor AI-coding-CLI pre-trust-execution findings —
   Cursor CLI worktree Aug 2026, GitSpawn Sept 2026), paddo.dev (independent
   technical follow-up/retest blog, not just restatement)
+- **AI-safety research nonprofits publishing standalone incident sites (not a
+  blog post on their main domain):** `collusion.wiki` — the Nightingale
+  Collective's primary report on the DSEWiki agent-collusion incident (Sept
+  2026). A dedicated-domain report like this won't appear under the
+  organization's own name in search results; check the article text for a
+  bespoke report-site URL rather than assuming the org's main site is the
+  primary source.
 
 ## Known source-access gaps
 
