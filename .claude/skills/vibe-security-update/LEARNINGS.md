@@ -211,3 +211,25 @@ empty, check secondary coverage for an incident-specific URL before concluding
 no primary source exists — small research nonprofits increasingly publish a
 single finding as its own standalone site rather than a post on a persistent
 org blog.
+
+## 13. A vendor incident notice can live only in a user-facing email, never a public blog post
+
+On **2026-09-07**, Anthropic's warning about infostealer malware hijacking
+Claude.ai sessions (`2026-09-anthropic-claude-session-infostealer-hijack.md`)
+had **no corresponding post on anthropic.com** — direct queries for the
+warning against `anthropic.com` came up empty. The only source was a
+direct-to-user email, which multiple independent outlets (BleepingComputer,
+Malwarebytes, SecurityWeek, DarkReading) obtained or had forwarded to them and
+quoted verbatim (*"We recently became aware of a bad actor that is using
+common infostealer malware to steal Claude login sessions..."*). Malwarebytes
+carried the fullest direct quote and remediation-step detail; BleepingComputer
+independently confirmed the malware family list.
+
+**Rule:** don't treat "no primary-source blog post found" as a reason to
+downgrade or drop a vendor-attributed incident. Check whether multiple outlets
+are independently quoting the *same* vendor communication (an email, a support
+ticket reply, an in-product notice) — that still satisfies the two-independent-source
+bar, since each outlet had to obtain the notice separately, even though none of
+them is the vendor's own site. Cite the outlet with the most complete direct
+quote as primary-equivalent, and note explicitly in the advisory that no vendor
+blog post exists (as opposed to implying one was checked and found silent).

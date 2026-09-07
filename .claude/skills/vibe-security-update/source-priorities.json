@@ -1,5 +1,5 @@
 {
- "last_updated": "2026-09-06",
+ "last_updated": "2026-09-07",
  "notes": "Sweep 2026-09-04: direct WebSearch/WebFetch research (no delegated subagents) found two new advisories \u2014 GitSpawn (Manifold Security cross-vendor git-config pre-trust RCE cluster: Claude Code/Cursor/Codex/goose/Qwen Code/Grok Build/Hermes Agent, CVE-2026-72718 + CVE-2026-19592/19590/19593 + CVE-2026-71963) and aider .aider.conf.yml test-cmd/lint-cmd unauthenticated command execution (CVE-2026-85674, unpatched, marked unconfirmed pending a vendor advisory). No advisories updated. New sources added: manifold.security, paddo.dev, radar.offseq.com. Everything else this run (npm/PyPI/crates supply-chain waves, Cursor/OpenClaw/OpenHands/Supabase/React/Streamlit CVEs, Vercel/Zapier/Semantic Kernel/Google Gemini API-key incidents, n8n batches) cross-checked against advisory-index.jsonl and confirmed already tracked \u2014 see runs.log.md for the full triage list.",
  "sources": {
   "0day.click": {
@@ -514,6 +514,7 @@
   },
   "bleepingcomputer.com": {
    "ecosystems": [
+    "anthropic-session-hijack",
     "aur-atomic-arch",
     "chromium",
     "claude-artifacts",
@@ -561,8 +562,8 @@
     "whitecobra",
     "windsurf"
    ],
-   "hits": 30,
-   "last_hit": "2026-07-28",
+   "hits": 31,
+   "last_hit": "2026-09-07",
    "tier": "aggregator",
    "weight": 20
   },
@@ -705,7 +706,8 @@
    "hits": 1,
    "last_hit": "2026-07-08",
    "tier": "aggregator",
-   "weight": 5
+   "weight": 4,
+   "last_decayed": "2026-09-07"
   },
   "chainguard.dev": {
    "_added": "2026-05-23",
@@ -810,7 +812,8 @@
    "hits": 1,
    "last_hit": "2026-07-08",
    "tier": "aggregator",
-   "weight": 6
+   "weight": 5,
+   "last_decayed": "2026-09-07"
   },
   "cnn.com": {
    "ecosystems": [
@@ -2484,12 +2487,13 @@
   },
   "malwarebytes.com": {
    "ecosystems": [
+    "anthropic-session-hijack",
     "copilot-word-worm"
    ],
-   "hits": 1,
-   "last_hit": "2026-08-02",
+   "hits": 2,
+   "last_hit": "2026-09-07",
    "tier": "vendor",
-   "weight": 6
+   "weight": 7
   },
   "manifold.security": {
    "ecosystems": [
@@ -3696,6 +3700,7 @@
     "ai-agents",
     "amazon-q",
     "anthropic-sandbox",
+    "anthropic-session-hijack",
     "antv",
     "aur-atomic-arch",
     "aws",
@@ -3751,8 +3756,8 @@
     "whitecobra",
     "zenity-pleasefix-update"
    ],
-   "hits": 43,
-   "last_hit": "2026-09-02",
+   "hits": 44,
+   "last_hit": "2026-09-07",
    "tier": "aggregator",
    "weight": 20
   },
@@ -4102,7 +4107,8 @@
    "hits": 7,
    "last_hit": "2026-07-08",
    "tier": "research",
-   "weight": 19
+   "weight": 18,
+   "last_decayed": "2026-09-07"
   },
   "tanstack.com": {
    "_added": "2026-05-18",
@@ -4462,6 +4468,7 @@
     "agentforger",
     "ai-vendor-infrastructure",
     "amazon-q",
+    "anthropic-eval-remediation",
     "aur-atomic-arch",
     "binding-gyp-removal",
     "checkpoint-agent-framework-cluster",
@@ -4498,8 +4505,8 @@
     "trivy",
     "vibe-platform"
    ],
-   "hits": 33,
-   "last_hit": "2026-09-02",
+   "hits": 34,
+   "last_hit": "2026-09-07",
    "tier": "aggregator",
    "weight": 20
   },
