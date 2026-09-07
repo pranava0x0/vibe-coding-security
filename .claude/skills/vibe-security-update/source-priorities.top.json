@@ -17,8 +17,8 @@
   {
    "domain": "bleepingcomputer.com",
    "weight": 20.0,
-   "hits": 30,
-   "last_hit": "2026-07-28"
+   "hits": 31,
+   "last_hit": "2026-09-07"
   },
   {
    "domain": "cisa.gov",
@@ -65,8 +65,8 @@
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 43,
-   "last_hit": "2026-09-02"
+   "hits": 44,
+   "last_hit": "2026-09-07"
   },
   {
    "domain": "sentinelone.com",
@@ -95,8 +95,8 @@
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 33,
-   "last_hit": "2026-09-02"
+   "hits": 34,
+   "last_hit": "2026-09-07"
   },
   {
    "domain": "wiz.io",
@@ -117,16 +117,16 @@
    "last_hit": "2026-08-31"
   },
   {
-   "domain": "sysdig.com",
-   "weight": 19.0,
-   "hits": 7,
-   "last_hit": "2026-07-08"
-  },
-  {
    "domain": "snyk.io",
    "weight": 18.0,
    "hits": 24,
    "last_hit": "2026-06-19"
+  },
+  {
+   "domain": "sysdig.com",
+   "weight": 18.0,
+   "hits": 7,
+   "last_hit": "2026-07-08"
   },
   {
    "domain": "unit42.paloaltonetworks.com",
