@@ -14,46 +14,6 @@
 
 ---
 
-## 2026-08-30
-
-```yaml
-queries: {deep: 16, medium: 8, shallow: 6}
-new: [2026-08-context7-contextcrush-prompt-injection, 2026-08-openai-astra-critical-cyber-threshold]
-updated: [2026-08-agent-framework-mcp-cve-batch]
-sources_added: [digitalapplied.com]
-sources_weighted: [nvd.nist.gov, vulncheck.com, noma.security, techcrunch.com, csoonline.com, github.com]
-blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, openai.com-cloudflare-bot-challenge-403, github-security-advisories-pages-404-for-several-recent-mcp-ghsas]
-```
-
-**Notes (≤300 words).** All research via direct `WebSearch`/`WebFetch`/NVD-API calls in this
-session — no delegated subagents this run, so the delegation-classifier risk in
-`LEARNINGS.md` §1 didn't apply. Two accuracy-bar catches worth recording: (1) a
-`WebSearch` summary conflated OpenAI's Astra "Critical" threshold disclosure with the
-already-tracked Hugging Face/GPT-5.6-Sol incident ("triggered by the Hugging Face
-incident") — fetching TechCrunch and CSO Online directly showed the two are explicitly
-distinct (TechCrunch: "Astra was not involved in exploiting Hugging Face"), so the
-advisory states the relationship as contextual timing, not causation. Same failure
-mode as the Wiz/Red-Agent-attribution and Ray-KEV cautions already in `LEARNINGS.md`
-§6 — a search summary blends pages, verify each specific claim against the outlet it's
-attributed to. (2) Context7's CVE-2026-75130 (published 2026-08-18, CVSS 9.0) reads as
-a fresh unpatched critical in every secondary write-up found ("no fix documented"), but
-fetching Noma Security's original "ContextCrush" post directly showed Upstash fixed it
-2026-02-23 — the CVE's affected range ("through 2.1.2") names the last *vulnerable*
-version, which happens to be the version the February fix shipped in, and no source
-cross-references the two. Wrote the advisory with `status: patched` and dated to the
-original February disclosure, with the August-CVE lag stated explicitly, rather than
-as a new active-critical entry — this is the same "publication date ≠ disclosure date"
-lesson in `LEARNINGS.md` §6, now observed for a CVE assignment rather than a GHSA
-listing. openai.com's own blog returned a Cloudflare bot-challenge 403 to direct
-fetch (`cf-mitigated: challenge`) both via WebFetch and `curl`; the Astra advisory
-names it as the outlets' shared primary source without linking it as a verified
-citation. Several GHSA pages for the new MCP bind-all-interfaces batch (ToolUniverse,
-Telnyx MCP, mcp-use) 404'd to direct fetch despite NVD listing them as references —
-confirmed the underlying CVE/CVSS/description via the NVD API directly instead, which
-worked cleanly for all 7 CVEs in that batch. **Branch cleanup: fully resolved.**
-`git ls-remote --heads origin` shows only `main` — zero stale `claude/eloquent-lovelace-*`
-branches remain, first time this has been true at *session start* rather than only
-immediately after a sweep's own merge.
 
 ## 2026-08-31
 
@@ -304,3 +264,55 @@ respectively — no update needed. No new playbook gap identified this run beyon
 "if-your-local-ai-agent-was-exploited.md" is a reasonable but imperfect fit for a generic-infostealer
 account-hijack scenario (root cause is a compromised machine, not agent exploitation specifically) —
 noted here rather than creating a new playbook per the routine-sweep restriction.
+
+## 2026-09-08
+
+```yaml
+queries: {deep: 16, medium: 10, shallow: 8}
+new: [2026-03-openai-codex-branch-name-command-injection, 2026-04-llm-router-malicious-intermediary-attacks]
+updated: [2026-02-clawhavoc-clawhub-skills]
+sources_added: [beyondtrust.com, blog.barrack.ai, cointelegraph.com, straiker.ai]
+sources_weighted: [securityweek.com, arxiv.org, coindesk.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only]
+```
+
+**Notes (≤300 words).** Full-coverage sweep per this run's explicit ask (social/web/industry/open-source,
+all cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend incl. Shadcn/Svelte/
+Tailwind/Vite; backend/auth/DB incl. FastAPI/Google AI Studio SDK/NextAuth.js/Prisma/Streamlit/Supabase).
+All research via direct `WebSearch`/`WebFetch` in this session, no delegated subagents. Two genuinely new,
+both backfilled (older than this sweep's window but never previously tracked): **OpenAI Codex** branch-name
+`${IFS}`-based shell-injection stealing GitHub OAuth/Installation tokens (BeyondTrust Phantom Labs; disclosed
+2026-03-30, but OpenAI silently remediated server-side by 2026-02-05 — no CVE assigned, consistent with
+SaaS-fix practice) and a UC research paper on malicious third-party LLM routers injecting tool calls / stealing
+credentials (arXiv:2604.08407, Apr 2026) — marked `status: unconfirmed` since it's one research group with no
+independent replication. **Accuracy-bar catch on the router paper:** several crypto-press outlets (Cointelegraph,
+CCN, ChainCatcher) headlined the wallet-drain finding as "$500,000," but CoinDesk — which read the paper directly
+— described the seeded canary wallet as carrying only a nominal balance with losses under $50, and the arXiv
+abstract itself gives no dollar figure at all. Rather than pick one, the advisory states both, names which
+source is better-grounded, and flags the "$500,000" figure as unverified — same "verify the outlet, don't trust
+the aggregator's number" lesson as the Ray-KEV and Wiz/Red-Agent cautions in `LEARNINGS.md` §6, now observed for
+a raw dollar figure rather than a quote or attribution claim. One update: Straiker's separate Feb 2026 ClawHub
+campaign (`bob-p2p-beta`, threat actor `26medias`/`BobVonNeumann`, agent-to-agent distribution via Moltbook,
+71 malicious + 73 high-risk of 3,505 skills scanned) folded into the existing ClawHavoc advisory as a new dated
+update — distinct researcher, distinct payload (direct Solana wallet drain vs. the original campaign's AMOS
+infostealer), and a distinct distribution mechanism (agent-to-agent social engineering via a dedicated
+agent-social-network persona) from every update already tracked there (Koi Security's original find, Snyk
+ToxicSkills, Trail of Bits scanner bypasses, SkillCloak/SkillDetonate, Zenity's skills.sh campaign) — explicitly
+flagged as single-sourced to Straiker, since SecurityWeek's pickup restates rather than independently verifies.
+Investigated and declined: a SentinelOne/Prompt Security "dependency hijack" piece reads as generic risk
+commentary with no specific incident, victim, or CVE — doesn't meet the bar. A "GitHub Actions defaults for
+Anthropic/Google/OpenAI fall to unauthenticated RCE" claim (from a search-result synthesis, not a primary
+article) resolved on investigation to already-tracked findings (gitlost, gemini-cli-trustissues,
+claude-code-github-actions-bot-bypass) with no distinct new OpenAI-specific finding — not written up separately.
+CISA KEV feed fetched directly (dateAdded >= 2026-08-31): 8 entries, all already tracked (LiteLLM, Starlette,
+Kestra, JFrog) or out of scope (Chromium V8, Sangoma, SonicWall x2). Extensively cross-checked via
+advisory-index.jsonl + corpus grep before writing anything: npm/PyPI/crates supply-chain waves (arrayref,
+binding.gyp/Phantom Gyp, ChainDrop, TeamPCP/Mini Shai-Hulud, Operation Navy Ghost), Cursor CVE batch, OpenClaw
+Claw Chain, Vercel/Context.ai OAuth breach, Hugging Face agentic intrusion, React2Shell/Next.js/Svelte CVE
+batches, FastAPI/Starlette BadHost, Streamlit SSRF, Supabase RLS misconfiguration pattern, Google AI Studio
+API-key leak, Semantic Kernel RCE (CVE-2026-25592/26030), Open VSX GlassWorm + evil-twin campaigns, GhostSplice
+MCP instruction-splitting, GitSpawn, CoreBreak — all confirmed already tracked, no duplicates written. No source-
+priority decay beyond the routine 2 sources this run (blog.trailofbits.com, securityaffairs.com, 60-day
+threshold). **Branch cleanup:** stale `claude/eloquent-lovelace-*` branches present at session start
+(`0c4quz`, `biz8jx`, `dq6yjk`, `ilp5b9`, `o3cag1`, `r7xawf`, `r7xawf-followup`, `v8dj3u`) — same recurring
+403/no-delete-tool situation documented since 2026-08-18; not re-attempted without a working deletion path.
