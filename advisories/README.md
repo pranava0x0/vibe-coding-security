@@ -4,6 +4,8 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-04-09 | [Research: third-party LLM API routers caught injecting malicious tool calls and harvesting credentials](2026-04-llm-router-malicious-intermediary-attacks.md) | high | unconfirmed |
+| 2026-03-30 | [OpenAI Codex — unsanitized GitHub branch names inject shell commands, stealing GitHub tokens](2026-03-openai-codex-branch-name-command-injection.md) | critical | patched |
 | 2026-09-04 | [aider auto-loads a repo's .aider.conf.yml and runs its test-cmd/lint-cmd with no confirmation (CVE-2026-85674, unpatched)](2026-09-aider-conf-yml-command-execution.md) | high | unconfirmed |
 | 2026-09-01 | [GitSpawn — repo-local git config (core.fsmonitor and others) runs code in 7 AI coding agents before any trust prompt](2026-09-gitspawn-git-config-agent-rce-cluster.md) | critical | active |
 | 2026-09-02 | [Kestra OSS — unauthenticated RCE via '/configs' auth-filter bypass (CVE-2026-49869, CISA KEV)](2026-09-kestra-auth-bypass-rce-kev.md) | critical | active |

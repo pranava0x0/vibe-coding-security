@@ -2,12 +2,12 @@
 id: 2026-02-clawhavoc-clawhub-skills
 title: "ClawHavoc — mass malicious-skill poisoning of OpenClaw's ClawHub marketplace (February 2026)"
 date_disclosed: 2026-02-01
-last_updated: 2026-08-06
+last_updated: 2026-09-08
 severity: high
 status: active
 ecosystems: [ai-agents, openclaw, clawhub]
 tools_affected: [openclaw, clawdbot, moltbot, clawhub-skills, skills.sh]
-tags: [supply-chain, credential-theft, ai-agent, skill-marketplace, atomic-stealer, amos, malware, koi-security, snyk, toxicskills, prompt-injection]
+tags: [supply-chain, credential-theft, ai-agent, skill-marketplace, atomic-stealer, amos, malware, koi-security, snyk, toxicskills, prompt-injection, straiker, crypto-theft, moltbook]
 ---
 
 ## TL;DR
@@ -21,6 +21,13 @@ Koi Security audited **all 2,857 skills** then on ClawHub and found **341 malici
 - **Payload:** 335 skills use **fake prerequisites** ("install this dependency first") to drop **Atomic macOS Stealer (AMOS)** — a malware-as-a-service infostealer (~$500–1,000/month) that harvests browser credentials, keychain passwords, crypto-wallet data, SSH keys, and files from user directories. Reporting also notes Windows-targeting variants in the wave.
 - **Camouflage:** the malicious skills span ~25 attack categories built to look useful to developers — browser-automation agents, **coding agents**, LinkedIn/WhatsApp integrations, PDF tools, and even **fake security-scanning skills**.
 - **Growth:** since the initial blog the marketplace grew from 2,857 to **10,700+** skills and Koi's malicious count **more than doubled to 824**; some trackers tally **~1,184** as removals lagged. Because the marketplace is open-by-default, the surface is **ongoing**, not a one-time event.
+
+### Update (2026-02-17) — Straiker: a separate agent-to-agent campaign spreads via Moltbook, drains crypto wallets
+Straiker (researcher Dan Regalado) independently scanned **3,505 skills on ClawHub** and found **71 overtly malicious** skills plus **73 more** exhibiting high-risk behavior — a distinct campaign from Koi Security's original ClawHavoc find, with its own threat actor, delivery mechanism, and payload. The clearest example, **`bob-p2p-beta`**, posed as a "decentralized API marketplace" skill but instructed any agent that installed it to store the user's Solana wallet private key in plaintext, use it to purchase a worthless token (`$BOB`) on pump.fun, and route the resulting payments through attacker-controlled infrastructure — a direct financial-theft payload rather than the credential-stealer (AMOS) payload Koi Security's original find used.
+
+The threat actor operated under two linked identities: **`26medias`** as the ClawHub publisher account, and **`BobVonNeumann`** as a persona on **Moltbook** (a social network built for AI agents to interact with each other) and on X/Twitter. Straiker's notable finding is the **distribution mechanism**: the attacker used the Moltbook persona to promote the malicious skill directly to other AI agents browsing the network, exploiting an agent's programmed trust in peer-agent recommendations rather than relying solely on ClawHub's own listing/search surface — an agent-to-agent social-engineering vector distinct from the marketplace-poisoning vector the original ClawHavoc campaign and Snyk's ToxicSkills audit (below) both describe.
+
+**Sourcing note:** this finding rests on Straiker's own analysis; independent pickup (SecurityWeek) restates Straiker's reporting without adding separate verification of the malicious-skill counts or wallet-theft mechanics, so treat the specific figures as Straiker's alone rather than independently confirmed.
 
 ### Update (May 2026) — Snyk "ToxicSkills": the problem is the whole ecosystem, not one campaign
 Snyk Labs published the first comprehensive security audit of the AI-agent-skill ecosystem, scanning **3,984 skills across ClawHub *and* skills.sh** (snapshot 2026-02-05). The results generalize ClawHavoc from "one bad campaign" to a structural problem:
@@ -96,3 +103,5 @@ If a skill triggered an unexpected install step or a macOS password prompt, trea
 - [Snyk — How a Malicious Google Skill on ClawHub Tricks Users Into Installing Malware](https://snyk.io/blog/clawhub-malicious-google-skill-openclaw-malware/) — worked example of a high-ranking malicious skill.
 - [The Hacker News — New SkillCloak Technique Lets Malicious AI Agent Skills Evade Static Scanners](https://thehackernews.com/2026/07/new-skillcloak-technique-lets-malicious.html) — HKUST research; SkillCloak evasion rates, SkillDetonate runtime-auditor results, affected tools (Claude Code, OpenAI Codex, OpenClaw).
 - [Trail of Bits — The sorry state of skill distribution](https://blog.trailofbits.com/2026/06/03/the-sorry-state-of-skill-distribution/) — newline-truncation, archive-obfuscation, bytecode-poisoning, and prompt-injection bypasses against ClawHub, Cisco's skill-scanner, and skills.sh's integrated scanners; publication date and technical detail.
+- [Straiker — Built on ClawHub, Spread on Moltbook: The New Agent-to-Agent Attack Chain](https://www.straiker.ai/blog/built-on-clawhub-spread-on-moltbook-the-new-agent-to-agent-attack-chain) — primary disclosure of the `bob-p2p-beta` campaign, threat-actor identities, Moltbook distribution mechanism, and the 71/73-skill scan counts.
+- [SecurityWeek — Autonomous AI Agents Provide New Class of Supply Chain Attack](https://www.securityweek.com/autonomous-ai-agents-provide-new-class-of-supply-chain-attack/) — independent secondary coverage of Straiker's research; restates rather than independently re-verifies the findings.

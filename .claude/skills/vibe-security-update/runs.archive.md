@@ -15,6 +15,47 @@
 
 ## Archived entries
 
+## 2026-08-30
+
+```yaml
+queries: {deep: 16, medium: 8, shallow: 6}
+new: [2026-08-context7-contextcrush-prompt-injection, 2026-08-openai-astra-critical-cyber-threshold]
+updated: [2026-08-agent-framework-mcp-cve-batch]
+sources_added: [digitalapplied.com]
+sources_weighted: [nvd.nist.gov, vulncheck.com, noma.security, techcrunch.com, csoonline.com, github.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, openai.com-cloudflare-bot-challenge-403, github-security-advisories-pages-404-for-several-recent-mcp-ghsas]
+```
+
+**Notes (≤300 words).** All research via direct `WebSearch`/`WebFetch`/NVD-API calls in this
+session — no delegated subagents this run, so the delegation-classifier risk in
+`LEARNINGS.md` §1 didn't apply. Two accuracy-bar catches worth recording: (1) a
+`WebSearch` summary conflated OpenAI's Astra "Critical" threshold disclosure with the
+already-tracked Hugging Face/GPT-5.6-Sol incident ("triggered by the Hugging Face
+incident") — fetching TechCrunch and CSO Online directly showed the two are explicitly
+distinct (TechCrunch: "Astra was not involved in exploiting Hugging Face"), so the
+advisory states the relationship as contextual timing, not causation. Same failure
+mode as the Wiz/Red-Agent-attribution and Ray-KEV cautions already in `LEARNINGS.md`
+§6 — a search summary blends pages, verify each specific claim against the outlet it's
+attributed to. (2) Context7's CVE-2026-75130 (published 2026-08-18, CVSS 9.0) reads as
+a fresh unpatched critical in every secondary write-up found ("no fix documented"), but
+fetching Noma Security's original "ContextCrush" post directly showed Upstash fixed it
+2026-02-23 — the CVE's affected range ("through 2.1.2") names the last *vulnerable*
+version, which happens to be the version the February fix shipped in, and no source
+cross-references the two. Wrote the advisory with `status: patched` and dated to the
+original February disclosure, with the August-CVE lag stated explicitly, rather than
+as a new active-critical entry — this is the same "publication date ≠ disclosure date"
+lesson in `LEARNINGS.md` §6, now observed for a CVE assignment rather than a GHSA
+listing. openai.com's own blog returned a Cloudflare bot-challenge 403 to direct
+fetch (`cf-mitigated: challenge`) both via WebFetch and `curl`; the Astra advisory
+names it as the outlets' shared primary source without linking it as a verified
+citation. Several GHSA pages for the new MCP bind-all-interfaces batch (ToolUniverse,
+Telnyx MCP, mcp-use) 404'd to direct fetch despite NVD listing them as references —
+confirmed the underlying CVE/CVSS/description via the NVD API directly instead, which
+worked cleanly for all 7 CVEs in that batch. **Branch cleanup: fully resolved.**
+`git ls-remote --heads origin` shows only `main` — zero stale `claude/eloquent-lovelace-*`
+branches remain, first time this has been true at *session start* rather than only
+immediately after a sweep's own merge.
+
 ## 2026-08-29
 
 - **Queries run:** 24 (deep: 12, medium: 8, shallow: 4) via direct `WebSearch`, plus ~13 targeted `WebFetch` verification calls (CISA KEV JSON feed, MindsDB's two GitHub Security Advisories, VulnCheck, cve.threatint.com, METR's independent-investigation blog post, Fortune's OpenAI-report review, Anthropic's `claude-code` GHSA advisory-index page-walk) before write-up.
