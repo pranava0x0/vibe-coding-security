@@ -15,6 +15,48 @@
 
 ## Archived entries
 
+## 2026-08-31
+
+```yaml
+queries: {deep: 16, medium: 8, shallow: 5}
+new: []
+updated: [2026-08-keyv-mini-shai-hulud-npm-worm]
+sources_added: []
+sources_weighted: [safedep.io]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only]
+```
+
+**Notes (≤300 words).** All research via direct `WebSearch`/`WebFetch`/npm-registry/NVD-API
+calls in this session — no delegated subagents this run. Broad coverage pass per this
+sweep's explicit ask (social/web/industry/OSS sources; agent-orchestration, frontend, and
+backend/auth/DB framework lists including aider, OpenHands, SWE-agent, OpenClaw, Shadcn,
+Svelte, Vite, FastAPI, Google AI Studio SDK, NextAuth.js, Prisma, Streamlit, Supabase) —
+essentially everything found was already tracked in the corpus, confirming this repo's
+existing coverage is current rather than surfacing gaps. Only one live update: SafeDep's
+settled keyv/ChainDrop count (2,234 versions / 444 package names / twelve orgs) plus a
+direct npm-registry query confirming `latest` now resolves clean across the core package
+family — moved that advisory `active` → `contained` and its ALERTS.md entry from 🔴 to 🟠.
+**Two accuracy-bar catches, no new advisories written as a result of either:** (1) a
+WebSearch summary attributed the 2,234/444 SafeDep figure to `digitalapplied.com`'s
+npm-compromise blog post — fetching that post directly showed it never mentions SafeDep at
+all (cites Wiz/Snyk/Socket/Aikido only); the real SafeDep numbers were confirmed by fetching
+`safedep.io` itself. Same failure mode as the Wiz/Red-Agent and Ray-KEV cautions already in
+`LEARNINGS.md` §6 — logged as another instance, not a new rule. (2) A Medium post titled
+"FastAPI Security Breach 2026: CVE-2026-2978" turned out via the NVD API to be about an
+unrelated product called **FastApiAdmin** (CVSS 2.1 LOW unrestricted file upload) — FastAPI
+itself was never affected; declined to write up. Also evaluated RestrictedPython's real,
+vendor-disclosed **CVE-2026-55830** (GHSA-ffg3-p8fm-mjx2, guard-hook bypass via
+positional-only params, CVSS 8.3, fixed 8.3) but declined a standalone advisory — legitimate
+and well-sourced, but no confirmed AI-agent-sandbox usage found, and its primary user base
+(Zope/Plone) isn't this repo's audience; flagging here in case a future sweep finds an AI
+coding tool that embeds it. CISA KEV feed checked directly (5 entries added in the last 7
+days) — none vibe-coding relevant (PaperCut, ownCloud, Linux kernel, JFrog Artifactory).
+**Branch cleanup:** `git ls-remote --heads origin` at session start showed one stale,
+fully-merged branch (`claude/eloquent-lovelace-o3cag1`, prior sweep's branch, 0 commits
+ahead/behind main) — same recurring 403/no-delete-tool situation documented since 2026-08-18,
+not re-attempted. This session's designated branch was reset fresh from `origin/main` per
+the standard merged-branch procedure.
+
 ## 2026-08-30
 
 ```yaml

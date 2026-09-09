@@ -2,11 +2,15 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-09-08. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-09-09. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-08-12 — Deadbugz: malicious MCP server waits for the third tool call before rewriting its own metadata into credential-theft instructions (unconfirmed, single-source)
+Pillar Security disclosed **Deadbugz**, an active MCP supply-chain campaign: a server calling itself `productivity-suite` behaves as an ordinary text-formatting/summarization tool for its first three tool calls, then silently rewrites the tool descriptions it returns to the connected AI coding agent into instructions to hunt for and exfiltrate SSH keys, AWS credentials, shell history, and Kubernetes configs — invisibly to the user. The trigger is a **call count, not a code or version change**, defeating one-time install review. The threat actor (GitHub account `zellkernel`) pushed the server via **23 unsolicited pull requests across unrelated AI/dev-tool projects in a 74-minute window** on 2026-08-10; 19 were closed, 4 remained open at disclosure. No CVE assigned; single-researcher disclosure — marked `unconfirmed`.
+→ [advisories/2026-09-deadbugz-mcp-supply-chain-campaign.md](advisories/2026-09-deadbugz-mcp-supply-chain-campaign.md)
 
 ### 2026-09-01 — GitSpawn: repo-local git config (`core.fsmonitor`) runs code in 7 AI coding agents before any trust prompt — Claude Code and Hermes Agent still unpatched
 Manifold Security's Francisco Rosales disclosed **GitSpawn**: AI coding agents run `git status`-class commands to gather repo context the instant a folder opens, without stripping the repository's own `.git/config` — and Git's **`core.fsmonitor`** setting (plus at least one other, undisclosed sink) lets that config specify a helper program Git executes on any index refresh. A poisoned repo (delivered as a zip, synced folder, or CI artifact — not a plain `git clone`) runs attacker code with full user privileges **before any prompt, tool approval, or trust dialog**, outside the agent's sandbox — the same class VS Code itself patched in 2021 (CVE-2021-43891). Eight findings across seven agents, reported July 1 – August 8: **goose** patched (1.44.0, CVE-2026-72718), **OpenAI Codex** patched (three CVEs, 2026-09-01), Claude Code's `core.fsmonitor` path quietly patched (2.1.196, no advisory published) but a **second, distinct path via `claude ultrareview` remains unpatched through build 2.1.252** as of 2026-09-01, **Hermes Agent unpatched** (CVE-2026-71963, vendor unresponsive across six contacts), **Qwen Code and Grok Build unpatched**. Cursor's status is disputed between sources — see the advisory.

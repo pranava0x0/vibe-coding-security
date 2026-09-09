@@ -5,8 +5,8 @@
   {
    "domain": "advisories.gitlab.com",
    "weight": 20.0,
-   "hits": 20,
-   "last_hit": "2026-09-03"
+   "hits": 21,
+   "last_hit": "2026-09-09"
   },
   {
    "domain": "aikido.dev",
@@ -23,8 +23,8 @@
   {
    "domain": "cisa.gov",
    "weight": 20.0,
-   "hits": 13,
-   "last_hit": "2026-09-06"
+   "hits": 14,
+   "last_hit": "2026-09-09"
   },
   {
    "domain": "csoonline.com",
@@ -41,8 +41,8 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 16,
-   "last_hit": "2026-09-04"
+   "hits": 17,
+   "last_hit": "2026-09-09"
   },
   {
    "domain": "github.com/advisories",
@@ -53,8 +53,8 @@
   {
    "domain": "nvd.nist.gov",
    "weight": 20.0,
-   "hits": 43,
-   "last_hit": "2026-09-03"
+   "hits": 44,
+   "last_hit": "2026-09-09"
   },
   {
    "domain": "ox.security",
