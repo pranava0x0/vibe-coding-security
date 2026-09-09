@@ -15,48 +15,6 @@
 ---
 
 
-## 2026-08-31
-
-```yaml
-queries: {deep: 16, medium: 8, shallow: 5}
-new: []
-updated: [2026-08-keyv-mini-shai-hulud-npm-worm]
-sources_added: []
-sources_weighted: [safedep.io]
-blockers: [reddit-webfetch-403, x-bsky-search-snippets-only]
-```
-
-**Notes (≤300 words).** All research via direct `WebSearch`/`WebFetch`/npm-registry/NVD-API
-calls in this session — no delegated subagents this run. Broad coverage pass per this
-sweep's explicit ask (social/web/industry/OSS sources; agent-orchestration, frontend, and
-backend/auth/DB framework lists including aider, OpenHands, SWE-agent, OpenClaw, Shadcn,
-Svelte, Vite, FastAPI, Google AI Studio SDK, NextAuth.js, Prisma, Streamlit, Supabase) —
-essentially everything found was already tracked in the corpus, confirming this repo's
-existing coverage is current rather than surfacing gaps. Only one live update: SafeDep's
-settled keyv/ChainDrop count (2,234 versions / 444 package names / twelve orgs) plus a
-direct npm-registry query confirming `latest` now resolves clean across the core package
-family — moved that advisory `active` → `contained` and its ALERTS.md entry from 🔴 to 🟠.
-**Two accuracy-bar catches, no new advisories written as a result of either:** (1) a
-WebSearch summary attributed the 2,234/444 SafeDep figure to `digitalapplied.com`'s
-npm-compromise blog post — fetching that post directly showed it never mentions SafeDep at
-all (cites Wiz/Snyk/Socket/Aikido only); the real SafeDep numbers were confirmed by fetching
-`safedep.io` itself. Same failure mode as the Wiz/Red-Agent and Ray-KEV cautions already in
-`LEARNINGS.md` §6 — logged as another instance, not a new rule. (2) A Medium post titled
-"FastAPI Security Breach 2026: CVE-2026-2978" turned out via the NVD API to be about an
-unrelated product called **FastApiAdmin** (CVSS 2.1 LOW unrestricted file upload) — FastAPI
-itself was never affected; declined to write up. Also evaluated RestrictedPython's real,
-vendor-disclosed **CVE-2026-55830** (GHSA-ffg3-p8fm-mjx2, guard-hook bypass via
-positional-only params, CVSS 8.3, fixed 8.3) but declined a standalone advisory — legitimate
-and well-sourced, but no confirmed AI-agent-sandbox usage found, and its primary user base
-(Zope/Plone) isn't this repo's audience; flagging here in case a future sweep finds an AI
-coding tool that embeds it. CISA KEV feed checked directly (5 entries added in the last 7
-days) — none vibe-coding relevant (PaperCut, ownCloud, Linux kernel, JFrog Artifactory).
-**Branch cleanup:** `git ls-remote --heads origin` at session start showed one stale,
-fully-merged branch (`claude/eloquent-lovelace-o3cag1`, prior sweep's branch, 0 commits
-ahead/behind main) — same recurring 403/no-delete-tool situation documented since 2026-08-18,
-not re-attempted. This session's designated branch was reset fresh from `origin/main` per
-the standard merged-branch procedure.
-
 ## 2026-09-02
 
 ```yaml
@@ -316,3 +274,47 @@ priority decay beyond the routine 2 sources this run (blog.trailofbits.com, secu
 threshold). **Branch cleanup:** stale `claude/eloquent-lovelace-*` branches present at session start
 (`0c4quz`, `biz8jx`, `dq6yjk`, `ilp5b9`, `o3cag1`, `r7xawf`, `r7xawf-followup`, `v8dj3u`) — same recurring
 403/no-delete-tool situation documented since 2026-08-18; not re-attempted without a working deletion path.
+
+## 2026-09-09
+
+```yaml
+queries: {deep: 16, medium: 11, shallow: 6}
+new: [2026-09-deadbugz-mcp-supply-chain-campaign]
+updated: [2026-08-agent-framework-mcp-cve-batch, 2025-11-n8n-ni8mare-rce]
+sources_added: []
+sources_weighted: [pillar.security, adversa.ai, nhimg.org, vulncheck.com, advisories.gitlab.com, nvd.nist.gov, github.com, cisa.gov]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only]
+```
+
+**Notes (≤300 words).** Full-coverage sweep per this run's explicit ask (social/web/industry/open-source, all
+cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend incl. Shadcn/Svelte/Tailwind/Vite;
+backend/auth/DB incl. FastAPI/Google AI Studio SDK/NextAuth.js/Prisma/Streamlit/Supabase). All research via direct
+`WebSearch`/`WebFetch` in this session, no delegated subagents. CISA KEV feed fetched directly (dateAdded >=
+2026-09-02): 12 entries, all already tracked (LiteLLM, Starlette, Kestra, JFrog) or out of scope (Adobe
+Commerce/Magento, Windows x2, N-able N-central, Chromium V8, Sangoma, SonicWall x2). One new advisory: **Deadbugz**
+(Pillar Security, 2026-08-12) — a malicious MCP server (`productivity-suite`) that behaves benignly for its first
+three tool calls then rewrites its own metadata into credential-theft instructions; distributed via 23 GitHub PRs
+in a 74-minute window. Single-primary-source (Adversa and nhimg.org both summarize Pillar's own research rather
+than independently verifying it) — marked `unconfirmed` per the two-independent-source bar, same as the related
+GhostSplice entry. Two updates, both confirmed CVE-by-CVE against primary sources rather than an aggregator
+roundup: `2026-08-agent-framework-mcp-cve-batch.md` gained three unrelated single-server MCP CVEs surfaced by an
+Adversa roundup — `mcp-atlassian` CVE-2026-73498 (path traversal, confirmed on the GHSA page directly), ArcadeDB
+CVE-2026-67357 (MCP `get_server_settings` cluster-token leak, confirmed via VulnCheck; explicitly disambiguated
+from the distinct sibling CVE-2026-67343, a non-MCP REST-endpoint leak of the same token fixed one version
+earlier), and `facebook-ads-mcp-server` CVE-2026-19956 (SSRF, confirmed via the NVD API — VulDB-sourced, no GHSA
+filed). `2025-11-n8n-ni8mare-rce.md` gained two medium-severity authorization-bypass CVEs, both confirmed via
+GitLab's advisory-database mirror: CVE-2026-86996 (an Agent-tool workflow invocation path skipped the
+sub-workflow caller-policy check that the conventional Execute-Workflow path enforces) and GHSA-h3jj-5f3v-3685
+(the Public API's execution-retry endpoint checked `workflow:read` instead of `workflow:execute`). Vendor
+GHSA-index page-walk repeated for Claude Code and Cursor per the standing practice — no advisories newer than the
+already-tracked June/July 2026 batches on either, confirming no gap rather than a quiet one. Extensively
+cross-checked against `advisory-index.jsonl` + corpus grep before writing anything: npm/PyPI/crates-io supply-
+chain waves (arrayref, binding.gyp/Phantom Gyp/Miasma lineage, Hades/ensmallen, Operation Navy Ghost, npm
+bin-entry-harvesting), Cursor CVE batch, OpenClaw Claw Chain, GitSpawn, Mexico-government breach, Hugging Face
+agentic intrusion (incl. the OpenAI-agent message-board story, already folded in), Google API-key/Gemini-scope
+leak, Supabase Auth OIDC bypass, React2Shell/Next.js CVE batch, Streamlit CVE-2026-33682, Open VSX evil-twin —
+all confirmed already tracked, no duplicates written. Declined: Nodemailer's IDN/Punycode allow-list bypass
+(GHSA-wmmp-3585-3rmp, moderate) — a real, confirmed CVE but a generic email library with no vibe-coding-specific
+angle, thin enough to skip per the routine out-of-audience-scope rule. All external citations in the new/updated
+advisories passed `tools/check-external-links.py` (0 flagged of 74 checked across the three files). No
+source-priority decay beyond the routine single source this run (60-day threshold).
