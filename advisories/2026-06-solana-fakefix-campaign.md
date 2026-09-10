@@ -2,9 +2,9 @@
 id: 2026-06-solana-fakefix-campaign
 title: "Solana FakeFix Campaign — 25 malicious npm + PyPI packages steal wallet keys and developer secrets via GitHub issue spam (June 2026)"
 date_disclosed: 2026-06-10
-last_updated: 2026-06-13
+last_updated: 2026-09-10
 severity: high
-status: active
+status: historical
 ecosystems: [npm, pypi]
 tools_affected: [Solana SDK, any project using @solana-labs/web3.js, solana-web3-stable, solana-rpc-client, solana-mev-bot, Claude Code, Cursor, Codex]
 tags: [supply-chain, credential-theft, social-engineering, npm, pypi, crypto-wallet, github-issue-spam, cross-ecosystem]
@@ -78,6 +78,8 @@ If you installed any Solana-related package after seeing a GitHub issue recommen
 - Never install a package recommended in a GitHub issue without independently verifying on the official registry that the package (a) exists, (b) is maintained by a known organization, and (c) matches the expected name exactly.
 - For Solana SDK, the official package is `@solana/web3.js` (scoped under `@solana`, NOT `@solana-labs/web3.js` variants from unknown publishers).
 - Crypto private keys should never leave the wallet app — no npm package or script legitimately requires a raw private key as input.
+
+**Status update 2026-09-10:** re-triaged from `active` to `historical`. The incident window closed in June 2026; no new malicious versions, IOCs, or vendor updates have been reported since this advisory was last touched (2026-06-13). The *technique* is not retired — successor waves are tracked as live entries in ALERTS.md — but this specific compromise is over, and "active" here should mean "still propagating," not "was bad once."
 
 ## Sources
 

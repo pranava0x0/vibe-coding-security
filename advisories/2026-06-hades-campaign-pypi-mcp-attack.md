@@ -2,9 +2,9 @@
 id: 2026-06-hades-campaign-pypi-mcp-attack
 title: "Hades Campaign — 19 PyPI bioinformatics + MCP-developer packages poisoned with Bun credential stealer (June 2026)"
 date_disclosed: 2026-06-08
-last_updated: 2026-06-13
+last_updated: 2026-09-10
 severity: critical
-status: active
+status: historical
 ecosystems: [pypi, npm]
 tools_affected: [ensmallen, dynamo, spateo, coolbox, u-fish, napari-ufish, langchain-core-mcp, openai-mcp, instructor-mcp, tiktoken-mcp, ray-mcp-server, claude-code, cursor, openhands]
 tags: [supply-chain, credential-theft, pypi, pth-file, bun-runtime, mcp-targeting, shai-hulud-lineage, miasma-lineage, bioinformatics]
@@ -114,6 +114,8 @@ Hades is the **fifth documented copycat wave** of the Mini Shai-Hulud worm after
 | **Hades** | **June 8** | **PyPI** | **`.pth` + Bun runtime, MCP-developer targeting** |
 
 Note: On **2026-06-10**, the Miasma worm source code was briefly open-sourced to GitHub via compromised developer accounts (repositories named "Miasma-Open-Source-Release"), mirroring what TeamPCP did with Mini Shai-Hulud on 2026-05-12. A sixth copycat wave is likely. See the [Miasma @redhat advisory](2026-06-miasma-redhat-cloud-services-compromise.md) for the source-code-leak update.
+
+**Status update 2026-09-10:** re-triaged from `active` to `historical`. The incident window closed in June 2026; no new malicious versions, IOCs, or vendor updates have been reported since this advisory was last touched (2026-06-13). The *technique* is not retired — successor waves are tracked as live entries in ALERTS.md — but this specific compromise is over, and "active" here should mean "still propagating," not "was bad once."
 
 ## Sources
 

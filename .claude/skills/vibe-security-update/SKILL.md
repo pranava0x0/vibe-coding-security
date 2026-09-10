@@ -171,6 +171,8 @@ grep -i 'langflow'       .claude/skills/vibe-security-update/advisory-index.json
 
 A hit means the incident is tracked — open that advisory to decide NEW vs UPDATE. This replaces reading `ALERTS.md` end to end and, unlike reading, it cannot silently truncate.
 
+**Grep the identifier, not only the product.** A product-name hit tells you where the home file is, not whether *this* CVE is in it: Langflow had five advisories here while CVE-2026-0768 (a CVSS 9.8 ZDI zero-day) went untracked for eight months because every sweep grepped `langflow`, saw hits, and stopped (`LEARNINGS.md` §15). For every CVE, GHSA, package version, or named package a source gives you, grep that exact token before concluding "already tracked."
+
 **An index miss is not proof. Confirm against the corpus before filing anything as new:**
 
 ```bash

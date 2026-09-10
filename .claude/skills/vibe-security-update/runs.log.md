@@ -15,44 +15,6 @@
 ---
 
 
-## 2026-09-02
-
-```yaml
-queries: {deep: 16, medium: 10, shallow: 7}
-new: [2026-08-openapi-react-query-codegen-comment-triggered-publish, 2026-08-gitea-diffpatch-git-hook-rce]
-updated: [2026-07-huggingface-agentic-intrusion, 2025-11-n8n-ni8mare-rce]
-sources_added: [ionix.io]
-sources_weighted: [socket.dev, stepsecurity.io, cybersecuritynews.com, helpnetsecurity.com, securityweek.com, cisa.gov, nvd.nist.gov, theregister.com, thehackernews.com, blog.gitguardian.com]
-blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, bleepingcomputer.com-403]
-```
-
-**Notes (≤300 words).** Full-coverage sweep per this run's explicit ask (social/web/industry/OSS
-sources; agent-orchestration, frontend, and backend/auth/DB framework lists). All research via
-direct `WebSearch`/`WebFetch` calls in this session — no delegated subagents, so the
-delegation-classifier risk in `LEARNINGS.md` §1 didn't apply. Two genuinely new incidents:
-`@7nohe/openapi-react-query-codegen` (150K weekly downloads, comment-triggered npm publish
-workflow abuse — no stolen token needed, confirmed via Socket and StepSecurity direct fetches),
-and Gitea's `diffpatch` git-hook RCE (CVE-2026-60004, CVSS 9.8, CISA KEV addition 2026-08-25,
-confirmed present in the KEV feed's own JSON this run). Two Artifactory/n8n updates folded into
-their existing "home" advisories per the established pattern of not spinning up redundant new
-files for the same product: a fifth, unrelated JFrog Artifactory CVE (CVE-2026-82329,
-unauthenticated admin-token-minting auth bypass, exploited within days) added to
-`2026-07-huggingface-agentic-intrusion.md`; GitGuardian's n8n API-token/weak-encryption-key
-credential-hygiene research (4,576 leaked tokens, 321 exploitable instances, 129 weak-key
-instances) added to `2025-11-n8n-ni8mare-rce.md`. **One accuracy-bar catch:** The Hacker News'
-coverage of the GitGuardian n8n research claimed leaked tokens turn up alongside
-`.claude/settings.json` files specifically — fetching GitGuardian's own post directly showed no
-such claim there, so it was dropped rather than repeated (same "verify the outlet named" failure
-mode already in `LEARNINGS.md` §6, logged as another instance). Everything else surfaced this
-run (GhostSplice, TrapDoor, evil-twin Open VSX, npm bin-entry-harvesting, Streamlit
-CVE-2026-33682, Google AI Studio API-key scope escalation, n8n Ni8mare/JSONata/Pyodide/vm2
-clusters, and the broad Mini-Shai-Hulud/TeamPCP/OpenClaw/Cursor/Claude-Code CVE landscape)
-confirmed already tracked via `advisory-index.jsonl` + corpus grep — this repo's existing
-coverage remains current. CISA KEV feed fetched directly (dateAdded ≥ 2026-08-26): only PaperCut
-(×2), ownCloud, Linux kernel, and JFrog CVE-2026-66384 (already tracked) — Gitea's KEV addition
-predates this window (2026-08-25) but was still new to this repo. No source-priority decay
-crossed the 60-day threshold this run.
-
 ## 2026-09-03
 
 ```yaml
@@ -318,3 +280,38 @@ all confirmed already tracked, no duplicates written. Declined: Nodemailer's IDN
 angle, thin enough to skip per the routine out-of-audience-scope rule. All external citations in the new/updated
 advisories passed `tools/check-external-links.py` (0 flagged of 74 checked across the three files). No
 source-priority decay beyond the routine single source this run (60-day threshold).
+
+## 2026-09-10
+
+```yaml
+queries: {deep: 16, medium: 12, shallow: 8}
+new: [2026-09-deepseek-harness-host-header-sandbox-escape, 2026-08-claude-code-auto-mode-module-shadowing-bypass, 2026-09-gtig-adversarial-ai-agentic-pipelines, 2026-09-langflow-cve-2026-0768-validate-code-rce-exploited, 2026-08-aurora-ransomware-cursor-agent-abuse]
+updated: [2026-07-nextjs-july-security-release, 2026-07-huggingface-agentic-intrusion]
+sources_added: [embracethered.com, itmeetsot.eu, cloud.google.com, techxplore.com]
+sources_weighted: [ox.security, vulncheck.com, nvd.nist.gov, thehackernews.com, theregister.com, thenextweb.com, adversa.ai, zerodayinitiative.com, securityaffairs.com, labs.cloudsecurityalliance.org, gambit.security, nextjs.org, github.com, securityweek.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, bleepingcomputer.com-403]
+```
+
+**Notes (≤300 words).** Full-coverage sweep per the scheduled ask (social/web/industry/open-source, all cited;
+agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend incl. Shadcn/Svelte/Tailwind/Vite;
+backend/auth/DB incl. FastAPI/Google AI Studio SDK/NextAuth.js/Prisma/Streamlit/Supabase). All research via direct
+`WebSearch`/`WebFetch` in this session, no delegated subagents. CISA KEV fetched directly (dateAdded ≥ 2026-09-03):
+Citrix, Fortinet, Chromium ×2, Cisco FMC, Adobe Commerce, Windows ×2, N-able — none in scope. Five new advisories,
+two of them the kind of miss worth logging. **(1) Langflow CVE-2026-0768** was untracked despite five existing
+Langflow files — prior sweeps grepped the *product*, saw hits, and moved on; the CVE id itself never got a corpus
+grep until a mass-exploitation report named it. Now in `LEARNINGS.md` §15. **(2) DeepSeek Harness CVE-2026-82533**
+had no vendor advisory; the VulnCheck CNA record served as the independent second source (`LEARNINGS.md` §14).
+**Accuracy-bar catch:** search-result summaries of the Aurora/Cursor story attributed a "told the agent it was an
+authorized test" jailbreak to Aurora; The Hacker News' own text attributes that quote to ReliaQuest describing a
+*different* actor's toolkit (Gryxa), and neither Gambit's primary nor the CSA note mentions any jailbreak. Written
+up as a declined claim inside the advisory. **Next.js:** the pre-announced "one critical" release shipped two
+(second one found in `libheif` via `sharp`); severity bumped high → critical, README row and ALERTS tier text
+updated. **Investigated and declined:** OpenClaw CVE-2026-35665 / CVE-2026-41301 (March/April, moderate, DoS +
+webhook signature-order bugs — fold into the OpenClaw file if a future sweep has room); two open-webui moderate
+advisories (2026-09-09, out of audience); arXiv 2608.05223 malicious-skill-file benchmark (Gemini CLI 95.5%, Qwen
+Code 71.6% — research, no incident; a candidate update for the ClawHavoc/skills file); CrowdStrike/AIR Security
+"17,800 add-ons" figure (vendor launch PR, no primary report located). Pillar's Google ADK finding, GhostJacking,
+Novee's GitHub Actions defaults, keyv, Mastra, RHSB-2026-006, and the CSA Sept 4 briefing items all resolved to
+already-tracked advisories via index + corpus grep. Link checker: 19 URLs across the 5 new files, 1 flagged
+(thenextweb.com returns 404 to the checker but fetched fine this session and has a 2026-09-05 Wayback snapshot —
+kept). **Branch cleanup:** stale `claude/eloquent-lovelace-v8dj3u` present at session start; attempted after merge.

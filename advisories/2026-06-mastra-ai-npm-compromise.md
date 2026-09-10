@@ -2,9 +2,9 @@
 id: 2026-06-mastra-ai-npm-compromise
 title: "Mastra AI npm namespace compromise — 145 @mastra/* packages carry easy-day-js typosquat RAT via hijacked contributor account `ehindero` (June 2026)"
 date_disclosed: 2026-06-17
-last_updated: 2026-06-25
+last_updated: 2026-09-10
 severity: critical
-status: active
+status: historical
 ecosystems: [npm]
 tools_affected: [mastra, "@mastra/*", easy-day-js]
 tags: [supply-chain, credential-theft, typosquat, postinstall, ai-agents, crypto-stealer, miasma-lineage, dependency-injection]
@@ -91,6 +91,8 @@ If you installed any `@mastra/*` package on **2026-06-17 between 01:15 and 02:36
 - **Scrutinize dependency additions.** A newly-added `easy-day-js` in a well-known framework's `package.json` is the IOC — require human review of any `package.json` change from a dependency update PR.
 - → [prevention/package-vetting-checklist.md](../prevention/package-vetting-checklist.md)
 - → [prevention/credential-hygiene.md](../prevention/credential-hygiene.md)
+
+**Status update 2026-09-10:** re-triaged from `active` to `historical`. The incident window closed in June 2026; no new malicious versions, IOCs, or vendor updates have been reported since this advisory was last touched (2026-06-25). The *technique* is not retired — successor waves are tracked as live entries in ALERTS.md — but this specific compromise is over, and "active" here should mean "still propagating," not "was bad once."
 
 ## Sources
 

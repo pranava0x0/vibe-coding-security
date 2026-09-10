@@ -2,9 +2,9 @@
 id: 2026-06-jetbrains-ide-plugins-ai-key-theft
 title: "15 malicious JetBrains Marketplace plugins steal AI provider API keys on entry (70K+ installs)"
 date_disclosed: 2026-06-17
-last_updated: 2026-06-19
+last_updated: 2026-09-10
 severity: high
-status: active
+status: historical
 ecosystems: [jetbrains-marketplace, ide-extensions]
 tools_affected: [IntelliJ IDEA, PyCharm, WebStorm, GoLand, Rider, CLion, DataGrip, RubyMine, PhpStorm, and other JetBrains IDEs]
 tags: [credential-theft, ide-extension, ai-api-keys, supply-chain, jetbrains-marketplace]
@@ -81,6 +81,8 @@ If any unfamiliar AI-adjacent plugin has a settings panel that accepted an API k
 - **Keep IDE auto-update off for plugins** (File → Settings → Plugins → uncheck "Update plugins automatically") so you have time to review changelogs before updates apply.
 
 → [prevention/credential-hygiene.md](../prevention/credential-hygiene.md)
+
+**Status update 2026-09-10:** re-triaged from `active` to `historical`. The incident window closed in June 2026; no new malicious versions, IOCs, or vendor updates have been reported since this advisory was last touched (2026-06-19). The *technique* is not retired — successor waves are tracked as live entries in ALERTS.md — but this specific compromise is over, and "active" here should mean "still propagating," not "was bad once."
 
 ## Sources
 

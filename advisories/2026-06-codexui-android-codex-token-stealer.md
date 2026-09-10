@@ -2,9 +2,9 @@
 id: 2026-06-codexui-android-codex-token-stealer
 title: "codexui-android npm — OpenAI Codex auth-token stealer (June 2026)"
 date_disclosed: 2026-06-01
-last_updated: 2026-06-03
+last_updated: 2026-09-10
 severity: high
-status: active
+status: historical
 ecosystems: [npm, android]
 tools_affected: [openai-codex, codex-cli]
 tags: [supply-chain, credential-theft, npm, android, ai-coding-tool, token-theft, openai]
@@ -65,6 +65,8 @@ If `codexui-android` ever ran its `postinstall` on a machine with `~/.codex/auth
 → [prevention/credential-hygiene.md](../prevention/credential-hygiene.md)
 → Never install packages that use a clean GitHub source + an opaque pre-built `dist/` without independently verifying the build is reproducible.
 → Alert on any outbound HTTPS to domains containing `sentry.` that aren't `sentry.io` — fake Sentry hosts are a recurring camouflage pattern (cf. [Miasma's `api.anthropic.com:443/v1/api`](2026-06-miasma-redhat-cloud-services-compromise.md) fake-AI-vendor host). Add `sentry.anyclaw.store` to your egress deny list.
+
+**Status update 2026-09-10:** re-triaged from `active` to `historical`. The incident window closed in June 2026; no new malicious versions, IOCs, or vendor updates have been reported since this advisory was last touched (2026-06-03). The *technique* is not retired — successor waves are tracked as live entries in ALERTS.md — but this specific compromise is over, and "active" here should mean "still propagating," not "was bad once."
 
 ## Sources
 - [Aikido Security — Malicious npm Package Steals OpenAI Codex Auth Tokens](https://www.aikido.dev/blog/malicious-npm-package-codexui-android-steals-openai-codex-auth-tokens) — canonical discovery and technical analysis
