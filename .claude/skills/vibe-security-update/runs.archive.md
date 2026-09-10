@@ -15,6 +15,44 @@
 
 ## Archived entries
 
+## 2026-09-02
+
+```yaml
+queries: {deep: 16, medium: 10, shallow: 7}
+new: [2026-08-openapi-react-query-codegen-comment-triggered-publish, 2026-08-gitea-diffpatch-git-hook-rce]
+updated: [2026-07-huggingface-agentic-intrusion, 2025-11-n8n-ni8mare-rce]
+sources_added: [ionix.io]
+sources_weighted: [socket.dev, stepsecurity.io, cybersecuritynews.com, helpnetsecurity.com, securityweek.com, cisa.gov, nvd.nist.gov, theregister.com, thehackernews.com, blog.gitguardian.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, bleepingcomputer.com-403]
+```
+
+**Notes (≤300 words).** Full-coverage sweep per this run's explicit ask (social/web/industry/OSS
+sources; agent-orchestration, frontend, and backend/auth/DB framework lists). All research via
+direct `WebSearch`/`WebFetch` calls in this session — no delegated subagents, so the
+delegation-classifier risk in `LEARNINGS.md` §1 didn't apply. Two genuinely new incidents:
+`@7nohe/openapi-react-query-codegen` (150K weekly downloads, comment-triggered npm publish
+workflow abuse — no stolen token needed, confirmed via Socket and StepSecurity direct fetches),
+and Gitea's `diffpatch` git-hook RCE (CVE-2026-60004, CVSS 9.8, CISA KEV addition 2026-08-25,
+confirmed present in the KEV feed's own JSON this run). Two Artifactory/n8n updates folded into
+their existing "home" advisories per the established pattern of not spinning up redundant new
+files for the same product: a fifth, unrelated JFrog Artifactory CVE (CVE-2026-82329,
+unauthenticated admin-token-minting auth bypass, exploited within days) added to
+`2026-07-huggingface-agentic-intrusion.md`; GitGuardian's n8n API-token/weak-encryption-key
+credential-hygiene research (4,576 leaked tokens, 321 exploitable instances, 129 weak-key
+instances) added to `2025-11-n8n-ni8mare-rce.md`. **One accuracy-bar catch:** The Hacker News'
+coverage of the GitGuardian n8n research claimed leaked tokens turn up alongside
+`.claude/settings.json` files specifically — fetching GitGuardian's own post directly showed no
+such claim there, so it was dropped rather than repeated (same "verify the outlet named" failure
+mode already in `LEARNINGS.md` §6, logged as another instance). Everything else surfaced this
+run (GhostSplice, TrapDoor, evil-twin Open VSX, npm bin-entry-harvesting, Streamlit
+CVE-2026-33682, Google AI Studio API-key scope escalation, n8n Ni8mare/JSONata/Pyodide/vm2
+clusters, and the broad Mini-Shai-Hulud/TeamPCP/OpenClaw/Cursor/Claude-Code CVE landscape)
+confirmed already tracked via `advisory-index.jsonl` + corpus grep — this repo's existing
+coverage remains current. CISA KEV feed fetched directly (dateAdded ≥ 2026-08-26): only PaperCut
+(×2), ownCloud, Linux kernel, and JFrog CVE-2026-66384 (already tracked) — Gitea's KEV addition
+predates this window (2026-08-25) but was still new to this repo. No source-priority decay
+crossed the 60-day threshold this run.
+
 ## 2026-08-31
 
 ```yaml

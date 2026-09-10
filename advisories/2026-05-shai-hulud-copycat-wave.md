@@ -2,9 +2,9 @@
 id: 2026-05-shai-hulud-copycat-wave
 title: "Shai-Hulud copycats after the worm source went public (May 2026)"
 date_disclosed: 2026-05-18
-last_updated: 2026-06-02
+last_updated: 2026-09-10
 severity: high
-status: active
+status: historical
 ecosystems: [npm]
 tools_affected: [any-node-project, cursor, claude-code]
 tags: [supply-chain, worm, credential-theft, npm, copycat, ddos, infostealer, teampcp]
@@ -60,6 +60,8 @@ If any hit, assume credential theft: rotate everything reachable from the affect
 ## Prevention
 → [prevention/npm-hardening.md](../prevention/npm-hardening.md) — disable install scripts, pin versions, watch for typosquats
 → [prevention/credential-hygiene.md](../prevention/credential-hygiene.md)
+
+**Status update 2026-09-10:** re-triaged from `active` to `historical`. The incident window closed in May 2026; no new malicious versions, IOCs, or vendor updates have been reported since this advisory was last touched (2026-06-02). The *technique* is not retired — successor waves are tracked as live entries in ALERTS.md — but this specific compromise is over, and "active" here should mean "still propagating," not "was bad once."
 
 ## Sources
 - [The Register — Shai-Hulud copycat worm infects yet another npm package](https://www.theregister.com/cyber-crime/2026/05/18/shai-hulud-copycat-hits-another-npm-package/5242180) — first copycat, chalk-tempalte, BreachForums competition.

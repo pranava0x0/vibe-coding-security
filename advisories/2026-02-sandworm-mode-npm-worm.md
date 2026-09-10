@@ -2,9 +2,9 @@
 id: 2026-02-sandworm-mode-npm-worm
 title: "SANDWORM_MODE — Shai-Hulud-style npm worm with MCP injection, CI implant, and 48-hour delayed activation (Feb 2026)"
 date_disclosed: 2026-02-17
-last_updated: 2026-06-06
+last_updated: 2026-09-10
 severity: critical
-status: active
+status: historical
 ecosystems: [npm, mcp, github-actions, ai-agents]
 tools_affected: [claude-code, openclaw, any npm package using the compromised accounts, CI pipelines using GitHub Actions]
 tags: [supply-chain, credential-theft, worm, mcp-injection, ai-toolchain, ci-cd, github-actions, prompt-injection]
@@ -91,6 +91,8 @@ You are affected if:
 - Never use `ci-quality/code-quality-check` or other unfamiliar "quality scan" Actions.
 - Apply `allowedOrgs` lists in your npm token configuration to limit publish scope.
 - Audit MCP config files (`~/.claude/mcp.json`, `~/.cursor/mcp.json`) on a schedule, especially after running `npm install`.
+
+**Status update 2026-09-10:** re-triaged from `active` to `historical`. The incident window closed in February 2026; no new malicious versions, IOCs, or vendor updates have been reported since this advisory was last touched (2026-06-06). The *technique* is not retired — successor waves are tracked as live entries in ALERTS.md — but this specific compromise is over, and "active" here should mean "still propagating," not "was bad once."
 
 ## Sources
 

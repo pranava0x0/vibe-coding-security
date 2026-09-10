@@ -2,9 +2,9 @@
 id: 2026-05-mini-shai-hulud-may19-wave
 title: "Mini Shai-Hulud May 19 wave — @antv npm + Microsoft durabletask PyPI (May 2026)"
 date_disclosed: 2026-05-19
-last_updated: 2026-05-20
+last_updated: 2026-09-10
 severity: critical
-status: active
+status: historical
 ecosystems: [npm, pypi]
 tools_affected: [any-react-project, any-node-project, azure-durable-functions, cursor, claude-code, lovable, bolt, v0, llm-tooling, ci-cd]
 tags: [supply-chain, worm, ci-cd, credential-theft, sigstore-provenance, teampcp, docker-escape, multi-cloud]
@@ -81,6 +81,8 @@ The [May 11 TanStack wave](2026-05-tanstack-mini-shai-hulud.md) was the first ma
 → [prevention/agent-sandboxing.md](../prevention/agent-sandboxing.md)
 → [prevention/credential-hygiene.md](../prevention/credential-hygiene.md) — never store long-lived PyPI/npm publish tokens in CI secrets; use OIDC trusted publishing with environment protection rules.
 → Pin dependencies and use `--ignore-scripts` by default; review postinstall scripts before enabling them.
+
+**Status update 2026-09-10:** re-triaged from `active` to `historical`. The incident window closed in May 2026; no new malicious versions, IOCs, or vendor updates have been reported since this advisory was last touched (2026-05-20). The *technique* is not retired — successor waves are tracked as live entries in ALERTS.md — but this specific compromise is over, and "active" here should mean "still propagating," not "was bad once."
 
 ## Sources
 - [Socket — Mini Shai-Hulud Hits @antv Ecosystem, 639 Compromised npm Packages](https://socket.dev/blog/antv-packages-compromised) — npm count, payload, detection timing.

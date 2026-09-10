@@ -129,6 +129,57 @@ when the CVE is already tracked — `patched` → `active` is exactly what
 - **Don't write `GHSA-` as a prose prefix** (e.g. "GHSA-index"). The malformed-id
   gate regex-matches it as a fabricated id. Reword to "advisory index" — never
   weaken the regex; catching that shape is the check's whole purpose.
+- **One article can quote two different actors; a search summary will merge them.**
+  On 2026-09-10 the Aurora/Cursor story arrived in every search summary with a
+  "told the agent it was an authorized test" jailbreak. The Hacker News article
+  that summary was built from attributes that quote to ReliaQuest describing a
+  *different* actor's toolkit (Gryxa), two paragraphs after the Aurora section;
+  Gambit's primary and the CSA note mention no jailbreak at all. When a claim is
+  the most quotable thing in a story, check it is about the subject of the story.
+- **A vendor's pre-announced security-release count is a floor, not the number.**
+  Next.js pre-announced one critical for 2026-08-26 and shipped two on 08-25
+  after finding a second bug in a transitive native dependency (`libheif` via
+  `sharp`). Always re-fetch the release post on release day rather than carrying
+  the pre-announcement's count forward.
+
+## 14. A CNA advisory is the independent second source when a small vendor has no advisory channel
+
+Extends §10. **DeepSeek Harness CVE-2026-82533** (2026-09-10) had no GitHub Security
+Advisory and no vendor post — the project's only public record was two developer
+reports on its discussion board and a release tag. OX Security's write-up was the
+primary; the second, independent source was **VulnCheck's own CNA advisory**, which
+is not a republication (the CNA validated the affected range, scored it, and linked
+the patch commit). NVD then reflected VulnCheck's record. **Rule:** when the CNA is
+a research firm (VulnCheck, ZDI, Wiz, Snyk, GitHub) rather than the vendor, its
+advisory page counts toward the two-source bar; an NVD entry that merely mirrors
+that CNA record does not add a third. Fetch the CNA page itself, not the NVD copy.
+
+## 15. Grep the CVE id, not the product — a product with five files is not "tracked"
+
+**Langflow CVE-2026-0768** (ZDI zero-day, published 2026-01-09, CVSS 9.8) sat
+untracked for eight months while this repo carried **five** Langflow advisories.
+Every intervening sweep grepped `langflow`, saw hits, and concluded the product was
+covered. It was only when a mass-exploitation wave (2026-08-30) named the CVE that
+a corpus grep for the *id* ran and came back empty. **Rule:** Step 2's index/corpus
+grep is per-identifier. For any CVE, GHSA, or package version a source names, grep
+that exact token before deciding "already tracked" — a product-name hit tells you
+where the *home file* is, not whether *this bug* is in it. This is the same failure
+as §6's "a prior sweep's 'already tracked' call is not self-verifying," reached
+from the other direction.
+
+## 16. Vendor threat-intelligence reports are primary sources for attacker tradecraft, and they name the tools your readers use
+
+Google Threat Intelligence's 2026-09-08 adversarial-AI report named specific
+trojanized MCP packages, specific hidden directories (`.claude/`, `.cursor/`,
+`.vscode/`), specific IDEs (Cursor, Cline, Continue), and a harvester configured via
+`AGENTS.md` — none of which had surfaced through incident-driven queries, because
+the report is telemetry, not an incident. **Rule:** query the major vendors'
+threat-intel blogs directly each sweep (GTIG, Microsoft Threat Intelligence, Unit
+42, Mandiant, Anthropic's threat reports) — not just their security-advisory pages —
+and treat a named package, path, or tool in such a report as a corpus-grep candidate
+even when no CVE or campaign name is attached. These reports are single-sourced by
+nature (it is the vendor's own telemetry); write them up as `ongoing` with the
+provenance stated, not as `unconfirmed`, since there is no second source to wait for.
 
 ## 7. Check for a platform outage before debugging your own commit
 
@@ -170,6 +221,23 @@ hand-tuning had converged to, so its output is byte-identical and the gain is
 that it re-solves itself instead of failing CI. **If a cap test fails now, it means something real** — triage stale
 `status: active`/`ongoing` advisories back to `patched`/`historical`. Never
 raise a cap; never reintroduce a hardcoded membership constant.
+
+**Update 2026-09-10 — the floor itself breached, and status triage cannot fix
+that.** `llms.txt` failed its budget *at `TIER1_FLOOR`* (8 full entries). The
+remaining ~255 advisories are Tier-2 one-liners of full title + absolute URL,
+and `test_llms_txt_lists_every_advisory` requires the full title, so Tier 2 is
+O(n) with a ~230 B/line floor no fitter can lower. Re-triaging 12 stale actives
+to `historical` saved **92 bytes** — at the floor, status barely matters. What
+landed green was dropping the redundant ` — severity — date` suffix from Tier-2
+lines (~5 KB), which buys ~20 advisories. **Diagnostic for next time:** if the
+cap fails, first check `ls -l dist/llms.txt` after rebuilding with *no* change
+— if the size is the floor render (Tier 1 = 8), status triage is not the lever;
+the Tier-2 line format is, and the real fix is the BACKLOG item "llms.txt
+Tier-2 floor" (make root `llms.txt` an index-of-indexes so it is O(1), with the
+complete list living in `advisories/llms.txt`), which needs the test contract
+changed deliberately, not mid-sweep. Status re-triage is still worth doing when
+it is *true* (a May npm wave is not "active" in September), just not as a size
+fix.
 
 ## 10. Smaller AI-coding tools often have no vendor security-advisory channel at all — the GitHub issue *is* the primary source
 

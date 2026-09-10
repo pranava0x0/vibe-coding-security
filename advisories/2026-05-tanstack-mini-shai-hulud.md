@@ -2,9 +2,9 @@
 id: 2026-05-tanstack-mini-shai-hulud
 title: "Mini Shai-Hulud wave — TanStack, Mistral, UiPath, OpenSearch (May 2026)"
 date_disclosed: 2026-05-11
-last_updated: 2026-06-11
+last_updated: 2026-09-10
 severity: critical
-status: active
+status: historical
 ecosystems: [npm, pypi]
 tools_affected: [any-react-project, cursor, claude-code, lovable, bolt, v0, llm-tooling]
 tags: [supply-chain, worm, ci-cd, github-actions, oidc, credential-theft, slsa-provenance, teampcp, cve, cisa-kev]
@@ -84,6 +84,8 @@ SLSA provenance is meant to prove "this artifact was built by this pipeline from
 → [prevention/npm-hardening.md](../prevention/npm-hardening.md)
 → [prevention/agent-sandboxing.md](../prevention/agent-sandboxing.md)
 → Restrict `pull_request_target` workflows. Use [`zizmor`](https://github.com/woodruffw/zizmor) to scan workflows for the Pwn Request pattern. Add [StepSecurity Harden-Runner](https://github.com/step-security/harden-runner) for runtime egress alerting.
+
+**Status update 2026-09-10:** re-triaged from `active` to `historical`. The incident window closed in May 2026; no new malicious versions, IOCs, or vendor updates have been reported since this advisory was last touched (2026-06-11). The *technique* is not retired — successor waves are tracked as live entries in ALERTS.md — but this specific compromise is over, and "active" here should mean "still propagating," not "was bad once."
 
 ## Sources
 - [TanStack — Postmortem: TanStack npm supply-chain compromise](https://tanstack.com/blog/npm-supply-chain-compromise-postmortem)

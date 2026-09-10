@@ -2,9 +2,9 @@
 id: 2026-04-mini-shai-hulud-sap
 title: "Mini Shai-Hulud — SAP-related npm packages (April–May 2026)"
 date_disclosed: 2026-04
-last_updated: 2026-05-16
+last_updated: 2026-09-10
 severity: high
-status: active
+status: historical
 ecosystems: [npm]
 tools_affected: [enterprise-node, sap-cap, any-node-with-sap-deps]
 tags: [supply-chain, credential-theft, npm, mini-shai-hulud, enterprise]
@@ -41,6 +41,8 @@ If you've installed or upgraded any of these in April or May 2026, assume creden
 ## Prevention
 → [prevention/npm-hardening.md](../prevention/npm-hardening.md)
 → [prevention/credential-hygiene.md](../prevention/credential-hygiene.md) — use short-lived creds, OIDC, 1Password CLI
+
+**Status update 2026-09-10:** re-triaged from `active` to `historical`. The incident window closed in April–May 2026; no new malicious versions, IOCs, or vendor updates have been reported since this advisory was last touched (2026-05-16). The *technique* is not retired — successor waves are tracked as live entries in ALERTS.md — but this specific compromise is over, and "active" here should mean "still propagating," not "was bad once."
 
 ## Sources
 - [The Hacker News — SAP-Related npm Packages Compromised in Credential-Stealing Supply Chain Attack](https://thehackernews.com/2026/04/sap-npm-packages-compromised-by-mini.html)

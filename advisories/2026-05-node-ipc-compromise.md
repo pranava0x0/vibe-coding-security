@@ -2,9 +2,9 @@
 id: 2026-05-node-ipc-compromise
 title: "node-ipc compromise (3 malicious versions, May 2026)"
 date_disclosed: 2026-05-14
-last_updated: 2026-05-18
+last_updated: 2026-09-10
 severity: critical
-status: active
+status: historical
 ecosystems: [npm]
 tools_affected: [any-node-project, cursor, claude-code, replit, lovable, bolt]
 tags: [supply-chain, credential-theft, npm, transitive-dependency, dns-exfiltration]
@@ -68,6 +68,8 @@ If any malicious version was on a dev machine or CI runner, treat the host as co
 ## Prevention
 → [prevention/npm-hardening.md](../prevention/npm-hardening.md) — `--ignore-scripts`, lockfile pinning, Socket
 → [prevention/agent-sandboxing.md](../prevention/agent-sandboxing.md) — run `npm install` inside a container
+
+**Status update 2026-09-10:** re-triaged from `active` to `historical`. The incident window closed in May 2026; no new malicious versions, IOCs, or vendor updates have been reported since this advisory was last touched (2026-05-18). The *technique* is not retired — successor waves are tracked as live entries in ALERTS.md — but this specific compromise is over, and "active" here should mean "still propagating," not "was bad once."
 
 ## Sources
 - [Socket — Popular node-ipc npm Package Infected with Credential Stealer](https://socket.dev/blog/node-ipc-package-compromised)
