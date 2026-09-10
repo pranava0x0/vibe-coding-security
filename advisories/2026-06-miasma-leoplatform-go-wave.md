@@ -2,9 +2,9 @@
 id: 2026-06-miasma-leoplatform-go-wave
 title: "Miasma LeoPlatform + Go ecosystem wave — 20 npm packages + Go module + GitHub Actions compromise (June 24 2026)"
 date_disclosed: 2026-06-24
-last_updated: 2026-07-06
+last_updated: 2026-09-10
 severity: critical
-status: active
+status: historical
 ecosystems: [npm, go, github-actions]
 tools_affected: [leo-sdk, leo-aws, leo-cli, leo-auth, rstreams-metrics, serverless-leo, claude-code, cursor, codfish-semantic-release-action]
 tags: [supply-chain, credential-theft, phantom-gyp, binding-gyp, miasma, shai-hulud-lineage, ci-cd, github-actions, go, npm-worm]
@@ -121,6 +121,8 @@ If the `binding.gyp` payload ran during `npm install`, treat all credentials in 
 - **[npm hardening](../prevention/npm-hardening.md)** — including `allow-scripts=false` in `.npmrc` (npm ≥ 11.16.0) which blocks BOTH lifecycle scripts AND `binding.gyp`-triggered builds (unlike `--ignore-scripts` which only blocks the former).
 - **[CI/CD hardening](../prevention/ci-cd-hardening.md)** — pin GitHub Actions to a specific commit SHA rather than a floating tag (`uses: codfish/semantic-release-action@v3` → `uses: codfish/semantic-release-action@<SHA>`).
 - **[Supply-chain attack surface](../prevention/supply-chain-attack-surface.md)** — audit for `binding.gyp` files in unfamiliar npm packages.
+
+**Status update 2026-09-10:** re-triaged from `active` to `historical`. The incident window closed in June–July 2026; no new malicious versions, IOCs, or vendor updates have been reported since this advisory was last touched (2026-07-06). The *technique* is not retired — successor waves are tracked as live entries in ALERTS.md — but this specific compromise is over, and "active" here should mean "still propagating," not "was bad once."
 
 ## Sources
 

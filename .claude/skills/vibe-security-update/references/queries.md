@@ -67,6 +67,12 @@ on rotating subsets, so high-signal pages aren't buried under news aggregators.
 9. `{ecosystem} security response team supply chain {year}`
 10. `{framework} CVE {year}` — direct per-framework CVE queries; these surface
     advisory-database-only CVEs that never get blog coverage
+11. `{agent} auto mode OR autonomous mode prompt injection {year}` — agent
+    "auto"/"yolo"/"full-access" modes are where classifier-bypass chains land;
+    the researcher blogs below publish these before any outlet picks them up
+12. `{vendor threat-intel blog} AI agent OR agentic {year}` — rotate GTIG,
+    Microsoft Threat Intelligence, Unit 42, Mandiant, Anthropic threat reports.
+    Telemetry reports name packages, paths, and tools with no CVE attached.
 
 **Fetch directly, don't search for:** CISA's KEV catalog is a JSON feed at
 `https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json`.
@@ -119,12 +125,29 @@ Rotate a different subset each sweep; the lists are a floor, not a ceiling.
 - **Industry security blogs:** Anthropic, OpenAI, Google (Project Zero /
   Security Blog), Microsoft MSRC, AWS, Cloudflare, Red Hat, Databricks,
   Salesforce, Oracle
+- **Vendor threat-intelligence reports (distinct from advisory pages):**
+  `cloud.google.com/blog/topics/threat-intelligence` (GTIG — the 2026-09-08
+  adversarial-AI report named trojanized MCP packages and `.claude/`/`.cursor/`
+  persistence paths), Microsoft Threat Intelligence, `unit42.paloaltonetworks.com`,
+  Mandiant, `gambit.security` (ransomware-affiliate AI-tool abuse from recovered
+  operator infrastructure)
+- **CNAs that are research firms:** `vulncheck.com/advisories`,
+  `zerodayinitiative.com/advisories` — for small AI-tool vendors with no GHSA
+  channel, the CNA's own advisory is the independent second source (DeepSeek
+  Harness CVE-2026-82533; Langflow CVE-2026-0768 was a ZDI 0-day advisory)
+- **Roundups that surface primaries (aggregators, not sources):**
+  `adversa.ai/blog` monthly "top … security resources" posts,
+  `labs.cloudsecurityalliance.org` CISO daily briefings — read them for the
+  links, then fetch and cite the primary
 - **Researcher blogs (upstream of aggregators):** 0day.click, cyata.ai,
   layerxsecurity.com, pillar.security, oasis.security, tenetsecurity.ai,
   labs.zenity.io, novee.security, danusminimus.github.io, oddguan.com,
   manifold.security (cross-vendor AI-coding-CLI pre-trust-execution findings —
   Cursor CLI worktree Aug 2026, GitSpawn Sept 2026), paddo.dev (independent
-  technical follow-up/retest blog, not just restatement)
+  technical follow-up/retest blog, not just restatement), embracethered.com
+  (Johann Rehberger — agent prompt-injection chains; Claude Code Auto Mode
+  module-shadowing, Aug 2026), itmeetsot.eu (independent replication of the
+  same class via steganographic payloads)
 - **AI-safety research nonprofits publishing standalone incident sites (not a
   blog post on their main domain):** `collusion.wiki` — the Nightingale
   Collective's primary report on the DSEWiki agent-collusion incident (Sept

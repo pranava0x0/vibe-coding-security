@@ -911,12 +911,20 @@ def _render_llms_txt(
     if tier2:
         lines.append("### More advisories (older, resolved — one line each)")
         lines.append("")
+        # 2026-09-10: Tier 2 is the O(n) term, and it is the one the fitter
+        # cannot shrink. At TIER1_FLOOR this file is ~8 full entries plus one
+        # line per remaining advisory, and tests/test_llms.py requires every
+        # advisory's *full* frontmatter title to appear here, so a Tier-2 line
+        # is bounded below by title + absolute URL (~230 B). With 263
+        # advisories the floor render exceeded the budget on this date, and
+        # neither status triage (12 stale actives → historical saved 92 B) nor
+        # membership fitting could touch it. The only per-line bytes that were
+        # optional were the " — severity — date" suffix (~22 B × ~230 lines ≈
+        # 5 KB); both facts are on the page and in advisories.json. Dropped.
+        # The floor is still O(n); see BACKLOG.md ("llms.txt Tier-2 floor") for
+        # the structural options, which need a test-contract change to land.
         for p in tier2:
-            sev = p.frontmatter.get("severity", "")
-            date_d = p.frontmatter.get("date_disclosed", "")
-            meta = " — ".join(str(x) for x in [sev, date_d] if x)
-            meta = f" — {meta}" if meta else ""
-            lines.append(f"- [{p.title}]({_page_html_url(p)}){meta}")
+            lines.append(f"- [{p.title}]({_page_html_url(p)})")
         lines.append("")
 
     for slug, label, _ in SECTIONS:

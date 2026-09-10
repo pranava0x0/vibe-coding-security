@@ -1,13 +1,13 @@
 ---
 id: 2026-07-nextjs-july-security-release
-title: "Next.js July 2026 Security Release — 9 CVEs (4 high, 5 medium): middleware bypass, SSRF, cache confusion (patch to 16.2.11 / 15.5.21)"
+title: "Next.js July + August 2026 Security Releases — 9 CVEs in July, then two critical unauthenticated RCEs in August (AVIF, Windows CVE-2026-75604)"
 date_disclosed: 2026-07-20
-last_updated: 2026-08-21
-severity: high
+last_updated: 2026-09-10
+severity: critical
 status: patched
 ecosystems: [npm, javascript]
-tools_affected: [nextjs, vercel, any-nextjs-project]
-tags: [cve, ssrf, middleware-bypass, cache-poisoning, dos, nextjs, security-release-program]
+tools_affected: [nextjs, vercel, any-nextjs-project, self-hosted-nextjs, windows-hosted-nextjs, sharp, libheif]
+tags: [cve, ssrf, middleware-bypass, cache-poisoning, dos, nextjs, security-release-program, rce, image-optimization, avif, path-traversal, windows]
 ---
 
 ## TL;DR
@@ -71,6 +71,29 @@ On **2026-08-20**, Vercel published the second pre-announcement under the same S
 
 This entry will be updated with the actual CVE detail once the release publishes.
 
+## Update — 2026-09-10: the August release shipped a day early (2026-08-25) with **two** critical unauthenticated RCEs, not one — patch self-hosted apps to 16.3.3 / 15.5.24
+
+The pre-announced release was pulled forward to **2026-08-25** after Vercel "identified an additional critical severity vulnerability in one of our upstream dependencies" (its own words on the release post). Both issues are **unauthenticated remote code execution**, both fixed in **Next.js 16.3.3** (Active LTS) and **15.5.24** (Maintenance LTS), and the severity of this advisory is bumped from high to **critical** accordingly.
+
+### Unauthenticated RCE in the Image Optimization API via AVIF — Critical, CVSS 4.0 **9.5**, no CVE
+**GHSA-2xp9-vwfh-vxw4** (Next.js) tracking **GHSA-g89c-p67h-r497** in **libheif**, the HEIF/AVIF decoder that `sharp` uses under Next.js's `next/image` optimizer. When the optimizer processes an attacker-controlled AVIF image, a flaw in libheif can lead to code execution on the server. Affects **Next.js ≥ 10.0.0 < 15.5.24** and **all 16.x < 16.3.3**. The patched releases **disable AVIF optimization entirely** until the upstream fix propagates — so if you rely on AVIF output, expect a format change, not just a security fix. The Hacker News' coverage narrows exposure to deployments that explicitly added `image/avif` to the `images.formats` configuration and credits rootxharsh (finder) and KarimPwnz (coordinator), with Vercel's changelog crediting the Hacktron team; the GHSA itself lists no credits.
+
+### Unauthenticated RCE on Windows-hosted servers — Critical, CVSS 3.1 **9.0**, **CVE-2026-75604**
+**GHSA-p293-qw3h-jr36**. Applications that use **both the Pages Router and App Router without Cache Components**, served from a **Windows filesystem**, are vulnerable to a path-traversal (CWE-22) issue that escalates to remote code execution. Affects **≥ 13.4 < 15.5.24** and **≥ 16.0 < 16.3.3**. Linux and macOS are not affected. Vercel's advisory: *"There is no known workaround for affected windows-hosted applications. You should upgrade immediately if your server is hosted on Windows."* Credited to evolutionstorm and B0RI.
+
+**Vercel-hosted apps are protected from both without upgrading** (per The Hacker News' summary of the release post); everyone self-hosting — Docker, Node on a VM, a Windows IIS box, the "deploy anywhere" template a vibe-coding platform emitted — has to ship the version bump.
+
+```bash
+# Which line are you on, and are you below the fix?
+node -e 'console.log(require("next/package.json").version)'
+grep -n 'avif' next.config.* 2>/dev/null                       # AVIF exposure check
+node -e 'console.log(process.platform)'                        # win32 = the CVE-2026-75604 case
+npm install next@15.5.24   # 15.x line
+npm install next@16.3.3    # 16.x line
+```
+
+Two program notes. First, this is the second consecutive release where the pre-announcement's count was **lower than what shipped** (July pre-announced 9 and shipped 9; August pre-announced 1 critical and shipped 2) — treat the pre-announced count as a floor. Second, the AVIF issue is the first Next.js critical whose root cause is a transitive native dependency (`sharp` → `libheif`), which `npm audit` on `next` alone would not have flagged; it is the same "the framework's image pipeline is a C library" exposure that the [React2Shell / RSC cluster](2025-12-react2shell-rce.md) is not, and it will recur.
+
 ## Sources
 - [Next.js — Security Release and Our Next Patch Release (announcement, 2026-07-13)](https://nextjs.org/blog/next-security-release-program)
 - [Next.js — July 2026 Security Release (full CVE list, published 2026-07-20)](https://nextjs.org/blog/july-2026-security-release)
@@ -78,3 +101,7 @@ This entry will be updated with the actual CVE detail once the release publishes
 - [Cybersecurity News — Next.js Launches Monthly Security Release Program as First Update Patches 9 Vulnerabilities](https://cybersecuritynews.com/next-js-monthly-security-updates/)
 - [GBHackers — Next.js Announces July Security Release to Fix 4 High-Severity and 5 Medium Flaws](https://gbhackers.com/next-js-announces-july-security-release/)
 - [Next.js — Upcoming Next.js August Security Release (pre-announcement, published 2026-08-20)](https://nextjs.org/blog/upcoming-nextjs-security-release-august-2026) — added 2026-08-21: the 2026-08-26 date, the single critical-severity count, and the 16.3.3 / 15.5.24 target versions.
+- [Next.js — August 2026 Security Release (published 2026-08-25)](https://nextjs.org/blog/august-2026-security-release) — fetched 2026-09-10 for the 2026-09-10 update: the pulled-forward date, both vulnerabilities, the AVIF-disabled mitigation, "no known workaround" for Windows, the 16.3.3 / 15.5.24 versions.
+- [GitHub Security Advisory — GHSA-p293-qw3h-jr36: Unauthenticated Remote Code Execution on windows-hosted servers (CVE-2026-75604)](https://github.com/vercel/next.js/security/advisories/GHSA-p293-qw3h-jr36) — fetched 2026-09-10: CVSS 9.0, CWE-22, affected ranges ≥13.4 <15.5.24 and ≥16.0 <16.3.3, reporter credits, published 2026-08-25.
+- [GitHub Security Advisory — GHSA-2xp9-vwfh-vxw4: Unauthenticated Remote Code Execution in Image Optimization API when AVIF files are used](https://github.com/vercel/next.js/security/advisories/GHSA-2xp9-vwfh-vxw4) — fetched 2026-09-10: CVSS 4.0 9.5, no CVE, affected ranges ≥10.0.0 <15.5.24 and <16.3.3, libheif GHSA-g89c-p67h-r497 reference.
+- [The Hacker News — Next.js Patches Critical AVIF and Windows Flaws Enabling Unauthenticated RCE](https://thehackernews.com/2026/08/nextjs-patches-critical-avif-and.html) — fetched 2026-09-10; published 2026-08-27: the `image/avif`-in-`formats` exposure condition, researcher credits, and the "Vercel-hosted applications are protected … and require no upgrade" statement.
