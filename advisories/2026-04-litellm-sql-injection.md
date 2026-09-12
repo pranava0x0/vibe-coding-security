@@ -2,7 +2,7 @@
 id: 2026-04-litellm-sql-injection
 title: "LiteLLM proxy pre-auth SQL injection — CVE-2026-42208 (April 2026, CISA KEV) + CVE-2026-42271 (June 2026, actively exploited)"
 date_disclosed: 2026-04-24
-last_updated: 2026-09-03
+last_updated: 2026-09-12
 severity: critical
 status: patched
 ecosystems: [pypi, ai-agents, llm-proxy, mcp]
@@ -106,8 +106,20 @@ Separately, **CVE-2026-42271** (CVSS 3.1: 8.8 / CVSS 4.0: 8.7; **CISA KEV added 
 
 **Remediation:** upgrade to LiteLLM ≥ 1.84.0 (supersedes all prior version guidance in this advisory). If the instance was internet-facing and unpatched, check for unexpected CPU load, unfamiliar processes, and outbound connections to mining pools in addition to the credential-rotation steps above.
 
+## September 2026 update — CVE-2026-37004 (SSTI RCE) + Wiz "Off Guard": ~1 in 10 exposed gateways still accept the example master key
+
+Two additions this window, both raising LiteLLM's already-high exposure:
+
+- **CVE-2026-37004** (CVSS 3.1 **9.8**, CWE-1336) — a **server-side template injection** in the **`/prompts/test`** endpoint: the `dotprompt_content` parameter is rendered through an **unsandboxed `jinja2.Environment`**, so an unauthenticated attacker can execute arbitrary OS commands. Affects **< 1.83.7**; fixed in **1.83.7** (commit `d910a95`). This is a distinct root cause from every prior LiteLLM CVE tracked here (SQLi, header auth-bypass, the MCP OAuth2 fallback) — a fresh RCE surface, not a variant. GHSA-6wvf-77m9-58rm, published 2026-08-27.
+- **Wiz "Off Guard" (2026-09-09)** — Wiz scanned ~3,000 internet-facing LiteLLM gateways and found **9.6% still accept the default master key `sk-1234`** (the value shipped in LiteLLM's own Docker Compose and pip quick-starts) and **6.2% require no authentication at all**. From an authenticated position, attackers abuse pass-through endpoints to reach the **cloud metadata service and retrieve IAM credentials**, defeating IMDSv2 via header manipulation — turning a default-credential gateway into cloud compromise. This is the practical exploitation path behind the CISA-KEV CVE-2026-59822 activity already documented above.
+
+**Remediation:** upgrade to the latest LiteLLM (≥ 1.84.0 already required by the MCP/auth CVEs above; ≥ 1.83.7 closes CVE-2026-37004 — take the higher), **replace `sk-1234` and any example master key with a strong unique value**, scope the proxy's IAM role to least privilege, and audit guardrail and pass-through routes. Treat any gateway that ever ran with the default key as compromised.
+
 ## Sources
 - [GitHub Advisory — GHSA / NVD CVE-2026-42208](https://nvd.nist.gov/vuln/detail/CVE-2026-42208) — canonical CVE record.
+- [GitHub Advisory Database — GHSA-6wvf-77m9-58rm (CVE-2026-37004)](https://github.com/advisories/GHSA-6wvf-77m9-58rm) — fetched 2026-09-12: `/prompts/test` unsandboxed-jinja2 SSTI, CVSS 9.8, affected < 1.83.7, fixed 1.83.7, commit `d910a95`, published 2026-08-27.
+- [Wiz — Off Guard: Breaking LiteLLM From Authentication Bypass to Cloud Compromise](https://www.wiz.io/blog/off-guard-breaking-litellm-from-authentication-bypass-to-cloud-compromise) — fetched 2026-09-12; 2026-09-09: 9.6% default-key / 6.2% no-auth measurement across ~3,000 gateways, metadata-service IAM-credential path, IMDSv2 header bypass.
+- [The Hacker News — Nearly 1 in 10 Exposed LiteLLM Gateways Accept the Default Master Key](https://thehackernews.com/2026/09/nearly-1-in-10-exposed-litellm-gateways.html) — fetched 2026-09-12; 2026-09-09: corroboration of the Wiz figures and CVE-2026-59822 exploitation context.
 - [NVD — CVE-2026-42271](https://nvd.nist.gov/vuln/detail/CVE-2026-42271) — command injection, CVSS 8.7, actively exploited.
 - [Obsidian Security — Breaking LiteLLM: From Low-Privilege User to Admin and RCE (CVE-2026-47101 / CVE-2026-47102 / CVE-2026-40217)](https://www.obsidiansecurity.com/blog/litellm-privilege-escalation-rce) — canonical CVSS 9.9 chain analysis.
 - [Sysdig — CVE-2026-42208: Targeted SQL injection against LiteLLM's authentication path discovered 36 hours following vulnerability disclosure](https://www.sysdig.com/blog/cve-2026-42208-targeted-sql-injection-against-litellms-authentication-path-discovered-36-hours-following-vulnerability-disclosure) — honeypot telemetry, attacker IP, target tables.

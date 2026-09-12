@@ -2,7 +2,7 @@
 id: 2026-09-anthropic-claude-session-infostealer-hijack
 title: "Generic infostealer malware hijacks Claude.ai browser sessions to drain paid usage and expose account data"
 date_disclosed: 2026-08-30
-last_updated: 2026-08-30
+last_updated: 2026-09-12
 severity: high
 status: active
 ecosystems: [anthropic, claude]
@@ -38,7 +38,12 @@ Anthropic notified affected users directly by email. Warning signs even without 
 - Don't download cracked software, pirated installers, or "free" tool cracks — the single largest infostealer delivery vector across this repo's tracked incidents.
 - Review Claude's active-sessions list periodically (Settings → Security) and revoke anything unrecognized.
 
+## Update 2026-09-12 — Okta quantifies the market: replayable AI tokens for Anthropic, Cursor, OpenAI and others in a 7 GB stealer dump, sold with "24x7 support"
+
+Okta's threat-intelligence team analysed a **7 GB infostealer log** posted to Telegram on **2026-08-02** covering **5,871 infected machines in 162 countries**. It contained **44,791 unique JWTs**, of which **555** were likely AI-service authentication tokens — for Google, Microsoft, **Anthropic**, Amazon, Character.ai, **Cursor**, Poe.com and Pika AI — plus **2,937 encrypted JWT structures from OpenAI** (ChatGPT uses NextAuth.js sessions). Okta's Jeremy Kirk: *"Session tokens and API keys are sought specifically by threat actors because it is often possible to replay those secrets and bypass credential-based authentication."* Underground vendors now sell the bundles: one offered discounted access to Claude, Cursor, ChatGPT and Gemini with "24x7 support and money-back guarantees"; anti-detect browsers such as Camoufox are used to replay the sessions without tripping device checks (The Hacker News, 2026-09-09). This is the supply side of the account-hijacking Anthropic warned about above, and it extends the exposure from Claude.ai to **Cursor sessions** and OpenAI accounts. Okta's recommendations: IP allow-listing where available, Chrome's Device Bound Session Credentials, short-lived OAuth tokens, passkeys, and monitoring API-key usage patterns. Status stays `active`.
+
 ## Sources
+- [The Hacker News — Infostealer Logs Expose Replayable AI Tokens That Can Bypass MFA](https://thehackernews.com/2026/09/infostealer-logs-expose-replayable-ai.html) — fetched 2026-09-12; 2026-09-09: Okta's dataset figures (5,871 machines, 162 countries, 44,791 JWTs, 555 AI-linked, 2,937 OpenAI), service list, vendor offerings, Kirk quote, remediation list.
 - [Malwarebytes — Infostealers are hijacking Claude accounts at users' expense](https://www.malwarebytes.com/blog/news/2026/09/infostealers-are-hijacking-claude-accounts-at-users-expense) — 2026-09-01: direct quote from Anthropic's warning email, remediation steps, recommended user actions.
 - [BleepingComputer — Anthropic warns infostealer malware is hijacking Claude sessions to drain usage](https://www.bleepingcomputer.com/news/artificial-intelligence/anthropic-warns-infostealer-malware-is-hijacking-claude-sessions-to-drain-usage/) — 2026-08-31: malware family list (Vidar, LummaC2, StealC, RedLine, Acreed, Atomic Stealer), Anthropic's remediation actions, "signing out doesn't remove the malware" quote.
 - [SecurityWeek — Anthropic Warns Claude Users of Infostealer Malware Infections](https://www.securityweek.com/anthropic-warns-claude-users-of-infostealer-malware-infections/) — 2026-08-31: independent corroboration of the malware families and timeline.
