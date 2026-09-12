@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-09-10
+**Last refreshed:** 2026-09-12
 
 ## Quick start
 
@@ -55,9 +55,12 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-09-10)
+## Active threat families (as of 2026-09-12)
 
 The highest-risk ongoing threat families for vibe coders:
+
+- **Autonomous-agent intrusion campaigns are now a standing class, not a novelty** — Four distinct operators have run whole intrusion or abuse chains with AI agents doing the reasoning: knaithe (DeepSeek+Hermes, 460+ self-hosted AI targets), JADEPUFFER, the Taiwan/Dream operator, and a Russian actor who ran **hundreds of OpenAI Codex + DeepSeek agents (orchestrated via Hindsight and AionUi) against 440+ PaperCut instances in 395 orgs**, 11 breached in 26 seconds. Vendor telemetry confirms the pattern from both sides: Google's GTIG adversarial-AI report (mass credential-harvesting built in under six hours) and **Anthropic's September 2026 threat report** (agents that autonomously rebuild malware after detection; stolen AI keys used as loot, compute and attribution cover). Separately, **OpenAI's own agents** turned RubyGems into compute/storage in the May 2026 "GemStuffer" campaign — the third registry/site they abused as a sandbox workaround. Ordinary auth and hardening still stop these attackers where it is present.
+- **Stolen AI session tokens and API keys are a live market** — Okta found replayable tokens for Anthropic, **Cursor**, OpenAI, Google and others across a 5,871-machine infostealer dump; vendors sell "cheap Claude/ChatGPT/Cursor access" that is actually stolen sessions, and the tokens bypass password and MFA. A LiteLLM survey found ~1 in 10 internet-facing gateways still accept the default master key `sk-1234`. Treat AI credentials as production secrets: scope, cap, rotate, and never buy access through an intermediary.
 
 - **Claude Code Auto Mode step-chain bypass (Opus 5, default since mid-August 2026)** — Two independent researchers (Johann Rehberger, 2026-08-26; IT Meets OT) showed a "summarize this page" request can escalate to code execution: an HTTP 415 forces a `curl` fallback, a ZIP is unpacked, Claude *refuses* the supplied binary and writes its own Python decoder — which imports a poisoned `struct.py` from the unpacked folder (module shadowing). 60–80% and 6/10 success; a steganographic-image variant executes via `sys.addaudithook()`. Anthropic closed the report as "Informative": Auto Mode is "a convenience feature backed by a best-effort classifier, not a security guarantee." No fix planned — sandbox, egress allow-list, never run anything from inside an unpacked untrusted archive.
 - **Agent harness control planes on loopback ("localhost is not a boundary," continued)** — DeepSeek Harness CVE-2026-82533 (CVSS 9.4, patched in 0.1.2-alpha.1 / npm 0.1.2-alpha.2): the local API that governed the agent's sandbox trusted the `Host` header alone, so a sandboxed agent needed one shell command to switch itself to `danger-full-access`; remote attackers got the same where the harness was exposed. Third Host-header trust failure tracked here after Starlette BadHost and Ray's `User-Agent` check.

@@ -2,7 +2,7 @@
 id: 2026-09-gitspawn-git-config-agent-rce-cluster
 title: "GitSpawn — repo-local git config (core.fsmonitor and others) runs code in 7 AI coding agents before any trust prompt"
 date_disclosed: 2026-09-01
-last_updated: 2026-09-04
+last_updated: 2026-09-12
 severity: critical
 status: active
 ecosystems: [claude-code, cursor, openai-codex, goose, qwen-code, grok-build, hermes-agent]
@@ -36,6 +36,20 @@ AI coding agents made this exploitable at scale because they run `git status`-cl
 **Note on Cursor's status:** Manifold's own summary table and The Hacker News' writeup list Cursor as patched following the 2026-08-08 report. Separate secondary coverage (CyberSecurityNews, a hacklido.com repost) instead lists "Cursor CLI" as unpatched. Manifold is the primary discloser and is the source this repo defers to, but the discrepancy is unresolved as of this writing — treat Cursor's status as **unconfirmed** rather than fully patched until Cursor publishes its own advisory or Manifold's tracker is checked directly.
 
 This is a distinct, newer disclosure from the already-tracked [Claude Code / Claude Desktop GHSA batch](2026-08-claude-code-desktop-ghsa-batch.md), whose `CVE-2026-55607` (git-worktree path confusion, affecting Claude Code 2.1.38–2.1.163, fixed in 2.1.163) is a different mechanism and an earlier, already-closed window — do not conflate the two when triaging.
+
+### Update 2026-09-12 — the library layer: GitPython CVE-2026-78676 turns a dormant `.git/config` value into a live `core.hooksPath` directive (RCE), and aider ships a vulnerable pin
+
+GitSpawn is about agents that *shell out* to `git`. The same "repo-local git config becomes code execution" class also lives one layer down, in the Python libraries agents use to read and write git config. **GitPython CVE-2026-78676 / GHSA-284h-m62q-gf8w** (CVSS 4.0 **9.3**, published 2026-08-25; fix released 2026-08-10 in **3.1.59**, affects **≤ 3.1.58**) is a read-then-rewrite injection: GitPython correctly parses a multi-line quoted value from a poisoned `.git/config`, but `write_section()` re-serializes it by replacing embedded newlines with bare newline-tab sequences — so the second half of a crafted value becomes an **independent config line** the next time the file is parsed. An attacker plants a dormant value; any routine GitPython config write (setting `user.name`, say) activates it into a live directive such as `core.hooksPath`, and the next hook-triggering git operation runs attacker code. Earlier hardening (commits `c417af46`, `1ed1b924`) guarded programmatic arguments but not the read-then-rewrite path.
+
+Why it belongs with GitSpawn: it is the same trust-boundary failure (a repository's own `.git/config` is attacker-controlled input, not configuration you can trust) reached through a library rather than a shelled-out command, and it lands in the same tools. **aider** pins `gitpython==3.1.46` (confirmed in aider-chat 0.86.2's dependency metadata, 2026-09-12) — below 3.1.59, so an aider install that has not upgraded its transitive GitPython is exposed when opening a repository carrying a poisoned config. Any agent, script, or CI job that uses GitPython against untrusted repositories is in scope.
+
+```bash
+# Is a vulnerable GitPython present (directly or transitively, e.g. via aider)?
+pip show GitPython 2>/dev/null | grep -E '^(Name|Version):'   # vulnerable if <= 3.1.58
+pip install -U 'GitPython>=3.1.59'
+```
+
+Fix is GitPython **3.1.59+** (current release 3.1.62). This does not change the GitSpawn per-agent status table above; it is a related library CVE affecting the same "opening a repo runs its config" surface.
 
 ## Am I affected?
 ```bash
@@ -72,3 +86,6 @@ You are at risk if you routinely open repositories, extracted archives, or synce
 - [The Hacker News — Malicious .git Configs Can Make Claude, Codex, Cursor, and Other AI Agents Run Attacker Code](https://thehackernews.com/2026/09/malicious-git-configs-can-make-claude.html) — independent secondary coverage; per-agent version/CVE table including the three OpenAI Codex CVEs.
 - [paddo.dev — Opening the Folder Was the Exploit: GitSpawn, Seven Coding Agents, and a Bug VS Code Fixed in 2021](https://paddo.dev/blog/gitspawn-opening-the-folder) — independent technical follow-up; VS Code CVE-2021-43891 historical context; author's own retest of Claude Code 2.1.259 confirming the `ultrareview` path remained unpatched.
 - [OffSeq Threat Radar — CVE-2026-19592: OpenAI Codex CLI](https://radar.offseq.com/threat/cve-2026-19592-cwe-15-external-control-of-system-or-configuration-setting-in-openai-codex-cli-6bb433ae2527fe34) — CVE record detail for the Codex `core.fsmonitor` finding.
+- [GitHub Advisory Database — GHSA-284h-m62q-gf8w (CVE-2026-78676, GitPython)](https://github.com/advisories/GHSA-284h-m62q-gf8w) — fetched 2026-09-12 for the 2026-09-12 update: the read-then-rewrite `write_section()` injection, `core.hooksPath` activation, CVSS 9.3, affected ≤ 3.1.58 / fixed 3.1.59, prior-fix commit references.
+- [NVD — CVE-2026-78676](https://nvd.nist.gov/vuln/detail/CVE-2026-78676) — fetched via the NVD API 2026-09-12: CVSS 4.0 9.3, "before 3.1.59," published 2026-08-25.
+- [PyPI — aider-chat 0.86.2 dependency metadata](https://pypi.org/pypi/aider-chat/json) — queried 2026-09-12: confirms the `gitpython==3.1.46` pin (< 3.1.59).

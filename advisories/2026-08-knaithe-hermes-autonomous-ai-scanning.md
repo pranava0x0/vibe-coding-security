@@ -2,7 +2,7 @@
 id: 2026-08-knaithe-hermes-autonomous-ai-scanning
 title: "knaithe/KnYuan — an autonomous DeepSeek+Hermes agent mass-scanned 460+ targets for Langflow, n8n and Marimo RCEs; the AI-tool exploits failed only where auth was on (July–August 2026)"
 date_disclosed: 2026-07-30
-last_updated: 2026-08-21
+last_updated: 2026-09-12
 severity: high
 status: active
 ecosystems: [self-hosted, ai-infrastructure]
@@ -48,7 +48,9 @@ On **2026-08-14**, [Tenable published](https://www.tenable.com/blog/the-agentic-
 
 The CVE list Tenable attributes across the cluster is a near-exact overlay of this repo's own coverage: CVE-2025-3248 and CVE-2026-33017 (Langflow), CVE-2026-39987 (Marimo), CVE-2026-21858 and CVE-2025-68613 (n8n), plus CVE-2026-3055 (Citrix NetScaler), CVE-2026-34486 (Apache Tomcat), CVE-2026-0300 (PAN-OS), and CVE-2026-33824 (Windows IKE VPN). **Self-hosted AI orchestration tooling is now a standing target category for autonomous attackers**, not an incidental one.
 
-## Am I affected?
+### Update 2026-09-12 — PaperCut: a Codex + DeepSeek agent fleet compromised 440+ instances across 395 organisations in 48 countries, from empty workspace to first RCE in under four hours
+
+The third agentic-threat-actor campaign in this cluster, and the largest by victim count. Blackpoint Cyber and GreyNoise (both 2026-09-09) reconstructed a Russian-speaking actor's operation against **PaperCut N
 
 You are in the target set if you run any of these reachable from a network you don't fully control. Check exposure and configuration, in this order:
 
@@ -77,6 +79,17 @@ Then check for the outcomes the agent actually achieved:
 
 Note the campaign's observed targeting was Chinese infrastructure (FOFA enumeration of Chinese systems), so **geographic absence from that set is not a reason to relax** — the technique, the tooling, and the CVE list are all portable, and the same Hermes framework has already been used against Thai and Taiwanese targets.
 
+### Update 2026-09-09/10 — a fourth ATA campaign: hundreds of AI agents (OpenAI Codex + DeepSeek) mass-exploit 440+ PaperCut instances
+
+GreyNoise and Blackpoint Cyber independently documented a **Russian-speaking operator** running *"hundreds of AI agents"* against **PaperCut NG/MF** print-management servers from **2026-08-31**, exploiting **CVE-2026-81578** (authentication bypass) and **CVE-2026-82078** (RCE). It is the same agentic-threat-actor shape as knaithe, at larger scale and against a different (non-AI) target class — logged here because this file is the repo's home for autonomous-agent mass-exploitation campaigns, not because PaperCut is a vibe-coding tool.
+
+- **The stack (GreyNoise):** OpenAI **Codex** and **DeepSeek** models as the agents, **Hindsight** (a persistent-memory service) and **AionUi** (a graphical agent workspace) for orchestration, the **Netlas.io** scanning API for target discovery, and off-the-shelf offensive tooling (Mimikatz, SharpHound, Certipy, BloodHound, Rubeus) for post-exploitation. Blackpoint adds that the campaign preserved state in **timestamped markdown files** recording completed work, blockers and next hypotheses — the same "agent playbook as persistence layer" pattern GTIG named for TeamPCP.
+- **Speed and scale:** empty workspace → RCE in under 4 hours; RCE → domain admin in ~2 more; **11 organizations compromised in 26 seconds** once the runner was live; fastest domain-admin was 5 minutes (a US high school). **440+ instances across 395 organizations in 48 countries**, ~280 credential-harvesting successes, **12 reaching domain admin**. Education was the hardest-hit sector (204 victims); US, UK, France and Spain led by count. Infrastructure was exposed at `45.142.193[.]132`.
+- **What held:** GreyNoise notes that fundamental hardening still worked — a Cloudflare WAF blocked at least one attempt — reinforcing this advisory's core finding that ordinary controls stop autonomous attackers holding working exploits.
+- **Detection (Blackpoint/GreyNoise):** unexpected child processes off the PaperCut service (`cmd.exe`, `powershell.exe`, `whoami.exe`, `wmic.exe`), registry-hive dumping and base64 staging files, `ligolo-ng` tunnel agents, and configuration changes to PaperCut's user-lookup database settings. Patch PaperCut and take it off the public internet.
+
+This makes at least four distinct autonomous-agent exploitation campaigns tracked here (knaithe, JADEPUFFER, Taiwan/Dream, and now the PaperCut operator), plus the vendor-telemetry view in [GTIG's adversarial-AI report](2026-09-gtig-adversarial-ai-agentic-pipelines.md) and [Anthropic's September threat report](2026-09-anthropic-threat-intel-report-september-2026.md). The agent-orchestrated intrusion is no longer a novelty incident class.
+
 ## If you are affected
 
 - [If your local AI agent was exploited](../playbooks/if-your-local-ai-agent-was-exploited.md)
@@ -95,3 +108,8 @@ The single highest-value action this incident supports: **turn authentication on
 
 - [Unit 42 — Chinese-Speaking Threat Actor Harnesses AI Models for Autonomous Cyberattacks](https://unit42.paloaltonetworks.com/autonomous-ai-cyber-attack-campaign/) (published 2026-07-30) — primary source, fetched directly: actor aliases and Zhuhai assessment, the Hermes+DeepSeek division of labor, the 2026-05-07 recovered session (84 Langflow instances, 25,209 FOFA-identified n8n systems, ~100 sampled IPs, ~40 probed), per-CVE success/failure outcomes and the agent's own quoted reasoning, the 11 compromised Marimo instances, the three NetScaler victims and `NSC_AAAC=` cookie hunting, and the 1DayNews pipeline (17 sources, DeepSeek filtering, Telegram distribution).
 - [Tenable — The Agentic AI Threat Cluster: Seven Incidents, Three Actors, and What They Mean for Your Exposure](https://www.tenable.com/blog/the-agentic-ai-threat-cluster-seven-incidents-three-actors-and-what-they-mean) (published 2026-08-14) — independent corroboration and clustering, fetched directly: the seven-incident/three-actor framing, the cross-campaign CVE list, and the characterization of agentic capability as operating beyond step-by-step human direction. Explicitly a synthesis of already-disclosed reporting (Unit 42, Dream Security, Sysdig TRT) rather than new primary research.
+
+**2026-09-09/10 PaperCut update sources:**
+- [GreyNoise — AI-Orchestrated Campaign Against PaperCut NG/MF](https://www.greynoise.io/blog/ai-orchestrated-campaign-against-papercut-ng-mf) — fetched 2026-09-12; published 2026-09-09: Russian-speaking actor, Codex+DeepSeek attribution, Netlas.io scanning, timing (26 seconds / 5 minutes), 440/280/12 victim counts, per-country and per-sector breakdown, detection guidance.
+- [Blackpoint Cyber — Death by a Thousand PaperCuts: AI-Driven Exploitation at Scale](https://blackpointcyber.com/blog/death-by-a-thousand-papercuts-ai-driven-exploitation-at-scale/) — fetched 2026-09-12; published 2026-09-09: Hindsight/AionUi orchestration, timestamped-markdown state files, CVE-2026-81578/CVE-2026-82078, 517-target runner, geofencing, defender guidance.
+- [The Hacker News — PaperCut Attacker Uses Hundreds of AI Agents to Compromise 440+ Instances](https://thehackernews.com/2026/09/papercut-attacker-uses-hundreds-of-ai.html) — fetched 2026-09-12; published 2026-09-10: aggregator corroboration of both primary reports.
