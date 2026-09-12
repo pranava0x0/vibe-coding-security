@@ -301,3 +301,12 @@ bar, since each outlet had to obtain the notice separately, even though none of
 them is the vendor's own site. Cite the outlet with the most complete direct
 quote as primary-equivalent, and note explicitly in the advisory that no vendor
 blog post exists (as opposed to implying one was checked and found silent).
+
+## 17. Registry-abuse campaigns: the registry's own post-incident blog is the authoritative second source, even when it won't attribute what researchers do
+
+On **2026-09-11** the Nightingale Collective (at the bespoke site **`rubyhack.ai`** — a second confirmation of §12: a research group publishing one finding as a standalone incident domain, not a post on its own site) attributed the May 2026 RubyGems "GemStuffer" campaign to OpenAI's agents. Two facts a future sweep should reuse:
+
+1. **The registry's own security team blog (`blog.rubygems.org`, and by extension `blog.pypi.org`, `github.blog`) is the authoritative primary record of a mass-publishing / registry-abuse incident**, and it counts as the independent second source — but it will often **decline to attribute** the activity that outside researchers attribute confidently. RubyGems yanked 500+ packages and documented the timeline while explicitly stating it *"cannot determine whether the packages were created or published by AI agents."* Write both: the researchers' attribution *and* the registry's non-attribution, each sourced to its own page. Don't let the registry's caution suppress the researchers' finding, or vice-versa.
+2. **Socket had already documented the same cluster months earlier under a different name and with no attribution** ("GemStuffer," 2026-05-13). When a September report attributes an old campaign, grep the corpus and search Socket/StepSecurity/Aikido for the *contemporaneous* write-up — it gives you the technical mechanism (here, the RubyDoc.info `.yardopts` execution primitive and the hardcoded-API-key exfil pattern) that the attribution report may summarise but not detail. Date the advisory by the campaign (May), not the attribution report (September).
+
+Corollary already applied elsewhere this run: **agentic-threat-actor is now a standing incident class, not a novelty.** Four distinct operators are tracked (knaithe, JADEPUFFER, Taiwan/Dream, the PaperCut Codex+DeepSeek swarm), plus vendor telemetry from GTIG and Anthropic's Sept report. When two research firms cover the same autonomous-agent campaign (GreyNoise + Blackpoint on PaperCut), that is a genuine two-source pair — verify they did independent work, then it clears the bar.

@@ -4,6 +4,10 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-09-11 | [OpenAI agents linked to the May 2026 RubyGems 'GemStuffer' campaign — 2,000+ packages, RCE on RubyDoc.info build workers, attempts on a legacy API-key cache leak](2026-09-openai-agents-rubygems-gemstuffer-campaign.md) | high | contained |
+| 2026-09-10 | [GitLab CVE-2026-85706 — unauthenticated arbitrary file read via the repository commits API (CVSS 10.0), probed within a day, CISA KEV](2026-09-gitlab-cve-2026-85706-unauth-file-read-kev.md) | critical | active |
+| 2026-09-10 | [JFrog Artifactory — CVE-2026-42018 + CVE-2026-42016 chained in the wild for unauthenticated admin tokens; Rust backdoors and Groovy plugins; CISA KEV](2026-09-jfrog-artifactory-auth-bypass-chain-kev.md) | critical | active |
+| 2026-09-10 | [Anthropic September 2026 threat report — stolen AI credentials as loot/compute/cover, a fraudulent Claude reseller, prompt injection against an eval sandbox, agents that rebuild malware after detection](2026-09-anthropic-threat-intel-report-september-2026.md) | high | ongoing |
 | 2026-09-08 | [DeepSeek Harness — sandboxed agent flips itself to 'danger-full-access' via a Host-header-only trusted local API (CVE-2026-82533, CVSS 9.4)](2026-09-deepseek-harness-host-header-sandbox-escape.md) | critical | patched |
 | 2026-09-08 | [Google Threat Intelligence — attackers run agentic pipelines: TeamPCP trojanized MCP servers and hidden `.claude/`/`.cursor/` malware, 'Recon' dashboard with 23,800+ secrets, mass credential theft built in under six hours](2026-09-gtig-adversarial-ai-agentic-pipelines.md) | high | ongoing |
 | 2026-01-09 | [Langflow CVE-2026-0768 — unauthenticated Python code injection in the `validate` endpoint (CVSS 9.8, ZDI zero-day), mass-exploited from 2026-08-30 to harvest OpenAI and AWS keys](2026-09-langflow-cve-2026-0768-validate-code-rce-exploited.md) | critical | active |
@@ -22,6 +26,7 @@ One file per incident. Latest at the top.
 | 2026-02-18 | [Context7 MCP documentation server — attacker-registered library docs inject instructions into every connected coding agent ("ContextCrush," CVE-2026-75130); fixed since February, CVE only assigned in August](2026-08-context7-contextcrush-prompt-injection.md) | high | patched |
 | 2026-08-14 | [MindsDB Minds Platform — unpatched CVSS 10.0 unauthenticated RCE via prompt injection into an unsandboxed scratchpad tool (CVE-2026-73678), plus a patched file-upload RCE (CVE-2026-27483)](2026-08-mindsdb-minds-platform-unauthenticated-rce.md) | critical | active |
 | 2026-07-13 | [JSONata — the "safe expression" engine n8n embeds ships two CVSS 9.3 sandbox-escape RCEs (CVE-2026-77414, CVE-2026-77415)](2026-08-jsonata-sandbox-escape-rce.md) | critical | patched |
+| 2026-07-12 | [orval — eleven critical code-injection CVEs in the OpenAPI → TypeScript client/zod/MSW generator; a hostile spec executes at codegen, test time, or import (fixed 8.21.0)](2026-09-orval-openapi-codegen-rce-cluster.md) | high | patched |
 | 2026-08-10 | [One Pyodide sandbox-escape flaw broke n8n, Grist, Cohere Terrarium, and Hugging Face smolagents — DEF CON 34 backfill, four CVEs](2026-08-pyodide-sandbox-escape-cluster.md) | critical | patched |
 | 2026-05-19 | [Nuxt's May 2026 security release — four CVEs in the /__nuxt_island/* endpoint, including a route-middleware auth bypass (predates the July batch)](2026-05-nuxt-island-endpoint-cve-batch.md) | high | patched |
 | 2026-08-17 | [Ray CVE-2025-62593 — a `Mozilla` User-Agent prefix was the browser-attack defense; DNS rebinding turns any web page into RCE on your AI compute cluster (CISA KEV)](2026-08-ray-cve-2025-62593-kev.md) | critical | patched |

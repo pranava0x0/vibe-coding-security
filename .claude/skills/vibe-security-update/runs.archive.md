@@ -15,6 +15,51 @@
 
 ## Archived entries
 
+## 2026-09-03
+
+```yaml
+queries: {deep: 16, medium: 8, shallow: 6}
+new: [2026-09-kestra-auth-bypass-rce-kev]
+updated: [2026-04-litellm-sql-injection, 2026-05-starlette-badhost-host-header-bypass]
+sources_added: []
+sources_weighted: [cisa.gov, thehackernews.com, nvd.nist.gov, advisories.gitlab.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only]
+```
+
+**Notes (≤300 words).** Full-coverage sweep per this run's explicit ask. All research via direct
+`WebSearch`/`WebFetch` in this session — no delegated subagents. The CISA KEV JSON feed (fetched
+directly, dateAdded ≥ 2026-08-27) surfaced a **7-CVE batch added 2026-09-02** that produced all
+three of this run's changes: **Kestra OSS CVE-2026-49869** (new advisory — CVSS 10.0 unauthenticated
+RCE via an `endsWith("/configs")` auth-filter suffix-match bypass; Kestra wasn't previously tracked
+at all, confirmed via corpus grep before writing). **LiteLLM CVE-2026-59822** (MCP OAuth2-passthrough
+auth bypass, CWE-287) folded as a dated update into the existing `2026-04-litellm-sql-injection.md`
+rather than a new file, per the established LiteLLM pattern — The Hacker News' KEV-batch coverage
+says it's chained with the already-tracked CVE-2026-42271 to deploy XMRig miners, with Wiz linking
+the activity to Qilin ransomware; that attribution came from a single secondary source (THN) so it's
+stated as reported, not independently re-confirmed against Wiz directly. **Starlette CVE-2026-48710
+("BadHost")**, already fully tracked as `patched`, got a same-day KEV-addition update (status left
+`patched` since the fix predates today by ~3.5 months; noted as now confirmed under active
+exploitation) — both LiteLLM and BadHost entries were also relocated from their prior ALERTS.md
+tiers up into 🔴 ACTIVE alongside the new Kestra entry, since a fresh KEV addition is "malware still
+propagating" under the tier-9,10 rule even though the advisory `status` field itself didn't change.
+Extensively cross-checked against `advisory-index.jsonl` + corpus grep before writing anything: Cursor
+DuneSlide/CVE-2026-63093/26268, OpenClaw Claw Chain (CVE-2026-32922/33579), arrayref/crates.io,
+Phantom Gyp, Svelte CVE-2026-42573 + ecosystem batch, Open VSX evil-twin, Vercel/Context.ai OAuth
+breach, Next.js/React CVE-2026-44578/23864/23869/23870, Semantic Kernel RCE, OpenHands
+CVE-2026-33718, and the `@7nohe/openapi-react-query-codegen` "150K weekly downloads" story (matched
+directly to the already-tracked 2026-08-28 advisory via package-name confirmation, not just theme)
+all confirmed already tracked with no new material fact. **Deferred, not written up:** Unit 42's
+Feb–May 2026 finding of 5 malicious ClawHub skills evading VirusTotal/ClawScan — thematically
+covered by the existing ClawHavoc/zenity-skillssh advisories already tracking this pattern at larger
+scale; logged here rather than spun into a redundant low-yield file. FastAPI/NextAuth.js/Prisma/
+Streamlit/Google AI Studio SDK direct queries returned nothing framework-specific and new this run.
+No source-priority decay crossed the 60-day threshold beyond the routine 2 sources this run.
+**Branch cleanup:** confirmed 4 stale `claude/eloquent-lovelace-*` branches (`ilp5b9`, `o3cag1`,
+`v8dj3u`, and this run's own `r7xawf` post-merge) all correspond to closed/squash-merged PRs
+(#89, #88, #90, #91) via `list_pull_requests`. `git push origin --delete` on all four returned
+the same **403** documented in every sweep since 2026-08-18; no GitHub MCP tool in this session's
+list exposes branch deletion either. Still blocked on tooling/permissions, not a data problem.
+
 ## 2026-09-02
 
 ```yaml

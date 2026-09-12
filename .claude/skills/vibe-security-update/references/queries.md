@@ -135,6 +135,29 @@ Rotate a different subset each sweep; the lists are a floor, not a ceiling.
   `zerodayinitiative.com/advisories` — for small AI-tool vendors with no GHSA
   channel, the CNA's own advisory is the independent second source (DeepSeek
   Harness CVE-2026-82533; Langflow CVE-2026-0768 was a ZDI 0-day advisory)
+- **Ecosystem security-team blogs (authoritative, may non-attribute):**
+  `blog.rubygems.org` (Ruby Central), `blog.pypi.org`, `github.blog/changelog`
+  — for a registry-abuse / mass-spam-publishing campaign these are the
+  registry's own post-incident record and count as the independent second
+  source even when they decline to attribute the activity to AI (RubyGems'
+  2026-09-11 GemStuffer post named counts and fixes but would not confirm AI
+  authorship the researchers asserted).
+- **Rapid-reaction exploit research (KEV-adjacent, same-day):** `watchtowr.com`,
+  `horizon3.ai`, `greynoise.io` (in-the-wild probing telemetry), `wiz.io` — for
+  a CVSS-9/10 disclosure these publish the vulnerable endpoint, exploitation
+  timing, and detection guidance within a day; pair with the NVD/vendor record.
+- **Agentic-campaign primary research:** `greynoise.io` + `blackpointcyber.com`
+  (the PaperCut AI-agent-swarm pair), `unit42.paloaltonetworks.com`,
+  `gambit.security` — two firms on the same autonomous-agent campaign is a real
+  two-source pair, not aggregator republication.
+- **Vendor patch-release trackers (fetch directly on a critical release):**
+  `docs.gitlab.com/releases/patches/`, GitLab/Atlassian/JFrog release notes —
+  the full CVE list in a "critical patch release" is often broader than the one
+  CVE the press covers (GitLab 2026-09-10 shipped 19 CVEs behind the CVSS-10
+  headline).
+- **AI-credential threat intel:** `okta.com` (Jeremy Kirk) — infostealer-dump
+  analysis quantifying replayable AI session tokens (Anthropic, Cursor, OpenAI)
+  and the black market selling them.
 - **Roundups that surface primaries (aggregators, not sources):**
   `adversa.ai/blog` monthly "top … security resources" posts,
   `labs.cloudsecurityalliance.org` CISO daily briefings — read them for the
