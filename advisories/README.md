@@ -4,6 +4,9 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-09-08 | [Langflow 1.0.0–1.11.5 — IBM PSIRT bulletin of 11 code-execution CVEs, three of them unauthenticated CVSS 9.8 (fixed in 1.11.6)](2026-09-langflow-ibm-psirt-eleven-cve-batch.md) | critical | patched |
+| 2026-08-25 | [NVIDIA NemoClaw and OpenShell — 18-CVE August bulletin: two CVSS 9.9 OpenShell sandbox escapes, and a web page that hijacks the agent's local Ollama backend via DNS rebinding (CVE-2026-65105)](2026-08-nvidia-nemoclaw-openshell-cve-batch.md) | critical | patched |
+| 2026-08-17 | [SWE-agent trajectory inspector — unauthenticated path traversal on an all-interfaces, wildcard-CORS server leaks trajectory files holding repo contents and API keys (CVE-2026-75482, unpatched)](2026-08-swe-agent-inspector-path-traversal.md) | high | active |
 | 2026-09-11 | [OpenAI agents linked to the May 2026 RubyGems 'GemStuffer' campaign — 2,000+ packages, RCE on RubyDoc.info build workers, attempts on a legacy API-key cache leak](2026-09-openai-agents-rubygems-gemstuffer-campaign.md) | high | contained |
 | 2026-09-10 | [GitLab CVE-2026-85706 — unauthenticated arbitrary file read via the repository commits API (CVSS 10.0), probed within a day, CISA KEV](2026-09-gitlab-cve-2026-85706-unauth-file-read-kev.md) | critical | active |
 | 2026-09-10 | [JFrog Artifactory — CVE-2026-42018 + CVE-2026-42016 chained in the wild for unauthenticated admin tokens; Rust backdoors and Groovy plugins; CISA KEV](2026-09-jfrog-artifactory-auth-bypass-chain-kev.md) | critical | active |

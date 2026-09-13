@@ -41,8 +41,8 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 19,
-   "last_hit": "2026-09-12"
+   "hits": 20,
+   "last_hit": "2026-09-13"
   },
   {
    "domain": "github.com/advisories",
@@ -53,8 +53,8 @@
   {
    "domain": "nvd.nist.gov",
    "weight": 20.0,
-   "hits": 46,
-   "last_hit": "2026-09-12"
+   "hits": 47,
+   "last_hit": "2026-09-13"
   },
   {
    "domain": "ox.security",
@@ -77,8 +77,8 @@
   {
    "domain": "socket.dev",
    "weight": 20.0,
-   "hits": 25,
-   "last_hit": "2026-09-12"
+   "hits": 26,
+   "last_hit": "2026-09-13"
   },
   {
    "domain": "stepsecurity.io",
@@ -147,10 +147,10 @@
    "last_hit": "2026-07-25"
   },
   {
-   "domain": "adversa.ai",
-   "weight": 15.0,
-   "hits": 9,
-   "last_hit": "2026-09-10"
+   "domain": "pillar.security",
+   "weight": 16.0,
+   "hits": 8,
+   "last_hit": "2026-09-13"
   }
  ]
 }
