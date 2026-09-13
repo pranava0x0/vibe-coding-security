@@ -181,6 +181,33 @@ even when no CVE or campaign name is attached. These reports are single-sourced 
 nature (it is the vendor's own telemetry); write them up as `ongoing` with the
 provenance stated, not as `unconfirmed`, since there is no second source to wait for.
 
+## 18. When a project has a corporate parent, the parent's PSIRT bulletin is the disclosure — and it bundles what the press reports as one CVE
+
+On **2026-09-13** a roundup (Forkast) named **one** Langflow CVE, CVE-2026-81204. The
+IBM PSIRT bulletin it linked (IBM is Langflow's CNA post-acquisition) carried
+**eleven** CVEs in the same affected range, three of them unauthenticated 9.8s.
+None appeared on `langflow-ai/langflow/security/advisories`; the project's own
+09-10 advisory for one of the same components gave a *different* affected range.
+The same shape held for **NVIDIA NemoClaw/OpenShell** (18 CVEs in one bulletin;
+press covered two) — with the bulletin page at `nvidia.custhelp.com` returning 403
+while the Markdown/CSAF mirror at `github.com/NVIDIA/product-security` fetched
+cleanly. And n8n's eighteen-advisory batch was indexed only by a
+`community.n8n.io` "Security update — <date>" forum post; the GHSA index shows
+them individually with no batch grouping.
+
+**Rules:**
+1. When a CVE for an AI tool is assigned by a corporate CNA (`psirt@us.ibm.com`,
+   `psirt@nvidia.com`, Microsoft, Google), **fetch the bulletin, not the CVE**, and
+   grep every id it lists — a bulletin is a batch, and the batch is the advisory.
+2. Vendors with a machine-readable bulletin mirror (`NVIDIA/product-security`
+   CSAF+md on GitHub; IBM's `ibm.com/support/pages/node/<id>`) are more reliable
+   fetch targets than their HTML portals; prefer the raw file.
+3. For n8n, the community-forum security post is the batch index — cite it as
+   the vendor record alongside the per-advisory GHSA pages.
+4. When the parent's range and the project's own GHSA disagree, **state both,
+   prefer the CNA's, and say why** — the project page will under-report the
+   affected range in the direction that makes a reader think they are safe.
+
 ## 7. Check for a platform outage before debugging your own commit
 
 GitHub Actions/API/Pages incidents are temporal and clear on their own. If a

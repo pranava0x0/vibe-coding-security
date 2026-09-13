@@ -2,7 +2,7 @@
 id: 2026-09-aider-conf-yml-command-execution
 title: "aider auto-loads a repo's .aider.conf.yml and runs its test-cmd/lint-cmd with no confirmation (CVE-2026-85674, unpatched)"
 date_disclosed: 2026-09-04
-last_updated: 2026-09-04
+last_updated: 2026-09-13
 severity: high
 status: unconfirmed
 ecosystems: [pypi, aider]
@@ -19,6 +19,8 @@ GitHub user `geo-chen` opened [Aider-AI/aider#5254](https://github.com/Aider-AI/
 Two independent fix attempts have been proposed and remain unmerged as of this advisory: [#5280](https://github.com/Aider-AI/aider/pull/5280) (opened 2026-06-18 by `Sarthak816`) and [#5365](https://github.com/Aider-AI/aider/pull/5365) (opened ~2026-06-30), both of which add a confirmation gate for `test-cmd`/`lint-cmd`/`test`/`lint`/`auto-test`/`auto-lint` keys sourced from a repo-local config, with #5280 explicitly designed so the check cannot be bypassed by `--yes`. As of this advisory neither PR has been merged and `Aider-AI/aider/security/advisories` lists no published GitHub Security Advisory.
 
 CVE-2026-85674 was published 2026-09-04, describing the same mechanism and confirming it reproduces on `0.86.3.dev` (current `main` at assignment time), with a CVSS 4.0 base score reported as 8.5 by the CVE record aggregator OffSeq (the GitHub issue itself states CVSS 7.8 in its own text) — **treat the exact score as unsettled**; the important fact both agree on is High severity and an unauthenticated, no-interaction exploitation path. No GHSA has been published for this CVE at the time of writing, so this advisory is marked `unconfirmed`: the GitHub issue is the primary technical source and the CVE record is a second, independent confirmation that the finding was validated for numbering, but neither is a vendor-published security advisory.
+
+**Update 2026-09-13 — a second, unrelated aider CVE with the same "fix PR open for months" shape.** **CVE-2026-10177** (published 2026-05-31, VulDB-sourced; CVSS 3.1 **6.3** Medium, CVSS 4.0 2.1, CWE-918) is a **server-side request forgery in aider's web scraper**: `requests.get` in `aider/scrape.py`'s API-docs path (`api_docs.py` in the record) fetches a URL with no private-network filtering, so a scrape target can be pointed at the **AWS EC2 metadata endpoint** or other internal addresses. Reported as [Aider-AI/aider#5075](https://github.com/Aider-AI/aider/issues/5075); the fix, [PR #5137 "Guard scraper against private network URLs"](https://github.com/Aider-AI/aider/pull/5137) (pragnyanramtha, opened 2026-05-16 — blocks loopback/private/link-local/metadata/multicast ranges, revalidates redirects, and pins Playwright to literal IPs against DNS rebinding), has been **open and unmerged since May**. It affects `0.86.3.dev`, the same development version CVE-2026-85674 above reproduces on. This is a different bug class (network-side SSRF, not local command execution) and lower severity, and is logged here rather than in its own file per this repo's same-product rule; the pattern it adds is that aider now has **two open CVEs whose community fixes have waited three and four months respectively** with no maintainer advisory for either. Status unchanged (`unconfirmed`, single vendor-unacknowledged finding each). The same reporter, geo-chen, also filed the [SWE-agent trajectory-inspector path traversal](2026-08-swe-agent-inspector-path-traversal.md) — a second small agent framework with an unmerged fix and no advisory channel.
 
 ## Am I affected?
 ```bash
@@ -45,3 +47,5 @@ You are at risk if you clone and run `aider` inside any repository whose content
 - [GitHub — Aider-AI/aider pull request #5280](https://github.com/Aider-AI/aider/pull/5280) — proposed fix (unmerged), opened 2026-06-18.
 - [GitHub — Aider-AI/aider pull request #5365](https://github.com/Aider-AI/aider/pull/5365) — second proposed fix (unmerged).
 - [OffSeq Threat Radar — CVE-2026-85674: Improper Control of Generation of Code ('Code Injection') in Aider-AI aider](https://radar.offseq.com/threat/cve-2026-85674-improper-control-of-generation-of-code-code-injection-in-aider-ai-aider-9e9c2323d21cf688) — CVE record detail, confirms reproduction on 0.86.3.dev.
+- [NVD — CVE-2026-10177](https://nvd.nist.gov/vuln/detail/CVE-2026-10177) — fetched via the NVD API 2026-09-13; published 2026-05-31, VulDB CVSS 3.1 6.3 / 4.0 2.1, CWE-918, aider 0.86.3, references issue #5075 and PR #5137.
+- [GitHub — Aider-AI/aider pull request #5137: Guard scraper against private network URLs](https://github.com/Aider-AI/aider/pull/5137) — fetched 2026-09-13; unmerged SSRF fix opened 2026-05-16, last activity 2026-06-01.

@@ -15,43 +15,6 @@
 ---
 
 
-## 2026-09-04
-
-```yaml
-queries: {deep: 16, medium: 8, shallow: 6}
-new: [2026-09-gitspawn-git-config-agent-rce-cluster, 2026-09-aider-conf-yml-command-execution]
-updated: []
-sources_added: [manifold.security, paddo.dev, radar.offseq.com]
-sources_weighted: [github.com, thehackernews.com, cybersecuritynews.com]
-blockers: [reddit-webfetch-403, x-bsky-search-snippets-only]
-```
-
-**Notes (≤300 words).** User explicitly asked for a source-category sweep (social/web/industry/
-open-source, all cited) plus an explicit framework rotation including aider/OpenHands/SWE-agent/
-OpenClaw and FastAPI/NextAuth.js/Prisma/Streamlit/Supabase/Google AI Studio SDK. All research via
-direct `WebSearch`/`WebFetch` in this session, no delegated subagents. Two new advisories, both
-genuinely current (published 2026-09-01 and 2026-09-04, i.e. within the last 72h of this sweep).
-**GitSpawn** (Manifold Security, Francisco Rosales): AI coding agents run eager `git status`-class
-context-gathering commands that don't strip a repo's local `.git/config`, so `core.fsmonitor` (and
-an undisclosed second sink) becomes a pre-trust RCE primitive across 7 agents. Verified the
-Goose↔GHSA-r5pp-p5r8-466r↔CVE-2026-72718 pairing directly on GitHub's advisory page (not just
-aggregator prose, per the standing CVE/GHSA-pairing caution) and cross-checked against the
-already-tracked `2026-08-claude-code-desktop-ghsa-batch.md` to confirm CVE-2026-55607 (git-worktree
-path confusion, already patched/tracked) is a **different** mechanism from GitSpawn's two Claude
-Code findings, not a duplicate — explicitly noted in the new advisory to prevent future conflation.
-Flagged an unresolved source disagreement on Cursor's patch status (Manifold/THN say patched;
-CyberSecurityNews/hacklido say still vulnerable) rather than picking one silently. **aider**
-CVE-2026-85674 (`.aider.conf.yml` `test-cmd`/`lint-cmd` auto-exec, unpatched): thinner sourcing —
-primary is the reporter's own GitHub issue (#5254) plus two unmerged fix PRs showing community
-acceptance of the bug, secondary is the CVE record itself (no vendor GHSA exists yet) — marked
-`status: unconfirmed` per the two-source accuracy bar rather than overstating confidence.
-Extensively cross-checked against `advisory-index.jsonl` + corpus grep before writing anything:
-every Tier A/B candidate this run (npm/PyPI/crates.io supply-chain waves incl. arrayref, Phantom
-Gyp, TrapDoor, Operation Navy Ghost; Cursor/OpenClaw/OpenHands/Supabase-Auth/React-RSC/Streamlit/
-Vite CVEs; Vercel-Context.ai, Zapier Zapocalypse, Semantic Kernel, Gemini-API-key-scope-escalation,
-n8n batches; Open VSX evil-twin) resolved to an already-tracked incident — none written up twice.
-No source-priority decay beyond the routine single source (`the420.in`, 60-day threshold) this run.
-
 ## 2026-09-06
 
 ```yaml
@@ -283,3 +246,17 @@ blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, reuters-webfetch-bl
 ```
 
 **Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source, all cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend incl. Shadcn/Svelte/Tailwind/Vite; backend/auth/DB incl. FastAPI/Google AI Studio SDK/NextAuth.js/Prisma/Streamlit/Supabase). All research via direct WebSearch/WebFetch, no delegated subagents. **Mid-run model switch (Fable 5.1 → context-compacted → Opus 4.8) and a context compaction dropped two already-applied edits (cyber-eval fourth-incident update, infostealer Okta update) out of the visible transcript — verified they were on disk and correct via git diff rather than re-adding; only one Claude process was running (ruled out a concurrent writer, LEARNINGS §2).** Five new: OpenAI-agents/RubyGems "GemStuffer" (Nightingale rubyhack.ai + Socket's May GemStuffer + RubyGems' own non-attributing post — three independent sources, `contained`); Anthropic Sept threat report (`ongoing`, single-source vendor telemetry per §16); GitLab CVE-2026-85706 CVSS-10 unauth file read (KEV 09-11, NVD score confirmed via API); JFrog CVE-2026-42018+42016 chain (KEV 09-11; folded the pre-existing CVE-2026-82329 tracking in the HF advisory by cross-link rather than duplicating); orval 11-CVE codegen cluster (fix 8.21.0 in July, GHSA-DB-published Sept per §"GHSA date ≠ disclosure date" — dated by original disclosure). Six updates incl. PaperCut AI-agent swarm folded into knaithe ATA file (GreyNoise+Blackpoint), Okta AI-token-market into the infostealer file, GitPython CVE-2026-78676 into GitSpawn (aider pins vulnerable gitpython 3.1.46 — verified via PyPI), LiteLLM SSTI+Wiz-default-key, MCP batch (chainlit/contextforge/mysql-mcp/praisonai). KEV feed fetched directly (14 entries since 09-05: only GitLab and JFrog×2 in scope). **Declined:** CoreBreak/Astra/GTIG/Langflow-0768/Deadbugz/DeepSeek-harness all already tracked (index+corpus grep per §15, per-identifier). Reuters blocked for WebFetch (new blocker). New source pattern: `rubyhack.ai` is a second bespoke standalone incident-site (cf. collusion.wiki, §12), and ecosystem-security-team blogs (blog.rubygems.org) are the authoritative non-attributing second source for registry-abuse — added to queries.md and LEARNINGS §17.
+
+## 2026-09-13
+
+```yaml
+queries: {deep: 16, medium: 14, shallow: 9}
+new: [2026-09-langflow-ibm-psirt-eleven-cve-batch, 2026-08-nvidia-nemoclaw-openshell-cve-batch, 2026-08-swe-agent-inspector-path-traversal]
+updated: [2025-11-n8n-ni8mare-rce, 2026-08-agent-framework-mcp-cve-batch, 2026-09-aider-conf-yml-command-execution]
+sources_added: [forkast.news, community.n8n.io, grafana.com, hn.algolia.com]
+sources_weighted: [ibm.com, nvd.nist.gov, github.com, vulncheck.com, cyera.com, pillar.security, labs.cloudsecurityalliance.org, socket.dev]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, nvidia.custhelp.com-403, securityonline.info-503, langflow-releases-tag-without-v-404]
+```
+
+**Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend; backend/auth/DB). All research via direct WebSearch/WebFetch, no subagents. KEV fetched directly (dateAdded ≥ 09-06): ScreenConnect, MikroTik ×2 new since last run — none in scope. Vendor advisory-index walks: Claude Code (newest 06-25), Cursor (07-14), OpenHands (03-23), SWE-agent (none), Langflow (a 09-10 advisory, see below) — no gaps. **Three new, all found by grepping the *identifier*, not the product (LEARNINGS §15):** the Forkast roundup named one Langflow CVE; fetching IBM's bulletin behind it revealed **eleven** (LEARNINGS §18). NemoClaw came from a Forkast mention → NVIDIA's `product-security` GitHub mirror (the `custhelp.com` bulletin page 403s; the raw `5872.md` does not). SWE-agent CVE-2026-75482 surfaced only because the framework-rotation query put "SWE-agent" next to "CVE". **Two source discrepancies logged rather than resolved:** Langflow's own GHSA-7w94-79vh-5mr2 says the MCP-stdio RCE is "1.8.3 → 1.9.0" while IBM's CVE-2026-78575 says "1.0.0–1.11.5 → 1.11.6" — advisory states both and prefers the CNA. The Langflow releases page summary came back with the wrong year on dates; cited the tag without a date. **n8n:** the 09-02 community post is the batch index for 18 GHSAs; corrected the 09-09 entry's claim that GHSA-7hgx-277f-7vmg "entered independently." **Declined:** SGLang CVE-2026-86793 (single-source, inference-only), Meta Muse, Trezor/Brevo, browser-extension stealers, Cursor CVE-2026-63093 (tracked), Lovable April regression (tracked), Anthropic PyPI/Russian-actor items (both already in the 09-12 updates). HN via the Algolia API works (`hn.algolia.com/api/v1/search_by_date`) — 6 hits for "prompt injection", none new; Boolean OR is not supported there, use one term per call. Link checker: see Step 6 output in the commit.
+

@@ -15,6 +15,43 @@
 
 ## Archived entries
 
+## 2026-09-04
+
+```yaml
+queries: {deep: 16, medium: 8, shallow: 6}
+new: [2026-09-gitspawn-git-config-agent-rce-cluster, 2026-09-aider-conf-yml-command-execution]
+updated: []
+sources_added: [manifold.security, paddo.dev, radar.offseq.com]
+sources_weighted: [github.com, thehackernews.com, cybersecuritynews.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only]
+```
+
+**Notes (≤300 words).** User explicitly asked for a source-category sweep (social/web/industry/
+open-source, all cited) plus an explicit framework rotation including aider/OpenHands/SWE-agent/
+OpenClaw and FastAPI/NextAuth.js/Prisma/Streamlit/Supabase/Google AI Studio SDK. All research via
+direct `WebSearch`/`WebFetch` in this session, no delegated subagents. Two new advisories, both
+genuinely current (published 2026-09-01 and 2026-09-04, i.e. within the last 72h of this sweep).
+**GitSpawn** (Manifold Security, Francisco Rosales): AI coding agents run eager `git status`-class
+context-gathering commands that don't strip a repo's local `.git/config`, so `core.fsmonitor` (and
+an undisclosed second sink) becomes a pre-trust RCE primitive across 7 agents. Verified the
+Goose↔GHSA-r5pp-p5r8-466r↔CVE-2026-72718 pairing directly on GitHub's advisory page (not just
+aggregator prose, per the standing CVE/GHSA-pairing caution) and cross-checked against the
+already-tracked `2026-08-claude-code-desktop-ghsa-batch.md` to confirm CVE-2026-55607 (git-worktree
+path confusion, already patched/tracked) is a **different** mechanism from GitSpawn's two Claude
+Code findings, not a duplicate — explicitly noted in the new advisory to prevent future conflation.
+Flagged an unresolved source disagreement on Cursor's patch status (Manifold/THN say patched;
+CyberSecurityNews/hacklido say still vulnerable) rather than picking one silently. **aider**
+CVE-2026-85674 (`.aider.conf.yml` `test-cmd`/`lint-cmd` auto-exec, unpatched): thinner sourcing —
+primary is the reporter's own GitHub issue (#5254) plus two unmerged fix PRs showing community
+acceptance of the bug, secondary is the CVE record itself (no vendor GHSA exists yet) — marked
+`status: unconfirmed` per the two-source accuracy bar rather than overstating confidence.
+Extensively cross-checked against `advisory-index.jsonl` + corpus grep before writing anything:
+every Tier A/B candidate this run (npm/PyPI/crates.io supply-chain waves incl. arrayref, Phantom
+Gyp, TrapDoor, Operation Navy Ghost; Cursor/OpenClaw/OpenHands/Supabase-Auth/React-RSC/Streamlit/
+Vite CVEs; Vercel-Context.ai, Zapier Zapocalypse, Semantic Kernel, Gemini-API-key-scope-escalation,
+n8n batches; Open VSX evil-twin) resolved to an already-tracked incident — none written up twice.
+No source-priority decay beyond the routine single source (`the420.in`, 60-day threshold) this run.
+
 ## 2026-09-03
 
 ```yaml

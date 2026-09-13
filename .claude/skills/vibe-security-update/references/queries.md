@@ -90,6 +90,9 @@ paraphrase. Run it every sweep.
 5. `supply chain attack AI arxiv preprint {year}`
 6. `malicious VS Code extension {year}` / `Open VSX malicious extension`
 7. `{agent} skills marketplace malicious {year}`
+8. `{corporate parent} security bulletin {AI product} {year}` — rotate IBM
+   (Langflow, ContextForge), NVIDIA (NemoClaw, OpenShell, NIM), Microsoft,
+   Google, Salesforce; the parent's PSIRT page is where the batch lands
 
 ---
 
@@ -150,6 +153,22 @@ Rotate a different subset each sweep; the lists are a floor, not a ceiling.
   (the PaperCut AI-agent-swarm pair), `unit42.paloaltonetworks.com`,
   `gambit.security` — two firms on the same autonomous-agent campaign is a real
   two-source pair, not aggregator republication.
+- **Corporate-parent PSIRT bulletins (the batch is the advisory):**
+  `ibm.com/support/pages/node/<id>` — IBM is Langflow's CNA since the
+  acquisition; its 2026-09-08 bulletin carried 11 Langflow CVEs the project's
+  own advisory tab never listed. `github.com/NVIDIA/product-security` — NVIDIA's
+  Markdown + CSAF mirror of every bulletin (fetch the raw `<id>.md`; the
+  `nvidia.custhelp.com` HTML page returns 403). Query
+  `"{parent} security bulletin {product}"` for any AI tool owned by IBM, NVIDIA,
+  Microsoft, Google, Cisco or Salesforce, and grep *every* CVE the bulletin lists.
+- **Vendor community-forum security posts (batch index for GHSA-only vendors):**
+  `community.n8n.io` "Security update — <date>" posts enumerate each n8n batch
+  (18 advisories on 2026-09-02) with severities and fixed versions; the GHSA
+  index shows the same advisories one at a time with no batch grouping.
+- **Hacker News via the Algolia API (works where the HN site is noisy):**
+  `https://hn.algolia.com/api/v1/search_by_date?query=<one term>&tags=story&numericFilters=created_at_i>{epoch}`
+  — one term per call (Boolean `OR` is not supported), filter by epoch for the
+  sweep window; returns title, URL, points and comment count.
 - **Vendor patch-release trackers (fetch directly on a critical release):**
   `docs.gitlab.com/releases/patches/`, GitLab/Atlassian/JFrog release notes —
   the full CVE list in a "critical patch release" is often broader than the one
@@ -193,6 +212,8 @@ unreachable.
 - **`socket.dev/blog`** — index renders without dates, RSS 404s; date individual
   post pages instead.
 - **arXiv API** — rate-limits (429); the HTML listing pages work.
+- **`nvidia.custhelp.com`** — 403; use the `NVIDIA/product-security` GitHub mirror.
+- **`securityonline.info`** — 503 on 2026-09-13; retry or cite a different secondary.
 
 ## Out of scope for this project
 
