@@ -2,7 +2,7 @@
 id: 2026-08-knaithe-hermes-autonomous-ai-scanning
 title: "knaithe/KnYuan — an autonomous DeepSeek+Hermes agent mass-scanned 460+ targets for Langflow, n8n and Marimo RCEs; the AI-tool exploits failed only where auth was on (July–August 2026)"
 date_disclosed: 2026-07-30
-last_updated: 2026-09-12
+last_updated: 2026-09-14
 severity: high
 status: active
 ecosystems: [self-hosted, ai-infrastructure]
@@ -90,6 +90,17 @@ GreyNoise and Blackpoint Cyber independently documented a **Russian-speaking ope
 
 This makes at least four distinct autonomous-agent exploitation campaigns tracked here (knaithe, JADEPUFFER, Taiwan/Dream, and now the PaperCut operator), plus the vendor-telemetry view in [GTIG's adversarial-AI report](2026-09-gtig-adversarial-ai-agentic-pipelines.md) and [Anthropic's September threat report](2026-09-anthropic-threat-intel-report-september-2026.md). The agent-orchestrated intrusion is no longer a novelty incident class.
 
+### Update 2026-09-14 — a fifth case, this time a *targeted* enterprise intrusion: Unit 42's IR team documents a human operator running parallel frontier-model agents from a public API endpoint to CI/CD and the victim's own AI infrastructure in under 10 hours
+
+Unit 42 published on **2026-09-02** an incident-response case ("An AI-Assisted Cyber Attack: Inside a Unit 42 Investigation") that differs from the four mass-scanning campaigns above in one respect that matters to this repo's readers: it was a single-victim, hands-on-keyboard intrusion in which the human attacker used "frontier AI models and attack-specific agentic AI frameworks" to do the work. Unit 42 does not name the models or frameworks (The Register asked and got no answer), and the report is single-source vendor IR, so it is logged as `ongoing` provenance rather than a confirmed attribution.
+
+- **Speed:** initial infiltration to full infrastructure compromise in **~10 hours**, over **50 MITRE ATT&CK techniques**, across five stages — infiltration and mapping of a public API endpoint and its microservices, secrets harvesting from code repositories and the secret-management system, privilege escalation, **pipeline (CI/CD) exploitation**, and hijacking of the victim's **AI infrastructure** to hide its presence. Unit 42's estimate for a skilled human red team on the same path: about two weeks.
+- **What the agents left behind, and what to look for:** the attacker's tooling wrote **structured Markdown files for inter-agent communication**, Python caches and paired asset folders, and custom scripts Unit 42 assessed "with high confidence to be AI-generated"; behaviourally, **bursty API requests, rapid 401→200 state shifts, parallel authentications, and sudden model usage** on the victim's own AI endpoints. That is the third time this file has recorded markdown-as-agent-state (TeamPCP's `AGENTS.md`-style playbooks per GTIG; Blackpoint's timestamped markdown for the PaperCut operator) — a filesystem signature worth a detection rule.
+- **The 80-page audit:** on completion the attacker's agent produced an **80-page report on the victim's security failings** "detailing dozens of exploited findings" — an artifact of the agent framework doing what it was built to do, and an odd but real IOC.
+- **Unit 42's guidance** maps directly onto this repo's playbooks: synchronised revocation of credentials *and* sessions; strict rate limits and logging on AI infrastructure; behavioural detection of operational loops; **multi-party code review and branch protection** on the pipeline the agents pivoted through.
+
+Read alongside the [Aurora/Cursor Agent](2026-08-aurora-ransomware-cursor-agent-abuse.md) case, this is the enterprise-targeted counterpart to the mass-exploitation campaigns above: same tooling shape, one victim, and the victim's own code repositories, secrets store, CI/CD and model endpoints as the path — exactly the surface a vibe-coding shop stands up first.
+
 ## If you are affected
 
 - [If your local AI agent was exploited](../playbooks/if-your-local-ai-agent-was-exploited.md)
@@ -113,3 +124,7 @@ The single highest-value action this incident supports: **turn authentication on
 - [GreyNoise — AI-Orchestrated Campaign Against PaperCut NG/MF](https://www.greynoise.io/blog/ai-orchestrated-campaign-against-papercut-ng-mf) — fetched 2026-09-12; published 2026-09-09: Russian-speaking actor, Codex+DeepSeek attribution, Netlas.io scanning, timing (26 seconds / 5 minutes), 440/280/12 victim counts, per-country and per-sector breakdown, detection guidance.
 - [Blackpoint Cyber — Death by a Thousand PaperCuts: AI-Driven Exploitation at Scale](https://blackpointcyber.com/blog/death-by-a-thousand-papercuts-ai-driven-exploitation-at-scale/) — fetched 2026-09-12; published 2026-09-09: Hindsight/AionUi orchestration, timestamped-markdown state files, CVE-2026-81578/CVE-2026-82078, 517-target runner, geofencing, defender guidance.
 - [The Hacker News — PaperCut Attacker Uses Hundreds of AI Agents to Compromise 440+ Instances](https://thehackernews.com/2026/09/papercut-attacker-uses-hundreds-of-ai.html) — fetched 2026-09-12; published 2026-09-10: aggregator corroboration of both primary reports.
+
+**2026-09-14 Unit 42 update sources:**
+- [Unit 42 — An AI-Assisted Cyber Attack: Inside a Unit 42 Investigation](https://unit42.paloaltonetworks.com/ai-assisted-cyber-attack-inside-a-unit-42-investigation/) — fetched 2026-09-14; published 2026-09-02: primary IR account — five-stage timeline, ~10-hour duration, 50+ techniques, the Markdown/Python-cache/paired-folder and bursty-auth indicators, the 80-page report, recommendations. Models and frameworks not named.
+- [The Register — AI agents carried out every step of this ransomware attack – then left the victim an 80-page security audit](https://www.theregister.com/security/2026/09/02/ai_agents_carried_out_every_step_of_this_ransomware_attack_then_left_the_victim_an_80_page_security_audit/5294009) — fetched 2026-09-14; published 2026-09-02: secondary coverage; records that Unit 42 declined to say which models/frameworks were used.

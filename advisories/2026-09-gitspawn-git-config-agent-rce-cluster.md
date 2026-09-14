@@ -2,11 +2,11 @@
 id: 2026-09-gitspawn-git-config-agent-rce-cluster
 title: "GitSpawn — repo-local git config (core.fsmonitor and others) runs code in 7 AI coding agents before any trust prompt"
 date_disclosed: 2026-09-01
-last_updated: 2026-09-12
+last_updated: 2026-09-14
 severity: critical
 status: active
-ecosystems: [claude-code, cursor, openai-codex, goose, qwen-code, grok-build, hermes-agent]
-tools_affected: ["Claude Code", "Cursor / Cursor CLI", "OpenAI Codex CLI/Desktop", "Block goose", "Alibaba Qwen Code", "xAI Grok Build", "Hermes Agent"]
+ecosystems: [claude-code, cursor, openai-codex, goose, qwen-code, grok-build, hermes-agent, github-copilot-cli]
+tools_affected: ["Claude Code", "Cursor / Cursor CLI", "OpenAI Codex CLI/Desktop", "Block goose", "Alibaba Qwen Code", "xAI Grok Build", "Hermes Agent", "GitHub Copilot CLI (CVE-2026-45033, May 2026 precedent)"]
 tags: [git-config-abuse, core-fsmonitor, pre-trust-execution, sandbox-escape, workspace-trust-bypass, rce, cve, cluster]
 ---
 
@@ -69,6 +69,19 @@ git config --get core.hooksPath
 ```
 You are at risk if you routinely open repositories, extracted archives, or synced folders you did not create yourself in any of the agents above — especially ones delivered as a zip/tarball or copied from a shared location rather than a fresh `git clone` from a URL you control (a plain clone from a remote does not carry the source's local `.git/config`).
 
+### Update 2026-09-14 — the precedent GitSpawn's write-up did not cite: GitHub Copilot CLI had the same `core.fsmonitor` bug, via a *nested bare repository*, patched in May (CVE-2026-45033)
+
+GitHub's own advisory [GHSA-9ccr-r5hg-74gf](https://github.com/advisories/GHSA-9ccr-r5hg-74gf) (published 2026-05-06; NVD 2026-05-13; CVSS 4.0 **8.5**; reporter syvb) describes a variant that **does not need the top-level `.git/config` at all**: a **bare git repository nested inside a project directory** (a `vendor/` folder, a deeply nested path) is auto-discovered by git as it walks up the directory tree, and its config — including `core.fsmonitor` — is applied when Copilot CLI runs a routine `git status`/`git diff`. That closes the "a plain clone is safe" loophole for this one vector: a nested bare repo *survives* a normal clone, a pull request, or a dependency, because it is committed content, not local metadata. Affects `@github/copilot` **≤ 1.0.42**; fixed **1.0.43**, which sets **`safe.bareRepository=explicit`** via environment variable so git stops discovering bare repositories implicitly.
+
+Two things follow. First, the fix is generic and cheap — any agent that shells out to git can set `GIT_CONFIG_PARAMETERS='safe.bareRepository=explicit'` (or `git config --global safe.bareRepository explicit` on the developer's machine) and remove the nested-bare-repo path regardless of vendor patch status; do that today for every agent in the table above, patched or not. Second, this advisory's May precedent means the class was publicly documented four months before Manifold's cluster disclosure, in GitHub's own advisory database, under a product name none of the GitSpawn queries used — the same sourcing gap this repo keeps hitting with vendor-only GHSA disclosures.
+
+```bash
+# Global mitigation for the nested-bare-repo variant, independent of any agent's patch:
+git config --global safe.bareRepository explicit
+# Find nested bare repos (a HEAD file next to objects/ and refs/, outside the top-level .git) before opening a checkout in an agent:
+find . -type f -name HEAD -not -path './.git/*' -execdir test -d objects \; -execdir test -d refs \; -print 2>/dev/null
+```
+
 ## If you are affected
 1. Update the affected agent to the patched build listed above; for Claude Code, be aware that **no version is confirmed to close the `ultrareview` path** as of this advisory — avoid `claude ultrareview` against any repository you have not fully reviewed until Anthropic confirms a fix.
 2. Treat any machine that opened an untrusted repo/archive in an affected agent before patching as potentially compromised: audit `~/.ssh/authorized_keys`, shell history, and cron/launchd persistence, and rotate any cloud or CI credentials that were present in the environment.
@@ -89,3 +102,5 @@ You are at risk if you routinely open repositories, extracted archives, or synce
 - [GitHub Advisory Database — GHSA-284h-m62q-gf8w (CVE-2026-78676, GitPython)](https://github.com/advisories/GHSA-284h-m62q-gf8w) — fetched 2026-09-12 for the 2026-09-12 update: the read-then-rewrite `write_section()` injection, `core.hooksPath` activation, CVSS 9.3, affected ≤ 3.1.58 / fixed 3.1.59, prior-fix commit references.
 - [NVD — CVE-2026-78676](https://nvd.nist.gov/vuln/detail/CVE-2026-78676) — fetched via the NVD API 2026-09-12: CVSS 4.0 9.3, "before 3.1.59," published 2026-08-25.
 - [PyPI — aider-chat 0.86.2 dependency metadata](https://pypi.org/pypi/aider-chat/json) — queried 2026-09-12: confirms the `gitpython==3.1.46` pin (< 3.1.59).
+- [GitHub Advisory Database — GHSA-9ccr-r5hg-74gf (CVE-2026-45033, GitHub Copilot CLI: nested bare repository can execute arbitrary commands via core.fsmonitor)](https://github.com/advisories/GHSA-9ccr-r5hg-74gf) — fetched 2026-09-14 for the 2026-09-14 update: mechanism, delivery vectors (PRs, dependencies, nested clones), `safe.bareRepository=explicit` fix, affected ≤ 1.0.42 / fixed 1.0.43, published 2026-05-06, reporter syvb.
+- [NVD — CVE-2026-45033](https://nvd.nist.gov/vuln/detail/CVE-2026-45033) — fetched via the NVD API 2026-09-14: CVSS 4.0 8.5 HIGH, published 2026-05-13, "prior to 1.0.43."

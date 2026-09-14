@@ -5,8 +5,8 @@
   {
    "domain": "advisories.gitlab.com",
    "weight": 20.0,
-   "hits": 21,
-   "last_hit": "2026-09-09"
+   "hits": 22,
+   "last_hit": "2026-09-14"
   },
   {
    "domain": "aikido.dev",
@@ -23,8 +23,8 @@
   {
    "domain": "cisa.gov",
    "weight": 20.0,
-   "hits": 15,
-   "last_hit": "2026-09-12"
+   "hits": 16,
+   "last_hit": "2026-09-14"
   },
   {
    "domain": "csoonline.com",
@@ -41,8 +41,8 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 20,
-   "last_hit": "2026-09-13"
+   "hits": 21,
+   "last_hit": "2026-09-14"
   },
   {
    "domain": "github.com/advisories",
@@ -53,8 +53,8 @@
   {
    "domain": "nvd.nist.gov",
    "weight": 20.0,
-   "hits": 47,
-   "last_hit": "2026-09-13"
+   "hits": 48,
+   "last_hit": "2026-09-14"
   },
   {
    "domain": "ox.security",
@@ -95,8 +95,8 @@
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 36,
-   "last_hit": "2026-09-12"
+   "hits": 37,
+   "last_hit": "2026-09-14"
   },
   {
    "domain": "wiz.io",
@@ -130,9 +130,9 @@
   },
   {
    "domain": "unit42.paloaltonetworks.com",
-   "weight": 17.0,
-   "hits": 6,
-   "last_hit": "2026-08-21"
+   "weight": 18.0,
+   "hits": 7,
+   "last_hit": "2026-09-14"
   },
   {
    "domain": "blog.rust-lang.org",

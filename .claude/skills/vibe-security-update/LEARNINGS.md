@@ -208,6 +208,16 @@ them individually with no batch grouping.
    prefer the CNA's, and say why** — the project page will under-report the
    affected range in the direction that makes a reader think they are safe.
 
+## 19. Vendors back-publish advisories in bulk, and CNAs assign CVEs months late — walk the index, date by the vendor's original date, and grep the CVE not the GHSA
+
+Three shapes from **2026-09-14**, all invisible to search and to a recency-sorted database query:
+
+1. **OpenClaw published 75 advisories on one day (2026-09-11)** for fixes shipped in 2026.7.1–2026.8.1 (2026-08-31), and its index also held ~30 dated 2026-06-30 no sweep had logged. Nothing else — no blog, no CVE, no press — recorded either batch. The 2026-09-13 walk covered Claude Code, Cursor, OpenHands, SWE-agent and Langflow; OpenClaw was not on the list. **Rule:** the vendor-index walk is per product, not per vendor class — add every agent framework the corpus tracks (OpenClaw, n8n, Langflow, aider, goose, Cline, Windsurf) and **paginate**; the OpenClaw index is 11+ pages and the first page tells you nothing about the tenth.
+2. **SvelteKit's nine advisories (Feb–Jul) got CVEs from VulnCheck on 2026-08-28.** A CVE date is not a disclosure date any more than a database date is — the vendor page carries the real one. And the database created a *second* GHSA id per CVE (an "unreviewed" VulnCheck-sourced entry beside the vendor-repo advisory), so a GHSA grep can miss a bug the corpus already has under the other id. **Rule:** grep the CVE; when a CVE arrives for a GHSA, look up the vendor page for the original date and date the advisory there.
+3. **OmniRoute CVE-2026-88062:** vendor page "fixed 3.8.49", NVD "3.8.49 and earlier affected", database copy "≤ 3.8.50, no fix", fix PR merged into the 3.8.50 branch after 3.8.49 shipped. `npm view <pkg> time` settles which version could physically contain a given commit; the registry is a primary source for release dates. **Rule:** when sources disagree on the fix version, publish the table and the registry dates, recommend the latest release, and keep the status the vendor's own advisory supports.
+
+Corollary from the same run: a **transitive native-dependency bug fans out across frameworks** — the libheif AVIF RCE behind Next.js's August critical recurred as Astro GHSA-26w7-cxv4-gfx2 (9.8) with no announcement. When one framework fixes a `sharp`/`libheif`-class bug, search the advisory database for the *upstream* advisory id, not the framework name.
+
 ## 7. Check for a platform outage before debugging your own commit
 
 GitHub Actions/API/Pages incidents are temporal and clear on their own. If a

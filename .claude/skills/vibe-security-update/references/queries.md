@@ -104,7 +104,9 @@ Rotate a different subset each sweep; the lists are a floor, not a ceiling.
   (Antigravity), Cline, aider, OpenHands, OpenClaw
 - **Vibe-coding platforms:** Lovable, Bolt, v0, Replit, Base44
 - **Web frameworks:** Vercel (Next.js), React/Meta, Svelte, Tailwind, Vite,
-  Shadcn UI, Nuxt/Vue
+  Shadcn UI, Nuxt/Vue, Astro (shares `sharp`/`libheif` with Next.js)
+- **Self-hosted AI gateways / routers:** OmniRoute, LiteLLM, Portkey,
+  OpenRouter-class proxies — a gateway holds every provider key
 - **Backend / auth / DB:** Supabase, Prisma, NextAuth.js / Auth.js, FastAPI,
   Streamlit, Google AI Studio SDK, better-auth, Lucia, Clerk
 - **Agent SDKs:** Microsoft (Semantic Kernel), LangChain / LangGraph, PraisonAI,
@@ -169,6 +171,25 @@ Rotate a different subset each sweep; the lists are a floor, not a ceiling.
   `https://hn.algolia.com/api/v1/search_by_date?query=<one term>&tags=story&numericFilters=created_at_i>{epoch}`
   — one term per call (Boolean `OR` is not supported), filter by epoch for the
   sweep window; returns title, URL, points and comment count.
+- **Vendor advisory indexes that must be paginated (bulk back-publication):**
+  `github.com/openclaw/openclaw/security/advisories?page=N` — 75 advisories
+  dated 2026-09-11 for fixes shipped weeks earlier, ~30 more dated 2026-06-30,
+  11+ pages; `github.com/sveltejs/kit/security/advisories` — nine advisories
+  Feb–Jul 2026 with no blog post, CVEs assigned by VulnCheck 2026-08-28. Walk
+  every agent framework and web framework the corpus tracks, not just the
+  IDE vendors, and read the *vendor's* published date, not the CVE's.
+- **Cloud-vendor security bulletins for their own MCP servers:**
+  `aws.amazon.com/security/security-bulletins/<year>-<nnn>-aws/` — AWS is the
+  CNA for `awslabs.*-mcp-server` packages (2026-097/101/103 in one week);
+  `ibm.com/support/pages/node/<id>` for ContextForge (four CVEs 2026-09-02).
+- **Exploitation telemetry (post-patch mass scanning):** `f5.com/labs` — the
+  2026-09-11 Vite CVE-2026-39364 report quantified a ~20× August scanning jump
+  five months after the fix; pair with `greynoise.io`. A telemetry report is a
+  status change (`patched` → `active`) even with no KEV entry.
+- **Registry release dates as a primary source:** `npm view <pkg> time`,
+  `pip index versions <pkg>` / PyPI JSON — settles whether a "fixed in X"
+  claim is physically possible (OmniRoute's fix PR merged three weeks after
+  the version the vendor page names as fixed).
 - **Vendor patch-release trackers (fetch directly on a critical release):**
   `docs.gitlab.com/releases/patches/`, GitLab/Atlassian/JFrog release notes —
   the full CVE list in a "critical patch release" is often broader than the one
@@ -214,6 +235,12 @@ unreachable.
 - **arXiv API** — rate-limits (429); the HTML listing pages work.
 - **`nvidia.custhelp.com`** — 403; use the `NVIDIA/product-security` GitHub mirror.
 - **`securityonline.info`** — 503 on 2026-09-13; retry or cite a different secondary.
+- **`msrc.microsoft.com/update-guide/vulnerability/<CVE>`** — renders as a bare
+  title to `WebFetch` (client-side app); use the NVD API record for the
+  description and score.
+- **`techtimes.com`** — 403 on 2026-09-14.
+- **`hn.algolia.com`** — an occasional non-JSON first response; retry once
+  before logging it as a blocker.
 
 ## Out of scope for this project
 

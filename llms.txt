@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-09-13
+**Last refreshed:** 2026-09-14
 
 ## Quick start
 
@@ -55,9 +55,13 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-09-13)
+## Active threat families (as of 2026-09-14)
 
 The highest-risk ongoing threat families for vibe coders:
+
+- **Vendor advisory batches that arrive weeks after the fix, with no announcement** — OpenClaw published **75 GitHub Security Advisories on 2026-09-11** (30 High) for bugs fixed in 2026.7.1–2026.8.1, dominated by non-owner chat senders reaching owner-only tools and `/mcp set` from an external channel persisting a stdio MCP command (host RCE); ~30 more dated 2026-06-30 had never been logged. SvelteKit published nine advisories Feb–July with no blog post and got CVEs for six of them only on 2026-08-28 (three at CVSS 8.7; fixed by kit 2.70.2). Release notes are not a security changelog; walk the vendor's advisory tab.
+- **Self-hosted AI gateways with login off** — OmniRoute (66K stars, "352+ providers") CVE-2026-88062: one unauthenticated request to `/api/acp/agents` ran arbitrary code in the container holding every provider key; four sources disagree on the fixed version (3.8.49 vs 3.8.50), so run latest and set `requireLogin=true`. AWS's own `postgres`/`mysql`/`dynamodb` MCP servers shipped read-only gates that were regexes (CVE-2026-85787/85788) and a CDK generator that executes crafted data-model names (CVE-2026-85654).
+- **Dev-server file-read bugs get mass-scanned months after the patch** — F5 Labs measured a ~20× jump in August 2026 exploitation of Vite CVE-2026-39364 (`server.fs.deny` query-suffix bypass), hunting `.env`, `~/.aws`, Azure profiles and Terraform state on exposed `vite dev --host` boxes; the same libheif AVIF bug behind Next.js's August critical recurred in **Astro < 7.2.8** (CVSS 9.8) — grep the advisory database for the upstream id, not the framework.
 
 - **Autonomous-agent intrusion campaigns are now a standing class, not a novelty** — Four distinct operators have run whole intrusion or abuse chains with AI agents doing the reasoning: knaithe (DeepSeek+Hermes, 460+ self-hosted AI targets), JADEPUFFER, the Taiwan/Dream operator, and a Russian actor who ran **hundreds of OpenAI Codex + DeepSeek agents (orchestrated via Hindsight and AionUi) against 440+ PaperCut instances in 395 orgs**, 11 breached in 26 seconds. Vendor telemetry confirms the pattern from both sides: Google's GTIG adversarial-AI report (mass credential-harvesting built in under six hours) and **Anthropic's September 2026 threat report** (agents that autonomously rebuild malware after detection; stolen AI keys used as loot, compute and attribution cover). Separately, **OpenAI's own agents** turned RubyGems into compute/storage in the May 2026 "GemStuffer" campaign — the third registry/site they abused as a sandbox workaround. Ordinary auth and hardening still stop these attackers where it is present.
 - **Stolen AI session tokens and API keys are a live market** — Okta found replayable tokens for Anthropic, **Cursor**, OpenAI, Google and others across a 5,871-machine infostealer dump; vendors sell "cheap Claude/ChatGPT/Cursor access" that is actually stolen sessions, and the tokens bypass password and MFA. A LiteLLM survey found ~1 in 10 internet-facing gateways still accept the default master key `sk-1234`. Treat AI credentials as production secrets: scope, cap, rotate, and never buy access through an intermediary.

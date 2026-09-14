@@ -4,6 +4,9 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-09-11 | [OpenClaw publishes 75 security advisories in one day (2026-09-11) for bugs fixed in 2026.7.1–2026.8.1 — 30 rated High: non-owner senders reaching owner-only tools, MCP config injection to RCE, exec approvals that outlive their directory, a gcloud argument injection](2026-09-openclaw-2026-8-1-advisory-batch.md) | high | patched |
+| 2026-09-03 | [OmniRoute (66K-star self-hosted AI gateway) — unauthenticated RCE through the custom ACP agent endpoint when requireLogin is off (CVE-2026-88062, CVSS 9.5–10.0); vendor, NVD and the advisory database disagree on which version is fixed](2026-09-omniroute-acp-agent-unauth-rce.md) | critical | patched |
+| 2026-02-18 | [SvelteKit February–July 2026 advisory backfill — nine vendor advisories (three CVSS 8.7 remote-function DoS bugs, a cross-user query.batch data leak, a BODY_SIZE_LIMIT bypass, a ReDoS) that got CVE numbers only on 2026-08-28](2026-02-sveltekit-remote-functions-cve-batch.md) | high | patched |
 | 2026-09-08 | [Langflow 1.0.0–1.11.5 — IBM PSIRT bulletin of 11 code-execution CVEs, three of them unauthenticated CVSS 9.8 (fixed in 1.11.6)](2026-09-langflow-ibm-psirt-eleven-cve-batch.md) | critical | patched |
 | 2026-08-25 | [NVIDIA NemoClaw and OpenShell — 18-CVE August bulletin: two CVSS 9.9 OpenShell sandbox escapes, and a web page that hijacks the agent's local Ollama backend via DNS rebinding (CVE-2026-65105)](2026-08-nvidia-nemoclaw-openshell-cve-batch.md) | critical | patched |
 | 2026-08-17 | [SWE-agent trajectory inspector — unauthenticated path traversal on an all-interfaces, wildcard-CORS server leaks trajectory files holding repo contents and API keys (CVE-2026-75482, unpatched)](2026-08-swe-agent-inspector-path-traversal.md) | high | active |
@@ -132,7 +135,7 @@ One file per incident. Latest at the top.
 | 2026-01-20 | [SvelteSpill — SvelteKit + Vercel cache deception exposes authenticated responses (CVE-2026-27118)](2026-01-sveltespill-sveltekit-vercel-cache-deception.md) | high | patched |
 | 2026-01-15 | [Five CVEs across the Svelte ecosystem — devalue DoS, SvelteKit memory-amplification DoS + prerendering SSRF, a hydratable-key XSS](2026-01-svelte-ecosystem-cve-batch.md) | high | patched |
 | 2026-06-25 | [Cursor DuneSlide — two CVSS 9.8 zero-click prompt-injection-to-RCE flaws (CVE-2026-50548, CVE-2026-50549)](2026-06-cursor-duneslide-zeroclick-rce.md) | critical | patched |
-| 2026-04-06 | [Vite dev-server WebSocket arbitrary file read + fs.deny bypasses (CVE-2026-39363, CVE-2026-39364, CVE-2026-39365)](2026-04-vite-dev-server-file-read.md) | high | patched |
+| 2026-04-06 | [Vite dev-server WebSocket arbitrary file read + fs.deny bypasses (CVE-2026-39363, CVE-2026-39364, CVE-2026-39365) — mass-scanned in the wild from August 2026 for .env, AWS and Terraform secrets](2026-04-vite-dev-server-file-read.md) | high | active |
 | 2026-04-10 | [Single operator uses Claude Code + GPT-4.1 to breach nine Mexican government agencies — 195M+220M records, AI-augmented attacker](2026-04-mexico-government-ai-agentic-breach.md) | high | historical |
 | 2026-04-02 | [Claude Code deny-rule bypass via 50-subcommand parser cap (silently patched v2.1.90)](2026-04-claude-code-subcommand-deny-bypass.md) | high | patched |
 | 2026-04-29 | [Claude Code GitHub Action's unsandboxed Read tool leaks CI/CD secrets via /proc/self/environ (patched 2.1.128)](2026-04-claude-code-action-procfs-credential-leak.md) | high | patched |
