@@ -2,11 +2,11 @@
 id: 2026-07-nextjs-july-security-release
 title: "Next.js July + August 2026 Security Releases — 9 CVEs in July, then two critical unauthenticated RCEs in August (AVIF, Windows CVE-2026-75604)"
 date_disclosed: 2026-07-20
-last_updated: 2026-09-10
+last_updated: 2026-09-14
 severity: critical
 status: patched
 ecosystems: [npm, javascript]
-tools_affected: [nextjs, vercel, any-nextjs-project, self-hosted-nextjs, windows-hosted-nextjs, sharp, libheif]
+tools_affected: [nextjs, vercel, any-nextjs-project, self-hosted-nextjs, windows-hosted-nextjs, sharp, libheif, astro]
 tags: [cve, ssrf, middleware-bypass, cache-poisoning, dos, nextjs, security-release-program, rce, image-optimization, avif, path-traversal, windows]
 ---
 
@@ -94,6 +94,17 @@ npm install next@16.3.3    # 16.x line
 
 Two program notes. First, this is the second consecutive release where the pre-announcement's count was **lower than what shipped** (July pre-announced 9 and shipped 9; August pre-announced 1 critical and shipped 2) — treat the pre-announced count as a floor. Second, the AVIF issue is the first Next.js critical whose root cause is a transitive native dependency (`sharp` → `libheif`), which `npm audit` on `next` alone would not have flagged; it is the same "the framework's image pipeline is a C library" exposure that the [React2Shell / RSC cluster](2025-12-react2shell-rce.md) is not, and it will recur.
 
+## Update — 2026-09-14: it recurred — the same libheif bug is a CVSS 9.8 unauthenticated RCE in **Astro < 7.2.8**
+
+**GHSA-26w7-cxv4-gfx2** (Astro, published 2026-08-27, reviewed into the advisory database 2026-09-08, no CVE): "Remote code execution through AVIF image optimization." The root cause is the identical upstream **libheif GHSA-g89c-p67h-r497**, reached through Astro's **default Sharp image service** when it processes untrusted AVIF input. CVSS 3.1 **9.8** (network, no privileges, no interaction; CWE-125/CWE-787). Affects **all Astro < 7.2.8**; fixed in **7.2.8** (npm 2026-08-26), which requires **`sharp` ≥ 0.35.4**. Astro is the other framework vibe-coding platforms emit for content sites, and it fixed the bug one day *after* Next.js's 08-25 release without a matching announcement of its own.
+
+The generalisable point is the one flagged above: a native-dependency bug fans out across every framework that bundles the same library. When one framework ships a `sharp`/`libheif` fix, search the advisory database for the upstream id, not the framework name — and check anything else with an image-optimisation step (Nuxt Image, Gatsby, SvelteKit's `@sveltejs/enhanced-img`, and any hand-rolled `sharp` route) against `sharp` ≥ 0.35.4.
+
+```bash
+node -e 'console.log(require("astro/package.json").version)' 2>/dev/null   # need >= 7.2.8
+npm ls sharp 2>/dev/null                                                    # need >= 0.35.4 everywhere it resolves
+```
+
 ## Sources
 - [Next.js — Security Release and Our Next Patch Release (announcement, 2026-07-13)](https://nextjs.org/blog/next-security-release-program)
 - [Next.js — July 2026 Security Release (full CVE list, published 2026-07-20)](https://nextjs.org/blog/july-2026-security-release)
@@ -105,3 +116,5 @@ Two program notes. First, this is the second consecutive release where the pre-a
 - [GitHub Security Advisory — GHSA-p293-qw3h-jr36: Unauthenticated Remote Code Execution on windows-hosted servers (CVE-2026-75604)](https://github.com/vercel/next.js/security/advisories/GHSA-p293-qw3h-jr36) — fetched 2026-09-10: CVSS 9.0, CWE-22, affected ranges ≥13.4 <15.5.24 and ≥16.0 <16.3.3, reporter credits, published 2026-08-25.
 - [GitHub Security Advisory — GHSA-2xp9-vwfh-vxw4: Unauthenticated Remote Code Execution in Image Optimization API when AVIF files are used](https://github.com/vercel/next.js/security/advisories/GHSA-2xp9-vwfh-vxw4) — fetched 2026-09-10: CVSS 4.0 9.5, no CVE, affected ranges ≥10.0.0 <15.5.24 and <16.3.3, libheif GHSA-g89c-p67h-r497 reference.
 - [The Hacker News — Next.js Patches Critical AVIF and Windows Flaws Enabling Unauthenticated RCE](https://thehackernews.com/2026/08/nextjs-patches-critical-avif-and.html) — fetched 2026-09-10; published 2026-08-27: the `image/avif`-in-`formats` exposure condition, researcher credits, and the "Vercel-hosted applications are protected … and require no upgrade" statement.
+- [GitHub Advisory Database — GHSA-26w7-cxv4-gfx2: Astro remote code execution through AVIF image optimization](https://github.com/advisories/GHSA-26w7-cxv4-gfx2) — fetched 2026-09-14 for the 2026-09-14 update: CVSS 9.8, affected < 7.2.8 / fixed 7.2.8, `sharp` ≥ 0.35.4 requirement, upstream libheif GHSA-g89c-p67h-r497 reference, published 2026-08-27 / reviewed 2026-09-08.
+- [npm registry — `astro`](https://registry.npmjs.org/astro) — queried 2026-09-14 (`npm view astro time`): 7.2.7 published 2026-08-25, 7.2.8 published 2026-08-26.
