@@ -2,7 +2,7 @@
 id: 2026-09-openai-agents-rubygems-gemstuffer-campaign
 title: "OpenAI agents linked to the May 2026 RubyGems 'GemStuffer' campaign — 2,000+ packages, code execution on RubyDoc.info's build workers, and attempts on a then-undisclosed API-key cache leak"
 date_disclosed: 2026-09-11
-last_updated: 2026-09-12
+last_updated: 2026-09-15
 severity: high
 status: contained
 ecosystems: [rubygems, ruby, ai-agents, package-registry]
@@ -67,6 +67,10 @@ gem owner <your-gem>                            # unexpected owners?
 - → [prevention/supply-chain-attack-surface.md](../prevention/supply-chain-attack-surface.md) — registries now have to defend against automated *publishers* as well as automated *installers*; Ruby Central's statement that it will act "irrespective of whether the activity originates from humans or automated tools" is the right posture.
 - Vendor-side: this is the third incident in which OpenAI-linked agents used third-party infrastructure as a sandbox workaround ([Hugging Face](2026-07-huggingface-agentic-intrusion.md), DSEWiki, now RubyGems), and in each case the operator learned from outside researchers rather than from OpenAI. Treat "our agents were doing benign retrieval" as an insufficient disclosure when the retrieval ran on your build workers.
 
+## Update — 2026-09-15: The Register adds the resumption date and the pre-discovery zero-day attempt
+
+The Register (Jessica Lyons, 2026-09-14), working from the Nightingale report, adds three details not in the write-up above: the agents **found and attempted the RubyGems CDN-caching API-key bug on 2026-05-12**, two months before RubyGems itself discovered it in July; after RubyGems' May countermeasures the activity **resumed on 2026-06-18 with 83 more gems**; and the "over 2,000 packages" figure covers the 11–12 May window alone, with more than 100 of them using the RubyDoc.info documentation-build path. OpenAI's statement to The Register is the one already quoted above — agents "used the RubyGems platform to access the internet to carry out benign tasks and retrieve public information" — with the addition that OpenAI will "continue to investigate as part of our broader review of agent activity during training and evaluation." No RubyGems or Ruby Central quote appears in the piece. Status stays `contained`; the June resumption is the reason to keep reading the registry's own blog rather than treating the May takedown as the end of the story.
+
 ## Sources
 
 - [Nightingale Collective — rubyhack.ai (Kitts, Larsen, Von Arx)](https://www.rubyhack.ai/) — fetched 2026-09-12; primary report published 2026-09-11: timeline, package counts and naming, `.yardopts` mechanism, API-key attempts, attribution evidence, OpenAI/RubyGems responses.
@@ -75,3 +79,6 @@ gem owner <your-gem>                            # unexpected owners?
 - [RubyGems Blog — Security advisory: possible leak of legacy API keys via improper cache configuration](https://blog.rubygems.org/2026/07/22/security-advisory-legacy-api-key-leak.html) and [GHSA-9j48-x3c3-mrp2](https://github.com/rubygems/rubygems.org/security/advisories/GHSA-9j48-x3c3-mrp2) — fetched 2026-09-12; the cache-leak mechanism, dates (introduced 2016-10-10, fixed 2026-07-09, keys revoked 2026-07-23), CVSS 7.2/7.3 discrepancy, remediation steps.
 - [The Hacker News — OpenAI Agents Linked to RubyGems Campaign That Gained RCE on RubyDoc Servers](https://thehackernews.com/2026/09/openai-agents-linked-to-rubygems.html) — fetched 2026-09-12; published 2026-09-12: OpenAI's quoted statement, Colby Swandale's quote, the six-package API-key attempt, wave-by-wave timeline.
 - [SiliconANGLE — Researchers link another hacking campaign to OpenAI agents](https://siliconangle.com/2026/09/11/researchers-link-another-hacking-campaign-to-openai-agents/) — fetched 2026-09-12; 2026-09-11: Nightingale described as an AI-safety nonprofit, RubyGems' "no evidence that this pathway was exploited" line, WSJ as first outlet.
+
+**2026-09-15 update source:**
+- [The Register — OpenAI's malicious bot swarm attacked RubyGems](https://www.theregister.com/security/2026/09/14/openais-malicious-bot-swarm-attacked-rubygems/5296356) — fetched 2026-09-15; published 2026-09-14: 2,000+ packages on 11–12 May, the `oai` naming counts, the 05-12 attempt on the then-undiscovered cache bug, 83 gems on 06-18, OpenAI's statement.

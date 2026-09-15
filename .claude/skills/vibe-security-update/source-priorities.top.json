@@ -41,8 +41,8 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 21,
-   "last_hit": "2026-09-14"
+   "hits": 22,
+   "last_hit": "2026-09-15"
   },
   {
    "domain": "github.com/advisories",
@@ -53,8 +53,8 @@
   {
    "domain": "nvd.nist.gov",
    "weight": 20.0,
-   "hits": 48,
-   "last_hit": "2026-09-14"
+   "hits": 49,
+   "last_hit": "2026-09-15"
   },
   {
    "domain": "ox.security",
@@ -71,8 +71,8 @@
   {
    "domain": "sentinelone.com",
    "weight": 20.0,
-   "hits": 17,
-   "last_hit": "2026-08-17"
+   "hits": 18,
+   "last_hit": "2026-09-15"
   },
   {
    "domain": "socket.dev",
@@ -95,8 +95,8 @@
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 37,
-   "last_hit": "2026-09-14"
+   "hits": 38,
+   "last_hit": "2026-09-15"
   },
   {
    "domain": "wiz.io",
