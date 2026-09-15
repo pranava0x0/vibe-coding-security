@@ -2,7 +2,7 @@
 id: 2026-04-vite-dev-server-file-read
 title: "Vite dev-server WebSocket arbitrary file read + fs.deny bypasses (CVE-2026-39363, CVE-2026-39364, CVE-2026-39365) — mass-scanned in the wild from August 2026 for .env, AWS and Terraform secrets"
 date_disclosed: 2026-04-06
-last_updated: 2026-09-14
+last_updated: 2026-09-15
 severity: high
 status: active
 ecosystems: [vite, npm]
@@ -11,7 +11,7 @@ tags: [file-read, dev-server, websocket, path-traversal, access-control-bypass, 
 ---
 
 ## TL;DR
-Three related flaws in **Vite**'s dev server let an attacker who can reach it over the network (e.g. it was started with `--host` or otherwise exposed) read **arbitrary files on the machine** — including `.env` secrets — by talking to the HMR WebSocket directly or by appending query parameters that dodge the `server.fs.deny`/`server.fs.allow` checks. Fixed in **Vite 6.4.2 / 7.3.2 / 8.0.5**. **Update 2026-09-14:** F5 Labs measured a ~20× jump in exploitation attempts against CVE-2026-39364 in August 2026 — 807 attack sessions, ~32,000 events — hunting `.env`, AWS credential files, Azure profiles, Terraform state and `/proc/self/environ`; status moved to `active`.
+Three related flaws in **Vite**'s dev server let an attacker who can reach it over the network (e.g. it was started with `--host` or otherwise exposed) read **arbitrary files on the machine** — including `.env` secrets — by talking to the HMR WebSocket directly or by appending query parameters that dodge the `server.fs.deny`/`server.fs.allow` checks. Fixed in **Vite 6.4.2 / 7.3.2 / 8.0.5**. **Update 2026-09-14:** F5 Labs measured a ~20× jump in exploitation attempts against CVE-2026-39364 in August 2026 — 807 attack sessions, ~32,000 events — hunting `.env`, AWS credential files, Azure profiles, Terraform state and `/proc/self/environ`; status moved to `active`. **Update 2026-09-15:** a further Windows-only `server.fs.deny` bypass (CVE-2026-53571, NTFS alternate data streams / 8.3 names, vendor advisory 2026-06-01) moves the fix line to **6.4.3 / 7.3.5 / 8.0.16** — see the update below.
 
 ## What happened
 Vite's dev server exposes an HMR WebSocket alongside its HTTP interface, and the two don't enforce the same access controls:
@@ -49,6 +49,10 @@ F5's version framing (affects **7.1.0 → < 7.3.2** and **8.x < 8.0.5**, CVSS 7.
 
 **Practical reading:** if a Vite dev server on any version below the fix line was ever reachable from outside the machine during or after April 2026, assume the `.env` and any `~/.aws/credentials` on that host were read, and rotate — the scanners are automated, and the window was five months long.
 
+## Update — 2026-09-15: a further `server.fs.deny` bypass on Windows (CVE-2026-53571) moves the fix line to 6.4.3 / 7.3.5 / 8.0.16
+
+Vite's own advisory tab carries **GHSA-fx2h-pf6j-xcff / CVE-2026-53571** (High, CVSS 8.2; published 2026-06-01), not previously logged here: on Windows the deny logic did not normalise **NTFS alternate data stream** syntax or **8.3 short filenames** before matching, so a request such as `/.env::$DATA?raw` resolved to the file's default stream and bypassed the denylist. Affects **≤ 6.4.2**, **7.0.0 – 7.3.4**, **8.0.0 – 8.0.15** and `vite-plus` ≤ 0.1.23; fixed **6.4.3 / 7.3.5 / 8.0.16** and `vite-plus` 0.1.24. Preconditions are the same as above — dev server exposed to the network, sensitive files inside allowed directories — plus an NTFS volume or 8.3 name generation enabled. **Correction to the guidance above:** on Windows, 6.4.2 / 7.3.2 / 8.0.5 are *not* sufficient; use the June line or later. Reporters: TazmiDev, 332QAQ. By the vendor's own index this is the sixth distinct `server.fs.deny` bypass since April 2025 (`.svg` / relative paths, an invalid request-target, `/./`, backslashes on Windows, query suffixes, now ADS and 8.3 names): the denylist is a string filter over an operating-system namespace, and the OS keeps having more spellings than the filter. The durable fix is not exposing the dev server.
+
 ## Sources
 - [F5 Labs — Cloud Takeover: Mass Scanning for Exposed Vite Endpoints (CVE-2026-39364)](https://www.f5.com/labs/articles/cloud-takeover-mass-scanning-for-exposed-vite-endpoints-cve-2026-39364) — fetched 2026-09-14 for the 2026-09-14 update; published 2026-09-11: event/session counts, the August-vs-prior-quarter comparison, targeted file categories, source-country breakdown, the query-suffix technique.
 - [CISA — Known Exploited Vulnerabilities Catalog (JSON feed)](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) — fetched 2026-09-14: no Vite entry as of this date.
@@ -56,3 +60,6 @@ F5's version framing (affects **7.1.0 → < 7.3.2** and **8.x < 8.0.5**, CVSS 7.
 - [GitHub Advisory Database — GHSA-v2wj-q39q-566r (CVE-2026-39364, Vite server.fs.deny bypassed with queries)](https://github.com/advisories/GHSA-v2wj-q39q-566r)
 - [NVD — CVE-2026-39365 (Vite source-map path traversal)](https://nvd.nist.gov/vuln/detail/CVE-2026-39365)
 - [SentinelOne Vulnerability Database — CVE-2026-39363](https://www.sentinelone.com/vulnerability-database/cve-2026-39363/)
+
+**2026-09-15 update source:**
+- [Vite — GHSA-fx2h-pf6j-xcff: `server.fs.deny` bypass on Windows alternate paths (CVE-2026-53571)](https://github.com/vitejs/vite/security/advisories/GHSA-fx2h-pf6j-xcff) — fetched 2026-09-15; CVSS 8.2, affected/patched ranges, the `::$DATA` example, CWE-22/58/69/200; the [Vite advisory index](https://github.com/vitejs/vite/security/advisories) for the bypass history.

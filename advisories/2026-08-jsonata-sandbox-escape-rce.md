@@ -2,7 +2,7 @@
 id: 2026-08-jsonata-sandbox-escape-rce
 title: "JSONata — the expression engine n8n and other workflow platforms embed as a 'safe' query language ships two CVSS 9.3 sandbox-escape RCEs (CVE-2026-77414, CVE-2026-77415)"
 date_disclosed: 2026-07-13
-last_updated: 2026-08-23
+last_updated: 2026-09-15
 severity: critical
 status: patched
 ecosystems: [npm, javascript, self-hosted]
@@ -50,6 +50,10 @@ If you run **n8n**, check whether your build has already picked up the patched j
 
 Practical guidance: put an **OS-level boundary** (container, VM, seccomp, separate process with dropped privileges) beneath any embedded expression/query-language evaluator that processes untrusted input, exactly as recommended for `vm2`/`isolated-vm` — an in-language "safe expression" sandbox is not a substitute for process isolation. Watch GHSA and your platform's dependency-bump changelogs directly; a transitive jsonata upgrade will rarely be called out as a security fix in the embedding platform's own release notes.
 
+## Update — 2026-09-15: a third id in the same batch, CVE-2026-77413
+
+The GitHub Advisory Database also carries **CVE-2026-77413 / GHSA-8gq3-vp5j-2grp** (Critical, CVSS 4.0 9.3; published 2026-07-13, the same day as the two above): "a missing `hasOwnProperty` check in the lookup function" enabling arbitrary code execution via crafted expressions, affecting **≤ 1.8.7** and **≥ 2.0.0 < 2.2.0**, fixed **1.8.8 / 2.2.0**. Its fixed 2.x version (2.2.0) is one release *before* CVE-2026-77414's (2.2.1), and the two descriptions differ only by "missing" versus "bypassable" — the reading consistent with the version numbers is that 77413 is the original missing check and 77414 the bypass of its first fix, though neither advisory page states that relationship. Version guidance is unchanged: **1.8.8 / 2.2.1 or later** covers all three.
+
 ## Sources
 
 - [GitHub Advisory Database — GHSA-2943-5xfg-gq5f (CVE-2026-77414)](https://github.com/advisories/GHSA-2943-5xfg-gq5f) — fetched directly: CVSS 9.3 (v4.0), affected `< 1.8.8` and `>= 2.0.0, < 2.2.1`, patched 1.8.8 / 2.2.1, the bypassable `hasOwnProperty` root cause, reporter c0rydoras, fix PR #799 and commits 59e2514/c41ef18/f09df84.
@@ -57,3 +61,6 @@ Practical guidance: put an **OS-level boundary** (container, VM, seccomp, separa
 - [GitHub Advisory Database — GHSA-66mm-25pp-rfff (CVE-2026-77415)](https://github.com/advisories/GHSA-66mm-25pp-rfff) — fetched directly: CVSS 9.3, the `$clone` overwrite / lambda destructuring / `applyProcedure` chain, reporter c0rydoras, fix PRs #799/#800/#802 backported to 1.8.8.
 - [GitLab Advisory Database — CVE-2026-77414](https://advisories.gitlab.com/npm/jsonata/CVE-2026-77414/) — independent corroboration of CVSS 9.8 (v3.1 scoring), affected/patched versions.
 - [GitLab Advisory Database — CVE-2026-77415](https://advisories.gitlab.com/npm/jsonata/CVE-2026-77415/) — independent corroboration of CVSS 9.8 (v3.1 scoring), affected/patched versions.
+
+**2026-09-15 update source:**
+- [GitHub Advisory Database — GHSA-8gq3-vp5j-2grp (CVE-2026-77413)](https://github.com/advisories/GHSA-8gq3-vp5j-2grp) — fetched 2026-09-15; CVSS 9.3, ≤ 1.8.7 and ≥ 2.0.0 < 2.2.0, fixed 1.8.8 / 2.2.0, published 2026-07-13.

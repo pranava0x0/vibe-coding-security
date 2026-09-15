@@ -15,49 +15,6 @@
 ---
 
 
-## 2026-09-07
-
-```yaml
-queries: {deep: 16, medium: 10, shallow: 7}
-new: [2026-09-anthropic-claude-session-infostealer-hijack]
-updated: [2026-07-anthropic-claude-cyber-eval-breaches]
-sources_added: []
-sources_weighted: [bleepingcomputer.com, securityweek.com, theregister.com, malwarebytes.com]
-blockers: [reddit-webfetch-403, x-bsky-search-snippets-only]
-```
-
-**Notes (≤300 words).** Full-coverage sweep per this run's explicit ask (social/web/industry/
-open-source, all cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend incl.
-Shadcn/Svelte/Tailwind/Vite; backend/auth/DB incl. FastAPI/Google AI Studio SDK/NextAuth.js/Prisma/
-Streamlit/Supabase). All research via direct `WebSearch`/`WebFetch` in this session, no delegated
-subagents. CISA KEV feed fetched directly (dateAdded ≥ 2026-08-31): 10 entries, all already tracked
-(LiteLLM, Starlette, Kestra, JFrog) or out of scope (Chromium V8, Sangoma Switchvox, SonicWall ×2,
-PaperCut ×2) — no new KEV-driven advisory. One genuinely new incident: Anthropic began emailing users
-2026-08-30 that generic infostealer malware (Vidar/LummaC2/StealC/RedLine/Acreed/Atomic Stealer) is
-stealing Claude.ai browser session cookies to hijack accounts and drain paid usage — confirmed via
-three independent outlets (BleepingComputer, Malwarebytes with a direct quote from Anthropic's warning
-email, SecurityWeek); no Anthropic blog post found, the disclosure channel is a direct user email, which
-several outlets independently obtained/quoted. One update: The Register's 2026-09-01 coverage of
-Anthropic's post-incident remediation (real-time sandbox-escape classifier, partner best-practice
-commitments) folded into the existing cyber-eval-breaches advisory as a dated update — severity/status
-unchanged, so no ALERTS.md tier move, only a summary-text refresh. **Two candidates investigated and
-declined:** the 2026-09-02 THN "malicious .git configs" article, cross-checked in full against the
-already-comprehensive GitSpawn advisory (published 2026-09-01, last updated 2026-09-04) — every
-CVE/agent/status detail in the THN piece (including CVE-2026-71963/Hermes Agent) was already present,
-no update needed. CVE-2026-24301 ("consumer AI assistant" chained flaws) resolved to the
-already-tracked Microsoft Copilot CoSnitch advisory via exact detail match (undocumented autorun
-parameter) — not a new finding. **Three low-value CVEs checked via NVD API and declined:** Azure OpenAI
-CVE-2026-45499 (SSRF, CVSS 9.9 but published July, single-source Microsoft advisory only, no press
-pickup found, requires existing privilege — PR:L); CVE-2026-23996 (FastAPI *Api Key*, a third-party
-add-on library by a different vendor, not core FastAPI — same "wrong FastAPI" pattern as a prior
-sweep's FastApiAdmin confusion); CVE-2026-10804 (Streamlit weak-hash, VulDB-sourced, local access only,
-high attack complexity, fix still unmerged — too thin to write up). GlassWorm's 72-extension Open VSX
-wave and Manifold's 77-counterfeit-extension campaign, both surfaced again this run via search, confirmed
-already fully covered in `2025-10-glassworm-vscode-worm.md` and `2026-08-openvsx-evil-twin-extensions.md`
-respectively — no update needed. No new playbook gap identified this run beyond the standing note that
-"if-your-local-ai-agent-was-exploited.md" is a reasonable but imperfect fit for a generic-infostealer
-account-hijack scenario (root cause is a compromised machine, not agent exploitation specifically) —
-noted here rather than creating a new playbook per the routine-sweep restriction.
 
 ## 2026-09-08
 
@@ -228,3 +185,16 @@ blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, msrc.microsoft.com-
 ```
 
 **Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend incl. Svelte/Vite/Astro; backend/auth/DB). All research direct WebSearch/WebFetch, no subagents. KEV fetched directly (dateAdded ≥ 09-07): nothing new in scope beyond the already-tracked GitLab/JFrog entries. **All three new advisories came from vendor advisory-index walks, not search.** (1) OpenClaw's index carries **75 advisories all dated 2026-09-11** for fixes shipped 2026.7.1–2026.8.1, plus ~30 dated 06-30 that no sweep had logged — walked 11 pages, sampled 10 (LEARNINGS §19). (2) SvelteKit: six CVEs published by VulnCheck on 08-28 map to vendor advisories from **Feb–Jul**; the DB carries a second GHSA id per CVE alongside the vendor-repo id. Dated by vendor publication. (3) OmniRoute CVE-2026-88062: vendor page says fixed 3.8.49, NVD says 3.8.49 affected, DB copy says ≤3.8.50 no fix, PR merged into 3.8.50 branch after 3.8.49 shipped — all four stated, status `patched` on the vendor's word with the caveat prominent. **Corrections to my own triage:** the EU/DSEWiki probe looked new but the 09-10 sweep had already folded it into the Hugging Face file — checked the file before writing. Copilot CLI CVE-2026-45033 (May) is a GitSpawn precedent no GitSpawn source cited; folded in with the generic `safe.bareRepository=explicit` mitigation. **Declined:** MSRC CVE-2026-81381/81380 (Copilot+VS Code token disclosure, Sept Patch Tuesday, medium) — MSRC page renders empty to WebFetch and NVD has one line; nltk pickle RCEs, prowler SAML, yayson, maplibre (out of audience); OpenClaw CVE-2026-33575/35665/41301 (older, medium; noted in the new OpenClaw file's context only via NVD, not written up); arXiv 2609.07754 "coding assistants never check supply-chain trust signals" (research); Microsoft ASCII-smuggling blog (phishing, not agents). HN Algolia: first call returned non-JSON, retry was clean — transient, not a blocker. Link checker output in Step 6.
+
+## 2026-09-15
+
+```yaml
+queries: {deep: 16, medium: 20, shallow: 8}
+new: [2026-04-clerk-sdk-middleware-bypass-cve-batch, 2026-09-bifrost-mcp-client-registration-unauth-rce, 2026-07-google-agent-studio-api-proxy-ssrf, 2026-07-unstructured-partition-url-ssrf]
+updated: [2026-08-agent-framework-mcp-cve-batch, 2026-06-langgraph-rce-chain, 2026-04-litellm-sql-injection, 2026-08-jsonata-sandbox-escape-rce, 2026-09-openai-agents-rubygems-gemstuffer-campaign, 2026-09-langflow-ibm-psirt-eleven-cve-batch, 2025-11-n8n-ni8mare-rce, 2026-04-vite-dev-server-file-read, 2026-08-npm-bin-entry-harvesting-google-scoped]
+sources_added: [zeropath.com, blog.centriole.io, docs.cloud.google.com]
+sources_weighted: [github.com, nvd.nist.gov, vulncheck.com, research.jfrog.com, theregister.com, ibm.com, sentinelone.com, registry.npmjs.org]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, spectrosec.com-404, docs.cloud.google.com-html-renders-nav-only-use-feed, vendor-repo-ghsa-url-404-for-knowns, pypi-json-truncated-by-webfetch]
+```
+
+**Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend incl. Vite/Svelte/Next.js; backend/auth/DB incl. FastAPI/Streamlit/Prisma/Supabase/NextAuth/Clerk/Google). All research direct WebSearch/WebFetch, no subagents. KEV fetched directly (dateAdded ≥ 09-08): only Cisco Secure Email Gateway new since 09-14 — nothing in scope. **All four new advisories came from a vendor advisory tab or an advisory-database listing; none from search.** (1) Clerk: three 2026 advisories including a CVSS 9.1 — `{framework} CVE` covers Next.js, not the auth SDK above it, and the Clerk tab had never been walked (LEARNINGS §20). (2) Bifrost 9.8 via the `mcp` recency listing; JFrog is CNA and researcher (§14). (3) Agent Studio SSRF exists only in the Google Cloud release-notes *feed* — the HTML page renders as navigation (§22). (4) unstructured 9.3 via the reviewed-critical pip list (July vendor advisory, NVD 08-20). Casdoor (9.9, unpatched, maintainers deleted the researcher's issues) folded into the MCP batch rather than a new file. **Declined:** esphome, prowler, NLTK, yayson, maplibre, omnigent, Serena (out of audience); Streamlit GHSA-7p48-42j8-8846 = tracked CVE-2026-33682; Cline Hub/Kanban, goose fsmonitor, better-auth SSO, Starlette, elementary-data, OpenClaw CVE-2026-32922, Windsurf CVE-2026-30615 all confirmed tracked by identifier; techtimes agent-pipeline study (403, research); arXiv 2604.08407 (research). HN Algolia: 4 terms, nothing new. Vendor-tab newest dates: Claude Code 06-25, Cursor 07-14, Cline 06-23, aider none, goose 07-24, OpenHands 03-23 (page error), LangChain 06-12, LangGraph 08-28, Semantic Kernel 02-19, better-auth 08-11, supabase/auth 03-11, Prisma 2021, FastAPI 2021, Streamlit 03-24, Vite 06-01, SvelteKit 07-29, Next.js 08-25, OpenClaw 09-11, gemini-cli none, LiteLLM 08-26, NextAuth 07-20, Langflow 09-10, Codex 2025-09 (page error), MCP TS SDK 02-04, Clerk 04-22. Five sources decayed (60-day rule). Link checker: 0/190 flagged across the nine edited files; 1/21 in the new files (`clerk.com/changelog` URLError to the checker, fetched fine in-session, Wayback snapshot exists — kept). **Budget warning:** `dist/llms.txt` built at 69,582 B against a 69,632 B budget after shortening four new titles — the next new advisory breaches it at the Tier-2 floor (LEARNINGS §9); the BACKLOG "llms.txt Tier-2 floor" item is now due, not optional.

@@ -129,6 +129,8 @@ Fetch CISA's KEV JSON feed directly every sweep (URL in `queries.md`) rather tha
 
 Don't repeat queries already run within the last 24h (check `runs.log.md`).
 
+**Also fetch directly, every sweep (URLs in `queries.md`):** the GitHub Advisory Database's `mcp` recency listing and its reviewed-critical `npm` and `pip` listings, plus the per-product advisory tabs — agent frameworks, IDEs, **and the auth SDKs** (Clerk, Better Auth, NextAuth.js, Supabase Auth). On 2026-09-15 all four new advisories came from those fetches and none from search (`LEARNINGS.md` §20–22).
+
 **Report source-access gaps as "not covered," never as "nothing found."** The standing gaps are listed in `queries.md`; a future sweep reading the log needs to know whether a quiet category was quiet or merely unreachable.
 
 ### Step 2 — Triage findings

@@ -2,7 +2,7 @@
 id: 2026-08-npm-bin-entry-harvesting-google-scoped
 title: "npm 'bin entry harvesting' — 21 packages squat unscoped binary names exposed by Google-scoped npm packages (unconfirmed, single-source)"
 date_disclosed: 2026-08-14
-last_updated: 2026-08-14
+last_updated: 2026-09-15
 severity: medium
 status: unconfirmed
 ecosystems: [npm]
@@ -36,5 +36,14 @@ All 21 packages were removed from the registry within hours of publication, so a
 → [prevention/npm-hardening.md](../prevention/npm-hardening.md)
 → If you depend on a scoped package that exposes a `bin` entry, consider pinning or vendoring the resolved binary rather than relying on `$PATH` resolution of its unscoped name in CI.
 
+## Update — 2026-09-15: a second, separately reported Google-namespace dependency-confusion cluster (Centriole) — four unscoped packages that sat on npm for 129 days
+
+Centriole (2026-08-31) reported a different set of packages, worth logging beside the SafeDep finding because it targets the same namespace with the classic technique rather than the bin-entry variant: four **unscoped** names styled as Google Cloud internal tooling — `google-internal-cloud-audit-security-check` (versions `99.9.1777210552` and `99.9.1777210553`), `google-cloud-mono-repo-helper` (`1.0.1777211772`), `google-cloud-internal-build-helper` (`1.2.45`) and `google-cloud-internal-core-utils` (`1.2.50`) — all published within 29 minutes on **2026-04-26** (13:36–14:05 UTC). The three version strategies are textbook dependency confusion: a `99.9.x` "beat any internal version," an epoch-stamped patch field, and plausible `1.2.x` numbers for a specific target. Centriole states the payload is undisclosed and quotes npm's standard "should be considered fully compromised" notice; no IOCs are published. **npm replaced all four with `0.0.1-security` placeholders on 2026-09-03** — confirmed directly against the registry for this update (`npm view <pkg> time` shows the April publish times and the 2026-09-03T02:45Z placeholder) — **129 days after publication**. The GitHub Advisory Database had no malware advisory for any of the four names as of 2026-09-15. Different researcher, different packages and no shared IOCs with the SafeDep cluster above; it is recorded here as a second data point on the namespace, not as the same campaign. Still single-source on what the packages *did*; the registry action confirms only that npm judged them malicious.
+
 ## Sources
 - [SafeDep — npm Bin Entry Harvesting: A Dependency Confusion Blind Spot](https://safedep.io/google-dep-confusion-bin-harvesting/) — sole source found this sweep: full package list, publish/unpublish timeline, IOCs, technical mechanism. No independent corroboration found — treat as unconfirmed.
+
+**2026-09-15 update sources:**
+- [Centriole — 129 Days on Public npm: google-cloud-internal Packages Built for Dependency Confusion](https://blog.centriole.io/google-cloud-internal-dependency-confusion) — fetched 2026-09-15; published 2026-08-31: package names, versions, publish timestamps, the three version strategies, the 2026-09-03 takedown.
+- npm registry (`npm view google-cloud-internal-core-utils time` and the other three names, run 2026-09-15) — the 2026-04-26 publish times and the 2026-09-03T02:45Z `0.0.1-security` placeholders.
+- [GitHub Advisory Database — search for the package names](https://github.com/advisories?query=google-internal-cloud-audit-security-check) — fetched 2026-09-15; no malware advisory for any of the four.

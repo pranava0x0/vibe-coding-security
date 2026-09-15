@@ -2,7 +2,7 @@
 id: 2025-11-n8n-ni8mare-rce
 title: "n8n Ni8mare + RCE cluster — CVSS 10.0 unauth takeover of workflow automation (Nov 2025 → August 2026)"
 date_disclosed: 2025-11-09
-last_updated: 2026-09-13
+last_updated: 2026-09-15
 severity: critical
 status: patched
 ecosystems: [npm, self-hosted]
@@ -158,6 +158,10 @@ The thirteen Medium, by title from the forum post (GHSA ids there; not individua
 
 Status stays `patched`. The count for readers keeping score: this file now tracks **five distinct expression-engine or `$fromAI` sandbox escapes to host code execution** across four batches, plus the Pyodide, isolated-vm, and JSONata sandbox findings cross-linked above. If your threat model for n8n is "workflow editors are trusted," that has been the load-bearing assumption every single time.
 
+## Update — 2026-09-15: a nineteenth advisory a day after the batch — OAuth refresh tokens not bound to the approved resource (CVE-2026-86073)
+
+**GHSA-cw9w-vv67-hf73 / CVE-2026-86073** (Moderate, CVSS 4.0 5.9; published 2026-09-03, the day after the eighteen-advisory batch above). n8n bound OAuth authorization codes and initial access tokens to the specific resource the user consented to, but **refresh tokens carried no such binding**: a registered OAuth client approved for one workflow could refresh into a token for a *different* workflow URL the same user could access. Affects **< 2.38.2** and **< 2.37.7**; fixed **2.38.2 / 2.37.7**. Because refresh tokens issued before the fix carry no binding, n8n's guidance is to **require re-authorization of connected OAuth clients after upgrading** and to audit the connected-client list. Reporter: bariskececi. Relevant to anyone exposing n8n workflows as MCP tools or OAuth-protected endpoints to agents — the consent screen named one workflow; the token worked for another.
+
 ## Sources
 
 - [GitLab Advisory Database — n8n: Agent Workflow Tool Bypasses Sub-Workflow Caller Policy (CVE-2026-86996)](https://advisories.gitlab.com/npm/n8n/CVE-2026-86996/) — fetched directly: GHSA-7hgx-277f-7vmg, CVSS 6.4, affected/patched versions, root-cause file path, publish date 2026-09-08.
@@ -207,3 +211,6 @@ Sources for the 2026-08-19 batch (added 2026-08-21):
 - [GHSA-hh89-3r9w-qj3j (CVE-2026-86075)](https://github.com/n8n-io/n8n/security/advisories/GHSA-hh89-3r9w-qj3j) — unauthenticated OAuth DCR storage exhaustion, CVSS 8.7, 2.x only.
 - [GHSA-j535-v25q-vx3q (CVE-2026-86081)](https://github.com/n8n-io/n8n/security/advisories/GHSA-j535-v25q-vx3q) — Git node blocked-file-pattern ReDoS, CVSS 7.1.
 - [GHSA-34ff-336r-5q23 (CVE-2026-86082)](https://github.com/n8n-io/n8n/security/advisories/GHSA-34ff-336r-5q23) — OpenAI Chat Model node domain-restriction bypass, CVSS 7.1.
+
+**2026-09-15 update source:**
+- [n8n — GHSA-cw9w-vv67-hf73: Per-Resource OAuth Consent Bypass via Unbound Refresh Token Resource Substitution (CVE-2026-86073)](https://github.com/n8n-io/n8n/security/advisories/GHSA-cw9w-vv67-hf73) — fetched 2026-09-15; CVSS 5.9, < 2.38.2 / < 2.37.7, the re-authorization guidance.

@@ -15,6 +15,50 @@
 
 ## Archived entries
 
+## 2026-09-07
+
+```yaml
+queries: {deep: 16, medium: 10, shallow: 7}
+new: [2026-09-anthropic-claude-session-infostealer-hijack]
+updated: [2026-07-anthropic-claude-cyber-eval-breaches]
+sources_added: []
+sources_weighted: [bleepingcomputer.com, securityweek.com, theregister.com, malwarebytes.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only]
+```
+
+**Notes (≤300 words).** Full-coverage sweep per this run's explicit ask (social/web/industry/
+open-source, all cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend incl.
+Shadcn/Svelte/Tailwind/Vite; backend/auth/DB incl. FastAPI/Google AI Studio SDK/NextAuth.js/Prisma/
+Streamlit/Supabase). All research via direct `WebSearch`/`WebFetch` in this session, no delegated
+subagents. CISA KEV feed fetched directly (dateAdded ≥ 2026-08-31): 10 entries, all already tracked
+(LiteLLM, Starlette, Kestra, JFrog) or out of scope (Chromium V8, Sangoma Switchvox, SonicWall ×2,
+PaperCut ×2) — no new KEV-driven advisory. One genuinely new incident: Anthropic began emailing users
+2026-08-30 that generic infostealer malware (Vidar/LummaC2/StealC/RedLine/Acreed/Atomic Stealer) is
+stealing Claude.ai browser session cookies to hijack accounts and drain paid usage — confirmed via
+three independent outlets (BleepingComputer, Malwarebytes with a direct quote from Anthropic's warning
+email, SecurityWeek); no Anthropic blog post found, the disclosure channel is a direct user email, which
+several outlets independently obtained/quoted. One update: The Register's 2026-09-01 coverage of
+Anthropic's post-incident remediation (real-time sandbox-escape classifier, partner best-practice
+commitments) folded into the existing cyber-eval-breaches advisory as a dated update — severity/status
+unchanged, so no ALERTS.md tier move, only a summary-text refresh. **Two candidates investigated and
+declined:** the 2026-09-02 THN "malicious .git configs" article, cross-checked in full against the
+already-comprehensive GitSpawn advisory (published 2026-09-01, last updated 2026-09-04) — every
+CVE/agent/status detail in the THN piece (including CVE-2026-71963/Hermes Agent) was already present,
+no update needed. CVE-2026-24301 ("consumer AI assistant" chained flaws) resolved to the
+already-tracked Microsoft Copilot CoSnitch advisory via exact detail match (undocumented autorun
+parameter) — not a new finding. **Three low-value CVEs checked via NVD API and declined:** Azure OpenAI
+CVE-2026-45499 (SSRF, CVSS 9.9 but published July, single-source Microsoft advisory only, no press
+pickup found, requires existing privilege — PR:L); CVE-2026-23996 (FastAPI *Api Key*, a third-party
+add-on library by a different vendor, not core FastAPI — same "wrong FastAPI" pattern as a prior
+sweep's FastApiAdmin confusion); CVE-2026-10804 (Streamlit weak-hash, VulDB-sourced, local access only,
+high attack complexity, fix still unmerged — too thin to write up). GlassWorm's 72-extension Open VSX
+wave and Manifold's 77-counterfeit-extension campaign, both surfaced again this run via search, confirmed
+already fully covered in `2025-10-glassworm-vscode-worm.md` and `2026-08-openvsx-evil-twin-extensions.md`
+respectively — no update needed. No new playbook gap identified this run beyond the standing note that
+"if-your-local-ai-agent-was-exploited.md" is a reasonable but imperfect fit for a generic-infostealer
+account-hijack scenario (root cause is a compromised machine, not agent exploitation specifically) —
+noted here rather than creating a new playbook per the routine-sweep restriction.
+
 ## 2026-09-06
 
 ```yaml

@@ -218,6 +218,44 @@ Three shapes from **2026-09-14**, all invisible to search and to a recency-sorte
 
 Corollary from the same run: a **transitive native-dependency bug fans out across frameworks** — the libheif AVIF RCE behind Next.js's August critical recurred as Astro GHSA-26w7-cxv4-gfx2 (9.8) with no announcement. When one framework fixes a `sharp`/`libheif`-class bug, search the advisory database for the *upstream* advisory id, not the framework name.
 
+## 20. The auth SDK is not the framework — walk its advisory tab, because nothing else will tell you
+
+On **2026-09-15** the sweep found that **Clerk** — the hosted-auth SDK most Next.js
+scaffolds ship with — had published a **CVSS 9.1 middleware route-protection bypass**
+(CVE-2026-41248, `@clerk/nextjs` / `@clerk/nuxt` / `@clerk/astro`) on **2026-04-15**,
+plus a 17-package authorization-predicate bypass a week later and a secret-key-leaking
+SSRF in March. Five months, no press, no changelog entry, and no hit from any prior
+sweep, because every framework query names the framework (`Next.js CVE 2026`) and
+the auth layer above it is a different vendor with its own GitHub advisory tab.
+**Rule:** the per-product advisory-tab walk (§19) includes the auth SDKs the corpus's
+audience installs — Clerk, Better Auth, NextAuth.js, Supabase Auth — not only the
+agent frameworks and IDEs. A middleware-bypass finding in an auth SDK is the same
+class as the Next.js middleware bypasses already tracked and gets the same severity.
+
+## 21. Fetch the advisory database's own listings; the `mcp` recency list beats every search query
+
+The same run's other three new advisories all came from `github.com/advisories`
+listings fetched directly, none from search: the **`mcp` query sorted by published
+date** surfaced Casdoor (9.9, unpatched), Bifrost (9.8), knowns, functype and
+FrontMCP in one page; the **reviewed-critical `pip` list** surfaced `unstructured`
+(9.3). The reviewed-critical lists **omit CVE-only "unreviewed" entries** (Casdoor and
+Bifrost carry no package metadata, so they never appear there) — run the recency
+query *and* the reviewed lists. A CVE-sourced database entry with empty
+package/version fields is not "no fix"; read the CNA record (VulnCheck, JFrog) it
+links to.
+
+## 22. Cloud-vendor release notes are a disclosure channel, and only the feed is readable
+
+Google's **Agent Studio `/api-proxy` SSRF** (2026-07-20) exists nowhere but a
+release-note entry in the Gemini Enterprise Agent Platform notes — no CVE, no blog,
+no bulletin — and the fix is "regenerate and redeploy your app," which means every
+app built before the fix is still vulnerable. The HTML release-notes page returns
+only navigation to `WebFetch`; the Atom feed at
+`docs.cloud.google.com/feeds/<product>-release-notes.xml` carries the text.
+**Rule:** for Google Cloud AI products (and by analogy AWS/Azure "What's new" feeds),
+fetch the feed and grep it for `security`, `vulnerability`, `SSRF`; a generator-side
+fix with a customer-side action is `mitigated`, not `patched`.
+
 ## 7. Check for a platform outage before debugging your own commit
 
 GitHub Actions/API/Pages incidents are temporal and clear on their own. If a
