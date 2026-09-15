@@ -2,7 +2,7 @@
 id: 2026-04-litellm-sql-injection
 title: "LiteLLM proxy pre-auth SQL injection — CVE-2026-42208 (April 2026, CISA KEV) + CVE-2026-42271 (June 2026, actively exploited)"
 date_disclosed: 2026-04-24
-last_updated: 2026-09-12
+last_updated: 2026-09-15
 severity: critical
 status: patched
 ecosystems: [pypi, ai-agents, llm-proxy, mcp]
@@ -115,6 +115,15 @@ Two additions this window, both raising LiteLLM's already-high exposure:
 
 **Remediation:** upgrade to the latest LiteLLM (≥ 1.84.0 already required by the MCP/auth CVEs above; ≥ 1.83.7 closes CVE-2026-37004 — take the higher), **replace `sk-1234` and any example master key with a strong unique value**, scope the proxy's IAM role to least privilege, and audit guardrail and pass-through routes. Treat any gateway that ever ran with the default key as compromised.
 
+## September 2026 update — two more SSRF / credential-exfiltration advisories on the vendor's index (published 2026-08-26), one of them fixed back in April
+
+Both from `BerriAI/litellm`'s own advisory tab; neither had press coverage and neither is part of the KEV-driven coverage above.
+
+- **CVE-2026-84377 / GHSA-3cv6-jpf6-8222** (Moderate, CVSS 6.5; published 2026-08-26). An **authenticated** proxy user could redirect outbound provider calls and **exfiltrate the configured provider credentials**: request-body validation was a denylist that missed nested routing and credential parameters, so `api_base` / `base_url` / `model_list` / `fallbacks`-class fields and credential values smuggled in the body were honoured. Affects **< 1.94.0** per the advisory, with backported fixes listed for 1.96.2, 1.95.1, 1.94.3, 1.93.2, 1.92.2, 1.91.5, 1.90.7, 1.89.7 and 1.88.6. Vendor guidance: disable `allow_client_side_credentials`, restrict the proxy to trusted users, and strip those parameters at a reverse proxy. Reporter: stuxf. Read alongside the Wiz "Off Guard" finding above — on a gateway where one in ten callers is effectively anonymous, "authenticated" is a low bar.
+- **CVE-2026-59823 / GHSA-hx8v-g79f-8w5f** (Moderate, CVSS 5.3, CWE-918; published 2026-08-26). `is_request_body_safe` blocked `api_base` / `base_url` at the top level but not when nested inside `user_config`, so a caller with a valid virtual key pointed the proxy's outbound request at arbitrary hosts. Affects **≤ 1.83.8**; fixed **1.83.9 — released 2026-04-17**, four months before the advisory was published. Reporter: brettgus. Another instance of this repo's "advisory date is not the fix date" caution: anyone on ≥ 1.83.9 was already covered; anyone pinned below it had no signal until August.
+
+Neither changes the version guidance above (≥ 1.84.0 for the KEV items; take the latest release, which covers all of these).
+
 ## Sources
 - [GitHub Advisory — GHSA / NVD CVE-2026-42208](https://nvd.nist.gov/vuln/detail/CVE-2026-42208) — canonical CVE record.
 - [GitHub Advisory Database — GHSA-6wvf-77m9-58rm (CVE-2026-37004)](https://github.com/advisories/GHSA-6wvf-77m9-58rm) — fetched 2026-09-12: `/prompts/test` unsandboxed-jinja2 SSTI, CVSS 9.8, affected < 1.83.7, fixed 1.83.7, commit `d910a95`, published 2026-08-27.
@@ -137,3 +146,8 @@ Two additions this window, both raising LiteLLM's already-high exposure:
 - [GitLab Advisory Database — CVE-2026-59822: LiteLLM MCP Authentication Bypass via OAuth2 Passthrough Fallback](https://advisories.gitlab.com/pypi/litellm/CVE-2026-59822/) — official advisory; description, affected/fixed versions, GHSA-7488-6r32-c95q.
 - [CISA — Adds Seven Known Exploited Vulnerabilities to Catalog (2026-09-02)](https://www.cisa.gov/news-events/alerts/2026/09/02/cisa-adds-seven-known-exploited-vulnerabilities-catalog) — KEV listing for CVE-2026-59822.
 - [The Hacker News — CISA Adds Seven Exploited Flaws as Attackers Deploy Reverse Shells and Crypto Miners](https://thehackernews.com/2026/09/cisa-adds-seven-exploited-flaws-as.html) — CVE-2026-59822 + CVE-2026-42271 chaining, XMRig deployment, Wiz/Qilin attribution.
+
+**2026-09-15 update sources** — all fetched 2026-09-15:
+- [LiteLLM — GHSA-3cv6-jpf6-8222: Authenticated SSRF and provider-credential exfiltration via unvalidated request-body routing parameters (CVE-2026-84377)](https://github.com/BerriAI/litellm/security/advisories/GHSA-3cv6-jpf6-8222) — CVSS 6.5, < 1.94.0, the backport list, the `allow_client_side_credentials` guidance.
+- [LiteLLM — GHSA-hx8v-g79f-8w5f: Server-side request forgery via the `user_config` request parameter (CVE-2026-59823)](https://github.com/BerriAI/litellm/security/advisories/GHSA-hx8v-g79f-8w5f) — CVSS 5.3, ≤ 1.83.8 → 1.83.9 (released 2026-04-17), the `user_config` nesting bypass.
+- [LiteLLM security advisories index](https://github.com/BerriAI/litellm/security/advisories) — newest entries 2026-08-26.

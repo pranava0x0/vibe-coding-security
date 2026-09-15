@@ -105,10 +105,13 @@ Rotate a different subset each sweep; the lists are a floor, not a ceiling.
 - **Vibe-coding platforms:** Lovable, Bolt, v0, Replit, Base44
 - **Web frameworks:** Vercel (Next.js), React/Meta, Svelte, Tailwind, Vite,
   Shadcn UI, Nuxt/Vue, Astro (shares `sharp`/`libheif` with Next.js)
-- **Self-hosted AI gateways / routers:** OmniRoute, LiteLLM, Portkey,
+- **Self-hosted AI gateways / routers:** OmniRoute, LiteLLM, Bifrost, Portkey,
   OpenRouter-class proxies — a gateway holds every provider key
 - **Backend / auth / DB:** Supabase, Prisma, NextAuth.js / Auth.js, FastAPI,
-  Streamlit, Google AI Studio SDK, better-auth, Lucia, Clerk
+  Streamlit, Google AI Studio SDK, Google Agent Studio, better-auth, Lucia,
+  Clerk, Casdoor
+- **RAG ingestion layers:** unstructured, langchain-community loaders,
+  LlamaIndex readers — a URL the model chooses becomes a server-side fetch
 - **Agent SDKs:** Microsoft (Semantic Kernel), LangChain / LangGraph, PraisonAI,
   Langflow, aider, OpenHands, SWE-agent, Cline
 - **Workflow automation / iPaaS:** n8n, Zapier, Make, Pipedream, Temporal
@@ -137,9 +140,22 @@ Rotate a different subset each sweep; the lists are a floor, not a ceiling.
   Mandiant, `gambit.security` (ransomware-affiliate AI-tool abuse from recovered
   operator infrastructure)
 - **CNAs that are research firms:** `vulncheck.com/advisories`,
-  `zerodayinitiative.com/advisories` — for small AI-tool vendors with no GHSA
-  channel, the CNA's own advisory is the independent second source (DeepSeek
-  Harness CVE-2026-82533; Langflow CVE-2026-0768 was a ZDI 0-day advisory)
+  `zerodayinitiative.com/advisories`, `research.jfrog.com/vulnerabilities` —
+  for small AI-tool vendors with no GHSA channel, the CNA's own advisory is the
+  independent second source (DeepSeek Harness CVE-2026-82533; Langflow
+  CVE-2026-0768 was a ZDI 0-day advisory; Bifrost CVE-2026-90898 a JFrog one)
+- **Auth-SDK advisory tabs (walk every cycle):** `clerk/javascript`,
+  `better-auth/better-auth`, `nextauthjs/next-auth`, `supabase/auth` under
+  `github.com/<org>/<repo>/security/advisories` — Clerk's CVSS 9.1 middleware
+  bypass (CVE-2026-41248) sat five months unseen by `{framework} CVE` queries.
+- **Advisory-database listings (fetch every sweep):**
+  `github.com/advisories?query=mcp+sort%3Apublished-desc` and
+  `github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm+severity%3Acritical`
+  (and `ecosystem%3Apip`). The reviewed lists omit CVE-only entries (Casdoor,
+  Bifrost), so run the `mcp` recency list too.
+- **Google Cloud release-notes feeds:**
+  `docs.cloud.google.com/feeds/<product>-release-notes.xml` — customer-action
+  security fixes (Agent Studio `/api-proxy` SSRF, 2026-07-20) appear only there.
 - **Ecosystem security-team blogs (authoritative, may non-attribute):**
   `blog.rubygems.org` (Ruby Central), `blog.pypi.org`, `github.blog/changelog`
   — for a registry-abuse / mass-spam-publishing campaign these are the
@@ -241,6 +257,12 @@ unreachable.
 - **`techtimes.com`** — 403 on 2026-09-14.
 - **`hn.algolia.com`** — an occasional non-JSON first response; retry once
   before logging it as a blocker.
+- **`docs.cloud.google.com/<product>/release-notes`** — HTML is navigation
+  only; use the `/feeds/<product>-release-notes.xml` feed.
+- **Vendor-repo advisory URLs** sometimes 404 while `github.com/advisories/GHSA-…`
+  resolves (knowns, 2026-09-15); try the database copy second.
+- **`pypi.org/pypi/<pkg>/json`** — truncated by `WebFetch`; use `pip index versions`.
+- **`spectrosec.com`** — 404 on 2026-09-15.
 
 ## Out of scope for this project
 
