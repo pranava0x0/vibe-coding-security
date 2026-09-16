@@ -2,7 +2,7 @@
 id: 2026-04-flowise-rce-cluster
 title: "Flowise RCE cluster — CVE-2025-59528 actively exploited + April 2026 Agent-node cluster (CVE-2026-41265 et al.)"
 date_disclosed: 2026-04-07
-last_updated: 2026-05-30
+last_updated: 2026-09-16
 severity: critical
 status: patched
 ecosystems: [npm, ai-agents, llm-workflow]
@@ -81,7 +81,25 @@ If any of those versions was reachable from the public internet (or from any net
 → Treat any "Agent node that runs LLM-generated code" as a **prompt-injection-to-RCE primitive** until the vendor provides a hard, audited sandbox boundary. The decorator/SDK annotation is documentation, not a security control. (Same pattern as [Microsoft Semantic Kernel `[KernelFunction]`](2026-05-semantic-kernel-rce.md).)
 → Treat **disclosure-to-exploit as < 36 hours** for any AI-workflow CVE; CVE-2025-59528 went exploited ~6 months after disclosure because attackers needed time to weaponize, but newer Agent-node CVEs will move faster now that the recipe is public.
 
+## Update — 2026-09: a ~17-CVE second wave (two more Custom-MCP-node RCEs), fixed in 3.1.4 — and the repo is now archived, so 3.1.4 is likely the last release
+
+Between **2026-09-10 and 2026-09-15** a large second batch of Flowise CVEs was published — one from MITRE, most from **VulnCheck** as CNA — all against versions **≤ 3.1.3** and all marked **fixed in 3.1.4** (npm `flowise@3.1.4`, released **2026-07-29**; confirmed via the registry). Two land in the same **Custom MCP node** that caused the original CVE-2025-59528, and both are authenticated RCE:
+
+- **[CVE-2026-91931](https://github.com/FlowiseAI/Flowise/security/advisories/GHSA-vcwp-f9rq-3887) (CVSS 9.0, GHSA-vcwp-f9rq-3887)** — the Custom MCP node's allowlist permits **`npx`** while blocking only specific flags, so an authenticated attacker sets `mcpServerConfig` to an attacker-named npm package (`npx shx touch …` is the vendor's PoC) and `npx` installs and runs it on the server (CWE-78). Fixed **3.1.4**. Credit DavidCarliez.
+- **[CVE-2026-91932](https://github.com/FlowiseAI/Flowise/security/advisories/GHSA-x7x8-95gh-42xm) (CVSS 9.0, GHSA-x7x8-95gh-42xm)** — `validateMCPServerConfig()` validates command, args and env but **ignores the `cwd` parameter**, so a clean filename in `args` passes while a poisoned working directory supplies the payload. Fixed **3.1.4**. Credit biecho / Diego Meyer.
+
+The rest of the wave (VulnCheck, published 2026-09-12/15, all fixed 3.1.4) is a cross-tenant-authorization and SSRF cluster: **CVE-2026-91929 / -91930 / -91933** (cross-tenant workspace/org takeover — delete workspaces, self-invite as org owner, reach other workspaces' tools), **CVE-2026-90533** (any org member reads the owner's **bcrypt hash and temp tokens** via `GET /api/v1/organizationuser`), **CVE-2026-90534** (cross-workspace credential IDOR via `node-load-method`), **CVE-2026-91935 / -91938** (SSRF and LLM-provider-**API-key exfiltration** via chat-model `baseURL` and Cheerio/Playwright/Puppeteer document loaders, reaching cloud metadata), **CVE-2026-91937** (unauthenticated NoSQL injection in the MongoDB memory node reads other users' chat history), **CVE-2026-91934** (arbitrary file write via the SQL Database Chain SQLite path), **CVE-2026-91936** (CI workflow script injection stealing AWS/Docker Hub tokens), and **CVE-2026-90535** (unauth DoS). Separately, **CVE-2026-52098** (MITRE, CVSS 9.8) reports RCE via `POST /api/v1/prediction/<flowId>` against **3.1.2**, and **CVE-2026-90580** (VulDB, low) an Evaluations-endpoint SSRF in ≤ 3.0.2 (fixed 3.1.3, exploit public).
+
+**The load-bearing caveat: the FlowiseAI/Flowise repository shows as archived on 2026-08-13** (noted in advisory GHSA-9gvv-qjj3-2p6g), and npm carries no release past **3.1.4** (2026-07-29). So while VulnCheck marks this whole batch "fixed in 3.1.4," Flowise is effectively **unmaintained** — CVE-2026-52098's fix version is not stated, and no future CVE here will get a patch. Treat exposure as the only control you still own: **get Flowise off the public internet, require auth in front of it, and disable the Custom MCP node** if you cannot migrate off the platform. This is the same advice as the original entry, now with no vendor backstop behind it.
+
 ## Sources
+- [GitHub Security Advisory GHSA-vcwp-f9rq-3887 — CVE-2026-91931 Flowise Custom MCP npx RCE](https://github.com/FlowiseAI/Flowise/security/advisories/GHSA-vcwp-f9rq-3887) — fetched 2026-09-16; CVSS 9.0, fixed 3.1.4, `npx`-package execution PoC.
+- [GitHub Security Advisory GHSA-x7x8-95gh-42xm — CVE-2026-91932 Flowise Custom MCP `cwd` bypass RCE](https://github.com/FlowiseAI/Flowise/security/advisories/GHSA-x7x8-95gh-42xm) — fetched 2026-09-16; CVSS 9.0, fixed 3.1.4, unvalidated `cwd` parameter.
+- [NVD — CVE-2026-52098](https://nvd.nist.gov/vuln/detail/CVE-2026-52098) — fetched 2026-09-16 via the NVD API; MITRE CNA, CVSS 9.8, RCE via `/api/v1/prediction/<flowId>` in 3.1.2.
+- [VulnCheck — Flowise before 3.1.4 remote code execution via Custom MCP npx](https://www.vulncheck.com/advisories/flowise-before-3.1.4-remote-code-execution-via-custom-mcp-npx) — fetched 2026-09-16; CNA record for CVE-2026-91931 and the wider 3.1.4 batch.
+- Registry check (2026-09-16): `npm view flowise time` — latest release `3.1.4` (2026-07-29), no `3.1.5`; repository archived 2026-08-13 per GHSA-9gvv-qjj3-2p6g.
+
+## Sources — original April 2026 cluster
 - [GitHub Security Advisory GHSA-3gcm-f6qx-ff7p — CVE-2026-41265 Flowise Airtable Agent RCE](https://github.com/FlowiseAI/Flowise/security/advisories/GHSA-3gcm-f6qx-ff7p) — vendor advisory.
 - [GitHub Advisory Database — CVE-2026-41138 Flowise Airtable Agent RCE via Pandas](https://github.com/advisories/GHSA-f228-chmx-v6j6) — sibling CVE.
 - [SentinelOne — CVE-2025-59528 Flowise RCE Vulnerability](https://www.sentinelone.com/vulnerability-database/cve-2025-59528/) — CVSS 10.0 CustomMCP RCE catalog entry.

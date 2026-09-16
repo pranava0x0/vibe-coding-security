@@ -2,7 +2,7 @@
 id: 2025-11-n8n-ni8mare-rce
 title: "n8n Ni8mare + RCE cluster — CVSS 10.0 unauth takeover of workflow automation (Nov 2025 → August 2026)"
 date_disclosed: 2025-11-09
-last_updated: 2026-09-15
+last_updated: 2026-09-16
 severity: critical
 status: patched
 ecosystems: [npm, self-hosted]
@@ -162,8 +162,25 @@ Status stays `patched`. The count for readers keeping score: this file now track
 
 **GHSA-cw9w-vv67-hf73 / CVE-2026-86073** (Moderate, CVSS 4.0 5.9; published 2026-09-03, the day after the eighteen-advisory batch above). n8n bound OAuth authorization codes and initial access tokens to the specific resource the user consented to, but **refresh tokens carried no such binding**: a registered OAuth client approved for one workflow could refresh into a token for a *different* workflow URL the same user could access. Affects **< 2.38.2** and **< 2.37.7**; fixed **2.38.2 / 2.37.7**. Because refresh tokens issued before the fix carry no binding, n8n's guidance is to **require re-authorization of connected OAuth clients after upgrading** and to audit the connected-client list. Reporter: bariskececi. Relevant to anyone exposing n8n workflows as MCP tools or OAuth-protected endpoints to agents — the consent screen named one workflow; the token worked for another.
 
+## Update — 2026-09-16: a fourth-week batch of sixteen advisories (eleven High), heavy on injection into the DB and agent nodes
+
+n8n's bi-weekly [Security update — 16 September 2026](https://community.n8n.io/t/security-update-16-september-2026/314102) enumerates **sixteen advisories** (eleven High, five Medium), all fixed in **1.123.80 / 2.40.1 / 2.39.6**; cloud instances are patched automatically. The theme this round is untrusted input reaching a database or an agent's credential store. The High set, by title/GHSA:
+
+- **GHSA-9rhv-fhr8-7q5r** (CVSS 8.3) — **inline agent node-tool introspection decrypts any instance credential without an ownership check**, so an ordinary member reads the owner's secrets in plaintext and can send them to an external host. The one to patch first.
+- **GHSA-xrqg-3xcp-h45x** — Supabase node "Filters (String)" mode inserts the field into the query with no escaping (PostgREST filter injection; single request can delete a whole table).
+- **GHSA-rqch-9jrh-cr8w** — path traversal + query injection via the Supabase node **table name**.
+- **GHSA-w24g-6454-7w7f** — **unauthenticated** NoSQL injection in the MongoDB Chat Memory node (a MongoDB operator in place of `sessionId` reads other sessions' chat history).
+- **GHSA-4wf3-rgqr-xcp3** — SQL injection in the Oracle Database node's delete/drop path.
+- **GHSA-fmmv-p585-7c8x** — in Redis **queue mode**, an internal PubSub handler installs a community npm package skipping every name/permission/checksum/npm-safety check — arbitrary package install cluster-wide with no n8n account (mitigate with `N8N_COMMUNITY_PACKAGES_ENABLED=false` + Redis auth).
+- **GHSA-7gjv-rcf8-x5qc** (duplicate node IDs bypass the credential tamper guard), **GHSA-597w-c3jh-g8fg** (path traversal in signed resume URLs → cross-project approval forgery), **GHSA-7gvh-q9w3-wqqx** (credential test endpoint resolves project-scoped vars from an attacker-controlled project ID), **GHSA-rx55-8qhx-4hwx** (dynamic-credentials authorize endpoint leaks the session token), **GHSA-gx6g-2hm7-c4xf** (Wekan/Baserow credentials leak the account password), **GHSA-89p4-6h98-c7xm** (path traversal redirects public-API calls).
+
+Medium: Webflow-trigger missing webhook-signature verification, stored DOM XSS in the resource-locator dropdown, unescaped parameter interpolation into third-party query languages, and a Send-and-Wait "approve within chat" bypass. This is the **fourth** biweekly n8n batch this repo has folded in (2026-08-19, 09-02, and the 09-03 straggler above), and the count of DB/expression-injection findings keeps climbing — the "workflow editors and their inputs are trusted" assumption remains the load-bearing one. **Upgrade to 1.123.80 / 2.40.1 / 2.39.6.**
+
 ## Sources
 
+- [n8n Community — Security update — 16 September 2026](https://community.n8n.io/t/security-update-16-september-2026/314102) — fetched 2026-09-16; the vendor's batch index for the sixteen 2026-09-16 advisories with severities and fixed versions (1.123.80 / 2.40.1 / 2.39.6).
+- [GitHub Security Advisory — GHSA-9rhv-fhr8-7q5r (inline agent credential decryption without ownership check)](https://github.com/n8n-io/n8n/security/advisories/GHSA-9rhv-fhr8-7q5r) — fetched 2026-09-16; CVSS 8.3, affected < 2.40.1 / < 2.39.6.
+- [GitHub Security Advisory — GHSA-xrqg-3xcp-h45x (Supabase node PostgREST filter injection)](https://github.com/n8n-io/n8n/security/advisories/GHSA-xrqg-3xcp-h45x) — fetched 2026-09-16; CVSS 7.1, table-wide delete from one request.
 - [GitLab Advisory Database — n8n: Agent Workflow Tool Bypasses Sub-Workflow Caller Policy (CVE-2026-86996)](https://advisories.gitlab.com/npm/n8n/CVE-2026-86996/) — fetched directly: GHSA-7hgx-277f-7vmg, CVSS 6.4, affected/patched versions, root-cause file path, publish date 2026-09-08.
 - [GitLab Advisory Database — n8n: Public API Execution Retry Authorization Bypass (GHSA-h3jj-5f3v-3685)](https://advisories.gitlab.com/npm/n8n/GHSA-h3jj-5f3v-3685/) — fetched directly: CVSS 6.4, affected/patched versions, `workflow:read` vs `workflow:execute` root cause.
 - [GitHub Security Advisories — n8n has XML Node Prototype Pollution that leads to RCE (GHSA-hqr4-h3xv-9m3r / CVE-2026-42232)](https://github.com/n8n-io/n8n/security/advisories/GHSA-hqr4-h3xv-9m3r) — primary source for the April 2026 backfill: CVE↔GHSA pairing, CVSS score, affected/patched versions confirmed directly on n8n's own advisory page.
