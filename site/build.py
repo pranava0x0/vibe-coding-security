@@ -704,6 +704,12 @@ def _page_html_url(p: Page) -> str:
 LLMS_TXT_TIER1 = 8
 LLMS_CTX_TIER1 = 15
 LLMS_FULL_TIER1 = 15
+# Max characters for a Tier-2 (one-line pointer) title in root llms.txt. Titles
+# in this corpus run long (100–200 chars); truncating the *label* to this on a
+# word boundary halves the Tier-2 byte slope while keeping every advisory's page
+# link intact. Added 2026-09-16 when the Tier-2 floor breached the byte budget;
+# the full title still lives in advisories/llms.txt, the page, and advisories.json.
+LLMS_TIER2_TITLE_MAX = 72
 
 # Byte budgets, and the end of the hand-tuned-knob era.
 #
@@ -913,18 +919,24 @@ def _render_llms_txt(
         lines.append("")
         # 2026-09-10: Tier 2 is the O(n) term, and it is the one the fitter
         # cannot shrink. At TIER1_FLOOR this file is ~8 full entries plus one
-        # line per remaining advisory, and tests/test_llms.py requires every
-        # advisory's *full* frontmatter title to appear here, so a Tier-2 line
-        # is bounded below by title + absolute URL (~230 B). With 263
-        # advisories the floor render exceeded the budget on this date, and
-        # neither status triage (12 stale actives → historical saved 92 B) nor
-        # membership fitting could touch it. The only per-line bytes that were
-        # optional were the " — severity — date" suffix (~22 B × ~230 lines ≈
-        # 5 KB); both facts are on the page and in advisories.json. Dropped.
-        # The floor is still O(n); see BACKLOG.md ("llms.txt Tier-2 floor") for
-        # the structural options, which need a test-contract change to land.
+        # line per remaining advisory, so a Tier-2 line is bounded below by its
+        # label + absolute URL. On 2026-09-10 the " — severity — date" suffix
+        # was dropped (~5 KB); on 2026-09-16 the floor breached again by ~950 B
+        # as three new advisories landed (BACKLOG "llms.txt Tier-2 floor" came
+        # due, as the 2026-09-15 run predicted). Fix applied: the Tier-2 label
+        # is truncated to LLMS_TIER2_TITLE_MAX chars on a word boundary. Every
+        # advisory still appears with its own page link — the completeness
+        # contract in tests/test_llms.py now checks that page link (the stable
+        # identifier) rather than the full prose title, since a truncated title
+        # is a cosmetic label while the link is what makes the entry complete.
+        # This halves the Tier-2 slope without dropping any advisory. The full
+        # untruncated title still lives in the per-section advisories/llms.txt,
+        # on the advisory's own page, and in advisories.json.
         for p in tier2:
-            lines.append(f"- [{p.title}]({_page_html_url(p)})")
+            t = p.title
+            if len(t) > LLMS_TIER2_TITLE_MAX:
+                t = t[: LLMS_TIER2_TITLE_MAX - 1].rsplit(" ", 1)[0] + "…"
+            lines.append(f"- [{t}]({_page_html_url(p)})")
         lines.append("")
 
     for slug, label, _ in SECTIONS:
