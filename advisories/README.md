@@ -4,6 +4,9 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-09-01 | [Coder registry compromise — a stolen Cloudflare API key rerouted registry.coder.com for 14 hours (2026-08-31), serving credential-stealing Terraform modules to AI-workspace provisioners (GHSA-vx42-ghc9-gw65)](2026-09-coder-registry-cloudflare-terraform-supply-chain.md) | critical | patched |
+| 2026-08-31 | [RevStealer — a fake 'Claude Opus 5 Free Desktop' GitHub repo delivers a Windows infostealer that streams credentials, wallets and dev secrets, then deletes itself](2026-08-revstealer-fake-claude-opus5-desktop.md) | high | active |
+| 2026-07-06 | [@zereight/mcp-gitlab — unauthenticated file read → PAT theft → full GitLab account takeover, plus SSRF, DNS-rebinding and path-traversal token redirects (CVE-2026-61560 et al.)](2026-07-gitlab-mcp-account-takeover-cve-cluster.md) | critical | patched |
 | 2026-09-14 | [Bifrost (8K-star Go AI gateway) — one unauthenticated POST /api/mcp/client registers a stdio MCP client and runs it as the gateway process (CVE-2026-90898, CVSS 9.8); authentication is off by default](2026-09-bifrost-mcp-client-registration-unauth-rce.md) | critical | patched |
 | 2026-07-20 | [Google Agent Studio — SSRF in the auto-generated /api-proxy backend of web apps built before 2026-07-01; the fix is regenerate-and-redeploy, so deployed apps stay vulnerable until you act (vendor release note, single-source)](2026-07-google-agent-studio-api-proxy-ssrf.md) | high | mitigated |
 | 2026-07-10 | [unstructured (the ingestion layer under LangChain's UnstructuredURLLoader, LlamaIndex's UnstructuredReader and Chainlit) — full-read SSRF via partition(url=) (CVE-2026-71428, CVSS 9.3), fixed 0.24.0](2026-07-unstructured-partition-url-ssrf.md) | critical | patched |

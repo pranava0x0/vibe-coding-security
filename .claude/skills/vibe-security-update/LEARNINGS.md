@@ -256,6 +256,14 @@ only navigation to `WebFetch`; the Atom feed at
 fetch the feed and grep it for `security`, `vulnerability`, `SSRF`; a generator-side
 fix with a customer-side action is `mitigated`, not `patched`.
 
+## 23. "Fixed in X" from a CNA is not "maintained" — check whether the repo is archived
+
+On **2026-09-16** VulnCheck published ~15 new Flowise CVEs all marked "before 3.1.4, fixed 3.1.4," which reads as a normal patched batch — but the **FlowiseAI/Flowise repository shows as archived on 2026-08-13** (a fact that surfaced only in the body of an unrelated GHSA, GHSA-9gvv-qjj3-2p6g), and npm carries no release past 3.1.4 (2026-07-29). So the CNA's "fixed 3.1.4" is technically true for that batch while the project is **effectively EOL**: a CVE with an unclear fix version (CVE-2026-52098 here) will never get one, and neither will the next finding. **Rule:** when a tracked project accumulates a fresh CVE batch, check whether its repo is archived and whether the registry has a release *after* the "fixed" version (`npm view <pkg> time` / a GitHub repo `archived` flag). If the project is archived or the "fixed" version is the last release, say so in the advisory and reframe the guidance around *exposure* (get it off the internet, disable the risky feature) rather than "upgrade" — an upgrade target that no longer receives fixes is not a durable control. This is the maintenance-status sibling of the "silent patch" and "incomplete fix" cautions: all three are about not trusting a version number at face value.
+
+## 24. The vendor CDN/registry is in the supply chain even when the source repo is clean
+
+The **Coder registry compromise** (2026-08-31) was not a bug in Coder's code: a stolen Cloudflare API key added malicious origin IPs to the pool behind `registry.coder.com`, and a share of module pulls were served tampered Terraform modules that stole credentials. Version-pinning would not have caught it (Coder's lock file does not track remote modules), and the vendor's source and cloud were untouched. **Rule:** a supply-chain sweep must treat a vendor's *delivery path* — CDN, package registry, module registry, update server — as an attack surface distinct from its source code, and a "our code was not compromised" statement does not mean "you were not served malicious artifacts." This is the same lesson as any CDN/registry hijack, now with an AI-tooling twist: Coder provisions Claude Code / Codex workspaces, so a poisoned provisioning module inherits AI-provider and MCP credentials alongside the usual cloud/CI secrets. Source-access note: the vendor's own GHSA page may 403 while its incident blog carries the identical IOC set — see `queries.md` gaps.
+
 ## 7. Check for a platform outage before debugging your own commit
 
 GitHub Actions/API/Pages incidents are temporal and clear on their own. If a

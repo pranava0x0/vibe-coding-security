@@ -142,10 +142,15 @@ def test_llms_ctx_contains_every_advisory(parsed_advisories, llms_ctx_txt):
 
 
 def test_llms_txt_lists_every_advisory(parsed_advisories, llms_txt):
+    # Every advisory must be linked from root llms.txt. Tier-1 entries appear in
+    # full; Tier-2 entries are one-line pointers whose title may be truncated to
+    # fit the byte budget (see LLMS_TIER2_TITLE_MAX in build.py). The page link
+    # is the stable completeness identifier — checking it (rather than the full
+    # prose title, which truncation may shorten) is what guarantees nothing is
+    # dropped. The untruncated title still lives in advisories/llms.txt.
     missing = []
     for path, fm, _ in parsed_advisories:
-        title = str(fm.get("title", "")).strip()
-        if title and title not in llms_txt:
+        if f"{path.stem}.html" not in llms_txt:
             missing.append(path.name)
     assert not missing, f"Advisories missing from llms.txt: {missing}"
 
