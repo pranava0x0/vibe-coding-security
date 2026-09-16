@@ -16,58 +16,6 @@
 
 
 
-## 2026-09-08
-
-```yaml
-queries: {deep: 16, medium: 10, shallow: 8}
-new: [2026-03-openai-codex-branch-name-command-injection, 2026-04-llm-router-malicious-intermediary-attacks]
-updated: [2026-02-clawhavoc-clawhub-skills]
-sources_added: [beyondtrust.com, blog.barrack.ai, cointelegraph.com, straiker.ai]
-sources_weighted: [securityweek.com, arxiv.org, coindesk.com]
-blockers: [reddit-webfetch-403, x-bsky-search-snippets-only]
-```
-
-**Notes (≤300 words).** Full-coverage sweep per this run's explicit ask (social/web/industry/open-source,
-all cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend incl. Shadcn/Svelte/
-Tailwind/Vite; backend/auth/DB incl. FastAPI/Google AI Studio SDK/NextAuth.js/Prisma/Streamlit/Supabase).
-All research via direct `WebSearch`/`WebFetch` in this session, no delegated subagents. Two genuinely new,
-both backfilled (older than this sweep's window but never previously tracked): **OpenAI Codex** branch-name
-`${IFS}`-based shell-injection stealing GitHub OAuth/Installation tokens (BeyondTrust Phantom Labs; disclosed
-2026-03-30, but OpenAI silently remediated server-side by 2026-02-05 — no CVE assigned, consistent with
-SaaS-fix practice) and a UC research paper on malicious third-party LLM routers injecting tool calls / stealing
-credentials (arXiv:2604.08407, Apr 2026) — marked `status: unconfirmed` since it's one research group with no
-independent replication. **Accuracy-bar catch on the router paper:** several crypto-press outlets (Cointelegraph,
-CCN, ChainCatcher) headlined the wallet-drain finding as "$500,000," but CoinDesk — which read the paper directly
-— described the seeded canary wallet as carrying only a nominal balance with losses under $50, and the arXiv
-abstract itself gives no dollar figure at all. Rather than pick one, the advisory states both, names which
-source is better-grounded, and flags the "$500,000" figure as unverified — same "verify the outlet, don't trust
-the aggregator's number" lesson as the Ray-KEV and Wiz/Red-Agent cautions in `LEARNINGS.md` §6, now observed for
-a raw dollar figure rather than a quote or attribution claim. One update: Straiker's separate Feb 2026 ClawHub
-campaign (`bob-p2p-beta`, threat actor `26medias`/`BobVonNeumann`, agent-to-agent distribution via Moltbook,
-71 malicious + 73 high-risk of 3,505 skills scanned) folded into the existing ClawHavoc advisory as a new dated
-update — distinct researcher, distinct payload (direct Solana wallet drain vs. the original campaign's AMOS
-infostealer), and a distinct distribution mechanism (agent-to-agent social engineering via a dedicated
-agent-social-network persona) from every update already tracked there (Koi Security's original find, Snyk
-ToxicSkills, Trail of Bits scanner bypasses, SkillCloak/SkillDetonate, Zenity's skills.sh campaign) — explicitly
-flagged as single-sourced to Straiker, since SecurityWeek's pickup restates rather than independently verifies.
-Investigated and declined: a SentinelOne/Prompt Security "dependency hijack" piece reads as generic risk
-commentary with no specific incident, victim, or CVE — doesn't meet the bar. A "GitHub Actions defaults for
-Anthropic/Google/OpenAI fall to unauthenticated RCE" claim (from a search-result synthesis, not a primary
-article) resolved on investigation to already-tracked findings (gitlost, gemini-cli-trustissues,
-claude-code-github-actions-bot-bypass) with no distinct new OpenAI-specific finding — not written up separately.
-CISA KEV feed fetched directly (dateAdded >= 2026-08-31): 8 entries, all already tracked (LiteLLM, Starlette,
-Kestra, JFrog) or out of scope (Chromium V8, Sangoma, SonicWall x2). Extensively cross-checked via
-advisory-index.jsonl + corpus grep before writing anything: npm/PyPI/crates supply-chain waves (arrayref,
-binding.gyp/Phantom Gyp, ChainDrop, TeamPCP/Mini Shai-Hulud, Operation Navy Ghost), Cursor CVE batch, OpenClaw
-Claw Chain, Vercel/Context.ai OAuth breach, Hugging Face agentic intrusion, React2Shell/Next.js/Svelte CVE
-batches, FastAPI/Starlette BadHost, Streamlit SSRF, Supabase RLS misconfiguration pattern, Google AI Studio
-API-key leak, Semantic Kernel RCE (CVE-2026-25592/26030), Open VSX GlassWorm + evil-twin campaigns, GhostSplice
-MCP instruction-splitting, GitSpawn, CoreBreak — all confirmed already tracked, no duplicates written. No source-
-priority decay beyond the routine 2 sources this run (blog.trailofbits.com, securityaffairs.com, 60-day
-threshold). **Branch cleanup:** stale `claude/eloquent-lovelace-*` branches present at session start
-(`0c4quz`, `biz8jx`, `dq6yjk`, `ilp5b9`, `o3cag1`, `r7xawf`, `r7xawf-followup`, `v8dj3u`) — same recurring
-403/no-delete-tool situation documented since 2026-08-18; not re-attempted without a working deletion path.
-
 ## 2026-09-09
 
 ```yaml
@@ -198,3 +146,16 @@ blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, spectrosec.com-404,
 ```
 
 **Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend incl. Vite/Svelte/Next.js; backend/auth/DB incl. FastAPI/Streamlit/Prisma/Supabase/NextAuth/Clerk/Google). All research direct WebSearch/WebFetch, no subagents. KEV fetched directly (dateAdded ≥ 09-08): only Cisco Secure Email Gateway new since 09-14 — nothing in scope. **All four new advisories came from a vendor advisory tab or an advisory-database listing; none from search.** (1) Clerk: three 2026 advisories including a CVSS 9.1 — `{framework} CVE` covers Next.js, not the auth SDK above it, and the Clerk tab had never been walked (LEARNINGS §20). (2) Bifrost 9.8 via the `mcp` recency listing; JFrog is CNA and researcher (§14). (3) Agent Studio SSRF exists only in the Google Cloud release-notes *feed* — the HTML page renders as navigation (§22). (4) unstructured 9.3 via the reviewed-critical pip list (July vendor advisory, NVD 08-20). Casdoor (9.9, unpatched, maintainers deleted the researcher's issues) folded into the MCP batch rather than a new file. **Declined:** esphome, prowler, NLTK, yayson, maplibre, omnigent, Serena (out of audience); Streamlit GHSA-7p48-42j8-8846 = tracked CVE-2026-33682; Cline Hub/Kanban, goose fsmonitor, better-auth SSO, Starlette, elementary-data, OpenClaw CVE-2026-32922, Windsurf CVE-2026-30615 all confirmed tracked by identifier; techtimes agent-pipeline study (403, research); arXiv 2604.08407 (research). HN Algolia: 4 terms, nothing new. Vendor-tab newest dates: Claude Code 06-25, Cursor 07-14, Cline 06-23, aider none, goose 07-24, OpenHands 03-23 (page error), LangChain 06-12, LangGraph 08-28, Semantic Kernel 02-19, better-auth 08-11, supabase/auth 03-11, Prisma 2021, FastAPI 2021, Streamlit 03-24, Vite 06-01, SvelteKit 07-29, Next.js 08-25, OpenClaw 09-11, gemini-cli none, LiteLLM 08-26, NextAuth 07-20, Langflow 09-10, Codex 2025-09 (page error), MCP TS SDK 02-04, Clerk 04-22. Five sources decayed (60-day rule). Link checker: 0/190 flagged across the nine edited files; 1/21 in the new files (`clerk.com/changelog` URLError to the checker, fetched fine in-session, Wayback snapshot exists — kept). **Budget warning:** `dist/llms.txt` built at 69,582 B against a 69,632 B budget after shortening four new titles — the next new advisory breaches it at the Tier-2 floor (LEARNINGS §9); the BACKLOG "llms.txt Tier-2 floor" item is now due, not optional.
+
+## 2026-09-16
+
+```yaml
+queries: {deep: 16, medium: 18, shallow: 10}
+new: [2026-09-coder-registry-cloudflare-terraform-supply-chain, 2026-07-gitlab-mcp-account-takeover-cve-cluster, 2026-08-revstealer-fake-claude-opus5-desktop]
+updated: [2026-04-flowise-rce-cluster, 2026-05-praisonai-auth-bypass, 2025-11-n8n-ni8mare-rce, 2026-08-agent-framework-mcp-cve-batch]
+sources_added: [coder.com, morphisec.com]
+sources_weighted: [pluto.security, vulncheck.com, nvd.nist.gov, github.com, community.n8n.io, bleepingcomputer.com, esecurityplanet.com, labs.cloudsecurityalliance.org, helpnetsecurity.com, scworld.com, cloud.google.com, ibm.com, registry.npmjs.org]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, hn-algolia-numericfilters-need-url-encoded-gt, nvd-web-page-renders-home-use-api, coder-github-advisory-403-use-blog]
+```
+
+**Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source, all cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend incl. Svelte/Vite/Next.js/Tailwind/Shadcn; backend/auth/DB incl. FastAPI/Streamlit/Prisma/Supabase/NextAuth/Clerk/Google). All research direct WebSearch/WebFetch, no subagents. KEV fetched directly (dateAdded >= 09-09): ScreenConnect, JFrog x2, GitLab, MikroTik x2, Citrix, Fortinet, Chromium, Cisco FMC/Email, Pixel — only the already-tracked GitLab/JFrog in scope. **Three new.** (1) **Coder registry compromise** — a stolen Cloudflare API key rerouted `registry.coder.com` for 14h on 08-31 serving credential-stealing Terraform modules; Coder blog + GHSA + BleepingComputer + eSecurityPlanet + CSA (the GHSA page 403s to WebFetch, the Coder blog carries the same IOCs). (2) **@zereight/mcp-gitlab** cluster — Pluto Security (July) + five GHSAs + NVD; downloads 82K/wk via the npm API; dated by the July research per the GHSA-date-is-not-disclosure-date rule though CVEs landed 09-15/16. (3) **RevStealer** fake "Claude Opus 5 Free Desktop" GitHub repo (Morphisec + Help Net + SC Media); generic stealer but the fake-Claude GitHub delivery is squarely on-audience. **Four updates**, all confirmed by identifier grep first: Flowise (~17 new Sept CVEs incl. two Custom-MCP-node RCEs, all fixed 3.1.4 — and the repo is **archived 2026-08-13**, no release past 3.1.4, so effectively EOL: flagged prominently); PraisonAI (~30-CVE mass audit, five+ unauth 9.8 RCE, fixed 4.6.62, confirmed via NVD API); n8n (16-advisory 09-16 batch via community forum + GHSAs); MCP batch (LightLLM pickle RCE 9.3 unpatched + atomic-agents-stack MITM 9.2). **Declined/logged:** Mandiant "AI Risk and Resilience" special report (Sept 16 Help Net coverage — the $50K runaway agent and repo-cloning items are real but the report repackages already-tracked GTIG "From Prompting to Autonomy" + ClawHavoc/VirusTotal; single-source vendor telemetry, no distinct new incident); Claude Chrome ShadowPrompt/ClaudeBleed (already tracked); dependency-confusion google-cloud-internal 129-day (Centriole, already in the bin-entry-harvesting file's theme — grepped, not re-filed); Supabase RLS "advisor" scans (vendor tooling, not an incident). **HN Algolia fix:** the `numericFilters=created_at_i>EPOCH` needs the `>` URL-encoded as `%3E` or the API returns non-JSON — first attempt with a bare `>` failed on every term, `%3E` worked (added to blockers/queries note). Vendor-tab walks: Claude Code newest 06-25, Cursor 07-14, OpenHands 03-23, SWE-agent none, aider none, goose 07-24, Cline 06-23, LangChain 06-12, Semantic Kernel 02-19, Next.js 08-25, React 07-21, Svelte 05-14, SvelteKit 07-29, Vite 06-01, Tailwind/shadcn/Supabase/python-genai none, FastAPI 2021, Prisma 2021, Streamlit 03-24, NextAuth 07-20, Clerk 04-22, better-auth 08-11, Codex 2025-09, Flowise 09-10, PraisonAI 09-15 (18 pages), n8n 09-16, Langflow 09-10, LiteLLM 08-26, Coder 09-01, MCP TS SDK 02-04 — all gaps covered. **Branch cleanup:** stale `jam/youthful-wozniak-y9zt6j` and prior `claude/eloquent-lovelace-*` branches present; deletion attempted per the recurring 403/no-delete situation documented since 08-18.

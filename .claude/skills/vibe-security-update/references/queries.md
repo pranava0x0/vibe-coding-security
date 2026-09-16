@@ -256,7 +256,8 @@ unreachable.
   description and score.
 - **`techtimes.com`** — 403 on 2026-09-14.
 - **`hn.algolia.com`** — an occasional non-JSON first response; retry once
-  before logging it as a blocker.
+  before logging it as a blocker. Also URL-encode `>` in `numericFilters` as
+  `%3E` or every term returns non-JSON.
 - **`docs.cloud.google.com/<product>/release-notes`** — HTML is navigation
   only; use the `/feeds/<product>-release-notes.xml` feed.
 - **Vendor-repo advisory URLs** sometimes 404 while `github.com/advisories/GHSA-…`

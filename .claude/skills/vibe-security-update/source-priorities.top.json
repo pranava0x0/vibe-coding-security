@@ -17,8 +17,8 @@
   {
    "domain": "bleepingcomputer.com",
    "weight": 20.0,
-   "hits": 31,
-   "last_hit": "2026-09-07"
+   "hits": 32,
+   "last_hit": "2026-09-16"
   },
   {
    "domain": "cisa.gov",
@@ -41,20 +41,20 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 22,
-   "last_hit": "2026-09-15"
+   "hits": 23,
+   "last_hit": "2026-09-16"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 28,
-   "last_hit": "2026-08-23"
+   "hits": 29,
+   "last_hit": "2026-09-16"
   },
   {
    "domain": "nvd.nist.gov",
    "weight": 20.0,
-   "hits": 49,
-   "last_hit": "2026-09-15"
+   "hits": 50,
+   "last_hit": "2026-09-16"
   },
   {
    "domain": "ox.security",

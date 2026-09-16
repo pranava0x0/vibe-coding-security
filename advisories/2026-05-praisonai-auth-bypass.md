@@ -2,7 +2,7 @@
 id: 2026-05-praisonai-auth-bypass
 title: "PraisonAI authentication bypass — CVE-2026-44338 + platform CVEs (May 2026)"
 date_disclosed: 2026-05-11
-last_updated: 2026-06-17
+last_updated: 2026-09-16
 severity: high
 status: patched
 ecosystems: [pypi, ai-agents]
@@ -100,7 +100,25 @@ PraisonAI uses `importlib.util.spec_from_file_location` to auto-load a file name
 
 **Remediation:** Upgrade to `praisonai >= 4.6.34` (the same release that addressed CVE-2026-44338 and CVE-2026-44336, with additional input sanitization).
 
+## September 2026 update — a ~30-CVE mass audit lands across the Python, TypeScript and platform packages, with five+ unauthenticated CVSS 9.8 RCEs
+
+On **2026-09-14 and 2026-09-15** GitHub (as CNA) published roughly **thirty CVEs against PraisonAI at once** (`CVE-2026-56839`, `CVE-2026-57112`, `CVE-2026-57119` through `CVE-2026-57148`), spanning the `praisonaiagents` (Python), `praisonai-ts` (TypeScript) and `praisonai_platform` packages. This is a systematic sweep of the same failure modes the original advisory named — network services binding `0.0.0.0` with authentication that fails open, and allowlists that check only the first token — now enumerated across every server surface. Confirmed against the NVD API; fixed across **praisonai 4.6.59 / 4.6.60 / 4.6.62** (with `praisonaiagents 1.6.59` / `1.7.2` and platform `0.1.6`). The unauthenticated-RCE headliners:
+
+| CVE | CVSS | Mechanism |
+|---|---|---|
+| **CVE-2026-57124** | 9.8 | Default UI binds `0.0.0.0`; **`POST /api/mcp/connect`** takes caller `command`/`args` and starts a local process — unauth RCE (GHSA-p75f-6fp4-p57w) |
+| **CVE-2026-57125** | 9.8 | Unauth **`POST /api/v1/runs`** Jobs API: attacker `agent_yaml` marks `execute_command` YAML-approved before `@require_approval` runs → agent runs OS commands |
+| **CVE-2026-57123** | 9.8 | MCP SSE server binds `0.0.0.0`, `/sse` + `/messages/` with no auth/Origin/DNS-rebinding guard though the helpers exist |
+| **CVE-2026-57131** | 9.8 | `/api/v1/runs` mounted with no auth/authorization — submit prompts+config, read/cancel other jobs, leak service creds |
+| **CVE-2026-57127** | 9.8 | `recipe serve` API-key/JWT middleware **forwards requests when the secret env var is unset** — auth fails open |
+| **CVE-2026-57139 / -57141 / -57147 / -57148** | 9.8 | TS MCP server binds without host restriction (no auth); TS `codeMode` `new Function()` sandbox bypass; platform `JWT_SECRET` defaults to the public `dev-secret-change-me` so anyone mints admin tokens |
+
+Two of these encode lessons this repo has logged before: **CVE-2026-57133 / -57136** (allowlist checks only the first whitespace token, then passes the whole string to `child_process.exec`/`sh -c`) is the exact GraphQL-comma / find-`-exec` bypass shape, and **CVE-2026-57138** recovers the real `Function` constructor via `({}).constructor.constructor` out of a `with(sandbox)` blocklist — the same JS-sandbox-escape primitive as [jsonata](2026-08-jsonata-sandbox-escape-rce.md) and [vm2/isolated-vm](2026-08-vm2-isolated-vm-sandbox-escapes.md). EPSS for the RCEs is low and no in-the-wild exploitation is reported yet — but the original CVE-2026-44338 was probed **3h44m** after disclosure, so the same-workday rule applies. **Upgrade to praisonai ≥ 4.6.62** (`praisonaiagents ≥ 1.7.2`, platform ≥ 0.1.6); never expose any PraisonAI server surface, MCP endpoint, Jobs API or recipe server on `0.0.0.0`; and set `PLATFORM_JWT_SECRET` / `PRAISONAI_API_KEY` explicitly rather than trusting an opt-in that fails open.
+
 ## Sources
+- [NVD — CVE-2026-57124 (PraisonAI unauthenticated MCP-connect RCE)](https://nvd.nist.gov/vuln/detail/CVE-2026-57124) — fetched 2026-09-16 via the NVD API; CVSS 9.8, GHSA-p75f-6fp4-p57w, fixed 4.6.59, one of the ~30-CVE 2026-09-14/15 batch confirmed against the NVD keyword query.
+- [NVD — CVE-2026-57125 (PraisonAI unauthenticated Jobs API RCE)](https://nvd.nist.gov/vuln/detail/CVE-2026-57125) — fetched 2026-09-16 via the NVD API; CVSS 9.8, fixed praisonai 4.6.59 / praisonaiagents 1.6.59.
+- [NVD — CVE-2026-57147 (praisonai_platform default JWT secret)](https://nvd.nist.gov/vuln/detail/CVE-2026-57147) — fetched 2026-09-16 via the NVD API; CVSS 9.8, public `dev-secret-change-me` HS256 key, fixed platform 0.1.6.
 - [Sysdig — CVE-2026-44338: PraisonAI authentication bypass in under 4 hours and the growing trend of rapid exploitation](https://www.sysdig.com/blog/cve-2026-44338-praisonai-authentication-bypass-in-under-4-hours-and-the-growing-trend-of-rapid-exploitation)
 - [The Hacker News — PraisonAI CVE-2026-44338 Auth Bypass Targeted Within Hours of Disclosure](https://thehackernews.com/2026/05/praisonai-cve-2026-44338-auth-bypass.html)
 - [SecurityWeek — Hackers Targeted PraisonAI Vulnerability Hours After Disclosure](https://www.securityweek.com/hackers-targeted-praisonai-vulnerability-hours-after-disclosure/)
