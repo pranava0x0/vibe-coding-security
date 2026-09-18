@@ -129,7 +129,7 @@ Fetch CISA's KEV JSON feed directly every sweep (URL in `queries.md`) rather tha
 
 Don't repeat queries already run within the last 24h (check `runs.log.md`).
 
-**Also fetch directly, every sweep (URLs in `queries.md`):** the GitHub Advisory Database's `mcp` recency listing and its reviewed-critical `npm` and `pip` listings, plus the per-product advisory tabs — agent frameworks, IDEs, **and the auth SDKs** (Clerk, Better Auth, NextAuth.js, Supabase Auth). On 2026-09-15 all four new advisories came from those fetches and none from search (`LEARNINGS.md` §20–22).
+**Also fetch directly, every sweep (URLs in `queries.md`):** the GitHub Advisory Database's `mcp` recency listing and its reviewed-critical `npm` and `pip` listings, plus the per-product advisory tabs — agent frameworks, IDEs, **and the auth SDKs** (Clerk, Better Auth, NextAuth.js, Supabase Auth). On 2026-09-15 all four new advisories came from those fetches and none from search (`LEARNINGS.md` §20–22). **Add the advisory-database package query for every tracked product whose own tab is empty** (`github.com/advisories?query=<package>`), the **ZDI published-advisories index**, the **AWS security-bulletin index**, and **`alignment.openai.com/misalignment-reports/`** — on 2026-09-17 five of seven new advisories came from those (`LEARNINGS.md` §25–27).
 
 **Report source-access gaps as "not covered," never as "nothing found."** The standing gaps are listed in `queries.md`; a future sweep reading the log needs to know whether a quiet category was quiet or merely unreachable.
 

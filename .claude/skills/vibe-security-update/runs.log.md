@@ -16,50 +16,6 @@
 
 
 
-## 2026-09-09
-
-```yaml
-queries: {deep: 16, medium: 11, shallow: 6}
-new: [2026-09-deadbugz-mcp-supply-chain-campaign]
-updated: [2026-08-agent-framework-mcp-cve-batch, 2025-11-n8n-ni8mare-rce]
-sources_added: []
-sources_weighted: [pillar.security, adversa.ai, nhimg.org, vulncheck.com, advisories.gitlab.com, nvd.nist.gov, github.com, cisa.gov]
-blockers: [reddit-webfetch-403, x-bsky-search-snippets-only]
-```
-
-**Notes (≤300 words).** Full-coverage sweep per this run's explicit ask (social/web/industry/open-source, all
-cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend incl. Shadcn/Svelte/Tailwind/Vite;
-backend/auth/DB incl. FastAPI/Google AI Studio SDK/NextAuth.js/Prisma/Streamlit/Supabase). All research via direct
-`WebSearch`/`WebFetch` in this session, no delegated subagents. CISA KEV feed fetched directly (dateAdded >=
-2026-09-02): 12 entries, all already tracked (LiteLLM, Starlette, Kestra, JFrog) or out of scope (Adobe
-Commerce/Magento, Windows x2, N-able N-central, Chromium V8, Sangoma, SonicWall x2). One new advisory: **Deadbugz**
-(Pillar Security, 2026-08-12) — a malicious MCP server (`productivity-suite`) that behaves benignly for its first
-three tool calls then rewrites its own metadata into credential-theft instructions; distributed via 23 GitHub PRs
-in a 74-minute window. Single-primary-source (Adversa and nhimg.org both summarize Pillar's own research rather
-than independently verifying it) — marked `unconfirmed` per the two-independent-source bar, same as the related
-GhostSplice entry. Two updates, both confirmed CVE-by-CVE against primary sources rather than an aggregator
-roundup: `2026-08-agent-framework-mcp-cve-batch.md` gained three unrelated single-server MCP CVEs surfaced by an
-Adversa roundup — `mcp-atlassian` CVE-2026-73498 (path traversal, confirmed on the GHSA page directly), ArcadeDB
-CVE-2026-67357 (MCP `get_server_settings` cluster-token leak, confirmed via VulnCheck; explicitly disambiguated
-from the distinct sibling CVE-2026-67343, a non-MCP REST-endpoint leak of the same token fixed one version
-earlier), and `facebook-ads-mcp-server` CVE-2026-19956 (SSRF, confirmed via the NVD API — VulDB-sourced, no GHSA
-filed). `2025-11-n8n-ni8mare-rce.md` gained two medium-severity authorization-bypass CVEs, both confirmed via
-GitLab's advisory-database mirror: CVE-2026-86996 (an Agent-tool workflow invocation path skipped the
-sub-workflow caller-policy check that the conventional Execute-Workflow path enforces) and GHSA-h3jj-5f3v-3685
-(the Public API's execution-retry endpoint checked `workflow:read` instead of `workflow:execute`). Vendor
-GHSA-index page-walk repeated for Claude Code and Cursor per the standing practice — no advisories newer than the
-already-tracked June/July 2026 batches on either, confirming no gap rather than a quiet one. Extensively
-cross-checked against `advisory-index.jsonl` + corpus grep before writing anything: npm/PyPI/crates-io supply-
-chain waves (arrayref, binding.gyp/Phantom Gyp/Miasma lineage, Hades/ensmallen, Operation Navy Ghost, npm
-bin-entry-harvesting), Cursor CVE batch, OpenClaw Claw Chain, GitSpawn, Mexico-government breach, Hugging Face
-agentic intrusion (incl. the OpenAI-agent message-board story, already folded in), Google API-key/Gemini-scope
-leak, Supabase Auth OIDC bypass, React2Shell/Next.js CVE batch, Streamlit CVE-2026-33682, Open VSX evil-twin —
-all confirmed already tracked, no duplicates written. Declined: Nodemailer's IDN/Punycode allow-list bypass
-(GHSA-wmmp-3585-3rmp, moderate) — a real, confirmed CVE but a generic email library with no vibe-coding-specific
-angle, thin enough to skip per the routine out-of-audience-scope rule. All external citations in the new/updated
-advisories passed `tools/check-external-links.py` (0 flagged of 74 checked across the three files). No
-source-priority decay beyond the routine single source this run (60-day threshold).
-
 ## 2026-09-10
 
 ```yaml
@@ -159,3 +115,16 @@ blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, hn-algolia-numericf
 ```
 
 **Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source, all cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend incl. Svelte/Vite/Next.js/Tailwind/Shadcn; backend/auth/DB incl. FastAPI/Streamlit/Prisma/Supabase/NextAuth/Clerk/Google). All research direct WebSearch/WebFetch, no subagents. KEV fetched directly (dateAdded >= 09-09): ScreenConnect, JFrog x2, GitLab, MikroTik x2, Citrix, Fortinet, Chromium, Cisco FMC/Email, Pixel — only the already-tracked GitLab/JFrog in scope. **Three new.** (1) **Coder registry compromise** — a stolen Cloudflare API key rerouted `registry.coder.com` for 14h on 08-31 serving credential-stealing Terraform modules; Coder blog + GHSA + BleepingComputer + eSecurityPlanet + CSA (the GHSA page 403s to WebFetch, the Coder blog carries the same IOCs). (2) **@zereight/mcp-gitlab** cluster — Pluto Security (July) + five GHSAs + NVD; downloads 82K/wk via the npm API; dated by the July research per the GHSA-date-is-not-disclosure-date rule though CVEs landed 09-15/16. (3) **RevStealer** fake "Claude Opus 5 Free Desktop" GitHub repo (Morphisec + Help Net + SC Media); generic stealer but the fake-Claude GitHub delivery is squarely on-audience. **Four updates**, all confirmed by identifier grep first: Flowise (~17 new Sept CVEs incl. two Custom-MCP-node RCEs, all fixed 3.1.4 — and the repo is **archived 2026-08-13**, no release past 3.1.4, so effectively EOL: flagged prominently); PraisonAI (~30-CVE mass audit, five+ unauth 9.8 RCE, fixed 4.6.62, confirmed via NVD API); n8n (16-advisory 09-16 batch via community forum + GHSAs); MCP batch (LightLLM pickle RCE 9.3 unpatched + atomic-agents-stack MITM 9.2). **Declined/logged:** Mandiant "AI Risk and Resilience" special report (Sept 16 Help Net coverage — the $50K runaway agent and repo-cloning items are real but the report repackages already-tracked GTIG "From Prompting to Autonomy" + ClawHavoc/VirusTotal; single-source vendor telemetry, no distinct new incident); Claude Chrome ShadowPrompt/ClaudeBleed (already tracked); dependency-confusion google-cloud-internal 129-day (Centriole, already in the bin-entry-harvesting file's theme — grepped, not re-filed); Supabase RLS "advisor" scans (vendor tooling, not an incident). **HN Algolia fix:** the `numericFilters=created_at_i>EPOCH` needs the `>` URL-encoded as `%3E` or the API returns non-JSON — first attempt with a bare `>` failed on every term, `%3E` worked (added to blockers/queries note). Vendor-tab walks: Claude Code newest 06-25, Cursor 07-14, OpenHands 03-23, SWE-agent none, aider none, goose 07-24, Cline 06-23, LangChain 06-12, Semantic Kernel 02-19, Next.js 08-25, React 07-21, Svelte 05-14, SvelteKit 07-29, Vite 06-01, Tailwind/shadcn/Supabase/python-genai none, FastAPI 2021, Prisma 2021, Streamlit 03-24, NextAuth 07-20, Clerk 04-22, better-auth 08-11, Codex 2025-09, Flowise 09-10, PraisonAI 09-15 (18 pages), n8n 09-16, Langflow 09-10, LiteLLM 08-26, Coder 09-01, MCP TS SDK 02-04 — all gaps covered. **Branch cleanup:** stale `jam/youthful-wozniak-y9zt6j` and prior `claude/eloquent-lovelace-*` branches present; deletion attempted per the recurring 403/no-delete situation documented since 08-18.
+
+## 2026-09-17
+
+```yaml
+queries: {deep: 16, medium: 22, shallow: 12}
+new: [2026-09-crewai-zdi-zero-day-agent-loading-cve-batch, 2026-09-kiro-ide-cli-aws-bulletin-cve-batch, 2026-09-aws-security-agent-mcp-s3-bucket-squat, 2026-09-bragjack-browser-extension-builtin-ai-assistant-hijack, 2026-09-mandiant-hijacked-coding-assistant-session-shai-hulud-saas, 2026-09-shai-hulud-111-day-dormant-payload-mcp-package, 2026-09-openai-misalignment-reports-leaked-keys-public-uploads]
+updated: [2026-08-vm2-isolated-vm-sandbox-escapes, 2026-08-mindsdb-minds-platform-unauthenticated-rce, 2026-08-agent-framework-mcp-cve-batch, 2026-08-knaithe-hermes-autonomous-ai-scanning, 2026-07-kiro-mcp-config-self-rewrite-rce]
+sources_added: [forever.security, alignment.openai.com, aepd.es, securitybrief.news, kiro.dev, pypi.org]
+sources_weighted: [zerodayinitiative.com, github.com/advisories, github.com, aws.amazon.com, nvd.nist.gov, vulncheck.com, thehackernews.com, helpnetsecurity.com, securityweek.com, theregister.com, aikido.dev, registry.npmjs.org, cloud.google.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, github-blog-changelog-security-label-404, openai-misalignment-framework-page-403, cloud-google-mandiant-report-landing-truncated, bbc-webfetch-blocked, cybernews-403, scworld-403, vulncheck-per-cve-pages-404-for-3-of-6-vm2, ghsa-3jxw-vj8m-8x77-404]
+```
+
+**Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source, all cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw/CrewAI; frontend incl. Next.js/React/Svelte/Vite; backend/auth/DB incl. FastAPI/Streamlit/Prisma/Supabase/NextAuth/Clerk/better-auth/python-genai). All research direct WebSearch/WebFetch, no subagents. KEV fetched directly (dateAdded ≥ 09-10): Pixel, Cisco ISE/Email, Acronis, ScreenConnect, JFrog ×2, GitLab, MikroTik ×2 — only the tracked GitLab/JFrog in scope. **Seven new; again most came from direct listings, not search:** `github.com/advisories?query=kiro` (nine unreviewed AWS-CNA CVEs; only one tracked), the AWS bulletin index (2026-105/111), the ZDI published-advisories index (CrewAI + MindsDB 0-days — note the index page's ZDI numbers were off by one from the advisory URLs: "707 CrewAI" on the list resolved to `/ZDI-26-706/`; fetch the URL and read the id printed on the page), the `rmcp` recency hits, and the vm2 vendor tab (ten advisories after the one we had). BragJack and the Mandiant case came from THN's front page; OpenAI's reports from HN Algolia. **Accuracy calls:** THN and Help Net described *different* case studies from the same Mandiant report (a real SaaS intrusion vs a red-team exercise) — fetched three outlets and wrote both, labelled; the report landing page itself would not render. CrewAI's advisory tab is empty while the CVE record has nine — LEARNINGS §25. Kiro CVE-2026-89332's fix (0.8.135) is dated 2026-01-14 on the vendor changelog; CVE 2026-09-11 — dated by disclosure, fix date stated. vm2 vendor pages say "No known CVE" for all ten; VulnCheck CVE'd six on 09-17 (three per-CVE pages 404 — cited from the index, flagged as such). **Declined:** Irregular self-retraining (research); Flutter `universal_file_viewer` XCSSET (pub.dev, ~500 downloads, `example/` only); lmdeploy/SGLang/djust/@cyclonedx/@vendure/tinacms (out of audience); Mozilla 0DIN (June, tracked); Grafana MCP, 7nohe, n8n 09-16, OpenClaw 09-11, GemStuffer/tenderlove (all tracked by identifier). **Budget:** watch `dist/llms.txt` after seven new Tier-2 lines. Two sources decayed.
