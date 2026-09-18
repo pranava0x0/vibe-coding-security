@@ -2,7 +2,7 @@
 id: 2026-07-microsoft-copilot-patch-tuesday-cves
 title: "Microsoft July 2026 Patch Tuesday — GitHub Copilot JetBrains plugin CVE-2026-50510 + M365 Copilot mobile CVE-2026-48561 + M365 Copilot cross-tenant EoP CVE-2026-41106 + M365 Copilot RCE CVE-2026-50517 + VS Code Copilot credential leak CVE-2026-47282 (all patched)"
 date_disclosed: 2026-07-14
-last_updated: 2026-07-29
+last_updated: 2026-09-18
 severity: critical
 status: patched
 ecosystems: [github-copilot, m365-copilot]
@@ -50,7 +50,30 @@ Update is the fix for the two client-side CVEs; there is no rotation or containm
 ## Why this matters for vibe coders
 "GitHub Copilot" and "Microsoft 365 Copilot" are different products with different attack surfaces, and both had CVEs land in the same Patch Tuesday — a useful reminder to patch every Copilot-branded surface you use (IDE plugin, desktop, mobile, browser integration) independently rather than assuming one update covers them all.
 
+## Update 2026-09-18 — Microsoft's September AI-cloud batch: a CVSS 10.0 missing-authentication bug in Azure AI Foundry, a 9.9 command injection in M365 Copilot, and a 10.0 signature-verification bug in Copilot Studio, all server-side and "already mitigated"
+
+Between 2026-09-03 and 2026-09-18 Microsoft published a run of cloud-service CVEs (SecurityWeek counts 18 on 2026-09-18 alone across Azure and Copilot products; Microsoft rates them all critical though the CVSS scores vary) that touch the Copilot family and the platform developers use to build agents. All are Microsoft-hosted; Microsoft's position, as reported by The Hacker News, is that they are fully mitigated with no customer action required, and no exploitation has been reported. Scores and descriptions below are NVD's (CNA secure@microsoft.com), queried via the NVD API on 2026-09-18, because the MSRC update-guide pages render as a bare title to a fetcher:
+
+| CVE | Product | CVSS | NVD description | Published |
+|---|---|---|---|---|
+| **CVE-2026-85889** | Azure AI Foundry | **10.0** | "Missing authentication for critical function… allows an unauthorized attacker to elevate privileges over a network" (CWE-306). Reported by Rémy Marot. | 2026-09-17 |
+| **CVE-2026-85885** | Microsoft 365 Copilot | **9.9** | "Improper neutralization of special elements used in a command ('command injection')… allows an authorized attacker to elevate privileges over a network" (CWE-77; PR:L, scope changed). | 2026-09-17 |
+| CVE-2026-85887 | Microsoft 365 Copilot | 7.7 | "Incorrect permission assignment for critical resource… allows an authorized attacker to disclose information over a network." | 2026-09-18 |
+| CVE-2026-78501 | M365 Copilot Business Chat | 7.4 | Command injection "allows an unauthorized attacker to disclose information over a network" (UI:R). | 2026-09-17 |
+| CVE-2026-55946 | Microsoft Copilot | 6.1 | Command injection, unauthenticated, information disclosure (AC:H, UI:R). | 2026-09-17 |
+| **CVE-2026-80098** | Copilot Studio | **10.0** / 9.3 (two NVD vectors) | "Improper verification of cryptographic signature… allows an unauthorized attacker to elevate privileges over a network." | 2026-09-03 |
+| CVE-2026-70352 | Azure AI Language | 10.0 | Missing authentication for critical function, unauthenticated privilege escalation. | 2026-09-03 |
+| CVE-2026-69843 | Microsoft Fabric | 10.0 | "Authentication bypass by spoofing… allows an unauthorized attacker to elevate privileges over a network." | 2026-09-18 |
+
+Also in the window, already logged as declined on 2026-09-14: CVE-2026-81381 / CVE-2026-81380 (GitHub Copilot / VS Code credential protection and command injection, September Patch Tuesday, moderate).
+
+**What a builder should take from it.** Three "command injection" CVEs in M365 Copilot in one week are the prompt-injection-to-privilege pattern this file documented in July (CVE-2026-48561), now recurring on the server side; the Azure AI Foundry and Copilot Studio entries are the agent-hosting control plane itself failing authentication or signature checks. There is nothing to patch locally, but two things to do: check the Azure/M365 audit logs for the disclosure window if you run agents on Foundry or Copilot Studio, and treat Microsoft's "no customer action" as a statement about the fix, not about what may have happened before it — Microsoft has said nothing either way about exploitation beyond "no evidence."
+
 ## Sources
+- [NVD — CVE-2026-85889](https://nvd.nist.gov/vuln/detail/CVE-2026-85889), [CVE-2026-85885](https://nvd.nist.gov/vuln/detail/CVE-2026-85885), [CVE-2026-85887](https://nvd.nist.gov/vuln/detail/CVE-2026-85887), [CVE-2026-78501](https://nvd.nist.gov/vuln/detail/CVE-2026-78501), [CVE-2026-55946](https://nvd.nist.gov/vuln/detail/CVE-2026-55946), [CVE-2026-80098](https://nvd.nist.gov/vuln/detail/CVE-2026-80098), [CVE-2026-70352](https://nvd.nist.gov/vuln/detail/CVE-2026-70352), [CVE-2026-69843](https://nvd.nist.gov/vuln/detail/CVE-2026-69843) — CNA Microsoft; scores, vectors and descriptions in the 2026-09-18 table were taken from the NVD API records on 2026-09-18.
+- [The Hacker News — Microsoft Patches CVSS 10.0 Azure AI Foundry Flaw Enabling Unauthorized Privilege Escalation](https://thehackernews.com/2026/09/microsoft-patches-cvss-100-azure-ai.html) — 2026-09-18; the "fully mitigated, no customer action," no-exploitation statements and the discoverer credit. Fetched 2026-09-18.
+- [SecurityWeek — Microsoft Patches 18 Vulnerabilities in AI, Cloud Products](https://www.securityweek.com/microsoft-patches-18-vulnerabilities-in-ai-cloud-products/) — 2026-09-18; the product list and the "all rated critical, CVSS says otherwise for some" observation. Fetched 2026-09-18.
+- [GitHub Advisory Database — advisories matching `copilot`, newest first](https://github.com/advisories?query=copilot+sort%3Apublished-desc) — the CVE-only mirrors (GHSA-g3r4-5f4w-4vh4, GHSA-jjmx-rwxc-vwh4, GHSA-hjj2-64g6-jw5p, GHSA-rq75-5hf2-vppm, GHSA-r9hf-26xj-x88v) that surfaced the batch. Fetched 2026-09-18.
 - [Windows News — A high-risk Copilot flaw can hijack your JetBrains IDE, Microsoft urges immediate patch](https://windowsnews.ai/article/a-high-risk-copilot-flaw-can-hijack-your-jetbrains-ide-microsoft-urges-immediate-patch.438594)
 - [Windows News — July Patch Tuesday: Visual Studio Code update to fix security feature bypass and more](https://windowsnews.ai/article/july-patch-tuesday-update-visual-studio-code-now-to-fix-security-feature-bypass-and-more.438185)
 - [NotebookCheck — Microsoft Copilot: Websites could secretly issue commands to the AI](https://www.notebookcheck.net/Microsoft-Copilot-Websites-could-secretly-issue-commands-to-the-AI.1343346.0.html)

@@ -35,26 +35,26 @@
   {
    "domain": "cybersecuritynews.com",
    "weight": 20.0,
-   "hits": 43,
-   "last_hit": "2026-09-04"
+   "hits": 44,
+   "last_hit": "2026-09-18"
   },
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 24,
-   "last_hit": "2026-09-17"
+   "hits": 25,
+   "last_hit": "2026-09-18"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 30,
-   "last_hit": "2026-09-17"
+   "hits": 31,
+   "last_hit": "2026-09-18"
   },
   {
    "domain": "nvd.nist.gov",
    "weight": 20.0,
-   "hits": 51,
-   "last_hit": "2026-09-17"
+   "hits": 52,
+   "last_hit": "2026-09-18"
   },
   {
    "domain": "ox.security",
@@ -65,8 +65,8 @@
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 48,
-   "last_hit": "2026-09-17"
+   "hits": 49,
+   "last_hit": "2026-09-18"
   },
   {
    "domain": "sentinelone.com",
@@ -89,14 +89,14 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 87,
-   "last_hit": "2026-09-17"
+   "hits": 88,
+   "last_hit": "2026-09-18"
   },
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 39,
-   "last_hit": "2026-09-17"
+   "hits": 40,
+   "last_hit": "2026-09-18"
   },
   {
    "domain": "wiz.io",
@@ -135,6 +135,12 @@
    "last_hit": "2026-09-14"
   },
   {
+   "domain": "helpnetsecurity.com",
+   "weight": 17.0,
+   "hits": 8,
+   "last_hit": "2026-09-18"
+  },
+  {
    "domain": "blog.rust-lang.org",
    "weight": 16.0,
    "hits": 3,
@@ -145,12 +151,6 @@
    "weight": 16.0,
    "hits": 6,
    "last_hit": "2026-07-25"
-  },
-  {
-   "domain": "helpnetsecurity.com",
-   "weight": 16.0,
-   "hits": 7,
-   "last_hit": "2026-09-17"
   }
  ]
 }
