@@ -2,7 +2,7 @@
 id: 2026-08-knaithe-hermes-autonomous-ai-scanning
 title: "knaithe/KnYuan — an autonomous DeepSeek+Hermes agent mass-scanned 460+ targets for Langflow, n8n and Marimo RCEs; the AI-tool exploits failed only where auth was on (July–August 2026)"
 date_disclosed: 2026-07-30
-last_updated: 2026-09-14
+last_updated: 2026-09-17
 severity: high
 status: active
 ecosystems: [self-hosted, ai-infrastructure]
@@ -101,6 +101,12 @@ Unit 42 published on **2026-09-02** an incident-response case ("An AI-Assisted C
 
 Read alongside the [Aurora/Cursor Agent](2026-08-aurora-ransomware-cursor-agent-abuse.md) case, this is the enterprise-targeted counterpart to the mass-exploitation campaigns above: same tooling shape, one victim, and the victim's own code repositories, secrets store, CI/CD and model endpoints as the path — exactly the surface a vibe-coding shop stands up first.
 
+### Update 2026-09-17 — a regulator's record: Spain's data-protection authority receives its first personal-data-breach notification for an attack "executed by means of an AI agent" (AEPD, 2026-09-14)
+
+The Spanish data-protection authority (**AEPD**) published on **2026-09-14** that it had received the first breach notification in which the attack was carried out by an **AI agent built on "a known language model"** — the AEPD is explicit that this does not mean the model or its provider was compromised or built for the purpose. Per the AEPD's own post and the independent coverage (SecurityWeek and The Register, both 2026-09-16; Help Net Security 2026-09-17): the agent **scanned generic files for weaknesses, logged into the target organisation's system, searched the application autonomously until it found a vulnerability, then modified personal records and accessed invoice data** — "successfully chaining together different phases of the attack." No victim, tool, model or vector is named. AEPD deputy director Francisco Pérez Bes: "attacks supported by artificial intelligence have ceased to be a theoretical risk and are beginning to materialize," and "human supervision remains essential, but it must be supported by detection, containment, and response mechanisms capable of operating quickly enough."
+
+What this adds to the cluster above is not tradecraft — it is thinner than any Unit 42 or GreyNoise case here — but **provenance**: the first agentic intrusion recorded through a GDPR Article 33 notification rather than a vendor's telemetry, which means the class now has a regulatory paper trail and the AEPD's guidance (include AI-assisted attacks in risk analyses; review response procedures for automated threats; harden identity and credential management; detection and containment "at machine speed") is the first data-protection-authority position on it. The AEPD also notes 2025 was its busiest year on record (30,931 complaints, +64%). Recorded here rather than as a separate advisory because it names nothing a reader can act on beyond the class itself.
+
 ## If you are affected
 
 - [If your local AI agent was exploited](../playbooks/if-your-local-ai-agent-was-exploited.md)
@@ -117,6 +123,10 @@ The single highest-value action this incident supports: **turn authentication on
 
 ## Sources
 
+- [AEPD — Primera notificación de brecha de datos personales causada por un ataque ejecutado mediante un agente de IA](https://www.aepd.es/prensa-y-comunicacion/blog/primera-notiviacion-brecha-datos-personales-causada-por-ataque-ejecutado-mediante-agente-ia) — fetched 2026-09-17 (Spanish); published 2026-09-14: the regulator's primary record for the 2026-09-17 update, the "known language model" caveat, the attack phases, the recommendations.
+- [SecurityWeek — First Agentic AI Data Breach Reported to Spanish Regulator](https://www.securityweek.com/first-agentic-ai-data-breach-reported-to-spanish-regulator/) — fetched 2026-09-17; published 2026-09-16: the AEPD quotation on agent autonomy and the three expert scenarios.
+- [The Register — Spain gets its first taste of AI-aided cyber attack](https://www.theregister.com/cyber-crime/2026/09/16/spain-gets-its-first-taste-of-ai-aided-cyber-attack/5296844) — fetched 2026-09-17; published 2026-09-16: Pérez Bes's quotes, the 2025 complaint statistics, the link to the AEPD post.
+- [Help Net Security — Spain reports first data breach involving autonomous AI agent](https://www.helpnetsecurity.com/2026/09/17/spain-ai-agent-data-breach/) — fetched 2026-09-17; published 2026-09-17: the attack-phase description and the cross-references to the Hugging Face and Anthropic eval incidents.
 - [Unit 42 — Chinese-Speaking Threat Actor Harnesses AI Models for Autonomous Cyberattacks](https://unit42.paloaltonetworks.com/autonomous-ai-cyber-attack-campaign/) (published 2026-07-30) — primary source, fetched directly: actor aliases and Zhuhai assessment, the Hermes+DeepSeek division of labor, the 2026-05-07 recovered session (84 Langflow instances, 25,209 FOFA-identified n8n systems, ~100 sampled IPs, ~40 probed), per-CVE success/failure outcomes and the agent's own quoted reasoning, the 11 compromised Marimo instances, the three NetScaler victims and `NSC_AAAC=` cookie hunting, and the 1DayNews pipeline (17 sources, DeepSeek filtering, Telegram distribution).
 - [Tenable — The Agentic AI Threat Cluster: Seven Incidents, Three Actors, and What They Mean for Your Exposure](https://www.tenable.com/blog/the-agentic-ai-threat-cluster-seven-incidents-three-actors-and-what-they-mean) (published 2026-08-14) — independent corroboration and clustering, fetched directly: the seven-incident/three-actor framing, the cross-campaign CVE list, and the characterization of agentic capability as operating beyond step-by-step human direction. Explicitly a synthesis of already-disclosed reporting (Unit 42, Dream Security, Sysdig TRT) rather than new primary research.
 

@@ -2,7 +2,7 @@
 id: 2026-08-vm2-isolated-vm-sandbox-escapes
 title: "Both JavaScript sandboxes that AI workflow platforms run untrusted code in broke in the same fortnight — vm2 (host DNS hijack) and isolated-vm (type confusion → host RCE), August 2026"
 date_disclosed: 2026-08-07
-last_updated: 2026-08-21
+last_updated: 2026-09-17
 severity: critical
 status: patched
 ecosystems: [npm, javascript, self-hosted]
@@ -56,6 +56,29 @@ Neither is exotic. Both are the *second* time the same sandbox has had its conta
 
 **n8n patched both in the same window**, alongside its own [nine-advisory batch on 2026-08-19](2025-11-n8n-ni8mare-rce.md) — which included two more first-party sandbox escapes to host RCE. If you run n8n, treat this as one upgrade event, not three.
 
+### Update 2026-09-17 — vm2 shipped ten more advisories in three weeks (2026-08-24 → 09-08), six of them critical host RCE; VulnCheck assigned CVEs on 2026-09-17; the fix line is now **3.12.2**
+
+The 3.11.6 fix above was the start, not the end. vm2's advisory tab now carries ten further entries between 2026-08-24 and 2026-09-08, and the npm `time` field shows the matching release cadence — **3.11.7 (08-24), 3.11.8 (08-27), 3.12.0 (09-01), 3.12.1 (09-03), 3.12.2 (09-08)**. On **2026-09-17** VulnCheck published CVEs for six of them; the vendor advisories themselves still read "No known CVE." Fetched from the vendor advisory pages and VulnCheck:
+
+- **GHSA-8hr7-r645-pc6w / CVE-2026-92935** (VulnCheck CVSS **9.5**, published 08-24): the NodeVM `require` option guard checks `typeof === 'object' && !== null`, which **accepts arrays**; an array-shaped `require` with `nesting: true` lets sandboxed code require the host `vm2` module and build a nested NodeVM with `child_process` — host command execution. Affects **≥ 3.11.4, < 3.11.7**. Credit lexdotdev.
+- **GHSA-x965-fc75-jpqh / CVE-2026-92934** (vendor CVSS 9.0, VulnCheck **9.5**, published 08-27): an **incomplete fix for `Error.cause` sanitisation** — a host-wrapped `AggregateError` revisited within one exception-handling walk (self-cycle, mutual cycle or duplicate reference) short-circuits `handleException`'s cycle check and returns **unsanitised host proxies in the `errors` array**: host RCE plus `process.env`. Affects **≤ 3.11.7**, fixed **3.11.8**. Credit zx (Jace) and maru1009.
+- **GHSA-r273-hxvj-fxhp / CVE-2026-92933** (Moderate, 08-27): `util.getCallSites()` bypasses host-frame redaction and leaks the host call stack. Fixed 3.11.8.
+- **GHSA-j89j-5m6r-cr2q** (vendor CVSS **10.0**, 09-03): calling a **non-strict (sloppy-mode) host function** the embedder exposed, with no receiver, makes V8 bind `this` to the host global object, which vm2 returned **unwrapped** — "a live proxy of the host global," hence `process` and RCE. Only strict-mode/ESM host functions were safe. Affects **≤ 3.12.0**, fixed **3.12.1**. Credit RajChowdhury240.
+- **GHSA-pq68-rvw4-xp4r** (10.0, 09-03): the hardened builtin denylist that blocks `cluster`, `worker_threads` and `vm` **omitted `child_process`**, so `require:{builtin:['*']}` gave `require('child_process').execSync(...)`. Fixed 3.12.1. (The exact `builtin:['*']` configuration that the August `os`/`dns` finding above already showed to be unsafe.)
+- **GHSA-6454-5x88-m6jw** (10.0, 09-03): host-realm Promises crossing the bridge — hijack `Symbol.species` on the host Promise and call `.then()` without an `onRejected`, and V8's internal Thrower re-throws the **raw host rejection** into the sandbox. Fixed 3.12.1.
+- **GHSA-x3v6-43hc-82mc** (High, 09-03): the NodeVM `crypto` sanitiser exposed process-wide `crypto.setFips`. Fixed 3.12.1.
+- **GHSA-5h3f-q97h-ccvc** (10.0, 09-08): NodeVM's **custom module resolver** stored allow-listed paths as raw string prefixes, so after requiring an allowed module a guest could `require` an absolute path to a **prefix-sharing sibling file** never allow-listed — code execution in the host process. Affects **≤ 3.12.1**, fixed **3.12.2**. Credit @rexpository.
+- **GHSA-489w-w794-jq94** (Critical, 09-08): NodeVM `zlib` Buffers exposed **pooled host memory** across the VM boundary. **GHSA-2v2p-6j97-cjg9** (High, 09-08): a host Promise rejection from an exposed constructor terminates the host. Both fixed 3.12.2.
+- VulnCheck's 09-17 batch also lists **CVE-2026-92937** ("3.11.6 remote code execution via Promise call/apply"), **CVE-2026-92938** ("3.11.3 through 3.11.6 remote code execution via node:sqlite") and **CVE-2026-92936** ("3.11.0 before 3.11.7 information disclosure via error stack") — VulnCheck's advisory pages for these three returned 404 to this sweep; the ids and version ranges are as printed on VulnCheck's advisory index, not verified against a per-CVE page.
+
+**What changed in the reading.** In August the finding was "two sandboxes broke in a fortnight." By mid-September it is that **vm2's bridge is being taken apart primitive by primitive** — error objects, Promises, `this` binding, the module resolver, `Buffer` pools — by at least six independent reporters, with a critical escape landing roughly weekly and each fix revealing the next incomplete sanitiser. The maintainer's own advisory text for CVE-2026-92934 says "incomplete fix." For any product whose untrusted-code story is "vm2" — including everything in `tools_affected` above — the practical position is: the current version is the *minimum*, an OS-level boundary beneath it is the *control*, and the 2026-09-17 CVE assignments mean CVE-driven scanners will finally flag versions below **3.11.8** (and nothing yet for the 3.12.x fixes, which still carry no CVE).
+
+```bash
+# What vm2 do you actually run (transitively)?
+npm ls vm2 2>/dev/null | grep vm2
+# Below 3.12.2 = at least one unfixed vendor advisory; below 3.11.8 = a CVE
+```
+
 ## Am I affected?
 
 ```bash
@@ -101,3 +124,7 @@ Practical guidance: put an **OS-level boundary** (container, VM, seccomp, separa
 - [Endor Labs — GHSA-864f-rcv7-6rh4: Critical Type Confusion Vulnerability in isolated-vm](https://www.endorlabs.com/learn/ghsa-864f-rcv7-6rh4-critical-type-confusion-vulnerability-in-isolated-vm) — independent research writeup: escalation to fake-vtable host control-flow hijack, the `DisallowJavascriptExecutionScope` fix, discovery credit to Cristian-Alexandru Staicu, and the named downstream consumers (n8n, Activepieces, Mastra, Budibase, Sim.ai, Directus).
 - [OX Security — Critical vm2 Vulnerability Allows Host DNS Hijacking and Information Disclosure](https://www.ox.security/blog/critical-vm2-vulnerability-allows-host-dns-hijacking-and-information-disclosure/) — independent corroboration of the vm2 finding and its relevance to low-code platforms, webhook/rules executors, plugin systems, and CI job runners.
 - [The Hacker News — isolated-vm Flaw Lets Sandboxed Code Escape](https://thehackernews.com/2026/08/isolated-vm-flaw-lets-sandboxed.html) — independent press confirmation of the isolated-vm finding.
+- [patriksimek/vm2 — security advisories index](https://github.com/patriksimek/vm2/security/advisories) — fetched 2026-09-17; the ten advisories 2026-08-24 → 09-08 with severities and titles (no CVEs shown on the vendor page).
+- [vm2 — GHSA-x965-fc75-jpqh (AggregateError sanitisation bypass)](https://github.com/patriksimek/vm2/security/advisories/GHSA-x965-fc75-jpqh), [GHSA-j89j-5m6r-cr2q (nullish receiver on non-strict host function)](https://github.com/patriksimek/vm2/security/advisories/GHSA-j89j-5m6r-cr2q), [GHSA-pq68-rvw4-xp4r (child_process omitted from denylist)](https://github.com/patriksimek/vm2/security/advisories/GHSA-pq68-rvw4-xp4r), [GHSA-6454-5x88-m6jw (Symbol.species / onRejected)](https://github.com/patriksimek/vm2/security/advisories/GHSA-6454-5x88-m6jw), [GHSA-5h3f-q97h-ccvc (custom resolver prefix bypass)](https://github.com/patriksimek/vm2/security/advisories/GHSA-5h3f-q97h-ccvc) — all fetched 2026-09-17; affected/patched versions, CVSS and credits as quoted in the 2026-09-17 update.
+- [VulnCheck — vm2 before 3.11.8 Sandbox Escape RCE via AggregateError (CVE-2026-92934)](https://www.vulncheck.com/advisories/vm2-before-3.11.8-sandbox-escape-rce-via-aggregateerror) and [vm2 NodeVM Remote Code Execution via Array-Shaped Require (CVE-2026-92935)](https://www.vulncheck.com/advisories/vm2-nodevm-remote-code-execution-via-array-shaped-require) — fetched 2026-09-17; published 2026-09-17, CVSS 9.5 each, version ranges; the [VulnCheck advisory index](https://www.vulncheck.com/advisories) (fetched 2026-09-17) lists the sibling CVE-2026-92933, CVE-2026-92936, CVE-2026-92937 and CVE-2026-92938 entries.
+- npm registry `time` field for `vm2` (via `npm view vm2 time`, 2026-09-17): 3.11.6 2026-08-14, 3.11.7 08-24, 3.11.8 08-27, 3.12.0 09-01, 3.12.1 09-03, 3.12.2 09-08.

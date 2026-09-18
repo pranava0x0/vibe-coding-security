@@ -126,114 +126,56 @@ Rotate a different subset each sweep; the lists are a floor, not a ceiling.
 
 ## Primary-source domains worth querying directly
 
-- **Ecosystem security teams:** `blog.rust-lang.org`, `blog.pypi.org`,
-  `github.blog/changelog`, `blog.golang.org`, RubyGems, Packagist
-- **Advisory databases:** `github.com/advisories`, GitLab Advisory DB, NVD,
-  CISA KEV, `advisory.splunk.com`, `spring.io`
-- **Industry security blogs:** Anthropic, OpenAI, Google (Project Zero /
-  Security Blog), Microsoft MSRC, AWS, Cloudflare, Red Hat, Databricks,
-  Salesforce, Oracle
-- **Vendor threat-intelligence reports (distinct from advisory pages):**
-  `cloud.google.com/blog/topics/threat-intelligence` (GTIG — the 2026-09-08
-  adversarial-AI report named trojanized MCP packages and `.claude/`/`.cursor/`
-  persistence paths), Microsoft Threat Intelligence, `unit42.paloaltonetworks.com`,
-  Mandiant, `gambit.security` (ransomware-affiliate AI-tool abuse from recovered
-  operator infrastructure)
-- **CNAs that are research firms:** `vulncheck.com/advisories`,
-  `zerodayinitiative.com/advisories`, `research.jfrog.com/vulnerabilities` —
-  for small AI-tool vendors with no GHSA channel, the CNA's own advisory is the
-  independent second source (DeepSeek Harness CVE-2026-82533; Langflow
-  CVE-2026-0768 was a ZDI 0-day advisory; Bifrost CVE-2026-90898 a JFrog one)
-- **Auth-SDK advisory tabs (walk every cycle):** `clerk/javascript`,
-  `better-auth/better-auth`, `nextauthjs/next-auth`, `supabase/auth` under
-  `github.com/<org>/<repo>/security/advisories` — Clerk's CVSS 9.1 middleware
-  bypass (CVE-2026-41248) sat five months unseen by `{framework} CVE` queries.
+Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.md`.
+
+- **Ecosystem security teams:** `blog.rust-lang.org`, `blog.pypi.org`, `github.blog/changelog`,
+  `blog.golang.org`, `blog.rubygems.org`, Packagist — the registry's own post-incident post is the
+  authoritative second source for a registry-abuse campaign, even when it declines to attribute.
+- **Advisory databases:** `github.com/advisories`, GitLab Advisory DB, NVD (use the API,
+  `services.nvd.nist.gov/rest/json/cves/2.0?cveId=`), CISA KEV JSON, `advisory.splunk.com`, `spring.io`.
 - **Advisory-database listings (fetch every sweep):**
-  `github.com/advisories?query=mcp+sort%3Apublished-desc` and
-  `github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm+severity%3Acritical`
-  (and `ecosystem%3Apip`). The reviewed lists omit CVE-only entries (Casdoor,
-  Bifrost), so run the `mcp` recency list too.
-- **Google Cloud release-notes feeds:**
-  `docs.cloud.google.com/feeds/<product>-release-notes.xml` — customer-action
-  security fixes (Agent Studio `/api-proxy` SSRF, 2026-07-20) appear only there.
-- **Ecosystem security-team blogs (authoritative, may non-attribute):**
-  `blog.rubygems.org` (Ruby Central), `blog.pypi.org`, `github.blog/changelog`
-  — for a registry-abuse / mass-spam-publishing campaign these are the
-  registry's own post-incident record and count as the independent second
-  source even when they decline to attribute the activity to AI (RubyGems'
-  2026-09-11 GemStuffer post named counts and fixes but would not confirm AI
-  authorship the researchers asserted).
-- **Rapid-reaction exploit research (KEV-adjacent, same-day):** `watchtowr.com`,
-  `horizon3.ai`, `greynoise.io` (in-the-wild probing telemetry), `wiz.io` — for
-  a CVSS-9/10 disclosure these publish the vulnerable endpoint, exploitation
-  timing, and detection guidance within a day; pair with the NVD/vendor record.
-- **Agentic-campaign primary research:** `greynoise.io` + `blackpointcyber.com`
-  (the PaperCut AI-agent-swarm pair), `unit42.paloaltonetworks.com`,
-  `gambit.security` — two firms on the same autonomous-agent campaign is a real
-  two-source pair, not aggregator republication.
-- **Corporate-parent PSIRT bulletins (the batch is the advisory):**
-  `ibm.com/support/pages/node/<id>` — IBM is Langflow's CNA since the
-  acquisition; its 2026-09-08 bulletin carried 11 Langflow CVEs the project's
-  own advisory tab never listed. `github.com/NVIDIA/product-security` — NVIDIA's
-  Markdown + CSAF mirror of every bulletin (fetch the raw `<id>.md`; the
-  `nvidia.custhelp.com` HTML page returns 403). Query
-  `"{parent} security bulletin {product}"` for any AI tool owned by IBM, NVIDIA,
-  Microsoft, Google, Cisco or Salesforce, and grep *every* CVE the bulletin lists.
-- **Vendor community-forum security posts (batch index for GHSA-only vendors):**
-  `community.n8n.io` "Security update — <date>" posts enumerate each n8n batch
-  (18 advisories on 2026-09-02) with severities and fixed versions; the GHSA
-  index shows the same advisories one at a time with no batch grouping.
-- **Hacker News via the Algolia API (works where the HN site is noisy):**
-  `https://hn.algolia.com/api/v1/search_by_date?query=<one term>&tags=story&numericFilters=created_at_i>{epoch}`
-  — one term per call (Boolean `OR` is not supported), filter by epoch for the
-  sweep window; returns title, URL, points and comment count.
-- **Vendor advisory indexes that must be paginated (bulk back-publication):**
-  `github.com/openclaw/openclaw/security/advisories?page=N` — 75 advisories
-  dated 2026-09-11 for fixes shipped weeks earlier, ~30 more dated 2026-06-30,
-  11+ pages; `github.com/sveltejs/kit/security/advisories` — nine advisories
-  Feb–Jul 2026 with no blog post, CVEs assigned by VulnCheck 2026-08-28. Walk
-  every agent framework and web framework the corpus tracks, not just the
-  IDE vendors, and read the *vendor's* published date, not the CVE's.
-- **Cloud-vendor security bulletins for their own MCP servers:**
-  `aws.amazon.com/security/security-bulletins/<year>-<nnn>-aws/` — AWS is the
-  CNA for `awslabs.*-mcp-server` packages (2026-097/101/103 in one week);
-  `ibm.com/support/pages/node/<id>` for ContextForge (four CVEs 2026-09-02).
-- **Exploitation telemetry (post-patch mass scanning):** `f5.com/labs` — the
-  2026-09-11 Vite CVE-2026-39364 report quantified a ~20× August scanning jump
-  five months after the fix; pair with `greynoise.io`. A telemetry report is a
-  status change (`patched` → `active`) even with no KEV entry.
-- **Registry release dates as a primary source:** `npm view <pkg> time`,
-  `pip index versions <pkg>` / PyPI JSON — settles whether a "fixed in X"
-  claim is physically possible (OmniRoute's fix PR merged three weeks after
-  the version the vendor page names as fixed).
-- **Vendor patch-release trackers (fetch directly on a critical release):**
-  `docs.gitlab.com/releases/patches/`, GitLab/Atlassian/JFrog release notes —
-  the full CVE list in a "critical patch release" is often broader than the one
-  CVE the press covers (GitLab 2026-09-10 shipped 19 CVEs behind the CVSS-10
-  headline).
-- **AI-credential threat intel:** `okta.com` (Jeremy Kirk) — infostealer-dump
-  analysis quantifying replayable AI session tokens (Anthropic, Cursor, OpenAI)
-  and the black market selling them.
-- **Roundups that surface primaries (aggregators, not sources):**
-  `adversa.ai/blog` monthly "top … security resources" posts,
-  `labs.cloudsecurityalliance.org` CISO daily briefings — read them for the
-  links, then fetch and cite the primary
-- **Researcher blogs (upstream of aggregators):** 0day.click, cyata.ai,
-  layerxsecurity.com, pillar.security, oasis.security, tenetsecurity.ai,
-  labs.zenity.io, novee.security, danusminimus.github.io, oddguan.com,
-  manifold.security (cross-vendor AI-coding-CLI pre-trust-execution findings —
-  Cursor CLI worktree Aug 2026, GitSpawn Sept 2026), paddo.dev (independent
-  technical follow-up/retest blog, not just restatement), embracethered.com
-  (Johann Rehberger — agent prompt-injection chains; Claude Code Auto Mode
-  module-shadowing, Aug 2026), itmeetsot.eu (independent replication of the
-  same class via steganographic payloads)
-- **AI-safety research nonprofits publishing standalone incident sites (not a
-  blog post on their main domain):** `collusion.wiki` — the Nightingale
-  Collective's primary report on the DSEWiki agent-collusion incident (Sept
-  2026). A dedicated-domain report like this won't appear under the
-  organization's own name in search results; check the article text for a
-  bespoke report-site URL rather than assuming the org's main site is the
-  primary source.
+  `github.com/advisories?query=mcp+sort%3Apublished-desc`,
+  `…?query=type%3Areviewed+ecosystem%3Anpm+severity%3Acritical`, `…ecosystem%3Apip…` — the reviewed
+  lists omit CVE-only entries, so run the `mcp` recency list too.
+- **Advisory-database package queries (for products whose own tab is empty):**
+  `github.com/advisories?query=crewai`, `…?query=kiro`, `…?query=rmcp`, `…?query=vm2` — CVE-only
+  entries from research CNAs (ZDI, VulnCheck) and corporate CNAs (AWS, IBM) never reach the vendor tab.
+- **Per-product advisory tabs (`github.com/<org>/<repo>/security/advisories`, paginate):** Claude Code,
+  Cursor, Cline, goose, OpenHands, SWE-agent, aider, Codex, gemini-cli, OpenClaw (11+ pages),
+  n8n, Langflow, Flowise, PraisonAI, LiteLLM, LangChain, LangGraph, Semantic Kernel, Coder, MCP
+  TS/Python SDKs, vm2; web: Next.js, React, Svelte, SvelteKit, Vite, Astro; **auth SDKs:**
+  `clerk/javascript`, `better-auth/better-auth`, `nextauthjs/next-auth`, `supabase/auth`;
+  backend: FastAPI, Prisma, Streamlit, `googleapis/python-genai`. Read the vendor's date, not the CVE's.
+- **CNAs that are research firms:** `vulncheck.com/advisories`,
+  `zerodayinitiative.com/advisories/published/` (AI-tool 0-days publish here first; the index's ZDI
+  numbers can be off by one from the URLs — open the page and read the id),
+  `research.jfrog.com/vulnerabilities`.
+- **Corporate-parent / cloud-vendor bulletins (the batch is the advisory):**
+  `ibm.com/support/pages/node/<id>` (Langflow, ContextForge); `github.com/NVIDIA/product-security`
+  (raw `<id>.md`; `nvidia.custhelp.com` 403s); `aws.amazon.com/security/security-bulletins/` (Kiro,
+  Amazon Q, `awslabs.*` MCP servers, Security Agent); `community.n8n.io` "Security update — <date>".
+- **Industry security blogs:** Anthropic, OpenAI, Google Security/Project Zero, MSRC, AWS, Cloudflare,
+  Red Hat, Databricks, Salesforce, Oracle.
+- **Vendor threat-intel and incident reports:** `cloud.google.com/blog/topics/threat-intelligence`
+  (GTIG), Mandiant reports (landing pages truncate — read via several outlets), Microsoft Threat
+  Intelligence, `unit42.paloaltonetworks.com`, `gambit.security`, Anthropic threat reports,
+  `alignment.openai.com/misalignment-reports/` (OpenAI internal-model incidents).
+- **Google Cloud release-note feeds:** `docs.cloud.google.com/feeds/<product>-release-notes.xml`.
+- **Rapid-reaction / telemetry:** `watchtowr.com`, `horizon3.ai`, `greynoise.io`, `wiz.io`,
+  `f5.com/labs`, `blackpointcyber.com`, `okta.com` (AI-token infostealer analysis).
+- **Vendor patch trackers:** `docs.gitlab.com/releases/patches/`, Atlassian, JFrog release notes.
+- **Registry records:** `npm view <pkg> time`, `registry.npmjs.org/<pkg>` (`0.0.1-security` =
+  takedown marker), `pip index versions <pkg>`, PyPI JSON via curl.
+- **Hacker News (Algolia):**
+  `hn.algolia.com/api/v1/search_by_date?query=<one term>&tags=story&numericFilters=created_at_i%3E{epoch}`
+  — one term per call, `>` URL-encoded.
+- **Roundups that surface primaries:** `adversa.ai/blog`, `labs.cloudsecurityalliance.org`.
+- **Researcher blogs:** 0day.click, cyata.ai, layerxsecurity.com, pillar.security, oasis.security,
+  tenetsecurity.ai, labs.zenity.io, novee.security, danusminimus.github.io, oddguan.com,
+  manifold.security, paddo.dev, embracethered.com, itmeetsot.eu, forever.security, socket.dev,
+  stepsecurity.io, aikido.dev, safedep.io.
+- **Standalone incident sites from research nonprofits:** `collusion.wiki`, `rubyhack.ai`.
+- **Regulators:** `aepd.es` (first GDPR notification for an attack executed by an AI agent).
 
 ## Known source-access gaps
 
@@ -264,6 +206,16 @@ unreachable.
   resolves (knowns, 2026-09-15); try the database copy second.
 - **`pypi.org/pypi/<pkg>/json`** — truncated by `WebFetch`; use `pip index versions`.
 - **`spectrosec.com`** — 404 on 2026-09-15.
+- **`github.blog/changelog/label/security/`** — 404 on 2026-09-17; use the main changelog.
+- **`cloud.google.com/security/resources/<report>`** — Mandiant report pages are
+  landing pages whose body truncates; read the report through several outlets
+  and label which case study each describes.
+- **`openai.com/index/model-misalignment-reporting-framework`** — 403; the
+  reports themselves at `alignment.openai.com` fetch fine.
+- **`bbc.co.uk` / `bbc.com`** — blocked for `WebFetch`.
+- **`cybernews.com`, `scworld.com`** — 403 on 2026-09-17.
+- **`vulncheck.com/advisories/<slug>`** — some per-CVE pages 404 while the index
+  lists them (three of six vm2 CVEs on 2026-09-17); cite the index and say so.
 
 ## Out of scope for this project
 

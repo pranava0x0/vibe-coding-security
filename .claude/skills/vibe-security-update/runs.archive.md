@@ -15,6 +15,50 @@
 
 ## Archived entries
 
+## 2026-09-09
+
+```yaml
+queries: {deep: 16, medium: 11, shallow: 6}
+new: [2026-09-deadbugz-mcp-supply-chain-campaign]
+updated: [2026-08-agent-framework-mcp-cve-batch, 2025-11-n8n-ni8mare-rce]
+sources_added: []
+sources_weighted: [pillar.security, adversa.ai, nhimg.org, vulncheck.com, advisories.gitlab.com, nvd.nist.gov, github.com, cisa.gov]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only]
+```
+
+**Notes (≤300 words).** Full-coverage sweep per this run's explicit ask (social/web/industry/open-source, all
+cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend incl. Shadcn/Svelte/Tailwind/Vite;
+backend/auth/DB incl. FastAPI/Google AI Studio SDK/NextAuth.js/Prisma/Streamlit/Supabase). All research via direct
+`WebSearch`/`WebFetch` in this session, no delegated subagents. CISA KEV feed fetched directly (dateAdded >=
+2026-09-02): 12 entries, all already tracked (LiteLLM, Starlette, Kestra, JFrog) or out of scope (Adobe
+Commerce/Magento, Windows x2, N-able N-central, Chromium V8, Sangoma, SonicWall x2). One new advisory: **Deadbugz**
+(Pillar Security, 2026-08-12) — a malicious MCP server (`productivity-suite`) that behaves benignly for its first
+three tool calls then rewrites its own metadata into credential-theft instructions; distributed via 23 GitHub PRs
+in a 74-minute window. Single-primary-source (Adversa and nhimg.org both summarize Pillar's own research rather
+than independently verifying it) — marked `unconfirmed` per the two-independent-source bar, same as the related
+GhostSplice entry. Two updates, both confirmed CVE-by-CVE against primary sources rather than an aggregator
+roundup: `2026-08-agent-framework-mcp-cve-batch.md` gained three unrelated single-server MCP CVEs surfaced by an
+Adversa roundup — `mcp-atlassian` CVE-2026-73498 (path traversal, confirmed on the GHSA page directly), ArcadeDB
+CVE-2026-67357 (MCP `get_server_settings` cluster-token leak, confirmed via VulnCheck; explicitly disambiguated
+from the distinct sibling CVE-2026-67343, a non-MCP REST-endpoint leak of the same token fixed one version
+earlier), and `facebook-ads-mcp-server` CVE-2026-19956 (SSRF, confirmed via the NVD API — VulDB-sourced, no GHSA
+filed). `2025-11-n8n-ni8mare-rce.md` gained two medium-severity authorization-bypass CVEs, both confirmed via
+GitLab's advisory-database mirror: CVE-2026-86996 (an Agent-tool workflow invocation path skipped the
+sub-workflow caller-policy check that the conventional Execute-Workflow path enforces) and GHSA-h3jj-5f3v-3685
+(the Public API's execution-retry endpoint checked `workflow:read` instead of `workflow:execute`). Vendor
+GHSA-index page-walk repeated for Claude Code and Cursor per the standing practice — no advisories newer than the
+already-tracked June/July 2026 batches on either, confirming no gap rather than a quiet one. Extensively
+cross-checked against `advisory-index.jsonl` + corpus grep before writing anything: npm/PyPI/crates-io supply-
+chain waves (arrayref, binding.gyp/Phantom Gyp/Miasma lineage, Hades/ensmallen, Operation Navy Ghost, npm
+bin-entry-harvesting), Cursor CVE batch, OpenClaw Claw Chain, GitSpawn, Mexico-government breach, Hugging Face
+agentic intrusion (incl. the OpenAI-agent message-board story, already folded in), Google API-key/Gemini-scope
+leak, Supabase Auth OIDC bypass, React2Shell/Next.js CVE batch, Streamlit CVE-2026-33682, Open VSX evil-twin —
+all confirmed already tracked, no duplicates written. Declined: Nodemailer's IDN/Punycode allow-list bypass
+(GHSA-wmmp-3585-3rmp, moderate) — a real, confirmed CVE but a generic email library with no vibe-coding-specific
+angle, thin enough to skip per the routine out-of-audience-scope rule. All external citations in the new/updated
+advisories passed `tools/check-external-links.py` (0 flagged of 74 checked across the three files). No
+source-priority decay beyond the routine single source this run (60-day threshold).
+
 ## 2026-09-08
 
 ```yaml

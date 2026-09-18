@@ -2,7 +2,7 @@
 id: 2026-08-mindsdb-minds-platform-unauthenticated-rce
 title: "MindsDB Minds Platform — unpatched CVSS 10.0 unauthenticated RCE via prompt injection, plus a separate patched file-upload RCE"
 date_disclosed: 2026-08-14
-last_updated: 2026-08-29
+last_updated: 2026-09-17
 severity: critical
 status: active
 ecosystems: [pypi, mindsdb, ai-agent-frameworks]
@@ -40,6 +40,12 @@ pip show mindsdb 2>/dev/null | grep Version
 
 If you run Minds Platform self-hosted and cannot fully firewall it off from untrusted networks, treat it as compromised risk until a patch ships — there is no configuration flag documented that closes this off short of network isolation.
 
+### Update 2026-09-17 — a third, unrelated bug, published as a ZDI zero-day: authenticated code injection in the `OpenBBtable` handler (CVE-2026-92207, CVSS 8.8, no patch)
+
+Trend Micro's Zero Day Initiative published **ZDI-26-707** on **2026-09-16** — "(0Day) MindsDB OpenBBtable Code Injection Remote Code Execution Vulnerability," **CVE-2026-92207**, CVSS 3.1 **8.8** (`AV:N/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H`). The flaw is in the `OpenBBtable` class of the core `mindsdb` project: "the lack of proper validation of a user-supplied string before using it to execute Python code," so an **authenticated** user runs arbitrary code with the service account's privileges. ZDI's timeline: **reported to MindsDB 2025-11-20**, follow-up 2026-02-02, 0-day notice 2026-03-09, published 2026-09-16 with **no vendor fix** and the mitigation "restrict interaction with the product." Researchers: Peter Girnus, Demeng Chen, Brandon Niemczyk — the same team whose [CrewAI `load_agent_from_repository` zero-day](2026-09-crewai-zdi-zero-day-agent-loading-cve-batch.md) ZDI published the same day on the same shape of timeline. NVD had no record yet at sweep time; the ZDI page is the primary and ZDI is the CNA.
+
+This is distinct from both CVEs above: different repository surface (an integration handler, not `cowork-server` and not the `/api/files` upload), different precondition (a valid MindsDB login rather than none, or rather than an upload), and no fix version. It makes three separate "a string reaches `exec`/`eval`" findings in the MindsDB org in five weeks. Practical reading: every MindsDB account is a code-execution account until this is patched, so the authenticated surface needs the same network isolation as the unauthenticated one, and the OpenBB integration should be disabled where it is not in use.
+
 ## If you are affected
 → [playbooks/if-your-local-ai-agent-was-exploited.md](../playbooks/if-your-local-ai-agent-was-exploited.md)
 → [playbooks/rotating-cloud-credentials.md](../playbooks/rotating-cloud-credentials.md) — rotate any credentials reachable from the host running Minds Platform or MindsDB
@@ -53,6 +59,7 @@ If you run Minds Platform self-hosted and cannot fully firewall it off from untr
 - For self-hosted MindsDB, upgrade to ≥ 25.9.1.1 now; for Minds Platform, monitor for a patch and isolate the service on an untrusted network in the meantime.
 
 ## Sources
+- [Zero Day Initiative — ZDI-26-707: (0Day) MindsDB OpenBBtable Code Injection Remote Code Execution Vulnerability](https://www.zerodayinitiative.com/advisories/ZDI-26-707/) — fetched 2026-09-17; primary for the 2026-09-17 update: CVE-2026-92207, CVSS 8.8 vector, mechanism, 2025-11-20 → 2026-09-16 timeline, researcher credits, no vendor patch.
 - [MindsDB — GitHub Security Advisory GHSA-jcxw-h8ph-pxpv](https://github.com/mindsdb/minds-platform/security/advisories/GHSA-jcxw-h8ph-pxpv) — fetched directly: vendor's own description of the unauthenticated-RCE-via-scratchpad chain, CVSS 10.0, root causes, no patched version listed.
 - [VulnCheck — MindsDB Minds Platform Unauthenticated RCE via Scratchpad exec()](https://vulncheck.com/advisories/mindsdb-minds-platform-unauthenticated-rce-via-scratchpad-exec) — fetched directly: independent confirmation of CVE-2026-73678, CVSS 10.0, affected version, disclosure date 2026-08-14.
 - [cve.threatint.com — CVE-2026-73678](https://cve.threatint.com/CVE/CVE-2026-73678) — fetched directly: CVSS 3.1/4.0 both 10.0, GHSA/VulnCheck/NVD reference links, publish/reserve/update dates.

@@ -2,7 +2,7 @@
 id: 2026-07-kiro-mcp-config-self-rewrite-rce
 title: "AWS Kiro IDE — prompt injection lets the agent rewrite its own MCP config, achieving RCE (CVE-2026-10591, patched v0.11.130)"
 date_disclosed: 2026-02-11
-last_updated: 2026-07-27
+last_updated: 2026-09-17
 severity: high
 status: patched
 ecosystems: [kiro, mcp, aws]
@@ -55,6 +55,8 @@ An unfamiliar `command` or `args` entry pointing outside your normal toolchain i
 
 ## Why this matters for vibe coders
 This is another entry in this repo's **"AI coding tool auto-executes workspace config"** class (siblings: [Claude Code `postStart` hooks](2025-08-claude-code-inverseprompt.md), [Amazon Q `.amazonq/mcp.json`](2026-06-amazon-q-mcp-workspace-rce.md), [TrustFall's five-CLI MCP auto-execute](2026-05-trustfall-mcp-auto-execute.md)) — except here the write path isn't a config file the developer edited, it's a file **the agent itself can write to**, which means the trust boundary depends entirely on whether the agent's own file-write tool is gated. A single "summarize this page" request, on an unpatched Kiro, was enough to have the agent quietly edit the one file that decides what it's allowed to run next. The four-plus-month gap between AWS confirming a fix (April) and actually publishing a CVE/bulletin (July) is also its own lesson: a vendor's silent "we already fixed it" is not the same as a public record a downstream auditor or SOC can search for — treat "no CVE yet" as "not yet triaged," not "not real," consistent with this repo's standing caution on silently-patched findings.
+
+**Update 2026-09-17 — this is one of nine 2026 Kiro CVEs, all disclosed only via AWS bulletins.** The other eight — including a 2026-09-11 agent-written workspace-settings exfiltration bug (CVE-2026-89332) that is this chain with a different sink, three CVSS 8.5 "open a crafted project directory and code runs" bugs, and a stdin trick that skipped Kiro CLI's tool-approval prompt — are written up in [the Kiro AWS-bulletin CVE batch](2026-09-kiro-ide-cli-aws-bulletin-cve-batch.md).
 
 ## Sources
 - [Intezer — CVE-2026-10591: Kiro MCP Configuration Vulnerability](https://research.intezer.com/blog/2026/07/remote-code-execution-kiro/) — technical summary of Kodem Security's finding, PoC mechanics, disclosure timeline, researcher attribution.

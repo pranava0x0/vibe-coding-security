@@ -11,8 +11,8 @@
   {
    "domain": "aikido.dev",
    "weight": 20.0,
-   "hits": 18,
-   "last_hit": "2026-08-21"
+   "hits": 19,
+   "last_hit": "2026-09-17"
   },
   {
    "domain": "bleepingcomputer.com",
@@ -41,20 +41,20 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 23,
-   "last_hit": "2026-09-16"
+   "hits": 24,
+   "last_hit": "2026-09-17"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 29,
-   "last_hit": "2026-09-16"
+   "hits": 30,
+   "last_hit": "2026-09-17"
   },
   {
    "domain": "nvd.nist.gov",
    "weight": 20.0,
-   "hits": 50,
-   "last_hit": "2026-09-16"
+   "hits": 51,
+   "last_hit": "2026-09-17"
   },
   {
    "domain": "ox.security",
@@ -65,8 +65,8 @@
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 47,
-   "last_hit": "2026-09-12"
+   "hits": 48,
+   "last_hit": "2026-09-17"
   },
   {
    "domain": "sentinelone.com",
@@ -89,14 +89,14 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 86,
-   "last_hit": "2026-09-12"
+   "hits": 87,
+   "last_hit": "2026-09-17"
   },
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 38,
-   "last_hit": "2026-09-15"
+   "hits": 39,
+   "last_hit": "2026-09-17"
   },
   {
    "domain": "wiz.io",
@@ -147,10 +147,10 @@
    "last_hit": "2026-07-25"
   },
   {
-   "domain": "pillar.security",
+   "domain": "helpnetsecurity.com",
    "weight": 16.0,
-   "hits": 8,
-   "last_hit": "2026-09-13"
+   "hits": 7,
+   "last_hit": "2026-09-17"
   }
  ]
 }
