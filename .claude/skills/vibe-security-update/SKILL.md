@@ -131,6 +131,8 @@ Don't repeat queries already run within the last 24h (check `runs.log.md`).
 
 **Also fetch directly, every sweep (URLs in `queries.md`):** the GitHub Advisory Database's `mcp` recency listing and its reviewed-critical `npm` and `pip` listings, plus the per-product advisory tabs — agent frameworks, IDEs, **and the auth SDKs** (Clerk, Better Auth, NextAuth.js, Supabase Auth). On 2026-09-15 all four new advisories came from those fetches and none from search (`LEARNINGS.md` §20–22). **Add the advisory-database package query for every tracked product whose own tab is empty** (`github.com/advisories?query=<package>`), the **ZDI published-advisories index**, the **AWS security-bulletin index**, and **`alignment.openai.com/misalignment-reports/`** — on 2026-09-17 five of seven new advisories came from those (`LEARNINGS.md` §25–27).
 
+**Fetch the front pages first.** Before any `WebSearch`, fetch `thehackernews.com`, `securityweek.com` and `theregister.com/security/` directly and read the dated headlines, plus the HN Algolia feed (`queries.md`). On 2026-09-18 six of eight new advisories were on those pages and in no query result — a story is on the front page a day or more before a search engine ranks it (`LEARNINGS.md` §28). Cite the article you then open, never the front page. For agent plugin/skill and "platform hands work to a coding agent" bugs, also query `kb.cert.org/vuls/` and the registry `time` field — those fixes are recorded in release notes and registries, not on any vendor advisory tab.
+
 **Report source-access gaps as "not covered," never as "nothing found."** The standing gaps are listed in `queries.md`; a future sweep reading the log needs to know whether a quiet category was quiet or merely unreachable.
 
 ### Step 2 — Triage findings

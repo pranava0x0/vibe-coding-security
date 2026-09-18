@@ -73,6 +73,12 @@ on rotating subsets, so high-signal pages aren't buried under news aggregators.
 12. `{vendor threat-intel blog} AI agent OR agentic {year}` — rotate GTIG,
     Microsoft Threat Intelligence, Unit 42, Mandiant, Anthropic threat reports.
     Telemetry reports name packages, paths, and tools with no CVE attached.
+13. `{agent} plugin OR skill marketplace vulnerability {year}` — rotate Claude Code,
+    Codex, Copilot, Gemini CLI/Antigravity, OpenClaw; plugin-pinning and
+    skill-hijack bugs are fixed in release notes, not advisory tabs.
+14. `{platform} AI autofix OR coding agent handoff vulnerability {year}` — rotate
+    Sentry, Datadog, GitHub Copilot Autofix, Linear, PagerDuty; the
+    telemetry-to-agent path is unauthenticated by design.
 
 **Fetch directly, don't search for:** CISA's KEV catalog is a JSON feed at
 `https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json`.
@@ -137,9 +143,15 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
   `github.com/advisories?query=mcp+sort%3Apublished-desc`,
   `…?query=type%3Areviewed+ecosystem%3Anpm+severity%3Acritical`, `…ecosystem%3Apip…` — the reviewed
   lists omit CVE-only entries, so run the `mcp` recency list too.
+- **Front pages, fetched before any search:** `thehackernews.com`, `securityweek.com`,
+  `theregister.com/security/` — dated headlines; fetch and cite the article (LEARNINGS §28).
+- **CERT/CC notes:** `kb.cert.org/vuls/` — CNA for platform-to-coding-agent handoff bugs.
 - **Advisory-database package queries (for products whose own tab is empty):**
-  `github.com/advisories?query=crewai`, `…?query=kiro`, `…?query=rmcp`, `…?query=vm2` — CVE-only
-  entries from research CNAs (ZDI, VulnCheck) and corporate CNAs (AWS, IBM) never reach the vendor tab.
+  `github.com/advisories?query=crewai`, `…?query=kiro`, `…?query=rmcp`, `…?query=vm2`,
+  `…?query=docker+sandboxes`, `…?query=sentry`, `…?query=copilot` — CVE-only entries from research
+  CNAs (ZDI, VulnCheck, CERT/CC) and corporate CNAs (AWS, IBM, Microsoft, Docker) never reach the vendor tab.
+- **Registry `time` fields** settle fix dates no vendor tab records, and whether a "deprecated"
+  package is still being published (LEARNINGS §28).
 - **Per-product advisory tabs (`github.com/<org>/<repo>/security/advisories`, paginate):** Claude Code,
   Cursor, Cline, goose, OpenHands, SWE-agent, aider, Codex, gemini-cli, OpenClaw (11+ pages),
   n8n, Langflow, Flowise, PraisonAI, LiteLLM, LangChain, LangGraph, Semantic Kernel, Coder, MCP
@@ -173,7 +185,10 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
 - **Researcher blogs:** 0day.click, cyata.ai, layerxsecurity.com, pillar.security, oasis.security,
   tenetsecurity.ai, labs.zenity.io, novee.security, danusminimus.github.io, oddguan.com,
   manifold.security, paddo.dev, embracethered.com, itmeetsot.eu, forever.security, socket.dev,
-  stepsecurity.io, aikido.dev, safedep.io.
+  stepsecurity.io, aikido.dev, safedep.io, air.security (agent plugin/skill supply chain),
+  hacktron.ai, opensourcemalware.com, research.empiricalsecurity.com, crowdstrike.com/en-us/blog.
+- **Endpoint-vendor telemetry:** `gendigital.com/blog/insights/research` (stealers vs agent state).
+- **Sandbox vendors as their own CNA:** `github.com/docker/sbx-releases/releases` (CVE text in notes).
 - **Standalone incident sites from research nonprofits:** `collusion.wiki`, `rubyhack.ai`.
 - **Regulators:** `aepd.es` (first GDPR notification for an attack executed by an AI agent).
 
@@ -216,6 +231,12 @@ unreachable.
 - **`cybernews.com`, `scworld.com`** — 403 on 2026-09-17.
 - **`vulncheck.com/advisories/<slug>`** — some per-CVE pages 404 while the index
   lists them (three of six vm2 CVEs on 2026-09-17); cite the index and say so.
+- **`github.com/advisories/GHSA-…` mirror 404s while the vendor-repo URL resolves**
+  (Discourse, 2026-09-18) — try both forms.
+- **`cybersecuritynews.com`** — empty body to `WebFetch` on 2026-09-18; retry once, then cite THN.
+- **`koi.ai/blog/…`** — 301s to a Palo Alto product page; cite Koi's 2025 work via THN.
+- **GitHub release pages** — fetch summaries can mis-state the year; date from the CVE
+  record or registry.
 
 ## Out of scope for this project
 
