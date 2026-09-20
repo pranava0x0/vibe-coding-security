@@ -17,8 +17,8 @@
   {
    "domain": "bleepingcomputer.com",
    "weight": 20.0,
-   "hits": 32,
-   "last_hit": "2026-09-16"
+   "hits": 33,
+   "last_hit": "2026-09-20"
   },
   {
    "domain": "cisa.gov",
@@ -41,14 +41,14 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 25,
-   "last_hit": "2026-09-18"
+   "hits": 26,
+   "last_hit": "2026-09-20"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 31,
-   "last_hit": "2026-09-18"
+   "hits": 32,
+   "last_hit": "2026-09-20"
   },
   {
    "domain": "nvd.nist.gov",
@@ -65,8 +65,8 @@
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 49,
-   "last_hit": "2026-09-18"
+   "hits": 50,
+   "last_hit": "2026-09-20"
   },
   {
    "domain": "sentinelone.com",
@@ -89,14 +89,14 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 88,
-   "last_hit": "2026-09-18"
+   "hits": 89,
+   "last_hit": "2026-09-20"
   },
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 40,
-   "last_hit": "2026-09-18"
+   "hits": 41,
+   "last_hit": "2026-09-20"
   },
   {
    "domain": "wiz.io",

@@ -2,7 +2,7 @@
 id: 2026-09-coder-registry-cloudflare-terraform-supply-chain
 title: "Coder registry compromise — a stolen Cloudflare API key rerouted registry.coder.com for 14 hours, serving credential-stealing Terraform modules to AI-workspace provisioners (GHSA-vx42-ghc9-gw65)"
 date_disclosed: 2026-09-01
-last_updated: 2026-09-16
+last_updated: 2026-09-20
 severity: critical
 status: patched
 ecosystems: [terraform, coder, cloud-dev-environment, ai-agents]
@@ -64,12 +64,18 @@ Coder's advisory ships **SQL queries** to list templates, template versions, and
 3. Search firewall / DNS / VPC flow logs for `coder-infra[.]com` and `199.91.220[.]205`; a hit is confirmation, not suspicion.
 4. If a workspace agent or its live credentials may have been used: [playbooks/if-your-local-ai-agent-was-exploited.md](../playbooks/if-your-local-ai-agent-was-exploited.md).
 
+## Update 2026-09-20 — an earlier, unrelated Coder bug worth knowing: a workspace-proxy hostname *prefix* match let an attacker's domain collect app-scoped API keys (GHSA-h58h-qvv5-xvwg, CVSS 7.7, 2026-08-10; reported by Anthropic's security team)
+
+Three weeks before the registry compromise, Coder published a batch of five advisories on 2026-08-10 that no sweep here had logged. The one that matters for workspaces exposed through proxies: `GetWorkspaceProxyByHostname` matched proxy hostnames with a **prefix pattern** rather than an exact host, so a domain that was merely a string prefix of a real proxy URL — the advisory's example: `syd.co` matching `syd.coder-proxy.example.com` — was treated as a trusted proxy. An attacker who got an authenticated user to click a crafted auth-redirect link could intercept an **application-scoped API key** and replay it against the genuine proxy to reach the victim's workspace apps. Affected **v2.35.0–2.35.3, v2.34.0–2.34.7, v2.33.0–2.33.11 and everything before v2.29.20**; fixed **v2.35.4 / v2.34.8 / v2.33.12 / v2.29.20** (the pattern now requires a string end, port delimiter or path separator after the host). Deployments that do not use workspace proxies are not affected. No CVE. Credited to the **Anthropic Security Team (ANT-2026-FXER0JGJ)** and Adam Korczynski (Ada Logics) — a data point that AI-vendor security teams are auditing the cloud-dev-environment layer their own agents run in. The same day's batch also covered an unauthenticated agent debug manifest exposing environment variables across workspace users (Low), user-level ACL grants bypassing org membership (Moderate), cross-org Terraform module file disclosure via the provisioner `DownloadFile` RPC (Moderate) and a workspace ACL endpoint exposing group-member PII (Moderate). If you are on a fix line below the registry-incident versions above (2.37.0 / 2.36.4 / 2.35.7 / 2.34.9), you are past this one too; if you pinned lower, the proxy bug is a second reason to move.
+
 ## Prevention
 → [prevention/supply-chain-attack-surface.md](../prevention/supply-chain-attack-surface.md) — a vendor's download/registry endpoint is part of *your* supply chain; a clean source repo does not make the delivery path clean.
 → [prevention/ci-cd-hardening.md](../prevention/ci-cd-hardening.md) — scope provisioning credentials as narrowly as possible; an AI-agent workspace needs its model-provider/MCP keys, not the full provisioning credential set.
 → [prevention/credential-hygiene.md](../prevention/credential-hygiene.md) — short-lived tokens over long-lived keys so a 14-hour exposure window is a rotation, not a standing breach.
 
 ## Sources
+- [Coder — GHSA-h58h-qvv5-xvwg: Workspace proxy hostname prefix match lets an attacker-controlled domain steal a victim's workspace app credential](https://github.com/coder/coder/security/advisories/GHSA-h58h-qvv5-xvwg) — vendor advisory, published 2026-08-10: CVSS 7.7, affected/fixed ranges, the `syd.co` example, reporter credits. Fetched 2026-09-20.
+- [coder/coder — security advisories tab](https://github.com/coder/coder/security/advisories) — fetched 2026-09-20: the five 2026-08-10 advisories and the 2026-09-01 registry advisory.
 - [Coder — Coder Registry Security Incident: What Happened and What to Do](https://coder.com/blog/coder-registry-security-incident-what-happened-and-what-to-do) — fetched 2026-09-16; vendor primary, published 2026-09-04: Cloudflare-key mechanism, 07:35–21:45 UTC window, `coder-infra.com` exfil domain, "own codebase and Google Cloud infrastructure were not compromised," lock file does not track remote modules.
 - [GitHub Security Advisory GHSA-vx42-ghc9-gw65 — Malicious Packages Served from Unauthorized Registry Server](https://github.com/coder/coder/security/advisories/GHSA-vx42-ghc9-gw65) — fetched 2026-09-16; CVSS 9.0, published 2026-09-01, affected `< 2.37.0`, fixes `2.37.0/2.36.4/2.35.7/2.34.9`, full IOC set (SHA-256 hashes, `data.external.telemetry` sentinel, `X-CLI-Token`/`/cli/check` exfil), detection SQL.
 - [BleepingComputer — Coder's registry infrastructure compromised to push malicious modules](https://www.bleepingcomputer.com/news/security/coders-registry-infrastructure-compromised-to-push-malicious-modules/) — fetched 2026-09-16; independent coverage, published 2026-09-04.

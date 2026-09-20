@@ -141,18 +141,32 @@ def test_llms_ctx_contains_every_advisory(parsed_advisories, llms_ctx_txt):
     assert not missing, f"Advisories missing from llms-ctx.txt: {missing}"
 
 
-def test_llms_txt_lists_every_advisory(parsed_advisories, llms_txt):
-    # Every advisory must be linked from root llms.txt. Tier-1 entries appear in
-    # full; Tier-2 entries are one-line pointers whose title may be truncated to
-    # fit the byte budget (see LLMS_TIER2_TITLE_MAX in build.py). The page link
-    # is the stable completeness identifier — checking it (rather than the full
-    # prose title, which truncation may shorten) is what guarantees nothing is
-    # dropped. The untruncated title still lives in advisories/llms.txt.
-    missing = []
-    for path, fm, _ in parsed_advisories:
-        if f"{path.stem}.html" not in llms_txt:
-            missing.append(path.name)
-    assert not missing, f"Advisories missing from llms.txt: {missing}"
+def test_advisories_llms_txt_lists_every_advisory(parsed_advisories, dist_dir):
+    """The complete advisory index is advisories/llms.txt, and the root links to it.
+
+    Until 2026-09-20 this test required every advisory's page link in the *root*
+    llms.txt, which made root Tier 2 an O(n) term (~200 B per advisory) that
+    _fit_tier1_max could not shrink; the file crossed budget every few sweeps
+    and each fix was a cosmetic ratchet (drop the severity/date suffix, truncate
+    the label). BACKLOG "llms.txt Tier-2 floor", option (b): the root is an
+    index of indexes (as llmstxt.org intends) carrying Tier 1 plus the newest
+    LLMS_TXT_TIER2_RECENT pointers and one link to advisories/llms.txt, which is
+    complete by construction. The page link is the stable identifier; the full
+    untruncated title also lives there, on the page, and in advisories.json.
+    """
+    section = (dist_dir / "advisories" / "llms.txt").read_text(encoding="utf-8")
+    missing = [path.name for path, _, _ in parsed_advisories if f"{path.stem}.html" not in section]
+    assert not missing, f"Advisories missing from advisories/llms.txt: {missing}"
+
+
+def test_llms_txt_links_complete_advisory_index(llms_txt):
+    """Root llms.txt must point a reader at the complete per-section index."""
+    assert "/advisories/llms.txt" in llms_txt, "root llms.txt does not link advisories/llms.txt"
+
+
+def test_llms_txt_tier2_is_bounded():
+    """Guards the 2026-09-20 fix: root Tier 2 is count-bounded, not O(corpus)."""
+    assert 0 < _build.LLMS_TXT_TIER2_RECENT <= 100
 
 
 def test_per_section_llms_txt_exist(dist_dir):

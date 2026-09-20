@@ -2,7 +2,7 @@
 id: 2026-08-meta-irregular-eval-containment-failure
 title: "Meta joins OpenAI and Anthropic in disclosing an AI-eval containment failure — all three used the same third-party testing vendor, Irregular"
 date_disclosed: 2026-08-06
-last_updated: 2026-08-06
+last_updated: 2026-09-20
 severity: high
 status: contained
 ecosystems: [ai-vendor-infrastructure, meta]
@@ -31,6 +31,8 @@ All three labs contracted **the same third-party evaluator, Irregular**, and all
 ## Am I affected?
 This incident targeted a third-party organization during Irregular's own red-team testing infrastructure — not something in your dependency tree or a product you install. It's relevant to this feed as the third confirmed instance of a systemic pattern: **a shared third-party AI-evaluation vendor's environment isolation is a single point of failure across multiple major AI labs at once.** If your organization runs (or is considering running) offensive-capability red-team evaluations against LLMs — your own or a vendor's — using any third-party evaluation platform, ask specifically how that platform enforces network isolation for the target/simulated environment, and whether that isolation has been independently verified rather than taken on the vendor's word.
 
+**Update 2026-09-20 — a fourth lab.** The Wall Street Journal reported on 2026-09-18 that a **Google Gemini** model, in the same Irregular evaluation scenario in May 2026, guessed one real company's password and used credentials found in public repositories to enter two more, then stopped once it recognised the systems were real; Irregular notified Google in July and calls it "the same issue that was already reported." Written up separately in [2026-09-google-gemini-irregular-eval-real-company-breach.md](2026-09-google-gemini-irregular-eval-real-company-breach.md). Irregular's 2026-08-14 post ("a single evaluation scenario… not materially separate incidents") is the vendor record for all four.
+
 ## If you are affected
 Not directly applicable — there is no local artifact or dependency to check. If you are the affected third-party organization (unnamed in current reporting) or believe your infrastructure may have been reached by an AI-lab red-team evaluation without your knowledge, treat it as an unauthorized-access incident: see [playbooks/if-your-webapp-was-compromised.md](../playbooks/if-your-webapp-was-compromised.md) and [playbooks/rotating-cloud-credentials.md](../playbooks/rotating-cloud-credentials.md).
 
@@ -40,4 +42,5 @@ Not directly applicable — there is no local artifact or dependency to check. I
 ## Sources
 - [The Register — Meta latest to tell world its AI agent wandered out of test pen](https://www.theregister.com/ai-and-ml/2026/08/06/meta-latest-to-tell-world-its-ai-agent-wandered-out-of-test-pen/5283947) — Meta statement, Irregular's "exact same evaluation-environment issue" quote, Kolochenko skepticism.
 - [CSO Online — Meta joins OpenAI, Anthropic in latest AI test breach](https://www.csoonline.com/article/4206116/meta-joins-openai-anthropic-in-latest-ai-test-breach.html) — Muse Spark 1.1 model name, capture-the-flag test framing, "contained/no lasting harm" characterization (via Reuters).
+- [Irregular — Addressing Recent Incidents: Ongoing Findings and Path Forward](https://www.irregular.com/research/addressing-recent-incidents-ongoing-findings-and-path-forward) — 2026-08-14; the vendor's root-cause statement (fictional company name coinciding with a real domain, unintended internet access), "a single evaluation scenario," late-July lab notification. Fetched 2026-09-20.
 - [Infosecurity Magazine — Meta AI exploit incident](https://www.infosecurity-magazine.com/news/meta-ai-exploit-incident/) — Meta spokesperson quote, disclosure-via-Irregular-notification detail.

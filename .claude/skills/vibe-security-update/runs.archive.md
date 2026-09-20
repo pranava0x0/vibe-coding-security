@@ -15,6 +15,19 @@
 
 ## Archived entries
 
+## 2026-09-12
+
+```yaml
+queries: {deep: 16, medium: 12, shallow: 7}
+new: [2026-09-openai-agents-rubygems-gemstuffer-campaign, 2026-09-anthropic-threat-intel-report-september-2026, 2026-09-gitlab-cve-2026-85706-unauth-file-read-kev, 2026-09-jfrog-artifactory-auth-bypass-chain-kev, 2026-09-orval-openapi-codegen-rce-cluster]
+updated: [2026-08-knaithe-hermes-autonomous-ai-scanning, 2026-09-anthropic-claude-session-infostealer-hijack, 2026-07-anthropic-claude-cyber-eval-breaches, 2026-04-litellm-sql-injection, 2026-09-gitspawn-git-config-agent-rce-cluster, 2026-08-agent-framework-mcp-cve-batch]
+sources_added: [rubyhack.ai, blog.rubygems.org, watchtowr.com, docs.gitlab.com, greynoise.io, blackpointcyber.com, okta.com]
+sources_weighted: [wiz.io, thehackernews.com, securityweek.com, theregister.com, nvd.nist.gov, cisa.gov, github.com, socket.dev, anthropic.com, labs.cloudsecurityalliance.org, siliconangle.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, reuters-webfetch-blocked]
+```
+
+**Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source, all cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend incl. Shadcn/Svelte/Tailwind/Vite; backend/auth/DB incl. FastAPI/Google AI Studio SDK/NextAuth.js/Prisma/Streamlit/Supabase). All research via direct WebSearch/WebFetch, no delegated subagents. **Mid-run model switch (Fable 5.1 → context-compacted → Opus 4.8) and a context compaction dropped two already-applied edits (cyber-eval fourth-incident update, infostealer Okta update) out of the visible transcript — verified they were on disk and correct via git diff rather than re-adding; only one Claude process was running (ruled out a concurrent writer, LEARNINGS §2).** Five new: OpenAI-agents/RubyGems "GemStuffer" (Nightingale rubyhack.ai + Socket's May GemStuffer + RubyGems' own non-attributing post — three independent sources, `contained`); Anthropic Sept threat report (`ongoing`, single-source vendor telemetry per §16); GitLab CVE-2026-85706 CVSS-10 unauth file read (KEV 09-11, NVD score confirmed via API); JFrog CVE-2026-42018+42016 chain (KEV 09-11; folded the pre-existing CVE-2026-82329 tracking in the HF advisory by cross-link rather than duplicating); orval 11-CVE codegen cluster (fix 8.21.0 in July, GHSA-DB-published Sept per §"GHSA date ≠ disclosure date" — dated by original disclosure). Six updates incl. PaperCut AI-agent swarm folded into knaithe ATA file (GreyNoise+Blackpoint), Okta AI-token-market into the infostealer file, GitPython CVE-2026-78676 into GitSpawn (aider pins vulnerable gitpython 3.1.46 — verified via PyPI), LiteLLM SSTI+Wiz-default-key, MCP batch (chainlit/contextforge/mysql-mcp/praisonai). KEV feed fetched directly (14 entries since 09-05: only GitLab and JFrog×2 in scope). **Declined:** CoreBreak/Astra/GTIG/Langflow-0768/Deadbugz/DeepSeek-harness all already tracked (index+corpus grep per §15, per-identifier). Reuters blocked for WebFetch (new blocker). New source pattern: `rubyhack.ai` is a second bespoke standalone incident-site (cf. collusion.wiki, §12), and ecosystem-security-team blogs (blog.rubygems.org) are the authoritative non-attributing second source for registry-abuse — added to queries.md and LEARNINGS §17.
+
 ## 2026-09-10
 
 ```yaml

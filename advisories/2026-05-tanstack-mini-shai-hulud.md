@@ -2,7 +2,7 @@
 id: 2026-05-tanstack-mini-shai-hulud
 title: "Mini Shai-Hulud wave — TanStack, Mistral, UiPath, OpenSearch (May 2026)"
 date_disclosed: 2026-05-11
-last_updated: 2026-09-10
+last_updated: 2026-09-20
 severity: critical
 status: historical
 ecosystems: [npm, pypi]
@@ -87,6 +87,14 @@ SLSA provenance is meant to prove "this artifact was built by this pipeline from
 
 **Status update 2026-09-10:** re-triaged from `active` to `historical`. The incident window closed in May 2026; no new malicious versions, IOCs, or vendor updates have been reported since this advisory was last touched (2026-06-11). The *technique* is not retired — successor waves are tracked as live entries in ALERTS.md — but this specific compromise is over, and "active" here should mean "still propagating," not "was bad once."
 
+## Update 2026-09-19 — four months later, a victim files the blast radius: CrowdSec says a TanStack-infected laptop's GitHub OAuth token was used to clone ~170 private repositories, and the archive surfaced on a forum on 2026-09-16
+
+CrowdSec (the French open-source IDS/IPS vendor) published its incident analysis on **2026-09-18**, and The Hacker News covered it on 09-19. The chain, per CrowdSec: a **former employee's laptop was infected by the May 11 TanStack packages** ("The ex-employee got compromised by the TanStack supply chain attack, matching the methodology" — the CEO); the stealer took, among other things, a **GitHub OAuth token** (`gho_…` format); on **2026-05-22, 05:52–06:01 UTC**, that token was used from Toronto to clone **~170 private repositories** (130+ public and private repos in total over May 22–23); the employee's GitHub access was revoked on **2026-05-25**, three days after the clones. Nothing else happened for months — then on **2026-08-17** the attacker tested the one usable credential in the loot, an AWS token restricted to SNS publishing (`assertible-zapier-sns-sender`), and failed; on **2026-09-16** the archive appeared on a forum, and CrowdSec rotated credentials on 09-16/17 and published on 09-18.
+
+What leaked: source for the Console, data-science scripts, automation and the consensus algorithm; **83 user email addresses** (under 0.05% of ~150K users); and the names, emails and investment context of **51 prospective investors from 2020**. CrowdSec says its infrastructure and databases were not accessed, no code was changed, and no customer data was taken. Its changes: **EDR on developer laptops** (Aikido), expanded GitHub logging, a sub-24-hour IR target, tighter on/offboarding. Its own framing of the gap: universal 2FA, hardware keys, token scoping and audit logging were all in place — and a stolen OAuth token walks past every one of them, because "the developer machine" was the one asset without endpoint coverage.
+
+Why it belongs in this file: **the stealer's take from May is still being cashed in September.** A package compromise's downstream victims disclose months after the wave, from their own blogs, and the token that mattered was a GitHub OAuth grant — the same class the [Mandiant SaaS case](2026-09-mandiant-hijacked-coding-assistant-session-shai-hulud-saas.md) and the [OpenAI TanStack response](https://openai.com/index/our-response-to-the-tanstack-npm-supply-chain-attack/) turn on. If a machine of yours ran a poisoned TanStack version in May and you rotated npm/SSH/cloud keys but not **GitHub OAuth app grants and personal tokens**, do that now (`Settings → Applications → Authorized OAuth Apps`; [if-your-github-pat-leaked.md](../playbooks/if-your-github-pat-leaked.md)), and check your org's audit log for clones from unfamiliar locations in the week after 2026-05-11.
+
 ## Sources
 - [TanStack — Postmortem: TanStack npm supply-chain compromise](https://tanstack.com/blog/npm-supply-chain-compromise-postmortem)
 - [StepSecurity — TeamPCP's Mini Shai-Hulud Is Back: A Self-Spreading Supply Chain Attack Compromises TanStack npm Packages](https://www.stepsecurity.io/blog/mini-shai-hulud-is-back-a-self-spreading-supply-chain-attack-hits-the-npm-ecosystem)
@@ -113,4 +121,6 @@ SLSA provenance is meant to prove "this artifact was built by this pipeline from
 - [TechCrunch — OpenAI says hackers stole some data after latest code security issue](https://techcrunch.com/2026/05/14/openai-says-hackers-stole-some-data-after-latest-code-security-issue/)
 - [CISA — Three Known Exploited Vulnerabilities Added to Catalog (2026-05-27)](https://www.cisa.gov/news-events/alerts/2026/05/27/cisa-adds-three-known-exploited-vulnerabilities-catalog) — CVE-2026-45321 KEV addition
 - [SecurityAffairs — U.S. CISA adds Daemon Tools, TanStack, and Nx Console flaws to its KEV catalog](https://securityaffairs.com/192776/security/u-s-cisa-adds-daemon-tools-tanstack-and-nx-console-flaws-to-its-known-exploited-vulnerabilities-catalog.html)
+- [CrowdSec — TanStack supply-chain attack analysis: how ~170 private repos were exposed](https://www.crowdsec.net/blog/tanstack-supply-chain-attack-analysis) — victim's own post-mortem, published 2026-09-18: the May 22 05:52–06:01 UTC clone window, the `gho_` OAuth token, the 05-25 revocation, the 08-17 SNS-token test, the 09-16 forum leak, the 83-user / 51-investor figures, EDR remediation. Fetched 2026-09-20.
+- [The Hacker News — CrowdSec Says TanStack npm Attack Led to Copy of 170 Private GitHub Repositories](https://thehackernews.com/2026/09/crowdsec-says-tanstack-npm-attack-led.html) — 2026-09-19; independent write-up of the CrowdSec disclosure with the CVE-2026-45321 linkage and the "only usable credential… AWS SNS" detail. Fetched 2026-09-20.
 - [VentureBeat — Four AI supply-chain attacks in 50 days exposed the release pipeline red teams aren't covering](https://venturebeat.com/security/supply-chain-incidents-openai-anthropic-meta-release-surface-vendor-questionnaire-matrix)

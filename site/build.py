@@ -710,6 +710,15 @@ LLMS_FULL_TIER1 = 15
 # link intact. Added 2026-09-16 when the Tier-2 floor breached the byte budget;
 # the full title still lives in advisories/llms.txt, the page, and advisories.json.
 LLMS_TIER2_TITLE_MAX = 72
+# Root llms.txt lists only this many Tier-2 (one-line) advisories; the complete
+# Tier-2 list lives in advisories/llms.txt, which the root file points at.
+# Added 2026-09-20 (BACKLOG "llms.txt Tier-2 floor", option b): Tier 2 was the
+# O(n) term no fitter could shrink — ~200 B per advisory, 258 advisories, and
+# the file sat 9 bytes under budget after that day's two new entries. llmstxt.org
+# intends the root file as an index of indexes, and the per-section index is
+# already complete, so the root now carries the newest Tier-2 pointers plus one
+# link to the full list. Size is O(1) in corpus size again.
+LLMS_TXT_TIER2_RECENT = 40
 
 # Byte budgets, and the end of the hand-tuned-knob era.
 #
@@ -932,11 +941,22 @@ def _render_llms_txt(
         # This halves the Tier-2 slope without dropping any advisory. The full
         # untruncated title still lives in the per-section advisories/llms.txt,
         # on the advisory's own page, and in advisories.json.
-        for p in tier2:
+        # 2026-09-20: Tier 2 is now bounded too. The root file lists the
+        # LLMS_TXT_TIER2_RECENT newest Tier-2 pointers and links the complete
+        # per-section index for the rest; the completeness contract in
+        # tests/test_llms.py checks advisories/llms.txt (complete by
+        # construction) and that the root links to it.
+        shown, rest = tier2[:LLMS_TXT_TIER2_RECENT], tier2[LLMS_TXT_TIER2_RECENT:]
+        for p in shown:
             t = p.title
             if len(t) > LLMS_TIER2_TITLE_MAX:
                 t = t[: LLMS_TIER2_TITLE_MAX - 1].rsplit(" ", 1)[0] + "…"
             lines.append(f"- [{t}]({_page_html_url(p)})")
+        if rest:
+            lines.append(
+                f"- …and {len(rest)} older advisories, every one listed with its full title in "
+                f"[advisories/llms.txt]({SITE_URL}/advisories/llms.txt)"
+            )
         lines.append("")
 
     for slug, label, _ in SECTIONS:

@@ -2,7 +2,7 @@
 id: 2026-09-gitspawn-git-config-agent-rce-cluster
 title: "GitSpawn — repo-local git config (core.fsmonitor and others) runs code in 7 AI coding agents before any trust prompt"
 date_disclosed: 2026-09-01
-last_updated: 2026-09-14
+last_updated: 2026-09-20
 severity: critical
 status: active
 ecosystems: [claude-code, cursor, openai-codex, goose, qwen-code, grok-build, hermes-agent, github-copilot-cli]
@@ -25,7 +25,7 @@ AI coding agents made this exploitable at scale because they run `git status`-cl
 | Agent | Affected version(s) | Status | CVE / GHSA |
 |---|---|---|---|
 | **Block goose** | < 1.44.0 | Patched (1.44.0) | [CVE-2026-72718](https://github.com/aaif-goose/goose/security/advisories/GHSA-r5pp-p5r8-466r) / GHSA-r5pp-p5r8-466r (CVSS 4.0: 7.0) |
-| **OpenAI Codex CLI/Desktop** | 0.102.0–0.130.0 (CLI); pre-fix Desktop builds | Patched — three CVEs assigned 2026-09-01 | CVE-2026-19592 (`core.fsmonitor`), CVE-2026-19590 (`core.hooksPath`), CVE-2026-19593 (`attr.tree` + clean filter) |
+| **OpenAI Codex CLI/Desktop** | 0.102.0–0.130.0 (CLI); pre-fix Desktop builds | Patched — three CVEs assigned 2026-09-01 (a fourth, CVE-2026-19591, from the same batch — see note below) | CVE-2026-19592 (`core.fsmonitor`), CVE-2026-19590 (`core.hooksPath`), CVE-2026-19593 (`attr.tree` + clean filter) |
 | **Claude Code** — `core.fsmonitor` path | ≤ 2.1.193 | Patched (2.1.196, 2026-06-29); **no Anthropic advisory published for either Claude Code finding** | none published |
 | **Claude Code** — `claude ultrareview` path (separate, unnamed git-config key) | 2.1.210 → **2.1.252 confirmed still vulnerable 2026-09-01** | **Unpatched.** Reported 2026-07-15; closed by Anthropic as a duplicate of an internal ticket. Runs before the workspace-trust prompt is shown. | none published |
 | **Hermes Agent** | 0.18.2, 0.21.0 | **Unpatched.** Vendor did not respond across six contact attempts; CVE assigned independently. | [CVE-2026-71963](https://cve.threatint.com/CVE/CVE-2026-71963) (assigned by VulnCheck, an independent CNA) |
@@ -92,6 +92,8 @@ find . -type f -name HEAD -not -path './.git/*' -execdir test -d objects \; -exe
 → [prevention/agent-sandboxing.md](../prevention/agent-sandboxing.md) — a sandbox flag is not a guarantee when the executing process is git itself, invoked outside the agent's own command sandbox.
 → [prevention/supply-chain-attack-surface.md](../prevention/supply-chain-attack-surface.md) — treat "download and open" workflows (zips, shared drives, CI artifacts) as carrying more risk than a plain `git clone`, since only the former preserves a poisoned local `.git/config`.
 → Never run an AI coding agent against a repository whose `.git` directory you did not create via a fresh clone from a URL you chose.
+
+**Note 2026-09-20 — the same 2026-09-01 Codex batch carries a fourth CVE that is not a git-config sink.** [GHSA-2frj-4qr5-m2rf / CVE-2026-19591](https://github.com/advisories/GHSA-2frj-4qr5-m2rf) (CVSS 8.8, Codex CLI on Windows/macOS/Linux and Codex Desktop): Codex's command-safety parser read PowerShell's stop-parsing token (`--%`) differently from PowerShell itself, so an attacker-prepared repository could make Codex run **file-writing git commands without approval**, modify configuration, and end up executing an attacker-controlled MCP server with the user's privileges (fix: openai/codex PR #22643). Different root cause, same outcome class — a repository steering the agent into an unapproved write — and the same fix window; it is recorded here so a reader reconciling the Codex CVE list against this table is not left with one unexplained id. Affected/patched versions are "unknown" on the database record; run current Codex (see also the separate [Heapjack/Overpatch sandbox escapes](2026-09-codex-heapjack-overpatch-sandbox-escapes.md), fixed 0.149.0).
 
 ## Sources
 - [Manifold Security — GitSpawn: A Single Flaw Lets Untrusted Repos Run Code in Claude Code, Codex, Cursor, and Grok](https://www.manifold.security/blog/ai-coding-agents-git-hijack) — primary disclosure: mechanism, full disclosure timeline, per-agent status table.
