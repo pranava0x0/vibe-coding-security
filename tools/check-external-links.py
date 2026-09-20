@@ -49,7 +49,10 @@ IGNORE_SUBSTR = ("attacker", "evil", "victim", "malicious", "example.")  # place
 
 
 def is_ignorable(url: str) -> bool:
-    host = (urllib.parse.urlparse(url).hostname or "").lower()
+    try:
+        host = (urllib.parse.urlparse(url).hostname or "").lower()
+    except ValueError:  # defanged prose like `coder-infra[.]com` — not a citation
+        return True
     if not host:
         return True
     if host in IGNORE_EXACT or host.endswith(IGNORE_SUFFIX):

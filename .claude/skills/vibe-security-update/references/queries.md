@@ -150,6 +150,11 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
   `github.com/advisories?query=crewai`, `…?query=kiro`, `…?query=rmcp`, `…?query=vm2`,
   `…?query=docker+sandboxes`, `…?query=sentry`, `…?query=copilot` — CVE-only entries from research
   CNAs (ZDI, VulnCheck, CERT/CC) and corporate CNAs (AWS, IBM, Microsoft, Docker) never reach the vendor tab.
+- **Advisory-database agent-name queries, every sweep:** `github.com/advisories?query=claude+sort%3Apublished-desc`,
+  `…?query=codex…`, `…?query=cursor…`, `…?query=agent…` — the community tools named after an agent
+  (LEARNINGS §29).
+- **Victim post-mortems, monthly:** `"TanStack" OR "ChainDrop" OR "axios" post-mortem OR "incident report"`
+  — a wave's downstream victims disclose from their own blogs months later (LEARNINGS §29).
 - **Registry `time` fields** settle fix dates no vendor tab records, and whether a "deprecated"
   package is still being published (LEARNINGS §28).
 - **Per-product advisory tabs (`github.com/<org>/<repo>/security/advisories`, paginate):** Claude Code,
@@ -186,7 +191,9 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
   tenetsecurity.ai, labs.zenity.io, novee.security, danusminimus.github.io, oddguan.com,
   manifold.security, paddo.dev, embracethered.com, itmeetsot.eu, forever.security, socket.dev,
   stepsecurity.io, aikido.dev, safedep.io, air.security (agent plugin/skill supply chain),
-  hacktron.ai, opensourcemalware.com, research.empiricalsecurity.com, crowdstrike.com/en-us/blog.
+  hacktron.ai, opensourcemalware.com, research.empiricalsecurity.com, crowdstrike.com/en-us/blog,
+  accomplish.ai/blog (posts days before any outlet; confirm the fix from the release tag + registry).
+- **Eval-vendor incident posts:** `irregular.com/research`. **Victim post-mortems:** `crowdsec.net/blog`.
 - **Endpoint-vendor telemetry:** `gendigital.com/blog/insights/research` (stealers vs agent state).
 - **Sandbox vendors as their own CNA:** `github.com/docker/sbx-releases/releases` (CVE text in notes).
 - **Standalone incident sites from research nonprofits:** `collusion.wiki`, `rubyhack.ai`.
@@ -208,13 +215,9 @@ unreachable.
 - **arXiv API** — rate-limits (429); the HTML listing pages work.
 - **`nvidia.custhelp.com`** — 403; use the `NVIDIA/product-security` GitHub mirror.
 - **`securityonline.info`** — 503 on 2026-09-13; retry or cite a different secondary.
-- **`msrc.microsoft.com/update-guide/vulnerability/<CVE>`** — renders as a bare
-  title to `WebFetch` (client-side app); use the NVD API record for the
-  description and score.
+- **`msrc.microsoft.com/update-guide/vulnerability/<CVE>`** — renders as a bare title; use the NVD API.
 - **`techtimes.com`** — 403 on 2026-09-14.
-- **`hn.algolia.com`** — an occasional non-JSON first response; retry once
-  before logging it as a blocker. Also URL-encode `>` in `numericFilters` as
-  `%3E` or every term returns non-JSON.
+- **`hn.algolia.com`** — occasional non-JSON first response (retry once); URL-encode `>` as `%3E`.
 - **`docs.cloud.google.com/<product>/release-notes`** — HTML is navigation
   only; use the `/feeds/<product>-release-notes.xml` feed.
 - **Vendor-repo advisory URLs** sometimes 404 while `github.com/advisories/GHSA-…`
@@ -222,9 +225,7 @@ unreachable.
 - **`pypi.org/pypi/<pkg>/json`** — truncated by `WebFetch`; use `pip index versions`.
 - **`spectrosec.com`** — 404 on 2026-09-15.
 - **`github.blog/changelog/label/security/`** — 404 on 2026-09-17; use the main changelog.
-- **`cloud.google.com/security/resources/<report>`** — Mandiant report pages are
-  landing pages whose body truncates; read the report through several outlets
-  and label which case study each describes.
+- **`cloud.google.com/security/resources/<report>`** — Mandiant landing pages truncate; read via outlets.
 - **`openai.com/index/model-misalignment-reporting-framework`** — 403; the
   reports themselves at `alignment.openai.com` fetch fine.
 - **`bbc.co.uk` / `bbc.com`** — blocked for `WebFetch`.
@@ -237,6 +238,9 @@ unreachable.
 - **`koi.ai/blog/…`** — 301s to a Palo Alto product page; cite Koi's 2025 work via THN.
 - **GitHub release pages** — fetch summaries can mis-state the year; date from the CVE
   record or registry.
+- **`wsj.com`** — blocked (2026-09-20); read through citing outlets and say so in Sources.
+- **`openai.com/index/third-party-cyber-evaluations-involving-openai-models`** — 403 (2026-09-20).
+- **`nvd.nist.gov/vuln/detail/<CVE>`** — renders as "NVD - Home"; use the API or the GHSA mirror.
 
 ## Out of scope for this project
 
