@@ -2,7 +2,7 @@
 id: 2026-09-hacktron-openai-forum-sso-codex-account-takeover
 title: "Hacktron reached OpenAI's internal monorepo through the community forum: a Claude-built exploit for an un-CVE'd libheif bug in Discourse's HEIC upload path, then an over-permissioned \"Sign in with OpenAI\" token that turned a forum session into full ChatGPT and Codex API access — a PR was opened in the internal repo via an employee's GitHub-connected Codex"
 date_disclosed: 2026-09-18
-last_updated: 2026-09-18
+last_updated: 2026-09-20
 severity: high
 status: patched
 ecosystems: [openai, codex, discourse, libheif, imagemagick, sso, github]
@@ -51,7 +51,13 @@ cd /var/discourse && ./launcher enter app -- dpkg -l | grep -i libheif
 - Sandbox image decoding (ImageMagick delegates, `sharp`/libvips, libheif) and pin distro packages to a release that actually carries upstream security fixes — the AVIF/HEIF family has now produced Next.js, Astro and Discourse criticals in two months. [`prevention/supply-chain-attack-surface.md`](../prevention/supply-chain-attack-surface.md).
 - Agent-connected repositories need branch protection and required review even for "your own" agent's PRs. [`prevention/ci-cd-hardening.md`](../prevention/ci-cd-hardening.md).
 
+## Update 2026-09-19 — three more outlets, one new OpenAI statement, no comment from Anthropic
+
+The Register (09-18), SecurityWeek (09-18) and The Hacker News (09-19) each wrote up Hacktron's post. The one materially new fact is OpenAI's framing of the bounty to The Register: "testing against the Discourse-hosted community.openai.com was explicitly excluded from our bug bounty program. The award recognizes the OpenAI-side finding" — i.e. the $6,500 (paid 2026-09-01, per THN) is for the over-scoped SSO token, not the forum RCE, which OpenAI treats as Discourse's issue. SecurityWeek adds that OpenAI's own review "found limited metadata reads and the researcher-submitted pull request," and that Discourse's patch was ready within two days. THN quotes Hacktron's caveat that "skilled human direction still mattered, and this was not automated hacking with no one at the controls." Neither OpenAI nor Anthropic answered The Register's further questions. No change to status or affected products; the SSO fix and the Discourse release line above stand.
+
 ## Sources
 - [Hacktron — Hacking OpenAI](https://www.hacktron.ai/blog/hacking-openai) — primary; the nine-step chain, libheif 1.19.7 / Debian 12, Opus 4.8 → Opus 5 exploit development, the SSO scope finding, PR #1186742, the full timeline and bounty note. Fetched 2026-09-18.
+- [The Register — Researchers used Claude to hack OpenAI employees' ChatGPT accounts](https://www.theregister.com/security/2026/09/18/researchers-used-claude-to-hack-openai-employees-chatgpt-accounts/5297517) — 2026-09-18; OpenAI's "explicitly excluded from our bug bounty program… recognizes the OpenAI-side finding" statement; the 72-hour / ~14-hour timeline; no further comment from OpenAI or Anthropic. Fetched 2026-09-20.
+- [The Hacker News — Claude Opus 5 Helped Researchers Take Over OpenAI Staff Accounts via Chained Flaws](https://thehackernews.com/2026/09/claude-opus-5-helped-researchers-take.html) — 2026-09-19; CVE-2026-32882 / libheif 1.22.0 context, the 2026-09-01 bounty payment date, Hacktron's "skilled human direction still mattered" quote. Fetched 2026-09-20.
 - [SecurityWeek — AI-Built Exploit and Sign-In Flaw Opened Path to Internal OpenAI Code](https://www.securityweek.com/ai-built-exploit-and-sign-in-flaw-opened-path-to-internal-openai-code/) — 2026-09-18; OpenAI's "narrowed the permissions on Community sign-in tokens" statement, the ~14-hour fix, the $6,500 bounty. Fetched 2026-09-18.
 - [Discourse — GHSA-vhm9-85gw-x335: RCE via malformed HEIF file (CVE-2026-32882)](https://github.com/discourse/discourse/security/advisories/GHSA-vhm9-85gw-x335) — 2026-07-28, CVSS 8.8, patched versions, rebuild guidance, credit. Fetched 2026-09-18 (the `github.com/advisories/` mirror URL returned 404; the vendor-repo URL resolves).

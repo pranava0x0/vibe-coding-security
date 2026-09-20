@@ -2,7 +2,7 @@
 id: 2026-08-vm2-isolated-vm-sandbox-escapes
 title: "Both JavaScript sandboxes that AI workflow platforms run untrusted code in broke in the same fortnight — vm2 (host DNS hijack) and isolated-vm (type confusion → host RCE), August 2026"
 date_disclosed: 2026-08-07
-last_updated: 2026-09-17
+last_updated: 2026-09-20
 severity: critical
 status: patched
 ecosystems: [npm, javascript, self-hosted]
@@ -79,6 +79,10 @@ npm ls vm2 2>/dev/null | grep vm2
 # Below 3.12.2 = at least one unfixed vendor advisory; below 3.11.8 = a CVE
 ```
 
+### Update 2026-09-20 — an eleventh advisory from the same window: the host's `https.globalAgent` is exposed to the sandbox, leaking Authorization headers and plaintext TLS socket data (GHSA-h85j-hv3c-qfgq / CVE-2026-92940, CVSS 10.0; 3.11.3–3.11.6, fixed 3.11.7)
+
+The 09-17 list above missed one vendor advisory dated **2026-08-24** (reporter Forrof), which VulnCheck CVE'd on **2026-09-17** as **CVE-2026-92940** (database copy GHSA-5843-9mh5-hhgw; CVSS 3.1 vector `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:L`). When a NodeVM is configured to allow `https`, vm2 exposed the **process-wide `https.globalAgent` singleton**. It was wrapped read-only, but the agent is an EventEmitter whose *methods* mutate state, and the read-only proxy forwards method calls — so sandboxed code could call `Agent.prototype.on()` and register a listener on the agent's `free` event. From there it captured the host's **Authorization headers and other sensitive request headers, private destination hostnames and ports, and plaintext data on reused TLS sockets**, and could make authenticated requests with the stolen credentials. Affects **≥ 3.11.3, ≤ 3.11.6**; fixed **3.11.7** (npm 2026-08-24). The root cause is the same one as the August `os`/`dns` finding: a process-global object handed to the guest instead of a sandbox-local instance. For a multi-tenant workflow platform this is cross-tenant credential theft without any host RCE at all — which is why it scores 10.0 while "only" reading. `vm2` still pulled ~824K downloads in the week to 2026-09-19.
+
 ## Am I affected?
 
 ```bash
@@ -127,4 +131,6 @@ Practical guidance: put an **OS-level boundary** (container, VM, seccomp, separa
 - [patriksimek/vm2 — security advisories index](https://github.com/patriksimek/vm2/security/advisories) — fetched 2026-09-17; the ten advisories 2026-08-24 → 09-08 with severities and titles (no CVEs shown on the vendor page).
 - [vm2 — GHSA-x965-fc75-jpqh (AggregateError sanitisation bypass)](https://github.com/patriksimek/vm2/security/advisories/GHSA-x965-fc75-jpqh), [GHSA-j89j-5m6r-cr2q (nullish receiver on non-strict host function)](https://github.com/patriksimek/vm2/security/advisories/GHSA-j89j-5m6r-cr2q), [GHSA-pq68-rvw4-xp4r (child_process omitted from denylist)](https://github.com/patriksimek/vm2/security/advisories/GHSA-pq68-rvw4-xp4r), [GHSA-6454-5x88-m6jw (Symbol.species / onRejected)](https://github.com/patriksimek/vm2/security/advisories/GHSA-6454-5x88-m6jw), [GHSA-5h3f-q97h-ccvc (custom resolver prefix bypass)](https://github.com/patriksimek/vm2/security/advisories/GHSA-5h3f-q97h-ccvc) — all fetched 2026-09-17; affected/patched versions, CVSS and credits as quoted in the 2026-09-17 update.
 - [VulnCheck — vm2 before 3.11.8 Sandbox Escape RCE via AggregateError (CVE-2026-92934)](https://www.vulncheck.com/advisories/vm2-before-3.11.8-sandbox-escape-rce-via-aggregateerror) and [vm2 NodeVM Remote Code Execution via Array-Shaped Require (CVE-2026-92935)](https://www.vulncheck.com/advisories/vm2-nodevm-remote-code-execution-via-array-shaped-require) — fetched 2026-09-17; published 2026-09-17, CVSS 9.5 each, version ranges; the [VulnCheck advisory index](https://www.vulncheck.com/advisories) (fetched 2026-09-17) lists the sibling CVE-2026-92933, CVE-2026-92936, CVE-2026-92937 and CVE-2026-92938 entries.
+- [vm2 — GHSA-h85j-hv3c-qfgq: vm2 3.11.6 exposes host HTTPS credentials and TLS traffic through globalAgent](https://github.com/patriksimek/vm2/security/advisories/GHSA-h85j-hv3c-qfgq) — vendor advisory, published 2026-08-24: CVSS 10.0 vector, ≥ 3.11.3 ≤ 3.11.6 → 3.11.7, the `free`-event listener mechanism, reporter Forrof. Fetched 2026-09-20.
+- [GitHub Advisory Database — GHSA-5843-9mh5-hhgw (CVE-2026-92940)](https://github.com/advisories/GHSA-5843-9mh5-hhgw) — VulnCheck-sourced copy published 2026-09-17; `Agent.prototype.on()` detail, CVSS 4.0 10.0. Fetched 2026-09-20.
 - npm registry `time` field for `vm2` (via `npm view vm2 time`, 2026-09-17): 3.11.6 2026-08-14, 3.11.7 08-24, 3.11.8 08-27, 3.12.0 09-01, 3.12.1 09-03, 3.12.2 09-08.
