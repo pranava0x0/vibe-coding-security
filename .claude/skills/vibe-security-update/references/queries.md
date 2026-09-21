@@ -65,20 +65,11 @@ on rotating subsets, so high-signal pages aren't buried under news aggregators.
 7. `npm dependency confusion internal scope {year}`
 8. `Supabase RLS misconfiguration exposed data {year}`
 9. `{ecosystem} security response team supply chain {year}`
-10. `{framework} CVE {year}` — direct per-framework CVE queries; these surface
-    advisory-database-only CVEs that never get blog coverage
-11. `{agent} auto mode OR autonomous mode prompt injection {year}` — agent
-    "auto"/"yolo"/"full-access" modes are where classifier-bypass chains land;
-    the researcher blogs below publish these before any outlet picks them up
-12. `{vendor threat-intel blog} AI agent OR agentic {year}` — rotate GTIG,
-    Microsoft Threat Intelligence, Unit 42, Mandiant, Anthropic threat reports.
-    Telemetry reports name packages, paths, and tools with no CVE attached.
-13. `{agent} plugin OR skill marketplace vulnerability {year}` — rotate Claude Code,
-    Codex, Copilot, Gemini CLI/Antigravity, OpenClaw; plugin-pinning and
-    skill-hijack bugs are fixed in release notes, not advisory tabs.
-14. `{platform} AI autofix OR coding agent handoff vulnerability {year}` — rotate
-    Sentry, Datadog, GitHub Copilot Autofix, Linear, PagerDuty; the
-    telemetry-to-agent path is unauthenticated by design.
+10. `{framework} CVE {year}` — surfaces advisory-database-only CVEs
+11. `{agent} auto mode OR autonomous mode prompt injection {year}` — researcher blogs publish these first
+12. `{vendor threat-intel blog} AI agent OR agentic {year}` — rotate GTIG, Microsoft TI, Unit 42, Mandiant, Anthropic
+13. `{agent} plugin OR skill marketplace vulnerability {year}` — rotate Claude Code, Codex, Copilot, Gemini CLI/Antigravity, OpenClaw
+14. `{platform} AI autofix OR coding agent handoff vulnerability {year}` — rotate Sentry, Datadog, Copilot Autofix, Linear, PagerDuty
 
 **Fetch directly, don't search for:** CISA's KEV catalog is a JSON feed at
 `https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json`.
@@ -194,6 +185,11 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
   hacktron.ai, opensourcemalware.com, research.empiricalsecurity.com, crowdstrike.com/en-us/blog,
   accomplish.ai/blog (posts days before any outlet; confirm the fix from the release tag + registry).
 - **Eval-vendor incident posts:** `irregular.com/research`. **Victim post-mortems:** `crowdsec.net/blog`.
+- **Coding-tool upload/telemetry (LEARNINGS §30):** `"<tool>" upload OR telemetry OR privacy OR snapshot`,
+  rotating desktop/CLI agents (Grok Build, ZCode, Kimi Code, Qwen Code, Trae, Kiro…); primaries
+  `blog.ferstar.org`, `blog.vonng.com`, `gist.github.com/cereblab`; China-market coverage `eu.36kr.com`, `panews.io`.
+- **Registry-team blog index pages, fetched each sweep** (warnings to maintainers never rank in search).
+- **`api.npmjs.org/downloads/point/last-week/<pkg>`** after a takedown — a stub still pulling millions = inflation.
 - **Endpoint-vendor telemetry:** `gendigital.com/blog/insights/research` (stealers vs agent state).
 - **Sandbox vendors as their own CNA:** `github.com/docker/sbx-releases/releases` (CVE text in notes).
 - **Standalone incident sites from research nonprofits:** `collusion.wiki`, `rubyhack.ai`.
@@ -209,36 +205,33 @@ unreachable.
 - **`reddit.com`** — blocked for `WebFetch` in this environment.
 - **`bleepingcomputer.com`, `cisa.gov` HTML pages** — return 403 (use the KEV
   JSON feed for CISA).
-- **`checkmarx.com/zero-post/`** — 404.
+- **`checkmarx.com/zero-post/`** — intermittent 404; fetched fine 2026-09-21.
+- **`kb.cert.org/vuls/id/<n>`** — 301 → `sei.cmu.edu` 404 for `WebFetch`; `curl -sSL --compressed` on the
+  `kb.cert.org` URL works (2026-09-21).
+- **`wired.com`** — blocked; **`gbhackers.com`** — empty body (2026-09-21).
+- **GitHub `security/advisories` tabs** — occasional 504 with no status incident; retry once.
 - **`socket.dev/blog`** — index renders without dates, RSS 404s; date individual
   post pages instead.
 - **arXiv API** — rate-limits (429); the HTML listing pages work.
 - **`nvidia.custhelp.com`** — 403; use the `NVIDIA/product-security` GitHub mirror.
-- **`securityonline.info`** — 503 on 2026-09-13; retry or cite a different secondary.
+- **`securityonline.info`** — 503 (2026-09-13).
 - **`msrc.microsoft.com/update-guide/vulnerability/<CVE>`** — renders as a bare title; use the NVD API.
-- **`techtimes.com`** — 403 on 2026-09-14.
+- **`techtimes.com`** — 403.
 - **`hn.algolia.com`** — occasional non-JSON first response (retry once); URL-encode `>` as `%3E`.
-- **`docs.cloud.google.com/<product>/release-notes`** — HTML is navigation
-  only; use the `/feeds/<product>-release-notes.xml` feed.
-- **Vendor-repo advisory URLs** sometimes 404 while `github.com/advisories/GHSA-…`
-  resolves (knowns, 2026-09-15); try the database copy second.
+- **`docs.cloud.google.com/<product>/release-notes`** — HTML is navigation only; use the `/feeds/<product>-release-notes.xml` feed.
+- **Vendor-repo vs `github.com/advisories/GHSA-…` URLs** — either can 404 while the other resolves; try both.
 - **`pypi.org/pypi/<pkg>/json`** — truncated by `WebFetch`; use `pip index versions`.
-- **`spectrosec.com`** — 404 on 2026-09-15.
-- **`github.blog/changelog/label/security/`** — 404 on 2026-09-17; use the main changelog.
-- **`cloud.google.com/security/resources/<report>`** — Mandiant landing pages truncate; read via outlets.
-- **`openai.com/index/model-misalignment-reporting-framework`** — 403; the
-  reports themselves at `alignment.openai.com` fetch fine.
+- **`spectrosec.com`** — 404.
+- **`github.blog/changelog/label/security/`** — 404; use the main changelog.
+- **`cloud.google.com/security/resources/<report>`** — Mandiant landing pages truncate; use outlets.
+- **`openai.com/index/model-misalignment-reporting-framework`** — 403; `alignment.openai.com` fetches fine.
 - **`bbc.co.uk` / `bbc.com`** — blocked for `WebFetch`.
 - **`cybernews.com`, `scworld.com`** — 403 on 2026-09-17.
-- **`vulncheck.com/advisories/<slug>`** — some per-CVE pages 404 while the index
-  lists them (three of six vm2 CVEs on 2026-09-17); cite the index and say so.
-- **`github.com/advisories/GHSA-…` mirror 404s while the vendor-repo URL resolves**
-  (Discourse, 2026-09-18) — try both forms.
-- **`cybersecuritynews.com`** — empty body to `WebFetch` on 2026-09-18; retry once, then cite THN.
+- **`vulncheck.com/advisories/<slug>`** — some per-CVE pages 404 while the index lists them; cite the index.
+- **`cybersecuritynews.com`** — empty body to `WebFetch` (09-18, 09-21); retry once, then cite THN.
 - **`koi.ai/blog/…`** — 301s to a Palo Alto product page; cite Koi's 2025 work via THN.
-- **GitHub release pages** — fetch summaries can mis-state the year; date from the CVE
-  record or registry.
-- **`wsj.com`** — blocked (2026-09-20); read through citing outlets and say so in Sources.
+- **GitHub release pages** — summaries can mis-state the year; date from the CVE record or registry.
+- **`wsj.com`** — blocked; read through citing outlets and say so in Sources.
 - **`openai.com/index/third-party-cyber-evaluations-involving-openai-models`** — 403 (2026-09-20).
 - **`nvd.nist.gov/vuln/detail/<CVE>`** — renders as "NVD - Home"; use the API or the GHSA mirror.
 

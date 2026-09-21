@@ -1,0 +1,71 @@
+---
+id: 2026-09-zhipu-zcode-silent-workspace-git-history-upload
+title: "Zhipu's ZCode coding app packaged every logged-in user's whole workspace — including the full .git history, LFS cache and reflogs, with the secret-file filter skipped for history — encrypted it with a key only Zhipu holds, and uploaded it to Alibaba Cloud OSS before prompts and after tasks; the UI toggles did nothing, the privacy policy said nothing; Zhipu apologised 09-18, removed the pipeline in 3.14.0, open-sourced the client and had the bucket audited as deleted on 09-21"
+date_disclosed: 2026-09-18
+last_updated: 2026-09-21
+severity: high
+status: contained
+ecosystems: [zcode, zhipu, ai-coding-desktop, macos, windows, linux]
+tools_affected: ["Zhipu ZCode desktop app before 3.14.0 (3.12.3 analysed)", "any repository opened in ZCode while logged in", "every secret ever committed to such a repository, including ones since deleted"]
+tags: [data-exposure, ai-vendor-hygiene, coding-agent, secrets-exposure, git-history, telemetry, opt-out-ineffective, china, repo-upload]
+---
+
+## TL;DR
+On **2026-09-18** the researcher **ferstar** published a reverse-engineering of **ZCode 3.12.3** (Zhipu / Z.ai's AI coding desktop app) showing that whenever a user is logged in, a background sidecar packages the **entire workspace** — one commercial project came to **313 MB across 42,411 files**, of which ~87% was `.git/` (objects, LFS cache, reflogs) — encrypts it locally with **AES-256-CTR under an RSA public key issued by Zhipu's server**, and POSTs it directly to **Alibaba Cloud OSS**, which calls back to Zhipu. Captures fired **on login, before each prompt and after tasks** (62 in one session). The RSA private key lives only on Zhipu's servers, so the user cannot read their own snapshot. The "Optimize Experience" and "Repo Snapshot Indexing" toggles controlled training consent and server-side indexing respectively, **not the capture or the upload**; the privacy policy did not mention snapshots. Worst detail: the filter that drops `.pem`/`.key` files and anything over 1 MB ran *after* the history directory was passed through, so **every secret ever committed and later deleted went up intact.** A second researcher (Feng Ruohang) independently confirmed a snapshot that the server recorded as accepted. Zhipu apologised the same day, blamed a default-on "repository indexing / Repo Wiki" feature, said uploads were destroyed after use, and by **2026-09-21** had shipped **3.14.0** with the pipeline removed, open-sourced the client, and published two third-party audits (CAICT, NSFOCUS) stating the `zcode-prod` OSS bucket and all objects were deleted. If you ran ZCode logged in before 3.14.0, treat every credential in your repos' git history as exposed to the vendor and rotate it.
+
+## What happened
+
+**The mechanism (ferstar, 2026-09-18).** ZCode's checkpoint sidecar under `~/.zcode/v2/checkpoints/` builds a "repo snapshot" of the open workspace. The client calls `zcode.z.ai` at `/api/v1/snapshot/upload-credential`, receives an RSA public key plus a pre-signed OSS form and object key, archives and compresses the workspace, encrypts it, and uploads straight to Aliyun OSS — bypassing Zhipu's own application servers — after which OSS calls Zhipu's backend to register the snapshot. Triggers were login (the sidecar runs for as long as you are authenticated), a `captureBeforePrompt` hook, and task-completion events tagged `repo-wiki-update`. The example archive: `.git/objects/` 102.2 MB (29.6%), `.git/lfs/` 196.1 MB (56.8%), `.git/logs/` 0.6 MB, actual source and docs 46.2 MB (13.4%). That archive **failed to upload 564 times** (a size limit) and sat in a pending queue retrying; deleting it regenerated it within half an hour.
+
+**What the filters missed.** 36kr's summary of the analysis: the file-filtering logic runs in sequence, and the pass-through for the history directory comes *before* the key-file filter (`.pem`, `.key`) and the 1 MB size cap — so "passwords and keys that were once committed into the history and then deleted would also be uploaded as-is," and 100+ MB packages went whole. 86.6% of snapshots contained history records. Feng Ruohang's check: public key files were included and "private key protection relied on luck."
+
+**Independent confirmation (Feng Ruohang / Vonng, 2026-09-18).** On a macOS ZCode 3.12.3, four workspaces had snapshot records: two (229 MB, 232 MB) had obtained upload credentials and were pending; one (`pgdoc`, 1.53 GB) had failed 102 times on size; and one (`pgnls`, 405 MB → 7.4 MB compressed) carried a `lastAcceptedManifestHash` — "this workspace snapshot was uploaded and the client recorded it as accepted." `.git` was 93.9–98.5% of packaged bytes. The "Repository Snapshot Indexing" setting was recorded `false` 1,339 times while uploads proceeded.
+
+**The toggles and the policy.** Per ferstar: "Optimize Experience" governs training authorisation; "Repo Snapshot Indexing" governs server-side index creation; neither stops packaging or upload, which "occur unconditionally" for a logged-in user. As of 2026-09-18 the privacy policy "contained zero disclosure regarding full-workspace snapshots or Git history." A 2026-09-16 changelog entry — "Optimize memory usage for repository snapshot uploads" — was deleted after the story broke (36kr).
+
+**Zhipu's response.** 2026-09-18 (PANews, 36kr): an apology; the behaviour "stemmed from the 'code repository indexing' feature," enabled by default in the early launch, whose Repo Wiki generator "may trigger repository data upload"; uploaded data was "immediately destroyed and not saved"; a promise to open-source the client, invite third-party review, and reset every user's weekly quota. Community questions 36kr lists as unanswered on 09-18: why a local index needs a cloud upload, why 86.6% of the payload was history unrelated to a wiki, which version introduced it, who holds the decryption key, and what happens to data already uploaded. Seoul Economic Daily (09-21) reports the original developer disputing the "only during wiki generation" framing: earlier versions "ran data transfers automatically every time a user submitted a query."
+
+**Remediation (2026-09-21).** BigGo Finance: ZCode was open-sourced ([zai-org/ZCode](https://github.com/zai-org/ZCode)); the China Academy of Information and Communications Technology confirmed **v3.14.0** removed the RepoWiki feature and "severed the local repository snapshot generation and upload pipeline"; NSFOCUS confirmed the Alibaba Cloud OSS bucket **`zcode-prod`** and all objects were deleted and that the remediated client has "no functional pathways capable of triggering local repository snapshots or file exfiltration." ferstar's follow-up: the open-source release confirms the `repoSnapshot` pipeline is gone and the upload-credential endpoint now returns 404. Zhipu also announced a "no data retention" option for its MaaS platform on 09-20.
+
+**Why this matters beyond one vendor.** This is the second AI coding tool in ten weeks caught shipping whole repositories as a side channel the user could not see or switch off — [xAI's Grok Build](2026-07-grok-build-silent-full-repo-upload-xai-storage.md) did it in July, with the same three properties: the *toggle* controlled training consent rather than transmission, the upload was **independent of what the model read**, and `.git` history went with it. Add the [Claude Code source-map leak](2026-03-claude-code-source-map-leak.md) and the pattern for this audience is: **the desktop agent's own telemetry and "features" are a data path out of your repo, separate from the model conversation, and the privacy toggle is not the switch.** For a vibe coder the payload is every `.env`, token and key that was ever committed — including the ones you deleted and thought were gone.
+
+## Am I affected?
+
+- **Affected if:** you ran any ZCode release before 3.14.0 while logged in, with a repository open. A snapshot was packaged; whether it *left* depends on size — small repos uploaded, very large ones failed and retried.
+- **Not affected if:** you never logged in (the sidecar only runs authenticated), or first used ZCode at ≥ 3.14.0.
+
+```bash
+# What the client packaged, and whether the server accepted any of it
+ls -la ~/.zcode/v2/checkpoints/ 2>/dev/null
+grep -rl "lastAcceptedManifestHash" ~/.zcode/v2/checkpoints/ 2>/dev/null   # accepted = left your machine
+# Version
+cat ~/.zcode/version 2>/dev/null; ls ~/.zcode 2>/dev/null
+
+# What went with it: every secret in your history, not only the working tree
+gitleaks detect --source . --log-opts="--all" 2>/dev/null | head
+# or: trufflehog git file://. --only-verified
+```
+
+## If you are affected
+
+1. Update to ≥ 3.14.0 or uninstall; Feng Ruohang's advice for production machines was to remove it until the mechanism was confirmed.
+2. **Rotate every credential that has ever been committed** to any repository you opened in ZCode — the history filter bypass means deleted secrets count. [rotating-cloud-credentials.md](../playbooks/rotating-cloud-credentials.md), [if-your-github-pat-leaked.md](../playbooks/if-your-github-pat-leaked.md), [if-your-npm-token-leaked.md](../playbooks/if-your-npm-token-leaked.md).
+3. If you cannot update yet, ferstar's stop-gap is to make the checkpoint directory immutable so it cannot be regenerated: `chflags uchg ~/.zcode/v2/checkpoints` (macOS) or `sudo chattr +i ~/.zcode/v2/checkpoints` (Linux) — rollback features stop working, chat and completion do not.
+4. Treat the vendor's deletion as the vendor's claim, audited by two Chinese third parties; if the code is regulated or under NDA, document the exposure window (first login → 3.14.0) for whoever needs to know.
+
+## Prevention
+
+- **Assume any AI coding tool can read the whole repo and its history, and keep secrets out of both** — [prevention/credential-hygiene.md](../prevention/credential-hygiene.md). History rewriting is not revocation; a secret that was ever committed is a secret to rotate.
+- **Watch the wire, not the settings page.** Both this incident and Grok Build were found by putting the client behind a proxy and reading what it sent. Run a new AI coding tool once behind `mitmproxy` on a throwaway repo with canary secrets before pointing it at real code ([prevention/package-vetting-checklist.md](../prevention/package-vetting-checklist.md)).
+- **Run coding agents in a sandbox that holds only the repository you are working on**, not your whole home directory or every checkout ([prevention/agent-sandboxing.md](../prevention/agent-sandboxing.md)).
+- Prefer tools whose client is open source and whose data-handling is stated per feature; "encrypted upload" is not "private" when the vendor holds the only key.
+
+## Sources
+- [ferstar — Inside ZCode: Silently Uploading Your Entire Git History to the Cloud](https://blog.ferstar.org/en/posts/zcode-silent-workspace-snapshot-upload/) — primary, 2026-09-18 (updated for the 09-21 open-source release): the sidecar, triggers, the credential/OSS/callback flow, AES-256-CTR under a server-issued RSA key, the 313 MB / 42,411-file breakdown, 564 failed uploads, the cosmetic toggles, the privacy-policy gap, the 3.14.0 removal and the `chflags`/`chattr` stop-gap. Fetched 2026-09-21.
+- [Feng Ruohang (Vonng) — Zhipu, Why Is ZCode Packaging and Uploading My Repositories?](https://blog.vonng.com/en/ai/zcode-upload/) — independent verification, 2026-09-18: four workspaces, the `pgnls` snapshot recorded as accepted (`lastAcceptedManifestHash`), 1.53 GB / 102 failures, `.git` at 93.9–98.5% of bytes, the setting recorded `false` 1,339 times, the uninstall-and-rotate advice. Fetched 2026-09-21.
+- [36kr — The Zhipu ZCode Package Leak Controversy: Key Unanswered Questions](https://eu.36kr.com/en/p/3990035042483209) — 2026-09-18: the filter-ordering bug that passed history through before the key/size filters, the 86.6% figure, the deleted 09-16 changelog line, Zhipu's statement and the list of open questions; also the Grok Build and Claude Code precedents. Fetched 2026-09-21.
+- [PANews — Zhipu apologizes over ZCode code-upload incident](https://panews.io/articles/01a0b4b8-5d05-70a9-9122-79b035289de6) — 2026-09-18: the apology text, the "code repository indexing" / Repo Wiki explanation, "immediately destroyed," the open-source and third-party-review promises, the quota reset. Fetched 2026-09-21.
+- [Seoul Economic Daily — China's Zhipu AI Accused of Sending User Project Files Offsite](https://en.sedaily.com/international/2026/09/21/chinas-zhipu-ai-accused-of-sending-user-project-files) — 2026-09-21: the ~10 GB bundle that failed hundreds of times, the developer's rebuttal that earlier versions uploaded on every query. Fetched 2026-09-21.
+- [BigGo Finance — Zhipu open-sources ZCode and completes third-party audit, confirming cloud data has been wiped](https://finance.biggo.com/news/3bf94199-7955-4c4d-911c-6e2fc609365e) — 2026-09-21: the open-sourcing, the CAICT and NSFOCUS audit statements, v3.14.0 removing RepoWiki and the snapshot pipeline, the `zcode-prod` bucket deletion, the MaaS no-retention option. Fetched 2026-09-21.
+- [Tech Buzz China on X — Zhipu's ZCode apologizes for code repository data uploads](https://x.com/TechBuzzChina/status/2101388377815712108) and [ferstar on X](https://x.com/ferstar_org/status/2100805861002355154) — the social-media thread that carried the finding and Zhipu's 09-18 response (search-indexed; X is not fetchable from this sweep).
+- [zai-org/ZCode](https://github.com/zai-org/ZCode/blob/main/README.en.md) — the open-sourced client; the README carries no incident statement (fetched 2026-09-21), cited only as the repository the audits refer to.

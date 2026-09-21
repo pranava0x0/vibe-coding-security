@@ -2,7 +2,7 @@
 id: 2026-05-tanstack-mini-shai-hulud
 title: "Mini Shai-Hulud wave — TanStack, Mistral, UiPath, OpenSearch (May 2026)"
 date_disclosed: 2026-05-11
-last_updated: 2026-09-20
+last_updated: 2026-09-21
 severity: critical
 status: historical
 ecosystems: [npm, pypi]
@@ -95,6 +95,10 @@ What leaked: source for the Console, data-science scripts, automation and the co
 
 Why it belongs in this file: **the stealer's take from May is still being cashed in September.** A package compromise's downstream victims disclose months after the wave, from their own blogs, and the token that mattered was a GitHub OAuth grant — the same class the [Mandiant SaaS case](2026-09-mandiant-hijacked-coding-assistant-session-shai-hulud-saas.md) and the [OpenAI TanStack response](https://openai.com/index/our-response-to-the-tanstack-npm-supply-chain-attack/) turn on. If a machine of yours ran a poisoned TanStack version in May and you rotated npm/SSH/cloud keys but not **GitHub OAuth app grants and personal tokens**, do that now (`Settings → Applications → Authorized OAuth Apps`; [if-your-github-pat-leaked.md](../playbooks/if-your-github-pat-leaked.md)), and check your org's audit log for clones from unfamiliar locations in the week after 2026-05-11.
 
+## Update 2026-09-21 — CrowdSec's formal statement: ~300 repositories in the archive (130+ of them already public), the private ones being the SaaS Console, AWS Cloud routines, connectors and automations; the vector described as a TanStack component "backdoored to extract an API key with authorization to read the private codebase"
+
+CrowdSec published a shorter [official statement](https://www.crowdsec.net/blog/crowdsec-statement-source-code-exposure) on **2026-09-17**, a day before the analysis above, and SecurityWeek covered it on 09-21. The statement's numbers: **approximately 300 repositories** in the leaked archive, of which **130+ are public open-source repos** — the private remainder is source for the SaaS Console, AWS Cloud routines, connectors and automations. On the vector it says a TanStack component "was used in our organization in May and appears to have been backdoored to extract an API key with authorization to read the private codebase"; the 09-18 analysis identifies that credential as a GitHub OAuth token (`gho_…`). The two descriptions are the same credential seen from different distances — a "key with authorization to read the private codebase" is what a stolen OAuth grant with repo scope *is* — but readers comparing the two posts should not conclude there were two credentials. CrowdSec was informed on **09-16**, verified the report, "immediately rotated all required tokens and credentials," and repeats that no customer data, credentials or PII were involved and that the code "has evolved significantly over those four months." SecurityWeek adds nothing beyond the statement but is the first mainstream write-up of the confirmation.
+
 ## Sources
 - [TanStack — Postmortem: TanStack npm supply-chain compromise](https://tanstack.com/blog/npm-supply-chain-compromise-postmortem)
 - [StepSecurity — TeamPCP's Mini Shai-Hulud Is Back: A Self-Spreading Supply Chain Attack Compromises TanStack npm Packages](https://www.stepsecurity.io/blog/mini-shai-hulud-is-back-a-self-spreading-supply-chain-attack-hits-the-npm-ecosystem)
@@ -123,4 +127,6 @@ Why it belongs in this file: **the stealer's take from May is still being cashed
 - [SecurityAffairs — U.S. CISA adds Daemon Tools, TanStack, and Nx Console flaws to its KEV catalog](https://securityaffairs.com/192776/security/u-s-cisa-adds-daemon-tools-tanstack-and-nx-console-flaws-to-its-known-exploited-vulnerabilities-catalog.html)
 - [CrowdSec — TanStack supply-chain attack analysis: how ~170 private repos were exposed](https://www.crowdsec.net/blog/tanstack-supply-chain-attack-analysis) — victim's own post-mortem, published 2026-09-18: the May 22 05:52–06:01 UTC clone window, the `gho_` OAuth token, the 05-25 revocation, the 08-17 SNS-token test, the 09-16 forum leak, the 83-user / 51-investor figures, EDR remediation. Fetched 2026-09-20.
 - [The Hacker News — CrowdSec Says TanStack npm Attack Led to Copy of 170 Private GitHub Repositories](https://thehackernews.com/2026/09/crowdsec-says-tanstack-npm-attack-led.html) — 2026-09-19; independent write-up of the CrowdSec disclosure with the CVE-2026-45321 linkage and the "only usable credential… AWS SNS" detail. Fetched 2026-09-20.
+- [CrowdSec — Statement on source code exposure](https://www.crowdsec.net/blog/crowdsec-statement-source-code-exposure) — 2026-09-17; the ~300-repository figure (130+ public), what the private code covers, the "backdoored to extract an API key" description of the vector, the 09-16 notification and rotation, the no-customer-data statement. Fetched 2026-09-21.
+- [SecurityWeek — CrowdSec Confirms Source Code Stolen in Supply Chain Attack](https://www.securityweek.com/crowdsec-confirms-source-code-stolen-in-supply-chain-attack/) — 2026-09-21; mainstream confirmation citing the statement; the TeamPCP / 84-artifact / 42-package linkage. Fetched 2026-09-21.
 - [VentureBeat — Four AI supply-chain attacks in 50 days exposed the release pipeline red teams aren't covering](https://venturebeat.com/security/supply-chain-incidents-openai-anthropic-meta-release-surface-vendor-questionnaire-matrix)
