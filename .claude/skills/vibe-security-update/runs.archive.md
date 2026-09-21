@@ -15,6 +15,19 @@
 
 ## Archived entries
 
+## 2026-09-13
+
+```yaml
+queries: {deep: 16, medium: 14, shallow: 9}
+new: [2026-09-langflow-ibm-psirt-eleven-cve-batch, 2026-08-nvidia-nemoclaw-openshell-cve-batch, 2026-08-swe-agent-inspector-path-traversal]
+updated: [2025-11-n8n-ni8mare-rce, 2026-08-agent-framework-mcp-cve-batch, 2026-09-aider-conf-yml-command-execution]
+sources_added: [forkast.news, community.n8n.io, grafana.com, hn.algolia.com]
+sources_weighted: [ibm.com, nvd.nist.gov, github.com, vulncheck.com, cyera.com, pillar.security, labs.cloudsecurityalliance.org, socket.dev]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, nvidia.custhelp.com-403, securityonline.info-503, langflow-releases-tag-without-v-404]
+```
+
+**Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend; backend/auth/DB). All research via direct WebSearch/WebFetch, no subagents. KEV fetched directly (dateAdded ≥ 09-06): ScreenConnect, MikroTik ×2 new since last run — none in scope. Vendor advisory-index walks: Claude Code (newest 06-25), Cursor (07-14), OpenHands (03-23), SWE-agent (none), Langflow (a 09-10 advisory, see below) — no gaps. **Three new, all found by grepping the *identifier*, not the product (LEARNINGS §15):** the Forkast roundup named one Langflow CVE; fetching IBM's bulletin behind it revealed **eleven** (LEARNINGS §18). NemoClaw came from a Forkast mention → NVIDIA's `product-security` GitHub mirror (the `custhelp.com` bulletin page 403s; the raw `5872.md` does not). SWE-agent CVE-2026-75482 surfaced only because the framework-rotation query put "SWE-agent" next to "CVE". **Two source discrepancies logged rather than resolved:** Langflow's own GHSA-7w94-79vh-5mr2 says the MCP-stdio RCE is "1.8.3 → 1.9.0" while IBM's CVE-2026-78575 says "1.0.0–1.11.5 → 1.11.6" — advisory states both and prefers the CNA. The Langflow releases page summary came back with the wrong year on dates; cited the tag without a date. **n8n:** the 09-02 community post is the batch index for 18 GHSAs; corrected the 09-09 entry's claim that GHSA-7hgx-277f-7vmg "entered independently." **Declined:** SGLang CVE-2026-86793 (single-source, inference-only), Meta Muse, Trezor/Brevo, browser-extension stealers, Cursor CVE-2026-63093 (tracked), Lovable April regression (tracked), Anthropic PyPI/Russian-actor items (both already in the 09-12 updates). HN via the Algolia API works (`hn.algolia.com/api/v1/search_by_date`) — 6 hits for "prompt injection", none new; Boolean OR is not supported there, use one term per call. Link checker: see Step 6 output in the commit.
+
 ## 2026-09-12
 
 ```yaml
