@@ -2,7 +2,7 @@
 id: 2026-08-mlflow-webhook-ssrf-authz-batch
 title: "MLflow — critical unauthenticated SSRF (CVSS 9.3) plus two authorization-bypass CVEs, all fixed in 3.15.0"
 date_disclosed: 2026-08-02
-last_updated: 2026-08-21
+last_updated: 2026-09-21
 severity: critical
 status: active
 ecosystems: [pypi, mlflow]
@@ -65,7 +65,13 @@ This moves the unauthenticated webhook-test SSRF from "critical but no public ex
 
 **This advisory's `status` is therefore changed from `patched` to `active`** — the vendor fix exists and is complete, but attackers are using this against unpatched instances now. If your MLflow Tracking Server has any network reachability beyond a fully trusted host and is not on **3.15.0+**, treat it as a live incident rather than a scheduled upgrade: the exploit is a single unauthenticated request that reflects cloud-metadata responses straight back to the caller, so assume credential theft rather than merely probing.
 
+## Update — 2026-09-16 (logged 2026-09-21): CERT/CC VU#369093 — the `MLFLOW_ALLOW_PICKLE_DESERIALIZATION` safety control is bypassed by two model flavors; `statsmodels` fixed in 3.15.0 (GHSA-gqvg-gmmx-x4hm, CVSS 8.8), `dspy` still unpatched
+
+CERT/CC published [VU#369093](https://kb.cert.org/vuls/id/369093) on **2026-09-16** (reporter Prasanna Dabi; vendor notified 2026-08-07, status *Unknown*, "MLFlow could not be reached to coordinate"). MLflow's `MLFLOW_ALLOW_PICKLE_DESERIALIZATION` control is meant to refuse pickle loads when a user sets it to false; two flavors ignore it. The **`statsmodels` flavor "does not apply the control" at all** — a crafted `MLmodel` artifact loaded through `mlflow.pyfunc.load_model()` executes code regardless of the setting; MLflow's own advisory GHSA-gqvg-gmmx-x4hm (published 2026-07-27, **CVSS 8.8**, AV:N/PR:N/UI:R, affected ≥ 2.1.0 < 3.15.0, no CVE) fixed that in **3.15.0**, the same release as the three CVEs above. The **`dspy` flavor "conditionally applies the control based on the model path's file extension"** — a path that does not end in `.pkl`, even when the file is a pickle, "will route to a separate branch for pickle deserialization, bypassing the safety control"; CERT/CC confirmed this against **3.12.0** and lists **no fix**. Impact is RCE on whatever loads the model; the precondition is write access to any location a user obtains MLflow models from — a registry, an artifact store, a shared bucket. CERT/CC's interim guidance: upgrade to ≥ 3.15.0 for `statsmodels`, and until a `dspy` fix ships, do not load models through the `dspy` flavor if you rely on the pickle block. For this audience the point is the one this file already makes: the model registry is a code-execution surface, and a setting whose name promises "no pickle" is only as good as every flavor honouring it.
+
 ## Sources
+- [CERT/CC — VU#369093: MLflow dspy and statsmodels flavors bypass pickle deserialization control](https://kb.cert.org/vuls/id/369093) — fetched 2026-09-21; 2026-09-16: both bypass mechanisms, the 3.12.0 confirmation, vendor notified 08-07 / status Unknown, the `statsmodels` fix in ≥ 3.15.0 and the unfixed `dspy` path, interim guidance, credit.
+- [GitHub Advisory Database — GHSA-gqvg-gmmx-x4hm: MLFLOW_ALLOW_PICKLE_DESERIALIZATION=False safety control bypassed by mlflow.statsmodels flavor](https://github.com/advisories/GHSA-gqvg-gmmx-x4hm) — fetched 2026-09-21; published 2026-07-27, CVSS 8.8, affected ≥ 2.1.0 < 3.15.0, fixed 3.15.0, PR #24686, no CVE.
 - [GitHub Security Advisory — GHSA-7gwp-5pfp-969j: Unauthenticated full-read SSRF in MLflow webhook delivery](https://github.com/mlflow/mlflow/security/advisories/GHSA-7gwp-5pfp-969j) — primary source for CVE-2026-64849: mechanism, CVSS 9.3, affected/patched versions.
 - [GitHub Security Advisory — GHSA-gqch-g4w5-7qcw: CreateModelVersion source validation does not check READ permission on referenced run_id](https://github.com/mlflow/mlflow/security/advisories/GHSA-gqch-g4w5-7qcw) — primary source for CVE-2026-69148.
 - [GitHub Security Advisory — GHSA-3p64-6gvh-82v5: LogInputs endpoint bypasses per-run UPDATE authorization in MLflow basic-auth](https://github.com/mlflow/mlflow/security/advisories/GHSA-3p64-6gvh-82v5) — primary source for CVE-2026-69146.
