@@ -153,6 +153,8 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
   n8n, Langflow, Flowise, PraisonAI, LiteLLM, LangChain, LangGraph, Semantic Kernel, Coder, MCP
   TS/Python SDKs, vm2; web: Next.js, React, Svelte, SvelteKit, Vite, Astro; **auth SDKs:**
   `clerk/javascript`, `better-auth/better-auth`, `nextauthjs/next-auth`, `supabase/auth`;
+  Supabase components (`supabase/supabase`'s tab is empty): `supabase/realtime`, `supabase/storage-api`,
+  `supabase/postgrest`; framework upstreams: `vercel/satori`, `lovell/sharp`;
   backend: FastAPI, Prisma, Streamlit, `googleapis/python-genai`. Read the vendor's date, not the CVE's.
 - **CNAs that are research firms:** `vulncheck.com/advisories`,
   `zerodayinitiative.com/advisories/published/` (AI-tool 0-days publish here first; the index's ZDI
@@ -201,39 +203,26 @@ Report these as **"not covered"**, never folded into "nothing found" — a futur
 sweep reading the log needs to know whether a quiet category was quiet or just
 unreachable.
 
-- **X / Bluesky** — no native browsing; only search-indexed snippets.
-- **`reddit.com`** — blocked for `WebFetch` in this environment.
-- **`bleepingcomputer.com`, `cisa.gov` HTML pages** — return 403 (use the KEV
-  JSON feed for CISA).
-- **`checkmarx.com/zero-post/`** — intermittent 404; fetched fine 2026-09-21.
-- **`kb.cert.org/vuls/id/<n>`** — 301 → `sei.cmu.edu` 404 for `WebFetch`; `curl -sSL --compressed` on the
-  `kb.cert.org` URL works (2026-09-21).
-- **`wired.com`** — blocked; **`gbhackers.com`** — empty body (2026-09-21).
-- **GitHub `security/advisories` tabs** — occasional 504 with no status incident; retry once.
-- **`socket.dev/blog`** — index renders without dates, RSS 404s; date individual
-  post pages instead.
-- **arXiv API** — rate-limits (429); the HTML listing pages work.
-- **`nvidia.custhelp.com`** — 403; use the `NVIDIA/product-security` GitHub mirror.
-- **`securityonline.info`** — 503 (2026-09-13).
-- **`msrc.microsoft.com/update-guide/vulnerability/<CVE>`** — renders as a bare title; use the NVD API.
-- **`techtimes.com`** — 403.
-- **`hn.algolia.com`** — occasional non-JSON first response (retry once); URL-encode `>` as `%3E`.
-- **`docs.cloud.google.com/<product>/release-notes`** — HTML is navigation only; use the `/feeds/<product>-release-notes.xml` feed.
-- **Vendor-repo vs `github.com/advisories/GHSA-…` URLs** — either can 404 while the other resolves; try both.
-- **`pypi.org/pypi/<pkg>/json`** — truncated by `WebFetch`; use `pip index versions`.
-- **`spectrosec.com`** — 404.
-- **`github.blog/changelog/label/security/`** — 404; use the main changelog.
-- **`cloud.google.com/security/resources/<report>`** — Mandiant landing pages truncate; use outlets.
-- **`openai.com/index/model-misalignment-reporting-framework`** — 403; `alignment.openai.com` fetches fine.
-- **`bbc.co.uk` / `bbc.com`** — blocked for `WebFetch`.
-- **`cybernews.com`, `scworld.com`** — 403 on 2026-09-17.
+- **X / Bluesky** — no native browsing; search snippets only. **Blocked / 403:** `reddit.com`, `wired.com`,
+  `wsj.com`, `bbc.com`, `bleepingcomputer.com`, `cisa.gov` HTML (use the KEV JSON), `nvidia.custhelp.com`
+  (use the `NVIDIA/product-security` mirror), `techtimes.com`, `cybernews.com`, `scworld.com`,
+  `spectrosec.com`, `securityonline.info` (intermittent), `openai.com/index/...` (use `alignment.openai.com`).
+  Read blocked outlets through citing outlets and say so in Sources.
+- **Empty / truncated bodies:** `gbhackers.com`, `cybersecuritynews.com` (retry once, then cite THN),
+  `msrc.microsoft.com/update-guide` (use the NVD API), `nvd.nist.gov/vuln/detail` (use the API),
+  `pypi.org/pypi/<pkg>/json` (use `pip index versions`), `docs.cloud.google.com/<product>/release-notes`
+  (use the `/feeds/...xml` feed), `cloud.google.com/security/resources/<report>` (use outlets),
+  `socket.dev/blog` index (date the post pages), `github.blog/changelog/label/security/` (use the main changelog).
+- **`kb.cert.org/vuls/id/<n>`** — 301 → `sei.cmu.edu` 404 for `WebFetch`; `curl -sSL --compressed` works.
+- **`checkmarx.com/zero-post/`** — intermittent 404. **`koi.ai/blog`** — 301s to a product page; cite via THN.
+- **GitHub `security/advisories` tabs** — occasional 504; retry once. **Vendor-repo vs `github.com/advisories/GHSA-…`**
+  — either can 404 while the other resolves; try both. **Release-page summaries** can mis-state the year.
+- **arXiv API** — 429; the HTML listing pages work. **`hn.algolia.com`** — retry once; URL-encode `>` as `%3E`.
 - **`vulncheck.com/advisories/<slug>`** — some per-CVE pages 404 while the index lists them; cite the index.
-- **`cybersecuritynews.com`** — empty body to `WebFetch` (09-18, 09-21); retry once, then cite THN.
-- **`koi.ai/blog/…`** — 301s to a Palo Alto product page; cite Koi's 2025 work via THN.
-- **GitHub release pages** — summaries can mis-state the year; date from the CVE record or registry.
-- **`wsj.com`** — blocked; read through citing outlets and say so in Sources.
-- **`openai.com/index/third-party-cyber-evaluations-involving-openai-models`** — 403 (2026-09-20).
-- **`nvd.nist.gov/vuln/detail/<CVE>`** — renders as "NVD - Home"; use the API or the GHSA mirror.
+- **`github.com` via `curl` (cloud session)** — proxy returns a GitHub-API scope error for every path; use the
+  read-only `web-fetch` agent with bare URLs (2026-09-22).
+- **`securityweek.com` front page** — 403 to curl (2026-09-22). **`reuters.com`** — paywall; `devdiscourse.com`
+  mirrors the wire. **`marketscreener.com`** — 403; **`technology.org`** — JS wall.
 
 ## Out of scope for this project
 

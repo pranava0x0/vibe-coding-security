@@ -15,6 +15,19 @@
 
 ## Archived entries
 
+## 2026-09-14
+
+```yaml
+queries: {deep: 16, medium: 20, shallow: 14}
+new: [2026-09-openclaw-2026-8-1-advisory-batch, 2026-02-sveltekit-remote-functions-cve-batch, 2026-09-omniroute-acp-agent-unauth-rce]
+updated: [2026-08-agent-framework-mcp-cve-batch, 2026-07-nextjs-july-security-release, 2026-04-vite-dev-server-file-read, 2026-09-gitspawn-git-config-agent-rce-cluster, 2026-08-knaithe-hermes-autonomous-ai-scanning]
+sources_added: [f5.com, registry.npmjs.org]
+sources_weighted: [github.com, nvd.nist.gov, aws.amazon.com, ibm.com, unit42.paloaltonetworks.com, theregister.com, advisories.gitlab.com, cisa.gov, svelte.dev]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, msrc.microsoft.com-update-guide-renders-empty, techtimes.com-403]
+```
+
+**Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend incl. Svelte/Vite/Astro; backend/auth/DB). All research direct WebSearch/WebFetch, no subagents. KEV fetched directly (dateAdded ≥ 09-07): nothing new in scope beyond the already-tracked GitLab/JFrog entries. **All three new advisories came from vendor advisory-index walks, not search.** (1) OpenClaw's index carries **75 advisories all dated 2026-09-11** for fixes shipped 2026.7.1–2026.8.1, plus ~30 dated 06-30 that no sweep had logged — walked 11 pages, sampled 10 (LEARNINGS §19). (2) SvelteKit: six CVEs published by VulnCheck on 08-28 map to vendor advisories from **Feb–Jul**; the DB carries a second GHSA id per CVE alongside the vendor-repo id. Dated by vendor publication. (3) OmniRoute CVE-2026-88062: vendor page says fixed 3.8.49, NVD says 3.8.49 affected, DB copy says ≤3.8.50 no fix, PR merged into 3.8.50 branch after 3.8.49 shipped — all four stated, status `patched` on the vendor's word with the caveat prominent. **Corrections to my own triage:** the EU/DSEWiki probe looked new but the 09-10 sweep had already folded it into the Hugging Face file — checked the file before writing. Copilot CLI CVE-2026-45033 (May) is a GitSpawn precedent no GitSpawn source cited; folded in with the generic `safe.bareRepository=explicit` mitigation. **Declined:** MSRC CVE-2026-81381/81380 (Copilot+VS Code token disclosure, Sept Patch Tuesday, medium) — MSRC page renders empty to WebFetch and NVD has one line; nltk pickle RCEs, prowler SAML, yayson, maplibre (out of audience); OpenClaw CVE-2026-33575/35665/41301 (older, medium; noted in the new OpenClaw file's context only via NVD, not written up); arXiv 2609.07754 "coding assistants never check supply-chain trust signals" (research); Microsoft ASCII-smuggling blog (phishing, not agents). HN Algolia: first call returned non-JSON, retry was clean — transient, not a blocker. Link checker output in Step 6.
+
 ## 2026-09-13
 
 ```yaml
