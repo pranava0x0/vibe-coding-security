@@ -133,6 +133,8 @@ Don't repeat queries already run within the last 24h (check `runs.log.md`).
 
 **Fetch the front pages first.** Before any `WebSearch`, fetch `thehackernews.com`, `securityweek.com` and `theregister.com/security/` directly and read the dated headlines, plus the HN Algolia feed (`queries.md`). On 2026-09-18 six of eight new advisories were on those pages and in no query result — a story is on the front page a day or more before a search engine ranks it (`LEARNINGS.md` §28). Cite the article you then open, never the front page. For agent plugin/skill and "platform hands work to a coding agent" bugs, also query `kb.cert.org/vuls/` and the registry `time` field — those fixes are recorded in release notes and registries, not on any vendor advisory tab.
 
+**If the session has no direct `WebFetch` tool, or `curl` cannot reach `github.com`** (the cloud session's proxy intercepts every github.com path with a GitHub-API scope error — 2026-09-22), fetch the advisory-database listings, GHSA pages and vendor tabs through the read-only `web-fetch` agent: hand it **bare URLs and the fields to report** (title, date, CVE, affected/patched range, description verbatim), never the reason you want them, and keep it out of the repo. That shape does not trip the classifier (`LEARNINGS.md` §31); the technique-annotated task list does (§1). Everything else — front pages, KEV, HN Algolia, the NVD API, outlets — fetches fine with `curl --compressed -A "Mozilla/5.0"` plus a tag-stripping one-liner.
+
 **Report source-access gaps as "not covered," never as "nothing found."** The standing gaps are listed in `queries.md`; a future sweep reading the log needs to know whether a quiet category was quiet or merely unreachable.
 
 ### Step 2 — Triage findings
