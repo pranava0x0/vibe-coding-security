@@ -41,20 +41,20 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 27,
-   "last_hit": "2026-09-21"
+   "hits": 28,
+   "last_hit": "2026-09-22"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 33,
-   "last_hit": "2026-09-21"
+   "hits": 34,
+   "last_hit": "2026-09-22"
   },
   {
    "domain": "nvd.nist.gov",
    "weight": 20.0,
-   "hits": 52,
-   "last_hit": "2026-09-18"
+   "hits": 53,
+   "last_hit": "2026-09-22"
   },
   {
    "domain": "ox.security",
@@ -89,14 +89,14 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 90,
-   "last_hit": "2026-09-21"
+   "hits": 91,
+   "last_hit": "2026-09-22"
   },
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 42,
-   "last_hit": "2026-09-21"
+   "hits": 43,
+   "last_hit": "2026-09-22"
   },
   {
    "domain": "wiz.io",

@@ -1,6 +1,6 @@
 {
-  "last_updated": "2026-09-21",
-  "notes": "Sweep 2026-09-21: direct WebSearch/WebFetch research (no delegated subagents). Full-coverage sweep per the scheduled ask. Four new advisories: Rust crates.io maintainer-targeting fake-interview campaign (blog.rust-lang.org primary, grack.com victim account, SecurityWeek/Register/Help Net), Zhipu ZCode silent workspace + git-history upload (blog.ferstar.org primary, blog.vonng.com independent verification, 36kr/PANews/sedaily/BigGo, X), xAI Grok Build whole-repo upload precedent from July (cereblab gist + repro repo on github.com, THN, TNW), and the indexed-btree runtime-payload npm cluster (Checkmarx primary, npm registry + downloads API as the takedown/inflation record). Updates: TanStack (CrowdSec statement + SecurityWeek), Gemini/Irregular (SecurityWeek: Google on-record), GitLab KEV file (Duo Claude agent CVE-2026-18252 from the 08-26 patch release), MLflow (CERT/CC VU#369093 pickle-control bypass), MCP batch (9router CVE-2026-55638 via the `codex` database query). New source shapes: the coding tool's own telemetry/snapshot channel (proxy the client), registry security-team warnings addressed to maintainers, China-market AI-tool coverage via 36kr/PANews, and the downloads API as an inflation tell for security-holding packages. Decayed (60-day rule): ",
+  "last_updated": "2026-09-22",
+  "notes": "Sweep 2026-09-22: direct WebSearch + curl research in the main session; github.com pages (advisory-database listings, GHSA pages, 35 vendor tabs) via the read-only web-fetch agent with bare URLs because the session proxy intercepts curl to github.com. Two new advisories: Next.js next/og ImageResponse RCE via Satori (nextjs.org + vendor GHSA pages on github.com + npm registry time fields; NVD had no record yet) and Supabase Realtime presence.read RLS bypass CVE-2026-62247 (vendor-repo GHSA — the github.com/advisories mirror 404s — + NVD API + release page). Updates: ZCode (Reuters via devdiscourse mirror, The Register, The News), MCP batch (9router CVE-2026-56681/56682 and notebooklm-mcp CVE-2026-61647 from the advisory database + NVD + npm), TeamPCP/Trivy (THN 08-27 arrests, SecurityOnline paraphrase of Wired's GTIG infiltration story), Docker Sandboxes (sbx-releases 0.45.0 note). New source shape: a framework's pre-announced 'critical upstream issue' resolved to a different upstream (Satori) than the last one (libheif); the upstream and consumer advisories carry different severities for one CVE. Decayed (60-day rule): better-auth.com.",
   "sources": {
     "advisories.gitlab.com": {
       "_added": "2026-05-18",
@@ -261,6 +261,7 @@
     },
     "github.com": {
       "ecosystems": [
+        "9router",
         "advisory-db-mcp-recency-listing",
         "aider",
         "aider-pr-5137",
@@ -294,6 +295,7 @@
         "cursor-advisories-walk-2026-09",
         "discourse-ghsa-vhm9",
         "docker-sbx-releases",
+        "docker-sbx-releases-0.45.0",
         "geo-chen-casdoor-writeup",
         "ghsa",
         "gitpython-ghsa",
@@ -321,6 +323,8 @@
         "nextjs-ghsa",
         "nextjs-ghsa-august-2026",
         "nextjs-ghsa-sept",
+        "nextjs-ghsa-vcvr",
+        "notebooklm-mcp",
         "nvidia-product-security-bulletin-5872",
         "omniroute-ghsa",
         "omniroute-pr-11028",
@@ -328,7 +332,9 @@
         "openclaw-advisories-walk-2026-09",
         "orval-ghsa",
         "rubygems-ghsa",
+        "satori-ghsa-wx4j",
         "siyuan-mcp",
+        "supabase-realtime-ghsa-rcr8",
         "sveltekit-advisories-walk-2026-09",
         "swe-agent-issue-1472",
         "swe-agent-pr-1505",
@@ -343,14 +349,16 @@
         "vm2-ghsa-h85j",
         "zcode-open-source"
       ],
-      "hits": 27,
-      "last_hit": "2026-09-21",
+      "hits": 28,
+      "last_hit": "2026-09-22",
       "tier": "independent",
       "weight": 20
     },
     "github.com/advisories": {
       "ecosystems": [
         "9router",
+        "9router-cve-56681",
+        "9router-cve-56682",
         "advisory-db-claude-agent-queries",
         "adx-mcp-server",
         "ai-agent-frameworks",
@@ -398,9 +406,12 @@
         "langsmith",
         "mcp",
         "mcp-atlassian",
+        "mcp-recency-listing",
         "mcpjam",
         "mlflow-pickle-bypass",
+        "next.js-listing",
         "nextjs-cve-2026-64642",
+        "notebooklm-mcp-cve-61647",
         "npm",
         "nuxt-server-island-rce",
         "obot-ghsa-batch",
@@ -417,14 +428,15 @@
         "security-agent-mcp-server",
         "sentry-seer",
         "supabase",
+        "supabase-listing",
         "svelte",
         "token-optimizer-mcp",
         "toolhive-cve-58197",
         "vite",
         "vm2-cve-92940"
       ],
-      "hits": 33,
-      "last_hit": "2026-09-21",
+      "hits": 34,
+      "last_hit": "2026-09-22",
       "tier": "official",
       "weight": 20
     },
@@ -475,6 +487,9 @@
         "cve-2026-50548",
         "cve-2026-50549",
         "cve-2026-55945",
+        "cve-2026-56681",
+        "cve-2026-61647",
+        "cve-2026-62247",
         "cve-2026-65105",
         "cve-2026-71428",
         "cve-2026-75482",
@@ -549,6 +564,7 @@
         "sentry-seer-cve-90999",
         "starlette",
         "supabase",
+        "supabase-realtime",
         "svelte",
         "telnyx-mcp",
         "terraform-mcp",
@@ -556,8 +572,8 @@
         "ui-tars-desktop",
         "windsurf"
       ],
-      "hits": 52,
-      "last_hit": "2026-09-18",
+      "hits": 53,
+      "last_hit": "2026-09-22",
       "tier": "official",
       "weight": 20
     },
@@ -823,6 +839,7 @@
         "flooding-dropper",
         "flooding-dropper-update",
         "friendly-fire",
+        "front-page",
         "gemini-cli-trustissues",
         "gemini-irregular-eval-breach",
         "ghostapproval",
@@ -911,6 +928,7 @@
         "skillcloak",
         "solidity-pro-whitecobra",
         "streamlit-ssrf",
+        "teampcp-arrests",
         "threatsday-infostealers",
         "trapdoor",
         "trivy",
@@ -921,8 +939,8 @@
         "weaselbiscuit",
         "whitecobra"
       ],
-      "hits": 90,
-      "last_hit": "2026-09-21",
+      "hits": 91,
+      "last_hit": "2026-09-22",
       "tier": "aggregator",
       "weight": 20
     },
@@ -946,6 +964,7 @@
         "copilot-word-worm",
         "cosnitch",
         "friendly-fire",
+        "front-page",
         "ghostapproval",
         "glassworm",
         "hacktron-openai",
@@ -974,10 +993,11 @@
         "takedown",
         "trivy",
         "unit42-ai-ransomware-80-page-audit",
-        "vibe-platform"
+        "vibe-platform",
+        "zcode"
       ],
-      "hits": 42,
-      "last_hit": "2026-09-21",
+      "hits": 43,
+      "last_hit": "2026-09-22",
       "tier": "aggregator",
       "weight": 20
     },
@@ -1771,10 +1791,11 @@
     },
     "registry.npmjs.org": {
       "_added": "2026-09-14",
-      "weight": 11,
-      "hits": 7,
-      "last_hit": "2026-09-21",
+      "weight": 12,
+      "hits": 8,
+      "last_hit": "2026-09-22",
       "ecosystems": [
+        "9router-release-dates",
         "astro-release-dates",
         "claude-code-2.1.179",
         "claude-code-templates-release-dates",
@@ -1785,8 +1806,11 @@
         "gemini-cli-0.60.0",
         "google-cloud-internal-placeholders",
         "indexed-btree",
+        "next-16.3.6",
+        "notebooklm-mcp-release-dates",
         "omniroute-release-dates",
         "openclaw-release-dates",
+        "satori-0.33.5",
         "sveltejs-kit-release-dates",
         "vm2-3.11.7",
         "vm2-release-dates",
@@ -2487,12 +2511,13 @@
         "nextjs",
         "nextjs-august-2026-release",
         "nextjs-july-2026-release",
+        "nextjs-og-satori-rce",
         "nextjs-security-release-program"
       ],
-      "hits": 4,
-      "last_hit": "2026-09-10",
+      "hits": 5,
+      "last_hit": "2026-09-22",
       "tier": "vendor",
-      "weight": 8
+      "weight": 9
     },
     "obsidiansecurity.com": {
       "_added": "2026-06-18",
@@ -2608,13 +2633,14 @@
     "securityonline.info": {
       "_added": "2026-05-20",
       "ecosystems": [
+        "github",
         "langflow",
-        "github"
+        "teampcp-gtig-infiltration"
       ],
-      "hits": 3,
-      "last_hit": "2026-07-29",
+      "hits": 4,
+      "last_hit": "2026-09-22",
       "tier": "aggregator",
-      "weight": 8
+      "weight": 9
     },
     "sophos.com": {
       "ecosystems": [
@@ -2702,7 +2728,8 @@
       "hits": 2,
       "last_hit": "2026-07-23",
       "tier": "vendor",
-      "weight": 7
+      "weight": 6,
+      "last_decayed": "2026-09-22"
     },
     "businesswire.com": {
       "_added": "2026-08-08",
@@ -3681,12 +3708,14 @@
     },
     "api.npmjs.org": {
       "_added": "2026-09-21",
-      "weight": 5,
-      "hits": 1,
-      "last_hit": "2026-09-21",
+      "weight": 6,
+      "hits": 2,
+      "last_hit": "2026-09-22",
       "ecosystems": [
+        "9router",
+        "download-count-inflation",
         "indexed-btree",
-        "download-count-inflation"
+        "notebooklm-mcp"
       ],
       "tier": "official"
     },
@@ -5812,6 +5841,27 @@
       "last_hit": "2026-05-16",
       "tier": "aggregator",
       "weight": 1
+    },
+    "devdiscourse.com": {
+      "_added": "2026-09-22",
+      "ecosystems": [
+        "reuters-mirror",
+        "zcode"
+      ],
+      "hits": 1,
+      "last_hit": "2026-09-22",
+      "tier": "aggregator",
+      "weight": 5
+    },
+    "thenews.com.pk": {
+      "_added": "2026-09-22",
+      "ecosystems": [
+        "zcode"
+      ],
+      "hits": 1,
+      "last_hit": "2026-09-22",
+      "tier": "aggregator",
+      "weight": 5
     }
   },
   "version": 1
