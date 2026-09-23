@@ -15,6 +15,20 @@
 
 ## Archived entries
 
+## 2026-09-15
+
+```yaml
+queries: {deep: 16, medium: 20, shallow: 8}
+new: [2026-04-clerk-sdk-middleware-bypass-cve-batch, 2026-09-bifrost-mcp-client-registration-unauth-rce, 2026-07-google-agent-studio-api-proxy-ssrf, 2026-07-unstructured-partition-url-ssrf]
+updated: [2026-08-agent-framework-mcp-cve-batch, 2026-06-langgraph-rce-chain, 2026-04-litellm-sql-injection, 2026-08-jsonata-sandbox-escape-rce, 2026-09-openai-agents-rubygems-gemstuffer-campaign, 2026-09-langflow-ibm-psirt-eleven-cve-batch, 2025-11-n8n-ni8mare-rce, 2026-04-vite-dev-server-file-read, 2026-08-npm-bin-entry-harvesting-google-scoped]
+sources_added: [zeropath.com, blog.centriole.io, docs.cloud.google.com]
+sources_weighted: [github.com, nvd.nist.gov, vulncheck.com, research.jfrog.com, theregister.com, ibm.com, sentinelone.com, registry.npmjs.org]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, spectrosec.com-404, docs.cloud.google.com-html-renders-nav-only-use-feed, vendor-repo-ghsa-url-404-for-knowns, pypi-json-truncated-by-webfetch]
+```
+
+**Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend incl. Vite/Svelte/Next.js; backend/auth/DB incl. FastAPI/Streamlit/Prisma/Supabase/NextAuth/Clerk/Google). All research direct WebSearch/WebFetch, no subagents. KEV fetched directly (dateAdded ≥ 09-08): only Cisco Secure Email Gateway new since 09-14 — nothing in scope. **All four new advisories came from a vendor advisory tab or an advisory-database listing; none from search.** (1) Clerk: three 2026 advisories including a CVSS 9.1 — `{framework} CVE` covers Next.js, not the auth SDK above it, and the Clerk tab had never been walked (LEARNINGS §20). (2) Bifrost 9.8 via the `mcp` recency listing; JFrog is CNA and researcher (§14). (3) Agent Studio SSRF exists only in the Google Cloud release-notes *feed* — the HTML page renders as navigation (§22). (4) unstructured 9.3 via the reviewed-critical pip list (July vendor advisory, NVD 08-20). Casdoor (9.9, unpatched, maintainers deleted the researcher's issues) folded into the MCP batch rather than a new file. **Declined:** esphome, prowler, NLTK, yayson, maplibre, omnigent, Serena (out of audience); Streamlit GHSA-7p48-42j8-8846 = tracked CVE-2026-33682; Cline Hub/Kanban, goose fsmonitor, better-auth SSO, Starlette, elementary-data, OpenClaw CVE-2026-32922, Windsurf CVE-2026-30615 all confirmed tracked by identifier; techtimes agent-pipeline study (403, research); arXiv 2604.08407 (research). HN Algolia: 4 terms, nothing new. Vendor-tab newest dates: Claude Code 06-25, Cursor 07-14, Cline 06-23, aider none, goose 07-24, OpenHands 03-23 (page error), LangChain 06-12, LangGraph 08-28, Semantic Kernel 02-19, better-auth 08-11, supabase/auth 03-11, Prisma 2021, FastAPI 2021, Streamlit 03-24, Vite 06-01, SvelteKit 07-29, Next.js 08-25, OpenClaw 09-11, gemini-cli none, LiteLLM 08-26, NextAuth 07-20, Langflow 09-10, Codex 2025-09 (page error), MCP TS SDK 02-04, Clerk 04-22. Five sources decayed (60-day rule). Link checker: 0/190 flagged across the nine edited files; 1/21 in the new files (`clerk.com/changelog` URLError to the checker, fetched fine in-session, Wayback snapshot exists — kept). **Budget warning:** `dist/llms.txt` built at 69,582 B against a 69,632 B budget after shortening four new titles — the next new advisory breaches it at the Tier-2 floor (LEARNINGS §9); the BACKLOG "llms.txt Tier-2 floor" item is now due, not optional.
+
+
 ## 2026-09-14
 
 ```yaml
