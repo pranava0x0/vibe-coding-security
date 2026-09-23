@@ -2,7 +2,7 @@
 id: 2026-09-openclaw-2026-8-1-advisory-batch
 title: "OpenClaw publishes 75 security advisories in one day (2026-09-11) for bugs fixed in 2026.7.1–2026.8.1 — 30 rated High: non-owner senders reaching owner-only tools, MCP config injection to RCE, exec approvals that outlive their directory, a gcloud argument injection"
 date_disclosed: 2026-09-11
-last_updated: 2026-09-14
+last_updated: 2026-09-23
 severity: high
 status: patched
 ecosystems: [ai-agents, npm, mcp]
@@ -48,6 +48,8 @@ What the sampled ones actually let an attacker do:
 
 **What the release notes said.** The [2026.8.1 release](https://github.com/openclaw/openclaw/releases/tag/v2026.8.1) (2026-08-31) describes masked credential prompts, plugin-trust review, provenance warnings for arbitrary plugin sources, and protected-credential egress — hardening, not a list of fixed vulnerabilities. A reader following release notes alone had no way to know 75 advisories were coming.
 
+**Update 2026-09-23 — a CVE lands on one of these, six weeks later.** VulnCheck (as CNA) assigned **CVE-2026-95815** on **2026-09-22** to the iOS deep-link advisory already in this batch ([GHSA-5j57-84cx-r295](https://github.com/openclaw/openclaw/security/advisories/GHSA-5j57-84cx-r295), now also carried as [GHSA-wjj6-g7c3-q75f](https://github.com/advisories/GHSA-wjj6-g7c3-q75f)): "OpenClaw iOS before 2026.8.11 logs complete agent deep-link URLs including persistent bearer keys to unified logs as public diagnostic data," so anyone who obtains a diagnostic archive recovers unrotated keys and replays them in forged deep links to submit agent requests without the local confirmation prompt (CWE-532, CVSS 4.0 7.2 / 3.1 6.3, fixed **2026.8.11**, credit Jason O'Neal). It is the first CVE attached to any advisory in this batch — a reminder that the CVE layer arrives weeks after the vendor fix, and that a CVE-feed-only monitor would surface this now while the fix has been out since August. If you rotate to 2026.8.11+, also rotate any Gateway bearer keys that appeared in an iOS diagnostic archive.
+
 ## Am I affected?
 
 ```bash
@@ -86,4 +88,7 @@ You are affected if you ran any release before **2026.8.1** with at least one ex
 - Individual vendor advisory pages, fetched 2026-09-14: [GHSA-wwx7-573h-pqwc](https://github.com/openclaw/openclaw/security/advisories/GHSA-wwx7-573h-pqwc), [GHSA-7cp7-87pj-p32v](https://github.com/openclaw/openclaw/security/advisories/GHSA-7cp7-87pj-p32v), [GHSA-9m4p-cqp4-jppq](https://github.com/openclaw/openclaw/security/advisories/GHSA-9m4p-cqp4-jppq), [GHSA-5mrc-77hj-xjxv](https://github.com/openclaw/openclaw/security/advisories/GHSA-5mrc-77hj-xjxv), [GHSA-crg9-c62w-j2p5](https://github.com/openclaw/openclaw/security/advisories/GHSA-crg9-c62w-j2p5), [GHSA-qgj5-6x35-9g6f](https://github.com/openclaw/openclaw/security/advisories/GHSA-qgj5-6x35-9g6f), [GHSA-62qm-6fjj-6g23](https://github.com/openclaw/openclaw/security/advisories/GHSA-62qm-6fjj-6g23), [GHSA-hgv5-f2r3-6v9r](https://github.com/openclaw/openclaw/security/advisories/GHSA-hgv5-f2r3-6v9r), [GHSA-3mq7-q27j-mq7q](https://github.com/openclaw/openclaw/security/advisories/GHSA-3mq7-q27j-mq7q), [GHSA-jhfx-v2j8-x3m6](https://github.com/openclaw/openclaw/security/advisories/GHSA-jhfx-v2j8-x3m6) — CVSS scores, affected/patched ranges, descriptions, interim mitigations.
 - [OpenClaw — release 2026.8.1](https://github.com/openclaw/openclaw/releases/tag/v2026.8.1) — fetched 2026-09-14: released 2026-08-31; hardening notes, no vulnerability list.
 - [npm registry — `openclaw` package metadata](https://registry.npmjs.org/openclaw) — queried 2026-09-14 (`npm view openclaw time`): 2026.8.1 published 2026-08-31, 2026.9.4 (latest) 2026-09-11.
+
+**2026-09-23 update sources** — all fetched 2026-09-23:
+- [GitHub Advisory Database — GHSA-wjj6-g7c3-q75f (CVE-2026-95815)](https://github.com/advisories/GHSA-wjj6-g7c3-q75f), [openclaw/openclaw — GHSA-5j57-84cx-r295](https://github.com/openclaw/openclaw/security/advisories/GHSA-5j57-84cx-r295), [VulnCheck advisory](https://www.vulncheck.com/advisories/openclaw-ios-before-2026.8.11-credential-exposure-via-deep-link-url-logging) and [NVD API — CVE-2026-95815](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-95815) — CNA VulnCheck, published 2026-09-22, CVSS 4.0 7.2 / 3.1 6.3, CWE-532, before 2026.8.11 → fixed 2026.8.11, commit `8361f37`, credit Jason O'Neal.
 - Single-source note: every fact above comes from the vendor's own advisory pages; no independent researcher write-up or press coverage was found for this batch as of 2026-09-14. Status is `patched` because the vendor states patched versions for every sampled advisory.
