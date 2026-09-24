@@ -11,8 +11,8 @@
   {
    "domain": "aikido.dev",
    "weight": 20.0,
-   "hits": 20,
-   "last_hit": "2026-09-23"
+   "hits": 21,
+   "last_hit": "2026-09-24"
   },
   {
    "domain": "bleepingcomputer.com",
@@ -41,20 +41,20 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 29,
-   "last_hit": "2026-09-23"
+   "hits": 30,
+   "last_hit": "2026-09-24"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 35,
-   "last_hit": "2026-09-23"
+   "hits": 36,
+   "last_hit": "2026-09-24"
   },
   {
    "domain": "nvd.nist.gov",
    "weight": 20.0,
-   "hits": 54,
-   "last_hit": "2026-09-23"
+   "hits": 55,
+   "last_hit": "2026-09-24"
   },
   {
    "domain": "ox.security",
@@ -65,14 +65,14 @@
   {
    "domain": "safedep.io",
    "weight": 20.0,
-   "hits": 13,
-   "last_hit": "2026-09-23"
+   "hits": 14,
+   "last_hit": "2026-09-24"
   },
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 52,
-   "last_hit": "2026-09-23"
+   "hits": 53,
+   "last_hit": "2026-09-24"
   },
   {
    "domain": "sentinelone.com",
@@ -83,8 +83,8 @@
   {
    "domain": "socket.dev",
    "weight": 20.0,
-   "hits": 26,
-   "last_hit": "2026-09-13"
+   "hits": 27,
+   "last_hit": "2026-09-24"
   },
   {
    "domain": "stepsecurity.io",
@@ -95,8 +95,8 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 92,
-   "last_hit": "2026-09-23"
+   "hits": 93,
+   "last_hit": "2026-09-24"
   },
   {
    "domain": "theregister.com",
@@ -111,16 +111,28 @@
    "last_hit": "2026-09-12"
   },
   {
+   "domain": "helpnetsecurity.com",
+   "weight": 19.0,
+   "hits": 10,
+   "last_hit": "2026-09-24"
+  },
+  {
    "domain": "microsoft.com",
    "weight": 19.0,
    "hits": 7,
    "last_hit": "2026-08-06"
   },
   {
-   "domain": "helpnetsecurity.com",
+   "domain": "unit42.paloaltonetworks.com",
+   "weight": 19.0,
+   "hits": 8,
+   "last_hit": "2026-09-24"
+  },
+  {
+   "domain": "blog.rust-lang.org",
    "weight": 18.0,
-   "hits": 9,
-   "last_hit": "2026-09-21"
+   "hits": 5,
+   "last_hit": "2026-09-24"
   },
   {
    "domain": "snyk.io",
@@ -133,18 +145,6 @@
    "weight": 18.0,
    "hits": 7,
    "last_hit": "2026-07-08"
-  },
-  {
-   "domain": "unit42.paloaltonetworks.com",
-   "weight": 18.0,
-   "hits": 7,
-   "last_hit": "2026-09-14"
-  },
-  {
-   "domain": "blog.rust-lang.org",
-   "weight": 17.0,
-   "hits": 4,
-   "last_hit": "2026-09-21"
   },
   {
    "domain": "checkmarx.com",
