@@ -194,7 +194,9 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
 - **`api.npmjs.org/downloads/point/last-week/<pkg>`** after a takedown — a stub still pulling millions = inflation.
 - **Endpoint-vendor telemetry:** `gendigital.com/blog/insights/research` (stealers vs agent state).
 - **Sandbox vendors as their own CNA:** `github.com/docker/sbx-releases/releases` (CVE text in notes).
-- **Standalone incident sites from research nonprofits:** `collusion.wiki`, `rubyhack.ai`.
+- **Standalone incident sites from research nonprofits:** `collusion.wiki`, `rubyhack.ai`, `transluce.org`.
+- **National broadcasters (government-victim stories):** `abc.net.au`, `sbs.com.au`.
+- **Platform blog indexes (post-mortems with no CVE):** `blog.cloudflare.com`, `openclaw.ai/blog`, `docs.gitlab.com/releases/patches/`.
 - **Regulators:** `aepd.es` (first GDPR notification for an attack executed by an AI agent).
 
 ## Known source-access gaps
@@ -221,7 +223,8 @@ unreachable.
 - **`vulncheck.com/advisories/<slug>`** — some per-CVE pages 404 while the index lists them; cite the index.
 - **`github.com` via `curl` (cloud session)** — proxy returns a GitHub-API scope error for every path; use the
   read-only `web-fetch` agent with bare URLs (2026-09-22).
-- **`securityweek.com` front page** — 403 to curl (2026-09-22). **`reuters.com`** — paywall; `devdiscourse.com`
+- **`securityweek.com` front page and `/feed/`** — 403 (2026-09-22, 09-24); article pages fetch. **`cnbc.com`, `cbc.ca`,
+  `darkreading.com`** — 403 (2026-09-24). **`theregister.com/<date>/`** day indexes 404 — use `/security/`. **`reuters.com`** — paywall; `devdiscourse.com`
   mirrors the wire. **`marketscreener.com`** — 403; **`technology.org`** — JS wall.
 
 ## Out of scope for this project
