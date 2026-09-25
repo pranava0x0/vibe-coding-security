@@ -15,6 +15,19 @@
 
 ## Archived entries
 
+## 2026-09-17
+
+```yaml
+queries: {deep: 16, medium: 22, shallow: 12}
+new: [2026-09-crewai-zdi-zero-day-agent-loading-cve-batch, 2026-09-kiro-ide-cli-aws-bulletin-cve-batch, 2026-09-aws-security-agent-mcp-s3-bucket-squat, 2026-09-bragjack-browser-extension-builtin-ai-assistant-hijack, 2026-09-mandiant-hijacked-coding-assistant-session-shai-hulud-saas, 2026-09-shai-hulud-111-day-dormant-payload-mcp-package, 2026-09-openai-misalignment-reports-leaked-keys-public-uploads]
+updated: [2026-08-vm2-isolated-vm-sandbox-escapes, 2026-08-mindsdb-minds-platform-unauthenticated-rce, 2026-08-agent-framework-mcp-cve-batch, 2026-08-knaithe-hermes-autonomous-ai-scanning, 2026-07-kiro-mcp-config-self-rewrite-rce]
+sources_added: [forever.security, alignment.openai.com, aepd.es, securitybrief.news, kiro.dev, pypi.org]
+sources_weighted: [zerodayinitiative.com, github.com/advisories, github.com, aws.amazon.com, nvd.nist.gov, vulncheck.com, thehackernews.com, helpnetsecurity.com, securityweek.com, theregister.com, aikido.dev, registry.npmjs.org, cloud.google.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, github-blog-changelog-security-label-404, openai-misalignment-framework-page-403, cloud-google-mandiant-report-landing-truncated, bbc-webfetch-blocked, cybernews-403, scworld-403, vulncheck-per-cve-pages-404-for-3-of-6-vm2, ghsa-3jxw-vj8m-8x77-404]
+```
+
+**Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source, all cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw/CrewAI; frontend incl. Next.js/React/Svelte/Vite; backend/auth/DB incl. FastAPI/Streamlit/Prisma/Supabase/NextAuth/Clerk/better-auth/python-genai). All research direct WebSearch/WebFetch, no subagents. KEV fetched directly (dateAdded ≥ 09-10): Pixel, Cisco ISE/Email, Acronis, ScreenConnect, JFrog ×2, GitLab, MikroTik ×2 — only the tracked GitLab/JFrog in scope. **Seven new; again most came from direct listings, not search:** `github.com/advisories?query=kiro` (nine unreviewed AWS-CNA CVEs; only one tracked), the AWS bulletin index (2026-105/111), the ZDI published-advisories index (CrewAI + MindsDB 0-days — note the index page's ZDI numbers were off by one from the advisory URLs: "707 CrewAI" on the list resolved to `/ZDI-26-706/`; fetch the URL and read the id printed on the page), the `rmcp` recency hits, and the vm2 vendor tab (ten advisories after the one we had). BragJack and the Mandiant case came from THN's front page; OpenAI's reports from HN Algolia. **Accuracy calls:** THN and Help Net described *different* case studies from the same Mandiant report (a real SaaS intrusion vs a red-team exercise) — fetched three outlets and wrote both, labelled; the report landing page itself would not render. CrewAI's advisory tab is empty while the CVE record has nine — LEARNINGS §25. Kiro CVE-2026-89332's fix (0.8.135) is dated 2026-01-14 on the vendor changelog; CVE 2026-09-11 — dated by disclosure, fix date stated. vm2 vendor pages say "No known CVE" for all ten; VulnCheck CVE'd six on 09-17 (three per-CVE pages 404 — cited from the index, flagged as such). **Declined:** Irregular self-retraining (research); Flutter `universal_file_viewer` XCSSET (pub.dev, ~500 downloads, `example/` only); lmdeploy/SGLang/djust/@cyclonedx/@vendure/tinacms (out of audience); Mozilla 0DIN (June, tracked); Grafana MCP, 7nohe, n8n 09-16, OpenClaw 09-11, GemStuffer/tenderlove (all tracked by identifier). **Budget:** watch `dist/llms.txt` after seven new Tier-2 lines. Two sources decayed.
+
 ## 2026-09-16
 
 ```yaml
