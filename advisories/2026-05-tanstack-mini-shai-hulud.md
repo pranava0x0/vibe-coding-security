@@ -2,7 +2,7 @@
 id: 2026-05-tanstack-mini-shai-hulud
 title: "Mini Shai-Hulud wave — TanStack, Mistral, UiPath, OpenSearch (May 2026)"
 date_disclosed: 2026-05-11
-last_updated: 2026-09-24
+last_updated: 2026-09-25
 severity: critical
 status: active
 ecosystems: [npm, pypi]
@@ -105,6 +105,10 @@ SafeDep (2026-09-24) reports that the May wave is **not over on GitHub**: six re
 
 **Do now:** `grep -rn "actions-cool/" .github/workflows/` — any hit by tag is an infection path; pin to a commit SHA you have inspected or remove the action. Search every repository for the two commit markers and for `.claude/settings.json` / `.claude/setup.mjs` / `.vscode/tasks.json` commits authored by `github-actions[bot]` that no workflow of yours writes. Rotate CI tokens for any repository whose workflows ran those actions since 2026-05-18, and treat developer machines that opened an infected checkout in an AI editor as compromised ([if-your-local-ai-agent-was-exploited.md](../playbooks/if-your-local-ai-agent-was-exploited.md)). Pinning actions to SHAs ([prevention/ci-cd-hardening.md](../prevention/ci-cd-hardening.md)) is the control that would have stopped every one of the six.
 
+## Update 2026-09-25 — GitHub disabled both actions-cool repositories a second time, confirming the tags still served the payload after their 09-16 re-enablement
+
+Socket (Karlo Zanki, 2026-09-24; a companion to SafeDep's report above) traced *why* the six repositories were reinfected: **`actions-cool/issues-helper` and `actions-cool/maintain-one-comment`, first disabled 2026-05-19 after the Mini Shai-Hulud compromise, became accessible again on 2026-09-16** (between 09:09 and 16:16 UTC) — and "their release tags were not cleaned up first. They still point to the malicious content introduced on May 18, so any workflow that references either action by a version tag resumed downloading and executing the payload on its next run." GitHub's dependency graph lists **~15,000 dependent repositories** for `issues-helper` alone, and "most affected repositories probably ran the payload within a day of the re-enablement, with no further action needed from the threat actor." **Both repositories were disabled again on 2026-09-25** (they now show "Access to this repository has been disabled by GitHub Staff"). Why they were re-enabled on 09-16 "is currently not known." The takeaway sharpens the one above: **a compromised tagged action stays dangerous for as long as the tag points at the malicious commit — taking the repository offline does not fix it, and bringing it back online re-arms it.** Workflows that pin either action to a full commit SHA of a clean version were never exposed. Status stays `active`.
+
 ## Sources
 - [TanStack — Postmortem: TanStack npm supply-chain compromise](https://tanstack.com/blog/npm-supply-chain-compromise-postmortem)
 - [StepSecurity — TeamPCP's Mini Shai-Hulud Is Back: A Self-Spreading Supply Chain Attack Compromises TanStack npm Packages](https://www.stepsecurity.io/blog/mini-shai-hulud-is-back-a-self-spreading-supply-chain-attack-hits-the-npm-ecosystem)
@@ -137,3 +141,4 @@ SafeDep (2026-09-24) reports that the May wave is **not over on GitHub**: six re
 - [SecurityWeek — CrowdSec Confirms Source Code Stolen in Supply Chain Attack](https://www.securityweek.com/crowdsec-confirms-source-code-stolen-in-supply-chain-attack/) — 2026-09-21; mainstream confirmation citing the statement; the TeamPCP / 84-artifact / 42-package linkage. Fetched 2026-09-21.
 - [VentureBeat — Four AI supply-chain attacks in 50 days exposed the release pipeline red teams aren't covering](https://venturebeat.com/security/supply-chain-incidents-openai-anthropic-meta-release-surface-vendor-questionnaire-matrix)
 - **2026-09-24 update sources** — [SafeDep — Mini Shai-Hulud Is Still Infecting GitHub Repositories](https://safedep.io/mini-shai-hulud-reinfection-github-repositories/) (2026-09-24: the six new infections and their star counts, the 2026-05-18 tag moves on `actions-cool/issues-helper` and `maintain-one-comment`, the scheduled-workflow triggers, the `ghs_` token read from `Runner.Worker`, the five committed files, the `t.m-kosche[.]com` OTel-path exfil host, the wiper trigger, the commit markers, the remediation). Fetched 2026-09-24.
+- **2026-09-25 update source** — [Socket — Re-Enabled GitHub Actions Expose Thousands of Repositories to Mini Shai-Hulud](https://socket.dev/blog/mini-shai-hulud-actions) (Karlo Zanki, 2026-09-24): the 2026-05-19 first disable, the 2026-09-16 re-enablement (tags never cleaned, still pointing at the May 18 payload), the ~15,000 dependent repositories for `issues-helper`, "most affected repositories probably ran the payload within a day of the re-enablement," and the 2026-09-25 second disable. Fetched 2026-09-25; also confirmed via The Hacker News, "Compromised GitHub Actions Came Back Online and Resumed Executing Mini Shai-Hulud Malware," 2026-09-25.
