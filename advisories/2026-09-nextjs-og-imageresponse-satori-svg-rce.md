@@ -2,7 +2,7 @@
 id: 2026-09-nextjs-og-imageresponse-satori-svg-rce
 title: "Next.js 16.2.0–16.3.5: remote code execution in `next/og` ImageResponse (Node.js runtime) through an upstream Satori SVG-escaping bug (CVE-2026-94545, CVSS 9.5) — out-of-band fix 16.3.6 / 15.5.26 on 2026-09-22; any OG-image route that puts request input into SVG text, attributes or styles is the exposure"
 date_disclosed: 2026-09-22
-last_updated: 2026-09-22
+last_updated: 2026-09-25
 severity: critical
 status: patched
 ecosystems: [npm, javascript, nextjs, satori]
@@ -26,6 +26,8 @@ On **2026-09-22** Vercel shipped an out-of-band Next.js security release — **1
 **Why one CVE has two severities.** Satori's bug is markup injection into an SVG string — harmless if the SVG is served as an image to a browser, critical if it is handed to a native rasteriser with its own parsing bugs. Next.js's Node.js `ImageResponse` does the latter (the Edge implementation takes a different path and is not affected). Vercel's wording — "due to vulnerabilities in other upstream dependencies" — does not name the rasteriser, and neither advisory does; this write-up does not guess. The practical reading: **the severity that applies to you is the consumer's (9.5), not the library's (5.3)**, and any other framework that pipes Satori output into a native SVG renderer on the server should be assumed to sit at the higher number until its maintainers say otherwise.
 
 **Why this matters for vibe coders.** A dynamic OG-image route is one of the most common things an AI assistant scaffolds for a Next.js app — `app/api/og/route.tsx` reading `title` and `description` from the query string — and it is by construction an unauthenticated endpoint that renders user input. This is the third Next.js critical in four weeks (AVIF/libheif and the Windows path traversal on 08-25, now this), all in the image path, and the second one caused by a dependency Next.js merely bundles. Version-pinning Next.js and never touching `satori` directly gives no protection: the fix is in the framework release.
+
+**Update 2026-09-25 — Next.js pre-announced a *scheduled* security release for 2026-09-30: nine vulnerabilities (one critical, two high, five medium, one low), to ship as 16.3.7 and 15.5.27.** On 2026-09-23 the Next.js team (Josh Story, Karim Rahal, Sebastian Silbermann) posted advance notice of a **September 30** release addressing "nine vulnerabilities in Next.js: one **critical**, two **high**, five **medium**, and one **low**," with "**16.3.7** and **15.5.27**" published "alongside the full advisories, including impact, affected versions, and upgrade instructions." No affected ranges or CVE ids are given yet; the guidance is "upgrading to a patched version once the release is available." This is distinct from the out-of-band Satori fix above (16.3.6, 09-22). Per this corpus's own rule, a pre-announced count is a **floor** — re-fetch the release post on 09-30 and grep every id, because Next.js has shipped more than the announced number before (the August critical became two after a second `sharp`/`libheif`-class bug surfaced). A future sweep should open [`nextjs.org/blog/upcoming-nextjs-security-release-september-2026`](https://nextjs.org/blog/upcoming-nextjs-security-release-september-2026)'s successor post and the `vercel/next.js` advisory tab on release day.
 
 ## Am I affected?
 
@@ -71,3 +73,4 @@ grep -rn "runtime *= *['\"]edge['\"]" --include=*.ts --include=*.tsx . | grep -v
 - npm registry `time` fields (`npm view next time`, `npm view satori time`, 2026-09-22): `satori@0.33.5` 15:57 UTC, `next@16.3.6` 16:19 UTC, `next@15.5.26` 17:03 UTC; `latest` → 16.3.6, `backport` → 15.5.26.
 - NVD API (`services.nvd.nist.gov`, 2026-09-22): no record for CVE-2026-94545 at the time of writing — the CVSS figures above are the vendors', not NVD's.
 - Related in this corpus: [Next.js July + August 2026 releases](2026-07-nextjs-july-security-release.md) (the AVIF/libheif and Windows criticals of 2026-08-25, and the Astro recurrence) and [Hacktron / OpenAI forum](2026-09-hacktron-openai-forum-sso-codex-account-takeover.md) (the same image-pipeline class in Discourse).
+- **2026-09-25 update source** — [Next.js — Upcoming Next.js September Security Release](https://nextjs.org/blog/upcoming-nextjs-security-release-september-2026) — 2026-09-23 (Josh Story, Karim Rahal, Sebastian Silbermann): the September 30 date, the 9-vulnerability breakdown (1 critical / 2 high / 5 medium / 1 low), and the planned 16.3.7 / 15.5.27 releases. Fetched 2026-09-25; no affected ranges or CVE ids published yet.
