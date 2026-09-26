@@ -142,12 +142,9 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
   `github.com/advisories?query=crewai`, `…?query=kiro`, `…?query=rmcp`, `…?query=vm2`,
   `…?query=docker+sandboxes`, `…?query=sentry`, `…?query=copilot` (LEARNINGS §25).
 - **Advisory-database agent-name queries, every sweep:** `github.com/advisories?query=claude+sort%3Apublished-desc`,
-  `…?query=codex…`, `…?query=cursor…`, `…?query=agent…` — the community tools named after an agent
-  (LEARNINGS §29).
-- **Victim post-mortems, monthly:** `"TanStack" OR "ChainDrop" OR "axios" post-mortem OR "incident report"`
-  — a wave's downstream victims disclose from their own blogs months later (LEARNINGS §29).
-- **Registry `time` fields** settle fix dates no vendor tab records, and whether a "deprecated"
-  package is still being published (LEARNINGS §28).
+  `…?query=codex…`, `…?query=cursor…`, `…?query=agent…` (LEARNINGS §29).
+- **Victim post-mortems, monthly:** `"TanStack" OR "ChainDrop" OR "axios" post-mortem OR "incident report"` (LEARNINGS §29).
+- **Registry `time` fields** settle fix dates and whether a "deprecated" package still ships (LEARNINGS §28).
 - **Per-product advisory tabs (`github.com/<org>/<repo>/security/advisories`, paginate):** Claude Code,
   Cursor, Cline, goose, OpenHands, SWE-agent, aider, Codex, gemini-cli, OpenClaw (11+ pages),
   n8n, Langflow, Flowise, PraisonAI, LiteLLM, LangChain, LangGraph, Semantic Kernel, Coder, MCP
