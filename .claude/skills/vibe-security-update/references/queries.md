@@ -135,7 +135,13 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
   `…?query=type%3Areviewed+ecosystem%3Anpm+severity%3Acritical`, `…ecosystem%3Apip…` — the reviewed
   lists omit CVE-only entries, so run the `mcp` recency list too.
 - **Front pages, fetched before any search:** `thehackernews.com`, `securityweek.com`,
-  `theregister.com/security/` — dated headlines; fetch and cite the article (LEARNINGS §28).
+  `theregister.com/security/` — dated headlines; fetch and cite the article (LEARNINGS §28). The Register's
+  links carry a section prefix (`/security/2026/…`, `/cyber-crime/2026/…`) — match on the full path.
+- **THN weekly roundup (`thehackernews.com/2026/MM/threatsday-….html`), the day it lands:** grep every item
+  against the corpus — it back-fills researcher posts two to four weeks old that never got a story (LEARNINGS §33).
+- **NVD API batch enumeration** for any vendor with a CVE wave:
+  `services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=<product>&pubStartDate=<t_3d>T00:00:00.000&pubEndDate=<today>T23:59:59.000&resultsPerPage=200`
+  — one call returns the whole batch with scores and fix versions; the database listing pages show 25 (LEARNINGS §33).
 - **CERT/CC notes:** `kb.cert.org/vuls/` — CNA for platform-to-coding-agent handoff bugs.
 - **Advisory-database package queries (for products whose own tab is empty):**
   `github.com/advisories?query=crewai`, `…?query=kiro`, `…?query=rmcp`, `…?query=vm2`,
@@ -174,13 +180,15 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
 - **Rapid-reaction / telemetry:** `watchtowr.com`, `horizon3.ai`, `greynoise.io`, `wiz.io`,
   `f5.com/labs`, `blackpointcyber.com`, `okta.com` (AI-token infostealer analysis).
 - **Vendor patch trackers:** `docs.gitlab.com/releases/patches/`, Atlassian, JFrog release notes.
-- **Registry records:** `npm view <pkg> time`, `registry.npmjs.org/<pkg>` (`0.0.1-security` =
+- **Registry records:** `osv.dev/vulnerability/MAL-<year>-<n>` (the OpenSSF malicious-packages record — an
+  independent second source for a registry takedown, often sourced from Amazon Inspector), `npm view <pkg> time`, `registry.npmjs.org/<pkg>` (`0.0.1-security` =
   takedown marker), `pip index versions <pkg>`, PyPI JSON via curl.
 - **Hacker News (Algolia):**
   `hn.algolia.com/api/v1/search_by_date?query=<one term>&tags=story&numericFilters=created_at_i%3E{epoch}`
   — one term per call, `>` URL-encoded.
 - **Roundups that surface primaries:** `adversa.ai/blog`, `labs.cloudsecurityalliance.org`.
-- **Researcher blogs:** 0day.click, cyata.ai, layerxsecurity.com, pillar.security, oasis.security,
+- **Researcher blogs:** remedio.io (VS Code / editor trust boundaries), upguard.com/blog (internet-scale
+  exposure measurements; Supabase/RLS), 0day.click, cyata.ai, layerxsecurity.com, pillar.security, oasis.security,
   tenetsecurity.ai, labs.zenity.io, novee.security, danusminimus.github.io, oddguan.com,
   manifold.security, paddo.dev, embracethered.com, itmeetsot.eu, forever.security, socket.dev,
   stepsecurity.io, aikido.dev, safedep.io, air.security (agent plugin/skill supply chain),
@@ -223,7 +231,9 @@ unreachable.
 - **`vulncheck.com/advisories/<slug>`** — some per-CVE pages 404 while the index lists them; cite the index.
 - **`github.com` via `curl` (cloud session)** — proxy returns a GitHub-API scope error for every path; use the
   read-only `web-fetch` agent with bare URLs (2026-09-22).
-- **`securityweek.com` front page and `/feed/`** — 403 (2026-09-22, 09-24); article pages fetch. **`cnbc.com`, `cbc.ca`,
+- **`securityweek.com` front page and `/feed/`** — 403 (2026-09-22, 09-24, 09-26); article pages fetch.
+- **`techcrunch.com`** — fetches, but a guessed slug 404s silently; find the real URL with a `site:techcrunch.com` search.
+  **`techrepublic.com`** — 403 (2026-09-26). **`cnbc.com`, `cbc.ca`,
   `darkreading.com`** — 403 (2026-09-24). **`theregister.com/<date>/`** day indexes 404 — use `/security/`. **`reuters.com`** — paywall; `devdiscourse.com`
   mirrors the wire. **`marketscreener.com`** — 403; **`technology.org`** — JS wall.
 

@@ -15,6 +15,19 @@
 
 ## Archived entries
 
+## 2026-09-18
+
+```yaml
+queries: {deep: 16, medium: 24, shallow: 10}
+new: [2026-09-plugin4shell-sha-pin-bypass-coding-agent-plugins, 2026-09-sentry-seer-phantomfix-telemetry-to-coding-agent-rce, 2026-09-docker-sandboxes-virtiofs-symlink-host-escape, 2026-09-hacktron-openai-forum-sso-codex-account-takeover, 2026-09-infostealers-target-coding-agent-tokens-mcp-configs-prompt-histories, 2026-09-phantomraven-llm-written-npm-stealer-bug-bounty-operator, 2026-09-weaselbiscuit-npm-chrome-extension-storage-stealer, 2026-09-orkes-conductor-graalvm-workflow-rce-exploited]
+updated: [2026-08-agent-framework-mcp-cve-batch, 2026-07-microsoft-copilot-patch-tuesday-cves]
+sources_added: [air.security, kb.cert.org, hacktron.ai, gendigital.com, research.empiricalsecurity.com, docs.docker.com, developers.googleblog.com, docs.sentry.io]
+sources_weighted: [opensourcemalware.com, crowdstrike.com, vulncheck.com, nvd.nist.gov, github.com/advisories, github.com, thehackernews.com, securityweek.com, theregister.com, helpnetsecurity.com, cybersecuritynews.com, registry.npmjs.org, hn.algolia.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, cybersecuritynews-empty-body-on-fetch-x2, koi-ai-blog-redirects-to-paloalto-product-page, github-advisories-mirror-404-for-discourse-ghsa-vhm9-use-vendor-repo-url, msrc-update-guide-renders-empty-use-nvd-api, sbx-releases-page-summary-gave-wrong-year]
+```
+
+**Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source, all cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw; frontend incl. Next.js/React/Svelte/Vite/Tailwind/shadcn; backend/auth/DB incl. FastAPI/Streamlit/Prisma/Supabase/NextAuth/Clerk/better-auth/Google). All research direct WebSearch/WebFetch, no subagents. KEV fetched directly (dateAdded ≥ 09-10): only two Linux kernel entries new on 09-18 — out of scope. **Eight new; six of them came from fetching the THN / SecurityWeek / Register front pages and the HN Algolia feed directly, not from search queries** (Plugin4Shell, Hacktron, PhantomRaven, WeaselBiscuit, Docker Sandboxes, PhantomFix); Gen Digital's infostealer report (09-08) had been missed by three prior sweeps and surfaced only as a ThreatsDay line item; Orkes came from the SecurityWeek front page. LEARNINGS §28 records the front-page rule. **Accuracy calls:** Air says Google "deprecated" Gemini CLI — the npm registry shows 0.60.0 published 09-15 and nightlies through 09-18, so the advisory says "retired for consumers, still shipping for enterprise" with both sources. The `docker/sbx-releases` page summary returned "September 7, 2025"; NVD/THN say 2026-09-07 — used the CVE record's dating. THN says 13 WeaselBiscuit packages, OSM says 14 — stated both. Sentry Seer is `unconfirmed` (CNA note + researchers, vendor silent), Orkes `active` (exploitation ongoing). Microsoft's September AI-cloud batch was folded into the July Copilot file rather than a new file (same product family). **Declined:** LocalAI 230+ compromised instances (self-hosted inference, out of audience); Brevo ClickFix supply chain (not dev tooling); projen CVE-2026-89065/89066 (AWS bulletin 2026-108, medium/high, local, UI:A — logged, fold into a future dev-tooling batch if one forms); Irregular self-retraining research; "test environment exposed customer data" (not AI); @vendure, Kong, Gyazo. Vendor-tab walk (27 tabs): newest dates unchanged from 09-16 except n8n 09-16 (tracked), Codex tab still 2025-09 while Plugin4Shell shipped only as a release note — a vendor tab is not where Plugin4Shell fixes were recorded for any of the four agents. Budget: `dist/llms.txt` watch after eight new Tier-2 lines.
+
 ## 2026-09-17
 
 ```yaml
