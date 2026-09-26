@@ -227,6 +227,12 @@ python tools/update-alerts-date.py
 
 This updates the `**Last refreshed:**` marker at the top of ALERTS.md to today's date. Run this even if no advisories changed (0 new, 0 updated) — the sweep ran today.
 
+**The script covers ALERTS.md only. Two more hand-maintained dates go stale otherwise (2026-09-25 left both a day behind; LEARNINGS §33):** the repo-root `llms.txt` (`**Last refreshed:** YYYY-MM-DD` and the `## Active threat families (as of YYYY-MM-DD)` heading — add a bullet there when the sweep adds a new pattern) and `README.md` (`**Last full sweep:** YYYY-MM-DD`). `site/build.py` regenerates `dist/llms*.txt` but never touches the root file. Check all three before the gate:
+
+```bash
+grep -l "$(date +%F)" ALERTS.md llms.txt README.md   # must print all three
+```
+
 ### Step 4 — Update source priorities (the learning step)
 
 For each source domain that contributed to a NEW or UPDATED advisory this run:

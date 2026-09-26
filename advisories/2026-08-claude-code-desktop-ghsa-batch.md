@@ -2,11 +2,11 @@
 id: 2026-08-claude-code-desktop-ghsa-batch
 title: "Claude Code / Claude Desktop's own GHSA index: 8 more advisories (Feb–Jun 2026) this repo hadn't tracked"
 date_disclosed: 2026-02-06
-last_updated: 2026-08-06
+last_updated: 2026-09-26
 severity: high
 status: patched
 ecosystems: [claude-code, claude-desktop, anthropic]
-tools_affected: ["Claude Code CLI / Agent SDK", "Claude Desktop for Windows", "Claude Cowork / CoworkVMService"]
+tools_affected: ["Claude Code CLI / Agent SDK", "Claude Desktop for Windows", "Claude Desktop for macOS (Cowork shared folders)", "Claude Cowork / CoworkVMService"]
 tags: [sandbox-escape, privilege-escalation, mitm, data-exfiltration, symlink, directory-junction, command-injection, cve, ghsa, claude-code, claude-desktop]
 ---
 
@@ -87,6 +87,13 @@ Users on Claude Code's standard auto-update have already received all eight fixe
 
 This is the same lesson the Cursor GHSA index audit produced: **a vendor's own GitHub Security Advisories index is a primary source that general security-news queries routinely miss**, especially for CVEs that never get an independent researcher writeup or aggregator pickup. Seven fixed, unremarkable-looking advisories accumulate into a real gap in any tracker (including this one) that leans on search-engine discovery. If you maintain your own AI-tool inventory, add a periodic direct check of each tool's own advisory page — `github.com/<org>/<repo>/security/advisories` — to your process rather than relying solely on news aggregators or CVE feeds, which lag or skip vendor-only disclosures.
 
+
+## Update 2026-09-26 — a new Claude Desktop advisory on the tab (published 2026-09-25): on macOS, Cowork's blocklist of "file types that execute when opened" missed one the OS runs automatically, so an agent in the Cowork sandbox could stage a file that ran commands on the host when the user opened it; a Cowork VM kernel bug made a no-interaction variant possible before June
+
+[GHSA-v234-4jrq-mgg6](https://github.com/anthropics/claude-code/security/advisories/GHSA-v234-4jrq-mgg6) — **High, CVSS 4.0 8.5, no CVE**, affected **Claude Desktop ≥ 1.1.3918 and < 1.15962.0**, fixed **1.15962.0**. The design: Cowork sessions run the agent in a VM and share a folder with the host; to stop the agent from using that folder to run code on the Mac, Claude Desktop keeps a blocklist of file types that execute when opened. On macOS the list "was incomplete and omitted a file type that the operating system executes automatically upon opening," so "a malicious or prompt-injected agent could place such a file in a Cowork folder, and if the user opened it from Claude Desktop, the file would execute commands on the user's Mac." The advisory also discloses that **Claude Desktop before 1.11847.5 (released 2026-06-09) shipped a Cowork VM image whose guest Linux kernel was affected by CVE-2026-43284** (an in-kernel ESP/xfrm bug, NVD 2026-05-08); combined with the file-handling gap, "code with elevated privileges inside the VM could trigger file execution without user interaction." Found internally by Anthropic and independently reported by Vladimir Tokarev (Cyera Research). Auto-updating installs already have both fixes; managed or manual installs need ≥ 1.15962.0.
+
+This is the third Cowork host-boundary advisory in the corpus after [the July sandbox escape](2026-07-claude-cowork-sandbox-escape.md) and [SharedRoot](2026-07-sharedroot-claude-cowork-macos-vm-escape.md), and it follows the same shape as the batch above: the vendor advisory is the only record (no CVE, no blog, no press at sweep time), it appeared on the tab a day before any listing carried it, and the affected range spans months. Status of this file stays `patched`.
+
 ## Sources
 
 - [GitHub — anthropics/claude-code Security Advisories index](https://github.com/anthropics/claude-code/security/advisories)
@@ -102,3 +109,5 @@ This is the same lesson the Cursor GHSA index audit produced: **a vendor's own G
 - [GitHub Advisory Database — CVE-2026-35020 (GHSA-jgg3-qqhf-7rx7)](https://github.com/advisories/GHSA-jgg3-qqhf-7rx7)
 - [SentinelOne — CVE-2026-35020: Claude CLI OS Command Injection Vulnerability](https://www.sentinelone.com/vulnerability-database/cve-2026-35020/)
 - [GitHub — Command Injection via Directory Change Bypasses Write Protection (GHSA-66q4-vfjg-2qhh, CVE-2026-25722)](https://github.com/anthropics/claude-code/security/advisories/GHSA-66q4-vfjg-2qhh)
+
+- **2026-09-26 update source** — [anthropics/claude-code — GHSA-v234-4jrq-mgg6, "Claude Desktop (macOS): opening a malicious file from a Cowork folder could run commands on the host"](https://github.com/anthropics/claude-code/security/advisories/GHSA-v234-4jrq-mgg6) — published 2026-09-25; High, CVSS 4.0 8.5, affected ≥ 1.1.3918 < 1.15962.0, fixed 1.15962.0, the CVE-2026-43284 kernel note and the 1.11847.5 (2026-06-09) kernel fix, credits. Fetched 2026-09-26. [NVD API — CVE-2026-43284](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-43284) confirms the kernel CVE (xfrm/esp in-place decrypt on shared skb frags, published 2026-05-08).

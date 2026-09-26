@@ -41,20 +41,20 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 31,
-   "last_hit": "2026-09-25"
+   "hits": 32,
+   "last_hit": "2026-09-26"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 36,
-   "last_hit": "2026-09-24"
+   "hits": 37,
+   "last_hit": "2026-09-26"
   },
   {
    "domain": "nvd.nist.gov",
    "weight": 20.0,
-   "hits": 56,
-   "last_hit": "2026-09-25"
+   "hits": 57,
+   "last_hit": "2026-09-26"
   },
   {
    "domain": "ox.security",
@@ -65,8 +65,8 @@
   {
    "domain": "safedep.io",
    "weight": 20.0,
-   "hits": 15,
-   "last_hit": "2026-09-25"
+   "hits": 16,
+   "last_hit": "2026-09-26"
   },
   {
    "domain": "securityweek.com",
@@ -95,8 +95,8 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 94,
-   "last_hit": "2026-09-25"
+   "hits": 95,
+   "last_hit": "2026-09-26"
   },
   {
    "domain": "theregister.com",
@@ -147,10 +147,10 @@
    "last_hit": "2026-07-08"
   },
   {
-   "domain": "checkmarx.com",
-   "weight": 17.0,
-   "hits": 7,
-   "last_hit": "2026-09-21"
+   "domain": "vulncheck.com",
+   "weight": 18.0,
+   "hits": 14,
+   "last_hit": "2026-09-26"
   }
  ]
 }

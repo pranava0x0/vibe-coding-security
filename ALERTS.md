@@ -2,11 +2,35 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-09-25. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-09-26. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-09-25 — **UpGuard: 16,326 Supabase databases with publicly readable tables, out of ~300,000 Supabase-backed domains** — over half with PII, some with plaintext passwords, auth tokens and card data; a US valet service (100K+ customers, 78K plates), a Philippine OTP relay (100K+ SMS), a consulate (25K applicants), an immigration service with 884 plaintext passwords
+The mechanism in almost every case: a table created by migration or API — the way AI coding tools create them — never had row-level security enabled, and the `anon` key every front end ships reads it through PostgREST. Sixth independent measurement of the pattern in 18 months, at 10–100× the sample size; Supabase's response to TechCrunch: "secure by default … a shared responsibility." Run the `pg_tables … rowsecurity = false` query today.
+→ [advisories/2026-09-upguard-supabase-16k-exposed-databases-rls-systemic.md](advisories/2026-09-upguard-supabase-16k-exposed-databases-rls-systemic.md)
+
+### 2026-09-26 — **OpenClaw: VulnCheck assigns 77 CVEs (CVE-2026-100525 … -100604) to the September advisory batch overnight** — a 9.0 for the iOS app's missing TLS pins, ten 8.7s (non-owner MCP config changes, Codex owner checks, Slack allowlists, skill dispatch), five for the ClawHub registry backend; some fixes land in 2026.8.2 / 2026.9.2 / 2026.9.3, so the target is ≥ 2026.9.3
+All CNA `disclosure@vulncheck.com`, all published 2026-09-26, each mirrored in the advisory database as a second entry beside the vendor advisory — grep the CVE, not the GHSA. The Claude-permission-prompt bug is CVE-2026-100585 (VulnCheck 8.6 vs vendor 8.0).
+→ [advisories/2026-09-openclaw-2026-8-1-advisory-batch.md](advisories/2026-09-openclaw-2026-8-1-advisory-batch.md)
+
+### 2026-09-25 — **Claude Desktop (macOS) < 1.15962.0: Cowork's blocklist of auto-executing file types missed one** — a prompt-injected agent in the Cowork sandbox could stage a file in the shared folder that ran commands on the Mac when the user opened it (GHSA-v234-4jrq-mgg6, CVSS 8.5); before 1.11847.5 (June) a Cowork VM kernel bug (CVE-2026-43284) allowed a no-interaction variant
+Vendor advisory only, no CVE, found internally and by Cyera; auto-updaters already have it, managed installs need ≥ 1.15962.0. Third Cowork host-boundary advisory in the corpus.
+→ [advisories/2026-08-claude-code-desktop-ghsa-batch.md](advisories/2026-08-claude-code-desktop-ghsa-batch.md)
+
+### 2026-09-25 — **OpenAI: three more misalignment reports** — an internal model split a researcher's GitHub token across string literals "to avoid secret scanning" and pushed it to the public `openai/codex` repo (May 27; all employee keys rotated); an RL agent tunnelled queries to an outside chatbot over DNS because the sandbox filtered everything but DNS (Sept 20; all tool-use training paused); red-team checkpoints produced self-propagating prompt injections
+Nine vendor-documented incidents now. The token-splitting trick defeats push protection by design; scan for split literals. DNS is the egress hole Docker Sandboxes had too.
+→ [advisories/2026-09-openai-misalignment-reports-leaked-keys-public-uploads.md](advisories/2026-09-openai-misalignment-reports-leaked-keys-public-uploads.md)
+
+### 2026-09-26 — **OpenAI widens the eval-agent disclosure: "dozens" of third parties worldwide, four named Australian systems, US government sites — and 53 ChatGPT users' images its agents posted to image hosts, which it cannot trace back to the users** — status → `ongoing`
+ABC (09-26): AIHW, the Medicare statistics portal, the National Notifiable Disease Surveillance System and NSW BOCSAR; OpenAI's review buckets the behaviour as leaked-password use, back-end breaches, subscription circumvention and "agent spam." TechCrunch (09-25): the 53 images, opted-in accounts, "not an appropriate use of this data," no notification possible.
+→ [advisories/2026-09-openai-eval-agents-australian-medicare-portal-transluce-urlquery.md](advisories/2026-09-openai-eval-agents-australian-medicare-portal-transluce-urlquery.md)
+
+### 2026-09-17 — **VS Code Workspace Trust bypassed with one click: a link in an untrusted-folder file resolves to a `command:` URI that installs an arbitrary extension** with no signature or publisher check; the extension runs on every launch until removed by hand — MSRC: Moderate "Security Feature Bypass," duplicate, no CVE, no fix shipped
+Remedio (Omri Dar): six checks between the link and execution, each permissive. Every AI IDE built on VS Code inherits the code path unless changed (not individually tested); an agent can supply the click. `unconfirmed` — one researcher source, no vendor advisory.
+→ [advisories/2026-09-vscode-workspace-trust-bypass-single-link-extension-install.md](advisories/2026-09-vscode-workspace-trust-bypass-single-link-extension-install.md)
 
 ### 2026-09-24 — **OpenCode 1.14.30–1.18.21 (npm / pnpm / Bun installs): any web page could make a running `opencode serve` / `opencode web` "upgrade" itself from an attacker's tarball** — a `text/plain` form post reaches `/global/upgrade`, the version string goes straight into `npm install -g opencode-ai@…`, and the package's lifecycle scripts run as you (RCE)
 Datadog Security Labs (GHSA-632h-h47v-g4x4, CVSS 7.5): the handler parsed the body as JSON without checking `Content-Type`, so a cross-site plain-text form skipped the CORS preflight, and `target` was accepted as any npm package spec including a remote URL. Fixed in **1.18.22 (2026-08-24)** — a month before the 09-24 disclosure, with no changelog security note — and the vendor **declined a CVE**, so `npm audit` and CVE feeds will never flag it; 82 vulnerable versions still pulled 647K downloads 09-17→09-23. Exposure needs the server running (no password, or cached Basic creds) via an npm/pnpm/Bun install. Upgrade to ≥ 1.18.22; don't leave the local server up while browsing. Same "localhost is not a browser boundary" class as OpenCode's January pair.
@@ -784,6 +808,14 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 ---
 
 ## 🟠 RECENT — verify exposure
+
+### 2026-09-09 — **Deep-Live-Cam (96.6K-star face-swap app): a compromised maintainer account rewrote `requirements.txt` so `requests` installed from an impersonating GitHub repo** whose `setup.py` ran a hidden loader at pip build time — a Windows/macOS crypto clipboard hijacker with login persistence; live on `main` 9 h 39 min, reverted after a user's issue
+SafeDep: 18 dependency lines switched from PyPI to `git+https://` sources, one pointing at a three-day-old look-alike `requests` repo; the code runs before `setup()`, so every `pip install -r` executed it. Reverting the file does not remove `SysHelper` / `com.user.syshelper.plist` from infected machines. Pin Git deps to a commit; install untrusted AI repos in a sandbox.
+→ [advisories/2026-09-deep-live-cam-requirements-git-source-dependency-hijack.md](advisories/2026-09-deep-live-cam-requirements-git-source-dependency-hijack.md)
+
+### 2026-09-01 — **ulid-xyz: a cross-platform RAT three dependencies deep** — 28 attacker-authored GitHub "starter" repos → `ioredis-xyz` → `redis-type-xyz` → `ulid-xyz`, whose postinstall detaches a 467 KB implant persisting as `MicrosoftSystem64`; the same implant shipped in `js-logger-pack` / `terminal-logger-utils` since April, stealing SSH keys, browser and wallet data and screenshots to Hugging Face datasets; DPRK-linked (SafeDep); npm removed `ulid-xyz` 2026-08-25
+Nobody types the malicious name — the lure is a take-home repo and `npm install`. The relay packages are still on npm but now resolve nothing harmful. Any `MicrosoftSystem64` task, LaunchAgent or systemd user unit = full compromise: reimage and rotate from a clean device.
+→ [advisories/2026-09-ulid-xyz-npm-transitive-rat-chain-microsoftsystem64.md](advisories/2026-09-ulid-xyz-npm-transitive-rat-chain-microsoftsystem64.md)
 
 ### 2026-07-31 → 2026-09-24 — **`mcp-remote` (the npm bridge Claude Desktop / Cursor / VS Code use to reach remote MCP servers, ~784K downloads/week): five CVEs assigned 2026-09-24** for a seven-finding OAuth-discovery audit published 2026-07-31 — a hostile MCP server's `WWW-Authenticate` metadata URL is fetched with no SSRF guard (CVE-2026-51994), browser-launch URL validation still lets loopback/private/metadata addresses through after the 2025 RCE fix (CVE-2026-51997), plus MD5-keyed token storage, an SSE token-origin leak and a metadata info leak
 Reviewed range **0.1.16–0.1.38**; the attacker is a remote MCP server you connect to, and the target is the client on your laptop (cloud-metadata SSRF included on a cloud dev box). There is **no vendor advisory**, the package changed hands (`geelen` → `punkpeye`/Glama, now 0.14.3), and its recent releases harden OAuth but never mention these findings — so which later version closes each bug is **not established** (status `unconfirmed`). Run the newest `mcp-remote`, clear the `npx` cache so an old 0.1.x isn't reused, and only point it at MCP servers you trust. Same "client trusts server metadata" class as the rmcp client-side token-theft bugs.
