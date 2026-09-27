@@ -2,7 +2,7 @@
 id: 2026-04-litellm-sql-injection
 title: "LiteLLM proxy pre-auth SQL injection — CVE-2026-42208 (April 2026, CISA KEV) + CVE-2026-42271 (June 2026, actively exploited)"
 date_disclosed: 2026-04-24
-last_updated: 2026-09-15
+last_updated: 2026-09-27
 severity: critical
 status: patched
 ecosystems: [pypi, ai-agents, llm-proxy, mcp]
@@ -124,6 +124,12 @@ Both from `BerriAI/litellm`'s own advisory tab; neither had press coverage and n
 
 Neither changes the version guidance above (≥ 1.84.0 for the KEV items; take the latest release, which covers all of these).
 
+## September 2026 update — CVE-2026-89032: a semantic-cache tenant-isolation bypass (CVSS 8.7) let one virtual key read other tenants' cached responses and replay their tool calls; fixed in 1.101.0-rc.1 (2026-09-06), CVE published 2026-09-25
+
+Found through the NVD keyword query, not the vendor tab (which still ends at 2026-08-26). **[CVE-2026-89032](https://github.com/advisories?query=CVE-2026-89032)** (CNA VulnCheck, published 2026-09-25, CVSS 4.0 **8.7**, GHSA-237m-2qxv-ww7c — an *unreviewed* database entry with no detail; the NVD record carries the description): LiteLLM before **1.101.0-rc.1** "contains a tenant isolation bypass vulnerability in the semantic cache layer that allows authenticated users to read other tenants' cached responses by exploiting a metadata key mismatch between `_get_semantic_cache_tenant_scope()` and `_get_metadata_variable_name()`." A caller holding any valid virtual key "can submit semantically similar prompts on affected routes such as `/v1/responses` and `/bedrock/*` to retrieve cached responses containing other tenants' personally identifiable information, financial data, or source code" — and, the part that matters for agent builders, "can cause agentic front-ends to auto-execute attacker-supplied tool calls under victim credentials by returning cached `function_call` or `tool_calls` payloads to a different principal." The cache is a second prompt-injection channel: whatever tool call one tenant's model emitted can be served to another tenant's agent as if its own model had asked for it.
+
+Fix: commit `16db51e` / PR #39590, released as **1.101.0-rc.1** — PyPI shows `1.101.0rc1` uploaded **2026-09-06** and `1.101.0` on **2026-09-14**, nineteen days before the CVE; latest is 1.102.1 (checked 2026-09-27). Upgrade to **≥ 1.101.0**. If semantic caching is enabled on a multi-tenant proxy, a conservative step is to clear the semantic cache on upgrade, and any agent front end that executes `tool_calls` from a proxy response should verify they belong to the current session rather than executing them because they arrived. The version guidance above still holds: take the latest release.
+
 ## Sources
 - [GitHub Advisory — GHSA / NVD CVE-2026-42208](https://nvd.nist.gov/vuln/detail/CVE-2026-42208) — canonical CVE record.
 - [GitHub Advisory Database — GHSA-6wvf-77m9-58rm (CVE-2026-37004)](https://github.com/advisories/GHSA-6wvf-77m9-58rm) — fetched 2026-09-12: `/prompts/test` unsandboxed-jinja2 SSTI, CVSS 9.8, affected < 1.83.7, fixed 1.83.7, commit `d910a95`, published 2026-08-27.
@@ -151,3 +157,4 @@ Neither changes the version guidance above (≥ 1.84.0 for the KEV items; take t
 - [LiteLLM — GHSA-3cv6-jpf6-8222: Authenticated SSRF and provider-credential exfiltration via unvalidated request-body routing parameters (CVE-2026-84377)](https://github.com/BerriAI/litellm/security/advisories/GHSA-3cv6-jpf6-8222) — CVSS 6.5, < 1.94.0, the backport list, the `allow_client_side_credentials` guidance.
 - [LiteLLM — GHSA-hx8v-g79f-8w5f: Server-side request forgery via the `user_config` request parameter (CVE-2026-59823)](https://github.com/BerriAI/litellm/security/advisories/GHSA-hx8v-g79f-8w5f) — CVSS 5.3, ≤ 1.83.8 → 1.83.9 (released 2026-04-17), the `user_config` nesting bypass.
 - [LiteLLM security advisories index](https://github.com/BerriAI/litellm/security/advisories) — newest entries 2026-08-26.
+- [NVD API — CVE-2026-89032](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-89032) — fetched 2026-09-27: CNA `disclosure@vulncheck.com`, published 2026-09-25, CVSS 4.0 8.7, the description quoted above, references to commit `16db51e2`, PR #39590, the `v1.101.0-rc.1` release and VulnCheck's advisory. [GitHub Advisory Database — CVE-2026-89032](https://github.com/advisories?query=CVE-2026-89032) — fetched 2026-09-27: GHSA-237m-2qxv-ww7c, unreviewed, High, before 1.101.0-rc.1. Registry check 2026-09-27: PyPI `litellm` — `1.101.0rc1` 2026-09-06, `1.101.0` 2026-09-14, latest 1.102.1. The VulnCheck advisory page and the vendor release notes were not opened this sweep.

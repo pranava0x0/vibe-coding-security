@@ -2,9 +2,9 @@
 id: 2026-04-flowise-rce-cluster
 title: "Flowise RCE cluster — CVE-2025-59528 actively exploited + April 2026 Agent-node cluster (CVE-2026-41265 et al.)"
 date_disclosed: 2026-04-07
-last_updated: 2026-09-16
+last_updated: 2026-09-27
 severity: critical
-status: patched
+status: ongoing
 ecosystems: [npm, ai-agents, llm-workflow]
 tools_affected: [flowise, flowiseai]
 tags: [cve, rce, prompt-injection, ai-agent-framework, active-exploitation, decorator-as-documentation]
@@ -92,12 +92,23 @@ The rest of the wave (VulnCheck, published 2026-09-12/15, all fixed 3.1.4) is a 
 
 **The load-bearing caveat: the FlowiseAI/Flowise repository shows as archived on 2026-08-13** (noted in advisory GHSA-9gvv-qjj3-2p6g), and npm carries no release past **3.1.4** (2026-07-29). So while VulnCheck marks this whole batch "fixed in 3.1.4," Flowise is effectively **unmaintained** — CVE-2026-52098's fix version is not stated, and no future CVE here will get a patch. Treat exposure as the only control you still own: **get Flowise off the public internet, require auth in front of it, and disable the Custom MCP node** if you cannot migrate off the platform. This is the same advice as the original entry, now with no vendor backstop behind it.
 
+## Update — 2026-09-26: six more CVEs against "through 3.1.4" — two CVSS 9.2 SSO authentication bypasses — with no patched version, on a repository archived since August; status → `ongoing`
+
+VulnCheck published **six more Flowise CVEs on 2026-09-26**, all affecting **Flowise through 3.1.4** — the version the September wave above called fixed — and all with **no patched version** ("At the time of the advisory no patched version was available," CVE-2026-100606). The registry check this sweep shows why: `npm view flowise time` still ends at **3.1.4 (2026-07-29)**, and the repository remains archived. Two are Critical, and both are in the SSO login path that enterprise/platform-mode deployments use:
+
+- **[CVE-2026-100606](https://github.com/advisories/GHSA-mgrx-3hqw-485h) (CVSS 4.0 9.2, GHSA-mgrx-3hqw-485h; vendor GHSA-vf3j-89vf-r697) — invitation takeover through SSO.** When an SSO callback arrives for an email whose user status is `INVITED`, `verifyAndLogin` copies the database user record — **including the server-stored single-use invitation `tempToken`** — into the data handed to `AccountService.register()`, so the register handler's token lookup, email match and expiry checks "pass trivially against the server's own token instead of a caller-supplied one." Anyone who can authenticate at *any* configured SSO provider with a pending invitee's email as the claim takes over the invitation and the organization membership, for the invitation's validity window (24 hours by default), without ever seeing the emailed token.
+- **[CVE-2026-100607](https://github.com/advisories/GHSA-mjgh-prrr-9qw5) (CVSS 4.0 9.2, GHSA-mjgh-prrr-9qw5; vendor GHSA-cffm-583c-vffr) — any existing account, by email.** Flowise "resolves SSO and local-password users solely by email without storing provider or subject identifier bindings," so an attacker who can claim a victim's email at any configured SSO provider — or through a different provider or local password than the victim registered with — is logged in as the victim, with "chatflows, credentials, and API keys."
+- **The other four (High, all "through 3.1.4", all unpatched):** CVE-2026-100608 (8.7) — the BullMQ admin dashboard has no authorization when the server runs in queue mode with the dashboard enabled outside cloud mode; CVE-2026-100610 (7.7) — `GET /api/v1/upsert-history/:id` and `PATCH /api/v1/upsert-history` have no route-level permission check and no workspace scoping; CVE-2026-100609 (7.6) — credentials are looked up by ID without filtering on the requester's workspace (cross-workspace credential read); CVE-2026-100605 (7.5) — low-privileged API keys can read and delete chat history.
+
+**Status changes from `patched` to `ongoing`.** Until now every Flowise CVE here had a fix version; these do not, and the project has no maintainer to ship one. If you still run Flowise: **the SSO bugs mean an account is only as strong as the weakest identity provider configured** — reduce to a single IdP you control, disable local-password login where SSO is on, cancel every pending invitation (`INVITED` users) and re-issue them one at a time when the invitee is ready to accept, and confirm the BullMQ dashboard is not reachable (`/admin/queues`-style paths behind the proxy). Put the whole instance behind reverse-proxy authentication, keep the Custom MCP node disabled, and plan the migration — the September advice, with two 9.2s now behind it.
+
 ## Sources
 - [GitHub Security Advisory GHSA-vcwp-f9rq-3887 — CVE-2026-91931 Flowise Custom MCP npx RCE](https://github.com/FlowiseAI/Flowise/security/advisories/GHSA-vcwp-f9rq-3887) — fetched 2026-09-16; CVSS 9.0, fixed 3.1.4, `npx`-package execution PoC.
 - [GitHub Security Advisory GHSA-x7x8-95gh-42xm — CVE-2026-91932 Flowise Custom MCP `cwd` bypass RCE](https://github.com/FlowiseAI/Flowise/security/advisories/GHSA-x7x8-95gh-42xm) — fetched 2026-09-16; CVSS 9.0, fixed 3.1.4, unvalidated `cwd` parameter.
 - [NVD — CVE-2026-52098](https://nvd.nist.gov/vuln/detail/CVE-2026-52098) — fetched 2026-09-16 via the NVD API; MITRE CNA, CVSS 9.8, RCE via `/api/v1/prediction/<flowId>` in 3.1.2.
 - [VulnCheck — Flowise before 3.1.4 remote code execution via Custom MCP npx](https://www.vulncheck.com/advisories/flowise-before-3.1.4-remote-code-execution-via-custom-mcp-npx) — fetched 2026-09-16; CNA record for CVE-2026-91931 and the wider 3.1.4 batch.
 - Registry check (2026-09-16): `npm view flowise time` — latest release `3.1.4` (2026-07-29), no `3.1.5`; repository archived 2026-08-13 per GHSA-9gvv-qjj3-2p6g.
+- **2026-09-27 update sources** — [GHSA-mgrx-3hqw-485h / CVE-2026-100606](https://github.com/advisories/GHSA-mgrx-3hqw-485h) and [GHSA-mjgh-prrr-9qw5 / CVE-2026-100607](https://github.com/advisories/GHSA-mjgh-prrr-9qw5) — fetched 2026-09-27: CVSS 4.0 9.2 each, "through 3.1.4", no patched version, the `verifyAndLogin` / email-only resolution mechanisms verbatim; CNA VulnCheck. [NVD API — CVE-2026-100605, -100606, -100607, -100608, -100609, -100610](https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=flowise&pubStartDate=2026-09-24T00:00:00.000&pubEndDate=2026-09-27T23:59:59.999) — fetched 2026-09-27: all six published 2026-09-26 with the scores quoted above. [GitHub Advisory Database — `flowise` query](https://github.com/advisories?query=flowise+sort%3Apublished-desc) — fetched 2026-09-27: six entries dated Sep 26 above the 09-15 wave. Registry check 2026-09-27: `npm view flowise time` — last release `3.1.4` (2026-07-29). The FlowiseAI/Flowise vendor advisories referenced by the database (GHSA-vf3j-89vf-r697, GHSA-cffm-583c-vffr) were not opened this sweep.
 
 ## Sources — original April 2026 cluster
 - [GitHub Security Advisory GHSA-3gcm-f6qx-ff7p — CVE-2026-41265 Flowise Airtable Agent RCE](https://github.com/FlowiseAI/Flowise/security/advisories/GHSA-3gcm-f6qx-ff7p) — vendor advisory.
@@ -114,3 +125,4 @@ The rest of the wave (VulnCheck, published 2026-09-12/15, all fixed 3.1.4) is a 
 - [Tech Jack Solutions — Flowise (FlowiseAI) Vulnerability Rollup (2026-04-07)](https://techjacksolutions.com/scc-vendor-rollup/flowise-flowiseai-vulnerability-rollup-2026-04-07/) — vendor-rollup index.
 - [Feedly — Latest Flowiseai Vulnerabilities](https://feedly.com/cve/vendors/flowiseai) — CVE tracker.
 - [Threat Intelligence Network — CVE-2026-41265](https://cve.threatint.eu/CVE/CVE-2026-41265) — CVE detail.
+

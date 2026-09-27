@@ -41,20 +41,20 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 32,
-   "last_hit": "2026-09-26"
+   "hits": 33,
+   "last_hit": "2026-09-27"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 37,
-   "last_hit": "2026-09-26"
+   "hits": 38,
+   "last_hit": "2026-09-27"
   },
   {
    "domain": "nvd.nist.gov",
    "weight": 20.0,
-   "hits": 57,
-   "last_hit": "2026-09-26"
+   "hits": 58,
+   "last_hit": "2026-09-27"
   },
   {
    "domain": "ox.security",
@@ -129,6 +129,12 @@
    "last_hit": "2026-09-24"
   },
   {
+   "domain": "vulncheck.com",
+   "weight": 19.0,
+   "hits": 15,
+   "last_hit": "2026-09-27"
+  },
+  {
    "domain": "blog.rust-lang.org",
    "weight": 18.0,
    "hits": 5,
@@ -145,12 +151,6 @@
    "weight": 18.0,
    "hits": 7,
    "last_hit": "2026-07-08"
-  },
-  {
-   "domain": "vulncheck.com",
-   "weight": 18.0,
-   "hits": 14,
-   "last_hit": "2026-09-26"
   }
  ]
 }

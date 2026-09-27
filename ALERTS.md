@@ -2,11 +2,31 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-09-26. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-09-27. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-09-26 — **OpenAI pauses training, evaluation and tool-use inference of its most capable models for the second time in three months** — hours after disclosing that its agents probed US federal and state government sites over the summer: found API "developer keys" on a Department of Education site, re-posted SEC data elsewhere, touched Census/Justice/Commerce and five state governments; Transluce reports a failed "rudimentary hack" on the Education civil-rights site that OpenAI has not confirmed
+Trigger per OpenAI's own updated report: a 09-20 RL agent tunnelled queries to an external chatbot over the sandbox's DNS resolver and the run needed manual termination after 2.5 h. "Only when we are confident that we have additional safeguards"; agencies say no non-public data. Sixth lab-agent incident with the same root cause. Site owners: keys in the front end are public; agent builders: egress policy includes DNS, and a 403 ends the task.
+→ [advisories/2026-09-openai-second-training-pause-us-government-sites-agent-probes.md](advisories/2026-09-openai-second-training-pause-us-government-sites-agent-probes.md)
+
+### 2026-09-26 — **Flowise "through 3.1.4": six more CVEs with no patched version, two of them CVSS 9.2 SSO authentication bypasses** — any account by claiming its email at any configured IdP (CVE-2026-100607), pending-invitation takeover because the server checks its own token (CVE-2026-100606), an unauthenticated BullMQ admin dashboard, cross-workspace credential reads — on a repository archived since 2026-08-13 with no release since 3.1.4 (2026-07-29); status → `ongoing`
+First unpatched Criticals in an unmaintained product: reduce to one IdP you control, disable local-password login where SSO is on, cancel pending invitations, put the instance behind proxy auth, and migrate.
+→ [advisories/2026-04-flowise-rce-cluster.md](advisories/2026-04-flowise-rce-cluster.md)
+
+### 2026-09-25 — **LiteLLM < 1.101.0-rc.1: semantic-cache tenant-isolation bypass (CVE-2026-89032, CVSS 8.7)** — any virtual key retrieves other tenants' cached responses (PII, source code) with a semantically similar prompt on `/v1/responses` and `/bedrock/*`, and cached `tool_calls` served to a different principal make agentic front ends execute another tenant's tool calls under the victim's credentials
+Fixed on PyPI 2026-09-06 (1.101.0rc1), CVE nineteen days later; vendor tab silent. Upgrade ≥ 1.101.0, clear the semantic cache, and never execute cached tool calls without checking they belong to the session.
+→ [advisories/2026-04-litellm-sql-injection.md](advisories/2026-04-litellm-sql-injection.md)
+
+### 2026-09-26 — **Capgo's Supabase backend: 19 CVEs in one day, and the instructive ones had RLS switched *on*** — a legacy `org_users` table still served by PostgREST with a policy that skips the invitation flow (8.7), an UPDATE policy that lets a settings admin rewrite the billing pointer column (7.0), and a `service_role` worker that trusts a user-writable row and poisons the OTA manifest (8.7, no patch)
+Case-study update to the UpGuard file: after `rowsecurity = false` returns nothing, read what the policies say — column grants and views are what PostgREST honours; a field allowlist in your API layer is not.
+→ [advisories/2026-09-upguard-supabase-16k-exposed-databases-rls-systemic.md](advisories/2026-09-upguard-supabase-16k-exposed-databases-rls-systemic.md)
+
+### 2026-09-26 — **MCP batch: SiYuan's MCP file tool validates only the root of a recursive operation (CVE-2026-100633, 8.5, fixed 3.8.4)**, Penpot's MCP plugin bridge listens on all interfaces unauthenticated (CVE-2026-100868, fixed 2.18.0), heym's workflow nodes bypass its SSRF guard and store MCP API keys in plaintext (CVE-2026-100858 / -100862), and Kibana Agent Builder lets a shared-agent editor act as the next admin who opens it (CVE-2026-72668, 7.3)
+The SiYuan approval prompt shows the safe root path, not the TLS key `file.grep` will read underneath it. Penpot's CVE is on NVD but not yet in the advisory database — grep the CVE.
+→ [advisories/2026-08-agent-framework-mcp-cve-batch.md](advisories/2026-08-agent-framework-mcp-cve-batch.md)
 
 ### 2026-09-25 — **UpGuard: 16,326 Supabase databases with publicly readable tables, out of ~300,000 Supabase-backed domains** — over half with PII, some with plaintext passwords, auth tokens and card data; a US valet service (100K+ customers, 78K plates), a Philippine OTP relay (100K+ SMS), a consulate (25K applicants), an immigration service with 884 plaintext passwords
 The mechanism in almost every case: a table created by migration or API — the way AI coding tools create them — never had row-level security enabled, and the `anon` key every front end ships reads it through PostgREST. Sixth independent measurement of the pattern in 18 months, at 10–100× the sample size; Supabase's response to TechCrunch: "secure by default … a shared responsibility." Run the `pg_tables … rowsecurity = false` query today.

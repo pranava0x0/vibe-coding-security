@@ -2,7 +2,7 @@
 id: 2026-09-upguard-supabase-16k-exposed-databases-rls-systemic
 title: "UpGuard finds 16,326 Supabase databases with publicly readable tables across ~300,000 Supabase-backed domains — more than half carry PII, some carry plaintext passwords, auth tokens and card data; the mechanism in almost every case is a table created by migration or API with row-level security never enabled (2026-09-25)"
 date_disclosed: 2026-09-25
-last_updated: 2026-09-26
+last_updated: 2026-09-27
 severity: high
 status: ongoing
 ecosystems: [supabase, lovable, bolt, v0, replit, postgres]
@@ -63,9 +63,32 @@ A JSON array with a row in it is the exposure UpGuard measured. Also grep your r
 - **Keep `service_role` server-side only** → [prevention/credential-hygiene.md](../prevention/credential-hygiene.md).
 - Related pattern file, updated with each measurement: [ongoing-vibe-platform-exposure.md](ongoing-vibe-platform-exposure.md).
 
+## Update 2026-09-27 — a live case study with CVE numbers: Capgo's Supabase backend received 19 CVEs on 2026-09-26, and several are RLS policies that were *on* and still wrong
+
+This file is about tables with RLS off. The day after it was written, VulnCheck published **19 CVEs against Capgo** (capgo.app, an over-the-air update platform for Capacitor apps whose backend is Supabase — PostgREST, Edge Functions and a `service_role` worker), following five on 2026-09-10 (including CVE-2026-88864, Critical: the `public.sso_providers` table without write restriction). Capgo is a SaaS vendor's own backend, not a vibe-coded app, and is logged here rather than filed separately — but three of the entries are the precise failure this file's "enable RLS" advice does not by itself prevent, and every Supabase-backed app built by an assistant has the same three seams:
+
+- **A legacy table left in `public` is served, policies and all.** [CVE-2026-100623](https://github.com/advisories/GHSA-9x83-rrg6-9pr9) (CVSS 8.7): the old membership table `public.org_users` "is directly exposed via Supabase PostgREST," and its RLS policies let an organization admin insert or update membership rows directly, "bypassing the invitation and role-assignment workflow entirely" — the invitation flow the API enforced never existed at the table.
+- **A row-level policy is not a column-level one.** [CVE-2026-100616](https://github.com/advisories/GHSA-455x-98vm-63r8) (CVSS 7.0): the UPDATE policy on `public.orgs` lets an admin with `org.update_settings` "update the entire row, including the internal billing pointer column `customer_id`"; the official endpoint restricted editable fields, but a direct PostgREST `PATCH` is not the endpoint, so an admin without `org.update_billing` can null or corrupt the Stripe pointer and move the org to unpaid/no-plan behaviour.
+- **A `service_role` worker that trusts user-writable rows is an RLS bypass by construction.** [CVE-2026-100619](https://github.com/advisories/GHSA-xj78-q428-xww2) (CVSS 8.7): a RESTRICTIVE policy blocks direct inserts into `public.manifest`, but the async `on_version_update` worker "trusts the manifest record contents and uses a service-role Supabase client to insert attacker-controlled `file_name`, `file_hash`, and `s3_path` values into `public.manifest`" from a version row the attacker could edit — OTA manifest poisoning served to every client on the channel. "No patch was available at publication."
+
+**What to add to the checks above.** After `rowsecurity = false` returns nothing, look at what the policies *say*: any UPDATE policy without a column restriction on a table that holds a billing, role or owner column; any table you stopped using but never dropped; and any Edge Function or worker that reads a user-writable table with the `service_role` key and writes on the strength of what it read. Column grants (`revoke update (customer_id) on public.orgs from authenticated;`) and views are the tools PostgREST honours; a field allowlist in your API layer is not.
+
+```sql
+-- UPDATE policies on tables that carry ownership/billing/role columns
+select p.tablename, p.policyname, p.cmd, p.qual, p.with_check
+from pg_policies p join information_schema.columns c
+  on c.table_schema = p.schemaname and c.table_name = p.tablename
+where p.schemaname = 'public' and p.cmd in ('UPDATE','ALL')
+  and c.column_name ~ '(customer|owner|role|plan|billing|admin)';
+-- Tables in public with no rows written in the last 90 days but still granted to anon/authenticated
+select relname, n_tup_ins, n_tup_upd from pg_stat_user_tables where schemaname = 'public' order by n_tup_upd asc limit 20;
+```
+
 ## Sources
 - [UpGuard — Everything, Everywhere: Systemic Data Exposure in Supabase Apps](https://www.upguard.com/blog/everything-everywhere-systemic-data-exposure-in-supabase-apps) — primary, 2026-09-25 (Greg Pollock): the ~300,000-domain corpus, the BuiltWith + Chrome UX Report method, the `users`-table probe, the 16,326 figure, the PII / password / card breakdown, the five case studies, the prior-research table, the Table-Editor-vs-API RLS default. Fetched 2026-09-26.
 - [TechCrunch — Some Supabase customers are publicly exposing reams of people's data to the web](https://techcrunch.com/2026/09/25/some-supabase-customers-are-publicly-exposing-reams-of-peoples-data-to-the-web/) — 2026-09-25 (Zack Whittaker): independent write-up with Supabase CISO Bil Harmer's statement quoted verbatim, the valet / adult-site / consulate / SIM-farm examples, the $10 B valuation context. Fetched 2026-09-26.
 - [Unite.AI — UpGuard Study Finds 16,326 Supabase Databases Exposing Readable Tables](https://www.unite.ai/upguard-study-finds-16-326-supabase-databases-exposing-readable-tables/) — 2026-09-25: restates the report's methodology and counts; used to cross-check the numbers above, not as an independent source. Fetched 2026-09-26.
 - Not fetched: Cybernews and other syndications (403 / paraphrase only). No Supabase blog post on the study existed at sweep time; the vendor statement is as carried by TechCrunch.
 - Related in this corpus: [ongoing-vibe-platform-exposure](ongoing-vibe-platform-exposure.md) (the pattern file; Lovable CVE-2025-48757, Base44, Red Access), [Supabase Realtime presence / broadcast bypasses](2026-06-supabase-realtime-presence-read-rls-bypass.md) (the RLS-bypass sibling on the realtime path).
+
+- **2026-09-27 update sources** — [GHSA-9x83-rrg6-9pr9 / CVE-2026-100623](https://github.com/advisories/GHSA-9x83-rrg6-9pr9), [GHSA-455x-98vm-63r8 / CVE-2026-100616](https://github.com/advisories/GHSA-455x-98vm-63r8) and [GHSA-xj78-q428-xww2 / CVE-2026-100619](https://github.com/advisories/GHSA-xj78-q428-xww2) — fetched 2026-09-27: the `org_users` / `orgs` / `manifest` descriptions quoted above, CVSS 8.7 / 7.0 / 8.7, published 2026-09-26, "no patch was available at publication" for the manifest bug. [GitHub Advisory Database — `capgo` query](https://github.com/advisories?query=capgo+sort%3Apublished-desc) — fetched 2026-09-27: 19 entries dated Sep 26, five dated Sep 10 (incl. GHSA-g597-pqh2-2fw7 / CVE-2026-88864, Critical, `public.sso_providers`), one from July. [NVD API — `supabase` keyword, 2026-09-24 → 09-27](https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=supabase&pubStartDate=2026-09-24T00:00:00.000&pubEndDate=2026-09-27T23:59:59.999) — fetched 2026-09-27: six Capgo CVEs naming Supabase/PostgREST (CVE-2026-100616, -100618, -100619, -100621, -100623, -100627), CNA VulnCheck.
