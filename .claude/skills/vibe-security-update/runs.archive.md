@@ -15,6 +15,19 @@
 
 ## Archived entries
 
+## 2026-09-20
+
+```yaml
+queries: {deep: 16, medium: 26, shallow: 10}
+new: [2026-09-codex-heapjack-overpatch-sandbox-escapes, 2026-09-google-gemini-irregular-eval-real-company-breach]
+updated: [2026-05-tanstack-mini-shai-hulud, 2026-09-hacktron-openai-forum-sso-codex-account-takeover, 2026-08-agent-framework-mcp-cve-batch, 2026-08-vm2-isolated-vm-sandbox-escapes, 2026-09-coder-registry-cloudflare-terraform-supply-chain, 2026-09-gitspawn-git-config-agent-rce-cluster, 2026-08-meta-irregular-eval-containment-failure]
+sources_added: [irregular.com, crowdsec.net]
+sources_weighted: [accomplish.ai, bleepingcomputer.com, thehackernews.com, cyberinsider.com, gbhackers.com, theregister.com, securityweek.com, github.com/advisories, github.com, registry.npmjs.org]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, wsj-webfetch-blocked, openai-third-party-cyber-evals-page-403, nvd-web-page-renders-home-use-api-or-ghsa]
+```
+
+**Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source, all cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw/Codex; frontend incl. Next.js/React/Svelte/SvelteKit/Vite/Astro/Tailwind/shadcn; backend/auth/DB incl. FastAPI/Streamlit/Prisma/Supabase/NextAuth/Clerk/better-auth/python-genai). No sweep ran on 09-19. All research direct WebSearch/WebFetch, no subagents. KEV fetched directly (dateAdded ≥ 09-13): three Linux kernel entries on 09-18, Pixel/Cisco ISE/Acronis 09-16 — nothing in scope. **Two new**, neither from a search query: Codex Heapjack/Overpatch came from the HN Algolia feed (BleepingComputer, 09-20) and the researcher's blog (09-15); Gemini/Irregular from the THN front page. **Eight updates**, the biggest from three database listings no prior sweep had run — `?query=claude`, `?query=agent` — which turned up three Claude-Code-ecosystem tools (claude-code-templates 8.8 RCE, claude-skill-antivirus, cc-connect) that had sat in the database 2–3 weeks (LEARNINGS §29). Vendor-tab walk (31 tabs): newest dates unchanged from 09-18 — Codex tab still 2025-09 while two escapes were fixed in August. **Accuracy calls:** WSJ is blocked, so the Gemini file cites the three outlets plus Irregular's 08-14 post and says the original was not fetched; Irregular's own "not materially separate" framing is quoted, and a one-line pointer was added to the Meta file rather than a rewrite. vm2's 09-17 update said "ten more advisories" — the tab had eleven; the missed one (globalAgent, CVSS 10.0) is now in. **Declined:** Dokploy VU#280377 / CVE-2026-72878 (authenticated → root, self-hosted PaaS; out of audience, candidate for a future dev-platform batch), anyio CVE-2026-63374 (IDN + MITM only), mnemosyne-memory (flashcards), Nuxt OG image SSRF (moderate), Azure AI Foundry / M365 Copilot batch (tracked 09-18), Codex CVE-2026-19591 (folded into GitSpawn), abandoned-CDN-domain piece (not AI tooling), AWS FortiGate LLM-assisted actor (Feb, no dev-tooling angle), Simon Willison/Register opinion pieces. **Gate:** `dist/llms.txt` landed 9 bytes under budget after the two new files — implemented BACKLOG "llms.txt Tier-2 floor" option (b) (root lists Tier 1 + 40 newest Tier-2 pointers + a link to the complete `advisories/llms.txt`; test moved to the per-section index) → 51,835 B, Tier 1 at its natural 80. One source decayed. Link checker output in Step 6.
+
 ## 2026-09-18
 
 ```yaml

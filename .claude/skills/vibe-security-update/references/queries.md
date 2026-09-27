@@ -160,7 +160,7 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
 - **Corporate-parent / cloud-vendor bulletins (the batch is the advisory):**
   `ibm.com/support/pages/node/<id>` (Langflow, ContextForge); `github.com/NVIDIA/product-security`
   (raw `<id>.md`; `nvidia.custhelp.com` 403s); `aws.amazon.com/security/security-bulletins/` (Kiro,
-  Amazon Q, `awslabs.*` MCP servers, Security Agent); `community.n8n.io` "Security update — <date>".
+  Amazon Q, `awslabs.*` MCP); `community.n8n.io` "Security update — <date>".
 - **Industry security blogs:** Anthropic, OpenAI, Google Security/Project Zero, MSRC, AWS, Cloudflare,
   Red Hat, Databricks, Salesforce, Oracle.
 - **Vendor threat-intel and incident reports:** `cloud.google.com/blog/topics/threat-intelligence`
@@ -203,7 +203,7 @@ sweep reading the log needs to know whether a quiet category was quiet or just
 unreachable.
 
 - **X / Bluesky** — no native browsing; search snippets only. **Blocked / 403:** `reddit.com`, `wired.com`,
-  `wsj.com`, `bbc.com`, `bleepingcomputer.com`, `cisa.gov` HTML (use the KEV JSON), `nvidia.custhelp.com`
+  `wsj.com`, `bbc.com`, `apnews.com`, `theguardian.com` (AP copy: `wtop.com`, `edweek.org`, `usnews.com`), `bleepingcomputer.com`, `cisa.gov` HTML (use the KEV JSON), `nvidia.custhelp.com`
   (use the `NVIDIA/product-security` mirror), `techtimes.com`, `cybernews.com`, `scworld.com`,
   `spectrosec.com`, `securityonline.info` (intermittent), `openai.com/index/...` (use `alignment.openai.com`).
   Read blocked outlets through citing outlets and say so in Sources.
