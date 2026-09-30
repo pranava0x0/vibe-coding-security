@@ -2,7 +2,7 @@
 id: 2026-07-jadepuffer-langflow-agentic-ransomware
 title: "JADEPUFFER — first documented fully agentic ransomware attack, run start-to-finish by an autonomous AI agent via Langflow CVE-2025-3248"
 date_disclosed: 2026-07-02
-last_updated: 2026-07-07
+last_updated: 2026-09-30
 severity: high
 status: active
 ecosystems: [langflow, python, ai-agents]
@@ -66,7 +66,15 @@ Any internet-facing AI-agent-workflow tool (Langflow, Flowise, Dify, n8n, and si
 - Treat any AI-agent-workflow platform (Langflow, Flowise, Dify, n8n) as a credential-hub attack surface, not a standalone app — see [prevention/supply-chain-attack-surface.md](../prevention/supply-chain-attack-surface.md) and [prevention/credential-hygiene.md](../prevention/credential-hygiene.md).
 - Expect attackers to increasingly deploy autonomous agents (rather than scripted tools) for post-exploitation — an agentic attacker adapts to failed steps and unfamiliar environments in ways static tooling cannot, so intrusion detection should not assume attacker behavior will be mechanically repetitive.
 
+## Update 2026-09-30 — Microsoft (as Storm-3168) documents the same actor's June 2026 destructive Azure operation: service-principal credentials posted in plaintext in a public GitHub issue, still valid in the edit history after "removal," then 300+ reads over 16 hours and 150+ deletions in 35 minutes — storage accounts, a Key Vault, a Function App, Site Recovery locks
+
+Microsoft Security's 2026-09-25 post tracks JADEPUFFER as **Storm-3168** and describes an early-June 2026 intrusion into an Azure tenant that began with a **service principal's client ID, secret and tenant ID posted in plaintext in a public GitHub issue** by an employee. The employee edited the issue to remove the secret; the platform's public edit history kept it, and, as Microsoft puts it, "removing or redacting an exposed secret does not invalidate it." Timeline: a first compromised principal ran roughly 15.5 hours of reconnaissance — 300+ read operations across VMs, subscriptions and resource groups; 90 minutes later a second principal enumerated two subscriptions in five seconds; around hour 16 it read App Service configuration, tried and failed to find an OpenSearch resource, attempted a key listing against a non-existent storage account, then ran a **seven-minute destructive sequence inside a 35-minute window: 150+ operations**, more than 100 storage-account deletions ("most … were successfully deleted"), a Key Vault, a Function App, an App Service plan; SQL deletions all failed on an unsupported API version, and Site Recovery / Backup protection-lock deletions failed. A similarly named storage account in the same resource group was spared and later targeted for key extraction. Microsoft's evidence for agentic execution is behavioural — no human-speed pauses, five tokens issued for one principal with two deletion tokens active simultaneously, parallel Storage and SQL targeting, programmatic-looking filtering — and the post says so: no explicit confirmation of AI orchestration, only a pattern consistent with it. The Hacker News (09-28) connects it to the Langflow operation in this file and to ENCFORGE.
+
+For this audience the entry point is the lesson, not the attribution: **a secret in a GitHub issue is public forever, including after you edit it out**, and an agentic operator will find it in the history. Rotate on exposure, never on redaction; keep service principals least-privileged; put resource locks and backup protection on anything you cannot rebuild from code — they were the only controls that held. Status stays active.
+
 ## Sources
+
+- **2026-09-30 update sources** — [Microsoft Security — Storm-3168: agentic-driven cloud attacks using compromised service principals](https://www.microsoft.com/en-us/security/blog/2026/09/25/storm-3168-agentic-driven-cloud-attacks-using-compromised-service-principals/) (2026-09-25: the GitHub-issue exposure and edit-history detail, the timeline and operation counts, what was deleted and what held, the token and timing evidence, detections and mitigations; authors Yossi Weizman, Tushar Mudi), [The Hacker News — JADEPUFFER-Linked Attackers Used Compromised Service Principals in Destructive Azure Attack](https://thehackernews.com/2026/09/jadepuffer-linked-attackers-used.html) (2026-09-28: the Storm-3168 alias, the Langflow and ENCFORGE links, the 18-hour framing). Fetched 2026-09-30.
 
 - [The Hacker News — AI Agent Exploits Langflow RCE to Automate Database Ransomware Attack](https://thehackernews.com/2026/07/ai-agent-exploits-langflow-rce-to.html) — full attack chain, CVE identification, Sysdig attribution, timeline.
 - [BleepingComputer — JadePuffer ransomware used AI agent to automate entire attack](https://www.bleepingcomputer.com/news/security/jadepuffer-ransomware-used-ai-agent-to-automate-entire-attack/) — independent confirmation of CVE-2025-3248 and CVE-2021-29441, attack progression, 1,342 encrypted Nacos items.

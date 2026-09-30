@@ -2,7 +2,7 @@
 id: 2026-07-better-auth-oauth-oidc-mcp-vulnerabilities
 title: "better-auth — 13+ OAuth/OIDC/SSO/SCIM advisories including a critical MCP-plugin refresh-token bypass (CVE-2026-53512)"
 date_disclosed: 2026-06-02
-last_updated: 2026-08-19
+last_updated: 2026-09-30
 severity: high
 status: patched
 ecosystems: [npm, nextjs, auth]
@@ -94,6 +94,14 @@ Two more better-auth advisories not previously tracked here, found this sweep �
 
 Both were verified directly against better-auth's own GitHub Security Advisories page (the same page-walk discipline already applied elsewhere in this advisory). Neither has independent aggregator coverage found this sweep, so — consistent with this repo's single-source standard — treat these two specific findings as `unconfirmed` pending a second source, even though the parent advisory as a whole remains `patched` based on the CVE-bearing findings already covered above. If you run `@better-auth/scim` or `@better-auth/sso` at all, update past the fixed versions above regardless.
 
+## Update — 2026-09-30: two more High advisories on the vendor tab (2026-09-28 and 09-29): a personal SSO provider can sign in as another provider's users (@better-auth/sso < 1.7.3, CVSS 8.1), and the device-authorization approval screen never showed which client was asking (better-auth 1.3.8-beta.3 – 1.6.x, CVSS 8.1, fixed 1.7.0-rc.3)
+
+**GHSA-mx9r-x6ww-qjw9 (published 2026-09-29, High 8.1, credit manus-use)** — in @better-auth/sso **≥ 1.7.0-rc.2 < 1.7.0 and ≥ 1.7.0 < 1.7.3**, linked accounts were matched "by issuer and account identifier alone, without verifying the provider ID performing the sign-in attempt." Anyone with a Better Auth account could register a personal SSO provider that impersonates a legitimate identity provider, then authenticate through it with a victim's account identifier and receive the victim's session — no victim interaction. Fixed **1.7.3**. Until then: block SSO sign-in at the application layer, set providersLimit to 0 (stops new registrations, does not remove existing ones), audit and delete untrusted personal providers; a configured resolveUser that requires an exact provider match blocks the path. Fourth SSO-plugin account-takeover in this file's history, and the second in which the fix is "check which provider is speaking."
+
+**GHSA-q84f-53jg-9ppm (published 2026-09-28, High 8.1, credits XlabAITeam, liangjs)** — the device-authorization plugin (sign in on one device by approving a code on another) did not tell the approving user "which client asked for access and which permissions it wants," so an attacker who started a device flow and got a signed-in user to approve the code received a valid session token and could "read or change any data the user's account can access." Affects **better-auth 1.3.8-beta.3 through every 1.6.x**; fixed **1.7.0-rc.3**. Preconditions: device flow enabled, an attacker-initiated request, an active user approval. Workarounds: disable the plugin or restrict /device/code, a strict validateClient allowlist (insufficient alone), and a custom approval endpoint that loads the pending request server-side and shows client and scopes before allowing approval. This is the device-flow sibling of the owner-binding bug (CVE-2026-45337) already in this batch.
+
+Registry check 2026-09-30: better-auth 1.7.6 (2026-09-24) is the latest npm release; NVD has no CVE for either advisory yet (keyword query, 09-20 → 09-30: zero results).
+
 ## If you are affected
 
 1. **Update `better-auth` and every scoped plugin package you use** to the versions above.
@@ -109,6 +117,8 @@ Both were verified directly against better-auth's own GitHub Security Advisories
 - → [prevention/credential-hygiene.md](../prevention/credential-hygiene.md)
 
 ## Sources
+
+- **2026-09-30 update sources** — [better-auth — GHSA-mx9r-x6ww-qjw9: Personal SSO providers can sign in as another provider's users](https://github.com/better-auth/better-auth/security/advisories/GHSA-mx9r-x6ww-qjw9) (vendor, 2026-09-29, High 8.1, affected/patched ranges, workarounds, credit), [better-auth — GHSA-q84f-53jg-9ppm: Device login approval does not show the requesting client or permissions](https://github.com/better-auth/better-auth/security/advisories/GHSA-q84f-53jg-9ppm) (vendor, 2026-09-28, High 8.1, 1.3.8-beta.3 – 1.6.x, fixed 1.7.0-rc.3, workarounds, credits), [better-auth advisories index](https://github.com/better-auth/better-auth/security/advisories) (both entries visible 2026-09-30), npm better-auth release metadata (1.7.6 on 2026-09-24), [NVD API — keyword better-auth, 2026-09-20 → 09-30](https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=better-auth&pubStartDate=2026-09-20T00:00:00.000&pubEndDate=2026-09-30T23:59:59.000) (0 results). All fetched 2026-09-30.
 
 - [better-auth — Security update: June 2026](https://better-auth.com/blog/security-update-june-2026) — vendor's own disclosure post; 13 advisories, severity breakdown, migration guidance for `oidcProvider`/`mcp`.
 - [GitHub — better-auth/better-auth security advisories](https://github.com/better-auth/better-auth/security) — full advisory index with GHSA IDs and severities.
