@@ -2,7 +2,7 @@
 id: 2026-09-docker-sandboxes-virtiofs-symlink-host-escape
 title: "Docker Sandboxes — the microVM that runs your coding agent could read and modify arbitrary macOS host files through a virtio-fs symlink race (CVE-2026-77179, CVSS 9.4) and reach any host Unix socket (CVE-2026-79994, 8.7); fixed in 0.42.0 alongside a D-Bus host-command bug and a cross-sandbox OAuth hijack"
 date_disclosed: 2026-09-15
-last_updated: 2026-09-22
+last_updated: 2026-09-30
 severity: critical
 status: patched
 ecosystems: [docker, macos, claude-code, codex, cursor, github-copilot, gemini-cli, agent-sandboxing]
@@ -54,7 +54,13 @@ If a sandbox ran untrusted code (an unreviewed repo's tests, a dependency instal
 
 Docker Sandboxes **v0.45.0** (released 2026-09-21) carries a one-item "Security" section: "Fixed an issue where revoking a sandbox's OAuth or API-key credential could leave its running proxy authorized until the sandbox was recreated." In other words, the credential proxy this file recommends leaning on kept honouring a credential after the user revoked it, for as long as the sandbox stayed up — revocation was not revocation until recreate. The same release's networking notes say reverse-DNS lookups are now restricted to policy-authorised IPs, closing "the previous policy bypass" (a sandboxed process could previously resolve names the egress policy was meant to block, per the note's own framing). Neither fix has a CVE or an advisory-tab entry, and no vulnerable version range is stated — same pattern as Codex's Heapjack release-note line. If you rotated an agent's provider credential while its sandbox was running on < 0.45.0, assume the old one worked until the sandbox was recreated; upgrade and recreate long-lived sandboxes. Pre-releases v0.45.1-rc1 and v0.46.0-rc2 were published 2026-09-22 with no security notes.
 
+## Update — 2026-09-30: v0.46.0 (2026-09-28) carries the credential-revocation fix and the reverse-DNS restriction as release-note lines again, plus bulk credential revocation; 0.47.0-rc1/rc2 (09-28 / 09-30) add nothing security-labelled
+
+The sbx-releases page on 2026-09-30 lists **v0.46.0 (2026-09-28)** as latest stable with a security section repeating the 0.45.0 item — "revoking a sandbox's OAuth or API-key credential could leave its running proxy authorized" — alongside a new bulk credential-revocation capability and the network-policy tightening "Reverse-DNS lookups are now allowed only for destination IPs already authorized by policy." No CVE is attached to either. v0.47.0-rc1 (2026-09-28) and rc2 (2026-09-30) are pre-releases with no security note. The upgrade advice stands: ≥ 0.46.0, and revoke credentials from the credential store rather than assuming a deleted key is dead inside a running sandbox.
+
 ## Sources
+
+- **2026-09-30 update source** — [docker/sbx-releases — releases](https://github.com/docker/sbx-releases/releases) (v0.46.0 2026-09-28 security and networking notes quoted; v0.47.0-rc1 / rc2 dates). Fetched 2026-09-30.
 - [docker/sbx-releases — releases](https://github.com/docker/sbx-releases/releases) — v0.45.0 (2026-09-21) "Security" and networking notes quoted above; v0.45.1-rc1 / v0.46.0-rc2 (2026-09-22) carry only "Link to docs from readme." Fetched 2026-09-22.
 - [NVD — CVE-2026-77179](https://nvd.nist.gov/vuln/detail/CVE-2026-77179) and [NVD — CVE-2026-79994](https://nvd.nist.gov/vuln/detail/CVE-2026-79994) — CNA security@docker.com, published 2026-09-15, CVSS 4.0 9.4 / 8.7, CWE-59 / CWE-367, descriptions quoted above; queried via the NVD API 2026-09-18.
 - [docker/sbx-releases — v0.42.0 release notes](https://github.com/docker/sbx-releases/releases/tag/v0.42.0) — the two CVE fixes plus the D-Bus and OAuth-hijack fixes, Devin support, `tcp4` default. Fetched 2026-09-18.
