@@ -2,7 +2,7 @@
 id: 2026-08-claude-code-desktop-ghsa-batch
 title: "Claude Code / Claude Desktop's own GHSA index: 8 more advisories (Feb–Jun 2026) this repo hadn't tracked"
 date_disclosed: 2026-02-06
-last_updated: 2026-09-26
+last_updated: 2026-09-30
 severity: high
 status: patched
 ecosystems: [claude-code, claude-desktop, anthropic]
@@ -94,7 +94,13 @@ This is the same lesson the Cursor GHSA index audit produced: **a vendor's own G
 
 This is the third Cowork host-boundary advisory in the corpus after [the July sandbox escape](2026-07-claude-cowork-sandbox-escape.md) and [SharedRoot](2026-07-sharedroot-claude-cowork-macos-vm-escape.md), and it follows the same shape as the batch above: the vendor advisory is the only record (no CVE, no blog, no press at sweep time), it appeared on the tab a day before any listing carried it, and the affected range spans months. Status of this file stays `patched`.
 
+## Update 2026-09-30 — a Low advisory on the tab (published 2026-09-29) that enterprise admins should read anyway: Claude Code 2.0.68 – 2.1.259 preferred a locally stored API key over the user's Enterprise/Team sign-in when fetching server-managed settings, so a rejected key meant the session ran with no organisation policy, or a stale cached one (CVE-2026-103012, CVSS 2.0, fixed 2.1.260)
+
+**GHSA-gfvf-j8jh-jxxw / CVE-2026-103012 (Anthropic CNA, published 2026-09-29, Low, CVSS 4.0 2.0, CWE-696, credit Tamas Voros / NVIDIA AI Red Team).** When fetching an organisation's server-managed settings, Claude Code "selected an API key stored by Claude Code, for example from an earlier /login or written directly to its configuration, ahead of the user's valid Claude Enterprise or Team sign-in." If the settings endpoint rejected that key, the session "started without the organization's server-managed policy (such as permission deny rules, model restrictions and managed-only locks) or, if a previously cached copy existed on the machine, kept applying that stale copy without receiving later policy changes — while continuing to operate as the organization's account." Triggering it needs local access to a device that holds such a stored key; the no-policy case additionally needs no cached settings. MDM- and file-managed settings are unaffected. Affected **≥ 2.0.68 < 2.1.260** for Enterprise (from 2.0.68) and Team (from 2.1.38); fixed **2.1.260**; auto-updaters already have it, npm's current line is 2.1.285 (2026-09-29). The score is low because the precondition is a local actor with a key on the box — but the failure mode is exactly the one enterprise controls exist to prevent (deny rules silently absent), and a developer who once ran /login with a personal key is the "local actor." Check for stray keys in the config directory on managed fleets.
+
 ## Sources
+
+- **2026-09-30 update sources** — [anthropics/claude-code — GHSA-gfvf-j8jh-jxxw: Managed Settings Not Applied When a Stored API Key Was Preferred Over Enterprise Sign-In](https://github.com/anthropics/claude-code/security/advisories/GHSA-gfvf-j8jh-jxxw) (vendor, 2026-09-29, Low 2.0, ≥ 2.0.68 < 2.1.260, fixed 2.1.260, credit), [NVD API — CVE-2026-103012](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-103012) (published 2026-09-30, Anthropic as CNA, description quoted; the advisory-database mirror returned no result the same day), [anthropics/claude-code advisories index](https://github.com/anthropics/claude-code/security/advisories) (ten entries; 09-25 and 09-29 newest), npm @anthropic-ai/claude-code release metadata (2.1.285 on 2026-09-29). Fetched 2026-09-30.
 
 - [GitHub — anthropics/claude-code Security Advisories index](https://github.com/anthropics/claude-code/security/advisories)
 - [GitHub — Sandbox Escape via Git Worktree Path Confusion (GHSA-7835-87q9-rgvv, CVE-2026-55607)](https://github.com/anthropics/claude-code/security/advisories/GHSA-7835-87q9-rgvv)

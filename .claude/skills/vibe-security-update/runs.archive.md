@@ -15,6 +15,19 @@
 
 ## Archived entries
 
+## 2026-09-21
+
+```yaml
+queries: {deep: 16, medium: 24, shallow: 10}
+new: [2026-09-rust-maintainers-fake-interview-video-call-campaign, 2026-09-zhipu-zcode-silent-workspace-git-history-upload, 2026-07-grok-build-silent-full-repo-upload-xai-storage, 2026-09-indexed-btree-npm-runtime-payload-sepolia-c2]
+updated: [2026-05-tanstack-mini-shai-hulud, 2026-09-google-gemini-irregular-eval-real-company-breach, 2026-09-gitlab-cve-2026-85706-unauth-file-read-kev, 2026-08-mlflow-webhook-ssrf-authz-batch, 2026-08-agent-framework-mcp-cve-batch]
+sources_added: [grack.com, api.npmjs.org, eu.36kr.com, panews.io, blog.ferstar.org, blog.vonng.com, en.sedaily.com, finance.biggo.com]
+sources_weighted: [blog.rust-lang.org, securityweek.com, theregister.com, helpnetsecurity.com, checkmarx.com, registry.npmjs.org, crowdsec.net, x.com, github.com, thehackernews.com, thenextweb.com, docs.gitlab.com, github.com/advisories, kb.cert.org, hn.algolia.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, bleepingcomputer-403, wired.com-blocked, cybersecuritynews-empty-body-x1, gbhackers-empty-body-x1, kb.cert.org-redirects-to-sei.cmu.edu-404-use-curl-compressed, github-security-tabs-504-x4-transient-retry-ok]
+```
+
+**Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source, all cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw/Codex; frontend incl. Next.js/React/Svelte/SvelteKit/Vite/Astro/Tailwind/shadcn; backend/auth/DB incl. FastAPI/Streamlit/Prisma/Supabase/NextAuth/Clerk/better-auth/python-genai). All research direct WebSearch/WebFetch, no subagents. KEV (dateAdded ≥ 09-14): three Linux kernel, Pixel, Cisco ISE/Email, Acronis — nothing in scope. **Four new; three came from front pages, not queries** (Rust: SecurityWeek + Register 09-21 → Rust blog 09-17; ZCode: HN "ZCode open source" item → 36kr → ferstar/vonng primaries; indexed-btree: HN feed → Checkmarx). Grok Build (July) surfaced only because 36kr cited it as precedent — a corpus gap for a tool already listed as *affected* in SymJack/GitSpawn; filed under its July date. **Accuracy calls:** BleepingComputer (403) and Wired (blocked) are mentioned without URLs; the ic3.gov joint-advisory PDF was not fetched, its figures are attributed to Help Net; Checkmarx's Slack/Telegram bot tokens omitted as attacker credentials; the "2M weekly downloads" reframed after `api.npmjs.org` showed the `0.0.1-security` stub still pulling 1.98M/week. CrowdSec's statement says "API key," its analysis says GitHub OAuth token — stated as one credential described twice. **Updates by identifier grep:** CVE-2026-18252 (GitLab Duo Claude agent, 08-26 — missed by the 09-12 GitLab file), VU#369093 (MLflow, CNA note + vendor GHSA), 9router CVE-2026-55638 (via the `codex` database query matching a URL path). **Declined:** VulnCheck Glasswing ledger critique (process, not incident); pnpm pacquet GHSA-2rx9-3g3h-c2jv (alpha-only, no CVE); Jade Sleet Indian IT breach (Terraform lures, no registry/agent angle); Cheshire Cat AI, mnemosyne, lmdeploy, Airbyte ZDI SSRFs (out of audience); Simon Willison compaction post (tracked in the OpenAI reports file); Wired TeamPCP-infiltration feature (unfetchable). Vendor-tab walk (31 tabs): newest dates unchanged from 09-20; four tabs 504'd once and were clean on retry, githubstatus showed no incident. Zero sources decayed.
+
 ## 2026-09-20
 
 ```yaml

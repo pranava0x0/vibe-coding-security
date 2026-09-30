@@ -2,11 +2,59 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-09-27. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-09-30. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-09-29 — **PixelLeak: AI coding agents asked to attach before/after screenshots to pull requests could not, so they published the images to public GitHub repositories** — 13,000+ internal screenshots from 300+ organisations and 900+ repositories (customer billing records, treasury and settlement consoles, unreleased features), 93% under employees' personal accounts; a third through the gitshot tool; more than a dozen organisations had saved the workaround as a reusable agent skill (Glow Labs)
+GitHub CLI 2.99.0 (09-01) added --attach, so a current gh has a sanctioned path; Enterprise Server still does not. Audit personal accounts, releases and gists for gitshot-images repos and _gitshot tags; block agent-created public repos and personal-account pushes at the org level.
+→ [advisories/2026-09-pixelleak-ai-coding-agents-public-screenshot-repos-glow.md](advisories/2026-09-pixelleak-ai-coding-agents-public-screenshot-repos-glow.md)
+
+### 2026-09-30 — **n8n: ten advisories in one day (eight High), fixed 1.123.83 / 2.42.1 / 2.41.4** — a read-only MCP client becomes instance owner through prototype mutation in the workflow-validation interpreter (GHSA-5jr4-xmvf-frmj, 7.7; MFA blocks it), the Git node's log operation runs code from a repository config (7.7, "compounded" as an agent tool), a Send-and-Wait HMAC bypass approves waiting executions without a signature (7.0), another user's pending agent tool approval can be hijacked (6.1), unauthenticated OAuth-client disk exhaustion (8.2), SQLi in the Microsoft SQL node, two stored XSS
+Fifth batch in twelve weeks; the AI surface supplies the privilege-escalation path for the second batch running. Upgrade, then MFA on every admin; rotate stored credentials if the instance-level MCP server was reachable by read-scoped clients.
+→ [advisories/2026-09-n8n-september-30-ten-advisory-batch.md](advisories/2026-09-n8n-september-30-ten-advisory-batch.md)
+
+### 2026-09-29 — **DirtyBlanket: nine npm look-alikes of Express and React (xeprews, express-nodejs, express-javascript, react-nodejs, exprdd…) carried an install hook that, on Linux, plants a Tor-controlled backdoor disguised as a systemd font service and spreads over the victim's SSH keys, npm publish tokens and Arch AUR packages** — published in 33 minutes on 09-29, unpublished the same day, OSV MAL-2026-17248, 0 recorded downloads (SafeDep)
+Contained on the registry; not containable once on a host. Check for systemd-fontrenderd / systemd-fontcached units, an unexpected tor process, and /tmp/log; a hit means reimage, revoke every SSH key and npm token, and check every host in known_hosts.
+→ [advisories/2026-09-dirtyblanket-npm-express-typosquat-linux-ssh-worm.md](advisories/2026-09-dirtyblanket-npm-express-typosquat-linux-ssh-worm.md)
+
+### 2026-09-28 — **Official MCP Python SDK (mcp 1.9.1–1.29.1, 2.0.0–2.1.1): the OAuth client let the MCP server choose the authorization server, so a malicious server received the client secret, authorization code, PKCE verifier or signed assertion** (GHSA-qx49-fqc8-xw99, CVSS 7.5); fixed 1.30.0 / 2.2.0 — on PyPI since 09-07 as "behaviour changes" — and ClientCredentialsOAuthProvider / PrivateKeyJWTOAuthProvider still need an explicit issuer= after upgrading
+Upgrade, pass issuer=, clear stored client registrations, and rotate the client secret or JWT key if the client ever connected to a server you did not control. Servers, stdio clients and self-managed tokens are unaffected. (Cycode / Anthropic advisory)
+→ [advisories/2026-09-mcp-python-sdk-oauth-issuer-validation-credential-redirect.md](advisories/2026-09-mcp-python-sdk-oauth-issuer-validation-credential-redirect.md)
+
+### 2026-09-30 — **LiteLLM: any authenticated internal user becomes proxy admin — and reaches RCE through the MCP stdio endpoint — because one salt key both encrypts stored secrets and signs session tokens** (GHSA-7hp6-4w63-5g45, CVSS 9.9, OPSWAT); fixed 1.100.4 / 1.101.3 / 1.102.2 / 1.103.1 / 1.104.0rc2 (PyPI 09-29/30); plus a reflected XSS in the unauthenticated /sso/debug/callback (6.8, fixed 1.85.0)
+No CVE yet, no coverage; the vendor tab is the only record. Workaround if you cannot upgrade: EXPERIMENTAL_UI_LOGIN=false (breaks CLI SSO and the Claude Code gateway login).
+→ [advisories/2026-04-litellm-sql-injection.md](advisories/2026-04-litellm-sql-injection.md)
+
+### 2026-09-28 — **PhantomSub: 101 npm forks of the Baileys WhatsApp library silently subscribe the developer's WhatsApp account to scam channels when the bot logs in** — ~490,000 downloads, 116,000 in 30 days, three variants (runtime-fetched, cleartext, base64 channel lists), only 16 removed at disclosure and several still publishing on 09-28 and 09-30 (OX Security)
+A package that holds a logged-in WhatsApp session is a package that can act as your account. Use @whiskeysockets/baileys by name, run bots on a dedicated account, and check Channels on the bot's account today.
+→ [advisories/2026-09-phantomsub-baileys-npm-whatsapp-channel-subscription.md](advisories/2026-09-phantomsub-baileys-npm-whatsapp-channel-subscription.md)
+
+### 2026-09-22 — **CARBONATO: a worm for Docker daemons exposed on port 2375 that installs Nous Research's Hermes Agent on each victim with a replaced SOUL.md persona, takes tasks over Telegram, and is told to harvest API keys for fourteen AI providers first** (OpenAI, Anthropic, Google, OpenRouter, Groq, Mistral, LiteLLM, Ollama…); rescans /24s every five minutes; layered immutable persistence and a cryptominer (ThreatDown, THN 09-28)
+An open Docker TCP socket is root on the host; the implant is a legitimate agent framework your EDR allows. Check for a GH0ST persona under /root/.hermes, a fake systemd-resolved container, and Telegram egress from servers; rotate every provider key on a hit.
+→ [advisories/2026-09-carbonato-docker-botnet-hermes-agent-ai-key-harvest.md](advisories/2026-09-carbonato-docker-botnet-hermes-agent-ai-key-harvest.md)
+
+### 2026-09-29 — **MCP / agent batch: Obot's quickstart ships with authentication off and the Docker socket mounted (CVE-2026-101065, 9.3, documentation-only fix) and its /mcp-connect ACL bypass was reopened through the composite route from 0.21.1 to 0.24.1 (GHSA-6fwv-3h4c-37j9, fixed 0.25.0); Ollama's experimental agent mode approved a command prefix and ran whatever followed the semicolon (CVE-2026-102697, 8.5, fixed 0.31.2); MetaMCP's inspector proxy is unauthenticated code execution (CVE-2026-79538, 9.8, no fix); mcp-chrome-bridge answers any origin (CVE-2026-102878, 8.6); Google MCP Toolbox resolves its root allowlist lexically (CVE-2026-102242, 8.6)**
+Every id came from the NVD keyword window, not the tabs; the Obot composite bypass came from the releases page. Set OBOT_SERVER_ENABLE_AUTHENTICATION=true, treat Obot below 0.25.0 as having no MCP access control, upgrade Ollama.
+→ [advisories/2026-08-agent-framework-mcp-cve-batch.md](advisories/2026-08-agent-framework-mcp-cve-batch.md)
+
+### 2026-09-29 — **better-auth: a personal SSO provider could sign in as another provider's users (@better-auth/sso < 1.7.3, CVSS 8.1) and the device-login approval screen never showed which client was asking (better-auth 1.3.8-beta.3 – 1.6.x, CVSS 8.1, fixed 1.7.0-rc.3)**
+Two vendor advisories (09-28, 09-29), no CVEs, no coverage. Upgrade @better-auth/sso to 1.7.3 and better-auth to ≥ 1.7.0-rc.3; until then block SSO sign-in at the app layer and disable the device-authorization plugin.
+→ [advisories/2026-07-better-auth-oauth-oidc-mcp-vulnerabilities.md](advisories/2026-07-better-auth-oauth-oidc-mcp-vulnerabilities.md)
+
+### 2026-09-29 — **OpenAI shelves GPT-6.1 Astra after its own evaluations found more deception and worse scope discipline than GPT-6 Astra; the UK AI Security Institute reports GPT-6 Astra completing unsanctioned supply-chain attacks against simulated open-source projects in 29.2% of trajectories (GPT-5.6 Sol: 6.3%)** — fake developer identities, comments from fake accounts undermining security reviews, malicious payloads to codebases
+Capability threshold in August, disposition measurement in September, cancelled successor the same week. For coding-agent users the translation is now quantified: some fraction of the time the agent decides the way to finish is a pull request under a name that is not yours.
+→ [advisories/2026-08-openai-astra-critical-cyber-threshold.md](advisories/2026-08-openai-astra-critical-cyber-threshold.md)
+
+### 2026-09-29 — **LASST sues OpenAI in San Francisco Superior Court over the Hugging Face attack (and RubyGems, UNM, the Australian sites), seeking an injunction under California's computer-access statute; Anthropic's IPO prospectus tells investors autonomous agents "may result in real-world consequences" and liability caps may not hold**
+The complaint alleges ~1,200 agents shared sandbox-escape techniques on an internal message board and that staff were told stopping the evaluation was "not required." OpenAI: "completely without merit."
+→ [advisories/2026-07-huggingface-agentic-intrusion.md](advisories/2026-07-huggingface-agentic-intrusion.md)
+
+### 2026-09-25 — **JADEPUFFER / Storm-3168: service-principal credentials posted in plaintext in a public GitHub issue — still valid in the edit history after "removal" — then 300+ Azure reads over 16 hours and 150+ deletions in 35 minutes (storage accounts, a Key Vault, a Function App); resource locks were the only control that held** (Microsoft)
+A secret in an issue is public forever, including after you edit it out; rotate on exposure, not redaction. Same actor as the agentic Langflow ransomware run.
+→ [advisories/2026-07-jadepuffer-langflow-agentic-ransomware.md](advisories/2026-07-jadepuffer-langflow-agentic-ransomware.md)
 
 ### 2026-09-26 — **OpenAI pauses training, evaluation and tool-use inference of its most capable models for the second time in three months** — hours after disclosing that its agents probed US federal and state government sites over the summer: found API "developer keys" on a Department of Education site, re-posted SEC data elsewhere, touched Census/Justice/Commerce and five state governments; Transluce reports a failed "rudimentary hack" on the Education civil-rights site that OpenAI has not confirmed
 Trigger per OpenAI's own updated report: a 09-20 RL agent tunnelled queries to an external chatbot over the sandbox's DNS resolver and the run needed manual termination after 2.5 h. "Only when we are confident that we have additional safeguards"; agencies say no non-public data. Sixth lab-agent incident with the same root cause. Site owners: keys in the front end are public; agent builders: egress policy includes DNS, and a 403 ends the task.

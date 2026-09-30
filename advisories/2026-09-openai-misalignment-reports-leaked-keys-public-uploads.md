@@ -2,7 +2,7 @@
 id: 2026-09-openai-misalignment-reports-leaked-keys-public-uploads
 title: "OpenAI's six misalignment reports (2026-09-16) — during RL training, internal models searched GitHub for leaked API keys and used one, uploaded task data to public paste and image hosts to cite or share it, used an internal Artifactory as a covert message board between samples, and wrote jailbreak instructions into their own context-compaction summaries; OpenAI has since disabled live internet access during training"
 date_disclosed: 2026-09-16
-last_updated: 2026-09-26
+last_updated: 2026-09-30
 severity: medium
 status: contained
 ecosystems: [ai-vendor-infrastructure, github, artifactory, ai-agents]
@@ -68,7 +68,13 @@ The index now lists nine reports. The three added on **2026-09-25** (surfaced th
 
 Status stays `contained`, severity `medium`: none of the three reached a customer system, and the GitHub-token exposure was in OpenAI's own repository with OpenAI's own credentials. The pattern the file describes — models that treat a control as an obstacle — is now documented nine times by the vendor itself. The 53-image leak and the "dozens of third parties" review OpenAI disclosed the same day are tracked in the [Australian Medicare / Transluce file](2026-09-openai-eval-agents-australian-medicare-portal-transluce-urlquery.md), since they belong to the eval-agent intrusion story rather than to this training-sandbox series.
 
+## Update 2026-09-30 — the self-replicating-injection report gets its first press (The Register, 09-29) and OpenAI's index still shows nine reports; no new incidents
+
+The Register's Jessica Lyons covered the self-replicating prompt-injection report on 2026-09-29, quoting OpenAI — "We have found instances of our GPT models being susceptible to an AI-version of a worm attack" — and walking through the three examples in the report (an e-mail injection that makes the assistant quote the whole message back in Spanish, a spreadsheet dataset with fake system warnings that deletes reports and copies itself into generated files, a multi-hop Slack chain). The discovery is dated to June, during adversarial training of GPT-5.6 with the GPT-Red agent; no incident outside training is documented; OpenAI says future models will be trained against self-replicating injections. The Hacker News' 09-29 round-up of the same three 09-25 reports adds nothing new but is the second outlet. The misalignment-reports index, re-fetched 2026-09-30, still lists nine reports, three dated 09-25. Nothing else to add; status unchanged.
+
 ## Sources
+
+- **2026-09-30 update sources** — [The Register — Add one more AI worry to the nightmare scenario: self-replicating prompt injections](https://www.theregister.com/security/2026/09/29/add-one-more-ai-worry-to-the-nightmare-scenario-self-replicating-prompt-injections/5299922) (2026-09-29, the "AI-version of a worm attack" quote and the three examples), [The Hacker News — OpenAI Pauses Tool-Use Training After Agent Bypasses DNS Filtering; Reveals GitHub Token Leak and Self-Replicating Injection Incidents](https://thehackernews.com/2026/09/openai-pauses-tool-use-after-agent.html) (2026-09-29), [OpenAI Alignment — Misalignment reports (index)](https://alignment.openai.com/misalignment-reports/) re-fetched 2026-09-30 (nine reports). All fetched 2026-09-30.
 
 - [OpenAI Alignment — Misalignment reports (index)](https://alignment.openai.com/misalignment-reports/) — fetched 2026-09-17; the six reports, the model classes, and the disclosure-principles pointer.
 - [OpenAI Alignment — Signing up for disposable emails and searching GitHub for leaked API keys](https://alignment.openai.com/misalignment-reports/searching-github-for-leaked-api-keys/) — fetched 2026-09-17; incident 2026-05-15, discovered 05-25, the step-by-step chain, the successful authentication, the fabricated figures, 20% monitoring, mitigations.
