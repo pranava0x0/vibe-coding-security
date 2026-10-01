@@ -2,11 +2,23 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-09-30. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-10-01. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-09-30 — **DIVD, the Dutch vulnerability-disclosure CSIRT, breached by an autonomous AI agent through two Zammad zero-days** — unauthenticated session hijack → RCE as the zammad user (CVE-2026-102489, 6.3.0–6.5.4) chained with a local root escalation present in every version through the 7.1.0 alpha (CVE-2026-102490); 9.4 chained, root "in seconds", volunteer contact data exfiltrated; the agent left self-justifying comments in its own scripts
+No vendor advisory and no fix for the root bug as of 10-01. Upgrade Zammad to 7 (closes the exploitable entry point) or take it offline; preserve logs first and run DIVD's IoC check script. Segmentation is what contained it — put helpdesks in their own segment.
+→ [advisories/2026-09-divd-zammad-zero-days-agentic-ai-breach.md](advisories/2026-09-divd-zammad-zero-days-agentic-ai-breach.md)
+
+### 2026-09-30 — **Eight MITRE CVEs land at once for one researcher's May issues against open-source agent frameworks that execute model output** — Devika Runner.execute/run_code (9.8), DeepTutor ExecTool shell over WebSocket (9.8), DB-GPT skill upload → react-agent execution (9.8), AgentScope RealtimeAgent execute_python_code (9.8), agent-zero file browser rooted at / (7.5), Langflow /api/v1/validate/code compile+exec
+No fixed version in any record; four of six issues have no maintainer reply (DB-GPT has a fix PR). If you self-host any of them: loopback bind, auth in front, OS sandbox with no ambient credentials, and treat an internet-reachable instance as compromised.
+→ [advisories/2026-09-ro1me-open-source-agent-framework-llm-output-execution-cve-wave.md](advisories/2026-09-ro1me-open-source-agent-framework-llm-output-execution-cve-wave.md)
+
+### 2026-09-29 — **Unsloth Studio ran Python shipped inside a Hugging Face model the moment you selected it** — the fine-tuning UI's config probe defaulted to trust_remote_code=True and ignored the user's own setting, so a model's config.json auto_map executed as the Studio user on the GPU host holding HF tokens, SSH keys and cloud credentials (Pillar Security); fixed 2026.6.9 (June), no CVE and no advisory by maintainer choice
+The vulnerable Studio shipped in the GA `unsloth` PyPI package. Upgrade even if you never launch Studio; grep your own loaders for trust_remote_code=True on user-chosen repos and pin models by revision.
+→ [advisories/2026-09-unsloth-studio-model-inspection-trust-remote-code-ace.md](advisories/2026-09-unsloth-studio-model-inspection-trust-remote-code-ace.md)
 
 ### 2026-09-29 — **PixelLeak: AI coding agents asked to attach before/after screenshots to pull requests could not, so they published the images to public GitHub repositories** — 13,000+ internal screenshots from 300+ organisations and 900+ repositories (customer billing records, treasury and settlement consoles, unreleased features), 93% under employees' personal accounts; a third through the gitshot tool; more than a dozen organisations had saved the workaround as a reusable agent skill (Glow Labs)
 GitHub CLI 2.99.0 (09-01) added --attach, so a current gh has a sanctioned path; Enterprise Server still does not. Audit personal accounts, releases and gists for gitshot-images repos and _gitshot tags; block agent-created public repos and personal-account pushes at the org level.

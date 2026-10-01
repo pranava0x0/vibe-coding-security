@@ -2,7 +2,7 @@
 id: 2026-09-aws-security-agent-mcp-s3-bucket-squat
 title: "AWS Security Agent MCP server and the aws-agents-for-devsecops plugin — the scan-input S3 bucket name is derived from your account id and was never ownership-checked, so a pre-registered bucket receives your private source archive, credentials and infrastructure state (CVE-2026-87912 / CVE-2026-87913); upgrading does not free a bucket someone already took"
 date_disclosed: 2026-09-10
-last_updated: 2026-09-17
+last_updated: 2026-10-01
 severity: medium
 status: patched
 ecosystems: [pypi, mcp, aws, ai-agents]
@@ -57,9 +57,19 @@ You are affected if you ran the MCP server at 0.1.0–0.1.5 or the plugin at ≤
 - → [prevention/mcp-hygiene.md](../prevention/mcp-hygiene.md) — any MCP server that uploads your workspace somewhere is a data-egress path; know the destination and who owns it.
 - For any tool that derives a cloud resource name from your account id, pre-create the resource yourself and require `ExpectedBucketOwner`-style checks; predictable names are claimable names.
 
+
+## Update 2026-10-01 — a second bug in the same server, also fixed in 0.2.0: argument injection in the **diff scan** operation lets a crafted git reference be read as a command-line option and create, overwrite or truncate files outside the workspace (CVE-2026-97662, AWS bulletin 2026-121, CVSS 6.9)
+
+AWS published bulletin **2026-121-AWS** on **2026-10-01**: in `awslabs.security-agent-mcp-server` **≥ 0.1.1 and < 0.2.0**, "a crafted reference value supplied to the diff scan operation" is interpreted as a command-line option rather than a revision, which "might allow context-dependent threat actors to create, overwrite, or truncate arbitrary files on the host outside the intended workspace directory." The bulletin names no workaround beyond upgrading, advises running diff scans only against trusted repositories and as a least-privileged user, and credits Mario Guzmán (yud4s); NVD lists CVSS 4.0 **6.9** (CNA AWS). The fix is the **same 0.2.0 release** (PyPI 2026-08-26) that closed the bucket-squatting bug above, so anyone who upgraded for CVE-2026-87913 is already covered; anyone still on 0.1.x has two reasons. The shape — a repository-controlled string (a branch or ref name) becoming a `git` option — is the one this corpus tracks for Codex ([branch-name command injection](2026-03-openai-codex-branch-name-command-injection.md)) and GitSpawn, now inside a *security* scanner that agents point at untrusted repos by design.
+
+```bash
+pip show awslabs.security-agent-mcp-server 2>/dev/null | grep Version   # < 0.2.0 = both CVEs; latest 0.2.1
+```
+
 ## Sources
 
 - [AWS Security Bulletin 2026-105-AWS — CVE-2026-87912 and CVE-2026-87913: Missing S3 bucket ownership verification in the AWS Security Agent plugin for aws-agents-for-devsecops and MCP Server](https://aws.amazon.com/security/security-bulletins/2026-105-aws/) — fetched 2026-09-17; primary: published 2026-09-10, affected/fixed versions, the `security-agent-scans-<account-id>-<region>` name, the "upgrading does not release a bucket name" mitigation, credit to Nadav Claude Cohen (glow.io).
 - [NVD — CVE-2026-87913](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-87913) — fetched via the NVD API 2026-09-17; CNA AWS, CVSS 3.1 5.9 / 4.0 5.1, CWE-283/341, affected 0.1.0–0.1.5, fixed 0.2.0, references to the bulletin, the GHSA copy and PyPI.
 - [GitHub Advisory Database — search "security-agent-mcp-server"](https://github.com/advisories?query=security-agent-mcp-server) — fetched 2026-09-17; the listing that surfaced the CVE alongside the rmcp and atomic-agents-stack entries.
 - [Vertex AI "Pickle in the Middle" bucket squatting](2026-06-vertex-ai-pickle-in-the-middle.md) — this repo's prior instance of the predictable-bucket-name class, in Google's SDK.
+- **2026-10-01 update sources** — [AWS Security Bulletin 2026-121-AWS — CVE-2026-97662: Argument injection in AWS security-agent-mcp-server diff scan](https://aws.amazon.com/security/security-bulletins/2026-121-aws/) (published 2026-10-01: affected ≥ 0.1.1 < 0.2.0, fixed 0.2.0, "Important", credit, no workaround beyond upgrade; fetched 2026-10-01); [NVD API — CVE-2026-97662](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-97662) (CNA AWS, CVSS 4.0 6.9, description quoted; queried 2026-10-01); [AWS Security Bulletins index](https://aws.amazon.com/security/security-bulletins/) (fetched 2026-10-01; 2026-121 is one of four bulletins dated 10-01); [PyPI — awslabs.security-agent-mcp-server](https://pypi.org/pypi/awslabs.security-agent-mcp-server/json) (0.2.0 on 2026-08-26, 0.2.1 on 2026-09-08; queried 2026-10-01).

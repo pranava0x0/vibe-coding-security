@@ -2,7 +2,7 @@
 id: 2026-03-polinrider-multi-ecosystem-dprk-campaign
 title: "PolinRider — ongoing DPRK-linked campaign backdoors npm, Packagist, Go, and a Chrome extension via maintainer-account takeover (Mar 2026–ongoing)"
 date_disclosed: 2026-03-01
-last_updated: 2026-07-25
+last_updated: 2026-10-01
 severity: high
 status: active
 ecosystems: [npm, packagist, go, chrome-extension]
@@ -59,7 +59,25 @@ You're at risk if you cloned or opened (in VS Code) a repository maintained by a
 - Prefer reviewing GitHub's **Activity/audit log** over `git log` alone when auditing a dependency's recent history, since this campaign relies on rewritten/force-pushed commits.
 - See [prevention/supply-chain-attack-surface.md](../prevention/supply-chain-attack-surface.md) and [prevention/package-vetting-checklist.md](../prevention/package-vetting-checklist.md) for routine cross-ecosystem dependency hygiene.
 
+
+### Update 2026-10-01 — the loader now reads its C2 from Ethereum mainnet transactions, and SafeDep finds it live at HEAD in 35 GitHub repositories (7,578 stars) — surfaced by a rejected pull request against oxc that a formatting bot un-minified
+
+SafeDep (2026-09-30) reports a new PolinRider loader variant whose C2 discovery works like [NullReceiver](2026-08-nullreceiver-npm-ethereum-c2.md): it reads **Ethereum mainnet** for small transactions from an operator wallet and decodes **each transaction's recipient address as a C2 IP**. Two operator wallets use the scheme — one sending a transaction roughly every **51 minutes since 2026-06-23**, the other every ~3.3 hours since 07-25 — and their public histories show **11 C2 servers**, eight on one hosting provider (AS149440 Evoxt); two of the servers also appear in SafeDep's earlier `astro.config.mjs` and `@joyfill` investigations, which is the link back to this campaign. One infection writes **two loaders** into a project: the Ethereum one and a second keyed to a Tron address pair SafeDep had not seen in public reports; the OpenSSF malicious-packages database holds 70 npm/PyPI records containing the second wallet and none for the first.
+
+**Where it was found.** A pull request against **oxc-project/oxc** (opened 09-14, branch rewritten 09-25) added the loader to **20 build, test, benchmark and code-generation scripts**, each edit placed after 2,000 spaces on the last line (TypeScript files carried it as base64 inside `eval(atob(…))`), with the commit's *author* field forged to a real oxc maintainer and an author date ten weeks older than the commit. **The maintainers did not merge it** — the payload became visible only because the repository's `autofix.ci` formatting bot reformatted the one-line payload into 106 lines in the diff, and maintainer Boshen posted the screenshot on 09-30. GitHub has removed the contributor account; the commits remain reachable by SHA in the fork network. From that diff SafeDep decoded every stage statically and found **35 repositories carrying the loader at the tip of their default branch on 2026-09-30** (7,578 stars, 2,884 forks combined); the loader runs when a developer builds or starts the project.
+
+**What is new for defenders.** (1) The "poison the repo, not the registry" branch of PolinRider has a **pull-request** delivery variant — a forged-author commit in a PR that touches scripts CI runs, aimed at a maintainer merging or a CI job building the branch; a bot that reformats code exposed it where human review of a 2,000-space line would not. (2) **Blockchain dead-drop C2 now reaches repository-level DPRK tooling**, so "block the known C2 IPs" is a losing control — the wallet is the durable indicator, and the on-chain history is a public log of every C2 the operator has ever used. (3) The 35 repositories are **currently infected** — a `git clone && npm run build` of any of them runs the loader. SafeDep's post lists them; this advisory does not reproduce the list or the wallet/IP indicators (see the repo's IOC policy) — read the post before building an unfamiliar JavaScript project with a large star count, and check CI for `autofix`-style diff expansion as a review aid.
+
+```bash
+# In any repository you are about to build: scripts with a very long trailing line, or eval(atob(...)) in TypeScript
+grep -rlE '^.{2000,}$' --include='*.js' --include='*.mjs' --include='*.cjs' . 2>/dev/null | head
+grep -rnE 'eval\(.*atob\(' --include='*.ts' --include='*.js' . 2>/dev/null | head
+# PRs against your project that touch build/test/bench scripts with single-quoted imports where your code uses double quotes
+git log --format='%h %an <%ae> %ad | %cn %cd' --date=short -- '*.js' '*.mjs' | awk '$0 ~ /\|/' | head   # author ≠ committer, author date far older than commit date
+```
+
 ## Sources
 
 - [The Hacker News — "North Korean Hackers Publish 108 Malicious Packages and Extensions in PolinRider Campaign"](https://thehackernews.com/2026/07/north-korean-hackers-publish-108.html) — scale, ecosystem breakdown, TaskJacker cross-link, historical repository-count figures.
 - [Socket — "PolinRider: North Korea-Linked Supply Chain Campaign Expands"](https://socket.dev/blog/polinrider-north-korea-linked-supply-chain-campaign-expands) — attack mechanism detail (Git history rewriting, `.woff2` concealment, blockchain RPC C2), specific IOCs, timeline, live-tracking status.
+- **2026-10-01 update sources** — [SafeDep — PolinRider Switches to Ethereum C2 in 30+ Repositories (2026-09-30)](https://safedep.io/polinrider-ethereum-c2-github-repositories) (primary, fetched 2026-10-01 with indicators filtered: the recipient-address C2 encoding, two operator wallets and their cadence since 06-23 / 07-25, 11 C2 servers / AS149440, the two-loader infection, the oxc pull request anatomy — 20 scripts, 2,000-space padding, forged author, `autofix.ci` reformat, Boshen's 09-30 post — the 35-repository / 7,578-star count at HEAD on 09-30, the OpenSSF malicious-packages cross-reference, and the overlap with SafeDep's astro.config.mjs and @joyfill cases); [SafeDep blog index](https://safedep.io/blog/) (fetched 2026-10-01; the 09-30 post sits beside the 09-29 DirtyBlanket post).
