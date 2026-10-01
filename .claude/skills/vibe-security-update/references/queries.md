@@ -138,9 +138,9 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
   `github.com/advisories?query=crewai`, `…?query=kiro`, `…?query=rmcp`, `…?query=vm2`,
   `…?query=docker+sandboxes`, `…?query=sentry`, `…?query=copilot` (LEARNINGS §25).
 - **Advisory-database agent-name queries, every sweep:** `github.com/advisories?query=claude+sort%3Apublished-desc`,
-  `…?query=codex…`, `…?query=cursor…`, `…?query=agent…` (LEARNINGS §29).
-- **Victim post-mortems, monthly:** `"TanStack" OR "ChainDrop" OR "axios" post-mortem OR "incident report"` (LEARNINGS §29).
-- **Registry `time` fields** settle fix dates and whether a "deprecated" package still ships (LEARNINGS §28).
+  `…?query=codex…`, `…?query=cursor…`, `…?query=agent…` (page 2 too), `…?query=llm…` (LEARNINGS §29, §36).
+- **Victim post-mortems, monthly:** `"TanStack" OR "ChainDrop" OR "axios" post-mortem` (§29).
+- **Registry `time` fields** settle fix dates and whether a "deprecated" package still ships (§28).
 - **Per-product advisory tabs (`github.com/<org>/<repo>/security/advisories`, paginate):** Claude Code,
   Cursor, Cline, goose, OpenHands, SWE-agent, aider, Codex, gemini-cli, OpenClaw (11+ pages),
   n8n, Langflow, Flowise, PraisonAI, LiteLLM, LangChain, LangGraph, Semantic Kernel, Coder, MCP
@@ -148,7 +148,9 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
   `clerk/javascript`, `better-auth/better-auth`, `nextauthjs/next-auth`, `supabase/auth`;
   Supabase components (`supabase/supabase`'s tab is empty): `supabase/realtime`, `supabase/storage-api`,
   `supabase/postgrest`; framework upstreams: `vercel/satori`, `lovell/sharp`;
-  backend: FastAPI, Prisma, Streamlit, `googleapis/python-genai`. Read the vendor's date, not the CVE's.
+  backend: FastAPI, Prisma, Streamlit, `googleapis/python-genai`; companion repos: `openclaw/openclaw-windows-node`,
+  `gitpython-developers/GitPython`, `unslothai/unsloth` (§36). Read the vendor's date, not the CVE's.
+- **CSIRT CNA case files:** `csirt.divd.nl/cases/` (§36).
 - **CNAs that are research firms:** `vulncheck.com/advisories`,
   `zerodayinitiative.com/advisories/published/` (AI-tool 0-days publish here first; the index's ZDI
   numbers can be off by one from the URLs — open the page and read the id),
@@ -167,8 +169,8 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
 - **Rapid-reaction / telemetry:** `watchtowr.com`, `horizon3.ai`, `greynoise.io`, `wiz.io`,
   `f5.com/labs`, `blackpointcyber.com`, `okta.com` (AI-token infostealer analysis).
 - **Vendor patch trackers:** `docs.gitlab.com/releases/patches/`, Atlassian, JFrog release notes.
-- **Registry records:** `osv.dev/vulnerability/MAL-<year>-<n>` (OpenSSF record; second source for a takedown), `npm view <pkg> time`, `registry.npmjs.org/<pkg>` (`0.0.1-security` =
-  takedown marker), `pip index versions <pkg>`, PyPI JSON via curl.
+- **Registry records:** `osv.dev/vulnerability/MAL-<year>-<n>`, `npm view <pkg> time`, `registry.npmjs.org/<pkg>`
+  (`0.0.1-security` = takedown), `pip index versions <pkg>`, PyPI JSON.
 - **Hacker News (Algolia):**
   `hn.algolia.com/api/v1/search_by_date?query=<one term>&tags=story&numericFilters=created_at_i%3E{epoch}`
   — one term per call, `>` URL-encoded.
@@ -177,22 +179,23 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
 - **Researcher blogs:** remedio.io, upguard.com/blog, 0day.click, cyata.ai, layerxsecurity.com, pillar.security, oasis.security,
   tenetsecurity.ai, labs.zenity.io, novee.security, danusminimus.github.io, oddguan.com,
   manifold.security, paddo.dev, embracethered.com, itmeetsot.eu, forever.security, socket.dev,
-  stepsecurity.io, aikido.dev, safedep.io, air.security (agent plugin/skill supply chain),
+  stepsecurity.io, aikido.dev, safedep.io, air.security,
   hacktron.ai, opensourcemalware.com, research.empiricalsecurity.com, crowdstrike.com/en-us/blog,
-  accomplish.ai/blog (posts days before any outlet; confirm the fix from the release tag + registry),
+  accomplish.ai/blog,
   cycode.com, glow.io, threatdown.com.
 - **Eval-vendor incident posts:** `irregular.com/research`. **Victim post-mortems:** `crowdsec.net/blog`.
+- **Exploitation telemetry:** `research.empiricalsecurity.com/research`. **Agent reports:** `transluce.org/investigations`.
 - **Coding-tool upload/telemetry (LEARNINGS §30):** `"<tool>" upload OR telemetry OR privacy OR snapshot`,
-  rotating desktop/CLI agents (Grok Build, ZCode, Kimi Code, Qwen Code, Trae, Kiro…); primaries
-  `blog.ferstar.org`, `blog.vonng.com`, `gist.github.com/cereblab`; China-market coverage `eu.36kr.com`, `panews.io`.
-- **Registry-team blog index pages, fetched each sweep** (warnings to maintainers never rank in search).
-- **`api.npmjs.org/downloads/point/last-week/<pkg>`** after a takedown — a stub still pulling millions = inflation.
-- **Endpoint-vendor telemetry:** `gendigital.com/blog/insights/research` (stealers vs agent state).
-- **Sandbox vendors as their own CNA:** `github.com/docker/sbx-releases/releases` (CVE text in notes).
-- **Standalone incident / legal sites:** `collusion.wiki`, `rubyhack.ai`, `transluce.org`, `lasstorg.substack.com` (complaint PDFs).
-- **National broadcasters (government-victim stories):** `abc.net.au`, `sbs.com.au`.
+  rotating desktop/CLI agents (Grok Build, ZCode, Kimi Code, Qwen Code, Trae, Kiro…); `blog.ferstar.org`,
+  `blog.vonng.com`, `gist.github.com/cereblab`, `eu.36kr.com`, `panews.io`.
+- **Registry-team blog index pages, fetched each sweep.**
+- **`api.npmjs.org/downloads/point/last-week/<pkg>`** after a takedown — millions on a stub = inflation.
+- **Endpoint-vendor telemetry:** `gendigital.com/blog/insights/research`.
+- **Sandbox vendors as their own CNA:** `github.com/docker/sbx-releases/releases`.
+- **Standalone incident / legal sites:** `collusion.wiki`, `rubyhack.ai`, `lasstorg.substack.com`.
+- **National broadcasters:** `abc.net.au`, `sbs.com.au`.
 - **Platform blog indexes (post-mortems with no CVE):** `blog.cloudflare.com`, `openclaw.ai/blog`, `docs.gitlab.com/releases/patches/`.
-- **Regulators:** `aepd.es` (first GDPR notification for an attack executed by an AI agent).
+- **Regulators:** `aepd.es` (GDPR notifications for AI-agent attacks).
 
 ## Known source-access gaps
 
@@ -204,7 +207,7 @@ whether a quiet category was quiet or unreachable.
   (use the `NVIDIA/product-security` mirror), `techtimes.com`, `cybernews.com`, `scworld.com`,
   `spectrosec.com`, `securityonline.info` (intermittent), `openai.com/index/...` (use `alignment.openai.com`).
   Read blocked outlets via citing outlets; say so in Sources.
-- **Empty / truncated bodies:** `gbhackers.com`, `cybersecuritynews.com` (retry once, else cite THN),
+- **Empty / truncated bodies:** `gbhackers.com`, `cybersecuritynews.com` (cite THN),
   `msrc.microsoft.com/update-guide` (use the NVD API), `nvd.nist.gov/vuln/detail` (use the API),
   `pypi.org/pypi/<pkg>/json` (use `pip index versions`), `docs.cloud.google.com/<product>/release-notes`
   (use the `/feeds/...xml` feed), `cloud.google.com/security/resources/<report>` (use outlets),
@@ -213,12 +216,13 @@ whether a quiet category was quiet or unreachable.
 - **`checkmarx.com/zero-post/`** — intermittent 404. **`koi.ai/blog`** — 301s to a product page; cite via THN.
 - **GitHub `security/advisories` tabs** — occasional 504; retry once. **Vendor-repo vs `github.com/advisories/GHSA-…`**
   — either can 404 while the other resolves; try both. **Release pages** mis-render years (Ollama, Obot 09-30) and
-  `api.github.com/.../releases/tags/<t>` is empty via the proxy — fix dates come from the registry or NVD.
-- **arXiv API** — 429; the HTML listing pages work. **`hn.algolia.com`** — retry once; URL-encode `>` as `%3E`.
-- **`vulncheck.com/advisories/<slug>`** — some per-CVE pages 404 while the index lists them; cite the index.
+  `api.github.com/.../releases/tags/<t>` is empty via the proxy; release tags can 404 — fix dates come from the registry or NVD.
+- **arXiv API** — 429; HTML listings work. **`hn.algolia.com`** — retry once; encode `>` as `%3E`.
+- **`vulncheck.com/advisories/<slug>`** — some per-CVE pages 404; cite the index.
 - **`github.com` via `curl` (cloud session)** — proxy returns a GitHub-API scope error; use the read-only
   `web-fetch` agent with bare URLs (2026-09-22).
-- **`securityweek.com` front page and `/feed/`** — intermittent 403 (09-22 to 09-26; clean 09-30).
+- **`securityweek.com`** — intermittent 403 to `curl`; `WebFetch` works.
+- **`cyber.gc.ca`** news — client-rendered, empty. **`zammad.com/en/advisories`** — stale; GitHub tab only. **`washingtonpost.com`** — paywall.
 - **`techcrunch.com`** — a guessed slug 404s silently; search for the URL. **`techrepublic.com`** — 403. **`cnbc.com`, `cbc.ca`,
   `darkreading.com`** — 403 (2026-09-24). **`theregister.com/<date>/`** day indexes 404 — use `/security/`. **`reuters.com`** — paywall; `devdiscourse.com`
   mirrors the wire. **`marketscreener.com`** — 403; **`technology.org`** — JS wall.

@@ -15,6 +15,19 @@
 
 ## Archived entries
 
+## 2026-09-22
+
+```yaml
+queries: {deep: 16, medium: 24, shallow: 12}
+new: [2026-09-nextjs-og-imageresponse-satori-svg-rce, 2026-06-supabase-realtime-presence-read-rls-bypass]
+updated: [2026-09-zhipu-zcode-silent-workspace-git-history-upload, 2026-08-agent-framework-mcp-cve-batch, 2026-03-trivy-litellm-supply-chain, 2026-09-docker-sandboxes-virtiofs-symlink-host-escape]
+sources_added: [devdiscourse.com, thenews.com.pk]
+sources_weighted: [nextjs.org, github.com, github.com/advisories, nvd.nist.gov, registry.npmjs.org, api.npmjs.org, theregister.com, thehackernews.com, securityonline.info]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, securityweek-front-page-403-cloudflare, wired.com-blocked, marketscreener-403, technology.org-js-wall, reuters.com-paywall-use-devdiscourse-mirror, github.com-curl-intercepted-by-session-proxy-use-fetch-agent, ghsa-mirror-404-for-supabase-realtime-use-vendor-repo-url, nvd-no-record-yet-for-cve-2026-94545]
+```
+
+**Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source, all cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw/Codex/CrewAI; frontend incl. Next.js/React/Svelte/SvelteKit/Vite/Astro/Tailwind/shadcn; backend/auth/DB incl. FastAPI/Streamlit/Prisma/Supabase/NextAuth/Clerk/better-auth/python-genai). No direct `WebFetch` tool this session: front pages, KEV, HN Algolia, NVD API and outlets via `curl`; **`github.com` via curl is intercepted by the session proxy** (returns a "sessions are bound to their configured repositories" GitHub-API error), so the nine advisory-database listings, eleven GHSA pages and the 35-tab vendor walk ran through the read-only `web-fetch` agent with bare URLs — no classifier trips, no repo access (LEARNINGS §31). KEV (dateAdded ≥ 09-15): Zyxel 09-21 only — nothing in scope. **Two new.** (1) Next.js critical: pre-announced in the morning as "a critical upstream issue," shipped in the afternoon; the upstream was **Satori**, not libheif — the pre-announcement's "upstream" is not the last one. Satori's own advisory is 5.3, Next.js's 9.5 for the same CVE; wrote the consumer's number and said why. NVD has no record yet. (2) Supabase Realtime CVE-2026-62247: surfaced from the `Supabase security advisory` search and the NVD API; vendor GHSA is June, database mirror 404s, `supabase/supabase` tab is empty — dated by the vendor. **Updates by identifier:** 9router's two new CVEs (DB 09-22; fix version disagreement settled by `npm view time`); notebooklm-mcp's *opt-in* traversal fix (folded into the MCP batch); TeamPCP arrests (THN 08-27, missed by prior sweeps) + GTIG infiltration (Wired blocked; SecurityOnline paraphrase, weighted as such); Docker Sandboxes 0.45.0 release-note security fix; ZCode Reuters/Register with the Chengming retraction. **Declined:** Loopjacking arXiv 2609.21081 (research; LangGraph path needs a custom auth policy, OpenClaw part fixed 2026.2.24 in Feb); Meta Muse macOS dictation-endpoint hijack (Wardle, hot-fixed 09-22 — consumer agent, not dev tooling; revisit if a coding tool ships the same pattern); OpenClaw CVE-2026-41301 (April, availability-only, 6.9); Tell HN "Claude Code signed a contract" and the Claude CLI feedback-consent thread (single anecdotes); EvilTokens, Contagious Interview joint advisory, Expat CVE-2026-93990 (out of audience); ckan-mcp-server incomplete-fix SSRF (moderate). Vendor-tab walk (35 tabs, all 200): only Next.js new since 09-18; docker/sbx-releases 0.45.0 security note used. SecurityWeek front page 403'd (Cloudflare) — not covered today. Zero sources decayed.
+
 ## 2026-09-21
 
 ```yaml

@@ -2,7 +2,7 @@
 id: 2025-11-n8n-ni8mare-rce
 title: "n8n Ni8mare + RCE cluster — CVSS 10.0 unauth takeover of workflow automation (Nov 2025 → August 2026)"
 date_disclosed: 2025-11-09
-last_updated: 2026-09-16
+last_updated: 2026-10-01
 severity: critical
 status: patched
 ecosystems: [npm, self-hosted]
@@ -176,6 +176,11 @@ n8n's bi-weekly [Security update — 16 September 2026](https://community.n8n.io
 
 Medium: Webflow-trigger missing webhook-signature verification, stored DOM XSS in the resource-locator dropdown, unescaped parameter interpolation into third-party query languages, and a Send-and-Wait "approve within chat" bypass. This is the **fourth** biweekly n8n batch this repo has folded in (2026-08-19, 09-02, and the 09-03 straggler above), and the count of DB/expression-injection findings keeps climbing — the "workflow editors and their inputs are trusted" assumption remains the load-bearing one. **Upgrade to 1.123.80 / 2.40.1 / 2.39.6.**
 
+
+## Update — 2026-10-01: VulnCheck assigns CVEs to three of the 09-16 batch — the inline-agent credential decryption is **CVE-2026-103246** (8.3), the Supabase node filter injection **CVE-2026-103248** (7.1) and the Supabase node table-name traversal **CVE-2026-103255** (7.1); NVD's text adds what the traversal reaches
+
+Published 2026-10-01 (CNA VulnCheck), the three ids map to GHSA-9rhv-fhr8-7q5r, GHSA-xrqg-3xcp-h45x and GHSA-rqch-9jrh-cr8w above; the vendor advisories themselves still read "No known CVE." Same fix versions (**1.123.80 / 2.39.6 / 2.40.1**, all npm 2026-09-16). NVD's description of CVE-2026-103255 is more specific than the vendor's about the blast radius: workflows binding the Supabase node's `tableId` to untrusted input let an attacker "traverse to Auth and Storage APIs using the administrative `serviceRole` key, **bypassing Row Level Security**" — i.e. the n8n integration holds the one Supabase key that RLS does not apply to, and the node let a request path escape the table endpoint. For readers of the [UpGuard / Supabase RLS advisory](2026-09-upguard-supabase-16k-exposed-databases-rls-systemic.md): an n8n workflow is a place your service-role key lives, and below these versions a crafted field value in any untrusted trigger reached it. The practical effect of the CVE assignment is that CVE-driven scanners now flag n8n below 2.39.6 / 2.40.1 for the agent-credential bug they previously missed.
+
 ## Sources
 
 - [n8n Community — Security update — 16 September 2026](https://community.n8n.io/t/security-update-16-september-2026/314102) — fetched 2026-09-16; the vendor's batch index for the sixteen 2026-09-16 advisories with severities and fixed versions (1.123.80 / 2.40.1 / 2.39.6).
@@ -231,3 +236,4 @@ Sources for the 2026-08-19 batch (added 2026-08-21):
 
 **2026-09-15 update source:**
 - [n8n — GHSA-cw9w-vv67-hf73: Per-Resource OAuth Consent Bypass via Unbound Refresh Token Resource Substitution (CVE-2026-86073)](https://github.com/n8n-io/n8n/security/advisories/GHSA-cw9w-vv67-hf73) — fetched 2026-09-15; CVSS 5.9, < 2.38.2 / < 2.37.7, the re-authorization guidance.
+- **2026-10-01 update sources** — [NVD API — CVE-2026-103246](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-103246), [CVE-2026-103248](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-103248), [CVE-2026-103255](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-103255) (CNA VulnCheck, published 2026-10-01, CVSS 4.0 8.3 / 7.1 / 7.1, descriptions quoted; queried 2026-10-01); vendor advisories [GHSA-9rhv-fhr8-7q5r](https://github.com/n8n-io/n8n/security/advisories/GHSA-9rhv-fhr8-7q5r), [GHSA-xrqg-3xcp-h45x](https://github.com/n8n-io/n8n/security/advisories/GHSA-xrqg-3xcp-h45x), [GHSA-rqch-9jrh-cr8w](https://github.com/n8n-io/n8n/security/advisories/GHSA-rqch-9jrh-cr8w) (re-fetched 2026-10-01: published 2026-09-16, still "No known CVE", patched ≥ 1.123.80 / ≥ 2.39.6 / ≥ 2.40.1, "Build Manually" filter mode as the Supabase workaround); [npm — n8n `time`](https://registry.npmjs.org/n8n) (1.123.80, 2.39.6 and 2.40.1 all 2026-09-16; latest 2.41.5; queried 2026-10-01).

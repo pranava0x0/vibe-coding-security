@@ -2,7 +2,7 @@
 id: 2026-07-nextjs-july-security-release
 title: "Next.js July + August 2026 Security Releases — 9 CVEs in July, then two critical unauthenticated RCEs in August (AVIF, Windows CVE-2026-75604)"
 date_disclosed: 2026-07-20
-last_updated: 2026-09-14
+last_updated: 2026-10-01
 severity: critical
 status: patched
 ecosystems: [npm, javascript]
@@ -105,6 +105,21 @@ node -e 'console.log(require("astro/package.json").version)' 2>/dev/null   # nee
 npm ls sharp 2>/dev/null                                                    # need >= 0.35.4 everywhere it resolves
 ```
 
+
+## Update — 2026-10-01: Empirical Security reports in-the-wild activity against the Windows RCE (CVE-2026-75604) from its own sensors since 2026-09-18 and a public Metasploit module; the scoping line "Linux and macOS are not affected" is how teams are closing it wrongly, and **the Server Actions key should be rotated after patching** — the advisory never says so
+
+Empirical Security's "October 2026 CVE of the Month" (published around 09-30) picks CVE-2026-75604 and adds three things the vendor advisory does not. **Exploitation:** Empirical's sensor network first saw activity against the bug on **2026-09-18**, with the most recent on **09-24**; its exploitability model moved the CVE from the 14th to the **98th percentile** of all scored CVEs, a **public Metasploit module** exists, and it is **not** on CISA KEV. Empirical is candid that this is one sensor source and that some activity may be testing — so this advisory keeps `status: patched` rather than promoting to `active`, and records the signal with its date. **Preconditions, precisely:** the exploit needs Windows hosting, **both** the Pages Router and the App Router with Cache Components off (the CVE text says "or"; Vercel's advisory and the Metasploit module require both), the default on-disk incremental cache (a custom `cacheHandler` to Redis/S3 should not reach the vulnerable path, though the advisory does not state that carve-out), and — for the public exploit — a dynamic ISR Pages route plus a dynamic cached App route, plus at least one Server Action that captures a form field in a closure. The traversal (`..%5C` in a route segment) reads `server-reference-manifest.json`, which holds the key Next.js uses to encrypt Server Action arguments; with it, forged Server Action calls run as the Node process. **Remediation gap:** the Next.js docs say a new Server Actions key is generated per build, but the key is cached in `.next/cache/.rscinfo` for up to **14 days** and reused across rebuilds that keep that folder, and multi-server deployments pin it via `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY` — a pinned key survives any upgrade. **If an affected app ever ran on Windows, rotate the key after patching; upgrading alone may not change it.** Also noted: the CVE was "reserved but public" for a week (advisory 08-25, CVE record 09-01) and reached the GitHub Advisory Database — Dependabot, `npm audit`, OSV — only on **09-08**, so intake keyed on database entries was two weeks behind the vendor post.
+
+```bash
+# Close "not affected" on evidence, not on the package version:
+#  - any Windows runtime for this app (IIS + HttpPlatformHandler/iisnode/ARR, node.exe running `next start`, Windows App Service plans, Windows containers)?
+#  - both routers present, Cache Components off, default filesystem cache?
+ls app pages 2>/dev/null; grep -n 'cacheComponents\|cacheHandler' next.config.* 2>/dev/null
+# If yes and the app was ever below 15.5.24 / 16.3.3: rotate the Server Actions key
+rm -rf .next/cache/.rscinfo && unset NEXT_SERVER_ACTIONS_ENCRYPTION_KEY   # then set a NEW pinned key for multi-server deployments and rebuild
+# Edge/WAF stopgap until every app is upgraded: block %5C / %255C (any case) or a literal backslash in the request PATH (not query), raw and once-decoded
+```
+
 ## Sources
 - [Next.js — Security Release and Our Next Patch Release (announcement, 2026-07-13)](https://nextjs.org/blog/next-security-release-program)
 - [Next.js — July 2026 Security Release (full CVE list, published 2026-07-20)](https://nextjs.org/blog/july-2026-security-release)
@@ -118,3 +133,4 @@ npm ls sharp 2>/dev/null                                                    # ne
 - [The Hacker News — Next.js Patches Critical AVIF and Windows Flaws Enabling Unauthenticated RCE](https://thehackernews.com/2026/08/nextjs-patches-critical-avif-and.html) — fetched 2026-09-10; published 2026-08-27: the `image/avif`-in-`formats` exposure condition, researcher credits, and the "Vercel-hosted applications are protected … and require no upgrade" statement.
 - [GitHub Advisory Database — GHSA-26w7-cxv4-gfx2: Astro remote code execution through AVIF image optimization](https://github.com/advisories/GHSA-26w7-cxv4-gfx2) — fetched 2026-09-14 for the 2026-09-14 update: CVSS 9.8, affected < 7.2.8 / fixed 7.2.8, `sharp` ≥ 0.35.4 requirement, upstream libheif GHSA-g89c-p67h-r497 reference, published 2026-08-27 / reviewed 2026-09-08.
 - [npm registry — `astro`](https://registry.npmjs.org/astro) — queried 2026-09-14 (`npm view astro time`): 7.2.7 published 2026-08-25, 7.2.8 published 2026-08-26.
+- **2026-10-01 update sources** — [Empirical Security — October 2026 CVE of the Month: The Next.js RCE Behind "Not Affected" (CVE-2026-75604)](https://research.empiricalsecurity.com/research/october-2026-cve-of-the-month) (fetched 2026-10-01: sensor activity 2026-09-18 → 09-24, percentile history, Metasploit preconditions, the `.rscinfo` 14-day key cache and `NEXT_SERVER_ACTIONS_ENCRYPTION_KEY` rotation advice, the RBP timeline and 09-08 database date, the WAF rule, Tenable plugin 342568 and Fastly virtual patch); [NVD API — CVE-2026-75604](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-75604) (CNA GitHub, published 2026-09-01, CVSS 3.1 9.0; re-queried 2026-10-01); [CISA KEV JSON](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) (checked 2026-10-01: not listed).

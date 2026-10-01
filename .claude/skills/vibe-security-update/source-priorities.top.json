@@ -29,8 +29,8 @@
   {
    "domain": "csoonline.com",
    "weight": 20.0,
-   "hits": 12,
-   "last_hit": "2026-08-30"
+   "hits": 13,
+   "last_hit": "2026-10-01"
   },
   {
    "domain": "cybersecuritynews.com",
@@ -41,20 +41,20 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 34,
-   "last_hit": "2026-09-30"
+   "hits": 35,
+   "last_hit": "2026-10-01"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 39,
-   "last_hit": "2026-09-30"
+   "hits": 40,
+   "last_hit": "2026-10-01"
   },
   {
    "domain": "helpnetsecurity.com",
    "weight": 20.0,
-   "hits": 11,
-   "last_hit": "2026-09-30"
+   "hits": 12,
+   "last_hit": "2026-10-01"
   },
   {
    "domain": "microsoft.com",
@@ -65,8 +65,8 @@
   {
    "domain": "nvd.nist.gov",
    "weight": 20.0,
-   "hits": 59,
-   "last_hit": "2026-09-30"
+   "hits": 60,
+   "last_hit": "2026-10-01"
   },
   {
    "domain": "ox.security",
@@ -77,14 +77,14 @@
   {
    "domain": "safedep.io",
    "weight": 20.0,
-   "hits": 17,
-   "last_hit": "2026-09-30"
+   "hits": 18,
+   "last_hit": "2026-10-01"
   },
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 54,
-   "last_hit": "2026-09-30"
+   "hits": 55,
+   "last_hit": "2026-10-01"
   },
   {
    "domain": "sentinelone.com",
@@ -107,26 +107,32 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 96,
-   "last_hit": "2026-09-30"
+   "hits": 97,
+   "last_hit": "2026-10-01"
   },
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 46,
-   "last_hit": "2026-09-30"
+   "hits": 47,
+   "last_hit": "2026-10-01"
   },
   {
    "domain": "vulncheck.com",
    "weight": 20.0,
-   "hits": 16,
-   "last_hit": "2026-09-30"
+   "hits": 17,
+   "last_hit": "2026-10-01"
   },
   {
    "domain": "wiz.io",
    "weight": 20.0,
    "hits": 15,
    "last_hit": "2026-09-12"
+  },
+  {
+   "domain": "registry.npmjs.org",
+   "weight": 19.0,
+   "hits": 15,
+   "last_hit": "2026-10-01"
   },
   {
    "domain": "unit42.paloaltonetworks.com",
@@ -139,12 +145,6 @@
    "weight": 18.0,
    "hits": 5,
    "last_hit": "2026-09-24"
-  },
-  {
-   "domain": "registry.npmjs.org",
-   "weight": 18.0,
-   "hits": 14,
-   "last_hit": "2026-09-30"
   },
   {
    "domain": "snyk.io",

@@ -2,7 +2,7 @@
 id: 2026-09-gitspawn-git-config-agent-rce-cluster
 title: "GitSpawn — repo-local git config (core.fsmonitor and others) runs code in 7 AI coding agents before any trust prompt"
 date_disclosed: 2026-09-01
-last_updated: 2026-09-20
+last_updated: 2026-10-01
 severity: critical
 status: active
 ecosystems: [claude-code, cursor, openai-codex, goose, qwen-code, grok-build, hermes-agent, github-copilot-cli]
@@ -95,6 +95,19 @@ find . -type f -name HEAD -not -path './.git/*' -execdir test -d objects \; -exe
 
 **Note 2026-09-20 — the same 2026-09-01 Codex batch carries a fourth CVE that is not a git-config sink.** [GHSA-2frj-4qr5-m2rf / CVE-2026-19591](https://github.com/advisories/GHSA-2frj-4qr5-m2rf) (CVSS 8.8, Codex CLI on Windows/macOS/Linux and Codex Desktop): Codex's command-safety parser read PowerShell's stop-parsing token (`--%`) differently from PowerShell itself, so an attacker-prepared repository could make Codex run **file-writing git commands without approval**, modify configuration, and end up executing an attacker-controlled MCP server with the user's privileges (fix: openai/codex PR #22643). Different root cause, same outcome class — a repository steering the agent into an unapproved write — and the same fix window; it is recorded here so a reader reconciling the Codex CVE list against this table is not left with one unexplained id. Affected/patched versions are "unknown" on the database record; run current Codex (see also the separate [Heapjack/Overpatch sandbox escapes](2026-09-codex-heapjack-overpatch-sandbox-escapes.md), fixed 0.149.0).
 
+
+### Update 2026-10-01 — a second GitPython bug in the same class: tracked files named `gitdir`, `commondir` and `HEAD` at a repo root can impersonate the git directory, so `index.commit()` on a cloned repo runs a tracked `pre-commit` hook (CVE-2026-87817 / GHSA-239g-whfq-7xj9, High 8.7–8.8; fixed 3.1.60) — and aider's pin is still 3.1.46
+
+The GitHub Advisory Database published GitPython's own advisory **GHSA-239g-whfq-7xj9** as a reviewed `pip` entry on **2026-09-30**; the vendor advisory is dated **2026-08-26** and VulnCheck's CVE **CVE-2026-87817** followed on **2026-09-09** (CVSS 4.0 **8.7**; the vendor page scores 3.1 **8.8**, CWE-94/CWE-427). NVD's description: *"GitPython before 3.1.60 fails to properly validate the git directory location, allowing attackers to impersonate the git directory using tracked files like `gitdir`, `commondir`, and `HEAD`. Attackers can execute arbitrary code by placing a malicious pre-commit hook in the tracked hooks directory that executes when a victim calls `index.commit()` on a cloned or opened repository."* The vendor advisory flags CI, scanners and AI code-review/agent tools as the relevant consumers, and notes the same confusion enables config-based file disclosure.
+
+This is a different bug from the 09-12 entry above (CVE-2026-78676, the `write_section()` read-then-rewrite injection, fixed 3.1.59): that one needed the agent to *write* config; this one fires on an ordinary **commit** against a repository whose *tracked content* is shaped like a `.git` directory. An agent that clones an untrusted repo, makes a change and commits — the default loop for every "fix this issue" workflow — is the victim. Fix is **GitPython ≥ 3.1.60** (PyPI 2026-08-25; current 3.2.0). **aider-chat 0.86.2 still pins `gitpython==3.1.46`** (PyPI metadata re-queried 2026-10-01), two fixes behind; until aider bumps it, `pip install -U 'GitPython>=3.1.60'` after installing aider, and treat an aider run against an unfamiliar repository as running that repository's hooks.
+
+```bash
+pip show GitPython 2>/dev/null | grep -E '^Version:'       # vulnerable if < 3.1.60 (and < 3.1.59 for CVE-2026-78676)
+# Does a repo you are about to open carry git-directory-shaped tracked files at its root?
+git -C <repo> ls-files | grep -E '^(gitdir|commondir|HEAD|hooks/)' 
+```
+
 ## Sources
 - [Manifold Security — GitSpawn: A Single Flaw Lets Untrusted Repos Run Code in Claude Code, Codex, Cursor, and Grok](https://www.manifold.security/blog/ai-coding-agents-git-hijack) — primary disclosure: mechanism, full disclosure timeline, per-agent status table.
 - [GitHub Security Advisory GHSA-r5pp-p5r8-466r — Arbitrary command execution in goose CLI via `goose review` via git core.fsmonitor](https://github.com/aaif-goose/goose/security/advisories/GHSA-r5pp-p5r8-466r) — vendor advisory confirming CVE-2026-72718, CVSS 4.0 7.0, credited to Francisco Rosales.
@@ -106,3 +119,4 @@ find . -type f -name HEAD -not -path './.git/*' -execdir test -d objects \; -exe
 - [PyPI — aider-chat 0.86.2 dependency metadata](https://pypi.org/pypi/aider-chat/json) — queried 2026-09-12: confirms the `gitpython==3.1.46` pin (< 3.1.59).
 - [GitHub Advisory Database — GHSA-9ccr-r5hg-74gf (CVE-2026-45033, GitHub Copilot CLI: nested bare repository can execute arbitrary commands via core.fsmonitor)](https://github.com/advisories/GHSA-9ccr-r5hg-74gf) — fetched 2026-09-14 for the 2026-09-14 update: mechanism, delivery vectors (PRs, dependencies, nested clones), `safe.bareRepository=explicit` fix, affected ≤ 1.0.42 / fixed 1.0.43, published 2026-05-06, reporter syvb.
 - [NVD — CVE-2026-45033](https://nvd.nist.gov/vuln/detail/CVE-2026-45033) — fetched via the NVD API 2026-09-14: CVSS 4.0 8.5 HIGH, published 2026-05-13, "prior to 1.0.43."
+- **2026-10-01 update sources** — [GitPython — GHSA-239g-whfq-7xj9: Repository content can impersonate the git directory, leading to arbitrary code execution](https://github.com/gitpython-developers/GitPython/security/advisories/GHSA-239g-whfq-7xj9) (vendor advisory, published 2026-08-26, High 8.8, CWE-94/427, ≤ 3.1.59 → 3.1.60; fetched 2026-10-01); [NVD API — CVE-2026-87817](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-87817) (CNA VulnCheck, published 2026-09-09, CVSS 4.0 8.7, description quoted; queried 2026-10-01); [GitHub Advisory Database — `agent`, sorted by published date](https://github.com/advisories?query=agent+sort%3Apublished-desc) (the 2026-09-30 reviewed pip entry; fetched 2026-10-01); [PyPI — GitPython](https://pypi.org/pypi/GitPython/json) (3.1.60 uploaded 2026-08-25, latest 3.2.0) and [aider-chat 0.86.2 metadata](https://pypi.org/pypi/aider-chat/json) (`gitpython==3.1.46`), both queried 2026-10-01.
