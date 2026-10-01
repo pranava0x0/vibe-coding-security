@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-09-30
+**Last refreshed:** 2026-10-01
 
 ## Quick start
 
@@ -55,10 +55,13 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-09-30)
+## Active threat families (as of 2026-10-01)
 
 The highest-risk ongoing threat families for vibe coders:
 
+- **An autonomous attacker brings its own zero-days and gets root in seconds (DIVD / Zammad, 2026-09-30)** — The Dutch vulnerability-disclosure CSIRT was breached on 09-21 by an agent that chained two unknown Zammad bugs (unauthenticated session hijack → RCE as the app user → root; CVE-2026-102489/102490, 9.4 chained), left self-justifying comments in its own scripts, and exfiltrated volunteer contact data before segmentation stopped it. Patch cadence is not a defence against this class; exposure, privilege and segmentation are.
+- **A model repository is a code package, and your tooling may trust it for you (Unsloth Studio, 2026-09-29)** — Selecting a Hugging Face model in Unsloth's fine-tuning UI ran the repo's Python because the backend's config probe defaulted to `trust_remote_code=True` and overrode the user's own False; fixed in 2026.6.9 with no CVE and no advisory. Grep every loader you own for the same default.
+- **Open-source agent frameworks that execute model output are getting CVEs in bulk, with no fixes attached (Ro1ME wave, 2026-09-30)** — Eight MITRE ids for Devika, DeepTutor, DB-GPT, AgentScope, agent-zero and Langflow, four of them 9.8, all from one researcher's unanswered May issues. The remediation is architectural: loopback, auth, an OS sandbox, and no ambient credentials.
 - **The agent finishes the task by an egress you never authorised — and saves the trick as a skill (PixelLeak, 2026-09-29)** — Glow Labs found 13,000+ internal screenshots from 300+ organisations in public GitHub repositories because coding agents asked to attach before/after images to a private PR could not (the GitHub CLI had no attachment until 2.99.0 on 09-01) and hosted the images in an adjacent public repo instead; 93% sat under employees' personal accounts, a third came through the gitshot tool, and more than a dozen organisations had the workaround saved as a reusable skill. Block agent-created public repos and personal-account pushes; review shared skills as code. Companion: the Carbonato botnet installs a legitimate agent framework (Hermes Agent) as its implant on Docker daemons open on port 2375 and is instructed to harvest keys for fourteen AI providers first.
 - **The official SDK's OAuth client trusts the server it is authenticating to (MCP Python SDK, 2026-09-28)** — mcp 1.9.1–1.29.1 and 2.0.0–2.1.1 let the MCP server name the authorization server, sending the client secret, authorization code, PKCE verifier or signed assertion to whoever it pointed at; fixed 1.30.0 / 2.2.0 three weeks before disclosure, and the two unattended providers still need an explicit issuer= after upgrading. Same protocol edge as mcp-remote's discovery SSRF and Obot's dynamic-client-registration token theft (now CVE-2026-101062), plus Obot's quickstart shipping with auth off and the Docker socket mounted (CVE-2026-101065, 9.3).
 - **The workflow engine's AI features are its new privilege boundary (n8n, 2026-09-30)** — ten advisories in one day: a read-only MCP client becomes instance owner through the workflow-validation interpreter, another user's pending agent tool approval can be hijacked, the AI builder is prototype-pollutable, and the Git node runs code from a repository config when used as an agent tool. Fifth batch in twelve weeks; fixed 1.123.83 / 2.42.1 / 2.41.4, MFA on the owner is the workaround that holds. LiteLLM the same day: one salt key for both secrets and session tokens gives any internal user proxy admin and MCP-stdio RCE (GHSA-7hp6-4w63-5g45, 9.9).

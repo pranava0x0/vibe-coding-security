@@ -2,7 +2,7 @@
 id: 2026-08-vm2-isolated-vm-sandbox-escapes
 title: "Both JavaScript sandboxes that AI workflow platforms run untrusted code in broke in the same fortnight — vm2 (host DNS hijack) and isolated-vm (type confusion → host RCE), August 2026"
 date_disclosed: 2026-08-07
-last_updated: 2026-09-20
+last_updated: 2026-10-01
 severity: critical
 status: patched
 ecosystems: [npm, javascript, self-hosted]
@@ -121,6 +121,19 @@ If you run one of the named `isolated-vm` consumers — **n8n, Activepieces, Mas
 
 Practical guidance: put an **OS-level boundary** (container, VM, seccomp, separate process with dropped privileges) beneath any in-process JS sandbox running untrusted or model-generated code, so a single library bug is not the only thing between a hostile expression and your host. And **watch GHSA, not just CVE feeds** — both of these would have been invisible to CVE-driven tooling.
 
+
+### Update 2026-10-01 — the GitHub Advisory Database now carries reviewed npm entries for ten vm2 criticals, five of them not previously listed here (CVE-2026-92941 **10.0**, -92944, -92948, -92951, -92957); every one is fixed in **3.11.7** or earlier, and all were CVE'd on 2026-09-17
+
+The reviewed-critical `npm` listing on 2026-10-01 shows ten `vm2` advisories published to the database that day — the vendor advisories are dated **2026-08-24** and VulnCheck assigned the CVEs on **2026-09-17**, so this is a database event, not a new wave (`LEARNINGS.md` §19: a GHSA publication date is not a disclosure date). Five ids were not in this file. From the NVD records (CNA VulnCheck) and the vendor advisory page fetched for the 10.0:
+
+- **CVE-2026-92941 / GHSA-98xx-8mx4-x7cm** — **CVSS 10.0**: when the `tls` builtin is allowed (explicitly or via `builtin: ['*']`), sandboxed code can call `tls.setDefaultCACertificates()` and **replace the host process's certificate-authority trust store**, so every later HTTPS client in the host accepts attacker certificates. Affects ≥ 3.11.3 ≤ 3.11.6 → **3.11.7**. The same "read-only proxy forwards method calls on a process-global object" root cause as the `dns.setServers()` and `https.globalAgent` findings above — this is the third process-wide singleton to fall.
+- **CVE-2026-92944 / GHSA-27g9-p43v-cw3v** — 9.3: on **Node.js 26** a stale `PromiseThenLookupChain` protector in V8 14.6 lets `Promise.prototype.finally()` bypass vm2's wrappers via an attacker-controlled `Symbol.species` constructor, reaching the host `Function` constructor and `process`. Affects 3.10.2 → 3.11.6.
+- **CVE-2026-92948 / GHSA-qhwx-74w5-xhxq** — 9.4: on Node.js 24+, `module.builtinModules` exposes the scheme-only key `node:test`, which vm2's family-based `DANGEROUS_BUILTINS` check does not cover; because the loader strips a single `node:` prefix, `require('node:node:test')` reaches the host module and `test.run()` with `execArgv` escapes. Affects ≥ 3.9.6 ≤ 3.11.6, when the embedder allows `node:test`.
+- **CVE-2026-92951 / GHSA-c48m-32m9-vx93** — 9.4: the external-package allowlist used **substring** matching, so a colliding package name containing an allowlisted name loads an unauthorised host package. Before 3.11.7.
+- **CVE-2026-92957 / GHSA-8686-vhfx-7r3j** — 9.4: negative (deny) entries in a wildcard policy are compared against canonical names, but the loader normalises `node:` away — so `['*', '-node:child_process']` fails to deny `child_process`. Through 3.11.6.
+
+What changes for a reader: nothing in the fix target (**3.11.8 minimum, 3.12.2 for the no-CVE fixes**) — but CVE-driven scanners will light up today for anything **< 3.11.7** that they previously passed, and two of the escapes (`node:test`, the Promise protector) are **Node-version-dependent**, so a vm2 that looked safe on Node 22 is not on Node 24/26. If you run vm2 behind a workflow product, check the product's Node base image, not only the library version.
+
 ## Sources
 
 - [GitHub Security Advisory — GHSA-864f-rcv7-6rh4 (isolated-vm)](https://github.com/laverdet/isolated-vm/security/advisories/GHSA-864f-rcv7-6rh4) — fetched directly: Critical severity, published 2026-08-07, affected ≤ 7.0.0, patched 7.0.1 / 6.2.0, no CVE assigned, and the double-walk / *"An index getter therefore fires once per walk and can answer differently each time"* root cause plus the unchecked `As<ArrayBuffer>()` cast.
@@ -134,3 +147,4 @@ Practical guidance: put an **OS-level boundary** (container, VM, seccomp, separa
 - [vm2 — GHSA-h85j-hv3c-qfgq: vm2 3.11.6 exposes host HTTPS credentials and TLS traffic through globalAgent](https://github.com/patriksimek/vm2/security/advisories/GHSA-h85j-hv3c-qfgq) — vendor advisory, published 2026-08-24: CVSS 10.0 vector, ≥ 3.11.3 ≤ 3.11.6 → 3.11.7, the `free`-event listener mechanism, reporter Forrof. Fetched 2026-09-20.
 - [GitHub Advisory Database — GHSA-5843-9mh5-hhgw (CVE-2026-92940)](https://github.com/advisories/GHSA-5843-9mh5-hhgw) — VulnCheck-sourced copy published 2026-09-17; `Agent.prototype.on()` detail, CVSS 4.0 10.0. Fetched 2026-09-20.
 - npm registry `time` field for `vm2` (via `npm view vm2 time`, 2026-09-17): 3.11.6 2026-08-14, 3.11.7 08-24, 3.11.8 08-27, 3.12.0 09-01, 3.12.1 09-03, 3.12.2 09-08.
+- **2026-10-01 update sources** — [GitHub Advisory Database — reviewed critical npm advisories, sorted by published date](https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm+severity%3Acritical+sort%3Apublished-desc) (fetched 2026-10-01: ten vm2 entries published that day — GHSA-qhwx-74w5-xhxq, -h85j-hv3c-qfgq, -c48m-32m9-vx93, -8686-vhfx-7r3j, -8hr7-r645-pc6w, -647f-g98j-qq25, -6w8r-xxw2-g3hx, -46pr-c5wc-xffx, -27g9-p43v-cw3v, -98xx-8mx4-x7cm); [vm2 — GHSA-98xx-8mx4-x7cm: NodeVM can replace the host process TLS trust store](https://github.com/patriksimek/vm2/security/advisories/GHSA-98xx-8mx4-x7cm) (vendor, published 2026-08-24, Critical 10.0, CWE-732, ≥ 3.11.3 ≤ 3.11.6 → 3.11.7; fetched 2026-10-01); [NVD API — CVE-2026-92941](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-92941), [CVE-2026-92944](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-92944), [CVE-2026-92948](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-92948), [CVE-2026-92951](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-92951), [CVE-2026-92957](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-92957) (CNA VulnCheck, all published 2026-09-17; scores and version ranges quoted above; queried 2026-10-01); [npm — vm2 `time`](https://registry.npmjs.org/vm2) (3.11.7 published 2026-08-24, 3.11.8 2026-08-27; queried 2026-10-01).
