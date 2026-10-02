@@ -1407,6 +1407,13 @@ def main() -> None:
     if wellknown_src.is_dir():
         shutil.copytree(wellknown_src, DIST_DIR / ".well-known")
 
+    # Public registry evidence, linked from sources pages. Copy JSON only.
+    evidence_src = REPO_ROOT / "sources" / "cve-evidence"
+    for snapshot in evidence_src.glob("*.json"):
+        target = DIST_DIR / "sources" / "cve-evidence" / snapshot.name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy(snapshot, target)
+
     (DIST_DIR / ".nojekyll").touch()
 
     pages = discover_pages()
