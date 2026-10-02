@@ -6,9 +6,17 @@
 
 ## Open
 
-_None open._
+### `mcp-remote` advisory: CISA scores added after the sweep are not reflected — 2026-10-02
+- **Data freshness: three of the five CVE records gained a CISA score after the 2026-09-25 sweep.** Found while verifying the correction logged under Fixed below. Read from the CVE records on 2026-10-02: CVE-2026-51994 9.1, CVE-2026-51996 9.8, CVE-2026-51997 8.8; CVE-2026-52001 still has none. [`advisories/2026-09-mcp-remote-oauth-discovery-ssrf-cve-batch.md`](advisories/2026-09-mcp-remote-oauth-discovery-ssrf-cve-batch.md) says that at sweep time (2026-09-25) only CVE-2026-51995 carried a score, which is true as dated but no longer the current picture. Deliberately left out of the correction: adding them is a severity reassessment — the advisory is `high`, two of the new scores are Critical, and all three go beyond what the researcher's own pages demonstrate (F-04, the 9.8, is filed there as defense-in-depth hardening with no score) — and that is a maintainer decision. Root cause: content (data freshness). Status: open.
 
 ## Fixed
+
+### `mcp-remote` advisory: CVE-2026-51995 attached to the wrong finding — 2026-10-02
+
+Reported by the researcher in [issue #114](https://github.com/pranava0x0/vibe-coding-security/issues/114) and verified independently against primary records before anything was changed.
+
+- **Content bug: the seven-findings table in [`advisories/2026-09-mcp-remote-oauth-discovery-ssrf-cve-batch.md`](advisories/2026-09-mcp-remote-oauth-discovery-ssrf-cve-batch.md) listed CVE-2026-51995 (and its CVSS 7.5) against F-10, the redirect-validation finding, and showed F-02, the blind SSRF via `authorization_servers[]`, with no CVE.** The CVE record references the F-02 page and always has: both revisions of the record in `CVEProject/cvelistV5` (2026-09-24), the NVD record, GHSA-5wmf-76f4-cg47 and OSV all carry the same reference, and no public source other than this repo ties the CVE to F-10. The two source files named in the CVE description are where `mcp-remote` 0.1.38 performs the F-02 fetch, which is consistent with the reference but would not settle it alone. Root cause: **content bug** — the advisory said its mapping came from "the reference URL in each NVD record", but this row did not follow that rule. How the wrong row was picked is not recorded; the likeliest slip is a number match — the researcher's original v1.0.0 table gave F-10 a suggested score of 7.5 (withdrawn the same day in v1.0.1), the same number CISA later put on CVE-2026-51995. Fixed: the CVE moved to the F-02 row, F-10 marked as having none, the title and `ALERTS.md` wording changed from "metadata info leak", and the TL;DR from "information disclosure through the authorization-server-metadata code", to the blind-SSRF description, a dated correction note and the newly fetched sources added, `last_updated` bumped, `advisory-index.jsonl` regenerated. The other four CVE-to-finding rows were re-checked against the same records and were already right. Severity, status and the advice to readers are unchanged.
+- **Regression guard: the dated correction note in the advisory itself.** The offline gate cannot check a CVE-to-finding pairing against the registries, so nothing in CI would catch this class. The process rule is the one the advisory already stated — copy the pairing from the record's reference URL, never infer it from a matching score or description.
 
 ### Sweep skill: classifier rejections, a context-window-sized preamble, and a build-budget ratchet — 2026-08-29
 
