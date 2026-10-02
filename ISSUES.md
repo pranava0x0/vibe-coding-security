@@ -6,7 +6,7 @@
 
 ## Open
 
-None for this review.
+_None open._
 
 ## Fixed
 
@@ -16,7 +16,7 @@ None for this review.
 
 The [advisory](advisories/2026-09-mcp-remote-oauth-discovery-ssrf-cve-batch.md) now maps all five CVEs to their CNA references, attributes the four scores to CISA-ADP, explains the OSV 0.1.38 fixed-version conflict, and corrects F-11's unsupported token-leak claim. Severity remains high and status unconfirmed, with a documented rationale and reassessment triggers. The new scores are visible without presenting unverified code execution as demonstrated impact. The [public evidence review](sources/mcp-remote-evidence.md) preserves source records and research limits; the private transcript stays local.
 
-Root cause: content verification gap. The former gate checked syntax and links but not CVE/finding identity. The new offline validator compares finding tables and attributed scores with saved registry records, requires explicit treatment of detected version conflicts, and rejects missing evidence. A separate live check detects upstream changes without silently rewriting content. Regression tests exercise the original swap, missing/ambiguous references, score changes, version conflicts and failed fetches. Sweep instructions now require these checks and reject score matching or source-count inflation. Resolution: PR #117.
+Root cause: content verification gap. The former gate checked syntax and links but not CVE/finding identity. The new offline validator compares finding tables and attributed scores with saved registry records, requires explicit treatment of detected version conflicts, and rejects missing evidence. A separate live check detects upstream changes without silently rewriting content. Regression tests exercise the original swap, missing/ambiguous references, score changes, version conflicts and failed fetches. Sweep instructions now require these checks and reject score matching or source-count inflation. A follow-up review of that change added CVSS vectors to the generated score rows (a Codex review comment), replaced the validator's `assert` checks with explicit errors so `python -O` cannot disable them, spaced the live registry requests, restored two sweep rules the first pass had replaced, and added terms notices for the saved third-party registry copies. Resolution: PR #117.
 
 ### Sweep skill: classifier rejections, a context-window-sized preamble, and a build-budget ratchet — 2026-08-29
 

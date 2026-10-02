@@ -29,7 +29,7 @@ Exact fields to inspect:
 
 ## Impact and severity
 
-The [advisory's dated score table](../advisories/2026-09-mcp-remote-oauth-discovery-ssrf-cve-batch.md#severity-review-2026-10-02) reproduces CISA-ADP's 9.1, 7.5, 9.8 and 8.8 scores; F-11 has none. The site keeps **high / unconfirmed**, an editorial rating distinct from the external CVSS scores. The trade-off is a headline below two Critical scores, with the disagreement visible rather than silently resolved.
+The [advisory's dated score table](../advisories/2026-09-mcp-remote-oauth-discovery-ssrf-cve-batch.md#severity-review-2026-10-02) reproduces CISA-ADP's 9.1, 7.5, 9.8 and 8.8 scores with their vectors; F-11 has none. The site keeps **high / unconfirmed**, an editorial rating distinct from the external CVSS scores. The trade-off is a headline below two Critical scores, with the disagreement visible rather than silently resolved.
 
 The versioned researcher pages support narrower claims:
 
@@ -44,11 +44,19 @@ The versioned researcher pages support narrower claims:
 
 These limits do not establish that stronger impact is impossible, nor reject or formally dispute a CVE. They establish what the cited research demonstrates. New vendor confirmation, a reproducible stronger impact, or changed records should trigger another review. No exploit was run for this review.
 
+## Source data and terms
+
+The files under `cve-evidence/` are saved copies of public registry API responses, retrieved on 2026-10-02 and re-indented for readability; their content is otherwise unchanged. They are third-party material. The CC0 dedication that covers the rest of this site does not apply to them. The same notice is saved beside the files as [NOTICE.txt](cve-evidence/NOTICE.txt).
+
+- **CVE Records** (from `cveawg.mitre.org`): Copyright © 1999-2026, The MITRE Corporation. Use is subject to the [CVE Program Terms of Use](https://www.cve.org/Legal/TermsOfUse), which permit copying and redistribution provided MITRE's copyright designation and that licence accompany each copy.
+- **NVD API responses** (from `services.nvd.nist.gov`): This product uses the NVD API but is not endorsed or certified by the NVD.
+- **OSV API responses** (from `api.osv.dev`): OSV.dev's automated conversions of NVD/CVE data. OSV's documentation states no separate licence for these records, so the CVE and NVD terms above are shown with them as well.
+
 ## Validation and limits
 
 `python tools/validate_cve_evidence.py` checks every ID-first `F-<number>` finding table in the corpus against a required evidence manifest. It rejects missing snapshots, wrong record IDs, unpublished CVEs, ambiguous finding references, moved or missing CVEs, stale score tables, and unreviewed inclusive-end/fixed-version conflicts. The build validator and pytest run this offline.
 
-`python tools/validate_cve_evidence.py --live` re-fetches only fixed registry endpoints and fails on changed records or network errors. It never follows researcher URLs, redirects, or instructions inside fetched data. `--refresh` explicitly replaces snapshots after all requests for a bundle succeed; it does not rewrite advisory prose or choose severity. Review the diff, then use `--scores <advisory-id>` to print the updated score block.
+`python tools/validate_cve_evidence.py --live` re-fetches only fixed registry endpoints and fails on changed records or network errors. Requests are spaced two seconds apart, which keeps consecutive NVD calls about six seconds apart; NVD allows five unauthenticated requests per rolling 30 seconds. It never follows researcher URLs, redirects, or instructions inside fetched data. `--refresh` explicitly replaces snapshots after all requests for a bundle succeed; it does not rewrite advisory prose or choose severity. Review the diff, then use `--scores <advisory-id>` to print the updated score block.
 
 Coverage is intentionally bounded: other advisory formats still require manual primary-source review. Snapshot checks detect disagreement with captured evidence, not false statements inside that evidence. Live checks detect record changes, not every possible vendor release. The version check recognizes inclusive `through X` text versus an OSV `fixed` boundary; it is not a general version-range parser. Reference URLs with no unique finding require manual resolution, not score matching.
 

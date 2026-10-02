@@ -13,6 +13,7 @@ import json
 from pathlib import Path
 import re
 import sys
+import time
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -26,6 +27,19 @@ ENDPOINTS = {
     "nvd": "https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=",
     "osv": "https://api.osv.dev/v1/vulns/",
 }
+USER_AGENT = "vibe-coding-security-evidence/1.0 (+https://github.com/pranava0x0/vibe-coding-security)"
+# Space out live requests. NVD allows 5 requests per rolling 30 seconds without
+# an API key and recommends about six seconds between calls; requests go out in
+# cve, nvd, osv order, so this spacing keeps consecutive NVD calls six seconds apart.
+REQUEST_DELAY = 2.0
+_last_request = float("-inf")
+
+
+def require(condition, message):
+    """Raise on a failed check. Not `assert`: `python -O` strips assert
+    statements, which would silently switch these checks off."""
+    if not condition:
+        raise ValueError(message)
 
 
 class NoRedirect(urllib.request.HTTPRedirectHandler):
@@ -34,13 +48,20 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 
 
 def fetch(kind, cve):
+    global _last_request
     if not CVE.fullmatch(cve):
         raise ValueError(f"invalid CVE: {cve}")
+    wait = REQUEST_DELAY - (time.monotonic() - _last_request)
+    if wait > 0:
+        time.sleep(wait)
     request = urllib.request.Request(ENDPOINTS[kind] + cve, headers={
-        "User-Agent": "vibe-coding-security-evidence/1.0", "Accept": "application/json",
+        "User-Agent": USER_AGENT, "Accept": "application/json",
     })
-    with urllib.request.build_opener(NoRedirect).open(request, timeout=30) as response:
-        data = response.read(2_000_001)
+    try:
+        with urllib.request.build_opener(NoRedirect).open(request, timeout=30) as response:
+            data = response.read(2_000_001)
+    finally:
+        _last_request = time.monotonic()
     if len(data) > 2_000_000:
         raise ValueError("registry response exceeds 2 MB")
     result = json.loads(data)
@@ -50,14 +71,14 @@ def fetch(kind, cve):
 
 def check_identity(kind, cve, record):
     if kind == "cve":
-        assert record["cveMetadata"]["cveId"] == cve, "CVE identity mismatch"
-        assert record["cveMetadata"]["state"] == "PUBLISHED", "CVE is not published"
+        require(record["cveMetadata"]["cveId"] == cve, "CVE identity mismatch")
+        require(record["cveMetadata"]["state"] == "PUBLISHED", "CVE is not published")
     elif kind == "nvd":
-        assert len(record["vulnerabilities"]) == 1, "expected one NVD record"
-        assert record["vulnerabilities"][0]["cve"]["id"] == cve, "NVD identity mismatch"
+        require(len(record["vulnerabilities"]) == 1, "expected one NVD record")
+        require(record["vulnerabilities"][0]["cve"]["id"] == cve, "NVD identity mismatch")
     else:
-        assert record["id"] == cve, "OSV identity mismatch"
-        assert not record.get("withdrawn"), "OSV record withdrawn"
+        require(record["id"] == cve, "OSV identity mismatch")
+        require(not record.get("withdrawn"), "OSV record withdrawn")
 
 
 def semantic_record(kind, record):
@@ -90,15 +111,15 @@ def metrics(record):
 
 def score_block(records, prefix, checked_at):
     lines = [START, f"Registry scores checked {checked_at}. Scores belong to the named provider.", "",
-             "| CVE | Finding | Provider / CVSS | Provider updated |",
-             "|---|---|---|---|"]
+             "| CVE | Finding | Provider / CVSS | Vector | Provider updated |",
+             "|---|---|---|---|---|"]
     for cve, record in sorted(records.items()):
         finding = reference_finding(record, prefix)
         values = metrics(record)
         if not values:
-            lines.append(f"| {cve} | {finding} | No CVSS supplied | — |")
+            lines.append(f"| {cve} | {finding} | No CVSS supplied | — | — |")
         for provider, version, score, severity, vector, updated in values:
-            lines.append(f"| {cve} | {finding} | {provider} / {version}: {score:.1f} {severity.title()} | {updated} |")
+            lines.append(f"| {cve} | {finding} | {provider} / {version}: {score:.1f} {severity.title()} | `{vector}` | {updated} |")
     return "\n".join([*lines, END])
 
 
@@ -140,22 +161,22 @@ def version_conflicts(cve_record, osv_record):
 
 def validate_bundle(root, manifest, live=False, refresh=False):
     path = root / EVIDENCE / manifest.name
-    config = json.loads(path.read_text())
-    assert config["schema_version"] == 1, "unsupported evidence schema"
+    config = json.loads(path.read_text(encoding="utf-8"))
+    require(config["schema_version"] == 1, "unsupported evidence schema")
     advisory = config["advisory"]
-    assert re.fullmatch(r"[a-z0-9-]+", advisory), "invalid advisory filename"
+    require(re.fullmatch(r"[a-z0-9-]+", advisory), "invalid advisory filename")
     checked = date.fromisoformat(config["checked_at"])
-    assert checked <= datetime.now(timezone.utc).date(), "future evidence date"
+    require(checked <= datetime.now(timezone.utc).date(), "future evidence date")
     ids = config["cves"]
-    assert ids and len(ids) == len(set(ids)), "empty or duplicate CVE list"
+    require(ids and len(ids) == len(set(ids)), "empty or duplicate CVE list")
     prefix = config["finding_reference_prefix"]
-    assert prefix.startswith("https://") and prefix.endswith("/"), "invalid reference prefix"
+    require(prefix.startswith("https://") and prefix.endswith("/"), "invalid reference prefix")
     records, changes = {}, []
     for cve in ids:
-        assert CVE.fullmatch(cve), "invalid CVE in manifest"
+        require(CVE.fullmatch(cve), "invalid CVE in manifest")
         for kind in ENDPOINTS:
             snapshot = root / EVIDENCE / f"{cve}.{kind}.json"
-            saved = json.loads(snapshot.read_text()) if snapshot.exists() else None
+            saved = json.loads(snapshot.read_text(encoding="utf-8")) if snapshot.exists() else None
             if live or refresh:
                 current = fetch(kind, cve)
                 if saved is None or semantic_record(kind, current) != semantic_record(kind, saved):
@@ -164,16 +185,16 @@ def validate_bundle(root, manifest, live=False, refresh=False):
                     # Stage all responses in memory. No partial refresh on a later failure.
                     records[(cve, kind)] = current
             if not refresh:
-                assert saved is not None, f"missing snapshot: {snapshot.name}"
+                require(saved is not None, f"missing snapshot: {snapshot.name}")
                 check_identity(kind, cve, saved)
                 records[(cve, kind)] = saved
     if refresh:
         for (cve, kind), record in records.items():
-            (root / EVIDENCE / f"{cve}.{kind}.json").write_text(json.dumps(record, indent=2) + "\n")
+            (root / EVIDENCE / f"{cve}.{kind}.json").write_text(json.dumps(record, indent=2) + "\n", encoding="utf-8")
         config["checked_at"] = datetime.now(timezone.utc).date().isoformat()
-        path.write_text(json.dumps(config, indent=2) + "\n")
+        path.write_text(json.dumps(config, indent=2) + "\n", encoding="utf-8")
     cve_records = {cve: records[(cve, "cve")] for cve in ids}
-    text = (root / "advisories" / f"{advisory}.md").read_text()
+    text = (root / "advisories" / f"{advisory}.md").read_text(encoding="utf-8")
     rows = finding_rows(text)
     expected = {finding: set() for finding in rows}
     for cve, record in cve_records.items():
@@ -206,7 +227,7 @@ def validate_all(root=ROOT, live=False, refresh=False):
     errors, covered = [], set()
     for manifest in sorted((root / EVIDENCE).glob("*.evidence.json")):
         try:
-            config = json.loads(manifest.read_text())
+            config = json.loads(manifest.read_text(encoding="utf-8"))
             name = config["advisory"]
             if name in covered:
                 raise ValueError(f"duplicate evidence manifest for {name}")
@@ -217,7 +238,7 @@ def validate_all(root=ROOT, live=False, refresh=False):
             errors.append(f"{manifest.name}: {exc}")
     for advisory in (root / "advisories").glob("*.md"):
         try:
-            if finding_rows(advisory.read_text()) and advisory.stem not in covered:
+            if finding_rows(advisory.read_text(encoding="utf-8")) and advisory.stem not in covered:
                 errors.append(f"{advisory.name}: finding table needs an evidence manifest")
         except ValueError as exc:
             errors.append(f"{advisory.name}: {exc}")

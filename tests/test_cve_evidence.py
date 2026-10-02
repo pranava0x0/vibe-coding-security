@@ -4,6 +4,8 @@ import importlib.util
 import json
 from pathlib import Path
 import shutil
+import subprocess
+import sys
 
 import pytest
 
@@ -80,7 +82,11 @@ def test_invalid_cna_evidence(corpus, case):
     assert evidence.validate_all(corpus)
 
 
-@pytest.mark.parametrize("field,value", [("baseScore", 8.0), ("baseSeverity", "CRITICAL")])
+@pytest.mark.parametrize("field,value", [
+    ("baseScore", 8.0),
+    ("baseSeverity", "CRITICAL"),
+    ("vectorString", "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N"),
+])
 def test_changed_scores_require_prose_update(corpus, field, value):
     def mutate(record):
         record["containers"]["adp"][0]["metrics"][0]["cvssV3_1"][field] = value
@@ -194,8 +200,53 @@ def test_fetch_validates_id_before_network(cve):
         evidence.fetch("cve", cve)
 
 
+def test_score_rows_record_vectors():
+    """A score without its vector hides conditions such as required user interaction."""
+    _, block = evidence.validate_bundle(ROOT, ROOT / evidence.EVIDENCE / f"{ADVISORY}.evidence.json")
+    rows = {line.split("|")[1].strip(): line for line in block.splitlines() if line.startswith("| CVE-")}
+    assert "`CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H`" in rows["CVE-2026-51997"]
+    assert rows["CVE-2026-52001"].count("—") == 2  # unscored: no vector, no provider date
+
+
+def test_checks_survive_python_optimize_flag(corpus):
+    """`python -O` strips assert statements; the gate must not depend on them."""
+    change_json(corpus, CVE + ".cve.json", lambda record: record["cveMetadata"].update(state="REJECTED"))
+    code = ("import sys; from pathlib import Path; sys.path.insert(0, sys.argv[1]); "
+            "import validate_cve_evidence as v; print(len(v.validate_all(Path(sys.argv[2]))))")
+    result = subprocess.run([sys.executable, "-O", "-c", code, str(ROOT / "tools"), str(corpus)],
+                            capture_output=True, text=True, check=True)
+    assert int(result.stdout.strip()) > 0
+
+
+def test_live_requests_are_spaced(monkeypatch):
+    """NVD allows five unauthenticated requests per rolling 30 seconds."""
+    slept = []
+
+    class Response:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *exc):
+            return False
+
+        def read(self, limit):
+            return json.dumps({"cveMetadata": {"cveId": CVE, "state": "PUBLISHED"}}).encode()
+
+    class Opener:
+        def open(self, request, timeout):
+            return Response()
+
+    monkeypatch.setattr(evidence.urllib.request, "build_opener", lambda *handlers: Opener())
+    monkeypatch.setattr(evidence.time, "sleep", slept.append)
+    monkeypatch.setattr(evidence, "_last_request", float("-inf"))
+    evidence.fetch("cve", CVE)
+    evidence.fetch("cve", CVE)
+    assert len(slept) == 1 and 0 < slept[0] <= evidence.REQUEST_DELAY
+
+
 def test_evidence_published_without_local_research(dist_dir):
     for source in (ROOT / evidence.EVIDENCE).glob("*.json"):
         assert (dist_dir / evidence.EVIDENCE / source.name).read_bytes() == source.read_bytes()
+    assert (dist_dir / evidence.EVIDENCE / "NOTICE.txt").read_bytes() == (ROOT / evidence.EVIDENCE / "NOTICE.txt").read_bytes()
     assert (dist_dir / "sources/mcp-remote-evidence.html").exists()
     assert not list(dist_dir.rglob("*.local.md"))

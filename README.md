@@ -100,4 +100,4 @@ If you spotted something live and need it logged in the next hour, just open an 
 
 ## License
 
-CC0 / public domain. Copy, fork, mirror, paste into your own runbooks. Attribution appreciated but not required.
+CC0 / public domain. Copy, fork, mirror, paste into your own runbooks. Attribution appreciated but not required. Exception: the saved registry records under `sources/cve-evidence/` are third-party data under their own terms — see [source data and terms](sources/mcp-remote-evidence.md#source-data-and-terms).
