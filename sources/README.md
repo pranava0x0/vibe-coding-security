@@ -34,3 +34,7 @@ It gets promoted to a full advisory file when:
 - Sources can be triangulated across at least two independent reporters.
 - Concrete IOCs (package names, versions, hashes, domains) exist.
 - A reader can answer "am I affected?" in under a minute using a command in the advisory.
+
+## Evidence reviews
+
+- [mcp-remote: CVE mappings, score attribution and version conflicts](mcp-remote-evidence.md) — primary records checked 2026-10-02.

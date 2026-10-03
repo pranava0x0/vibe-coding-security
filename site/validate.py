@@ -30,6 +30,10 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 DIST_DIR = REPO_ROOT / "dist"
 ADV_DIR = REPO_ROOT / "advisories"
 
+# The same offline provenance gate runs locally and in CI/deploy validation.
+sys.path.insert(0, str(REPO_ROOT / "tools"))
+from validate_cve_evidence import validate_all as check_cve_evidence
+
 
 class HTMLAuditor(HTMLParser):
     def __init__(self) -> None:
@@ -288,6 +292,7 @@ def main() -> int:
         ("HTML metadata present", check_html_metadata),
         ("Heading hierarchy OK", check_heading_hierarchy),
         ("Advisory frontmatter complete", check_advisory_frontmatter),
+        ("CVE mappings and attributed scores match evidence", check_cve_evidence),
         ("llms.txt format", check_llms_txt),
         ("sitemap.xml well-formed", check_sitemap),
         ("advisories.json sane", check_advisories_json),
