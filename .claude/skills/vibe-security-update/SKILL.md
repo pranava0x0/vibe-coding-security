@@ -291,7 +291,7 @@ that is the file every future run actually reads.
 
 **The GitHub Pages deploy runs `build.py → validate.py → pytest` and fails the deploy if any step fails. Run the exact same gate locally and only commit if it is fully green.** Committing without this is what froze the live site for 2+ weeks (2026-06-04 → 2026-06-19): every daily sweep committed broken internal links, `validate.py` failed, and the site silently stopped updating while `main` kept advancing.
 
-**For a full sweep, run the date-update script first. For a targeted correction, retain the last-full-sweep dates and update only the touched advisory's `last_updated`. Before either gate, run the live evidence check and resolve any drift:**
+**For a full sweep, run the date-update script first. For a targeted correction, leave README's `Last full sweep` alone (no sweep ran), bump the `Last refreshed` markers in `ALERTS.md` and `llms.txt` when the feed or index changed, and update the touched advisory's `last_updated`. Before either gate, run the live evidence check and resolve any drift:**
 
 ```bash
 python tools/validate_cve_evidence.py --live

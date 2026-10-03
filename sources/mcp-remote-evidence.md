@@ -1,6 +1,6 @@
 # mcp-remote: evidence review
 
-> Checked 2026-10-02. Public evidence supporting the [advisory correction and severity review](../advisories/2026-09-mcp-remote-oauth-discovery-ssrf-cve-batch.md).
+> Checked 2026-10-02; standards section and licence text added 2026-10-03. Public evidence supporting the [advisory correction and severity review](../advisories/2026-09-mcp-remote-oauth-discovery-ssrf-cve-batch.md).
 
 ## Mapping correction
 
@@ -44,13 +44,34 @@ The versioned researcher pages support narrower claims:
 
 These limits do not establish that stronger impact is impossible, nor reject or formally dispute a CVE. They establish what the cited research demonstrates. New vendor confirmation, a reproducible stronger impact, or changed records should trigger another review. No exploit was run for this review.
 
+## Standards and guidance consulted
+
+Each item was read on the date shown. They support the editorial decisions above; none is a statement about this package.
+
+- [FIRST, CVSS v3.1 Specification, §1.2](https://www.first.org/cvss/v3-1/specification-document) (2026-10-03): the vector string should always be displayed with the score, and publishers are expected to provide both. This is why the score table carries vectors.
+- [CISA Vulnrichment README](https://github.com/cisagov/vulnrichment) (2026-10-02): CISA's enrichment sits in its own ADP container, is added only where the CNA supplied none, and never overwrites the CNA's data. This is why the scores are attributed to CISA-ADP rather than to MITRE or NVD.
+- [NIST, NVD operations update (2026-04-15)](https://www.nist.gov/news-events/news/2026/04/nist-updates-nvd-operations-address-record-cve-growth) (2026-10-02): NVD now schedules enrichment only for KEV, federal-use and critical-software CVEs; everything else is lowest priority. This is what "Deferred" means for these five records.
+- [Model Context Protocol, Security Best Practices (2026-07-28), SSRF section](https://modelcontextprotocol.io/specification/2026-07-28/basic/security_best_practices) (2026-10-02): names the `resource_metadata` URL, the `authorization_servers` list and the authorization-server endpoints as attacker-controlled, lists redirect chains as a separate pattern, and says clients SHOULD block private ranges and validate redirect targets. This is why F-01, F-02 and F-10 are distinct rows.
+- [RFC 9728 §7.7](https://www.rfc-editor.org/rfc/rfc9728.html#section-7.7) (2026-10-02): a client fetching authorization-server metadata on a resource server's say-so is an SSRF risk, and clients SHOULD take precautions such as blocking internal address ranges. This is F-02's mechanism as the standard describes it; the paragraph does not address redirects.
+- [PortSwigger Web Security Academy, Blind SSRF](https://portswigger.net/web-security/ssrf/blind) (2026-10-03): blind SSRF is a request the application can be made to send whose response is not returned to the attacker, with typically lower impact than full SSRF. This is the sense in which the F-01 and F-02 rows say "blind".
+- [NVD developers, Start Here](https://nvd.nist.gov/developers/start-here) (2026-10-02): five requests per rolling 30-second window without an API key, with a recommendation to pause between requests. This is why `--live` spaces its calls.
+- [CVE Program Terms of Use](https://www.cve.org/Legal/TermsOfUse) and the [SPDX record of that licence, cve-tou](https://github.com/spdx/license-list-data/blob/main/text/cve-tou.txt) (2026-10-03): copies of CVE records must carry MITRE's copyright designation and the licence. This is why the notice below reproduces it.
+
 ## Source data and terms
 
 The files under `cve-evidence/` are saved copies of public registry API responses, retrieved on 2026-10-02 and re-indented for readability; their content is otherwise unchanged. They are third-party material. The CC0 dedication that covers the rest of this site does not apply to them. The same notice is saved beside the files as [NOTICE.txt](cve-evidence/NOTICE.txt).
 
-- **CVE Records** (from `cveawg.mitre.org`): Copyright © 1999-2026, The MITRE Corporation. Use is subject to the [CVE Program Terms of Use](https://www.cve.org/Legal/TermsOfUse), which permit copying and redistribution provided MITRE's copyright designation and that licence accompany each copy.
+- **CVE Records** (from `cveawg.mitre.org`): Copyright © 1999-2026, The MITRE Corporation. Use is subject to the [CVE Program Terms of Use](https://www.cve.org/Legal/TermsOfUse), which permit copying and redistribution provided MITRE's copyright designation and that licence accompany each copy. The licence text is reproduced below.
 - **NVD API responses** (from `services.nvd.nist.gov`): This product uses the NVD API but is not endorsed or certified by the NVD.
 - **OSV API responses** (from `api.osv.dev`): OSV.dev's automated conversions of NVD/CVE data. OSV's documentation states no separate licence for these records, so the CVE and NVD terms above are shown with them as well.
+
+The licence text, reproduced as those terms require:
+
+> CVE Usage: MITRE hereby grants you a perpetual, worldwide, non-exclusive, no-charge, royalty-free, irrevocable copyright license to reproduce, prepare derivative works of, publicly display, publicly perform, sublicense, and distribute Common Vulnerabilities and Exposures (CVE®). Any copy you make for such purposes is authorized provided that you reproduce MITRE's copyright designation and this license in any such copy.
+>
+> DISCLAIMERS
+>
+> ALL DOCUMENTS AND THE INFORMATION CONTAINED THEREIN PROVIDED BY MITRE ARE PROVIDED ON AN "AS IS" BASIS AND THE CONTRIBUTOR, THE ORGANIZATION HE/SHE REPRESENTS OR IS SPONSORED BY (IF ANY), THE MITRE CORPORATION, ITS BOARD OF TRUSTEES, OFFICERS, AGENTS, AND EMPLOYEES, DISCLAIM ALL WARRANTIES, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO ANY WARRANTY THAT THE USE OF THE INFORMATION THEREIN WILL NOT INFRINGE ANY RIGHTS OR ANY IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.
 
 ## Validation and limits
 

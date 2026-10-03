@@ -2,7 +2,7 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-10-01. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-10-03. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
@@ -898,7 +898,7 @@ Nobody types the malicious name — the lure is a take-home repo and `npm instal
 → [advisories/2026-09-ulid-xyz-npm-transitive-rat-chain-microsoftsystem64.md](advisories/2026-09-ulid-xyz-npm-transitive-rat-chain-microsoftsystem64.md)
 
 ### 2026-07-31 — **mcp-remote OAuth discovery: SSRF findings and CVE record discrepancies**
-Five CVEs published 2026-09-24 cover a seven-finding researcher audit. **Corrected 2026-10-02:** CVE-2026-51995 belongs to F-02 (blind SSRF), not F-10 (redirect handling). CISA-ADP scores are 9.1, 7.5, 9.8 and 8.8; CVE-2026-52001 has no score. The advisory remains **high / unconfirmed** because the stronger code-execution claims are not demonstrated in the cited research; F-04 and F-11 are hardening findings. No fixed version is established, and OSV's inferred 0.1.38 fix boundary conflicts with the CVE records. Verify your installed version and only connect to trusted servers; upgrading alone is not a verified fix.
+`mcp-remote` is the npm bridge (~716K downloads/week) that some Claude Desktop, Cursor and VS Code setups use to reach remote MCP servers. Five CVEs published 2026-09-24 cover a seven-finding researcher audit. **Corrected 2026-10-02:** CVE-2026-51995 belongs to F-02 (blind SSRF), not F-10 (redirect handling). CISA-ADP scores are 9.1, 7.5, 9.8 and 8.8; CVE-2026-52001 has no score. The advisory remains **high / unconfirmed** because the stronger code-execution claims are not demonstrated in the cited research; F-04 and F-11 are hardening findings. No fixed version is established, and OSV's inferred 0.1.38 fix boundary conflicts with the CVE records. Verify your installed version and only connect to trusted servers; upgrading alone is not a verified fix.
 → [advisories/2026-09-mcp-remote-oauth-discovery-ssrf-cve-batch.md](advisories/2026-09-mcp-remote-oauth-discovery-ssrf-cve-batch.md)
 
 ### 2026-07-10 → 2026-09-22 — `mcp-atlassian` (the most-used Jira/Confluence MCP server, 161K weekly PyPI downloads): **26 CVEs assigned at once on 2026-09-22** for the security audit it shipped in July — headline **CVE-2026-77244, CVSS 10.0**, an unauthenticated HTTP-transport auth bypass (any non-empty token accepted, then falls back to the operator's global credentials); **all fixed in 0.22.0**, current 0.23.1
