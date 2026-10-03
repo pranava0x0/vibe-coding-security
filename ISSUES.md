@@ -10,6 +10,14 @@ _None open._
 
 ## Fixed
 
+### mcp-remote: mapping, impact wording and score attribution — 2026-10-02
+
+[Issue #114](https://github.com/pranava0x0/vibe-coding-security/issues/114) was valid: CVE-2026-51995 references F-02, while our table assigned it to F-10. The 2026-09-25 sweep introduced the mismatch. Why it selected that row is not established; a matching 7.5 score is a possible explanation, not a proven cause.
+
+The [advisory](advisories/2026-09-mcp-remote-oauth-discovery-ssrf-cve-batch.md) now maps all five CVEs to their CNA references, attributes the four scores to CISA-ADP, explains the OSV 0.1.38 fixed-version conflict, and corrects F-11's unsupported token-leak claim. Severity remains high and status unconfirmed, with a documented rationale and reassessment triggers. The new scores are visible without presenting unverified code execution as demonstrated impact. The [public evidence review](sources/mcp-remote-evidence.md) preserves source records and research limits; the private transcript stays local.
+
+Root cause: content verification gap. The former gate checked syntax and links but not CVE/finding identity. The new offline validator compares finding tables and attributed scores with saved registry records, requires explicit treatment of detected version conflicts, and rejects missing evidence. A separate live check detects upstream changes without silently rewriting content. Regression tests exercise the original swap, missing/ambiguous references, score changes, version conflicts and failed fetches. Sweep instructions now require these checks and reject score matching or source-count inflation. A follow-up review of that change added CVSS vectors to the generated score rows (a Codex review comment), replaced the validator's `assert` checks with explicit errors so `python -O` cannot disable them, spaced the live registry requests, restored two sweep rules the first pass had replaced, and added terms notices for the saved third-party registry copies. A final pass reproduced MITRE's licence text in those notices, restored the download figure and product description to the summary and alert, listed the standards consulted on the evidence page, and refreshed the feed dates. Resolution: PR #117.
+
 ### Sweep skill: classifier rejections, a context-window-sized preamble, and a build-budget ratchet — 2026-08-29
 
 Prompted by a review of the automated daily sweeps over the preceding two weeks. Three distinct problems, one shared root cause: the skill accretes detail every run and nothing ever bounded it.

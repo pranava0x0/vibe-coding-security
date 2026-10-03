@@ -105,6 +105,12 @@ A wrong-but-confident advisory is worse than none — readers act on it. These a
 - **Check your links before opening a PR:** `python tools/check-external-links.py advisories/<your-file>.md` flags 404s and whether a Wayback snapshot exists. **404 + no snapshot = the URL never existed → fix or drop it.** Never link a malware/IOC/C2 domain.
 - **Internal links must point to docs that exist.** Link only real files under `playbooks/` and `prevention/` (run `ls` to check). `site/validate.py` fails the build on broken internal links.
 
+### CVE evidence
+
+For a CVE-to-finding table, use the CNA's exact finding reference and read the referenced revision. Do not infer identity from equal scores or similar descriptions. Attribute scores to their actual provider, and keep registry claims separate from demonstrated impact. NVD, GitHub and OSV mirrors are not independent confirmation. A reviewed affected endpoint is not a fix boundary.
+
+ID-first `F-<number>` tables require saved registry snapshots and a manifest. Run `python tools/validate_cve_evidence.py --live` before publication, then the normal build gate. Review drift or fetch failures explicitly; never silently reuse old evidence as fresh. See [the evidence workflow and its limits](sources/mcp-remote-evidence.md#validation-and-limits). Severity remains an editorial decision supported by evidence, not an automatic maximum of external scores.
+
 ## Style notes
 
 - **Date everything.** Format: `YYYY-MM-DD`. Update `last_updated` in frontmatter when you touch an advisory. Stamp volatile facts (EPSS/KEV, "as of" counts) with their date.
