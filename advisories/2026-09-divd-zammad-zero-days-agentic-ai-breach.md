@@ -2,7 +2,7 @@
 id: 2026-09-divd-zammad-zero-days-agentic-ai-breach
 title: "DIVD breached by an autonomous AI agent through two Zammad zero-days (2026-09-21): unauthenticated session hijack → RCE as the zammad user (CVE-2026-102489) chained with a local root escalation (CVE-2026-102490), both CVSS 4.0 9.4 chained, root 'in seconds'; volunteer contact data exfiltrated; no vendor fix for the root bug as of 2026-10-01 — upgrade to Zammad 7 or take it offline (DIVD CSIRT, 2026-09-30)"
 date_disclosed: 2026-09-30
-last_updated: 2026-10-01
+last_updated: 2026-10-04
 severity: critical
 status: active
 ecosystems: [self-hosted, ruby, helpdesk, ai-agents]
@@ -68,6 +68,10 @@ DIVD is scanning for exposed instances and notifying owners through hosting prov
 - A zero-day in a product you did not write is still your incident; what you control is exposure (is it internet-facing?), privilege (does the app user need `sudo` paths at all?) and credentials (does the helpdesk hold tokens that reach anything else?). [prevention/credential-hygiene.md](../prevention/credential-hygiene.md).
 - For readers building agents: DIVD's attacker left self-justifying comments in its scripts and tripped over its own password spraying. Those artefacts are **detection signals** for the agentic-threat-actor class — log review should look for them, the same way it looks for known tool signatures.
 
+## Update — 2026-10-04: CISA added both Zammad CVEs to the Known Exploited Vulnerabilities catalog on 2026-10-02 (due date 2026-10-05, forensic-triage flag set); DIVD's case file has no statement after 10-01
+
+CISA's KEV feed carries **CVE-2026-102489** ("Zammad Session Fixation Vulnerability … can lead to remote code execution as the zammad user. This vulnerability can be chained with CVE-2026-102490") and **CVE-2026-102490** ("Improper Privilege Management … can allow the local zammad user to escalate privileges to root"), both `dateAdded` **2026-10-02**, `dueDate` **2026-10-05**, `forensicTriage: Yes`, ransomware use "Unknown". The required action is the BOD 26-04 formula — apply vendor mitigations "or discontinue use of the product if mitigations are unavailable" — and the KEV notes link Zammad's releases page and a Zammad community thread titled "Take care: local privilege escalation CVE-2026-102490 is reported as being actively exploited," which is the first vendor-side acknowledgement this corpus has seen (the thread itself was not opened this sweep). For US federal agencies the three-day due date is the shortest this corpus has logged for a self-hosted application; for everyone else it is CISA's way of saying the DIVD intrusion was not a one-off. DIVD's case page DIVD-2026-00014 shows "Last modified 01 Oct 2026 22:30 CEST" with no new statement; status stays **active**.
+
 ## Sources
 
 - [DIVD CSIRT — Case DIVD-2026-00015: Vulnerabilities in Zammad during investigation of case DIVD-2026-00014](https://csirt.divd.nl/cases/DIVD-2026-00015/) — primary (DIVD is the CNA): affected ranges for both bugs, "Upgrade to Zammad version 7" / take it offline, the IoC log-check script, the 09-21 → 09-26 timeline, "reported the vulnerability to Zammad who are working on a fix." Last modified 2026-10-01; fetched 2026-10-01.
@@ -80,3 +84,4 @@ DIVD is scanning for exposed instances and notifying owners through hosting prov
 - [The Register — AI agents hacked the hackers, stealing email addresses from security research org (2026-10-01)](https://www.theregister.com/security/2026/10/01/ai-agents-hacked-the-hackers-stealing-email-addresses-from-security-research-org/5300652) — the 10-01 data-breach statement, the "what human attacker leaves notes to themself" quote, DIVD's CNA role, and VulnCheck's Patrick Garrity on the disclosure. Fetched 2026-10-01.
 - [Zammad — Security Advisory Archive](https://zammad.com/en/advisories) — checked 2026-10-01: last entry ZAA-2026-07 (2026-04-08); the page says later advisories are published only on the project's GitHub security tab; nothing for these CVEs. The vendor's GitHub tab was not reachable from this session.
 - [The Hacker News — ThreatsDay roundup (2026-10-01)](https://thehackernews.com/2026/10/threatsday-ai-powered-zero-day-chain.html) — roundup item quoting DIVD's statements.
+- **2026-10-04 update sources** — [CISA Known Exploited Vulnerabilities catalog (JSON feed)](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) — entries for CVE-2026-102489 (CWE-384) and CVE-2026-102490 (CWE-269): `dateAdded` 2026-10-02, `dueDate` 2026-10-05, `forensicTriage` Yes, descriptions and notes quoted; fetched 2026-10-04. [DIVD CSIRT — DIVD-2026-00014](https://csirt.divd.nl/cases/DIVD-2026-00014/) — re-fetched 2026-10-04: last modified 2026-10-01 22:30 CEST, statements 09-24 → 10-01, nothing newer.
