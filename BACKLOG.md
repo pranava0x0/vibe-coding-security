@@ -21,6 +21,8 @@
 
 ## Medium
 
+- **`advisories.gitlab.com` citations now 404 across the corpus (found 2026-10-04).** Both per-CVE pages (`/pypi/litellm/CVE-2026-49468/`) and package index pages (`/pkg/pypi/litellm/`) return 404; the link checker flags them as gate-failing in the better-auth, LiteLLM and n8n files, and the domain is a weight-20 source. Decide whether the GitLab Advisory Database moved (new path scheme) or is gone; re-link affected citations to the vendor GHSA / NVD pages and demote the source in `source-priorities.json`.
+
 - **GitHub Action: RSS-to-issue.** Poll Socket / Snyk / GHSA RSS, open a `new-advisory` issue when a relevant item appears. Filter by package popularity (>100k weekly downloads) or specific ecosystems to keep noise down.
 - **CLI tool (`npx vcs-check`)** that wraps `npm install` and warns if the package appears in ALERTS or has been flagged. (Subset of `npq`, scoped to this repo's data.)
 - **MCP server for the data.** Expose advisories + playbooks as an MCP server so AI agents can query them inline: `tell me if I should install <pkg>`. Highly on-theme; would dogfood the patterns we recommend in [prevention/mcp-hygiene.md](prevention/mcp-hygiene.md).

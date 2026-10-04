@@ -2,8 +2,8 @@
 id: 2026-07-better-auth-oauth-oidc-mcp-vulnerabilities
 title: "better-auth — 13+ OAuth/OIDC/SSO/SCIM advisories including a critical MCP-plugin refresh-token bypass (CVE-2026-53512)"
 date_disclosed: 2026-06-02
-last_updated: 2026-09-30
-severity: high
+last_updated: 2026-10-04
+severity: critical
 status: patched
 ecosystems: [npm, nextjs, auth]
 tools_affected: [better-auth, better-auth-sso, better-auth-oauth-provider, better-auth-scim, better-auth-stripe, better-auth-mcp]
@@ -102,6 +102,14 @@ Both were verified directly against better-auth's own GitHub Security Advisories
 
 Registry check 2026-09-30: better-auth 1.7.6 (2026-09-24) is the latest npm release; NVD has no CVE for either advisory yet (keyword query, 09-20 → 09-30: zero results).
 
+## Update — 2026-10-04: a Critical on the vendor tab (2026-09-30) — an OAuth sign-in *state* value is accepted as a Magic Link token, so anyone who knows a user's email signs in as them with no mailbox and no provider check (GHSA-965c-763c-88jm, CVSS 9.1); the OAuth Proxy plugin accepts a forged profile (GHSA-r4xp-prcw-77qf, 7.4); both fixed 1.7.7 — this file's severity moves to critical
+
+**[GHSA-965c-763c-88jm](https://github.com/better-auth/better-auth/security/advisories/GHSA-965c-763c-88jm) — Critical, CVSS 3.1 9.1 (`AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:N`), published 2026-09-30, credits rick-v12 and bazumo.** Better Auth "accepts OAuth sign-in state values as Magic Link tokens. An attacker knowing a user's email can leverage an OAuth state to complete a Magic Link sign-in without mailbox access or OAuth provider verification," yielding account takeover or the creation of falsely email-verified accounts. Affected **better-auth ≥ 1.4.0-beta.18 < 1.7.7**, fixed **1.7.7** (npm 2026-09-30). Workarounds until then: `account.storeStateStrategy: "cookie"`, Magic Link `storeToken: "hashed"` with `verification.storeIdentifier: "plain"`, or disable Magic Link or OAuth sign-in; and the advisory says to upgrade all servers together and **invalidate pre-upgrade tokens and state values**. For this audience it is the worst shape an auth library can have: the two most common sign-in methods an AI scaffold enables — "sign in with Google" and "email me a link" — share a token namespace, and either one on its own is fine.
+
+**[GHSA-r4xp-prcw-77qf](https://github.com/better-auth/better-auth/security/advisories/GHSA-r4xp-prcw-77qf) — High 7.4, 2026-09-30, credits iabdullah215 and martinfrancois.** The OAuth Proxy plugin (the helper for preview deployments with changing callback URLs) "under certain configuration conditions" accepts an attacker-crafted fake user profile as legitimate, "enabling unauthorized account access without requiring provider sign-in or victim interaction." Affected ≥ 1.5.0-beta.12 < 1.7.7 → 1.7.7. Workarounds: a distinct strong OAuth Proxy secret separate from the global Better Auth secret, `account.storeStateStrategy: "database"`, remove the plugin if unused, `account.accountLinking.disableImplicitLinking: true` (partial).
+
+Also on the tab: [GHSA-44jh-23m7-hpcf](https://github.com/better-auth/better-auth/security/advisories/GHSA-44jh-23m7-hpcf) (Low, 2026-09-30) — `@better-auth/drizzle-adapter` rate limits can be exceeded by concurrent requests on PostgreSQL. With the two Highs from the 09-30 update that is **five advisories in three days**, all without CVEs. Upgrade `better-auth` to **≥ 1.7.7** and `@better-auth/sso` to ≥ 1.7.3, then rotate: the 9.1 does not require the attacker to have done anything detectable beforehand, so if Magic Link and OAuth were both enabled on < 1.7.7, treat every account as possibly signed into and revoke sessions.
+
 ## If you are affected
 
 1. **Update `better-auth` and every scoped plugin package you use** to the versions above.
@@ -136,3 +144,4 @@ Registry check 2026-09-30: better-auth 1.7.6 (2026-09-24) is the latest npm rele
 - [GitLab Advisory Database — GHSA-j8v8-g9cx-5qf4](https://advisories.gitlab.com/npm/@better-auth/scim/GHSA-j8v8-g9cx-5qf4/) — primary source for the non-org SCIM provider owner-binding bug; CVSS 8.3, affected/fixed versions.
 - [GitHub — better-auth/better-auth security advisories index](https://github.com/better-auth/better-auth/security/advisories) — confirmed GHSA-8c5h-wx78-2cfg as the sole August 2026 entry at time of this sweep.
 - [GitHub Security Advisory — GHSA-8c5h-wx78-2cfg](https://github.com/better-auth/better-auth/security/advisories/GHSA-8c5h-wx78-2cfg) — primary source for the `@better-auth/sso` domain-verification bypass and TOCTOU race; CVSS 8.1, affected/fixed versions.
+- **2026-10-04 update sources** — [better-auth — GHSA-965c-763c-88jm: OAuth state can be used as a Magic Link to sign in as another user](https://github.com/better-auth/better-auth/security/advisories/GHSA-965c-763c-88jm) (published 2026-09-30: Critical 9.1 with vector, affected ≥ 1.4.0-beta.18 < 1.7.7, patched 1.7.7, the four workarounds and the invalidate-pre-upgrade-tokens instruction, credits), [GHSA-r4xp-prcw-77qf: OAuth Proxy lets an attacker sign in as another user](https://github.com/better-auth/better-auth/security/advisories/GHSA-r4xp-prcw-77qf) (2026-09-30: High 7.4, ≥ 1.5.0-beta.12 < 1.7.7, workarounds, credits), [GHSA-44jh-23m7-hpcf](https://github.com/better-auth/better-auth/security/advisories/GHSA-44jh-23m7-hpcf) (Low, drizzle-adapter); [better-auth advisory tab](https://github.com/better-auth/better-auth/security/advisories?state=published) (walked 2026-10-04: five entries 09-28 → 09-30); npm `better-auth` `time` (1.7.6 2026-09-24, **1.7.7 2026-09-30**; queried 2026-10-04). All fetched 2026-10-04.

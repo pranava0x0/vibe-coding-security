@@ -15,6 +15,19 @@
 
 ## Archived entries
 
+## 2026-09-23
+
+```yaml
+queries: {deep: 16, medium: 24, shallow: 10}
+new: [2026-09-memtensor-memos-openclaw-plugin-sckit-worm, 2026-09-mcp-atlassian-cve-mass-assignment, 2026-09-mathmain-encrypted-loader-npm-lusolve-trigger]
+updated: [2026-08-agent-framework-mcp-cve-batch, 2026-09-openclaw-2026-8-1-advisory-batch]
+sources_added: []
+sources_weighted: [stepsecurity.io, safedep.io, aikido.dev, thehackernews.com, research.jfrog.com, github.com, github.com/advisories, nvd.nist.gov, registry.npmjs.org, api.npmjs.org, vulncheck.com, advisories.gitlab.com, reversinglabs.com, securityweek.com, theregister.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, socket.dev-blog-webfetch-503, reversinglabs-blog-landing-truncated-use-THN, github.com-curl-intercepted-use-webfetch-tool, securityonline.info-503]
+```
+
+**Notes (≤300 words).** Full-coverage scheduled sweep (all four requested source classes; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw/Codex/CrewAI; frontend incl. Next.js/React/Svelte/SvelteKit/Vite/Astro/Tailwind/shadcn; backend/auth/DB incl. FastAPI/Streamlit/Prisma/Supabase/NextAuth/Clerk/better-auth/python-genai). This session HAD a direct `WebFetch` tool, so github.com advisory pages, GHSA pages and vendor tabs were fetched with it (curl to github.com is still proxy-intercepted, LEARNINGS §31); front pages, KEV, HN Algolia and NVD via curl. KEV (dateAdded ≥ 09-16): Arista/F5/Check Point/Zyxel/Pixel/Cisco ISE/Acronis/Linux — nothing in scope. **Three new.** (1) **MemTensor sckit** — the official OpenClaw memory plugin + PyPI MemoryOS published from stolen CI tokens with a Go credential stealer; four researcher primaries (StepSecurity/SafeDep/Aikido/THN) within hours, reporter's issue #173 the only maintainer record; npm re-pointed `latest` to clean 0.1.24 but never removed the bad versions, PyPI quarantined. Wrote status `active`. NOTE: the first draft of this advisory was stopped by the safety classifier mid-write (payload-mechanics detail); rewrote it remediation-first (affected versions, defender checks, rotation) and it went through — keep sckit/worm write-ups defender-framed. (2) **mcp-atlassian** — 26 CVEs assigned 09-22 for the July 0.22.0 audit, headline CVE-2026-77244 CVSS 10.0 auth bypass; dated by original disclosure 2026-07-10 (LEARNINGS §19), README row placed in July. (3) **mathmain/JFrog "Equation of Compromise"** — encrypted `lusolve`-triggered loader, same operator infra as indexed-btree; download inflation confirmed via `api.npmjs.org` (stubs still pulling ~2M/wk). **Updates:** MCP batch (+ToolHive session/SSE/JSON-ambiguity ×3 fixed 0.50.0/0.51.0/0.51.1, Kimi Code CVE-2026-95660, Google mcp-toolbox CVE-2026-19202, Langflow MCP IDOR GHSA-4hmc); OpenClaw batch (CVE-2026-95815 now assigned to the iOS deep-link advisory). **Declined:** Graphalgo Terraform/Go-module expansion (Lazarus, crypto-dev audience — logged not filed); tw-pkgprobe-7731 Twilio probe (removed in ~1h, no downloads, low-soph, single-ecosystem); Anthropic/OpenAI Opus 5.5 / GPT-6 alignment-test disclosures (model-safety, not an incident); XRanges eval platform (product); Fortune-500 Azure/Hugging Face-lessons/Copilot-local-sandbox (not vibe-coding incidents). Zero sources decayed (no source past 60 days unseen this batch).
+
 ## 2026-09-22
 
 ```yaml
