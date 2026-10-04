@@ -124,7 +124,7 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
 - **Ecosystem security teams:** `blog.rust-lang.org`, `blog.pypi.org`, `github.blog/changelog`,
   `blog.golang.org`, `blog.rubygems.org`, Packagist (LEARNINGS §17).
 - **Advisory databases:** `github.com/advisories`, GitLab Advisory DB, NVD (use the API,
-  `services.nvd.nist.gov/rest/json/cves/2.0?cveId=`), CISA KEV JSON, `advisory.splunk.com`, `spring.io`.
+  `services.nvd.nist.gov/rest/json/cves/2.0?cveId=`), CNA records `cveawg.mitre.org/api/cve/<id>` (title and description can disagree), CISA KEV JSON, `advisory.splunk.com`, `spring.io`.
 - **Advisory-database listings (fetch every sweep):**
   `github.com/advisories?query=mcp+sort%3Apublished-desc`,
   `…?query=type%3Areviewed+ecosystem%3Anpm+severity%3Acritical`, `…ecosystem%3Apip…` — the reviewed
@@ -133,14 +133,14 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
   `theregister.com/security/` — dated headlines; fetch and cite the article (LEARNINGS §28).
 - **THN weekly roundup** (`thehackernews.com/2026/MM/threatsday-….html`): grep every item against the corpus (§33).
 - **NVD API batch enumeration:** `services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=<product>&pubStartDate=…&pubEndDate=…&resultsPerPage=200` — a CVE wave in one call (§33).
-- **CERT/CC notes:** `kb.cert.org/vuls/` — CNA for platform-to-coding-agent handoff bugs.
+- **CERT/CC notes:** `kb.cert.org/vuls/`.
 - **Advisory-database package queries (products whose own tab is empty):**
   `github.com/advisories?query=crewai`, `…?query=kiro`, `…?query=rmcp`, `…?query=vm2`,
   `…?query=docker+sandboxes`, `…?query=sentry`, `…?query=copilot` (LEARNINGS §25).
 - **Advisory-database agent-name queries, every sweep:** `github.com/advisories?query=claude+sort%3Apublished-desc`,
   `…?query=codex…`, `…?query=cursor…`, `…?query=agent…` (page 2 too), `…?query=llm…` (LEARNINGS §29, §36).
-- **Victim post-mortems, monthly:** `"TanStack" OR "ChainDrop" OR "axios" post-mortem` (§29).
-- **Registry `time` fields** settle fix dates and whether a "deprecated" package still ships (§28).
+- **Victim post-mortems, monthly:** `"<campaign>" post-mortem` (§29).
+- **Registry `time` fields** settle fix dates and whether a "deprecated" package still ships.
 - **Per-product advisory tabs (`github.com/<org>/<repo>/security/advisories`, paginate):** Claude Code,
   Cursor, Cline, goose, OpenHands, SWE-agent, aider, Codex, gemini-cli, OpenClaw (11+ pages),
   n8n, Langflow, Flowise, PraisonAI, LiteLLM, LangChain, LangGraph, Semantic Kernel, Coder, MCP
@@ -148,7 +148,7 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
   `clerk/javascript`, `better-auth/better-auth`, `nextauthjs/next-auth`, `supabase/auth`;
   Supabase components (`supabase/supabase`'s tab is empty): `supabase/realtime`, `supabase/storage-api`,
   `supabase/postgrest`; framework upstreams: `vercel/satori`, `lovell/sharp`;
-  backend: FastAPI, Prisma, Streamlit, `googleapis/python-genai`; companion repos: `openclaw/openclaw-windows-node`,
+  backend: FastAPI, Prisma, Streamlit, `googleapis/python-genai`, `triggerdotdev/trigger.dev`; agent platforms: `awslabs/loom`; companion repos: `openclaw/openclaw-windows-node`,
   `gitpython-developers/GitPython`, `unslothai/unsloth` (§36). Read the vendor's date, not the CVE's.
 - **CSIRT CNA case files:** `csirt.divd.nl/cases/` (§36).
 - **CNAs that are research firms:** `vulncheck.com/advisories`,
@@ -168,14 +168,13 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
 - **Google Cloud release-note feeds:** `docs.cloud.google.com/feeds/<product>-release-notes.xml`.
 - **Rapid-reaction / telemetry:** `watchtowr.com`, `horizon3.ai`, `greynoise.io`, `wiz.io`,
   `f5.com/labs`, `blackpointcyber.com`, `okta.com` (AI-token infostealer analysis).
-- **Vendor patch trackers:** `docs.gitlab.com/releases/patches/`, Atlassian, JFrog release notes.
+- **Vendor patch trackers:** `docs.gitlab.com/releases/patch-releases.xml` (the feed; the HTML hub hides AI Gateway "other patches"), Atlassian, JFrog release notes.
 - **Registry records:** `osv.dev/vulnerability/MAL-<year>-<n>`, `npm view <pkg> time`, `registry.npmjs.org/<pkg>`
   (`0.0.1-security` = takedown), `pip index versions <pkg>`, PyPI JSON.
 - **Hacker News (Algolia):**
   `hn.algolia.com/api/v1/search_by_date?query=<one term>&tags=story&numericFilters=created_at_i%3E{epoch}`
-  — one term per call, `>` URL-encoded.
-- **Roundups that surface primaries:** `adversa.ai/blog`, `labs.cloudsecurityalliance.org`, `xygeni.io/blog`
-  (monthly malicious-code digest: dependency-confusion, plugin and n8n-node impersonation waves).
+  — one term per call.
+- **Roundups that surface primaries:** `adversa.ai/blog`, `labs.cloudsecurityalliance.org`, `xygeni.io/blog`.
 - **Researcher blogs:** remedio.io, upguard.com/blog, 0day.click, cyata.ai, layerxsecurity.com, pillar.security, oasis.security,
   tenetsecurity.ai, labs.zenity.io, novee.security, danusminimus.github.io, oddguan.com,
   manifold.security, paddo.dev, embracethered.com, itmeetsot.eu, forever.security, socket.dev,
@@ -183,19 +182,18 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
   hacktron.ai, opensourcemalware.com, research.empiricalsecurity.com, crowdstrike.com/en-us/blog,
   accomplish.ai/blog,
   cycode.com, glow.io, threatdown.com.
-- **Eval-vendor incident posts:** `irregular.com/research`. **Victim post-mortems:** `crowdsec.net/blog`.
-- **Exploitation telemetry:** `research.empiricalsecurity.com/research`. **Agent reports:** `transluce.org/investigations`.
-- **Coding-tool upload/telemetry (LEARNINGS §30):** `"<tool>" upload OR telemetry OR privacy OR snapshot`,
-  rotating desktop/CLI agents (Grok Build, ZCode, Kimi Code, Qwen Code, Trae, Kiro…); `blog.ferstar.org`,
-  `blog.vonng.com`, `gist.github.com/cereblab`, `eu.36kr.com`, `panews.io`.
+- **Eval-vendor posts:** `irregular.com/research`. **Victim post-mortems:** `crowdsec.net/blog`.
+- **Exploitation telemetry:** `research.empiricalsecurity.com/research`. **Agent reports:** `transluce.org/investigations`, `asymmetricsecurity.com/newsroom`.
+- **Coding-tool upload/telemetry (LEARNINGS §30):** `"<tool>" upload OR telemetry OR privacy`, rotating desktop/CLI
+  agents (Grok Build, ZCode, Kimi Code, Qwen Code, Trae, Kiro); `blog.ferstar.org`, `blog.vonng.com`, `eu.36kr.com`, `panews.io`.
 - **Registry-team blog index pages, fetched each sweep.**
 - **`api.npmjs.org/downloads/point/last-week/<pkg>`** after a takedown — millions on a stub = inflation.
-- **Endpoint-vendor telemetry:** `gendigital.com/blog/insights/research`.
+- **Endpoint telemetry:** `gendigital.com/blog/insights/research`.
 - **Sandbox vendors as their own CNA:** `github.com/docker/sbx-releases/releases`.
-- **Standalone incident / legal sites:** `collusion.wiki`, `rubyhack.ai`, `lasstorg.substack.com`.
+- **Standalone incident sites:** `collusion.wiki`, `rubyhack.ai`, `lasstorg.substack.com`.
 - **National broadcasters:** `abc.net.au`, `sbs.com.au`.
 - **Platform blog indexes (post-mortems with no CVE):** `blog.cloudflare.com`, `openclaw.ai/blog`, `docs.gitlab.com/releases/patches/`.
-- **Regulators:** `aepd.es` (GDPR notifications for AI-agent attacks).
+- **Regulators:** `aepd.es` (GDPR notifications for AI-agent attacks), `oag.ca.gov`.
 
 ## Known source-access gaps
 
@@ -205,15 +203,14 @@ whether a quiet category was quiet or unreachable.
 - **X / Bluesky** — no native browsing; search snippets only. **Blocked / 403:** `reddit.com`, `wired.com`,
   `wsj.com`, `bbc.com`, `apnews.com`, `theguardian.com` (AP copy: `wtop.com`, `edweek.org`, `usnews.com`), `bleepingcomputer.com`, `cisa.gov` HTML (use the KEV JSON), `nvidia.custhelp.com`
   (use the `NVIDIA/product-security` mirror), `techtimes.com`, `cybernews.com`, `scworld.com`,
-  `spectrosec.com`, `securityonline.info` (intermittent), `openai.com/index/...` (use `alignment.openai.com`).
-  Read blocked outlets via citing outlets; say so in Sources.
+  `spectrosec.com`, `securityonline.info` (intermittent), `openai.com/index/...` and `openai.com/hugging-face-incident-and-misalignment/` (use `alignment.openai.com`; read the incident page via outlets).
 - **Empty / truncated bodies:** `gbhackers.com`, `cybersecuritynews.com` (cite THN),
   `msrc.microsoft.com/update-guide` (use the NVD API), `nvd.nist.gov/vuln/detail` (use the API),
   `pypi.org/pypi/<pkg>/json` (use `pip index versions`), `docs.cloud.google.com/<product>/release-notes`
   (use the `/feeds/...xml` feed), `cloud.google.com/security/resources/<report>` (use outlets),
   `socket.dev/blog` index (date the post pages), `github.blog/changelog/label/security/` (use the main changelog).
 - **`kb.cert.org/vuls/id/<n>`** — 301 → `sei.cmu.edu` 404 for `WebFetch`; `curl -sSL --compressed` works.
-- **`checkmarx.com/zero-post/`** — intermittent 404. **`koi.ai/blog`** — 301s to a product page; cite via THN.
+- **`checkmarx.com/zero-post/`** — intermittent 404. **`koi.ai/blog`** — 301s; cite via THN.
 - **GitHub `security/advisories` tabs** — occasional 504; retry once. **Vendor-repo vs `github.com/advisories/GHSA-…`**
   — either can 404 while the other resolves; try both. **Release pages** mis-render years (Ollama, Obot 09-30) and
   `api.github.com/.../releases/tags/<t>` is empty via the proxy; release tags can 404 — fix dates come from the registry or NVD.

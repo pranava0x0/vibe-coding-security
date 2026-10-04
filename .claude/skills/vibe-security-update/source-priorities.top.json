@@ -23,8 +23,8 @@
   {
    "domain": "cisa.gov",
    "weight": 20.0,
-   "hits": 16,
-   "last_hit": "2026-09-14"
+   "hits": 17,
+   "last_hit": "2026-10-04"
   },
   {
    "domain": "csoonline.com",
@@ -41,14 +41,14 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 35,
-   "last_hit": "2026-10-01"
+   "hits": 36,
+   "last_hit": "2026-10-04"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 40,
-   "last_hit": "2026-10-01"
+   "hits": 41,
+   "last_hit": "2026-10-04"
   },
   {
    "domain": "helpnetsecurity.com",
@@ -65,14 +65,20 @@
   {
    "domain": "nvd.nist.gov",
    "weight": 20.0,
-   "hits": 60,
-   "last_hit": "2026-10-01"
+   "hits": 61,
+   "last_hit": "2026-10-04"
   },
   {
    "domain": "ox.security",
    "weight": 20.0,
    "hits": 13,
    "last_hit": "2026-09-30"
+  },
+  {
+   "domain": "registry.npmjs.org",
+   "weight": 20.0,
+   "hits": 16,
+   "last_hit": "2026-10-04"
   },
   {
    "domain": "safedep.io",
@@ -107,32 +113,26 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 97,
-   "last_hit": "2026-10-01"
+   "hits": 98,
+   "last_hit": "2026-10-04"
   },
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 47,
-   "last_hit": "2026-10-01"
+   "hits": 48,
+   "last_hit": "2026-10-04"
   },
   {
    "domain": "vulncheck.com",
    "weight": 20.0,
-   "hits": 17,
-   "last_hit": "2026-10-01"
+   "hits": 18,
+   "last_hit": "2026-10-04"
   },
   {
    "domain": "wiz.io",
    "weight": 20.0,
    "hits": 15,
    "last_hit": "2026-09-12"
-  },
-  {
-   "domain": "registry.npmjs.org",
-   "weight": 19.0,
-   "hits": 15,
-   "last_hit": "2026-10-01"
   },
   {
    "domain": "unit42.paloaltonetworks.com",

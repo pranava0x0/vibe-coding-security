@@ -2,7 +2,7 @@
 id: 2026-06-langgraph-rce-chain
 title: "LangGraph RCE chain — SQLite SQL injection + msgpack deserialization → arbitrary code execution (June 2026)"
 date_disclosed: 2026-06-09
-last_updated: 2026-09-15
+last_updated: 2026-10-04
 severity: critical
 status: patched
 ecosystems: [pypi, ai-agents]
@@ -93,6 +93,10 @@ Walking the `langchain-ai/langgraph` and `langchain-ai/langchain` security-advis
 
 None of these changes this file's status; the RCE chain above remains patched. The shape is the one this repo keeps meeting in agent frameworks: authorization and path confinement implemented as string operations on values the model can influence.
 
+## Update — 2026-10-04: LangGraph's JavaScript/TypeScript custom authentication may not apply Store authorization at all (GHSA-4hm6-w6qq-w73v, CVSS 8.6, published 2026-09-28) — `langgraph-api` 0.1.2 – 0.14.x, fixed 0.15.0
+
+[GHSA-4hm6-w6qq-w73v](https://github.com/langchain-ai/langgraph/security/advisories/GHSA-4hm6-w6qq-w73v) (vendor advisory, 2026-09-28, High 8.6, credit coinspect-audits): LangGraph deployments that use **JavaScript/TypeScript custom authentication** "may fail to apply Store authorization changes," so an authenticated user reaches Store data outside their authorized namespace. The failing pattern is an authorization handler that *rewrites* the requested namespace to the caller's own rather than *rejecting* the request — the rewrite was not honoured. Affected `langgraph-api` ≥ 0.1.2 < 0.15.0; fixed 0.15.0. Workaround until upgrade: change every Store handler to reject unauthorized namespaces instead of rewriting them, for every Store action the deployment exposes. The Store is where agent memory lives (per-user facts, conversation state, tool results), so this is cross-tenant memory read/write in multi-user agent apps — the same class as the 09-15 `langgraph-sdk` decorator bug and the checkpoint `LIKE` namespace bug above, now in the JS runtime. Python deployments are not named as affected. File status unchanged.
+
 ## Sources
 
 - [The Hacker News — "LangGraph Flaw Chain Exposes Self-Hosted AI Agents to Remote Code Execution"](https://thehackernews.com/2026/06/langgraph-flaw-chain-exposes-self.html) — primary disclosure, chain walkthrough.
@@ -107,3 +111,4 @@ None of these changes this file's status; the RCE chain above remains patched. T
 - [LangGraph — GHSA-47pj-3jcm-6whg: Namespace prefix matching crosses segment boundaries in Postgres and SQLite stores (CVE-2026-71433)](https://github.com/langchain-ai/langgraph/security/advisories/GHSA-47pj-3jcm-6whg) — CVSS 5.3, < 3.1.1 → 3.1.1, the three failing scenarios.
 - [LangChain — GHSA-gr75-jv2w-4656: Path traversal and sandbox escape in LangChain file-search middleware and loaders (CVE-2026-55443)](https://github.com/langchain-ai/langchain/security/advisories/GHSA-gr75-jv2w-4656) — CVSS 5.1, langchain ≤ 1.3.8 → 1.3.9, langchain-anthropic ≤ 1.4.5 → 1.4.6.
 - [LangGraph security advisories index](https://github.com/langchain-ai/langgraph/security/advisories) and [LangChain security advisories index](https://github.com/langchain-ai/langchain/security/advisories) — newest entries 2026-08-28 and 2026-06-12 respectively.
+- **2026-10-04 update source** — [langchain-ai/langgraph — GHSA-4hm6-w6qq-w73v: LangGraph JavaScript custom authentication may permit cross-user Store access](https://github.com/langchain-ai/langgraph/security/advisories/GHSA-4hm6-w6qq-w73v) (published 2026-09-28: High 8.6, `langgraph-api` ≥ 0.1.2 < 0.15.0 → 0.15.0, the reject-not-rewrite workaround, credit coinspect-audits); [langgraph advisory tab](https://github.com/langchain-ai/langgraph/security/advisories?state=published) (walked 2026-10-04: newest 2026-09-28). Fetched 2026-10-04.

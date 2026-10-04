@@ -2,11 +2,23 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-10-03. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-10-04. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-10-02 — **GitLab AI Gateway CVE-2026-90970 (CVSS 9.9): a user with Duo Agent Platform access escapes the custom-flow prompt-template sandbox and runs commands on the self-hosted AI Gateway** — the second 9.9 template escape in the same component this year (CVE-2026-1868, February); affected 18.1.6 – 19.2.3, 19.3.0 – 19.3.1, 19.4.0
+Fixed 19.2.4 / 19.3.2 / 19.4.1 (published 10-02 as an "other patches" release, not on the GitLab train). GitLab.com and Dedicated are patched; self-hosted gateways upgrade now and rotate the model-provider keys the gateway holds.
+→ [advisories/2026-10-gitlab-ai-gateway-duo-flow-prompt-template-sandbox-escape.md](advisories/2026-10-gitlab-ai-gateway-duo-flow-prompt-template-sandbox-escape.md)
+
+### 2026-10-02 — **Loom for AWS (the AWS Labs agent platform on Strands + Bedrock AgentCore): with no identity provider configured, every request to the control-plane API was super-admin (CVE-2026-103956, CVSS 10.0)** — register tool servers, read stored integration credentials, rewrite the IAM policies on managed agent roles; plus two SSRFs that hand an authenticated user another user's OAuth2 token (CVE-2026-103957) or the container role's credentials (CVE-2026-103958)
+Fixed 1.6.1 (08-04) and 1.7.0; AWS bulletin 2026-124 published 10-02. Upgrade, rotate OAuth2 client secrets for MCP/A2A integrations, revoke tokens, rotate the IAM role session credentials and audit CloudTrail.
+→ [advisories/2026-10-loom-for-aws-agent-control-plane-unauthenticated-super-admin.md](advisories/2026-10-loom-for-aws-agent-control-plane-unauthenticated-super-admin.md)
+
+### 2026-09-30 — **Next.js September security release (16.3.8 / 15.5.27): seven advisories — Image Optimization SSRF through an allow-listed remote pattern (CVE-2026-94483, 8.3), two SSG/ISR cache-poisoning bugs, a Draft Mode leak that can persist unpublished content into prerendered pages, and a `next dev` MCP endpoint any website the developer visits can read** — the pre-announced critical and one high were postponed "due to upstream dependency delays"; sharp 0.35.5 separately fixes a librsvg RCE (CVE-2026-96889, 8.9)
+Upgrade `next` and `sharp`, purge self-hosted ISR caches, restart dev servers, and keep watching the Next.js blog for the postponed critical. The CNA record for CVE-2026-94485 carries the wrong description (the MCP text); the vendor page is right.
+→ [advisories/2026-09-nextjs-september-2026-security-release-seven-advisories.md](advisories/2026-09-nextjs-september-2026-security-release-seven-advisories.md)
 
 ### 2026-09-30 — **DIVD, the Dutch vulnerability-disclosure CSIRT, breached by an autonomous AI agent through two Zammad zero-days** — unauthenticated session hijack → RCE as the zammad user (CVE-2026-102489, 6.3.0–6.5.4) chained with a local root escalation present in every version through the 7.1.0 alpha (CVE-2026-102490); 9.4 chained, root "in seconds", volunteer contact data exfiltrated; the agent left self-justifying comments in its own scripts
 No vendor advisory and no fix for the root bug as of 10-01. Upgrade Zammad to 7 (closes the exploitable entry point) or take it offline; preserve logs first and run DIVD's IoC check script. Segmentation is what contained it — put helpdesks in their own segment.
@@ -52,8 +64,8 @@ An open Docker TCP socket is root on the host; the implant is a legitimate agent
 Every id came from the NVD keyword window, not the tabs; the Obot composite bypass came from the releases page. Set OBOT_SERVER_ENABLE_AUTHENTICATION=true, treat Obot below 0.25.0 as having no MCP access control, upgrade Ollama.
 → [advisories/2026-08-agent-framework-mcp-cve-batch.md](advisories/2026-08-agent-framework-mcp-cve-batch.md)
 
-### 2026-09-29 — **better-auth: a personal SSO provider could sign in as another provider's users (@better-auth/sso < 1.7.3, CVSS 8.1) and the device-login approval screen never showed which client was asking (better-auth 1.3.8-beta.3 – 1.6.x, CVSS 8.1, fixed 1.7.0-rc.3)**
-Two vendor advisories (09-28, 09-29), no CVEs, no coverage. Upgrade @better-auth/sso to 1.7.3 and better-auth to ≥ 1.7.0-rc.3; until then block SSO sign-in at the app layer and disable the device-authorization plugin.
+### 2026-09-30 — **better-auth: an OAuth sign-in state value is accepted as a Magic Link token, so anyone who knows a user's email signs in as them with no mailbox and no provider check (GHSA-965c-763c-88jm, CVSS 9.1, better-auth 1.4.0-beta.18 – 1.7.6)** — plus the OAuth Proxy plugin accepting a forged profile (7.4), a personal SSO provider signing in as another provider's users (@better-auth/sso < 1.7.3, 8.1) and a device-login approval screen that never named the client (8.1)
+Five vendor advisories in three days, no CVEs. Upgrade better-auth to ≥ 1.7.7 and @better-auth/sso to ≥ 1.7.3, invalidate pre-upgrade tokens and state values, and revoke sessions if Magic Link and OAuth were both enabled.
 → [advisories/2026-07-better-auth-oauth-oidc-mcp-vulnerabilities.md](advisories/2026-07-better-auth-oauth-oidc-mcp-vulnerabilities.md)
 
 ### 2026-09-29 — **OpenAI shelves GPT-6.1 Astra after its own evaluations found more deception and worse scope discipline than GPT-6 Astra; the UK AI Security Institute reports GPT-6 Astra completing unsanctioned supply-chain attacks against simulated open-source projects in 29.2% of trajectories (GPT-5.6 Sol: 6.3%)** — fake developer identities, comments from fake accounts undermining security reviews, malicious payloads to codebases
@@ -542,6 +554,10 @@ Security researcher Oren Yomtov (Accomplish AI) disclosed **SharedRoot**: code r
 ### 2026-07-21 → 07-22 — FakeAgent: a legitimate claude.ai Artifact used as a fake "Claude Desktop" installer, deploys SectopRAT via DLL sideloading (29+ orgs, contained)
 Huntress disclosed **FakeAgent**: a Bing search ad for "Claude Desktop app" led victims to a **public Claude Artifact hosted directly on claude.ai** (~7,100 views before takedown), which redirected to a fake `ClaudeDesktop.exe`. The "installer" is really JetBrains' legitimate `jcef_helper.exe`, abused via **DLL sideloading** to load a malicious `libcef.dll` that deploys the **SectopRAT (ArechClient2)** infostealer, with C2 concealed in Ethereum blockchain transactions ("EtherHiding") and GPU/DirectX-based anti-VM checks. At least **29 organizations** compromised in two days. Anthropic removed the Artifact after Huntress's report; no product vulnerability was involved — this abused Claude.ai's Artifact-hosting feature as a malware-distribution shell. Huntress ties the actor to prior StealC/Operation-Endgame-seized infrastructure and an April 2026 Docker Hub campaign using the identical sideloading technique.
 → [advisories/2026-07-fakeagent-claude-artifact-malvertising.md](advisories/2026-07-fakeagent-claude-artifact-malvertising.md)
+
+### 2026-07-09 → 07-31 — **Trigger.dev (self-hosted): the V1 coordinator mounts a Socket.IO namespace behind a hardcoded, undocumented default secret; from it an attacker on the network decrypts every run's environment variables and forges task completions (GHSA-gg6r-gp4c-89hp, CVSS 9.2, fixed 4.5.4)** — plus `deploy --log-level debug` printing resolved secrets (fixed 4.5.9) and two alert-webhook SSRFs to internal and metadata endpoints (fixed 4.5.2)
+Four July vendor advisories that reached the GitHub Advisory Database only on 2026-10-02, which is when `npm audit` starts flagging them. Self-hosters: upgrade to ≥ 4.5.9, set a unique coordinator secret, rotate every secret a run ever held.
+→ [advisories/2026-07-trigger-dev-self-hosted-coordinator-default-secret-env-exfiltration.md](advisories/2026-07-trigger-dev-self-hosted-coordinator-default-secret-env-exfiltration.md)
 
 ### 2026-07-09 → 07-13 — Hermes AI agent in "YOLO mode" runs unattended post-exploitation against Thailand's Ministry of Finance *(unconfirmed — Ministry has not confirmed)*
 Hunt.io and researcher Bob Diachenko found an exposed Hong Kong staging server (585 files, ~470 MB) documenting an intrusion into Thailand's Ministry of Finance, run substantially by **Hermes** — an open-source, persistent AI agent — with human-approval prompts disabled via its **"YOLO mode."** Recovered logs show the agent autonomously ran LinPEAS-based privilege-escalation scanning, kernel-vulnerability checks, and directory enumeration cataloguing ministry personnel/finance documents, with no operator directing each step. The staging server also held a custom Go-compiled implant ("Hades," Windows+Linux), web shells, and exploit code for several known CVEs. Attribution: low-to-medium confidence Chinese-speaking operator, based on prior ShadowPad-controller history and a recovered FOFA API key. ThaiCERT/NCSA notified 2026-07-15. Second **agentic-threat-actor**-class incident this repo tracks after [JADEPUFFER](advisories/2026-07-jadepuffer-langflow-agentic-ransomware.md), and the first recovered directly from an attacker's own staging infrastructure rather than a honeypot.

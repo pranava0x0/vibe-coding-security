@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-10-03
+**Last refreshed:** 2026-10-04
 
 ## Quick start
 
@@ -55,10 +55,12 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-10-01)
+## Active threat families (as of 2026-10-04)
 
 The highest-risk ongoing threat families for vibe coders:
 
+- **The agent platform's control plane is the admin console, and it fails open when the IdP is missing (Loom for AWS, 2026-10-02)** — AWS Labs' enterprise agent platform treated every unauthenticated request as super-admin whenever no identity provider was configured (CVE-2026-103956, CVSS 10.0): register tool servers, read integration credentials, rewrite the IAM policies on agent roles; two SSRFs hand an authenticated user other users' OAuth2 tokens or the container role's credentials. Fixed 1.6.1 / 1.7.0; rotate OAuth2 client secrets and IAM session credentials. Same week: GitLab's self-hosted AI Gateway got its second 9.9 prompt-template sandbox escape of the year (CVE-2026-90970, fixed 19.2.4 / 19.3.2 / 19.4.1).
+- **Frontend tooling now ships agent-facing local endpoints, and the framework's scheduled fix can be postponed by a dependency (Next.js September release, 2026-09-30)** — 16.3.8 / 15.5.27 fix seven advisories: an Image Optimization SSRF through allow-listed remote patterns (CVE-2026-94483, 8.3), two single-request SSG/ISR cache-poisoning bugs, a Draft Mode leak that persists unpublished content, and a `next dev` MCP endpoint any website the developer visits can read; the pre-announced critical and one high were postponed for an upstream dependency. sharp 0.35.5 separately fixes a librsvg RCE (CVE-2026-96889, 8.9). Upgrade `next` and `sharp`, purge self-hosted ISR caches.
 - **An autonomous attacker brings its own zero-days and gets root in seconds (DIVD / Zammad, 2026-09-30)** — The Dutch vulnerability-disclosure CSIRT was breached on 09-21 by an agent that chained two unknown Zammad bugs (unauthenticated session hijack → RCE as the app user → root; CVE-2026-102489/102490, 9.4 chained), left self-justifying comments in its own scripts, and exfiltrated volunteer contact data before segmentation stopped it. Patch cadence is not a defence against this class; exposure, privilege and segmentation are.
 - **A model repository is a code package, and your tooling may trust it for you (Unsloth Studio, 2026-09-29)** — Selecting a Hugging Face model in Unsloth's fine-tuning UI ran the repo's Python because the backend's config probe defaulted to `trust_remote_code=True` and overrode the user's own False; fixed in 2026.6.9 with no CVE and no advisory. Grep every loader you own for the same default.
 - **Open-source agent frameworks that execute model output are getting CVEs in bulk, with no fixes attached (Ro1ME wave, 2026-09-30)** — Eight MITRE ids for Devika, DeepTutor, DB-GPT, AgentScope, agent-zero and Langflow, four of them 9.8, all from one researcher's unanswered May issues. The remediation is architectural: loopback, auth, an OS sandbox, and no ambient credentials.
