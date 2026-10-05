@@ -15,6 +15,20 @@
 
 ## Archived entries
 
+## 2026-09-24
+
+```yaml
+queries: {deep: 14, medium: 22, shallow: 10}
+new: [2026-09-openai-eval-agents-australian-medicare-portal-transluce-urlquery, 2026-09-gitlab-19-4-1-regex-rce-duo-mcp-batch, 2026-09-gitlab-incoming-email-token-push-to-main, 2026-09-cloudflare-containers-sandboxes-cross-tenant-residual-storage, 2026-09-rust-miri-github-actions-cache-secrets-leak]
+updated: [2026-09-orval-openapi-codegen-rce-cluster, 2026-06-supabase-realtime-presence-read-rls-bypass, 2026-05-tanstack-mini-shai-hulud, 2026-09-memtensor-memos-openclaw-plugin-sckit-worm, 2026-09-openclaw-2026-8-1-advisory-batch, 2026-08-agent-framework-mcp-cve-batch, 2026-07-aws-bedrock-agentcore-cve-cluster]
+sources_added: [transluce.org, abc.net.au, sbs.com.au, blog.cloudflare.com, openclaw.ai]
+sources_weighted: [thehackernews.com, helpnetsecurity.com, securityweek.com, cyberinsider.com, securityaffairs.com, docs.gitlab.com, nvd.nist.gov, github.com/advisories, github.com, aikido.dev, blog.rust-lang.org, socket.dev, safedep.io, unit42.paloaltonetworks.com, vulncheck.com, registry.npmjs.org, api.npmjs.org]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, securityweek-front-page-and-rss-403-cloudflare, cnbc-403, cbc-403, bbc-blocked, bleepingcomputer-not-opened, securityonline-503, darkreading-403, theregister-day-index-404-use-front-page, github.com-curl-intercepted-use-webfetch-tool, check-external-links-urlerror-on-transluce.org-curl-200]
+```
+
+**Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw/Codex/CrewAI/goose/Cline/gemini-cli; frontend incl. Next.js/React/Svelte/SvelteKit/Vite/Astro; backend/auth/DB incl. FastAPI/Streamlit/Prisma/Supabase auth+realtime+storage/NextAuth/Clerk/better-auth/python-genai). Direct `WebFetch` available; front pages, KEV, HN Algolia and NVD via curl. KEV (dateAdded ≥ 09-17): Arista/F5/Check Point ×2/Zyxel/Linux ×3 — nothing in scope. **Five new, three from front pages or database listings, none from a Tier-A query:** Australia/Transluce (THN front page → ABC → Help Net named Transluce → primary fetched); GitLab 19.4.1 (the `mcp` recency listing showed an MCP-scope CVE, the patch post had two 9.9s above it); GitLab email token (THN front page → Aikido blog index); Cloudflare Containers (Cloudflare blog index); Miri (Rust blog index). **Accuracy calls:** the search summary attributed urlquery.net/SQLi probing to the *Medicare* agent — the fetched primaries put those at UNM/Data USA/AIHW and leave the Medicare method undisclosed; the advisory separates the two (LEARNINGS §32). orval's release page labels every September release "2024" — registry `time` used. Supabase Realtime GHSA-9vjf has no patched version; folded into the June file as an update with status `ongoing`/`high` rather than a new file (same product rule). TanStack back to `active` on SafeDep's 09-24 reinfection post — a hijacked action tag is live propagation. **Declined:** Radicle cleartext/impersonation (decentralised git, not AI/vibe stack — log for a dev-platform batch); SigNoz CVE-2026-97055 empty-JWT-secret 9.2 (observability, out of audience); CLOSEDQUORUM AI-voting malware (Talos; no dev-tooling angle); installmap llms.txt steering study (not an attack); request-filtering-agent DoS; Kotaemon VU#754548 (RAG app, vendor unreachable); fake Claude Max phishing (consumer); Anthropic/OpenAI alignment-test article (09-23 call stands); Check Point Jev prompt-injection research; LightLLM RCE (inference server). Vendor-tab walk (31 tabs): only Supabase Realtime (09-24) and orval (09-23) new since 09-23. Four sources decayed (windowsnews.ai, hunt.io, huntress.com, labs.zenity.io). Budget: `dist/llms.txt` 53,883 B after seven Tier-2 lines.
+
+
 ## 2026-09-23
 
 ```yaml
