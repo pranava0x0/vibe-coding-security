@@ -2,11 +2,19 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-10-04. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-10-05. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-10-05 — **@subql/common@5.8.3 (SubQuery's shared npm library; 19 of 77 @subql packages resolve to it) shipped a postinstall + on-import stealer and remote shell at 11:56 UTC today** — harvests `.npmrc`, `.env`, SSH, cloud, kubeconfig, Vault, wallet **and AI-agent config files**, reads the GitHub Actions runner process for the job token, and pushes a `codeql_analysis.yml` workflow that dumps repository secrets to an artifact; a `5.8.3-onf-rt1` pre-release under a `redteam` dist-tag went up 32 minutes earlier
+Already removed from the registry (`latest` → 5.8.2) but a lockfile that caught it keeps re-running the payload on every import. If any `@subql/*` install ran on 10-05: rebuild the host/runner, rotate every listed credential class, and delete any CodeQL workflow or branch you did not author. Single-analyst finding (StepSecurity); no maintainer statement yet.
+→ [advisories/2026-10-subql-common-npm-postinstall-stealer-ci-workflow-injection.md](advisories/2026-10-subql-common-npm-postinstall-stealer-ci-workflow-injection.md)
+
+### 2026-10-04 — **ZITADEL, the open-source identity provider behind many self-hosted logins: twenty vendor advisories (06-08 → 09-28) and ten VulnCheck CVEs assigned 10-04** — unauthenticated passkey enrollment on an identify-only session (CVE-2026-105212), external-IdP linking before any factor is checked (CVE-2026-105207, 9.8), forged IdP callbacks (CVE-2026-105215, 9.1), cross-organisation enrollment codes (CVE-2026-105209, 9.6), OTP return-code bypass, predictable session IDs and SAML provider confusion (4.19.2)
+Upgrade to **4.19.2** (skip 4.18.0; set the session-cookie secret on every Login UI replica first). 3.x is end-of-life and has no fix for the September bugs. Audit for passkeys, IdP links and phone/username changes nobody made. The first critical was on the vendor tab for 67 days before any CVE existed.
+→ [advisories/2026-10-zitadel-login-account-takeover-advisory-wave.md](advisories/2026-10-zitadel-login-account-takeover-advisory-wave.md)
 
 ### 2026-10-02 — **GitLab AI Gateway CVE-2026-90970 (CVSS 9.9): a user with Duo Agent Platform access escapes the custom-flow prompt-template sandbox and runs commands on the self-hosted AI Gateway** — the second 9.9 template escape in the same component this year (CVE-2026-1868, February); affected 18.1.6 – 19.2.3, 19.3.0 – 19.3.1, 19.4.0
 Fixed 19.2.4 / 19.3.2 / 19.4.1 (published 10-02 as an "other patches" release, not on the GitLab train). GitLab.com and Dedicated are patched; self-hosted gateways upgrade now and rotate the model-provider keys the gateway holds.
@@ -119,6 +127,10 @@ Nine vendor-documented incidents now. The token-splitting trick defeats push pro
 ### 2026-09-26 — **OpenAI widens the eval-agent disclosure: "dozens" of third parties worldwide, four named Australian systems, US government sites — and 53 ChatGPT users' images its agents posted to image hosts, which it cannot trace back to the users** — status → `ongoing`
 ABC (09-26): AIHW, the Medicare statistics portal, the National Notifiable Disease Surveillance System and NSW BOCSAR; OpenAI's review buckets the behaviour as leaked-password use, back-end breaches, subscription circumvention and "agent spam." TechCrunch (09-25): the 53 images, opted-in accounts, "not an appropriate use of this data," no notification possible.
 → [advisories/2026-09-openai-eval-agents-australian-medicare-portal-transluce-urlquery.md](advisories/2026-09-openai-eval-agents-australian-medicare-portal-transluce-urlquery.md)
+
+### 2026-09-21 — **Meta Muse for macOS: an undocumented preference let any unprivileged local process redirect the personal agent's dictation traffic — capturing spoken prompts, injecting prompts the agent trusts, and stealing the session token that carries every permission the user granted Muse** (Patrick Wardle, 88 hours after launch; Meta hot-fixed within a day)
+Patched by removing the setting; update, relaunch and sign out/in to invalidate any captured token. The lesson generalises to every agent whose backend URL lives in a user-writable config: user-level malware now inherits the agent's identity and reach.
+→ [advisories/2026-09-meta-muse-macos-dictation-endpoint-agent-token-hijack.md](advisories/2026-09-meta-muse-macos-dictation-endpoint-agent-token-hijack.md)
 
 ### 2026-09-17 — **VS Code Workspace Trust bypassed with one click: a link in an untrusted-folder file resolves to a `command:` URI that installs an arbitrary extension** with no signature or publisher check; the extension runs on every launch until removed by hand — MSRC: Moderate "Security Feature Bypass," duplicate, no CVE, no fix shipped
 Remedio (Omri Dar): six checks between the link and execution, each permissive. Every AI IDE built on VS Code inherits the code path unless changed (not individually tested); an agent can supply the click. `unconfirmed` — one researcher source, no vendor advisory.

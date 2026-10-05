@@ -41,14 +41,14 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 36,
-   "last_hit": "2026-10-04"
+   "hits": 37,
+   "last_hit": "2026-10-05"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 41,
-   "last_hit": "2026-10-04"
+   "hits": 42,
+   "last_hit": "2026-10-05"
   },
   {
    "domain": "helpnetsecurity.com",
@@ -77,14 +77,14 @@
   {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
-   "hits": 16,
-   "last_hit": "2026-10-04"
+   "hits": 17,
+   "last_hit": "2026-10-05"
   },
   {
    "domain": "safedep.io",
    "weight": 20.0,
-   "hits": 18,
-   "last_hit": "2026-10-01"
+   "hits": 19,
+   "last_hit": "2026-10-05"
   },
   {
    "domain": "securityweek.com",
@@ -101,14 +101,14 @@
   {
    "domain": "socket.dev",
    "weight": 20.0,
-   "hits": 29,
-   "last_hit": "2026-09-30"
+   "hits": 30,
+   "last_hit": "2026-10-05"
   },
   {
    "domain": "stepsecurity.io",
    "weight": 20.0,
-   "hits": 26,
-   "last_hit": "2026-09-23"
+   "hits": 27,
+   "last_hit": "2026-10-05"
   },
   {
    "domain": "thehackernews.com",
@@ -119,14 +119,14 @@
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 48,
-   "last_hit": "2026-10-04"
+   "hits": 49,
+   "last_hit": "2026-10-05"
   },
   {
    "domain": "vulncheck.com",
    "weight": 20.0,
-   "hits": 18,
-   "last_hit": "2026-10-04"
+   "hits": 19,
+   "last_hit": "2026-10-05"
   },
   {
    "domain": "wiz.io",

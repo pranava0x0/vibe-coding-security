@@ -10,14 +10,10 @@ for defenders. Running these searches means finding *coverage* of incidents —
 vendor advisories, CVE records, researcher write-ups — not finding, testing, or
 interacting with vulnerable systems.
 
-**Why the annotations live elsewhere.** Every "why we run this query and what
-to look for" note was moved to [`triage-patterns.md`](triage-patterns.md). Two
-reasons, and they point the same way:
-
-1. Those notes are ~25KB of attack-technique detail. Handed to a fresh agent as
-   a numbered task list they read like offensive tasking, and the cyber-safeguards
-   classifier flagged that eight times (2026-08-13 → 08-17; [`../LEARNINGS.md`](../LEARNINGS.md)).
-2. They are triage/write-up material anyway; the session *writing* uses them.
+**Why the annotations live elsewhere.** The "why we run this query" notes are in
+[`triage-patterns.md`](triage-patterns.md): handed to a fresh agent they read like
+offensive tasking (classifier trips 2026-08-13 → 08-17; [`../LEARNINGS.md`](../LEARNINGS.md) §1),
+and they are write-up material anyway.
 
 `{year}` = the current year. Substitute before searching.
 
@@ -45,8 +41,7 @@ Aim for ~12 parallel `WebSearch` calls.
 15. `binding.gyp node-gyp supply chain npm malicious {year}`
 16. `Telegram bot developer PyPI backdoor supply chain {year}`
 
-Prepend the top sources from `source-priorities.top.json` via `allowed_domains`
-on rotating subsets, so high-signal pages aren't buried under news aggregators.
+Prepend top sources from `source-priorities.top.json` via `allowed_domains` on rotating subsets.
 
 ## Tier B — medium (3-day window)
 
@@ -67,10 +62,8 @@ on rotating subsets, so high-signal pages aren't buried under news aggregators.
 13. `{agent} plugin OR skill marketplace vulnerability {year}` — rotate Claude Code, Codex, Copilot, Gemini CLI/Antigravity, OpenClaw
 14. `{platform} AI autofix OR coding agent handoff vulnerability {year}` — rotate Sentry, Datadog, Copilot Autofix, Linear, PagerDuty
 
-**Fetch directly, don't search for:** CISA's KEV catalog is a JSON feed at
-`https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json`.
-Filter by `dateAdded >= t_7d`. One request, authoritative, no aggregator
-paraphrase. Run it every sweep.
+**Fetch directly, every sweep:** CISA KEV JSON at
+`https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json`, filtered by `dateAdded >= t_7d`.
 
 ## Tier C — shallow (7-day window)
 
@@ -145,7 +138,7 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
   Cursor, Cline, goose, OpenHands, SWE-agent, aider, Codex, gemini-cli, OpenClaw (11+ pages),
   n8n, Langflow, Flowise, PraisonAI, LiteLLM, LangChain, LangGraph, Semantic Kernel, Coder, MCP
   TS/Python SDKs, vm2; web: Next.js, React, Svelte, SvelteKit, Vite, Astro; **auth SDKs:**
-  `clerk/javascript`, `better-auth/better-auth`, `nextauthjs/next-auth`, `supabase/auth`;
+  `clerk/javascript`, `better-auth/better-auth`, `nextauthjs/next-auth`, `supabase/auth`; **identity servers:** `zitadel/zitadel` (2 pages), Keycloak, Authentik, Ory (§38);
   Supabase components (`supabase/supabase`'s tab is empty): `supabase/realtime`, `supabase/storage-api`,
   `supabase/postgrest`; framework upstreams: `vercel/satori`, `lovell/sharp`;
   backend: FastAPI, Prisma, Streamlit, `googleapis/python-genai`, `triggerdotdev/trigger.dev`; agent platforms: `awslabs/loom`; companion repos: `openclaw/openclaw-windows-node`,
@@ -162,19 +155,19 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
 - **Industry security blogs:** Anthropic, OpenAI, Google Security/Project Zero, MSRC, AWS, Cloudflare,
   Red Hat, Databricks, Salesforce, Oracle.
 - **Vendor threat-intel and incident reports:** `cloud.google.com/blog/topics/threat-intelligence`
-  (GTIG), Mandiant reports (landing pages truncate — read via several outlets), Microsoft Threat
+  (GTIG), Mandiant reports (truncates; use outlets), Microsoft Threat
   Intelligence, `unit42.paloaltonetworks.com`, `gambit.security`, Anthropic threat reports,
   `alignment.openai.com/misalignment-reports/` (OpenAI internal-model incidents).
 - **Google Cloud release-note feeds:** `docs.cloud.google.com/feeds/<product>-release-notes.xml`.
 - **Rapid-reaction / telemetry:** `watchtowr.com`, `horizon3.ai`, `greynoise.io`, `wiz.io`,
   `f5.com/labs`, `blackpointcyber.com`, `okta.com` (AI-token infostealer analysis).
 - **Vendor patch trackers:** `docs.gitlab.com/releases/patch-releases.xml` (the feed; the HTML hub hides AI Gateway "other patches"), Atlassian, JFrog release notes.
-- **Registry records:** `osv.dev/vulnerability/MAL-<year>-<n>`, `npm view <pkg> time`, `registry.npmjs.org/<pkg>`
-  (`0.0.1-security` = takedown), `pip index versions <pkg>`, PyPI JSON.
+- **Registry records:** `osv.dev/vulnerability/MAL-<year>-<n>`, `npm view <pkg> time dist-tags` (the publish timeline; report, don't interpret — §38), `registry.npmjs.org/<pkg>/<ver>` (`version not found` = removed; `0.0.1-security` = takedown), `pip index versions <pkg>`.
 - **Hacker News (Algolia):**
   `hn.algolia.com/api/v1/search_by_date?query=<one term>&tags=story&numericFilters=created_at_i%3E{epoch}`
-  — one term per call.
-- **Roundups that surface primaries:** `adversa.ai/blog`, `labs.cloudsecurityalliance.org`, `xygeni.io/blog`.
+
+- **Roundups that surface primaries:** `adversa.ai/blog`, `labs.cloudsecurityalliance.org`, `xygeni.io/blog`, `noma.security/blog` (grep the incident token, not the product; §38).
+- **Personal agents** (`<product> zero-day OR token`): Meta Muse, OpenAI dots, Grok Bot, Instinct, Perplexity Computer; `objective-see.org`, `malwarebytes.com/blog`, `venturebeat.com/security`.
 - **Researcher blogs:** remedio.io, upguard.com/blog, 0day.click, cyata.ai, layerxsecurity.com, pillar.security, oasis.security,
   tenetsecurity.ai, labs.zenity.io, novee.security, danusminimus.github.io, oddguan.com,
   manifold.security, paddo.dev, embracethered.com, itmeetsot.eu, forever.security, socket.dev,
@@ -197,36 +190,31 @@ Bare pointers. The *why* for each lives in `triage-patterns.md` and `LEARNINGS.m
 
 ## Known source-access gaps
 
-Report these as **"not covered"**, never as "nothing found" — the log must show
-whether a quiet category was quiet or unreachable.
+Report these as **"not covered"**, never as "nothing found."
 
-- **X / Bluesky** — no native browsing; search snippets only. **Blocked / 403:** `reddit.com`, `wired.com`,
-  `wsj.com`, `bbc.com`, `apnews.com`, `theguardian.com` (AP copy: `wtop.com`, `edweek.org`, `usnews.com`), `bleepingcomputer.com`, `cisa.gov` HTML (use the KEV JSON), `nvidia.custhelp.com`
-  (use the `NVIDIA/product-security` mirror), `techtimes.com`, `cybernews.com`, `scworld.com`,
-  `spectrosec.com`, `securityonline.info` (intermittent), `openai.com/index/...` and `openai.com/hugging-face-incident-and-misalignment/` (use `alignment.openai.com`; read the incident page via outlets).
-- **Empty / truncated bodies:** `gbhackers.com`, `cybersecuritynews.com` (cite THN),
-  `msrc.microsoft.com/update-guide` (use the NVD API), `nvd.nist.gov/vuln/detail` (use the API),
-  `pypi.org/pypi/<pkg>/json` (use `pip index versions`), `docs.cloud.google.com/<product>/release-notes`
-  (use the `/feeds/...xml` feed), `cloud.google.com/security/resources/<report>` (use outlets),
-  `socket.dev/blog` index (date the post pages), `github.blog/changelog/label/security/` (use the main changelog).
+- **X / Bluesky** — search snippets only. **Blocked / 403:** `reddit.com`, `wired.com`, `wsj.com`, `bbc.com`, `apnews.com`,
+  `theguardian.com` (AP copy: `wtop.com`, `edweek.org`, `usnews.com`), `bleepingcomputer.com`, `cisa.gov` HTML (KEV JSON), `nvidia.custhelp.com`
+  (`NVIDIA/product-security` mirror), `techtimes.com`, `cybernews.com`, `scworld.com`, `spectrosec.com`, `securityonline.info`,
+  `openai.com/index/...` and `openai.com/hugging-face-incident-and-misalignment/` (use `alignment.openai.com` and outlets).
+- **Empty / truncated bodies:** `gbhackers.com`, `cybersecuritynews.com` (cite THN), `msrc.microsoft.com/update-guide` and
+  `nvd.nist.gov/vuln/detail` (use the NVD API), `pypi.org/pypi/<pkg>/json` (`pip index versions`), `docs.cloud.google.com/<product>/release-notes`
+  (the `/feeds/...xml`), `cloud.google.com/security/resources/<report>` (outlets), `socket.dev/blog` index (undated), `github.blog/changelog/label/security/`.
 - **`kb.cert.org/vuls/id/<n>`** — 301 → `sei.cmu.edu` 404 for `WebFetch`; `curl -sSL --compressed` works.
 - **`checkmarx.com/zero-post/`** — intermittent 404. **`koi.ai/blog`** — 301s; cite via THN.
-- **GitHub `security/advisories` tabs** — occasional 504; retry once. **Vendor-repo vs `github.com/advisories/GHSA-…`**
-  — either can 404 while the other resolves; try both. **Release pages** mis-render years (Ollama, Obot 09-30) and
-  `api.github.com/.../releases/tags/<t>` is empty via the proxy; release tags can 404 — fix dates come from the registry or NVD.
+- **GitHub `security/advisories` tabs** — occasional 504; retry. **Vendor-repo vs `github.com/advisories/GHSA-…`** — either can 404; try both.
+  **Release pages** mis-render years and `api.github.com/.../releases/tags/<t>` is empty via the proxy — fix dates come from the registry or NVD.
 - **arXiv API** — 429; HTML listings work. **`hn.algolia.com`** — retry once; encode `>` as `%3E`.
 - **`vulncheck.com/advisories/<slug>`** — some per-CVE pages 404; cite the index.
-- **`github.com` via `curl` (cloud session)** — proxy returns a GitHub-API scope error; use the read-only
-  `web-fetch` agent with bare URLs (2026-09-22).
+- **`github.com` via `curl` (cloud session)** — proxy scope error; `WebFetch` reaches listings, tabs and GHSA pages (2026-10-05); the read-only `web-fetch` agent with bare URLs is the fallback.
+- **`security.salesforce.com/security-advisories`** → status page; **`msrc.microsoft.com/blog`** → undated page; **`openai.com/news`** 403;
+  **`NVIDIA/product-security`** root shows year folders (open the year); **ZDI published index** truncates in `WebFetch`.
+- **GHSA prints a CVE id CVE Services lacks** — cite the GHSA, note DNE, re-check (§38).
 - **`securityweek.com`** — intermittent 403 to `curl`; `WebFetch` works.
 - **`cyber.gc.ca`** news — client-rendered, empty. **`zammad.com/en/advisories`** — stale; GitHub tab only. **`washingtonpost.com`** — paywall.
-- **`techcrunch.com`** — a guessed slug 404s silently; search for the URL. **`techrepublic.com`** — 403. **`cnbc.com`, `cbc.ca`,
-  `darkreading.com`** — 403 (2026-09-24). **`theregister.com/<date>/`** day indexes 404 — use `/security/`. **`reuters.com`** — paywall; `devdiscourse.com`
-  mirrors the wire. **`marketscreener.com`** — 403; **`technology.org`** — JS wall.
+- **`techcrunch.com`** — guessed slugs 404 silently; search for the URL. **403:** `techrepublic.com`, `cnbc.com`, `cbc.ca`, `darkreading.com`, `marketscreener.com`.
+  **`theregister.com/<date>/`** day indexes 404 — use `/security/`. **`reuters.com`** — paywall (`devdiscourse.com` mirrors the wire). **`technology.org`** — JS wall.
 
 ## Out of scope for this project
-
-Stated here so it is unambiguous in the one file a delegated agent may receive:
 
 - Do **not** connect to, scan, probe, enumerate, or test any third-party system.
 - Do **not** check whether a specific named organisation is affected by anything.

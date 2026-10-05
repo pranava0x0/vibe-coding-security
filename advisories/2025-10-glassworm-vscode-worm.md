@@ -2,7 +2,7 @@
 id: 2025-10-glassworm-vscode-worm
 title: "GlassWorm — self-propagating VS Code / Open VSX extension worm (Oct 2025 → 2026)"
 date_disclosed: 2025-10-17
-last_updated: 2026-06-22
+last_updated: 2026-10-05
 severity: high
 status: active
 ecosystems: [vscode, openvsx, npm, github]
@@ -15,6 +15,8 @@ tags: [supply-chain, ide-extension, worm, self-propagating, credential-theft, cr
 > **Update 2026-05-31 — disrupted.** On **2026-05-26 14:00 UTC**, **CrowdStrike Counter Adversary Operations + Google + the Shadowserver Foundation** executed a coordinated takedown, **simultaneously disabling all four C2 channels** (Solana blockchain memos, BitTorrent DHT, Google Calendar dead-drops, direct VPS IPs). The takedown stopped new payload delivery but did not uninstall the malware, rotate stolen credentials, or undo downstream credential resale.
 >
 > **Update 2026-06-12 — back: new Mac wave with reconstituted fresh infrastructure.** Koi Security and BleepingComputer report a **new GlassWorm wave targeting macOS exclusively** with **fresh C2 infrastructure** — the first wave to survive the May 26 takedown and reconstitute. The operator rebuilt on new infrastructure, pivoted from Windows-only to macOS-first, and added a **hardware-wallet trojanization capability** (Ledger Live and Trezor Suite replaced with backdoored versions). Status reverted to **`active`**. Defensive cue: eBPF/EDR tools that detected the Windows variant may not detect the macOS AppleScript/LaunchAgent-based variant — check koi.ai IOC list for the macOS wave specifically.
+
+> **Update 2026-10-05 — a GlassWorm-linked cluster hiding in VS Code *themes*, on both marketplaces (Socket, 2026-10-02).** Socket's threat-research team tied a set of colour-theme extensions to GlassWorm by "the same embedded AES key, Russian-environment gating, Solana transaction-memo resolution, and staged in-memory JavaScript execution," plus a publisher namespace (`cosmic-themes`) that overlaps a previously confirmed malicious Open VSX extension (`cosmic-themes.sql-formatter`). On the **VS Code Marketplace**: *Aurora Nocturne Night Theme* (publisher `microsoftvs`), *Coca-Cola Christmas* (`holiday-themes`, 8,000+ installs), *Aurora Borealis Studio Theme* (`lohsebhipolg2s`), *Cosmic Nebula Themes* (`cosmic-themes`); on **Open VSX** the same identities plus *Deep Focus*, *Aurora Nocturne Dreams Theme* and *Charcoal Mint* — *Coca-Cola Christmas* alone at ~39,000 Open VSX downloads, *Charcoal Mint* ~10,000. Two loader shapes: the Aurora variant downloads batch scripts to a temp directory and runs them through a hidden shell window; the Cosmic Nebula variant decrypts embedded JavaScript at runtime, skips Russian-locale systems, resolves infrastructure from blockchain transaction memos and executes remotely supplied code with full Node.js capability. Microsoft removed the reported extensions "shortly after receiving our report" and had already classified *Cosmic Nebula Themes* as malware; Open VSX status was unclear at publication. A theme is the one extension category nobody reviews — it is "just colours" — and it is installed by the forks (Cursor, Windsurf, Trae) that pull from Open VSX. Hunt: child processes spawned from the extension host, and command scripts in the temp directory written at extension activation. Status stays `active`.
 
 ## What happened
 GlassWorm's signature trick is **steganographic source**: the malicious logic is encoded in **printable-but-non-rendering Unicode** (e.g., variation selectors / invisible code points), so a maintainer or reviewer eyeballing the extension's source sees nothing. This defeats human review and most diff-based checks.
@@ -80,6 +82,7 @@ If a flagged extension turns up, treat the machine as compromised: npm/GitHub/Gi
 → Prefer verified-publisher, first-party extensions; disable silent auto-update on credential-holding editors; be especially wary of typosquatted "popular dev tool" clones on Open VSX, which is GlassWorm's primary vector.
 
 ## Sources
+- **2026-10-05 update source** — [Socket — Pretty Themes, Hidden Loaders: GlassWorm-Linked Extensions Span VS Code Marketplace and Open VSX](https://socket.dev/blog/glassworm-vscode-themes) — 2026-10-02; the extension names, publisher ids, install counts, the two loader behaviours, the shared-key/gating/memo-resolution attribution, Microsoft's removal. Fetched 2026-10-05.
 - [The Hacker News — Self-Spreading 'GlassWorm' Infects VS Code Extensions in Widespread Supply Chain Attack](https://thehackernews.com/2025/10/self-spreading-glassworm-infects-vs.html)
 - [Veracode — GlassWorm: The First Self-Propagating VS Code Extension Worm](https://www.veracode.com/blog/glassworm-vs-code-extension/)
 - [The Hacker News — GlassWorm Supply-Chain Attack Abuses 72 Open VSX Extensions to Target Developers](https://thehackernews.com/2026/03/glassworm-supply-chain-attack-abuses-72.html)
