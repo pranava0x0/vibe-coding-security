@@ -15,6 +15,19 @@
 
 ## Archived entries
 
+## 2026-09-25
+
+```yaml
+queries: {deep: 16, medium: 22, shallow: 10}
+new: [2026-09-opencode-global-upgrade-cross-site-npm-install-rce, 2026-09-mcp-remote-oauth-discovery-ssrf-cve-batch, 2026-09-third-party-com-placeholder-domain-clickfix-agent-skills, 2026-09-gambit-hermes-strix-cairn-autonomous-agent-retail-skimmer-campaign, 2026-09-salesbleed-agentforce-zero-click-prompt-injection-exfiltration]
+updated: [2026-08-agent-framework-mcp-cve-batch, 2026-09-kiro-ide-cli-aws-bulletin-cve-batch, 2026-09-nextjs-og-imageresponse-satori-svg-rce, 2026-05-tanstack-mini-shai-hulud, 2026-09-openai-eval-agents-australian-medicare-portal-transluce-urlquery]
+sources_added: [securitylabs.datadoghq.com]
+sources_weighted: [gambit.security, labs.zenity.io, manifold.security, therecord.media, hackread.com, infosecurity-magazine.com, thehackernews.com, theregister.com, github.com, nvd.nist.gov, registry.npmjs.org, api.npmjs.org, socket.dev, aws.amazon.com, kiro.dev, nextjs.org, hn.algolia.com, safedep.io, vulncheck.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, securityweek-front-page-403, bleepingcomputer-403, msrc-blog-dns-fail, github-advisories-GHSA-632h-mirror-404-use-vendor-repo-url, manifold-third-party-com-clickfix-post-fetched-ok]
+```
+
+**Notes (≤300 words).** Full-coverage scheduled sweep (all four requested source classes cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw/Codex/CrewAI/goose/Cline/gemini-cli/opencode; frontend incl. Next.js/React/Svelte/SvelteKit/Vite/Astro; backend/auth/DB incl. FastAPI/Streamlit/Prisma/Supabase auth+realtime+storage/NextAuth/Clerk/better-auth). Direct WebSearch/WebFetch + curl; no subagents. Front pages fetched first (THN/Register; SecurityWeek front page 403'd — not covered), then KEV, HN Algolia, the advisory-database `mcp`/`npm`/`pip`/`claude`/`agent`/`codex`/`cursor` listings, ~40 vendor advisory tabs, and the platform blog indexes. KEV (dateAdded ≥ 09-18): MikroTik/SharePoint/WSO2/Adobe Commerce/Arista/F5/Check Point ×2/Zyxel/Linux ×3 — nothing in scope. **Five new:** OpenCode `/global/upgrade` RCE (Datadog, no CVE, fixed 1.18.22 a month pre-disclosure — HN Algolia + GHSA); mcp-remote five OAuth-discovery CVEs (database `mcp` listing; wrote `unconfirmed` — no fix statement exists and the package changed owners geelen→punkpeye, ceiling 0.1.38 is the reviewed version not a patch line); third-party.com placeholder→ClickFix (Manifold/THN, defender-framed); Gambit Hermes/Strix/Cairn agent skimmer campaign (Gambit + Register + Hackread — written remediation-first after the first draft tripped the safety classifier on tradecraft detail; kept to victims/impact/defenses); SalesBleed Agentforce (Zenity + Register + Infosec). **Five updates:** MCP batch (+DBHub ×2, mcp-fetch, Decepticon 10.0, ContextForge #5 — the 09-24 database wave); Kiro batch (+CVE-2026-95985, bulletin 2026-117-AWS); Satori file (Next.js scheduled 09-30 release, nine vulns — floor not count); TanStack (Socket confirms actions-cool re-disabled 09-25 after the tags still served the May payload); Medicare (The Record: archived JS shows an unauthenticated guest endpoint — "hack" now contested, status unchanged). **Accuracy:** gate green (build/validate/pytest); expanded two slash-compressed CVE lists the id-lint caught; link checker 0-flagged on all five new files. Zero sources decayed.
+
 ## 2026-09-24
 
 ```yaml

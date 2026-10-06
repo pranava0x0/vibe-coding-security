@@ -2,7 +2,7 @@
 id: 2026-09-meta-muse-macos-dictation-endpoint-agent-token-hijack
 title: "Meta Muse for macOS (Meta's personal AI agent, launched 2026-09-17): an undocumented preference, endo_voyager_dictation_endpoint, let any unprivileged local process redirect the agent's dictation traffic to a server it chose — capturing spoken prompts, injecting prompts the agent trusts, and stealing the agent's session token, which carries every permission the user had granted Muse (linked-phone location, device actions); Patrick Wardle published the PoC 88 hours after launch (2026-09-21), Meta hot-fixed within a day by removing the setting"
 date_disclosed: 2026-09-21
-last_updated: 2026-10-05
+last_updated: 2026-10-06
 severity: high
 status: patched
 ecosystems: [macos, ai-agents, meta]
@@ -53,6 +53,12 @@ grep -rhoE 'https?://[^"'"'"' ]+' ~/.claude ~/.codex ~/.cursor ~/.config/*mcp* 2
 
 Muse itself is a consumer product, but the mechanism is the one every agent on your laptop shares: a config file decides where the agent sends your prompts and its credentials, and that file is writable by the same user that runs your package installs. This repo already has the coding-agent version of this bug (Claude Code's `ANTHROPIC_BASE_URL` in a repo-local `.env`); Muse is the personal-agent version, with a session token that reaches your phone. When the next stealer's harvest list includes "AI-agent config files" — as the one in [this week's npm compromise](2026-10-subql-common-npm-postinstall-stealer-ci-workflow-injection.md) does — this is what it is looking for.
 
+## Update — 2026-10-06: Apple says it will tighten macOS Full Disk Access controls because AI agents are using the permission "in ways that could put users at risk," naming Muse's iMessage access and this zero-day among the triggers; no date for the change (THN 10-05, SecurityWeek 10-06)
+
+The Hacker News reported on **2026-10-05** (SecurityWeek the next morning) that Apple has announced tighter controls around **Full Disk Access (FDA)** to restrict how AI agents and other applications reach user data, saying developers are "using Full Disk Access in ways that could put users at risk, exposing everything on their systems — including files, mail, messages, and even browsing history," and that "as AI agents become increasingly capable and autonomous, the risks associated with this level of access will grow substantially." THN lists the incidents behind it: Meta Muse reading a journalist's private iMessages after being granted FDA (Meta then clarified its two-permission model), Patrick Wardle's zero-day in this file, and a ChatGPT-for-Mac issue THN identifies as **CVE-2026-100754** that could have exposed chat logs — that last id is recorded here from THN only and was not verified against NVD this sweep. Apple gave no timeline: "it's currently not known when the new controls will be rolled out."
+
+For this file: status stays `patched` (Meta's hotfix removed the preference), and the platform response is the structural one this advisory's Prevention section asked for — an agent that holds FDA holds everything, and until Apple ships the change the only control is not granting it. For readers running coding agents on macOS, note that FDA is also what many developer tools request to read `~/Library` and mail archives; the same prompt that Muse used is the one your IDE's agent may show.
+
 ## Sources
 
 - [The Register — Meta Muse AI app flaw lets local malware redirect dictation traffic](https://www.theregister.com/ai-and-ml/2026/09/21/meta-muse-ai-app-flaw-lets-local-malware-redirect-dictation-traffic/5297980) — 2026-09-21 (updated 09-22), Thomas Claburn: the preference key, the unprivileged-process prerequisite, what is captured, the 88-hour gap, Wardle's `not-a-mused` PoC, Meta's statement via David Singleton quoted above. Fetched 2026-10-05.
@@ -61,3 +67,5 @@ Muse itself is a consumer product, but the mechanism is the one every agent on y
 - [Noma Security — Personal AI Agent Security: Discovering and Governing dots, Grok Bot, Instinct, Muse, & Muse Code](https://noma.security/blog/personal-ai-agent-security-discovering-and-governing-dots-grok-bot-muse-muse-code) — 2026-10-02, vendor blog; the pointer that surfaced this incident for the sweep, plus the Muse / Muse Code product distinction. Fetched 2026-10-05; incident facts above are taken from the three outlets, not from this post.
 - Not fetched: Patrick Wardle's X thread and the `not-a-mused` repository (X is not reachable from this environment; the repository is cited by The Register and was not opened — the PoC is out of scope for this repo).
 - Related in this repo: [Claude Code `ANTHROPIC_BASE_URL` key exfiltration](2025-08-claude-code-inverseprompt.md), [Meta / Irregular eval containment failure](2026-08-meta-irregular-eval-containment-failure.md) (a different Muse incident), [Claude Desktop Cowork host-boundary advisories](2026-08-claude-code-desktop-ghsa-batch.md).
+- [The Hacker News — Apple Plans Tighter macOS Full Disk Access Controls Over AI Agent Data Access](https://thehackernews.com/2026/10/apple-plans-tighter-macos-full-disk.html) — 2026-10-05: Apple's statements, the Muse iMessage and zero-day references, the ChatGPT-for-Mac CVE id as THN gives it, no rollout date. Fetched 2026-10-06.
+- [SecurityWeek — Apple to Tighten Full Disk Access Controls in macOS Amid AI Risks](https://www.securityweek.com/apple-to-tighten-full-disk-access-controls-in-macos-amid-ai-risks/) — 2026-10-06 front-page headline; article not opened separately.
