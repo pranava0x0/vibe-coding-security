@@ -1,6 +1,6 @@
 {
- "last_updated": "2026-10-05",
- "notes": "Sweep 2026-09-30: direct WebSearch/WebFetch + curl research in the main session. Six new advisories (PixelLeak, MCP Python SDK OAuth issuer validation, DirtyBlanket express typosquats, PhantomSub Baileys forks, CARBONATO Docker botnet, n8n ten-advisory batch) and twelve updates, most from the NVD keyword window and the vendor advisory tabs. Five new sources. The auto-mode classifier blocked Bash, Agent and .claude/ writes after a fetched page carried live C2 addresses (LEARNINGS \u00a735); the block lifted at context compaction. Decay (60-day rule) skipped this run.",
+ "last_updated": "2026-10-06",
+ "notes": "Sweep 2026-10-06: direct WebSearch/WebFetch + curl in the main session, no subagents. Seven new advisories (Langflow four-advisory backfill with IBM-vs-vendor conflicts, simple-git denylist bypasses, Tinypool prototype-pollution gadgets, PyJWT key-confusion batch, Copilot CLI Cryptographic Context Injection, npm core-library criticals shell-quote/proxy-addr/seroval, Databricks Genie malicious skills) and eleven updates. Most new items came from the reviewed-critical npm/pip database listings carrying vendor advisories one to four months old, and from per-product tabs. Two new sources (wikimediafoundation.org, pypistats.org); flatt.tech recorded its first hit. Decay (60-day rule) touched 1 sources.",
  "sources": {
   "advisories.gitlab.com": {
    "_added": "2026-05-18",
@@ -150,6 +150,7 @@
     "kev-2026-10-02-zammad",
     "kev-feed-2026-09-09",
     "kev-feed-2026-09-14-no-new-in-scope",
+    "kev-json-2026-10-06-no-new-in-scope",
     "litellm",
     "megalodon",
     "metabase-sqli",
@@ -159,8 +160,8 @@
     "tanstack",
     "vscode"
    ],
-   "hits": 17,
-   "last_hit": "2026-10-04",
+   "hits": 18,
+   "last_hit": "2026-10-06",
    "tier": "official",
    "weight": 20
   },
@@ -308,6 +309,7 @@
     "cursor-advisories-walk-2026-09",
     "dbhub-ghsa",
     "decepticon-ghsa",
+    "dify-ghsa-ccrj",
     "discourse-ghsa-vhm9",
     "docker-sbx-releases",
     "docker-sbx-releases-0.45.0",
@@ -338,6 +340,7 @@
     "mcp-remote-oauth-cve",
     "mcp-router-ghsa",
     "mcp-typescript-sdk-ghsa",
+    "mcp-typescript-sdk-ghsa-rvq5",
     "mcp-use-ghsa",
     "mindsdb",
     "mlflow-security-advisories",
@@ -373,29 +376,38 @@
     "orval-ghsa-v263",
     "orval-ghsa-w4x4",
     "orval-releases",
+    "pyjwt-advisories",
+    "pyjwt-changelog-2.14.0",
     "pypi",
     "ro1me-issues-devika-agentzero-deeptutor-dbgpt-agentscope-langflow",
     "rubygems-ghsa",
     "satori-ghsa-wx4j",
     "sharp-ghsa-librsvg-96889",
+    "simple-git-advisories",
+    "simple-git-release-4.0.0",
     "siyuan-mcp",
     "subql-issue-3047",
     "supabase-realtime-ghsa-9vjf",
     "supabase-realtime-ghsa-rcr8",
     "supabase-realtime-releases",
+    "sveltekit-advisories-2026-10-05",
     "sveltekit-advisories-walk-2026-09",
     "swe-agent-issue-1472",
     "swe-agent-pr-1505",
     "sweagent-advisories-walk-2026-09",
     "telnyx-mcp-ghsa",
+    "tinypool-release",
     "tooluniverse-ghsa",
     "trigger-dev-ghsa",
+    "ufo-ghsa-6ppj",
     "unstructured-ghsa",
     "vendor-tab-walk",
     "vendor-tab-walk-2026-09-27",
     "vendor-tab-walk-2026-10-04",
     "vendor-tab-walk-2026-10-05",
+    "vendor-tab-walk-2026-10-06",
     "vertex-ai-xss-poc",
+    "vite-advisories-2026-10-06",
     "vite-cve-53571-ghsa",
     "vm2-advisories-walk-2026-09",
     "vm2-ghsa-98xx",
@@ -403,8 +415,8 @@
     "zcode-open-source",
     "zitadel-advisories-walk-2026-10-05"
    ],
-   "hits": 37,
-   "last_hit": "2026-10-05",
+   "hits": 38,
+   "last_hit": "2026-10-06",
    "tier": "independent",
    "weight": 20
   },
@@ -463,6 +475,7 @@
     "langchain",
     "langflow-cve-27966",
     "langflow-cve-55255-kev",
+    "langflow-ghsa-backfill",
     "langgraph",
     "langgraph-cve-27794",
     "langgraph-cve-28277",
@@ -491,37 +504,49 @@
     "office-powerpoint-mcp-cve-71427",
     "openclaw",
     "openclaw-cve-94094",
+    "openclaw-ghsa-g7fw",
     "openhands",
     "openpanel-cve-93982",
     "orval-cve-96754",
     "orval-cve-96758",
     "praisonai",
     "praisonai-platform",
+    "proxy-addr-cve-90711",
+    "pyjwt-cve-102268",
     "pypi",
     "python",
+    "reviewed-critical-npm-2026-10-05",
     "reviewed-critical-npm-vm2-batch",
     "reviewed-critical-pip",
+    "reviewed-critical-pip-2026-10-05",
     "rmcp-cve-63127",
     "rmcp-cve-63128",
     "rmcp-cve-64684",
     "rmcp-ghsa-c9xm",
     "security-agent-mcp-server",
     "sentry-seer",
+    "seroval-cve-104846",
+    "shell-quote-cve-102422",
+    "simple-git-cve-batch",
+    "siyuan-cve-69085",
     "siyuan-ghsa-x8gv-p23f",
     "siyuan-mcp",
     "supabase",
     "supabase-listing",
+    "superagi-cve-51904",
     "svelte",
+    "tinypool-cve-104848-104849",
     "token-optimizer-mcp",
     "toolhive-cve-58197",
     "trigger-dev-listing",
     "vibe-trading-ai",
     "vite",
     "vm2-cve-92940",
+    "vm2-cve-92946-92956",
     "wordpress"
    ],
-   "hits": 42,
-   "last_hit": "2026-10-05",
+   "hits": 43,
+   "last_hit": "2026-10-06",
    "tier": "official",
    "weight": 20
   },
@@ -674,6 +699,7 @@
     "cve-44211",
     "cve-62353",
     "cve-official",
+    "dify-cve-105761",
     "docker-sandboxes-cve-77179",
     "facebook-ads-mcp-server-cve-19956",
     "fast-mcp-telegram",
@@ -683,6 +709,7 @@
     "hashicorp-consul-mcp",
     "heym-cve-100858",
     "jsonata",
+    "k6-mcp-cve-89039",
     "kibana-agent-builder-cve-72668",
     "langchain",
     "langchain-ssrf",
@@ -691,6 +718,7 @@
     "langflow-cve-101861",
     "langflow-cve-27966",
     "langflow-cve-55255-kev",
+    "langflow-cve-wave-2026-10-05",
     "langgraph-cve-27794",
     "langgraph-sqli",
     "langsmith",
@@ -722,26 +750,35 @@
     "orval",
     "penpot-cve-100868",
     "praisonai-platform",
+    "proxy-addr",
+    "pyjwt",
     "python",
     "react2shell",
     "rmcp-cve-64684",
     "ro1me-agent-framework-wave",
     "ro1me-wave-2026-10-01-02",
     "sentry-seer-cve-90999",
+    "seroval",
+    "shell-quote",
+    "simple-git",
     "siyuan-cve-100633",
+    "siyuan-cve-69085",
     "starlette",
     "supabase",
     "supabase-realtime",
+    "superagi-six-ids",
     "svelte",
     "telnyx-mcp",
     "terraform-mcp",
+    "tinypool",
     "tooluniverse",
+    "ufo-cve-105788",
     "ui-tars-desktop",
     "vm2-cve-92941-92957",
     "windsurf"
    ],
-   "hits": 61,
-   "last_hit": "2026-10-04",
+   "hits": 62,
+   "last_hit": "2026-10-06",
    "tier": "official",
    "weight": 20
   },
@@ -772,8 +809,8 @@
   "registry.npmjs.org": {
    "_added": "2026-09-14",
    "weight": 20,
-   "hits": 17,
-   "last_hit": "2026-10-05",
+   "hits": 18,
+   "last_hit": "2026-10-06",
    "ecosystems": [
     "9router-release-dates",
     "astro-release-dates",
@@ -784,6 +821,7 @@
     "codex-0.146.0",
     "codex-0.149.0",
     "dbhub",
+    "express-proxy-addr-pin",
     "feishu-docx-mcp-takedown",
     "flowise-3.1.4-last-release",
     "gemini-cli-0.60.0",
@@ -805,10 +843,17 @@
     "orval-release-dates",
     "satori-0.33.5",
     "sharp-0.35.5",
+    "simple-git-4.0.x-time",
+    "solidstart-seroval-pin",
     "subql-common-time-dist-tags",
     "sveltejs-kit-release-dates",
+    "sveltekit-3.0.1",
+    "tinypool-time",
     "trigger-dev-release-dates",
+    "vite-8.3.3",
+    "vitest-tinypool-pins",
     "vm2-3.11.7",
+    "vm2-3.12.2",
     "vm2-release-dates",
     "weaselbiscuit-takedown"
    ],
@@ -852,6 +897,7 @@
     "anthropic-session-hijack",
     "anthropic-threat-report",
     "antv",
+    "apple-fda",
     "aur-atomic-arch",
     "aws",
     "bitwarden",
@@ -867,6 +913,7 @@
     "divd-zammad",
     "front-page-fetched-2026-09-30",
     "front-page-fetched-2026-10-01",
+    "front-page-fetched-2026-10-06",
     "gemini-cli",
     "gemini-cli-trustissues",
     "gemini-irregular",
@@ -923,8 +970,8 @@
     "x47c-api-drain-declined",
     "zenity-pleasefix-update"
    ],
-   "hits": 55,
-   "last_hit": "2026-10-01",
+   "hits": 56,
+   "last_hit": "2026-10-06",
    "tier": "aggregator",
    "weight": 20
   },
@@ -1056,6 +1103,7 @@
     "anthropic-threat-report",
     "antigravity",
     "antv",
+    "apple-fda-ai-agents",
     "astra-aisi",
     "asyncapi-miasma",
     "atlassian-rovo",
@@ -1204,10 +1252,12 @@
     "vscode",
     "vsxploit",
     "weaselbiscuit",
-    "whitecobra"
+    "weekly-recap-2026-10-05",
+    "whitecobra",
+    "wikimedia-openai-agents"
    ],
-   "hits": 98,
-   "last_hit": "2026-10-04",
+   "hits": 99,
+   "last_hit": "2026-10-06",
    "tier": "aggregator",
    "weight": 20
   },
@@ -1230,6 +1280,7 @@
     "claude-code-subcommand-deny-bypass",
     "claude-desktop-personalization",
     "clawhub",
+    "copilot-cli-cci",
     "copilot-word-worm",
     "cosnitch",
     "divd-zammad-data-breach",
@@ -1272,8 +1323,8 @@
     "vibe-platform",
     "zcode"
    ],
-   "hits": 49,
-   "last_hit": "2026-10-05",
+   "hits": 50,
+   "last_hit": "2026-10-06",
    "tier": "aggregator",
    "weight": 20
   },
@@ -1507,6 +1558,27 @@
    "tier": "research",
    "weight": 17
   },
+  "adversa.ai": {
+   "ecosystems": [
+    "agent-frameworks",
+    "blog-index",
+    "claude-code",
+    "claude-code-auto-mode",
+    "claude-code-subcommand-deny-bypass",
+    "copilot-cli-cryptographic-context-injection",
+    "cursor",
+    "deadbugz",
+    "guardfall",
+    "mcp",
+    "mcp-cve-batch-sep2026",
+    "symjack",
+    "trustfall"
+   ],
+   "hits": 10,
+   "last_hit": "2026-10-06",
+   "tier": "research",
+   "weight": 16
+  },
   "infosecurity-magazine.com": {
    "ecosystems": [
     "LITL",
@@ -1525,25 +1597,6 @@
    "last_hit": "2026-09-25",
    "tier": "aggregator",
    "weight": 16
-  },
-  "adversa.ai": {
-   "ecosystems": [
-    "agent-frameworks",
-    "claude-code",
-    "claude-code-auto-mode",
-    "claude-code-subcommand-deny-bypass",
-    "cursor",
-    "deadbugz",
-    "guardfall",
-    "mcp",
-    "mcp-cve-batch-sep2026",
-    "symjack",
-    "trustfall"
-   ],
-   "hits": 9,
-   "last_hit": "2026-09-10",
-   "tier": "research",
-   "weight": 15
   },
   "darkreading.com": {
    "ecosystems": [
@@ -1567,6 +1620,29 @@
    "last_decayed": "2026-08-26",
    "last_hit": "2026-06-25",
    "tier": "aggregator",
+   "weight": 15
+  },
+  "ibm.com": {
+   "_added": "2026-08-11",
+   "ecosystems": [
+    "contextforge-cve-18486",
+    "contextforge-cve-18489",
+    "contextforge-cve-18905",
+    "contextforge-cve-77822",
+    "contextforge-cve-78573-bulletin-7286834",
+    "cve-2026-9198",
+    "ibm-psirt-bulletin-7286666",
+    "ibm-psirt-bulletins-7286052-56",
+    "langflow",
+    "langflow-bulletin-7277242",
+    "langflow-bulletin-7278921",
+    "langflow-bulletin-7282648",
+    "langflow-eleven-cve-batch",
+    "langflow-fernet-webhook-repl-wave"
+   ],
+   "hits": 6,
+   "last_hit": "2026-10-06",
+   "tier": "vendor",
    "weight": 15
   },
   "securityaffairs.com": {
@@ -1661,24 +1737,29 @@
    "tier": "research",
    "weight": 14
   },
-  "ibm.com": {
-   "_added": "2026-08-11",
+  "hn.algolia.com": {
+   "_added": "2026-09-13",
+   "weight": 14,
+   "hits": 10,
+   "last_hit": "2026-10-06",
    "ecosystems": [
-    "contextforge-cve-18486",
-    "contextforge-cve-18489",
-    "contextforge-cve-18905",
-    "contextforge-cve-77822",
-    "contextforge-cve-78573-bulletin-7286834",
-    "cve-2026-9198",
-    "ibm-psirt-bulletin-7286666",
-    "ibm-psirt-bulletins-7286052-56",
-    "langflow",
-    "langflow-eleven-cve-batch"
+    "dirtyblanket",
+    "flatt-subql-story",
+    "hacker-news-search-api",
+    "indexed-btree",
+    "litellm-9.9",
+    "openai",
+    "openai-training-pause-ap-guardian-fortune",
+    "openclaw-tob-recap",
+    "opencode-datadog",
+    "phantomfix-sentry",
+    "prompt-injection",
+    "promptarmor-databricks-story",
+    "subql-common-story",
+    "third-party-com",
+    "transluce-canada-wapo"
    ],
-   "hits": 5,
-   "last_hit": "2026-09-16",
-   "tier": "vendor",
-   "weight": 14
+   "tier": "aggregator"
   },
   "labs.cloudsecurityalliance.org": {
    "_added": "2026-05-18",
@@ -1739,6 +1820,33 @@
    "tier": "aggregator",
    "weight": 14
   },
+  "api.npmjs.org": {
+   "_added": "2026-09-21",
+   "weight": 13,
+   "hits": 9,
+   "last_hit": "2026-10-06",
+   "ecosystems": [
+    "9router",
+    "baileys-forks-downloads",
+    "download-count-inflation",
+    "indexed-btree",
+    "mcp-remote-downloads",
+    "memtensor-plugin",
+    "notebooklm-mcp",
+    "npm",
+    "opencode-ai-downloads",
+    "orval",
+    "piscina",
+    "proxy-addr",
+    "seroval",
+    "shell-quote",
+    "simple-git",
+    "subql-weekly-downloads",
+    "tinypool",
+    "vitest"
+   ],
+   "tier": "official"
+  },
   "arxiv.org": {
    "ecosystems": [
     "agent-skills",
@@ -1773,27 +1881,6 @@
    "last_hit": "2026-09-25",
    "tier": "aggregator",
    "weight": 13
-  },
-  "hn.algolia.com": {
-   "_added": "2026-09-13",
-   "weight": 13,
-   "hits": 9,
-   "last_hit": "2026-10-05",
-   "ecosystems": [
-    "dirtyblanket",
-    "hacker-news-search-api",
-    "indexed-btree",
-    "litellm-9.9",
-    "openai",
-    "openai-training-pause-ap-guardian-fortune",
-    "opencode-datadog",
-    "phantomfix-sentry",
-    "prompt-injection",
-    "subql-common-story",
-    "third-party-com",
-    "transluce-canada-wapo"
-   ],
-   "tier": "aggregator"
   },
   "oasis.security": {
    "_added": "2026-05-18",
@@ -1894,26 +1981,6 @@
    "last_hit": "2026-09-12",
    "tier": "vendor",
    "weight": 12
-  },
-  "api.npmjs.org": {
-   "_added": "2026-09-21",
-   "weight": 12,
-   "hits": 8,
-   "last_hit": "2026-10-05",
-   "ecosystems": [
-    "9router",
-    "baileys-forks-downloads",
-    "download-count-inflation",
-    "indexed-btree",
-    "mcp-remote-downloads",
-    "memtensor-plugin",
-    "notebooklm-mcp",
-    "npm",
-    "opencode-ai-downloads",
-    "orval",
-    "subql-weekly-downloads"
-   ],
-   "tier": "official"
   },
   "cyberscoop.com": {
    "_added": "2026-05-18",
@@ -2128,6 +2195,33 @@
    "tier": "research",
    "weight": 11
   },
+  "services.nvd.nist.gov": {
+   "weight": 11,
+   "hits": 7,
+   "last_hit": "2026-10-06",
+   "ecosystems": [
+    "flowise",
+    "keyword-window-2026-09-30",
+    "keyword-window-2026-10-01",
+    "keyword-window-2026-10-02-05-finrobot",
+    "keyword-window-2026-10-04",
+    "keyword-window-2026-10-06",
+    "langflow-cve-51886",
+    "langflow-cve-wave",
+    "litellm",
+    "mcp",
+    "mcp-window",
+    "metamcp",
+    "obot",
+    "ollama",
+    "openclaw",
+    "openclaw-recheck",
+    "supabase",
+    "superagi",
+    "zammad"
+   ],
+   "tier": "official"
+  },
   "trendmicro.com": {
    "ecosystems": [
     "npm",
@@ -2288,6 +2382,30 @@
    "tier": "official",
    "weight": 10
   },
+  "pypi.org": {
+   "_added": "2026-09-17",
+   "weight": 10,
+   "hits": 6,
+   "last_hit": "2026-10-06",
+   "ecosystems": [
+    "agentscope-release-dates",
+    "aider-gitpython-pin",
+    "authlib-1.8.0",
+    "crewai-release-dates",
+    "gitpython-3.1.60",
+    "gitpython-3.2.0",
+    "langflow-1.12.4",
+    "litellm-1.101.0rc1-2026-09-06",
+    "litellm-1.104.0",
+    "litellm-fixed-versions",
+    "mcp-1.30.0-2.2.0-release-dates",
+    "mcp-2.3.0",
+    "pyjwt-2.15.1",
+    "security-agent-mcp-0.2.0",
+    "unsloth-release-dates"
+   ],
+   "tier": "official"
+  },
   "rapid7.com": {
    "_added": "2026-05-21",
    "ecosystems": [
@@ -2300,29 +2418,6 @@
    "last_hit": "2026-08-18",
    "tier": "research",
    "weight": 10
-  },
-  "services.nvd.nist.gov": {
-   "weight": 10,
-   "hits": 6,
-   "last_hit": "2026-10-05",
-   "ecosystems": [
-    "flowise",
-    "keyword-window-2026-09-30",
-    "keyword-window-2026-10-01",
-    "keyword-window-2026-10-02-05-finrobot",
-    "keyword-window-2026-10-04",
-    "langflow-cve-51886",
-    "litellm",
-    "mcp",
-    "metamcp",
-    "obot",
-    "ollama",
-    "openclaw",
-    "openclaw-recheck",
-    "supabase",
-    "zammad"
-   ],
-   "tier": "official"
   },
   "trufflesecurity.com": {
    "_added": "2026-08-09",
@@ -2468,6 +2563,21 @@
    "tier": "aggregator",
    "weight": 9
   },
+  "flatt.tech": {
+   "_added": "2026-06-30",
+   "ecosystems": [
+    "ai-coding",
+    "claude-code",
+    "github-actions",
+    "publish-workflow-tampering",
+    "subql-common-second-analysis",
+    "supply-chain"
+   ],
+   "hits": 1,
+   "last_hit": "2026-10-06",
+   "tier": "research",
+   "weight": 9
+  },
   "hiddenlayer.com": {
    "_added": "2026-08-03",
    "ecosystems": [
@@ -2553,27 +2663,18 @@
    "tier": "research",
    "weight": 9
   },
-  "pypi.org": {
-   "_added": "2026-09-17",
-   "weight": 9,
-   "hits": 5,
-   "last_hit": "2026-10-04",
+  "promptarmor.com": {
+   "_added": "2026-08-10",
    "ecosystems": [
-    "agentscope-release-dates",
-    "aider-gitpython-pin",
-    "authlib-1.8.0",
-    "crewai-release-dates",
-    "gitpython-3.1.60",
-    "gitpython-3.2.0",
-    "litellm-1.101.0rc1-2026-09-06",
-    "litellm-1.104.0",
-    "litellm-fixed-versions",
-    "mcp-1.30.0-2.2.0-release-dates",
-    "mcp-2.3.0",
-    "security-agent-mcp-0.2.0",
-    "unsloth-release-dates"
+    "atlassian-rovo",
+    "data-exfiltration",
+    "databricks-genie-code-malicious-skills",
+    "prompt-injection"
    ],
-   "tier": "official"
+   "hits": 2,
+   "last_hit": "2026-10-06",
+   "tier": "research",
+   "weight": 9
   },
   "rustsec.org": {
    "_added": "2026-05-27",
@@ -2770,20 +2871,6 @@
    "tier": "vendor",
    "weight": 8
   },
-  "flatt.tech": {
-   "_added": "2026-06-30",
-   "ecosystems": [
-    "ai-coding",
-    "claude-code",
-    "github-actions",
-    "supply-chain"
-   ],
-   "hits": 0,
-   "last_decayed": "2026-08-21",
-   "last_hit": null,
-   "tier": "research",
-   "weight": 8
-  },
   "fortune.com": {
    "ecosystems": [
     "huggingface-openai-attribution",
@@ -2919,28 +3006,6 @@
    ],
    "hits": 4,
    "last_hit": "2026-09-18",
-   "tier": "research",
-   "weight": 8
-  },
-  "promptarmor.com": {
-   "_added": "2026-08-10",
-   "ecosystems": [
-    "atlassian-rovo",
-    "prompt-injection",
-    "data-exfiltration"
-   ],
-   "hits": 1,
-   "last_hit": "2026-08-10",
-   "tier": "research",
-   "weight": 8
-  },
-  "proofpoint.com": {
-   "ecosystems": [
-    "cursor",
-    "mcp"
-   ],
-   "hits": 1,
-   "last_hit": "2026-08-06",
    "tier": "research",
    "weight": 8
   },
@@ -3157,6 +3222,25 @@
    "tier": "aggregator",
    "weight": 7
   },
+  "cveawg.mitre.org": {
+   "_added": "2026-10-04",
+   "weight": 7,
+   "hits": 3,
+   "last_hit": "2026-10-06",
+   "ecosystems": [
+    "aws-cna-records",
+    "claude-code-cve-103435-dne",
+    "claude-code-cve-103435-still-dne",
+    "cve-2026-100721",
+    "cve-json-cna-records",
+    "langgraph-cve-104873",
+    "loom-cve-records",
+    "nextjs-cve-94485-description-mixup",
+    "vm2-cve-records-2026-09-17",
+    "zitadel-cve-records"
+   ],
+   "tier": "official"
+  },
   "cybersecuritydive.com": {
    "_added": "2026-05-31",
    "ecosystems": [
@@ -3320,6 +3404,17 @@
    "last_hit": "2026-05-16",
    "tier": "vendor",
    "weight": 7
+  },
+  "proofpoint.com": {
+   "ecosystems": [
+    "cursor",
+    "mcp"
+   ],
+   "hits": 1,
+   "last_hit": "2026-08-06",
+   "tier": "research",
+   "weight": 7,
+   "last_decayed": "2026-10-06"
   },
   "radar.offseq.com": {
    "_added": "2026-05-30",
@@ -3712,22 +3807,6 @@
     "cna-case-pages",
     "divd-case-recheck-2026-10-04",
     "divd-zammad-zero-days"
-   ],
-   "tier": "official"
-  },
-  "cveawg.mitre.org": {
-   "_added": "2026-10-04",
-   "weight": 6,
-   "hits": 2,
-   "last_hit": "2026-10-05",
-   "ecosystems": [
-    "aws-cna-records",
-    "claude-code-cve-103435-dne",
-    "cve-json-cna-records",
-    "langgraph-cve-104873",
-    "loom-cve-records",
-    "nextjs-cve-94485-description-mixup",
-    "zitadel-cve-records"
    ],
    "tier": "official"
   },
@@ -4997,6 +5076,17 @@
    "tier": "research",
    "weight": 5
   },
+  "pypistats.org": {
+   "_added": "2026-10-06",
+   "weight": 5,
+   "hits": 1,
+   "last_hit": "2026-10-06",
+   "ecosystems": [
+    "langflow-weekly-downloads",
+    "pyjwt-weekly-downloads"
+   ],
+   "tier": "official"
+  },
   "reco.ai": {
    "_added": "2026-05-18",
    "ecosystems": [
@@ -5236,6 +5326,16 @@
     "jfrog-artifactory"
    ],
    "tier": "research"
+  },
+  "wikimediafoundation.org": {
+   "_added": "2026-10-06",
+   "weight": 5,
+   "hits": 1,
+   "last_hit": "2026-10-06",
+   "ecosystems": [
+    "openai-rogue-agent-activities"
+   ],
+   "tier": "independent"
   },
   "witness.ai": {
    "ecosystems": [

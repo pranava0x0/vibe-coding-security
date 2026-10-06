@@ -2,12 +2,12 @@
 id: 2026-10-subql-common-npm-postinstall-stealer-ci-workflow-injection
 title: "@subql/common@5.8.3 (SubQuery, the web3 indexing framework; 18k-star monorepo) shipped a postinstall + on-import credential stealer and remote shell on 2026-10-05 — harvests .npmrc, .env, SSH, cloud, Kubernetes, Vault and AI-agent config files, reads the GitHub Actions runner process for tokens, and pushes a disguised CodeQL workflow to dump repository secrets; 19 of 77 @subql packages resolve to it; removed from the registry within hours"
 date_disclosed: 2026-10-05
-last_updated: 2026-10-05
+last_updated: 2026-10-06
 severity: high
-status: unconfirmed
+status: contained
 ecosystems: [npm, github-actions, ci-cd]
 tools_affected: ["@subql/common 5.8.3 (and the 5.8.3-onf-rt1 pre-release published 32 minutes earlier)", "@subql/cli 6.6.3, @subql/node-core 19.3.1, @subql/query 2.25.0 and 16 other @subql packages whose latest version resolves to it", "any project or CI pipeline that ran `npm install` with a floating @subql range on 2026-10-05", "GitHub Actions runners that installed it"]
-tags: [supply-chain, npm, postinstall, on-import-payload, credential-theft, github-actions, runner-memory, workflow-injection, remote-shell, ai-agent-config-theft, web3, unconfirmed]
+tags: [supply-chain, npm, postinstall, on-import-payload, credential-theft, github-actions, runner-memory, workflow-injection, remote-shell, ai-agent-config-theft, web3, second-analyst-confirmed, publish-workflow-tampering]
 ---
 
 ## TL;DR
@@ -57,6 +57,17 @@ Any hit on `5.8.3` or `5.8.3-onf-rt1`, or the `manifest-cache.js` file, means th
 
 A web3 indexer is not a vibe-coding tool, but the payload's harvest list is a snapshot of what attackers now expect to find on a developer machine in 2026: cloud and registry credentials, **and the agent config files that hold model-provider keys and MCP server secrets**. Whatever package you install next, assume its postinstall and its first import run with everything in your home directory. If you let an agent run `npm install` for you, that agent's own credentials are in scope.
 
+## Update — 2026-10-06: a second, independent analysis (GMO Flatt Security) confirms the payload and supplies the missing "how" — the attacker had push access to `subquery/subql` and modified the npm publish workflow, so 5.8.3 was built and signed by the project's own GitHub Actions OIDC pipeline; timeline 11:24 pre-release → 11:52 malicious commit → 11:56 publish → 12:46 removal; status moves from `unconfirmed` to `contained`
+
+GMO Flatt Security Research published its own write-up on **2026-10-06** (the attack is dated 10-05), reaching Hacker News the same morning. It is an independent read of the same tarball, not a repost of StepSecurity's, and it agrees on every technical point this file took from the first analysis — the AWS/GitHub/SSH/Kubernetes/Vault harvest, the AWS SSM Parameter Store and Secrets Manager enumeration "across all regions," the GitHub Actions runner-memory secret extraction, and the injected workflow "disguised as CodeQL analysis." Two things it adds:
+
+- **The compromise method.** "The attacker obtained push access to the `subquery/subql` GitHub repository and tampered with the CI/CD workflow (`.github/workflows/publish.yml`) to inject a malicious payload into the legitimate npm publishing flow." The malicious release therefore carries the project's normal trusted-publisher provenance — which is why the 10-05 file could not tell from the registry whether a maintainer or an attacker published it. The malicious commit is **506863d6fb82bd2714970cf8c6f1bf364374b009**, the one StepSecurity's issue asked the maintainers to investigate.
+- **The timeline (UTC, 2026-10-05).** 11:24 `5.8.3-onf-rt1` published, **with no postinstall script** (Flatt calls it a "presumed test release"); 11:52 the malicious commit pushed; 11:56 `5.8.3` published via GitHub Actions OIDC; **12:46 package removed from the npm registry**. That makes the live window **50 minutes** for the malicious version, and it explains the `redteam`-tagged pre-release the 10-05 file reported without interpreting: it was the dry run.
+
+Flatt also names the command-and-control domain and IP; this file continues not to reproduce them beyond saying that **any outbound connection from a build host or runner to the `ci-artifacts.dev` domain on or after 2026-10-05 is a compromise signal** — treat the domain as an IOC in egress logs, not as something to visit.
+
+**Status.** Two independent analyst firms, a registry removal confirmed by both and by this repo's own query, and a stated compromise method meet this repo's bar; `unconfirmed` → **`contained`**. Still missing at fetch time: any statement from the SubQuery maintainers, and confirmation that the repository's push access and publishing secrets have been rotated — until that appears, treat the `@subql` namespace as capable of producing another malicious release and keep the pins. The lesson for everyone else is the one Flatt's title implies: with trusted publishing, **the publish workflow file is the signing key**; protect `.github/workflows/publish.yml` with required reviews and environment protection rules the same way you would protect an npm token — [prevention/ci-cd-hardening.md](../prevention/ci-cd-hardening.md).
+
 ## Sources
 
 - [StepSecurity — SubQuery Ecosystem Compromise: Hidden Credential Theft and Backdoors](https://www.stepsecurity.io/blog/subql-ecosystem-compromised) — 2026-10-05, the primary analysis: files added in 5.8.3, the three-layer unpacking, the harvest list including AI-agent configs, runner-memory extraction, the CodeQL-named workflow injection, the 77-package / 19-affected dependency review, the on-import execution path. Fetched 2026-10-05.
@@ -66,3 +77,5 @@ A web3 indexer is not a vibe-coding tool, but the payload's harvest list is a sn
 - [Hacker News — "Subql/common 5.8.3 compromised: postinstall stealer in 18k-star SubQuery repo"](https://hn.algolia.com/api/v1/search_by_date?query=subquery&tags=story) — 2026-10-05 submission linking the issue; the star count.
 - [SafeDep — An Attacker Hijacked an AI Coding Assistant to Spread a Worm](https://safedep.io/ai-coding-assistant-hijack-shai-hulud/) — 2026-10-02, secondary; the 189 → 469 credential-location figure attributed to Google Cloud's AI Risk and Resilience Report 2026. Fetched 2026-10-05.
 - Related in this repo: [Mandiant hijacked coding-assistant session → Shai-Hulud](2026-09-mandiant-hijacked-coding-assistant-session-shai-hulud-saas.md), [ChainDrop / keyv](2026-08-keyv-mini-shai-hulud-npm-worm.md), [Mini Shai-Hulud](2026-05-tanstack-mini-shai-hulud.md).
+- [GMO Flatt Security Research — Software Supply Chain Attack on subql/common](https://flatt.tech/research/posts/subql-common-npm-supply-chain-attack/) — 2026-10-06 (attack 2026-10-05), the second independent analysis: push access to `subquery/subql`, the tampered `.github/workflows/publish.yml`, the UTC timeline (11:24 / 11:52 / 11:56 / 12:46), the SSM Parameter Store and Secrets Manager enumeration, commit 506863d. Fetched 2026-10-06. The post names the C2 domain and IP; they are deliberately not linked here.
+- [Hacker News (Algolia) — "Software Supply Chain Attack on subql/common"](https://hn.algolia.com/api/v1/search_by_date?query=subql&tags=story) — 2026-10-06 submission of the Flatt post.

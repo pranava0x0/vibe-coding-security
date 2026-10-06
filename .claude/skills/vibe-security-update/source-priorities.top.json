@@ -23,8 +23,8 @@
   {
    "domain": "cisa.gov",
    "weight": 20.0,
-   "hits": 17,
-   "last_hit": "2026-10-04"
+   "hits": 18,
+   "last_hit": "2026-10-06"
   },
   {
    "domain": "csoonline.com",
@@ -41,14 +41,14 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 37,
-   "last_hit": "2026-10-05"
+   "hits": 38,
+   "last_hit": "2026-10-06"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 42,
-   "last_hit": "2026-10-05"
+   "hits": 43,
+   "last_hit": "2026-10-06"
   },
   {
    "domain": "helpnetsecurity.com",
@@ -65,8 +65,8 @@
   {
    "domain": "nvd.nist.gov",
    "weight": 20.0,
-   "hits": 61,
-   "last_hit": "2026-10-04"
+   "hits": 62,
+   "last_hit": "2026-10-06"
   },
   {
    "domain": "ox.security",
@@ -77,8 +77,8 @@
   {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
-   "hits": 17,
-   "last_hit": "2026-10-05"
+   "hits": 18,
+   "last_hit": "2026-10-06"
   },
   {
    "domain": "safedep.io",
@@ -89,8 +89,8 @@
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 55,
-   "last_hit": "2026-10-01"
+   "hits": 56,
+   "last_hit": "2026-10-06"
   },
   {
    "domain": "sentinelone.com",
@@ -113,14 +113,14 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 98,
-   "last_hit": "2026-10-04"
+   "hits": 99,
+   "last_hit": "2026-10-06"
   },
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 49,
-   "last_hit": "2026-10-05"
+   "hits": 50,
+   "last_hit": "2026-10-06"
   },
   {
    "domain": "vulncheck.com",
