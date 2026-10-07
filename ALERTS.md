@@ -2,11 +2,19 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-10-06. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-10-07. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-10-06 — **A KVM guest-to-host-root escape found through Vercel's $1M Sandbox bounty, confirmed by Vercel's CEO on X and paid at the $50k cap — no CVE, no details; the same program's 09-15 results already named two Linux-kernel networking defects (host memory leak, deterministic host crash) with CVEs pending** — Firecracker-on-KVM is the isolation layer under most "run the agent's code safely" products, not only Vercel's.
+Single-outlet relay of vendor statements (`unconfirmed`). Nothing to patch yet: keep host kernels on the security channel, treat the microVM as the boundary and the container as convenience, and re-check when a CVE or writeup names what the bounty paid for.
+→ [advisories/2026-10-vercel-sandbox-bounty-kvm-firecracker-guest-to-host-escape-kernel-flaws.md](advisories/2026-10-vercel-sandbox-bounty-kvm-firecracker-guest-to-host-escape-kernel-flaws.md)
+
+### 2026-10-05 — **"Protocol pivoting": the same SSRF — an MCP tool fetches whatever URL the agent or its input supplies — confirmed and fixed at Google (MCP Toolbox CVE-2026-14540, 8.0, 0.3.0–1.4.0 → 1.5.0), JPMorgan Chase, Weaviate, France's DINUM and an Indonesian city, with five US federal MCP servers still in triage** — one researcher, five unrelated codebases, one structural mistake.
+Upgrade MCP Toolbox to ≥ 1.5.0 (and the later fixes for its two September CVEs). For any MCP server you wrote: resolve the destination at connect time, block loopback / RFC1918 / metadata, re-validate every redirect hop, and assume the agent will be told what URL to type.
+→ [advisories/2026-10-mcp-protocol-pivoting-ssrf-same-flaw-google-toolbox-jpmorgan-dinum-five-vendors.md](advisories/2026-10-mcp-protocol-pivoting-ssrf-same-flaw-google-toolbox-jpmorgan-dinum-five-vendors.md)
 
 ### 2026-10-06 — **GitHub Copilot CLI in autopilot mode sends local secrets to an attacker from one web page carrying AES-encrypted instructions plus the key** — the agent writes the decryption helper, reads `.env.prod` to build a "template" key, then fetches a URL with the harvested values in it (Adversa AI's Cryptographic Context Injection, ~28 seconds); works about half the time on Microsoft's `mai-code-1.1-flash`, which Auto routing can assign silently, and not on GPT-5.6
 Reported 09-17; GitHub "validated the finding but declined to treat it as a vulnerability" on 10-01 — no patch, no CVE. Turn autopilot off for anything that touches the web, pin a model, keep secrets out of the agent's reach, and egress-filter the host.
@@ -928,6 +936,14 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 ---
 
 ## 🟠 RECENT — verify exposure
+
+### 2026-09-18 — **Payload CMS (the Next.js-native headless CMS, 1.1M weekly downloads): 32 vendor advisories 09-18 → 10-06, 29 CVEs assigned 10-06 — unauthenticated RCE through the Form Builder plugin (CVE-2026-105857, 10.0), unauthenticated SQL injection in the Postgres/SQLite adapters (CVE-2026-105845, 9.8), unauthenticated document update on `orderable` collections (CVE-2026-105859, 9.8), forged JWT claims (9.2), Import/Export prototype pollution → RCE (9.3), and three MCP-plugin bugs including account takeover through the MCP password-recovery tool** — several fixes shipped silently in 3.88.0 on 08-11 and were disclosed six weeks later.
+Upgrade every `payload` and `@payloadcms/*` package together to ≥ 3.90.0 (`latest` 3.90.2), rotate `PAYLOAD_SECRET`, re-issue agent MCP keys, and treat a Form Builder or Import/Export endpoint that was internet-facing below 3.88/3.90 as a possible compromise.
+→ [advisories/2026-09-payload-cms-thirty-advisory-wave-form-builder-rce-sqli-mcp-plugin-takeover.md](advisories/2026-09-payload-cms-thirty-advisory-wave-form-builder-rce-sqli-mcp-plugin-takeover.md)
+
+### 2026-09-03 — **python-jose (the `from jose import jwt` library older FastAPI tutorials and generated `auth.py` files use) accepts a DER-encoded public key as an HMAC secret — anyone holding the service's public key forges HS256 tokens when `algorithms=` isn't pinned (CVE-2026-85394, 9.3, incomplete fix of CVE-2024-33663) — reported 06-04, CVE 09-03, still unpatched at 3.5.0 with the fix PR unanswered; plus AnyIO < 4.14.2 TLS host-name validation after IDNA-2003 (CVE-2026-63374, 9.3, fixed 07-07)** — two FastAPI-stack primitives surfaced by the reviewed-critical pip listing months after the fact.
+Pin `algorithms=[...]` on every `jwt.decode` today (closes the bug on any version), migrate to PyJWT ≥ 2.14.0, let `anyio` float to ≥ 4.14.2. Only verifiers given a public key with no algorithm pin are forgeable; shared-secret HS256 apps are not.
+→ [advisories/2026-09-python-jose-algorithm-confusion-unpatched-anyio-tls-idna-fastapi-stack-primitives.md](advisories/2026-09-python-jose-algorithm-confusion-unpatched-anyio-tls-idna-fastapi-stack-primitives.md)
 
 ### 2026-10-05 — **Langflow: four more code-execution and credential-theft advisories reach the database (vendor pages Aug–Sep, IBM bulletins Jun–Aug) — PythonREPLComponent with full builtins (CVE-2026-10561, IBM 10.0 unauthenticated via the auto-login default / vendor 9.9), webhook endpoint skipping the API key on its default setting (CVE-2026-8505, 9.8), the Fernet key for every stored credential derived from `random.seed()` (CVE-2026-9205), Smart Transform `eval()`ing an LLM-written lambda (CVE-2026-7700, prompt injection → RCE)**
 IBM and the vendor disagree on affected and fixed versions for three of the four; the highest fix any source gives is **1.11.0**, PyPI latest 1.12.4. Rotate every credential Langflow ever stored if a secret-key file or database backup was ever exposed.
