@@ -205,7 +205,11 @@ def test_score_rows_record_vectors():
     _, block = evidence.validate_bundle(ROOT, ROOT / evidence.EVIDENCE / f"{ADVISORY}.evidence.json")
     rows = {line.split("|")[1].strip(): line for line in block.splitlines() if line.startswith("| CVE-")}
     assert "`CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:H/A:H`" in rows["CVE-2026-51997"]
-    assert rows["CVE-2026-52001"].count("—") == 2  # unscored: no vector, no provider date
+    # CISA ADP scored CVE-2026-52001 on 2026-10-06 (previously unscored); the row must carry
+    # the vector and the provider date, attributed to CISA-ADP, not to the CNA.
+    assert "CISA-ADP / 3.1: 7.5 High" in rows["CVE-2026-52001"]
+    assert "`CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:N/A:N`" in rows["CVE-2026-52001"]
+    assert "2026-10-06" in rows["CVE-2026-52001"]
 
 
 def test_checks_survive_python_optimize_flag(corpus):

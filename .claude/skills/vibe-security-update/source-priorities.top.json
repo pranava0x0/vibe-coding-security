@@ -23,8 +23,8 @@
   {
    "domain": "cisa.gov",
    "weight": 20.0,
-   "hits": 18,
-   "last_hit": "2026-10-06"
+   "hits": 19,
+   "last_hit": "2026-10-07"
   },
   {
    "domain": "csoonline.com",
@@ -41,14 +41,14 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 38,
-   "last_hit": "2026-10-06"
+   "hits": 39,
+   "last_hit": "2026-10-07"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 43,
-   "last_hit": "2026-10-06"
+   "hits": 44,
+   "last_hit": "2026-10-07"
   },
   {
    "domain": "helpnetsecurity.com",
@@ -77,8 +77,8 @@
   {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
-   "hits": 18,
-   "last_hit": "2026-10-06"
+   "hits": 19,
+   "last_hit": "2026-10-07"
   },
   {
    "domain": "safedep.io",
@@ -89,8 +89,8 @@
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 56,
-   "last_hit": "2026-10-06"
+   "hits": 57,
+   "last_hit": "2026-10-07"
   },
   {
    "domain": "sentinelone.com",
@@ -119,14 +119,14 @@
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 50,
-   "last_hit": "2026-10-06"
+   "hits": 51,
+   "last_hit": "2026-10-07"
   },
   {
    "domain": "vulncheck.com",
    "weight": 20.0,
-   "hits": 19,
-   "last_hit": "2026-10-05"
+   "hits": 20,
+   "last_hit": "2026-10-07"
   },
   {
    "domain": "wiz.io",
@@ -141,16 +141,16 @@
    "last_hit": "2026-09-24"
   },
   {
+   "domain": "aws.amazon.com",
+   "weight": 18.0,
+   "hits": 11,
+   "last_hit": "2026-10-07"
+  },
+  {
    "domain": "blog.rust-lang.org",
    "weight": 18.0,
    "hits": 5,
    "last_hit": "2026-09-24"
-  },
-  {
-   "domain": "snyk.io",
-   "weight": 18.0,
-   "hits": 24,
-   "last_hit": "2026-06-19"
   }
  ]
 }
