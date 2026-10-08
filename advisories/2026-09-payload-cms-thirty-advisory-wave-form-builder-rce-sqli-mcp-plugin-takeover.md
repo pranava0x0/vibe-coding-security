@@ -2,7 +2,7 @@
 id: 2026-09-payload-cms-thirty-advisory-wave-form-builder-rce-sqli-mcp-plugin-takeover
 title: "Payload CMS (the Next.js-native headless CMS; 1.1M weekly downloads): 32 vendor advisories between 2026-09-18 and 10-06, 29 CVEs assigned 10-06 — unauthenticated RCE through the Form Builder plugin (CVE-2026-105857, 10.0), unauthenticated SQL injection in the Postgres/SQLite adapters (CVE-2026-105845, 9.8), unauthenticated document update on orderable collections (CVE-2026-105859, 9.8), forged auth-token claims (CVE-2026-105863, 9.2), prototype-pollution RCE in Import/Export (CVE-2026-105844, 9.3), and three MCP-plugin bugs including account takeover through the MCP password-recovery tool; fixed 3.88.0 → 3.90.0"
 date_disclosed: 2026-09-18
-last_updated: 2026-10-07
+last_updated: 2026-10-08
 severity: critical
 status: patched
 ecosystems: [npm, nextjs, react, postgres, sqlite, mcp]
@@ -98,6 +98,16 @@ grep -rl "@payloadcms/plugin-mcp\|formBuilderPlugin\|importExportPlugin" --inclu
 - Disable XML/XSL and SVG uploads unless you need them; serve uploads with attachment headers and a strict CSP.
 - [supply-chain-attack-surface](../prevention/supply-chain-attack-surface.md) — the admin panel a generator added is a second application with its own CVE stream.
 
+## Update 2026-10-08 — the tab keeps producing: eight more advisories (2026-10-06/08), including a High improper-authentication bug in the MCP plugin's custom-auth path (fixed 3.88.0) and a CSV formula-injection in Import/Export
+
+Payload's security tab added eight advisories on **2026-10-06 and 10-08**, after the 29-CVE wave above — the pattern this file opened with (the generator's admin panel is a second application with its own continuous CVE stream) continuing:
+
+- **[GHSA-cqr4-hjg9-833p](https://github.com/payloadcms/payload/security/advisories/GHSA-cqr4-hjg9-833p) — improper authentication in MCP when using custom authentication** (`@payloadcms/plugin-mcp` 3.64.0 – 3.87.x → **3.88.0**, High, CVSS 4.0 7.6, published 2026-10-08). Under non-default MCP auth configurations the access restriction may not be enforced, so an authenticated user reaches MCP functionality that should be unavailable; default MCP auth configs are unaffected. Fix makes custom MCP auth use the configured credential.
+- **[GHSA-jjm7-864w-gg8q](https://github.com/payloadcms/payload/security/advisories/GHSA-jjm7-864w-gg8q) — hidden-field leak in MCP login responses** (High, published 2026-10-06).
+- Six Moderate advisories dated **2026-10-08**: incorrect authorization for framework collections (GHSA-8j2x-hjh9-3ff8), **CSV formula injection in `@payloadcms/plugin-import-export`** (GHSA-97w9-jq7h-73pq), excessive-authentication-attempts (GHSA-m35c-r5p5-c3w8), authorization bypass of client uploads (GHSA-g6p9-6gm4-cj6m), insufficient session expiration after password changes (GHSA-wvw7-x9pg-w4cc), and improper privilege management in scheduled publishing (GHSA-mg7r-jhr9-m745).
+
+No CVE ids were shown on the tab for these yet; the two MCP-plugin bugs are the ones that matter most for a generated backend that exposes an MCP endpoint. Status stays `patched` (all carry fix versions, with the MCP custom-auth fix in 3.88.0 the same floor as the September wave). Upgrade `payload` and every `@payloadcms/*` plugin together to the current line.
+
 ## Related
 - [Next.js September 2026 security release](2026-09-nextjs-september-2026-security-release-seven-advisories.md) and [next/og ImageResponse RCE](2026-09-nextjs-og-imageresponse-satori-svg-rce.md) — the host framework's own wave the same month.
 - [npm core-library critical batch](2026-09-npm-core-library-critical-batch-shell-quote-proxy-addr-seroval.md) — the same disclosure shape (vendor tab weeks ahead of the CVE) in libraries one layer down.
@@ -111,3 +121,4 @@ grep -rl "@payloadcms/plugin-mcp\|formBuilderPlugin\|importExportPlugin" --inclu
 - [Payload — New in Payload: hardening uploads, copy/paste, and MCP defaults (3.88.0)](https://payloadcms.com/posts/releases/new-in-payload-hardening-uploads-copypaste-and-mcp-defaults) — 2026-08-11 release post; the three "hardening" lines quoted above, no CVE or severity.
 - [payloadcms/payload — Release v3.90.0](https://github.com/payloadcms/payload/releases/tag/v3.90.0) — 2026-09-18; the "critical security fixes … identifiers published separately" notice quoted above.
 - Registry: [`api.npmjs.org` weekly downloads](https://api.npmjs.org/downloads/point/last-week/payload) for `payload`, `@payloadcms/plugin-mcp`, `plugin-form-builder`, `plugin-import-export`, `plugin-multi-tenant`, `db-postgres`, `db-sqlite` (week 2026-09-28 → 10-04); `npm view payload dist-tags.latest` → 3.90.2 on 2026-10-07.
+- **2026-10-08 update source** — [payloadcms/payload — Security Advisories (page 1)](https://github.com/payloadcms/payload/security/advisories) (walked 2026-10-08: the eight 2026-10-06/08 entries, GHSA ids, severities and the 3.88.0 MCP custom-auth fix quoted above; CVE ids not yet shown).

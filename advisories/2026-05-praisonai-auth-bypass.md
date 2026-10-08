@@ -2,7 +2,7 @@
 id: 2026-05-praisonai-auth-bypass
 title: "PraisonAI authentication bypass — CVE-2026-44338 + platform CVEs (May 2026)"
 date_disclosed: 2026-05-11
-last_updated: 2026-10-07
+last_updated: 2026-10-08
 severity: high
 status: patched
 ecosystems: [pypi, ai-agents]
@@ -127,6 +127,16 @@ Three PraisonAI rows appeared on the advisory database's `agent`/`llm` recency l
 
 Status stays `patched` for the Python package (4.6.78 shipped the webhook fix in June; current releases are far past it) with the standing caveat that the platform package and the un-CVE'd June advisories have not been individually verified as fixed.
 
+## Update 2026-10-08 — three more of the June-25 tab entries get CVEs on the database (vendor 2026-06-25): a Critical code-injection (CVE-2026-62176, 9.1), the prompt-injection-defence bypass (CVE-2026-61439) and the Crawl4AI SSRF (CVE-2026-61429), all fixed in 4.6.78
+
+Three further PraisonAI rows reached the advisory database's reviewed-critical pip and `agent`/`llm` listings on **2026-10-07/08**, closing more of the un-CVE'd June-25 tab from the previous update. All were vendor-published **2026-06-25** and fixed in **4.6.78**:
+
+- **[CVE-2026-62176](https://github.com/MervinPraison/PraisonAI/security/advisories/GHSA-g6j7-pffp-8whg) — code injection via f-string interpolation in Deploy API server generation** (`praisonai` ≤ 4.6.77, GitHub-as-CNA, CVSS 3.1 **9.1**, CWE-94). `deploy/api.py` builds Python server code by interpolating the `agents_file` parameter into an f-string that is then written and run with `subprocess.Popen()`; an attacker controlling that value (CLI arg, config, or upstream API) injects arbitrary Python. The same pattern appears in `deploy/docker.py`. Reporter anushkavirgaonkar.
+- **[CVE-2026-61439](https://github.com/MervinPraison/PraisonAI/security/advisories/GHSA-fj8f-m44g-c479) — prompt-injection defence bypassed for HIGH-level threats** (`praisonai` ≤ 4.6.77, VulnCheck CNA, CVSS 4.0 **8.7** / 3.1 7.5). The Injection Defense layer's default block threshold is CRITICAL (needs 3+ detector families to fire), so a single-vector injection — instruction override, financial manipulation — is logged HIGH but not blocked, enabling prompt extraction, unauthorised tool use or context exfiltration downstream. The fix sets the default to HIGH.
+- **[CVE-2026-61429](https://github.com/MervinPraison/PraisonAI/security/advisories/GHSA-6g59-gm2v-qhvq) — `web_crawl` SSRF via the Crawl4AI/Chromium backend** (`praisonaiagents` ≤ 1.6.77, VulnCheck CNA, CVSS 3.1 **8.5**). When crawl4ai + Playwright are installed, `web_crawl` uses a headless Chromium that resolves DNS and follows redirects with no per-connection SSRF check, so the initial URL check is bypassed through DNS rebinding or redirects (confirmed returning internal content). Extends the earlier PRAI-05 SSRF finding.
+
+These confirm the previous update's read — the ~30-CVE catch-up is the CNA working through the June-25 tab — and none change the Python package's `patched` status (4.6.78 carries all three). The eighteen-page tab diff remains the standing item.
+
 ## Sources
 - [NVD — CVE-2026-57124 (PraisonAI unauthenticated MCP-connect RCE)](https://nvd.nist.gov/vuln/detail/CVE-2026-57124) — fetched 2026-09-16 via the NVD API; CVSS 9.8, GHSA-p75f-6fp4-p57w, fixed 4.6.59, one of the ~30-CVE 2026-09-14/15 batch confirmed against the NVD keyword query.
 - [NVD — CVE-2026-57125 (PraisonAI unauthenticated Jobs API RCE)](https://nvd.nist.gov/vuln/detail/CVE-2026-57125) — fetched 2026-09-16 via the NVD API; CVSS 9.8, fixed praisonai 4.6.59 / praisonaiagents 1.6.59.
@@ -144,3 +154,5 @@ Status stays `patched` for the Python package (4.6.78 shipped the webhook fix in
 - [GitHub Advisory — CVE-2026-47418 praisonai-platform cross-workspace IDOR](https://github.com/advisories?query=praisonai-platform)
 - [GitHub Advisory — CVE-2026-47408 praisonai-platform unauthenticated A2A tool execution](https://github.com/advisories?query=praisonai-platform)
 - **2026-10-07 update sources** — [GitHub Advisory Database — GHSA-7c92-x8vg-4258 / CVE-2026-61436](https://github.com/advisories/GHSA-7c92-x8vg-4258) and [GHSA-qj9c-59p6-8cgx / CVE-2026-61428](https://github.com/advisories/GHSA-qj9c-59p6-8cgx) (fetched 2026-10-07: vendor date 2026-06-25, ≤ 4.6.77 → 4.6.78, the Svix-header and allow/block-list descriptions, reporters); [CVE Services — CVE-2026-61436](https://cveawg.mitre.org/api/cve/CVE-2026-61436) and [CVE-2026-61428](https://cveawg.mitre.org/api/cve/CVE-2026-61428) (VulnCheck CNA, 2026-07-15 / 2026-07-11, scores and fix commits) and [CVE-2026-62179](https://cveawg.mitre.org/api/cve/CVE-2026-62179) (GitHub-as-CNA, 2026-10-07, `praisonai-platform` < 0.1.9, 6.5); [MervinPraison/PraisonAI — Security Advisories, pages 1–2](https://github.com/MervinPraison/PraisonAI/security/advisories) (walked 2026-10-07: 18 pages; the twenty 2026-06-25 titles summarised above); [GitHub Advisory Database — `agent` recency listing](https://github.com/advisories?query=agent+sort%3Apublished-desc) (where the three rows surfaced, 2026-10-07).
+
+- **2026-10-08 update sources** — [MervinPraison/PraisonAI — GHSA-g6j7-pffp-8whg / CVE-2026-62176](https://github.com/MervinPraison/PraisonAI/security/advisories/GHSA-g6j7-pffp-8whg), [GHSA-fj8f-m44g-c479 / CVE-2026-61439](https://github.com/MervinPraison/PraisonAI/security/advisories/GHSA-fj8f-m44g-c479), [GHSA-6g59-gm2v-qhvq / CVE-2026-61429](https://github.com/MervinPraison/PraisonAI/security/advisories/GHSA-6g59-gm2v-qhvq) (fetched 2026-10-08: vendor-published 2026-06-25, ≤ 4.6.77 / ≤ 1.6.77 → 4.6.78, scores, mechanisms and reporters); [CVE Services — CVE-2026-62176](https://cveawg.mitre.org/api/cve/CVE-2026-62176) (GitHub-as-CNA 2026-10-07, 9.1), [CVE-2026-61439](https://cveawg.mitre.org/api/cve/CVE-2026-61439) and [CVE-2026-61429](https://cveawg.mitre.org/api/cve/CVE-2026-61429) (VulnCheck CNA 2026-07-11); [GitHub Advisory Database — reviewed critical pip listing](https://github.com/advisories?query=type%3Areviewed+ecosystem%3Apip+severity%3Acritical) (fetched 2026-10-07).

@@ -2,7 +2,7 @@
 id: 2026-08-vm2-isolated-vm-sandbox-escapes
 title: "Both JavaScript sandboxes that AI workflow platforms run untrusted code in broke in the same fortnight — vm2 (host DNS hijack) and isolated-vm (type confusion → host RCE), August 2026"
 date_disclosed: 2026-08-07
-last_updated: 2026-10-06
+last_updated: 2026-10-08
 severity: critical
 status: patched
 ecosystems: [npm, javascript, self-hosted]
@@ -148,6 +148,10 @@ The reviewed-critical `npm` listing of 2026-10-05 carries ten more `vm2` rows; c
 
 Registry check 2026-10-06: `vm2` `latest` is **3.12.2**. The reading for operators is unchanged from the 10-01 update — **3.12.2 is the target**, and two of the escapes depend on the Node major (`node:test` on 24+, `compileStreaming` on 26), so a workflow product's base image matters as much as the library version. This file now carries twenty-two CVE ids for vm2 since August; a platform that still embeds it to run model- or user-written JavaScript should read that count as the verdict on the approach.
 
+## Update 2026-10-08 — the `child_process` escape tracked here by GHSA now has its CVE: CVE-2026-93605 (10.0, `≤ 3.12.0` → 3.12.1), surfacing on the reviewed-critical npm listing
+
+The reviewed-critical npm listing carried the vm2 batch again this sweep (database dates 2026-10-05/07, which are review-lag of the August/September vendor advisories already tracked above). One id was not yet grepped here: **CVE-2026-93605** (VulnCheck CNA, published 2026-09-18) is the CVE for **[GHSA-pq68-rvw4-xp4r](https://github.com/patriksimek/vm2/security/advisories/GHSA-pq68-rvw4-xp4r)**, the NodeVM escape where the `DANGEROUS_BUILTINS` denylist omitted `child_process` — a sandbox configured to allow all builtins could `require('child_process')` and run host commands (CVSS 10.0, `≤ 3.12.0` → **3.12.1**). The advisory was already in this file by GHSA; this records the CVE id so a scanner-driven reader keyed on CVE-2026-93605 finds it. No new bug and no status change — 3.12.2 remains the target.
+
 ## Sources
 
 - [GitHub Security Advisory — GHSA-864f-rcv7-6rh4 (isolated-vm)](https://github.com/laverdet/isolated-vm/security/advisories/GHSA-864f-rcv7-6rh4) — fetched directly: Critical severity, published 2026-08-07, affected ≤ 7.0.0, patched 7.0.1 / 6.2.0, no CVE assigned, and the double-walk / *"An index getter therefore fires once per walk and can answer differently each time"* root cause plus the unchecked `As<ArrayBuffer>()` cast.
@@ -167,3 +171,4 @@ Registry check 2026-10-06: `vm2` `latest` is **3.12.2**. The reading for operato
 - [GHSA-88hf-g992-jg85 — vm2: Sandbox Escape (NodeVM) (CVE-2026-92955)](https://github.com/advisories/GHSA-88hf-g992-jg85) — fetched 2026-10-06: 10.0 (4.0), `≤ 3.11.7` → 3.11.8, the `console._stdout` / `__proto__` / `EventEmitter.prototype.emit` chain, commit 22a4370, reporter c0rydoras.
 - [CVE Services — CVE-2026-92946, -92947, -92953, -92954, -92955, -92956, -100721](https://cveawg.mitre.org/api/cve/CVE-2026-100721) — fetched 2026-10-06: CNA VulnCheck; titles, affected/unaffected version boundaries and scores as listed; 100721 published 2026-09-27, the rest 2026-09-17.
 - [GitHub Advisory Database — reviewed `npm` critical listing](https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm+severity%3Acritical) — fetched 2026-10-06: vm2 rows dated Oct 1 and Oct 5 (database dates). [npm registry — `vm2`](https://registry.npmjs.org/vm2) — `latest` 3.12.2 on 2026-10-06.
+- **2026-10-08 update source** — [CVE Services — CVE-2026-93605](https://cveawg.mitre.org/api/cve/CVE-2026-93605) (VulnCheck CNA, published 2026-09-18: title "vm2 NodeVM before 3.12.1 Remote Code Execution via child_process", `0`–`3.12.1` affected/unaffected, CVSS 4.0 and 3.1 10.0, reference GHSA-pq68-rvw4-xp4r); [GitHub Advisory Database — reviewed critical npm listing](https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm+severity%3Acritical) (fetched 2026-10-07: vm2 rows, database dates Oct 5/7).
