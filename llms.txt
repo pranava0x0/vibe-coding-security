@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-10-07
+**Last refreshed:** 2026-10-08
 
 ## Quick start
 
@@ -55,10 +55,11 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-10-07)
+## Active threat families (as of 2026-10-08)
 
 The highest-risk ongoing threat families for vibe coders:
 
+- **A signed, provenance-attested npm package is only as trustworthy as the branch it was built from (tensorlake, 2026-10-08)** — `tensorlake@0.5.144`, the SDK for an agent-sandbox platform, was built and published by the project's own GitHub Actions release workflow from a `main` branch an attacker had committed a Shai-Hulud/ChainDrop worm to, so it carried valid npm provenance. The payload reads the config and MCP files of Claude, Cursor, Kiro, Windsurf and Zed, plants `.claude/settings.json` and `.vscode/tasks.json` to re-run when the repo is reopened, and installs a `gh-token-monitor` that deletes the home directory if the stolen GitHub token is revoked — so remove the monitor before rotating. Provenance proves origin, not safety; set `ignore-scripts=true` and keep tokens off dev hosts.
 - **The admin panel your generator added is a second application with its own CVE stream, and its fixes can ship weeks before anyone is told (Payload CMS, 2026-09-18 → 10-06)** — 32 vendor advisories and 29 CVEs for the Next.js-native headless CMS: unauthenticated RCE via the Form Builder plugin (10.0), unauthenticated SQL injection in the Postgres/SQLite adapters (9.8), unauthenticated document updates (9.8), and three MCP-plugin bugs including account takeover through the MCP password-recovery tool; several fixes shipped as "hardening" in 3.88.0 on 08-11 and were disclosed six weeks later. Upgrade everything to ≥ 3.90.0 and rotate `PAYLOAD_SECRET`.
 - **The MCP server's network identity becomes the agent's (protocol pivoting, 2026-10-05)** — one researcher's SSRF pattern — a tool fetches whatever URL the agent or its input supplies — confirmed and fixed at Google's MCP Toolbox (CVE-2026-14540, 8.0), JPMorgan Chase, Weaviate, France's DINUM and an Indonesian city, with five US federal MCP servers still in triage. Resolve at connect time, block metadata and private ranges, re-validate redirects.
 - **The JWT library's algorithm-confusion guard keeps getting re-broken, and one library has no maintainer answering (python-jose, 2026-09-03)** — a DER-encoded public key passes python-jose's PEM/SSH-only check and becomes the HS256 secret (CVE-2026-85394, 9.3, unpatched at 3.5.0, fix PR unanswered). Pin `algorithms=` on every decode and migrate to PyJWT.
