@@ -2,11 +2,27 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-10-07. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-10-08. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-10-08 — **`tensorlake@0.5.144` (npm SDK for Tensorlake's agent sandboxes/cloud) shipped a Shai-Hulud/ChainDrop worm from the project's own release workflow with valid provenance** — the preinstall payload steals npm/GitHub/cloud/SSH/Vault/Kubernetes secrets and the config/MCP files of Claude, Cursor, Kiro, Windsurf and Zed, republishes the victim's packages, plants Claude Code (`.claude/settings.json`) and VS Code (`.vscode/tasks.json`) re-run files, and installs a `gh-token-monitor` service that **deletes the home directory if the stolen GitHub token is revoked**.
+Published 01:12 UTC, flagged by Socket 11 minutes later, pulled within ~2 hours; maintainers reverted and will ship 0.5.145. If it installed with scripts on: **disable `gh-token-monitor` first, then rotate everything**. Pin 0.5.143 until 0.5.145 is on the registry; set `ignore-scripts=true`.
+→ [advisories/2026-10-tensorlake-npm-shai-hulud-hostage-token-wipe.md](advisories/2026-10-tensorlake-npm-shai-hulud-hostage-token-wipe.md)
+
+### 2026-10-07 — **LMCache (the KV-cache layer under vLLM): unauthenticated RCE via pickle deserialization on the multiprocess ZeroMQ transport (CVE-2026-105192, CVSS 9.8), no fixed version, and the official container images run as root** — one crafted message to the unauthenticated ZMQ socket runs code as the LMCache process.
+Affected 0.3.9 through 0.5.5 and the 0.5.6 release candidates. Default localhost bind is safe; the risk is multi-node/Kubernetes deployments that set a routable `--host`. No patch: keep the ZMQ port off routable networks, don't run the container as root, and watch for a fixed release.
+→ [advisories/2026-10-lmcache-unauthenticated-pickle-rce-vllm-kv-cache.md](advisories/2026-10-lmcache-unauthenticated-pickle-rce-vllm-kv-cache.md)
+
+### 2026-10-07 — **A financially-motivated operator ran intrusions at five South Korean banks with Claude Code plus the Chinese open-source agentic-pentest tool ARTEX, and CrowdStrike recovered the whole operation — Claude Code session histories, memory files, ARTEX configs and a résumé prompt — from the attacker's own exposed directories** — an AI coding agent used as the attacker's workbench, not a flaw in it.
+No CVE. The defensive read: your own agent session/memory/MCP files are high-value if a box is exposed, and AI tooling compresses a multi-bank campaign into days. Keep agent logs off internet-reachable paths; financial-sector teams should hunt the ARTEX header fingerprint.
+→ [advisories/2026-10-artex-claude-code-south-korea-bank-intrusions-exposed-logs.md](advisories/2026-10-artex-claude-code-south-korea-bank-intrusions-exposed-logs.md)
+
+### 2026-10-07 — **PoeLLM (Canto Incognito): a cryptomining botnet that scans for and exploits internet-exposed LLM infrastructure — mostly vulnerable LiteLLM and Ollama, plus Gotenberg and Gitea — 3,400+ servers since April 2026, with its C2 address hidden in an AI-written poem on GitHub** (Lumen Black Lotus Labs).
+Exploits known flaws in exposed services (LiteLLM's `/mcp-rest/test/connection`, CVE-2026-42271; Ivanti Sentry CVE-2026-10520). The lesson for vibe coders: an exposed LLM gateway or local model server is a mining target the day it goes public. Patch LiteLLM to 1.83.7+, take the control plane off the internet.
+→ [advisories/2026-10-poellm-canto-incognito-litellm-ollama-cryptomining-botnet.md](advisories/2026-10-poellm-canto-incognito-litellm-ollama-cryptomining-botnet.md)
 
 ### 2026-10-06 — **A KVM guest-to-host-root escape found through Vercel's $1M Sandbox bounty, confirmed by Vercel's CEO on X and paid at the $50k cap — no CVE, no details; the same program's 09-15 results already named two Linux-kernel networking defects (host memory leak, deterministic host crash) with CVEs pending** — Firecracker-on-KVM is the isolation layer under most "run the agent's code safely" products, not only Vercel's.
 Single-outlet relay of vendor statements (`unconfirmed`). Nothing to patch yet: keep host kernels on the security channel, treat the microVM as the boundary and the container as convenience, and re-check when a CVE or writeup names what the bounty paid for.
@@ -27,6 +43,10 @@ Databricks' quoted position: skill safety is "ultimately the user's responsibili
 ### 2026-10-05 — **@subql/common@5.8.3 (SubQuery's shared npm library; 19 of 77 @subql packages resolve to it) shipped a postinstall + on-import stealer and remote shell at 11:56 UTC today** — harvests `.npmrc`, `.env`, SSH, cloud, kubeconfig, Vault, wallet **and AI-agent config files**, reads the GitHub Actions runner process for the job token, and pushes a `codeql_analysis.yml` workflow that dumps repository secrets to an artifact; a `5.8.3-onf-rt1` pre-release under a `redteam` dist-tag went up 32 minutes earlier
 Confirmed 10-06 by a second analyst (GMO Flatt): the attacker had push access and modified `publish.yml`, so 5.8.3 carries the project's own OIDC provenance; live for 50 minutes. Already removed from the registry (`latest` → 5.8.2) but a lockfile that caught it keeps re-running the payload on every import. If any `@subql/*` install ran on 10-05: rebuild the host/runner, rotate every listed credential class, and delete any CodeQL workflow or branch you did not author. Single-analyst finding (StepSecurity); no maintainer statement yet.
 → [advisories/2026-10-subql-common-npm-postinstall-stealer-ci-workflow-injection.md](advisories/2026-10-subql-common-npm-postinstall-stealer-ci-workflow-injection.md)
+
+### 2026-10-05 — **VTCode (open-source Rust coding agent): once a user approves three ordinary `find` commands, the agent auto-approves later `find` commands in that family, and an ANSI-C quote spliced into a destructive flag (`-exe$''c`) slips past the block on `-exec`/`-delete`** — a prompt-injected agent runs an unapproved destructive command (CVE-2026-104247, CVSS 6.3, fixed 0.171.5).
+Same approval-bypass class as the Mistral Vibe, Cursor and Claude Code `find`/allowlist bypasses: the agent's auto-approve heuristic is a parser, and the shell parses more. Upgrade to 0.171.5+ (crates.io line is 0.174.0); don't rely on learned approvals in a workspace untrusted input can steer.
+→ [advisories/2026-10-vtcode-find-approval-bypass-ansi-c-quote.md](advisories/2026-10-vtcode-find-approval-bypass-ansi-c-quote.md)
 
 ### 2026-10-04 — **ZITADEL, the open-source identity provider behind many self-hosted logins: twenty vendor advisories (06-08 → 09-28) and ten VulnCheck CVEs assigned 10-04** — unauthenticated passkey enrollment on an identify-only session (CVE-2026-105212), external-IdP linking before any factor is checked (CVE-2026-105207, 9.8), forged IdP callbacks (CVE-2026-105215, 9.1), cross-organisation enrollment codes (CVE-2026-105209, 9.6), OTP return-code bypass, predictable session IDs and SAML provider confusion (4.19.2)
 Upgrade to **4.19.2** (skip 4.18.0; set the session-cookie secret on every Login UI replica first). 3.x is end-of-life and has no fix for the September bugs. Audit for passkeys, IdP links and phone/username changes nobody made. The first critical was on the vendor tab for 67 days before any CVE existed.
@@ -936,6 +956,10 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 ---
 
 ## 🟠 RECENT — verify exposure
+
+### 2026-09-11 — **Mistral Vibe (Mistral's agentic coding CLI): six shell-permission-check bypasses let an allowlisted command run attacker-chosen code or reach files outside the workspace with no approval prompt — CVE-2026-87983 through CVE-2026-87988, four scored CVSS 10.0, reachable through indirect prompt injection** (HiddenLayer, disclosed 2026-09-11).
+The approval check didn't understand shell redirection, ANSI-C quoting, env-var prefixes or quoted paths — the shell executed what the check never saw. Mistral fixed it structurally in 2.25.4 and recommends 2.25.8+; current PyPI is 2.26.0. Keep permission checks on; auto-approve modes bypass them entirely.
+→ [advisories/2026-09-mistral-vibe-shell-permission-bypass-cve-batch.md](advisories/2026-09-mistral-vibe-shell-permission-bypass-cve-batch.md)
 
 ### 2026-09-18 — **Payload CMS (the Next.js-native headless CMS, 1.1M weekly downloads): 32 vendor advisories 09-18 → 10-06, 29 CVEs assigned 10-06 — unauthenticated RCE through the Form Builder plugin (CVE-2026-105857, 10.0), unauthenticated SQL injection in the Postgres/SQLite adapters (CVE-2026-105845, 9.8), unauthenticated document update on `orderable` collections (CVE-2026-105859, 9.8), forged JWT claims (9.2), Import/Export prototype pollution → RCE (9.3), and three MCP-plugin bugs including account takeover through the MCP password-recovery tool** — several fixes shipped silently in 3.88.0 on 08-11 and were disclosed six weeks later.
 Upgrade every `payload` and `@payloadcms/*` package together to ≥ 3.90.0 (`latest` 3.90.2), rotate `PAYLOAD_SECRET`, re-issue agent MCP keys, and treat a Form Builder or Import/Export endpoint that was internet-facing below 3.88/3.90 as a possible compromise.

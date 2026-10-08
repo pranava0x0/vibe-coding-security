@@ -11,8 +11,8 @@
   {
    "domain": "aikido.dev",
    "weight": 20.0,
-   "hits": 21,
-   "last_hit": "2026-09-24"
+   "hits": 22,
+   "last_hit": "2026-10-08"
   },
   {
    "domain": "bleepingcomputer.com",
@@ -35,20 +35,20 @@
   {
    "domain": "cybersecuritynews.com",
    "weight": 20.0,
-   "hits": 44,
-   "last_hit": "2026-09-18"
+   "hits": 45,
+   "last_hit": "2026-10-08"
   },
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 39,
-   "last_hit": "2026-10-07"
+   "hits": 40,
+   "last_hit": "2026-10-08"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 44,
-   "last_hit": "2026-10-07"
+   "hits": 45,
+   "last_hit": "2026-10-08"
   },
   {
    "domain": "helpnetsecurity.com",
@@ -77,14 +77,14 @@
   {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
-   "hits": 19,
-   "last_hit": "2026-10-07"
+   "hits": 20,
+   "last_hit": "2026-10-08"
   },
   {
    "domain": "safedep.io",
    "weight": 20.0,
-   "hits": 19,
-   "last_hit": "2026-10-05"
+   "hits": 20,
+   "last_hit": "2026-10-08"
   },
   {
    "domain": "securityweek.com",
@@ -101,26 +101,32 @@
   {
    "domain": "socket.dev",
    "weight": 20.0,
-   "hits": 30,
-   "last_hit": "2026-10-05"
+   "hits": 31,
+   "last_hit": "2026-10-08"
   },
   {
    "domain": "stepsecurity.io",
    "weight": 20.0,
-   "hits": 27,
-   "last_hit": "2026-10-05"
+   "hits": 28,
+   "last_hit": "2026-10-08"
   },
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 99,
-   "last_hit": "2026-10-06"
+   "hits": 100,
+   "last_hit": "2026-10-08"
   },
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 51,
-   "last_hit": "2026-10-07"
+   "hits": 52,
+   "last_hit": "2026-10-08"
+  },
+  {
+   "domain": "unit42.paloaltonetworks.com",
+   "weight": 20.0,
+   "hits": 9,
+   "last_hit": "2026-10-08"
   },
   {
    "domain": "vulncheck.com",
@@ -133,12 +139,6 @@
    "weight": 20.0,
    "hits": 15,
    "last_hit": "2026-09-12"
-  },
-  {
-   "domain": "unit42.paloaltonetworks.com",
-   "weight": 19.0,
-   "hits": 8,
-   "last_hit": "2026-09-24"
   },
   {
    "domain": "aws.amazon.com",

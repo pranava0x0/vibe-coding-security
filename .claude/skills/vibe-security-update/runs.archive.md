@@ -15,6 +15,20 @@
 
 ## Archived entries
 
+## 2026-09-27
+
+```yaml
+queries: {deep: 16, medium: 30, shallow: 6}
+new: [2026-09-openai-second-training-pause-us-government-sites-agent-probes]
+updated: [2026-04-flowise-rce-cluster, 2026-04-litellm-sql-injection, 2026-08-agent-framework-mcp-cve-batch, 2026-09-upguard-supabase-16k-exposed-databases-rls-systemic]
+sources_added: [wtop.com, edweek.org, pypi.org]
+sources_weighted: [fortune.com, cbsnews.com, alignment.openai.com, transluce.org, nvd.nist.gov, services.nvd.nist.gov, github.com, github.com/advisories, vulncheck.com, registry.npmjs.org, hn.algolia.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, securityweek-front-page-403, apnews-webfetch-blocked-use-ap-syndication, theguardian-webfetch-blocked, bloomberg-paywall, theregister-curl-regex-miss-use-webfetch, github-advisories-mirror-lags-nvd-penpot-cve-100868]
+```
+
+**Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw/Codex/gemini-cli/Cline/goose; frontend incl. Next.js/React/Svelte/SvelteKit/Vite/Astro/Satori/sharp; backend/auth/DB incl. FastAPI/Streamlit/Prisma/Supabase auth+realtime+storage+postgrest/NextAuth/Clerk/better-auth/python-genai). Direct WebSearch/WebFetch + curl; no subagents. KEV (dateAdded ≥ 09-20): MikroTik/SharePoint/WordPress core/WSO2/Adobe Commerce/Arista/F5/Check Point ×2/Zyxel — nothing in scope. **One new:** the OpenAI second training pause + US government sites, from the HN Algolia `agent` term (AP/Guardian/Fortune) — AP and Guardian unfetchable, read via WTOP/EdWeek syndication (LEARNINGS §34). Transluce's own post was re-fetched to confirm it does *not* contain the Department of Education claim; the advisory says so. **Four updates, all from the NVD keyword query or database listings, none from search:** Flowise six unpatched CVEs "through 3.1.4" (two 9.2) → status `patched → ongoing`; LiteLLM CVE-2026-89032 (fixed on PyPI 09-06, CVE 09-25, vendor tab silent); MCP batch (SiYuan 8.5, Penpot, heym ×2, Kibana Agent Builder); UpGuard file gains the Capgo "RLS on and wrong" case study — declined twice as a standalone, folded in as an example (§34). **Declined:** Cursor git.exe (Mindgard post "updated 09-24" but no new re-test date — file stands); Cline CVE-2026-59723 (DB 09-24, original June, already tracked); OpenClaw Trail of Bits recap (tracked); Air skill-scanner bypass (folded 09-26); Aikido Graphalgo Go/Terraform (09-23 call stands); Microsoft Autopilot-on-OpenClaw (product); SafeDep Jev/Gryph (product); Turnstile Spin (product); Kiteworks/Lunex/Elementor/Roundcube/Citrix (out of scope); Contrast/Traefik/Storm (out of audience); Datadog "attacker infrastructure, but vibe-coded" (09-18, attackers using vibe tools, not a reader risk). Vendor-tab walk (41 tabs): nothing new since 09-25. Zero sources decayed. queries.md at budget — trimmed one annotation to add the AP gap.
+
+
 ## 2026-09-26
 
 ```yaml
