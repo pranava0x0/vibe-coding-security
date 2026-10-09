@@ -8,8 +8,28 @@
 
 ## 🔴 ACTIVE — react now
 
+### 2026-10-08 — **Ollama: an unauthenticated `/api/pull` request writes a file outside the model store, and in the default Docker image that file runs as root on the next restart (CVE-2026-103663, CVSS 4.0 9.4 / 6.9; 0.34.2 to 0.34.x, fixed 0.35.0)** — the pull path trusts the layer digest, CERT Polska coordinated, reporter striga.ai. Also on the record: a tensor-blob redirect SSRF to cloud metadata (CVE-2026-85180, 8.7, no fixed version listed) and the September agent-mode approval bypass.
+Upgrade to 0.35.0, run Ollama as a non-root user with the library directory read-only, keep port 11434 on loopback, and check the library directory for new files before restarting an exposed container. The PoeLLM botnet is already scanning for exposed instances.
+→ [advisories/2026-10-ollama-api-pull-path-traversal-root-rce-docker-restart.md](advisories/2026-10-ollama-api-pull-path-traversal-root-rce-docker-restart.md)
+
+### 2026-10-08 — **AWS bulletins: the `databases-on-aws` plugin for AI coding agents let content the agent ingests reach a local psql helper as an OS command (CVE-2026-107322, 8.5 / 7.8; 1.0.0 to 1.7.0, fixed 1.7.1 on 2026-08-26), AWS Toolkit for VS Code cached a CodeCatalyst bearer token world-readable and never deleted it (CVE-2026-107332, < 4.10.0), and CDK Docker bundling could emit symlinked files (CVE-2026-107608, aws-cdk-lib < 2.267.0)** — prompt injection to shell through an agent plugin, in AWS's own words.
+Update the plugin in every agent that loads it (pinned checkouts need commit 8b13a503 or later), update the Toolkit and delete leftover `codecatalyst..token` files, update aws-cdk-lib, and run agent helpers as an unprivileged user with a `dsql:DbConnect`-only role.
+→ [advisories/2026-10-aws-agent-plugins-databases-on-aws-command-injection-toolkit-token-cdk-bulletins.md](advisories/2026-10-aws-agent-plugins-databases-on-aws-command-injection-toolkit-token-cdk-bulletins.md)
+
+### 2026-10-08 — **About 2,100 GPU servers at some 300 organisations exposed NVIDIA DCGM Exporter telemetry to the internet with no authentication (12,000+ GPUs, H100/H200/B300), and a quarter also exposed the Go profiling endpoints an unauthenticated caller can use to crash monitoring (CVE-2026-47483, 8.2, bulletin 2026-07-28; DCGM 4.5.3 / Exporter 4.8.2)** — Lava's research; much of it customer-deployed on GPU clouds.
+Take ports 9400 and 9100 off public interfaces, firewall `/debug/pprof/`, and upgrade. An exposed metrics page tells the next scanner exactly what the box is worth.
+→ [advisories/2026-10-nvidia-dcgm-exporter-exposed-gpu-telemetry-pprof-dos.md](advisories/2026-10-nvidia-dcgm-exporter-exposed-gpu-telemetry-pprof-dos.md)
+
+### 2026-10-06 — **Phishing mail now carries two payloads: a password-protected attachment for the person and hidden prompt-injection text (HTML comments, CSS-hidden text, Base64 blocks, zero-width characters) for the AI assistant that summarises the inbox, telling it to mark the mail legitimate or urgent, surface a fake payment change, or leak data** (Barracuda, 2026-10-06; scale not disclosed).
+Strip hidden content before a model reads mail, keep summarising and acting apart, and re-check recent assistant-recommended payment changes against the raw message. Barracuda extends the same finding to code assistants reading poisoned documentation.
+→ [advisories/2026-10-barracuda-dual-target-phishing-prompt-injection-email-ai-assistants.md](advisories/2026-10-barracuda-dual-target-phishing-prompt-injection-email-ai-assistants.md)
+
+### 2026-10-05 — **Handlebars (41.5M weekly downloads): the March AST validation in `compile()` is bypassed, so an untrusted object passed instead of a template string still runs attacker JavaScript (CVE-2026-106446, 9.8), and the prototype deny list misses `Function.prototype.constructor` (CVE-2026-106445, 9.2); fixed 4.7.10** — exploitable only where a parsed object reaches `compile()`/`precompile()` or `allowProtoMethodsByDefault` is on; string templates from your own tree are safe.
+Upgrade to 4.7.10, type-check template inputs as strings, ship `handlebars/runtime` in production, and never set `allowProtoMethodsByDefault` for user templates.
+→ [advisories/2026-10-handlebars-compile-ast-javascript-injection-bypass-cve-batch.md](advisories/2026-10-handlebars-compile-ast-javascript-injection-bypass-cve-batch.md)
+
 ### 2026-10-08 — **`tensorlake@0.5.144` (npm SDK for Tensorlake's agent sandboxes/cloud) shipped a Shai-Hulud/ChainDrop worm from the project's own release workflow with valid provenance** — the preinstall payload steals npm/GitHub/cloud/SSH/Vault/Kubernetes secrets and the config/MCP files of Claude, Cursor, Kiro, Windsurf and Zed, republishes the victim's packages, plants Claude Code (`.claude/settings.json`) and VS Code (`.vscode/tasks.json`) re-run files, and installs a `gh-token-monitor` service that **deletes the home directory if the stolen GitHub token is revoked**.
-Published 01:12 UTC, flagged by Socket 11 minutes later, pulled within ~2 hours; maintainers reverted and published 0.5.145 on 2026-10-08. If it installed with scripts on: **disable `gh-token-monitor` first, then rotate everything**. Upgrade to 0.5.145; the six `tensorlake-native-*` packages still list 0.5.144 (checked 2026-10-09).5.145 is on the registry; set `ignore-scripts=true`.
+Published 01:12 UTC, flagged by Socket 11 minutes later, pulled within ~2 hours; maintainers reverted and published 0.5.145 on 2026-10-08. If it installed with scripts on: **disable `gh-token-monitor` first, then rotate everything**. Upgrade to 0.5.145; the six `tensorlake-native-*` packages still list 0.5.144 (checked 2026-10-09). Set `ignore-scripts=true`.
 → [advisories/2026-10-tensorlake-npm-shai-hulud-hostage-token-wipe.md](advisories/2026-10-tensorlake-npm-shai-hulud-hostage-token-wipe.md)
 
 ### 2026-10-07 — **LMCache (the KV-cache layer under vLLM): unauthenticated RCE via pickle deserialization on the multiprocess ZeroMQ transport (CVE-2026-105192, CVSS 9.8), no fixed version, and the official container images run as root** — one crafted message to the unauthenticated ZMQ socket runs code as the LMCache process.
@@ -956,6 +976,14 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 ---
 
 ## 🟠 RECENT — verify exposure
+
+### 2026-08-12 — **Pydantic AI: a website the developer visits can post to the loopback `clai web` / `Agent.to_web()` chat endpoint and make the served agent run its tools under the local process's credentials (CVE-2026-107295, 7.6), DNS rebinding reaches the same endpoint because the Host header was never checked (CVE-2026-107292, 6.4), and an IPv6 zone identifier slipped past the cloud-metadata SSRF blocklist (CVE-2026-107289, incomplete fix)** — ten vendor advisories 2026-08-08 to 10-02, seven CVEs assigned 2026-10-08; 1.38M PyPI downloads a week.
+Upgrade to 1.107.7 (v1) or 2.53.0 (v2), do not run the dev chat UI while browsing, keep side-effecting tools off anything a browser can reach, and prefer `allowed_domains` on fetch tools.
+→ [advisories/2026-08-pydantic-ai-web-chat-ui-cross-site-agent-tool-execution-cve-batch.md](advisories/2026-08-pydantic-ai-web-chat-ui-cross-site-agent-tool-execution-cve-batch.md)
+
+### 2026-07-28 — **fast-jwt (the JWT library under `@fastify/jwt`, 1.3M weekly downloads): the second fix for RSA-to-HS256 algorithm confusion is bypassed again by any non-whitespace prefix on the public key (CVE-2026-107722, 9.8; 6.2.0 to 6.2.4, fixed 6.3.0), raw JWK text is treated as an HMAC secret (CVE-2026-107724), unsigned tokens pass when the key is empty and `algorithms` is set (CVE-2026-107720, fixed 6.3.1), and expired tokens are served from cache without `iat` (CVE-2026-107719, fixed 6.3.4)** — vendor advisories July 28, CVEs 2026-10-08.
+Upgrade to 6.3.4, regenerate the lockfile so `@fastify/jwt`'s `^6.2.4` resolves there, and pass an asymmetric-only `algorithms` list, which the vendor says prevents the confusion attack on every version. Same class as the PyJWT and python-jose entries below.
+→ [advisories/2026-07-fast-jwt-rsa-hs256-algorithm-confusion-third-incomplete-fix-cve-batch.md](advisories/2026-07-fast-jwt-rsa-hs256-algorithm-confusion-third-incomplete-fix-cve-batch.md)
 
 ### 2026-09-11 — **Mistral Vibe (Mistral's agentic coding CLI): six shell-permission-check bypasses let an allowlisted command run attacker-chosen code or reach files outside the workspace with no approval prompt — CVE-2026-87983 through CVE-2026-87988, four scored CVSS 10.0, reachable through indirect prompt injection** (HiddenLayer, disclosed 2026-09-11).
 The approval check didn't understand shell redirection, ANSI-C quoting, env-var prefixes or quoted paths — the shell executed what the check never saw. Mistral fixed it structurally in 2.25.4 and recommends 2.25.8+; current PyPI is 2.26.0. Keep permission checks on; auto-approve modes bypass them entirely.
