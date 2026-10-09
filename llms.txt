@@ -55,7 +55,7 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-10-08)
+## Active threat families (as of 2026-10-09)
 
 The highest-risk ongoing threat families for vibe coders:
 

@@ -2,7 +2,7 @@
 id: 2026-09-bifrost-mcp-client-registration-unauth-rce
 title: "Bifrost (8K-star Go AI gateway) — one unauthenticated POST /api/mcp/client registers a stdio MCP client and runs it as the gateway process (CVE-2026-90898, CVSS 9.8); authentication is off by default"
 date_disclosed: 2026-09-14
-last_updated: 2026-09-15
+last_updated: 2026-10-09
 severity: critical
 status: patched
 ecosystems: [go, ai-gateways, llm-routers, mcp, self-hosted]
@@ -60,6 +60,10 @@ You are affected if you ran any Bifrost HTTP transport below 2.1.0 (including 1.
 - → [prevention/credential-hygiene.md](../prevention/credential-hygiene.md) — scope provider keys per gateway and cap spend, so a compromised gateway is a bounded loss.
 - Never run an AI gateway with authentication off outside a throwaway sandbox; "zero-config" quick-starts are for evaluation, not for the box that holds your keys.
 
+## Update 2026-10-09 — the earlier plugin-loader finding from the same tab: an unauthenticated plugin whose path is an HTTP URL is downloaded and loaded as a Go shared object (CVE-2026-86242, 8.1, fixed 2.0.0)
+
+JFrog's first Bifrost advisory of the quarter, published **2026-09-06** and missed by the sweep that wrote this file, is **CVE-2026-86242** (JFSA-2026-001684572, CVSS 3.1 **8.1**, Or Peles). With management authentication off, the default, an unauthenticated `POST /api/plugins` can enable a custom plugin whose `path` is an HTTP URL; the shared-object loader treats an `http`-prefixed path as a download, writes the body to a temporary `.so`, hands it to Go's `plugin.Open`, and runs the plugin's `Init` with the supplied config as the Bifrost process user. On the dynamically linked builds the vendor requires for custom Go plugins (`DYNAMIC=1`) that is unauthenticated code execution in the gateway; on the statically linked official Docker image `plugin.Open` fails and the same request is a server-side request forgery. Affected HTTP transport **< 2.0.0**, including the 1.6.x line through 1.6.11; fixed in **transports/v2.0.0**, so the 2.1.0 upgrade this file already recommends covers both. A loadable plugin must match the host's Go version, OS, architecture and linkage, which raises the bar without lowering the lesson: the management API registers code to run, and it ships unauthenticated.
+
 ## Sources
 
 - [JFrog Security Research — Bifrost is vulnerable to Unauthenticated Remote Code Execution via MCP Stdio Client Registration (JFSA-2026-001686326, CVE-2026-90898)](https://research.jfrog.com/vulnerabilities/bifrost-is-vulnerable-to-unauthenticated-remote-code-execution-via-mcp-stdio-client-registration-cve-2026-90898/) — fetched 2026-09-15; primary: published 2026-09-14, CVSS 9.8, affected "before 2.1.0 including 1.6.x through 1.6.11," the default `governance.auth_config.is_enabled=false`, mitigation guidance.
@@ -67,3 +71,5 @@ You are affected if you ran any Bifrost HTTP transport below 2.1.0 (including 1.
 - [Bifrost — transports/v2.1.0 release](https://github.com/maximhq/bifrost/releases/tag/transports/v2.1.0) — fetched 2026-09-15; released 2026-09-08: "SSRF Hardening for MCP (PR #6757): unauthenticated callers cannot register stdio MCP clients or private addresses, all MCP HTTP clients dial through the SSRF guard, and the Teredo prefix is blocked."
 - [GitHub Advisory Database — GHSA-gqjq-cgxr-8c7c (CVE-2026-90898)](https://github.com/advisories/GHSA-gqjq-cgxr-8c7c) — fetched 2026-09-15; CVE-sourced copy published 2026-09-14, no package/version fields populated.
 - [Bifrost — repository](https://github.com/maximhq/bifrost) and [security advisories index](https://github.com/maximhq/bifrost/security/advisories) — fetched 2026-09-15; the "50x faster than LiteLLM" tagline, ~8.1K stars, Go, 23+ providers, MCP tool support, "zero-config startup"; one prior advisory (GHSA-w98g-5w9p-p3rc, 2026-07-21, incomplete SSRF deny-list).
+- [JFrog Security Research — Bifrost is vulnerable to Unauthenticated Remote Code Execution via a Custom Plugin HTTP Path on Dynamically Linked Builds (JFSA-2026-001684572, CVE-2026-86242)](https://research.jfrog.com/vulnerabilities/bifrost-is-vulnerable-to-unauthenticated-remote-code-execution-via-a-custom-plugin-http-path-on-dynamically-linked-builds-cve-2026-86242-jfsa-2026-001684572/) — fetched 2026-10-09; published 2026-09-06, CVSS 8.1, affected < 2.0.0, the dynamic-versus-static build distinction, the `POST /api/plugins` path.
+- [CVE Services — CVE-2026-86242](https://cveawg.mitre.org/api/cve/CVE-2026-86242) — fetched 2026-10-09; CNA JFrog, published 2026-09-06, affected Bifrost `0` to `< 2.0.0`, CVSS 3.1 8.1.
