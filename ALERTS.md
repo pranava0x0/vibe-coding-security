@@ -2,18 +2,18 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-10-08. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-10-09. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
 
 ### 2026-10-08 — **`tensorlake@0.5.144` (npm SDK for Tensorlake's agent sandboxes/cloud) shipped a Shai-Hulud/ChainDrop worm from the project's own release workflow with valid provenance** — the preinstall payload steals npm/GitHub/cloud/SSH/Vault/Kubernetes secrets and the config/MCP files of Claude, Cursor, Kiro, Windsurf and Zed, republishes the victim's packages, plants Claude Code (`.claude/settings.json`) and VS Code (`.vscode/tasks.json`) re-run files, and installs a `gh-token-monitor` service that **deletes the home directory if the stolen GitHub token is revoked**.
-Published 01:12 UTC, flagged by Socket 11 minutes later, pulled within ~2 hours; maintainers reverted and will ship 0.5.145. If it installed with scripts on: **disable `gh-token-monitor` first, then rotate everything**. Pin 0.5.143 until 0.5.145 is on the registry; set `ignore-scripts=true`.
+Published 01:12 UTC, flagged by Socket 11 minutes later, pulled within ~2 hours; maintainers reverted and published 0.5.145 on 2026-10-08. If it installed with scripts on: **disable `gh-token-monitor` first, then rotate everything**. Upgrade to 0.5.145; the six `tensorlake-native-*` packages still list 0.5.144 (checked 2026-10-09).5.145 is on the registry; set `ignore-scripts=true`.
 → [advisories/2026-10-tensorlake-npm-shai-hulud-hostage-token-wipe.md](advisories/2026-10-tensorlake-npm-shai-hulud-hostage-token-wipe.md)
 
 ### 2026-10-07 — **LMCache (the KV-cache layer under vLLM): unauthenticated RCE via pickle deserialization on the multiprocess ZeroMQ transport (CVE-2026-105192, CVSS 9.8), no fixed version, and the official container images run as root** — one crafted message to the unauthenticated ZMQ socket runs code as the LMCache process.
-Affected 0.3.9 through 0.5.5 and the 0.5.6 release candidates. Default localhost bind is safe; the risk is multi-node/Kubernetes deployments that set a routable `--host`. No patch: keep the ZMQ port off routable networks, don't run the container as root, and watch for a fixed release.
+Affected 0.3.9 through 0.5.5 and the 0.5.6 release candidates; the CVE record gives no upper bound. Default localhost bind is safe; the risk is multi-node/Kubernetes deployments that set a routable `--host`. No patch: keep the ZMQ port off routable networks, don't run the container as root, and watch for a fixed release.
 → [advisories/2026-10-lmcache-unauthenticated-pickle-rce-vllm-kv-cache.md](advisories/2026-10-lmcache-unauthenticated-pickle-rce-vllm-kv-cache.md)
 
 ### 2026-10-07 — **A financially-motivated operator ran intrusions at five South Korean banks with Claude Code plus the Chinese open-source agentic-pentest tool ARTEX, and CrowdStrike recovered the whole operation — Claude Code session histories, memory files, ARTEX configs and a résumé prompt — from the attacker's own exposed directories** — an AI coding agent used as the attacker's workbench, not a flaw in it.
@@ -61,7 +61,7 @@ Fixed 1.6.1 (08-04) and 1.7.0; AWS bulletin 2026-124 published 10-02. Upgrade, r
 → [advisories/2026-10-loom-for-aws-agent-control-plane-unauthenticated-super-admin.md](advisories/2026-10-loom-for-aws-agent-control-plane-unauthenticated-super-admin.md)
 
 ### 2026-09-30 — **Next.js September security release (16.3.8 / 15.5.27): seven advisories — Image Optimization SSRF through an allow-listed remote pattern (CVE-2026-94483, 8.3), two SSG/ISR cache-poisoning bugs, a Draft Mode leak that can persist unpublished content into prerendered pages, and a `next dev` MCP endpoint any website the developer visits can read** — the pre-announced critical and one high were postponed "due to upstream dependency delays"; sharp 0.35.5 separately fixes a librsvg RCE (CVE-2026-96889, 8.9)
-Upgrade `next` and `sharp`, purge self-hosted ISR caches, restart dev servers, and keep watching the Next.js blog for the postponed critical. The CNA record for CVE-2026-94485 carries the wrong description (the MCP text); the vendor page is right.
+Upgrade `next` and `sharp`, purge self-hosted ISR caches, and restart dev servers. Update 2026-10-09: Vercel will ship an out-of-band release on 2026-10-14 for two Critical and one High upstream-dependency issues. Two were postponed from September. No ids are published yet. The CNA record for CVE-2026-94485 carries the wrong description (the MCP text); the vendor page is right.
 → [advisories/2026-09-nextjs-september-2026-security-release-seven-advisories.md](advisories/2026-09-nextjs-september-2026-security-release-seven-advisories.md)
 
 ### 2026-09-30 — **DIVD, the Dutch vulnerability-disclosure CSIRT, breached by an autonomous AI agent through two Zammad zero-days** — unauthenticated session hijack → RCE as the zammad user (CVE-2026-102489, 6.3.0–6.5.4) chained with a local root escalation present in every version through the 7.1.0 alpha (CVE-2026-102490); 9.4 chained, root "in seconds", volunteer contact data exfiltrated; the agent left self-justifying comments in its own scripts

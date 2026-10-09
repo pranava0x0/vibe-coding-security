@@ -2,7 +2,7 @@
 id: 2026-10-lmcache-unauthenticated-pickle-rce-vllm-kv-cache
 title: "LMCache (the KV-cache layer under vLLM) — unauthenticated remote code execution via pickle deserialization on the multiprocess ZeroMQ transport (CVE-2026-105192, CVSS 9.8); affected 0.3.9 through 0.5.5 and the 0.5.6 release candidates, no fixed version at disclosure, and the official container images run the process as root"
 date_disclosed: 2026-10-07
-last_updated: 2026-10-08
+last_updated: 2026-10-09
 severity: critical
 status: active
 ecosystems: [pypi, llm-infrastructure, self-hosted]
@@ -30,6 +30,8 @@ An LMCache embedded inside a single vLLM process does not open the port and is n
 
 ## If you are affected
 No patch exists. Keep the LMCache ZMQ transport off routable networks — bind it to localhost or a trusted cluster-internal network only, and do not set `--host` to a routable address. A firewall reduces exposure but does not remove it, since any host that can open a connection can run code; segment the serving tier and do not run the container as root. See [agent-sandboxing.md](../prevention/agent-sandboxing.md) and [if-your-webapp-was-compromised.md](../playbooks/if-your-webapp-was-compromised.md). Watch for a fixed LMCache release and upgrade immediately when it ships.
+
+**Update 2026-10-09: still no fix.** The CVE record (CNA JFrog, updated 2026-10-07) gives the affected versions as 0.3.9 and later, with no fixed version. PyPI's latest stable is still 0.5.5 (2026-09-12). The newest pre-release, `0.5.6rc3` (2026-10-06), falls inside that range. This advisory keeps the tested range in its title and treats every later version as affected until a fix ships. Do not treat a release candidate as a fix.
 
 ## Prevention
 Treat every unauthenticated LLM-infrastructure port as internet-reachable until proven otherwise ([supply-chain-attack-surface.md](../prevention/supply-chain-attack-surface.md)); never expose an inference or cache control plane without authentication and network isolation ([ci-cd-hardening.md](../prevention/ci-cd-hardening.md)).

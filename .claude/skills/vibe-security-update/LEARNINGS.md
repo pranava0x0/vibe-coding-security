@@ -545,3 +545,21 @@ Four things from **2026-10-08**:
 2. **A valid provenance attestation proves where a package was built, not that the branch was clean.** tensorlake was built and published by the project's *own* GitHub Actions release workflow from a `main` an attacker had committed to, so npm provenance was valid and a provenance-based allow policy would not have blocked it. **Rule:** never present provenance/attestation as a safety signal in a write-up; it defeats typosquat and pipeline-spoof, not a compromised maintainer committing to the real branch. The fix the vendor shipped (PR #1016) is the template: `--ignore-scripts` in CI, an install-script tripwire, no admin bypass on the protected branch, signed commits, a second reviewer on the publish environment.
 3. **When a threat actor uses an AI coding agent as its own workbench, file it as an offensive-use incident, not a product flaw.** CrowdStrike recovered a whole bank-intrusion campaign (Claude Code session histories, memory files, ARTEX configs, a résumé/CV prompt) from the *attacker's* exposed directories. **Rule:** such a case is `status: active`, severity by impact, tools_affected names the agent as abused — and the defensive takeaways are (a) the victim's own agent session/memory/MCP files are high-value if a box is exposed and belong off internet-reachable paths, and (b) AI tooling compresses a multi-target campaign into days, so exposure/privilege/segmentation beat patch cadence. Don't frame it as a CVE in the agent.
 4. **Two access notes.** `theregister.com` article URLs need their trailing numeric id (`…/slug/5301908`): `WebFetch` and the external-link checker both 404 the slug-only form, while `curl` 200s the suffixed form — cite the suffixed URL (grep the front-page `href` for the id, or `curl -L -o /dev/null -w %{url_effective}`). And `crates.io/crates/<name>` 404s to the link checker (client-rendered SPA) and the API 429s readily — cite the project's **GitHub releases** page for a Rust crate's fix version instead.
+
+## 42. A re-sent safeguard stop switches the session to Opus 4.8
+
+A review of the routine's run logs for 2026-09-09 to 2026-10-08 (done 2026-10-09) found the switch the owner had been seeing. It is not a rate limit and not the auto-mode permission classifier. It is Claude Code's documented refusal fallback: a cyber-flagged request on Fable is re-run on Opus 4.8 and the session stays on Opus 4.8. In the observed logs the switch fired on the response after a stop notice. The docs offer no way to change that target on the Anthropic API; only third-party providers can pin a different Opus.
+
+| Date | Trigger | Outcome |
+|---|---|---|
+| 09-23 | Bash heredoc writing the MemTensor sckit worm advisory | stopped, rewritten, session ended on Opus 4.8 |
+| 09-25 | Writing the Gambit retail-skimmer campaign advisory | stopped, rewritten, session ended on Opus 4.8 |
+| 09-29 | Heredoc writing the DirtyBlanket worm advisory, re-sent | stopped twice, auto-mode then blocked every write, nothing committed |
+| 09-30 | `WebFetch` returned a page with live loader and onion URLs | auto-mode blocked Bash, Agent and skill writes until compaction (§35) |
+| 10-01 | A fetch subagent returned exploitation steps in its report | subagent response stopped, main session unaffected |
+| 10-08 | Heredoc writing the tensorlake worm advisory, re-sent | `model_refusal_fallback`, rest of the sweep written on Opus 4.8, not recorded in the run log |
+
+Three shapes: the sweep narrates payload mechanics in its own output, a fetched page carries live indicators, or a delegated report carries exploitation steps. One cause: attacker-adjacent text enters a session that holds write and publish access.
+
+**Rules:** see `SKILL.md`, "Classifier stops and the model switch". The owner chose to keep the switch on (a refused turn would end the run) and to require a row in `fallback.log.md` for every event instead. `fallbackModel: ["opus"]` sends an overload fallback to the `opus` alias, which the docs say resolves to the newest Opus on the Anthropic API.
+
