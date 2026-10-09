@@ -561,5 +561,5 @@ A review of the routine's run logs for 2026-09-09 to 2026-10-08 (done 2026-10-09
 
 Three shapes: the sweep narrates payload mechanics in its own output, a fetched page carries live indicators, or a delegated report carries exploitation steps. One cause: attacker-adjacent text enters a session that holds write and publish access.
 
-**Rules:** see `SKILL.md`, "Classifier stops and the model switch". The repo's `.claude/settings.json` sets `switchModelsOnFlag: false` and `fallbackModel: ["opus"]`, so the session never switches on a flag, and an overload fallback goes to the `opus` alias, which the docs say resolves to the newest Opus on the Anthropic API. The setting takes effect on the first routine run after merge; a transcript with no `model_refusal_fallback` line is the confirmation.
+**Rules:** see `SKILL.md`, "Classifier stops and the model switch". The owner chose to keep the switch on (a refused turn would end the run) and to require a row in `fallback.log.md` for every event instead. `fallbackModel: ["opus"]` sends an overload fallback to the `opus` alias, which the docs say resolves to the newest Opus on the Anthropic API.
 

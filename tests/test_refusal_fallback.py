@@ -1,13 +1,14 @@
-"""Guards against the sweep routine being silently switched off Claude Fable.
+"""Guards on how the sweep routine handles being switched off Claude Fable.
 
 Why this file exists
 --------------------
 The daily cloud routine runs this skill on Fable 5.1. A safety classifier
 flagged the model's own advisory text about a worm, the run re-sent it, and
 Claude Code's refusal fallback emitted `model_refusal_fallback` and finished
-the session on Opus 4.8. Two guards stop that: a committed .claude/settings.json
-that disables the switch, and a classifier-stop protocol in SKILL.md that tells
-the run not to re-send flagged text. Deleting either one re-opens the path.
+the session on Opus 4.8. The owner chose to keep that switch on, because a
+refused turn would otherwise end an unattended run. The guard is now: the
+switch is allowed but every model event is logged in fallback.log.md, and a
+classifier-stop protocol in SKILL.md tells the run not to re-send flagged text.
 """
 
 from __future__ import annotations
@@ -18,6 +19,9 @@ from datetime import date
 from pathlib import Path
 
 SKILL_PATH = ".claude/skills/vibe-security-update/SKILL.md"
+FALLBACK_LOG = ".claude/skills/vibe-security-update/fallback.log.md"
+LOG_HEADER = "| Date | Run | Event | From \u2192 to | Doing | Cause | Resolution |"
+LOG_EVENTS = {"safeguard-stop", "model-switch", "overload-fallback", "permission-block", "rate-limit"}
 
 
 def _settings(repo_root: Path) -> dict:
@@ -49,11 +53,12 @@ def _section(text: str, start: str, end: str) -> str:
     return m.group(0)
 
 
-def test_project_settings_disable_refusal_fallback(repo_root: Path):
+def test_project_settings_keep_switch_explicit_and_use_opus_alias(repo_root: Path):
     s = _settings(repo_root)
-    assert s.get("switchModelsOnFlag") is False, (
-        "switchModelsOnFlag must be exactly false. When true, a classifier flag "
-        "silently switches the Fable routine to Opus 4.8 for the rest of the run."
+    assert s.get("switchModelsOnFlag") is True, (
+        "switchModelsOnFlag must be exactly true. This is a recorded decision: a switch "
+        "may happen but is logged in fallback.log.md, because a refused turn would end "
+        "an unattended run. Removing the key hides the decision behind a default."
     )
     fb = s.get("fallbackModel")
     assert isinstance(fb, list) and fb and fb[0] == "opus", (
@@ -71,9 +76,37 @@ def test_settings_json_sets_only_the_two_fallback_keys(repo_root: Path):
     )
 
 
+def test_fallback_log_is_well_formed(repo_root: Path):
+    why = " The log is the owner's audit trail for model switches and must stay machine-readable."
+    path = repo_root / FALLBACK_LOG
+    assert path.exists(), f"{FALLBACK_LOG} is missing." + why
+    lines = path.read_text(encoding="utf-8").splitlines()
+    assert LOG_HEADER in lines, f"Table header must be exactly: {LOG_HEADER}" + why
+    rows = [ln for ln in lines[lines.index(LOG_HEADER) + 2:] if ln.startswith("|")]
+    prev = ""
+    for row in rows:
+        cells = [c.strip() for c in row.strip().strip("|").split("|")]
+        assert len(cells) == 7, f"Row has {len(cells)} cells, expected 7: {row}" + why
+        day, event = cells[0], cells[2]
+        assert re.match(r"^\d{4}-\d{2}-\d{2}$", day), f"Date {day!r} is not YYYY-MM-DD: {row}" + why
+        bad = {t.strip() for t in event.split(",")} - LOG_EVENTS
+        assert not bad, f"Unknown Event value(s) {sorted(bad)} in: {row}" + why
+        assert day >= prev, f"Date {day} comes after {prev}; rows must be oldest first." + why
+        prev = day
+
+
+def test_skill_requires_fallback_log_rows(repo_root: Path):
+    count = _skill(repo_root).count("fallback.log.md")
+    assert count >= 2, (
+        f"SKILL.md mentions fallback.log.md {count} time(s), expected at least 2 (the "
+        "file table and the rule that every model event gets a row). Without both, "
+        "switches stop being logged and the owner loses the audit trail."
+    )
+
+
 def test_skill_has_classifier_stop_protocol(repo_root: Path):
     text = _skill(repo_root)
-    why = " Removing the classifier-stop protocol re-opens the Opus 4.8 switch path."
+    why = " Removing the classifier-stop protocol makes the switch to Opus 4.8 more likely."
     assert _has_heading(text, "Classifier stops"), "SKILL.md has no 'Classifier stops' heading." + why
     assert "do not re-send" in text, "SKILL.md no longer says 'do not re-send'." + why
     assert "deferred_after_classifier_stop" in text, (
