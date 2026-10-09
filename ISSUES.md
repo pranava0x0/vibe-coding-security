@@ -10,6 +10,17 @@ _None open._
 
 ## Fixed
 
+### Sweep routine: silent switch from Fable 5.1 to Opus 4.8, and three recurring wastes of turns — 2026-10-09
+
+Prompted by a review of the daily routine's run logs for 2026-09-09 to 2026-10-08. Four problems.
+
+- **Bug: the routine's session was switched to Opus 4.8 mid-run on 2026-09-23, 2026-09-25 and 2026-10-08, and nothing in the repo recorded it.** Root cause: **infra plus process**. Fable's safeguard stopped the sweep while it was writing a worm or campaign advisory with the payload narrated in full. The run re-sent the same file. Claude Code's refusal fallback then re-ran it on Opus 4.8 and kept the session there. The Claude Code docs name Opus 4.8 as the target for cyber flags on Fable and give no way to change it on the Anthropic API. Two related failures: 2026-09-29 ended with nothing committed after the same stop led to permission blocks, and 2026-09-30 lost its write path after a fetched page carried live loader and onion URLs. Fix: the "Classifier stops and the model switch" protocol in `SKILL.md`, an append-only `fallback.log.md` seeded with the eight events found in the audit, a committed `.claude/settings.json` (`switchModelsOnFlag: true` by decision, since a refused turn would end an unattended run, and `fallbackModel: ["opus"]`), `LEARNINGS.md` §42, and `tests/test_refusal_fallback.py`. Verification: later rows in `fallback.log.md` show whether switches became rare.
+- **Bug: every sweep since 2026-09-30 spent five to ten turns adding lines to `references/queries.md` and trimming them back out** to pass the 4,000-token gate. Root cause: **process bug**. The file was at its cap and the skill still invited additions. Fix: the file is frozen at its size, with the rule in Step 4 and in the file's header.
+- **Bug: every cloud run re-discovered the missing build dependencies** and the Debian PyYAML conflict, two to four turns each. Root cause: **infra**. Fix: the Default cloud environment now has a setup script that installs `site/requirements.txt` before each run, with a fallback install line in Step 6.
+- **Bug: every cloud run retried `git push --delete` up to five times** against a proxy that always refuses it, then reported the stale branch. Root cause: **infra**. Fix: Step 7 says not to retry. The two stale remote branches were deleted from a local checkout.
+
+Advisory updates in the same change: Next.js September release (Vercel's 2026-10-08 pre-announcement of the 2026-10-14 update), tensorlake (0.5.145 on the registry, six native siblings still carrying 0.5.144), LMCache (the CNA's open-ended affected range). Resolution: PR #123.
+
 ### mcp-remote: mapping, impact wording and score attribution — 2026-10-02
 
 [Issue #114](https://github.com/pranava0x0/vibe-coding-security/issues/114) was valid: CVE-2026-51995 references F-02, while our table assigned it to F-10. The 2026-09-25 sweep introduced the mismatch. Why it selected that row is not established; a matching 7.5 score is a possible explanation, not a proven cause.
