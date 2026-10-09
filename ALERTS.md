@@ -2,7 +2,7 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-10-08. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-10-09. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
@@ -61,7 +61,7 @@ Fixed 1.6.1 (08-04) and 1.7.0; AWS bulletin 2026-124 published 10-02. Upgrade, r
 → [advisories/2026-10-loom-for-aws-agent-control-plane-unauthenticated-super-admin.md](advisories/2026-10-loom-for-aws-agent-control-plane-unauthenticated-super-admin.md)
 
 ### 2026-09-30 — **Next.js September security release (16.3.8 / 15.5.27): seven advisories — Image Optimization SSRF through an allow-listed remote pattern (CVE-2026-94483, 8.3), two SSG/ISR cache-poisoning bugs, a Draft Mode leak that can persist unpublished content into prerendered pages, and a `next dev` MCP endpoint any website the developer visits can read** — the pre-announced critical and one high were postponed "due to upstream dependency delays"; sharp 0.35.5 separately fixes a librsvg RCE (CVE-2026-96889, 8.9)
-Upgrade `next` and `sharp`, purge self-hosted ISR caches, restart dev servers, and keep watching the Next.js blog for the postponed critical. The CNA record for CVE-2026-94485 carries the wrong description (the MCP text); the vendor page is right.
+Upgrade `next` and `sharp`, purge self-hosted ISR caches, restart dev servers, and keep watching the Next.js blog for the postponed critical. Update 2026-10-09: Vercel has scheduled an out-of-band release for 2026-10-14 covering two Critical and one High upstream-dependency issues, two of them the postponed September fixes. The CNA record for CVE-2026-94485 carries the wrong description (the MCP text); the vendor page is right.
 → [advisories/2026-09-nextjs-september-2026-security-release-seven-advisories.md](advisories/2026-09-nextjs-september-2026-security-release-seven-advisories.md)
 
 ### 2026-09-30 — **DIVD, the Dutch vulnerability-disclosure CSIRT, breached by an autonomous AI agent through two Zammad zero-days** — unauthenticated session hijack → RCE as the zammad user (CVE-2026-102489, 6.3.0–6.5.4) chained with a local root escalation present in every version through the 7.1.0 alpha (CVE-2026-102490); 9.4 chained, root "in seconds", volunteer contact data exfiltrated; the agent left self-justifying comments in its own scripts

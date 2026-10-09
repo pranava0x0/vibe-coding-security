@@ -2,7 +2,7 @@
 id: 2026-09-nextjs-september-2026-security-release-seven-advisories
 title: "Next.js September 2026 security release (2026-09-30, 16.3.8 / 15.5.27): seven advisories — Image Optimization SSRF through an allow-listed remote pattern (CVE-2026-94483, High 8.3), two SSG/ISR cache-poisoning bugs, a Draft Mode `use cache` leak, a root-param cache leak, a `dynamicParams` bypass on OG-image routes, and a `next dev` MCP endpoint any website the developer visits can read (CVE-2026-94486) — while the pre-announced *critical* and one *high* were postponed for an upstream dependency; sharp 0.35.5 separately fixes a librsvg RCE (CVE-2026-96889, 8.9)"
 date_disclosed: 2026-09-30
-last_updated: 2026-10-04
+last_updated: 2026-10-09
 severity: high
 status: patched
 ecosystems: [npm, javascript, nextjs, react, sharp]
@@ -65,6 +65,10 @@ Vercel-hosted apps are not affected by CVE-2026-94543; Netlify says its Image CD
 6. Developers: restart `next dev` after upgrading; until then do not browse untrusted sites with a Next.js 16 dev server running.
 7. **Watch for the postponed critical.** Subscribe to `vercel/next.js` advisories or the Next.js blog; this corpus will update this file when it ships.
 
+## Update 2026-10-09: the postponed fixes have a date
+
+On 2026-10-08 Vercel pre-announced an out-of-band security update for **Wednesday 2026-10-14**. The post says it "will address three vulnerabilities in upstream dependencies: two **Critical** and one **High**" and that "two of these fixes were postponed from the September security release due to upstream coordination." No ids, components or affected versions are published yet; the advisories ship with the update. Status here stays `patched` for the seven September advisories; the October items get their own entry when they land.
+
 ## Prevention
 
 - This is the fourth Next.js security release in six weeks (08-25 criticals, 09-22 Satori, 09-30 scheduled, plus the pending one). Keep `next` **unpinned within a minor** and on the LTS line the Security Release Program targets; see [prevention/npm-hardening.md](../prevention/npm-hardening.md).
@@ -73,6 +77,7 @@ Vercel-hosted apps are not affected by CVE-2026-94543; Netlify says its Image CD
 
 ## Sources
 
+- [Next.js — Upcoming Next.js Security Update for Upstream Vulnerabilities](https://nextjs.org/blog/upcoming-nextjs-security-update-october-2026) — 2026-10-08 (Josh Story, Karim Rahal, Sebastian Silbermann): out-of-band update planned for 2026-10-14, three upstream-dependency vulnerabilities (two Critical, one High), two postponed from September.
 - [Next.js — September 2026 Security Release](https://nextjs.org/blog/september-2026-security-release) — 2026-09-30 (Josh Story, Karim Rahal, Sebastian Silbermann): the seven advisories with CVE/GHSA ids, severities, exclusions, the 16.3.8 / 15.5.27 versions, and the "one critical vulnerability and one high severity vulnerability was postponed due to upstream dependency delays" statement. Fetched 2026-10-04.
 - [vercel/next.js — GHSA-cjq9-62q9-8jv4](https://github.com/vercel/next.js/security/advisories/GHSA-cjq9-62q9-8jv4) (CVE-2026-94483, High 8.3, `remotePatterns` precondition), [GHSA-4jqv-mc3x-m676](https://github.com/vercel/next.js/security/advisories/GHSA-4jqv-mc3x-m676) (CVE-2026-94543, self-hosted Pages Router SSG/ISR, Vercel not affected), [GHSA-mcj8-r9mp-w47p](https://github.com/vercel/next.js/security/advisories/GHSA-mcj8-r9mp-w47p) (CVE-2026-94484, root catch-all + SSG/ISR), [GHSA-f87g-xv8r-7p7x](https://github.com/vercel/next.js/security/advisories/GHSA-f87g-xv8r-7p7x) (CVE-2026-94485, webpack-only `dynamicParams` bypass), [GHSA-h694-7cp9-m8p3](https://github.com/vercel/next.js/security/advisories/GHSA-h694-7cp9-m8p3) (CVE-2026-103004, nested `use cache` root-param key, fixed 16.3.8), [GHSA-3w37-wq28-93x7](https://github.com/vercel/next.js/security/advisories/GHSA-3w37-wq28-93x7) (CVE-2026-94544, Draft Mode pending-fill leak, vector `AV:N/AC:H/AT:P/PR:N/UI:N/VC:L`), [GHSA-39w2-rjm5-chcv](https://github.com/vercel/next.js/security/advisories/GHSA-39w2-rjm5-chcv) (CVE-2026-94486, Low 2.3, `next dev` MCP endpoint, `UI:P`) — all published 2026-09-30, all credit eps1lon. Fetched 2026-10-04. [vercel/next.js advisory tab](https://github.com/vercel/next.js/security/advisories?state=published) — the seven 09-30 entries beside the 09-22 and 08-25 criticals.
 - CVE records (CNA GitHub, published 2026-10-02): [CVE-2026-94485](https://cveawg.mitre.org/api/cve/CVE-2026-94485) and [CVE-2026-94486](https://cveawg.mitre.org/api/cve/CVE-2026-94486) — affected `>= 16.0.0, < 16.3.8`, CVSS 4.0 6.3 / 2.3, both referencing commit `2d9f50a4` and the v16.3.8 tag; 94485's description duplicates 94486's text (noted above). [NVD API keyword window 10-01 → 10-04](https://services.nvd.nist.gov/rest/json/cves/2.0?keywordSearch=Next.js&pubStartDate=2026-10-01T00:00:00.000&pubEndDate=2026-10-04T23:59:59.999) — CVE-2026-94483 (8.3), 94484, 94485, 94486, 94543, 94544, 103004 with the ranges quoted. Queried 2026-10-04.

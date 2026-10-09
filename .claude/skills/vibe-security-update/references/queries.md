@@ -6,8 +6,8 @@
 **Purpose.** This project indexes already-disclosed security advisories for people building with AI coding tools.
 These searches find *coverage* — vendor advisories, CVE records, researcher write-ups — never vulnerable systems.
 
-**Why the annotations live elsewhere.** The "why" for each query is in [`triage-patterns.md`](triage-patterns.md);
-handed to a fresh agent it reads like offensive tasking ([`../LEARNINGS.md`](../LEARNINGS.md) §1).
+**Frozen size.** This file is at its 4,000-token cap. Do not add sources or notes here: sources go in
+`source-priorities.json`, notes in `LEARNINGS.md`. The "why" per query is in `triage-patterns.md` (§1).
 
 `{year}` = the current year. Substitute before searching.
 

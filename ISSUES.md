@@ -10,6 +10,17 @@ _None open._
 
 ## Fixed
 
+### Sweep routine: silent switch from Fable 5.1 to Opus 4.8, and three recurring turn sinks — 2026-10-09
+
+Prompted by a review of the daily routine's run logs for 2026-09-09 to 2026-10-08. Four problems.
+
+- **Bug: the routine's session was switched to Opus 4.8 mid-run on 2026-09-23, 09-25 and 10-08, and nothing in the repo recorded it.** Root cause: **infra plus process**. Fable's cyber safeguard stopped the sweep while it was writing a worm or campaign advisory with the payload narrated in full; the run re-sent the same file; Claude Code's refusal fallback then re-ran it on Opus 4.8 and kept the session there (`model_refusal_fallback`). The target is fixed by Claude Code for the cyber category. Two related failures: 09-29 ended with nothing committed after the same stop wedged auto mode, and 09-30 lost its write path after a fetched page carried live loader and onion URLs. Fixed by a committed `.claude/settings.json` (`switchModelsOnFlag: false`, `fallbackModel: ["opus"]`), a classifier-stop protocol in the skill (defender altitude, malware files written last, never re-send a stopped file, fetch prompts omit indicators, every event logged under `classifier_events`), `LEARNINGS.md` §42, and `tests/test_refusal_fallback.py`.
+- **Bug: every sweep since 09-30 spent five to ten turns adding lines to `references/queries.md` and trimming them back out** to pass the 4,000-token gate. Root cause: **process bug**; the file was at its cap and the skill still invited additions. Fixed: the file is frozen at its size, with the rule in Step 4 and in the file's header.
+- **Bug: every cloud run re-discovered the missing build dependencies** and the Debian PyYAML conflict, two to four turns each. Root cause: **infra**. Fixed: one install line in Step 6.
+- **Bug: every cloud run retried `git push --delete` up to five times** against a proxy that always refuses it, then reported the stale branch. Root cause: **infra**. Fixed: Step 7 says not to retry; the two stale remote branches were deleted locally.
+
+Also in this change: the Next.js September advisory records Vercel's 2026-10-08 pre-announcement of the 10-14 out-of-band release; the tensorlake advisory records 0.5.145 on the registry and the six native siblings still carrying 0.5.144; the LMCache advisory records the CNA's open-ended affected range. Resolution: this PR.
+
 ### mcp-remote: mapping, impact wording and score attribution — 2026-10-02
 
 [Issue #114](https://github.com/pranava0x0/vibe-coding-security/issues/114) was valid: CVE-2026-51995 references F-02, while our table assigned it to F-10. The 2026-09-25 sweep introduced the mismatch. Why it selected that row is not established; a matching 7.5 score is a possible explanation, not a proven cause.

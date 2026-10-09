@@ -1,0 +1,4 @@
+{
+  "switchModelsOnFlag": false,
+  "fallbackModel": ["opus"]
+}
