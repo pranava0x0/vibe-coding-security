@@ -74,15 +74,17 @@ Between 2026-08-13 and 2026-08-17, eight sweep subagent launches failed outright
 
 ### Classifier stops and the model switch (read before writing any advisory)
 
-Fable's safeguards score every response the sweep produces, including the advisory text it writes. When one is stopped, Claude Code adds a notice to the transcript and lets the run continue once. If the next response is flagged too, Claude Code re-runs it on **Opus 4.8** and keeps the session there for the rest of the run (`model_refusal_fallback`). That target is fixed inside Claude Code and is not the newest Opus. It happened on 2026-09-23, 09-25 and 10-08; on 09-29 the run ended with nothing committed, and on 09-30 the run lost its write path until compaction. Each one began the same way: the sweep was writing a worm, stealer or campaign advisory with the payload narrated step by step (`LEARNINGS.md` §35, §42).
+Two classifiers can interrupt a run. A **safeguard stop** is Fable refusing one of its own responses, including advisory text it is writing. A **permission block** is auto mode refusing a tool call because of content already in the conversation. `classifier_events` in the run log records both.
 
-The repo's `.claude/settings.json` sets `switchModelsOnFlag: false`, so a second flagged response now ends the turn instead of switching models. The rules below keep that from costing a run:
+The Claude Code docs say a cyber-flagged request on Fable is re-run on Opus 4.8 and the session then stays on Opus 4.8 (`model_refusal_fallback`). On the Anthropic API that target is not configurable; only third-party providers can pin a different Opus. In the observed run logs the first stop is followed by a notice and one more response, and the switch fires when that response is flagged too. Switches happened on 2026-09-23, 2026-09-25 and 2026-10-08, each after a malware advisory was re-sent. On 2026-09-29 the same stop led to permission blocks and nothing was committed. On 2026-09-30 a fetched page with live indicators caused permission blocks until compaction (`LEARNINGS.md` §35, §42).
 
-1. **Write at defender altitude.** State what the code reads, where it writes and how it spreads, one clause each, with package names, versions, dates, file paths and credential categories. Do not narrate the loader chain, quote payload code, reproduce encoded strings, or print live download, C2, onion, IP or wallet addresses. Link the researcher's write-up for mechanics.
-2. **Order the writing.** Save every non-malware advisory and every update first. Write worm, stealer and campaign advisories last, one file per `Write` call, never as a Bash heredoc.
-3. **After a stop, do not re-send.** Do not retry, reword or shorten the stopped file in this run. Add its id to `deferred_after_classifier_stop` in the run-log entry with one line on what it covers, finish the rest of the sweep, and let the next run write it from the primary sources. Re-sending the same file is what triggered the switch on 10-08.
-4. **Fetch prompts omit indicators.** Every `WebFetch` or delegated fetch of a malware or campaign write-up asks for behaviour, affected packages and versions, dates and remediation, and says to omit live addresses, hashes and payload text. A delegated report that carries exploitation steps is stopped too (10-01).
-5. **Record every event.** If the transcript shows a safeguard stop, a model switch notice or a permission-classifier block, list it under `classifier_events` in the run-log entry with the file or URL involved. The 10-08 entry recorded none of it, which is why the pattern took a month to see.
+The repo's `.claude/settings.json` sets `switchModelsOnFlag: false`. A second flagged response now ends the turn instead of switching models, and in a routine the turn is the run. The rules below keep a stop from costing more than one deferred file. The same file also sets `fallbackModel: ["opus"]`, which is an overload fallback to the newest Opus on the Anthropic API; a fallback notice of that kind is also a `classifier_events` entry.
+
+1. **Write at defender altitude from the first draft.** State what the code reads, where it writes and how it spreads, one clause each, with package names, versions, dates, file paths and credential categories. Do not narrate the loader chain, quote payload code, reproduce encoded strings, or print live download, C2, onion, IP or wallet addresses. Link the researcher's write-up for mechanics.
+2. **Order the writing, and checkpoint.** Save every non-malware advisory and update first, with their `ALERTS.md` entries and README rows. Then run the Step 6 gate once and make a **checkpoint commit** on the sweep branch (`git commit -m "sweep YYYY-MM-DD: checkpoint"`, then `git push`). Only then write worm, stealer and campaign advisories, each with its index entries, one file per `Write` call, never as a Bash heredoc. A run that ends after the checkpoint still has its work on the remote branch.
+3. **After a stop, do not re-send.** The first action after the stop notice is to append `<planned filename slug>: <one-line scope>` under `deferred_after_classifier_stop` in today's run-log entry (create the entry stub if Step 5 has not run yet) and commit it. Do not retry, reword or shorten the stopped file in this run. Move on to the next item. The next run writes the deferred file from the primary sources, at defender altitude. If the same file has been deferred twice, do not try a third time: add an `ALERTS.md` entry of three lines (product, versions, the primary-source link) and record it under `blockers` for the owner.
+4. **Keep indicators out of context.** Every `WebFetch` or delegated fetch of a malware or campaign write-up asks for behaviour, affected packages and versions, dates and remediation, and says to omit live addresses, hashes and payload text. When fetching such a page with `curl`, strip URLs, dotted quads and hex strings before the text enters the conversation (`LEARNINGS.md` §35). A delegated report that carries exploitation steps is stopped too (2026-10-01).
+5. **Record every event.** If the transcript shows a safeguard stop, a model switch notice or a permission block, list it under `classifier_events` in the run-log entry with the file or URL involved.
 
 ### Why the sweep needs this more than most projects
 
@@ -123,6 +125,14 @@ python3 tools/sweep_context.py   # refreshes advisory-index.jsonl + source-prior
 | `references/queries.md` | the query list | ~1K |
 
 **Do not read `ALERTS.md`, `advisories/README.md`, `advisory-index.jsonl`, the full `source-priorities.json`, or `runs.archive.md` into context.** They are `grep` targets, not reading material. Step 0 previously mandated ~345K tokens of reading — more than fits in a context window, so it silently truncated every run, which is how the classifier workaround kept getting rediscovered and how the 2026-06-19 stale-checkout duplication happened.
+
+Check what the last run left for you:
+
+```bash
+grep -A3 'deferred_after_classifier_stop' .claude/skills/vibe-security-update/runs.log.md | tail -4
+```
+
+Anything listed there is written this run, from the primary sources, before new research starts.
 
 Set:
 - `today` = current absolute date (YYYY-MM-DD)
@@ -171,7 +181,7 @@ For each unique candidate incident pulled from results, decide:
 - Cross-ecosystem worm (npm ↔ PyPI ↔ RubyGems with identical payload), OR
 - Significant supply-chain hygiene incident at a major AI vendor (e.g., source-map leak, accidental token exposure)
 
-Use the template in `CONTRIBUTING.md`. Filename: `YYYY-MM-short-id.md`.
+Use the template in `CONTRIBUTING.md`. Filename: `YYYY-MM-short-id.md`. Follow the **Writing rules** section at the end of this file for every file you write.
 
 **B. UPDATE EXISTING** — append to an existing advisory if:
 - Status changed (active → contained, etc.)
@@ -273,7 +283,7 @@ For NEW sources discovered this run (not yet in the list), add with `weight: 5, 
 
 Write the updated JSON back. Sort by weight desc for readability.
 
-**Do not add to `references/queries.md`.** It sits a few bytes under the 4,000-token cap in `tests/test_sweep_context.py`. New sources go in `source-priorities.json`, access notes in `LEARNINGS.md`. Change a query string only when the old one has stopped producing, and keep the file's size flat. Six consecutive sweeps (2026-09-30 to 10-08) spent five to ten turns each adding lines to it and then trimming them back out to pass the gate.
+Do not edit `references/queries.md`. It is at the cap in `tests/test_sweep_context.py` (3,994 of 4,000 tokens). Put new sources in `source-priorities.json` and access notes in `LEARNINGS.md`. The one exception is replacing a query string that has stopped producing with one of the same length.
 
 ### Step 5 — Append to runs.log.md
 
@@ -307,10 +317,10 @@ that is the file every future run actually reads.
 
 **The GitHub Pages deploy runs `build.py → validate.py → pytest` and fails the deploy if any step fails. Run the exact same gate locally and only commit if it is fully green.** Committing without this is what froze the live site for 2+ weeks (2026-06-04 → 2026-06-19): every daily sweep committed broken internal links, `validate.py` failed, and the site silently stopped updating while `main` kept advancing.
 
-**Cloud session:** the container has no `markdown`, `Pygments` or `pytest`, and `pip install -r site/requirements.txt` fails on Debian's PyYAML. Install once, then run the gate:
+Cloud session: the container has no `markdown`, `Pygments` or `pytest`, and `pip install -r site/requirements.txt` fails on Debian's PyYAML. Install once, then run the gate commands below:
 
 ```bash
-python3 -m pip install -q --ignore-installed $(grep -v -i pyyaml site/requirements.txt)
+python3 -m pip install -q --ignore-installed -r site/requirements.txt
 ```
 
 **For a full sweep, run the date-update script first. For a targeted correction, leave README's `Last full sweep` alone (no sweep ran), bump the `Last refreshed` markers in `ALERTS.md` and `llms.txt` when the feed or index changed, and update the touched advisory's `last_updated`. Before either gate, run the live evidence check and resolve any drift:**
@@ -349,7 +359,7 @@ git commit -m "sweep YYYY-MM-DD: N new, M updated"
 git fetch origin && git rebase origin/main   # a daily sweep may have landed mid-run
 git push
 ```
-**Cloud session: do not retry remote branch deletion.** The session proxy drops every `git push --delete` and refuses the refs API, and has since 2026-09-23. Delete the local branch, say once in the summary that the remote branch remains, and stop. The owner removes stale `jam/*` branches from a local checkout.
+Cloud session: do not retry remote branch deletion. The session proxy drops every `git push --delete` and refuses the refs API, and has since 2026-09-23. Delete the local branch, say once in the summary that the remote branch remains, and continue the run. The owner removes stale `jam/*` branches from a local checkout.
 
 The `git config` lines are local (repo-scoped), not `--global` — a cloud-run sweep has no pre-existing identity and would otherwise commit as its own default bot account (this is also why commit messages must never carry a `Co-Authored-By:`/`Claude-Session:` trailer — see CLAUDE.md's git discipline section).
 
@@ -402,9 +412,9 @@ These apply to advisories, `ALERTS.md` entries, README rows, run-log notes, PR d
 - **Plain sentences.** One idea per sentence. No em-dash chains; use a full stop or a comma. No semicolons joining clauses. No parentheses holding a second sentence.
 - **No filler.** Cut "it's important to note", "in today's landscape", "a stark reminder", "underscores", "highlights the need", "robust", "seamless", "cutting-edge", "game-changing", "delve", "leverage" as a verb, and the "not just X but Y" shape. No rhetorical questions, no closing morals.
 - **No decoration.** No emoji outside the three tier headers in `ALERTS.md`. No bold on whole sentences. No "Key takeaways" or "Conclusion" sections.
-- **Numbers and ids stay exact.** Dates as `YYYY-MM-DD`; versions, CVE and GHSA ids as the source prints them. No rounding words where the source gave a number.
+- **Numbers and ids stay exact.** Dates as `YYYY-MM-DD`. Versions, CVE and GHSA ids as the source prints them. No rounding words where the source gave a number.
 - **Say what you did not do.** "Not covered" beats "nothing found"; "unconfirmed" beats a confident guess.
-- **PR descriptions and summaries** list what changed, with ids, in the repo's existing form. No preamble, no sign-off.
+- **PR descriptions and summaries** are a list of what changed, with advisory ids and counts. No preamble, no sign-off.
 
 ## Sweep discipline
 

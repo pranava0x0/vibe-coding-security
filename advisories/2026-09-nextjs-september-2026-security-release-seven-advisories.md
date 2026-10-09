@@ -67,11 +67,11 @@ Vercel-hosted apps are not affected by CVE-2026-94543; Netlify says its Image CD
 
 ## Update 2026-10-09: the postponed fixes have a date
 
-On 2026-10-08 Vercel pre-announced an out-of-band security update for **Wednesday 2026-10-14**. The post says it "will address three vulnerabilities in upstream dependencies: two **Critical** and one **High**" and that "two of these fixes were postponed from the September security release due to upstream coordination." No ids, components or affected versions are published yet; the advisories ship with the update. Status here stays `patched` for the seven September advisories; the October items get their own entry when they land.
+On 2026-10-08 Vercel pre-announced an out-of-band security update for Wednesday 2026-10-14. The post says it "will address three vulnerabilities in upstream dependencies: two Critical and one High", and that two of the fixes are the ones postponed from the September release. No ids, components or affected versions are published yet. The advisories ship with the update. Status here stays `patched` for the seven September advisories. The October items get their own entry when they land.
 
 ## Prevention
 
-- This is the fourth Next.js security release in six weeks (08-25 criticals, 09-22 Satori, 09-30 scheduled, plus the pending one). Keep `next` **unpinned within a minor** and on the LTS line the Security Release Program targets; see [prevention/npm-hardening.md](../prevention/npm-hardening.md).
+- This is the fourth Next.js security release in six weeks (08-25 criticals, 09-22 Satori, 09-30 scheduled, and the out-of-band update announced for 10-14). Keep `next` **unpinned within a minor** and on the LTS line the Security Release Program targets; see [prevention/npm-hardening.md](../prevention/npm-hardening.md).
 - Local agent endpoints — MCP servers in dev tooling, IDE bridges, Hub dashboards — need origin/host validation like any other localhost service; see [prevention/mcp-hygiene.md](../prevention/mcp-hygiene.md).
 - Cache poisoning via a single crafted request is a shared-cache design problem; put a CDN with its own cache key normalisation in front of self-hosted ISR, and alert on `revalidate` storms. [playbooks/if-your-webapp-was-compromised.md](../playbooks/if-your-webapp-was-compromised.md) covers the purge-and-verify steps.
 
