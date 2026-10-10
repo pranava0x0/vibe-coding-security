@@ -1,13 +1,13 @@
 ---
 id: 2026-09-plugin4shell-sha-pin-bypass-coding-agent-plugins
-title: "Plugin4Shell — Claude Code, OpenAI Codex, GitHub Copilot and Gemini CLI all checked out a pinned plugin commit without verifying they landed on it, so a repository owner can serve different code under a reviewed SHA and auto-update it into every installed agent; Claude Code and Codex are patched, Copilot and the retired Gemini CLI are not"
+title: "Plugin4Shell — Claude Code, OpenAI Codex, GitHub Copilot and Gemini CLI all checked out a pinned plugin commit without verifying they landed on it, so a repository owner can serve different code under a reviewed SHA and auto-update it into every installed agent; Claude Code and Codex are patched, Copilot and the retired Gemini CLI are not; Anthropic assigned CVE-2026-86063 on 2026-10-09"
 date_disclosed: 2026-09-17
-last_updated: 2026-09-18
+last_updated: 2026-10-10
 severity: high
 status: mitigated
 ecosystems: [claude-code, codex, github-copilot, gemini-cli, git, agent-plugins, skills]
 tools_affected: ["Claude Code < 2.1.179", "OpenAI Codex CLI < 0.146.0", "GitHub Copilot CLI (no fix shipped as of 2026-09-18)", "Google Gemini CLI (all versions; product retired, no fix)", "any plugin marketplace served from Bitbucket or a self-hosted Git server"]
-tags: [supply-chain, agent-plugins, skills, sha-pinning, git, zero-click, auto-update, rce, coordinated-disclosure, no-cve]
+tags: [supply-chain, agent-plugins, skills, sha-pinning, git, zero-click, auto-update, rce, coordinated-disclosure, cve]
 ---
 
 ## TL;DR
@@ -75,6 +75,12 @@ git -C <plugin-repo> branch -r | grep -E '/[0-9a-f]{40}$|/FETCH_HEAD$'
 - Disable background auto-update for agent plugins where the agent allows it; review updates the way you review a dependency bump.
 - Run agents with the least reach a plugin could abuse: [`prevention/agent-sandboxing.md`](../prevention/agent-sandboxing.md), [`prevention/credential-hygiene.md`](../prevention/credential-hygiene.md).
 
+## Update — 2026-10-10: Anthropic publishes the Claude Code half as GHSA-pq7j-f95f-qfcv with CVE-2026-86063 (CVSS 4.0 7.7), 115 days after the fix shipped; the id is not yet in CVE Services
+
+On **2026-10-09** the `anthropics/claude-code` advisory tab gained [GHSA-pq7j-f95f-qfcv, "Plugin Commit SHA Pin Bypass Allows Installation of Attacker-Controlled Code"](https://github.com/anthropics/claude-code/security/advisories/GHSA-pq7j-f95f-qfcv), the first vendor advisory for this finding. It carries **CVE-2026-86063**, CVSS 4.0 **7.7** (`AV:N/AC:L/AT:P/PR:N/UI:P/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N`), CWE-494 and CWE-829, affected `@anthropic-ai/claude-code` **< 2.1.179**, patched **2.1.179**, and credits Or Nevo Michrowski of Air Security. The description matches Air's write-up: the install flow "checked out a marketplace's pinned commit SHA using `git checkout` without verifying that the resulting HEAD matched the pinned SHA," so a branch named with the 40-character SHA resolved instead of the reviewed commit; exploitation "required a user to install a malicious plugin, pin to a safe hash, and for the plugin source to be hosted on a git host that permitted SHA-shaped branch names." Anthropic adds that it also affected Claude Desktop's plugin install flow, and that auto-update users already have the fix.
+
+Three things to record. The advisory lands 115 days after the npm fix (2.1.179, 2026-06-16) and 22 days after Air's publication, so a reader who only watches the vendor tab or Dependabot learned of this in October. the CVE Services API returned no record for CVE-2026-86063 on 2026-10-10, the same shape as CVE-2026-103435 last week, a vendor advisory printing an id that CVE Services does not have yet (that one resolved in two days); cite the GHSA and re-check. The Codex, Copilot and Gemini CLI positions are unchanged by this: no new vendor statement for any of the three was found this sweep, so status stays `mitigated`.
+
 ## Sources
 - [Air Security — Plugin4Shell: Zero Click RCE Vulnerability found in top 4 most popular coding agents](https://www.air.security/blog-posts/plugin4shell) — primary; the two variants, the `git rev-parse` fix, the per-vendor timeline (Anthropic 06-17, Google 08-04, Codex verified 08-12), the GitHub-vs-Bitbucket host behaviour, researcher names. Fetched 2026-09-18.
 - [The Hacker News — Plugin4Shell Lets Repository Owners Swap Pinned Plugin Code Across Four AI Coding Agents](https://thehackernews.com/2026/09/plugin4shell-lets-repository-owners.html) — 2026-09-18; OpenAI's fix description quote, "no CVE as of September 18," GitHub's branch-name block. Fetched 2026-09-18.
@@ -84,3 +90,4 @@ git -C <plugin-repo> branch -r | grep -E '/[0-9a-f]{40}$|/FETCH_HEAD$'
 - [openai/codex release rust-v0.146.0](https://github.com/openai/codex/releases/tag/rust-v0.146.0) — 2026-07-29; "Verify Git plugin SHA checkouts" (#34644). Fetched 2026-09-18.
 - [Google Developers Blog — An important update: Transitioning Gemini CLI to Antigravity CLI](https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/) — 2026-05-19 announcement, 2026-06-18 cutover, enterprise carve-out. Fetched 2026-09-18.
 - npm registry `time` fields for `@anthropic-ai/claude-code` (2.1.179 → 2026-06-16), `@openai/codex` (0.146.0 → 2026-07-29) and `@google/gemini-cli` (0.60.0 → 2026-09-15, not deprecated) — queried 2026-09-18.
+- **2026-10-10 update sources** — [anthropics/claude-code — GHSA-pq7j-f95f-qfcv](https://github.com/anthropics/claude-code/security/advisories/GHSA-pq7j-f95f-qfcv) (fetched 2026-10-10; published 2026-10-09; CVE-2026-86063, CVSS 4.0 7.7, affected < 2.1.179, patched 2.1.179, the description quoted above, credit); CVE Services API, CVE-2026-86063 (queried 2026-10-10: no record yet, so no link; re-check next sweep); npm `time` for `@anthropic-ai/claude-code` 2.1.179 (2026-06-16; re-queried 2026-10-10, latest 2.1.296 on 2026-10-09).
