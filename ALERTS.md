@@ -2,11 +2,23 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-10-09. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-10-10. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-10-08 — **GhostAction returns: two compromised maintainer accounts (the author of pyxel; the original author of uber/athenadriver) pushed a "Security Audit" GitHub Actions workflow to 345 repositories in two sixteen-minute bursts, and the new variant checks out full history and searches every branch and tag for AWS, Anthropic, OpenAI, OpenRouter, GitHub, GitLab, Slack and Firebase keys, including ones deleted years ago; 772 repositories were hit between 2026-08-31 and 09-30 and about 378 still carried a live workflow on 10-09** — the named Actions secrets go too, as in 2025; the only control observed stopping a run was "require approval for workflow runs."
+Hunt for `security-audit.yml` / `github_actions_security.yml` / `security-check.yml` on every branch and tag, the "Security Audit" / "Github Actions Security" job names and the `AKIA_CTX_START` marker; any completed run is confirmed exfiltration. Revoke the pushing account's credential first, then rotate every secret and every key ever committed, and freeze releases until clean.
+→ [advisories/2026-10-ghostaction-returns-github-actions-workflow-credential-theft-git-history-sweep.md](advisories/2026-10-ghostaction-returns-github-actions-workflow-credential-theft-git-history-sweep.md)
+
+### 2026-10-09 — **AWS Amplify API: the query resolvers generated for SQL-backed data models with owner/group rules and a secondary index let a signed-in user read other users' records through crafted secondary-index queries (CVE-2026-108096, CVSS 3.1 6.5 / 4.0 7.1); fixed `@aws-amplify/graphql-index-transformer` 3.1.2 / `data-construct` 1.17.4 / `graphql-api-construct` 1.21.4, all on npm 2026-07-01, bulletin 2026-133 on 2026-10-09** — a silent fix one hundred days before the disclosure, in a build-time package, so upgrading changes nothing until the backend is redeployed.
+Upgrade the three packages, redeploy, confirm the stack's update time moved, and review AppSync logs for cross-owner reads on SQL-backed models. No workaround.
+→ [advisories/2026-10-aws-amplify-sql-backed-model-query-resolver-cross-user-read.md](advisories/2026-10-aws-amplify-sql-backed-model-query-resolver-cross-user-read.md)
+
+### 2026-10-06 — **Pwn2Own Ireland 2026: OpenAI Codex fell to an argument-injection bug (Ikotas Labs, $40,000), LiteLLM twice (Xint: input validation plus code injection; Out of Bounds: four bugs, two already known), NVIDIA Dynamo once and Chroma to two partial chains, in the first AI Coding Agents category, whose rules require a contestant-controlled page, repo or file in a default approval-gated mode** — every entry is a working chain against a current build, now with the vendor; mechanisms, versions and fixes are withheld until patches ship.
+Keep Codex on latest and off untrusted repos with auto-approval until OpenAI's fix lands; take LiteLLM and Chroma off routable interfaces; watch the ZDI published-advisory index and the vendor tabs rather than the CVE feed.
+→ [advisories/2026-10-pwn2own-ireland-2026-ai-targets-codex-litellm-chroma-dynamo-zero-days.md](advisories/2026-10-pwn2own-ireland-2026-ai-targets-codex-litellm-chroma-dynamo-zero-days.md)
 
 ### 2026-10-08 — **Ollama: an unauthenticated `/api/pull` request writes a file outside the model store, and in the default Docker image that file runs as root on the next restart (CVE-2026-103663, CVSS 4.0 9.4 / 6.9; 0.34.2 to 0.34.x, fixed 0.35.0)** — the pull path trusts the layer digest, CERT Polska coordinated, reporter striga.ai. Also on the record: a tensor-blob redirect SSRF to cloud metadata (CVE-2026-85180, 8.7, no fixed version listed) and the September agent-mode approval bypass.
 Upgrade to 0.35.0, run Ollama as a non-root user with the library directory read-only, keep port 11434 on loopback, and check the library directory for new files before restarting an exposed container. The PoeLLM botnet is already scanning for exposed instances.
@@ -976,6 +988,10 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 ---
 
 ## 🟠 RECENT — verify exposure
+
+### 2026-09-16 — **TinaCMS (the `/admin` editing panel on many generated Next.js and Astro sites): a doubled slash in the hash-router path makes the admin frame an attacker origin and trust its `postMessage` channel, so one crafted link run by a signed-in editor sends any GraphQL query or mutation with the editor's token and returns the result to the attacker (CVE-2026-108261, CVSS 9.3; fixed `tinacms` 3.14.0 / `@tinacms/app` 2.5.14 on 2026-09-14, CVE 2026-10-09)** — a bypass of the incomplete June fix (3.9.3); on self-hosted backends the `authentication` collection's password hashes are in reach.
+Upgrade both packages together and rebuild the admin bundle; on self-hosted backends rotate editor passwords; review the content repository's recent commits for edits no editor made.
+→ [advisories/2026-09-tinacms-admin-preview-iframe-origin-bypass-editor-session-takeover.md](advisories/2026-09-tinacms-admin-preview-iframe-origin-bypass-editor-session-takeover.md)
 
 ### 2026-08-12 — **Pydantic AI: a website the developer visits can post to the loopback `clai web` / `Agent.to_web()` chat endpoint and make the served agent run its tools under the local process's credentials (CVE-2026-107295, 7.6), DNS rebinding reaches the same endpoint because the Host header was never checked (CVE-2026-107292, 6.4), and an IPv6 zone identifier slipped past the cloud-metadata SSRF blocklist (CVE-2026-107289, incomplete fix)** — ten vendor advisories 2026-08-08 to 10-02, seven CVEs assigned 2026-10-08; 1.38M PyPI downloads a week.
 Upgrade to 1.107.7 (v1) or 2.53.0 (v2), do not run the dev chat UI while browsing, keep side-effecting tools off anything a browser can reach, and prefer `allowed_domains` on fetch tools.
