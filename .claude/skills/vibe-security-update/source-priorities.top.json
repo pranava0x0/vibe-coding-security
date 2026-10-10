@@ -15,6 +15,12 @@
    "last_hit": "2026-10-08"
   },
   {
+   "domain": "aws.amazon.com",
+   "weight": 20.0,
+   "hits": 13,
+   "last_hit": "2026-10-10"
+  },
+  {
    "domain": "bleepingcomputer.com",
    "weight": 20.0,
    "hits": 33,
@@ -41,14 +47,14 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 41,
-   "last_hit": "2026-10-09"
+   "hits": 42,
+   "last_hit": "2026-10-10"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 46,
-   "last_hit": "2026-10-09"
+   "hits": 47,
+   "last_hit": "2026-10-10"
   },
   {
    "domain": "helpnetsecurity.com",
@@ -77,8 +83,8 @@
   {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
-   "hits": 21,
-   "last_hit": "2026-10-09"
+   "hits": 22,
+   "last_hit": "2026-10-10"
   },
   {
    "domain": "safedep.io",
@@ -89,8 +95,8 @@
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 57,
-   "last_hit": "2026-10-07"
+   "hits": 58,
+   "last_hit": "2026-10-10"
   },
   {
    "domain": "sentinelone.com",
@@ -107,14 +113,14 @@
   {
    "domain": "stepsecurity.io",
    "weight": 20.0,
-   "hits": 29,
-   "last_hit": "2026-10-09"
+   "hits": 30,
+   "last_hit": "2026-10-10"
   },
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 101,
-   "last_hit": "2026-10-09"
+   "hits": 102,
+   "last_hit": "2026-10-10"
   },
   {
    "domain": "theregister.com",
@@ -139,12 +145,6 @@
    "weight": 20.0,
    "hits": 15,
    "last_hit": "2026-09-12"
-  },
-  {
-   "domain": "aws.amazon.com",
-   "weight": 19.0,
-   "hits": 12,
-   "last_hit": "2026-10-09"
   },
   {
    "domain": "blog.rust-lang.org",

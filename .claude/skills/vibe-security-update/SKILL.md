@@ -46,6 +46,24 @@ A wrong-but-confident advisory is worse than no advisory: readers act on it, and
 
 These are enforced by Step 6's gate (`build → validate → pytest`) plus the link checker. The gate is the floor, not the ceiling — snapshot checks cover the registered finding tables; unstructured claims still need manual verification.
 
+### Incorrect-data classes seen so far
+
+Each row is a shape of wrong-but-plausible data that has shipped from this routine at least once and had to be corrected afterwards. Before publishing, read each new or edited advisory against this table. **When a correction reveals a new class, add a row here and a rule above; do not cite the pull request that fixed it**, because future runs read this file, not the PR.
+
+| Class | How it looks | The check |
+|---|---|---|
+| Fabricated citation | a real outlet name with a guessed slug, a repository that does not exist | every `## Sources` URL was opened this run; `check-external-links.py` is clean |
+| Malformed or abbreviated id | `GHSA-xxxx`, yearless `CVE-NNNN`, slash-compressed lists | `tests/test_advisory_ids.py`; write every id in full |
+| Wrong CVE-to-finding pairing | an aggregator pairs a real CVE with the wrong GHSA, or a similar description with the wrong research finding | the CNA record's `references` and the exact referenced research revision; never a matching score, CWE or filename |
+| Score overwrites assessment | a CNA, ADP or NVD score is copied into `severity` as if it proved the impact in the description | record provider, vector and date; explain any difference from the advisory rating; a hardening finding stays a hardening finding |
+| Version boundary misread | an inclusive reviewed upper version written as a fix; a registry range preferred over the vendor fix evidence | open both; state inclusive versus exclusive endpoints; leave fix status unknown when unsupported |
+| Aggregator counted as second source | outlet pickup of the same researcher's post treated as independent confirmation | name the second researcher or firm; otherwise `status: unconfirmed` |
+| Database date as disclosure date | a GHSA that entered the database months after the vendor published it, filed as fresh | date by the vendor page; say "DB-published X; originally Y" |
+| Search-summary attribution | a rebuttal, quote or mechanism attributed to an outlet that the outlet's page does not contain | open the outlet; rewrite the claim down to what the page says |
+| Press-only detail in a vendor incident | an outlet adds a case the vendor's primary does not mention | keep it, labelled as the outlet's claim with its stated source |
+| Stale index row | `advisories/README.md` or `ALERTS.md` still shows the old `severity` or `status` after an update | Step 3's row edit on every status change; the `comm` check before the gate |
+
+
 ---
 
 

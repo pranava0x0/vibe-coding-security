@@ -15,6 +15,19 @@
 
 ## Archived entries
 
+## 2026-10-01
+
+```yaml
+queries: {deep: 16, medium: 24, shallow: 8}
+new: [2026-09-divd-zammad-zero-days-agentic-ai-breach, 2026-09-ro1me-open-source-agent-framework-llm-output-execution-cve-wave, 2026-09-unsloth-studio-model-inspection-trust-remote-code-ace]
+updated: [2026-08-vm2-isolated-vm-sandbox-escapes, 2026-09-gitspawn-git-config-agent-rce-cluster, 2026-09-openclaw-2026-8-1-advisory-batch, 2026-09-aws-security-agent-mcp-s3-bucket-squat, 2026-08-agent-framework-mcp-cve-batch, 2025-11-n8n-ni8mare-rce, 2026-09-openai-second-training-pause-us-government-sites-agent-probes, 2026-07-nextjs-july-security-release, 2026-03-polinrider-multi-ecosystem-dprk-campaign]
+sources_added: [csirt.divd.nl, zammad.com, euronews.com]
+sources_weighted: [pillar.security, csoonline.com, thehackernews.com, pypi.org, securityweek.com, helpnetsecurity.com, theregister.com, nvd.nist.gov, services.nvd.nist.gov, github.com, github.com/advisories, transluce.org, research.empiricalsecurity.com, safedep.io, aws.amazon.com, registry.npmjs.org, hn.algolia.com, vulncheck.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, securityweek-front-page-curl-403-webfetch-ok, darkreading-403, cbc-403, washingtonpost-paywall, cyber.gc.ca-news-list-client-rendered, zammad-github-tab-unreachable, github.com-curl-403-use-web-fetch-agent, unsloth-release-tag-404, theregister-curl-regex-miss-use-webfetch]
+```
+
+**Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw/Codex/gemini-cli/Cline/goose/CrewAI + the Ro1ME frameworks; frontend incl. Next.js/React/Svelte/Vite/Tailwind/shadcn/Astro; backend/auth/DB incl. FastAPI/Streamlit/Prisma/Supabase/NextAuth/Clerk/better-auth/python-genai). Direct WebSearch + curl for front pages, KEV, HN Algolia, NVD API (60-keyword window), registries; two read-only `web-fetch` agents for github.com listings/tabs/issues and vendor blog indexes — bare URLs only, no classifier trips. KEV (dateAdded ≥ 09-24): Fortinet, Cisco SD-WAN, Apple, Citrix ×2, MikroTik, SharePoint, WordPress, WSO2, Adobe — nothing in scope. **Three new:** DIVD/Zammad (THN roundup + SecurityWeek/HNS/Register, primary = DIVD case pages via agent), the Ro1ME agent-framework wave (advisory-database `agent` p.1–2 + `llm` listings, NVD), Unsloth (THN roundup → Pillar + CSO). **Nine updates**, mostly ids landing on tracked bugs (vm2 ×5, n8n ×3, Obot, OpenClaw Windows Node ×4, AWS security-agent #2, GitPython #2) plus Transluce's US/Canada report, Empirical's Next.js exploitation telemetry and SafeDep's PolinRider Ethereum-C2 post (fetched with a hex/IP filter; no classifier event). **Declined:** OpenAI distillation/Moonshot (model IP, not vibe-coding; the encrypted-reasoning replay is already tracked), MetaMask infrastructure incident (no detail, crypto infra), Truffle 543K live GitHub secrets (prevention material), Tracebit context bombs (research), GTIG AI-vuln-discovery report (statistics), Register "Anthropic exec spoofed" phishing, FTC probe, Gemini 4 Argon, piscina CVE-2026-102992 and PyJWT/axios/undici (generic), WordPress MCP plugins (ByteCoreStack, AI Engine — out of audience), SiYuan CVE-2026-69085, Unit 42 OperTraitors (Kubernetes operators; revisit if an agent angle appears), Figma MCP allowlist (product change). Source-priority decay ran (5 sources). Skill: queries.md gained the `llm` listing, companion-app tabs, CSIRT CNA case files, Empirical and Transluce pages and five access gaps; LEARNINGS §36.
+
 ## 2026-09-30
 
 ```yaml
