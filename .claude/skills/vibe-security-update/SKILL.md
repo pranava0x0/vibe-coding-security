@@ -62,6 +62,7 @@ Each row is a shape of wrong-but-plausible data that has shipped from this routi
 | Search-summary attribution | a rebuttal, quote or mechanism attributed to an outlet that the outlet's page does not contain | open the outlet; rewrite the claim down to what the page says |
 | Press-only detail in a vendor incident | an outlet adds a case the vendor's primary does not mention | keep it, labelled as the outlet's claim with its stated source |
 | Stale index row | `advisories/README.md` or `ALERTS.md` still shows the old `severity` or `status` after an update | Step 3's row edit on every status change; the `comm` check before the gate |
+| Registry name collision | a CNA `product` name matched to a registry package of the same name that is a different project (PyPI `zotero-mcp` 0.3.1 vs the record's 0.10.0–0.14.1; PyPI `openlit` 1.45.0 SDK vs the OpenLIT 2.1.0 platform), producing a wrong "upgrade to" or "latest is" line | compare the record's `affected.vendor` and repository references with `npm view <pkg> repository.url` / the PyPI project URLs; when they differ, name the artifact the record means and say the registry package is not it |
 
 
 ---

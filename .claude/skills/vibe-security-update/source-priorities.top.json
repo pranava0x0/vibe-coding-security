@@ -47,14 +47,14 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 42,
-   "last_hit": "2026-10-10"
+   "hits": 43,
+   "last_hit": "2026-10-11"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 47,
-   "last_hit": "2026-10-10"
+   "hits": 48,
+   "last_hit": "2026-10-11"
   },
   {
    "domain": "helpnetsecurity.com",
@@ -83,8 +83,8 @@
   {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
-   "hits": 22,
-   "last_hit": "2026-10-10"
+   "hits": 23,
+   "last_hit": "2026-10-11"
   },
   {
    "domain": "safedep.io",
@@ -125,20 +125,20 @@
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 53,
-   "last_hit": "2026-10-09"
+   "hits": 54,
+   "last_hit": "2026-10-11"
   },
   {
    "domain": "unit42.paloaltonetworks.com",
    "weight": 20.0,
-   "hits": 9,
-   "last_hit": "2026-10-08"
+   "hits": 10,
+   "last_hit": "2026-10-11"
   },
   {
    "domain": "vulncheck.com",
    "weight": 20.0,
-   "hits": 20,
-   "last_hit": "2026-10-07"
+   "hits": 21,
+   "last_hit": "2026-10-11"
   },
   {
    "domain": "wiz.io",
