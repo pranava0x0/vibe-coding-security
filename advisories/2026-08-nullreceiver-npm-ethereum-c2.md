@@ -2,7 +2,7 @@
 id: 2026-08-nullreceiver-npm-ethereum-c2
 title: "NullReceiver: DPRK-linked npm malware hides C2 IPs inside blank Ethereum transactions, hits Tailwind/PostCSS-themed packages"
 date_disclosed: 2026-08-10
-last_updated: 2026-08-10
+last_updated: 2026-10-11
 severity: high
 status: contained
 ecosystems: [npm, javascript, blockchain-c2]
@@ -46,8 +46,13 @@ You are affected if any of the six named packages/versions above are in your dep
 - → [prevention/npm-hardening.md](../prevention/npm-hardening.md)
 - → [prevention/supply-chain-attack-surface.md](../prevention/supply-chain-attack-surface.md)
 
+## Update 2026-10-11 — Unit 42 names two more NullReceiver packages, `bianira-ui` and `fluid-type-ui`; both are already gone from npm
+
+Palo Alto Unit 42's 2026-10-07 review of Web3-based command-and-control in cloud supply-chain attacks lists the front-end npm packages `bianira-ui` and `fluid-type-ui` as using the NullReceiver technique to resolve their command-and-control addresses from zero-value Ethereum transactions. Neither was in Sonatype's August list above. The registry confirms both and dates their removal: `bianira-ui` returns "Unpublished on 2026-07-28," and `fluid-type-ui` was replaced by a `0.0.1-security` holding package created 2026-08-03, which is npm's takedown marker. Both predate Sonatype's 08-10 identification of the campaign, so the technique was in use on at least eight packages by early August. If either name appears in a lockfile, treat it as the six packages above: [playbooks/if-you-installed-a-bad-npm-package.md](../playbooks/if-you-installed-a-bad-npm-package.md). Status stays `contained`; the Unit 42 article reports no new activity.
+
 ## Sources
 
 - [Sonatype — Six npm Packages Use Ethereum Transactions to Retrieve Malicious Payloads](https://www.sonatype.com/blog/six-npm-packages-use-ethereum-transactions-to-retrieve-malicious-payloads) — primary technical disclosure: package names/versions, mechanism, tracking IDs.
 - [The Hacker News — Trojanized npm Packages Employ NullReceiver Tactic to Decode C2 IP from Blockchain](https://thehackernews.com/2026/08/trojanized-npm-packages-decode-c2-ip.html) — independent corroboration.
 - [OpenSourceMalware — NullReceiver: hidden blockchain C2 in npm packages](https://opensourcemalware.com/blog/nullreceiver-dprk-c2-technique) — independent corroboration, DPRK/Contagious Interview attribution via wallet-address overlap.
+- **2026-10-11 update sources** — [Unit 42 — Evolution of Web3 in Cloud Supply Chain Attacks](https://unit42.paloaltonetworks.com/web3-cloud-supply-chain-attacks/) (2026-10-07, fetched 2026-10-11: the two package names under the NullReceiver technique, alongside its ChainDrop, PolinRider, axios, Mastra and arrayref summaries); `npm view bianira-ui` ("Unpublished on 2026-07-28") and `npm view fluid-type-ui version time.created dist-tags` (`0.0.1-security`, 2026-08-03), checked 2026-10-11.

@@ -15,6 +15,19 @@
 
 ## Archived entries
 
+
+## 2026-10-04
+
+```yaml
+queries: {deep: 16, medium: 24, shallow: 8}
+new: [2026-09-nextjs-september-2026-security-release-seven-advisories, 2026-10-gitlab-ai-gateway-duo-flow-prompt-template-sandbox-escape, 2026-10-loom-for-aws-agent-control-plane-unauthenticated-super-admin, 2026-07-trigger-dev-self-hosted-coordinator-default-secret-env-exfiltration]
+updated: [2026-09-mcp-python-sdk-oauth-issuer-validation-credential-redirect, 2026-08-agent-framework-mcp-cve-batch, 2026-09-ro1me-open-source-agent-framework-llm-output-execution-cve-wave, 2025-11-n8n-ni8mare-rce, 2026-09-divd-zammad-zero-days-agentic-ai-breach, 2026-09-openai-second-training-pause-us-government-sites-agent-probes, 2026-07-better-auth-oauth-oidc-mcp-vulnerabilities, 2026-04-litellm-sql-injection, 2026-09-gitspawn-git-config-agent-rce-cluster, 2026-06-langgraph-rce-chain]
+sources_added: [cveawg.mitre.org, asymmetricsecurity.com, oag.ca.gov, incibe.es]
+sources_weighted: [nextjs.org, docs.gitlab.com, aws.amazon.com, netlify.com, csirt.divd.nl, theregister.com, thehackernews.com, github.com, github.com/advisories, nvd.nist.gov, services.nvd.nist.gov, registry.npmjs.org, pypi.org, cisa.gov, vulncheck.com]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, theregister-curl-regex-miss-use-webfetch, openai-incident-page-403, gitlab-work-item-628842-not-public, docs.gitlab.com-releases-hub-navigation-only-use-feed, securityweek-microsoft-18-ai-cves-article-is-09-18, socket.dev-blog-index-no-dates, advisories.gitlab.com-404-sitewide-backlogged]
+```
+
+**Notes (≤300 words).** Full-coverage scheduled sweep (social/web/industry/open-source cited; agent-orchestration incl. aider/OpenHands/SWE-agent/OpenClaw/Codex/gemini-cli/Cline/goose/CrewAI; frontend incl. Next.js/React/Svelte/SvelteKit/Vite/Astro/Satori/sharp; backend/auth/DB incl. FastAPI/Streamlit/Prisma/Supabase auth+realtime+storage+postgrest/NextAuth/Clerk/better-auth/python-genai; plus the MCP TS/Python SDK, GitPython, vm2, Coder, Loom and trigger.dev tabs). Direct WebSearch/WebFetch + curl; no subagents. KEV (dateAdded ≥ 09-27): **Zammad ×2 (10-02)** → DIVD file update; rest out of scope. **Four new:** Next.js 09-30 release (vendor blog + seven GHSA pages + CNA JSON + Netlify; the postponed critical is a tracked open item — re-check next sweep), GitLab AI Gateway 9.9 (THN front page → patch-releases *feed*; the HTML hub shows nothing), Loom for AWS (AWS bulletins index → GHSA tab → CNA records), Trigger.dev (`agent` listing → four July GHSAs; dated by vendor). **Ten updates**, most from the tab walk: both MCP SDKs (TS twin CVE-2026-104850 + six), MCP batch (SiYuan ×3 + VulnCheck id, `mcp-server-fetch` fix "awaits acceptance", rmcp, PowerPoint MCP, A2UI 9.3), Ro1ME (+13 MITRE ids, MindSearch VulDB 9.3, Vibe-Trading as the fixed counter-example), n8n (+13 VulnCheck ids), better-auth (**9.1 critical**, severity bumped → README/ALERTS rows changed), LiteLLM, GitPython six (9.8), LangGraph JS, OpenAI (100+ org notifications via Register, Asymmetric 47 vs 55, CA AG subpoena). **Declined:** Nx `@nx/docker` CVE-2026-104859 (7.3, release-pipeline shell injection via config — deferred; revisit if an agent/CI angle lands), SageMaker Distribution CVE-2026-104019 (AWS 2026-125; ML notebook, out of audience), Authlib VU#762428 / CVE-2026-96760 (JWS empty-signatures bypass, no fix, vendor unreachable — generic auth lib; log for a FastAPI/OAuth batch), HN "VSCode/Cursor exploit used by scammers" (anonymous tasks.json anecdote, class tracked), Proofpoint TA419 Anthropic-impersonation phishing (policy experts), Mythos/HFS CVE-2026-61500, rugsnare MCP-server diffing (research), Microsoft Digital Defense Report (statistics), Cloudflare Protected Quick Tunnels (product), headroom-ai CSWSH CVE-2026-71416 (low, product tracked). Six sources decayed. Skill: LEARNINGS §37; queries.md now at the 4,000-token ceiling after trims.
 ## 2026-10-01
 
 ```yaml
