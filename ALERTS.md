@@ -2,11 +2,19 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-10-10. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-10-11. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-10-10 — **One researcher, 22 VulnCheck CVEs across agent sandboxes, MCP servers and LLM gateways; mini-swe-agent leaks host API keys into its sandbox; no fixes recorded**
+Take long-lived keys out of the runner environment for mini-swe-agent and other sandboxed agents, keep `requireLogin` on and audit `~/.hermes/config.yaml` if 9router manages Hermes, stop using `mcp-remote --device-code` against servers you do not control, and watch the CNA records rather than the empty vendor tabs for fixes.
+→ [advisories/2026-10-vulncheck-single-researcher-agent-mcp-gateway-cve-wave-mini-swe-agent-env-leak.md](advisories/2026-10-vulncheck-single-researcher-agent-mcp-gateway-cve-wave-mini-swe-agent-env-leak.md)
+
+### 2026-10-09 — **Fireworks AI incident: internal credentials misused to read evaluation-job environment variables, including customer API keys and third-party tokens (detected 2026-10-06)**
+If you got a notice, create new Fireworks keys, update every app and agent config that held the old ones, and rotate at the issuer every third-party credential your evaluation jobs could read; review access logs back to when each secret was set. Single source: the vendor bulletin.
+→ [advisories/2026-10-fireworks-ai-evaluation-job-environment-variable-credential-exposure.md](advisories/2026-10-fireworks-ai-evaluation-job-environment-variable-credential-exposure.md)
 
 ### 2026-10-08 — **GhostAction returns: two compromised maintainer accounts (the author of pyxel; the original author of uber/athenadriver) pushed a "Security Audit" GitHub Actions workflow to 345 repositories in two sixteen-minute bursts, and the new variant checks out full history and searches every branch and tag for AWS, Anthropic, OpenAI, OpenRouter, GitHub, GitLab, Slack and Firebase keys, including ones deleted years ago; 772 repositories were hit between 2026-08-31 and 09-30 and about 378 still carried a live workflow on 10-09** — the named Actions secrets go too, as in 2025; the only control observed stopping a run was "require approval for workflow runs."
 Hunt for `security-audit.yml` / `github_actions_security.yml` / `security-check.yml` on every branch and tag, the "Security Audit" / "Github Actions Security" job names and the `AKIA_CTX_START` marker; any completed run is confirmed exfiltration. Revoke the pushing account's credential first, then rotate every secret and every key ever committed, and freeze releases until clean.
