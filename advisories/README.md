@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-10-06 | [Reactime: 20 of 22 repository branches carried a folder-open VS Code task that ran a stealer, 2026-06-01 to 10-07; npm package clean](2026-10-reactime-repository-compromise-vscode-folder-open-task-polinrider.md) | high | contained |
 | 2026-10-12 | [Agno runs model-requested tool calls with no default confirmation gate and delegates with the leader's identity (CVE-2026-108819, CVE-2026-108820); fix PRs open, no release](2026-10-agno-tool-call-confirmation-gate-team-delegation-vuldb-cves.md) | high | unconfirmed |
 | 2026-10-08 | [Strapi: CISA adds the 2023 relational-filter hash leak to KEV (CVE-2023-22894); the same class returned in 2026 as unauthenticated admin takeover (CVE-2026-27886, fixed 5.37.0)](2026-10-strapi-kev-relational-filter-admin-hash-leak-2026-recurrence.md) | high | active |
 | 2026-10-10 | [One researcher, 22 VulnCheck CVEs across agent sandboxes, MCP servers and LLM gateways; mini-swe-agent leaks host API keys into its sandbox; no fixes recorded](2026-10-vulncheck-single-researcher-agent-mcp-gateway-cve-wave-mini-swe-agent-env-leak.md) | high | active |

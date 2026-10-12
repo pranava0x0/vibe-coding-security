@@ -8,6 +8,10 @@
 
 ## 🔴 ACTIVE — react now
 
+### 2026-10-06 — **Reactime: 20 of 22 repository branches carried a folder-open VS Code task that ran a stealer, 2026-06-01 to 10-07; npm package clean**
+A compromised contributor account rewrote branch tips with forged 2020-dated commits that replaced 387 files; opening a non-default branch in VS Code (or building it, on 15 branches) ran a stealer that resolves its server from an Ethereum transaction and rewrites VS Code and Discord to re-run. Maintainers reset the branches on 10-07; Deep Woods call the tradecraft PolinRider-consistent. If you cloned any branch but `master` or `dev` in the window and opened it, treat the machine as compromised, reinstall the editor and chat client, and rotate everything; turn `task.allowAutomaticTasks` off everywhere.
+→ [advisories/2026-10-reactime-repository-compromise-vscode-folder-open-task-polinrider.md](advisories/2026-10-reactime-repository-compromise-vscode-folder-open-task-polinrider.md)
+
 ### 2026-10-08 — **Strapi: CISA adds the 2023 relational-filter hash leak to KEV (CVE-2023-22894); the same class returned in 2026 as unauthenticated admin takeover (CVE-2026-27886, fixed 5.37.0)**
 The exploited bug filters a public collection on a related admin's password hash and reset token one character at a time; fixed in 4.8.0 on 2023-03-15, chained to RCE on 4.5.5 and earlier, KEV due date 2026-10-11. The vendor tab, never opened here before, carries the same class twice more (CVE-2024-56143 in 5.0.0 to 5.5.1; CVE-2026-27886 in 4.0.0 to 5.36.1, 9.2) plus an admin SQL injection (CVE-2026-22599, 9.3) and a reflected-origin CORS default (CVE-2025-53092). Upgrade to current 5.x, grep request logs for bracketed filters naming password or reset-token fields, and treat a match as admin takeover.
 → [advisories/2026-10-strapi-kev-relational-filter-admin-hash-leak-2026-recurrence.md](advisories/2026-10-strapi-kev-relational-filter-admin-hash-leak-2026-recurrence.md)
