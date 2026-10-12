@@ -29,8 +29,8 @@
   {
    "domain": "cisa.gov",
    "weight": 20.0,
-   "hits": 19,
-   "last_hit": "2026-10-07"
+   "hits": 20,
+   "last_hit": "2026-10-12"
   },
   {
    "domain": "csoonline.com",
@@ -47,14 +47,14 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 43,
-   "last_hit": "2026-10-11"
+   "hits": 44,
+   "last_hit": "2026-10-12"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 48,
-   "last_hit": "2026-10-11"
+   "hits": 49,
+   "last_hit": "2026-10-12"
   },
   {
    "domain": "helpnetsecurity.com",
@@ -83,8 +83,8 @@
   {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
-   "hits": 23,
-   "last_hit": "2026-10-11"
+   "hits": 24,
+   "last_hit": "2026-10-12"
   },
   {
    "domain": "safedep.io",
@@ -137,8 +137,8 @@
   {
    "domain": "vulncheck.com",
    "weight": 20.0,
-   "hits": 21,
-   "last_hit": "2026-10-11"
+   "hits": 22,
+   "last_hit": "2026-10-12"
   },
   {
    "domain": "wiz.io",

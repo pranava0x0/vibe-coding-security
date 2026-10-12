@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-10-11
+**Last refreshed:** 2026-10-12
 
 ## Quick start
 
@@ -55,10 +55,12 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-10-11)
+## Active threat families (as of 2026-10-12)
 
 The highest-risk ongoing threat families for vibe coders:
 
+- **A repository branch is an install path: clone it, open it in the editor, and a folder-open task runs the stealer (Reactime, 2026-06-01 → 10-07)** — a compromised contributor account rewrote 20 of 22 branches of the React devtool with forged 2020-dated commits; `.vscode/tasks.json` ran a font-named JavaScript file when the folder opened, a Babel config ran it on build, and the implant rewired VS Code and Discord to re-run. The npm package was never touched, so no audit tool fires. Set `task.allowAutomaticTasks` off, clone unknown branches into a disposable environment, and if you opened one in the window, rotate everything. See `advisories/2026-10-reactime-repository-compromise-vscode-folder-open-task-polinrider.md`.
+- **The headless CMS under the generated frontend has its own exploited CVE and its own recurrence (Strapi, KEV 2026-10-08)** — CISA lists the 2023 relational-filter leak (CVE-2023-22894, fixed 4.8.0) as exploited in the wild; the same oracle against admin reset tokens came back in 5.x twice (CVE-2024-56143; CVE-2026-27886, 9.2, fixed 5.37.0), beside an admin SQL injection and a reflect-any-origin CORS default. Upgrade to current 5.x and grep request logs for bracketed filters on password or reset-token fields. See `advisories/2026-10-strapi-kev-relational-filter-admin-hash-leak-2026-recurrence.md`.
 - **The sandbox contains the filesystem and hands the model your environment (mini-swe-agent and a 22-CVE single-researcher wave, 2026-10-10 → 10-11)** — VulnCheck assigned 22 CVEs in two days to one researcher's findings across agent sandboxes, MCP servers and LLM gateways: mini-swe-agent's Bubblewrap backend starts without `--clearenv`, so a prompt-injected task reads the host's API keys and sends them out (CVE-2026-108592); 9router writes an unvalidated URL into Hermes Agent's `config.yaml`, adding a shell hook (CVE-2026-108593); mcp-remote's device-code grant posts secrets over plain HTTP (CVE-2026-108716). No record names a fix. See `advisories/2026-10-vulncheck-single-researcher-agent-mcp-gateway-cve-wave-mini-swe-agent-env-leak.md`.
 - **The secrets you hand a hosted job runner are the vendor's to lose (Fireworks AI, 2026-10-06 → 10-10)** — an unauthorized party used internal Fireworks credentials to read evaluation-job environment variables, including customer API keys and third-party tokens, in a limited number of accounts; Fireworks revoked keys on 10-09 and 10-10 and its review of what the exposed credentials were used for was still open. Rotate at the issuer, not only at Fireworks. See `advisories/2026-10-fireworks-ai-evaluation-job-environment-variable-credential-exposure.md`.
 - **A stolen maintainer login is now a full-history sweep of your repository for AI provider keys (GhostAction returns, 2026-10-08)** — two compromised maintainer accounts pushed a "Security Audit" workflow to 345 repositories in two sixteen-minute bursts; the October variant checks out with full history and greps every branch and tag, deleted lines included, for AWS, Anthropic, OpenAI, OpenRouter, GitHub, GitLab, Slack and Firebase keys, then posts them to a raw IP over plain HTTP. 772 repositories were hit in the August to September wave and roughly 378 still carried a live workflow on 10-09. Require approval for workflow runs (the only control seen stopping one), protect `.github/workflows/` with branch protection, allowlist runner egress, and if the file was ever present, revoke the pushing account first and then rotate every key ever committed. → `advisories/2026-10-ghostaction-returns-github-actions-workflow-credential-theft-git-history-sweep.md`
