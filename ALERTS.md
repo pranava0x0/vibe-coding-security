@@ -2,14 +2,22 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-10-11. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-10-12. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
 
+### 2026-10-08 — **Strapi: CISA adds the 2023 relational-filter hash leak to KEV (CVE-2023-22894); the same class returned in 2026 as unauthenticated admin takeover (CVE-2026-27886, fixed 5.37.0)**
+The exploited bug filters a public collection on a related admin's password hash and reset token one character at a time; fixed in 4.8.0 on 2023-03-15, chained to RCE on 4.5.5 and earlier, KEV due date 2026-10-11. The vendor tab, never opened here before, carries the same class twice more (CVE-2024-56143 in 5.0.0 to 5.5.1; CVE-2026-27886 in 4.0.0 to 5.36.1, 9.2) plus an admin SQL injection (CVE-2026-22599, 9.3) and a reflected-origin CORS default (CVE-2025-53092). Upgrade to current 5.x, grep request logs for bracketed filters naming password or reset-token fields, and treat a match as admin takeover.
+→ [advisories/2026-10-strapi-kev-relational-filter-admin-hash-leak-2026-recurrence.md](advisories/2026-10-strapi-kev-relational-filter-admin-hash-leak-2026-recurrence.md)
+
+### 2026-10-12 — **Agno runs model-requested tool calls with no default confirmation gate and delegates with the leader's identity (CVE-2026-108819, CVE-2026-108820); fix PRs open, no release**
+One reporter's issues from 2026-09-08, no maintainer reply, two community pull requests unmerged, VulDB as CNA, PyPI latest 3.1.3 unchanged: `unconfirmed`, written because the class is the one this corpus keeps meeting. Set `requires_confirmation_tools` on every code, shell and file toolkit now, scope team members' identities, and sandbox agents that read untrusted content.
+→ [advisories/2026-10-agno-tool-call-confirmation-gate-team-delegation-vuldb-cves.md](advisories/2026-10-agno-tool-call-confirmation-gate-team-delegation-vuldb-cves.md)
+
 ### 2026-10-10 — **One researcher, 22 VulnCheck CVEs across agent sandboxes, MCP servers and LLM gateways; mini-swe-agent leaks host API keys into its sandbox; no fixes recorded**
-Take long-lived keys out of the runner environment for mini-swe-agent and other sandboxed agents, keep `requireLogin` on and audit `~/.hermes/config.yaml` if 9router manages Hermes, stop using `mcp-remote --device-code` against servers you do not control, and watch the CNA records rather than the empty vendor tabs for fixes.
+Take long-lived keys out of the runner environment for mini-swe-agent and other sandboxed agents, keep `requireLogin` on and audit `~/.hermes/config.yaml` if 9router manages Hermes, stop using `mcp-remote --device-code` against servers you do not control, and watch the CNA records rather than the empty vendor tabs for fixes. **Updated 2026-10-12:** sixteen more records from two reporters; the Unla MCP gateway issues OAuth tokens to anyone (CVE-2026-108865, 8.8), Katanemo Plano prints its provider keys on an unauthenticated admin port (CVE-2026-108863, 8.7), mcp-go fixed an OAuth resource-binding bug in 1.2.1 and still buffers unbounded POST bodies (CVE-2026-108859), hyper-mcp accepts any Sigstore signer (CVE-2026-108698, CVE-2026-108699), the pinclaw OpenClaw plugin takes unauthenticated prompt injection on port 18790 (CVE-2026-108757), and mac-shell-mcp's fix exists only as a commit, not an npm release (CVE-2026-108953).
 → [advisories/2026-10-vulncheck-single-researcher-agent-mcp-gateway-cve-wave-mini-swe-agent-env-leak.md](advisories/2026-10-vulncheck-single-researcher-agent-mcp-gateway-cve-wave-mini-swe-agent-env-leak.md)
 
 ### 2026-10-09 — **Fireworks AI incident: internal credentials misused to read evaluation-job environment variables, including customer API keys and third-party tokens (detected 2026-10-06)**

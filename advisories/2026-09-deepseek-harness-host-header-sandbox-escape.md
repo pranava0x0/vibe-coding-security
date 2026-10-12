@@ -2,7 +2,7 @@
 id: 2026-09-deepseek-harness-host-header-sandbox-escape
 title: "DeepSeek Harness — Host-header-only trust on the local API let a sandboxed agent disable its own sandbox (CVE-2026-82533, CVSS 9.4)"
 date_disclosed: 2026-09-08
-last_updated: 2026-09-10
+last_updated: 2026-10-12
 severity: critical
 status: patched
 ecosystems: [deepseek-harness, npm, ai-coding-agent, localhost-api]
@@ -52,6 +52,10 @@ The affected version range is stated by NVD/VulnCheck as **< 0.1.2-alpha.1**; OX
 - Treat `Host` as attacker-controlled input everywhere. This is the third Host-header trust failure this repo has tracked in a few months, after [Starlette BadHost](2026-05-starlette-badhost-host-header-bypass.md) and the Ray `User-Agent`-prefix check ([CVE-2025-62593](2026-08-ray-cve-2025-62593-kev.md)): a request header is a string the client chose, never evidence of who sent it.
 - "Loopback only" is a *reachability* statement, not an *authentication* one. Anything that runs on the machine — the sandboxed agent, a browser tab via DNS rebinding, another local process — can talk to 127.0.0.1.
 - Keep fast-moving agent harnesses on `latest`. This project went from launch to 216K stars to a CVSS 9.4 fix in under a month, and the first two reports of the bug sat on a discussion board with no advisory; release notes are not where you'll learn about the next one.
+
+## Update 2026-10-12: a second, unrelated record (CVE-2026-108789)
+
+A VulDB-assigned record published 2026-10-12 names `deepseek-harness` 0.1.1-rc.0 through 0.1.1-rc.2 for a different finding in the `dsh-workflow-worker-thread` component. The VulDB description is generic ("the manipulation leads to enforcement of behavioral workflow," CWE-841), its references are a GitHub discussion (#243) and a Feishu document that this sweep did not open, and the record says the vendor was contacted and did not respond. VulDB scores it 5.5 CVSS 3.1 and 5.1 CVSS 4.0. Nothing in the record touches the Host-header bypass above, the affected versions predate the 0.1.2 line that fixed it, and no vendor advisory exists for either. Recorded here so a grep for the id lands on the home file; the status of this advisory does not change. Source: [CVE-2026-108789](https://cveawg.mitre.org/api/cve/CVE-2026-108789) (CNA: VulDB, fetched 2026-10-12).
 
 ## Sources
 
