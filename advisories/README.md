@@ -4,6 +4,9 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-10-12 | [GitLab 19.4.2: unauthenticated code execution from a crafted CI/CD regular expression (CVE-2026-97229, CVSS 10.0); Duo Agent Platform prompt-injection fix (CVE-2026-96893)](2026-10-gitlab-19-4-2-unauthenticated-cicd-regex-rce-cvss-10-duo-agent-prompt-injection.md) | critical | patched |
+| 2026-10-12 | [Continue CLI runs chained commands past its Bash allow rules and denylist (CVE-2026-109560, CVE-2026-76072), no fix; VulnCheck batch adds sandboxed.sh, deepsec, Network-AI](2026-10-continue-cli-bash-rule-chaining-bypass-vulncheck-agent-sandbox-batch.md) | high | active |
+| 2026-10-13 | [Claude Desktop on Windows ran a git.exe found in the opened project directory (CVE-2026-88066, CVSS 4.0 7.5); fixed 1.8089.0, auto-updated](2026-10-claude-desktop-windows-git-exe-search-path-rce-cve-2026-88066.md) | high | patched |
 | 2026-10-06 | [Reactime: 20 of 22 repository branches carried a folder-open VS Code task that ran a stealer, 2026-06-01 to 10-07; npm package clean](2026-10-reactime-repository-compromise-vscode-folder-open-task-polinrider.md) | high | contained |
 | 2026-10-12 | [Agno runs model-requested tool calls with no default confirmation gate and delegates with the leader's identity (CVE-2026-108819, CVE-2026-108820); fix PRs open, no release](2026-10-agno-tool-call-confirmation-gate-team-delegation-vuldb-cves.md) | high | unconfirmed |
 | 2026-10-08 | [Strapi: CISA adds the 2023 relational-filter hash leak to KEV (CVE-2023-22894); the same class returned in 2026 as unauthenticated admin takeover (CVE-2026-27886, fixed 5.37.0)](2026-10-strapi-kev-relational-filter-admin-hash-leak-2026-recurrence.md) | high | active |

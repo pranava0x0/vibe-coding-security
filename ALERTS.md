@@ -2,11 +2,23 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-10-12. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-10-13. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-10-12 — **GitLab 19.4.2: unauthenticated code execution from a crafted CI/CD regular expression (CVE-2026-97229, CVSS 10.0); Duo Agent Platform prompt-injection fix (CVE-2026-96893)**
+The third regex code-execution bug in the CI/CD compiler from the same reporter in three weeks, and the first with no login required; 19.2 before 19.2.8, 19.3 before 19.3.5, 19.4 before 19.4.2. The same release fixes raw-file cache poisoning that runs crafted content in targeted pipelines and exposes protected variables (CVE-2026-14814, 8.2), Developer-role pipelines on protected branches (CVE-2026-16301, 8.5), an 8.7 stored XSS in syntax highlighting, and injected content reaching Duo agent instructions as another user (CVE-2026-96893, 7.3). GitLab.com and Dedicated are done; self-managed upgrades today and sits behind an authenticating proxy until then.
+→ [advisories/2026-10-gitlab-19-4-2-unauthenticated-cicd-regex-rce-cvss-10-duo-agent-prompt-injection.md](advisories/2026-10-gitlab-19-4-2-unauthenticated-cicd-regex-rce-cvss-10-duo-agent-prompt-injection.md)
+
+### 2026-10-12 — **Continue CLI runs chained commands past its Bash allow rules and denylist (CVE-2026-109560, CVE-2026-76072), no fix; VulnCheck batch adds sandboxed.sh, deepsec, Network-AI**
+Every published `@continuedev/cli` (latest 1.5.47, 2026-06-18) matches a `Bash(prefix*)` rule against the whole command line and, unattended, relies on a denylist that misses most of the filesystem; both issues are open with no maintainer reply and the vendor tab is empty. Stop running it headless on content you do not control. sandboxed.sh's fix is an environment flag that is off by default (CVE-2026-109569, 9.3); deepsec below 1.1.17 wrote files on the orchestrator host from a sandbox tarball (CVE-2026-109375); Network-AI's Claude Code PreToolUse deny gate was bypassed through non-first fields until 5.15.2 (CVE-2026-109331).
+→ [advisories/2026-10-continue-cli-bash-rule-chaining-bypass-vulncheck-agent-sandbox-batch.md](advisories/2026-10-continue-cli-bash-rule-chaining-bypass-vulncheck-agent-sandbox-batch.md)
+
+### 2026-10-13 — **Claude Desktop on Windows ran a git.exe found in the opened project directory (CVE-2026-88066, CVSS 4.0 7.5); fixed 1.8089.0, auto-updated**
+The same bug Cursor had in July, now in Claude Desktop: `git.exe` launched by bare name resolved from the working directory first, so a binary of that name in a cloned or shared repository ran on project open. Auto-update delivered the fix; a pinned or managed install needs 1.8089.0. A `git.exe` outside the Git for Windows tree in a folder you opened is the artefact, and the machine ran attacker code if you find one. CVE Services had no record on the sweep date.
+→ [advisories/2026-10-claude-desktop-windows-git-exe-search-path-rce-cve-2026-88066.md](advisories/2026-10-claude-desktop-windows-git-exe-search-path-rce-cve-2026-88066.md)
 
 ### 2026-10-06 — **Reactime: 20 of 22 repository branches carried a folder-open VS Code task that ran a stealer, 2026-06-01 to 10-07; npm package clean**
 A compromised contributor account rewrote branch tips with forged 2020-dated commits that replaced 387 files; opening a non-default branch in VS Code (or building it, on 15 branches) ran a stealer that resolves its server from an Ethereum transaction and rewrites VS Code and Discord to re-run. Maintainers reset the branches on 10-07; Deep Woods call the tradecraft PolinRider-consistent. If you cloned any branch but `master` or `dev` in the window and opened it, treat the machine as compromised, reinstall the editor and chat client, and rotate everything; turn `task.allowAutomaticTasks` off everywhere.
