@@ -2,7 +2,7 @@
 id: 2026-10-barracuda-dual-target-phishing-prompt-injection-email-ai-assistants
 title: "Phishing mail with two payloads: a password-protected attachment for the person and hidden prompt-injection text (HTML comments, CSS-hidden text, Base64 blocks, zero-width characters) for the AI assistant that summarises the inbox (Barracuda, 2026-10-06; campaign scale not disclosed)"
 date_disclosed: 2026-10-06
-last_updated: 2026-10-09
+last_updated: 2026-10-13
 severity: medium
 status: active
 ecosystems: [email, ai-assistants, prompt-injection]
@@ -34,3 +34,4 @@ Anything the model reads from outside the organisation is untrusted input, whate
 - [Barracuda — Threat Spotlight: Email attacks target both humans and AI in the same message](https://blog.barracuda.com/2026/10/07/email-attacks-target-both-humans-ai-assistants) (fetched 2026-10-09; page dated "Updated: Oct. 6, 2026"; the dual-target sample, the four concealment techniques, the invoice, résumé and support-bot examples, the code-assistant extension)
 - [Infosecurity Magazine — Attackers Hide AI Prompt Injections Inside Phishing Emails](https://infosecurity-magazine.com/news/attackers-hide-ai-prompt) (fetched 2026-10-09; confirms the campaign description and that Barracuda "did not say how widespread the campaign was")
 - [The Hacker News — ThreatsDay bulletin, week of 2026-10-09](https://thehackernews.com/2026/10/threatsday-ransomware-affiliate.html) (the "Phishing Campaign Targets Both Humans and AI Agents" item quoting Barracuda)
+- [Malwarebytes — Phishing emails are now baiting your AI assistant](https://www.malwarebytes.com/blog/ai/2026/10/phishing-emails-are-baiting-your-ai-assistant) (Pieter Arntz, 2026-10-12; fetched 2026-10-13) — restates the Barracuda sample (the hidden block that tells a summarising assistant to add a fake priority action to change a vendor's payment details), names no assistant or campaign count, and adds the consumer-facing advice: verify payment changes out of band, treat a summary as not a verification, and require human approval for payment actions. Added as pickup, not as a second research source.
