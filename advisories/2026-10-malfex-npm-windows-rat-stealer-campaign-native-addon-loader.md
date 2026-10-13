@@ -46,7 +46,7 @@ Checkmarx's point is not the download count. `function-flag` was malicious from 
 
 ## Am I affected?
 
-Only Windows machines run any of it, but a lockfile pin survives the removal.
+Only Windows machines run any of it, but a lockfile pin survives the removal. A hit below means the package was present; whether its code ran depends on the package (see the first step under "If you are affected").
 
 ```bash
 # Direct or transitive presence in a project
@@ -65,7 +65,7 @@ Get-ScheduledTask | Where-Object { $_.Date -lt (Get-Date).AddYears(-1) -and $_.T
 
 ## If you are affected
 
-1. **Treat the Windows host as compromised**, even if the package is gone. Isolate it, preserve logs, and rebuild rather than clean: [playbooks/if-you-installed-a-bad-npm-package.md](../playbooks/if-you-installed-a-bad-npm-package.md), [playbooks/if-you-ran-malicious-postinstall.md](../playbooks/if-you-ran-malicious-postinstall.md).
+1. **Decide which package you had, because the trigger differs.** For the install-hook packages (`tlxbnhd`, `tldriver`, `mxdriver`, `img-to-native`, `native-runner`, `function-flag`, `function-color`, `cdn-img-fetch`), an `npm install` on a Windows host with lifecycle scripts enabled ran the loader, so treat the host as compromised even if the package is gone. For `imgdecode`, installation alone did nothing: the addon runs only when the module is loaded (`require`/`import`) and stdout is an interactive Windows console. A lockfile or cache hit on `imgdecode` with no code that loads it, or loads it only under redirected output in CI, is exposure to remove, not a compromise. Where it was loaded in a terminal session, or you cannot tell, treat the host as compromised. Then isolate it, preserve logs, and rebuild rather than clean: [playbooks/if-you-installed-a-bad-npm-package.md](../playbooks/if-you-installed-a-bad-npm-package.md), [playbooks/if-you-ran-malicious-postinstall.md](../playbooks/if-you-ran-malicious-postinstall.md).
 2. **Rotate from a clean machine**: Discord tokens and passwords, every browser-saved login, Telegram sessions (end them all), wallets (move funds to new keys), and because Overlord keylogs, everything typed on the host since the install, including npm, GitHub, cloud and AI-provider keys: [playbooks/rotating-cloud-credentials.md](../playbooks/rotating-cloud-credentials.md), [playbooks/if-your-npm-token-leaked.md](../playbooks/if-your-npm-token-leaked.md).
 3. **Purge the names** from private registries, proxies and caches, and block all nine at the proxy, pairs included; blocking one half of `function-color` and `function-flag` leaves the other.
 

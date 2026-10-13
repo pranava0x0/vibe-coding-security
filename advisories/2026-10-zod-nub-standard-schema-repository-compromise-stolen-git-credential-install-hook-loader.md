@@ -66,11 +66,21 @@ grep -n '"preinstall"' /path/to/zod/packages/zod/package.json /path/to/zod/packa
 grep -rln '"preinstall"' node_modules/zod/package.json node_modules/@zod/mini/package.json 2>/dev/null
 ```
 
-A `preinstall` entry in zod's manifests is not something any release has ever had. If you find one, the install ran the loader.
+A `preinstall` entry in zod's manifests is not something any release has ever had. Finding one proves the checkout is a pre-rewrite revision, not that the loader ran: it ran only if an install was executed from that tree with lifecycle scripts enabled (the default in npm 11; not with `--ignore-scripts`, and not for a clone that was only read or bisected without installing). Check the install's own record before escalating:
+
+```bash
+# Did an install from this tree run lifecycle scripts? npm logs each run; a preinstall line for zod is the evidence
+grep -l 'preinstall' ~/.npm/_logs/*.log 2>/dev/null | head
+grep -h 'zod.*preinstall\|preinstall.*zod' ~/.npm/_logs/*.log 2>/dev/null | head -3
+# pnpm and yarn: an ignore-scripts setting means the hook could not have run
+pnpm config get ignore-scripts 2>/dev/null; npm config get ignore-scripts 2>/dev/null
+```
+
+A pre-rewrite revision with no install from it is cleanup (rebase or re-clone); an install with scripts enabled is the case the next section is for.
 
 ## If you are affected
 
-1. **If a clone from the window was installed or bisected on a machine:** treat the machine as compromised. Rotate every credential on it, starting with git push credentials and SSH keys, then npm and GitHub tokens, then cloud and AI-provider keys: [playbooks/if-you-ran-malicious-postinstall.md](../playbooks/if-you-ran-malicious-postinstall.md), [playbooks/if-your-npm-token-leaked.md](../playbooks/if-your-npm-token-leaked.md), [playbooks/rotating-cloud-credentials.md](../playbooks/rotating-cloud-credentials.md).
+1. **If an install with lifecycle scripts enabled ran from a pre-rewrite clone on a machine:** treat the machine as compromised. Rotate every credential on it, starting with git push credentials and SSH keys, then npm and GitHub tokens, then cloud and AI-provider keys: [playbooks/if-you-ran-malicious-postinstall.md](../playbooks/if-you-ran-malicious-postinstall.md), [playbooks/if-your-npm-token-leaked.md](../playbooks/if-your-npm-token-leaked.md), [playbooks/rotating-cloud-credentials.md](../playbooks/rotating-cloud-credentials.md).
 2. **If you maintain a fork of zod:** rebase onto the rewritten `main` and delete the stale branch; the six commits should not survive anywhere you publish from.
 3. **If you own packages whose release fires on a tag push:** the nub path is the one that reached the registry. Move to a manually triggered, environment-scoped publish: [prevention/ci-cd-hardening.md](../prevention/ci-cd-hardening.md).
 
