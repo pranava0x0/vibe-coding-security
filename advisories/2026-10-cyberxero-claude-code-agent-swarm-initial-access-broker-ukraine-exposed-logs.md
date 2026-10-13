@@ -50,9 +50,9 @@ Two different readers.
 # WordPress: unexpected administrators and plugins
 wp user list --role=administrator --fields=user_login,user_registered 2>/dev/null
 wp plugin list --fields=name,status,version,update 2>/dev/null
-# web shells: recently changed PHP under each installation's wp-content, anchored on that installation's own wp-config.php
+# web shells: PHP changed since the campaign's first infrastructure (July 2026) under each installation's wp-content
 find /var/www -name wp-config.php 2>/dev/null | while read -r cfg; do
-  find "$(dirname "$cfg")/wp-content" -name '*.php' -mtime -90 -newer "$cfg" 2>/dev/null
+  find "$(dirname "$cfg")/wp-content" -name '*.php' -newermt 2026-07-01 2>/dev/null
 done | head
 # Redis: is it reachable, and whose keys are in authorized_keys on the host?
 redis-cli -h 127.0.0.1 CONFIG GET protected-mode 2>/dev/null; ss -ltnp | grep ':6379'
