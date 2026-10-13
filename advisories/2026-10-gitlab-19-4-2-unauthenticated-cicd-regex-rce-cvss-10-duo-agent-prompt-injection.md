@@ -41,7 +41,7 @@ CVE-2026-96893 is the first GitLab CVE whose vendor title says "LLM Prompting." 
 
 ### The CI/CD secrets path
 
-CVE-2026-14814 lets a user poison cached responses for raw repository files so that targeted users' CI/CD pipelines execute crafted content and may expose protected environment variables. It affects every version before 19.2.8. Combined with CVE-2026-16301, where a Developer can start pipelines on protected branches through the downstream pipeline creation service (18.7 and later), the release closes two routes from "has a project role" to "runs a job with protected variables."
+CVE-2026-14814 lets a user poison cached responses for raw repository files so that targeted users' CI/CD pipelines execute crafted content and may expose protected environment variables. It affects every version before 19.2.8, 19.3 before 19.3.5 and 19.4 before 19.4.2. Combined with CVE-2026-16301, where a Developer can start pipelines on protected branches through the downstream pipeline creation service (18.7 and later), the release closes two routes from "has a project role" to "runs a job with protected variables."
 
 ### What the vendor says about urgency
 
