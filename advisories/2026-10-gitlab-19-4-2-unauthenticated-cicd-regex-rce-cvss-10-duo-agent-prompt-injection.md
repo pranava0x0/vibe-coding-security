@@ -1,0 +1,80 @@
+---
+id: 2026-10-gitlab-19-4-2-unauthenticated-cicd-regex-rce-cvss-10-duo-agent-prompt-injection
+title: "GitLab 19.4.2: unauthenticated code execution from a crafted CI/CD regular expression (CVE-2026-97229, CVSS 10.0); Duo Agent Platform prompt-injection fix (CVE-2026-96893)"
+date_disclosed: 2026-10-12
+last_updated: 2026-10-13
+severity: critical
+status: patched
+ecosystems: [gitlab, self-hosted, ci-cd, source-hosting, ai-agents]
+tools_affected: ["GitLab CE/EE 19.2.0 through 19.2.7, 19.3.0 through 19.3.4, 19.4.0 and 19.4.1 (CVE-2026-97229)", "GitLab CE/EE 19.1 before 19.2.8, 19.3 before 19.3.5, 19.4 before 19.4.2 (CVE-2026-92883 XSS in syntax highlighting)", "GitLab CE/EE 18.7 before 19.2.8, 19.3 before 19.3.5, 19.4 before 19.4.2 (CVE-2026-16301 protected-branch pipelines)", "GitLab CE/EE all versions before 19.2.8, 19.3 before 19.3.5, 19.4 before 19.4.2 (CVE-2026-14814 raw-file cache poisoning)", "GitLab EE 19.1 before 19.2.8, 19.3 before 19.3.5, 19.4 before 19.4.2 Duo Agent Platform (CVE-2026-96893, CVE-2026-105458)", "GitLab EE 18.1 before 19.2.8, 19.3 before 19.3.5, 19.4 before 19.4.2 scheduled pipeline execution policies (CVE-2026-81839)"]
+tags: [cve, rce, unauthenticated, regex, ci-cd, gitlab, duo, ai-agent, prompt-injection, cache-poisoning, secrets-exposure, authorization-bypass, patch-release]
+---
+
+## TL;DR
+GitLab's critical patch release of 2026-10-12 (19.4.2, 19.3.5, 19.2.8) fixes 24 CVEs. The one that matters most is **CVE-2026-97229, CVSS 10.0**: an **unauthenticated** user could execute arbitrary code on the GitLab server through a specially crafted regular expression in a CI/CD configuration, an integer overflow in the CI/CD regular expression compiler. It affects 19.2 before 19.2.8, 19.3 before 19.3.5 and 19.4 before 19.4.2, and it is the third regular-expression code-execution bug from the same reporter in three weeks, after the two authenticated 9.9s fixed in [19.4.1 on 2026-09-23](2026-09-gitlab-19-4-1-regex-rce-duo-mcp-batch.md). The same release fixes a Duo Agent Platform bug in which an authenticated user could inject content into AI agent instructions and cause command execution attributed to other users (CVE-2026-96893, 7.3), a raw-file cache poisoning that makes targeted pipelines run crafted content and expose protected variables (CVE-2026-14814, 8.2), a Developer-role path to running pipelines on protected branches (CVE-2026-16301, 8.5), and an 8.7 stored XSS in syntax highlighting (CVE-2026-92883). GitLab.com is patched and GitLab Dedicated needs no action. Self-managed instances should upgrade now. No exploitation is reported in the release post or the CNA records as of 2026-10-13.
+
+## What happened
+
+GitLab published the patch release on 2026-10-12 and the CVE records on 2026-10-13 at 01:05 UTC. The release post's table, with the vendor's own CVSS 3.1 scores and vectors:
+
+| CVE | Title (vendor) | CVSS 3.1 | Vector | Affected | Reporter |
+|---|---|---|---|---|---|
+| CVE-2026-97229 | Integer Overflow in CI/CD Regular Expression Compiler (CE/EE) | 10.0 | `AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:H/A:H` | 19.2 before 19.2.8; 19.3 before 19.3.5; 19.4 before 19.4.2 | joaxcar (HackerOne) |
+| CVE-2026-92883 | XSS in Syntax Highlighting (CE/EE) | 8.7 | `AV:N/AC:L/PR:L/UI:R/S:C/C:H/I:H/A:N` | 19.1 before 19.2.8; 19.3 before 19.3.5; 19.4 before 19.4.2 | a0xnirudh (HackerOne) |
+| CVE-2026-16301 | Improper Authorization in Downstream Pipeline Creation (CE/EE) | 8.5 | `AV:N/AC:L/PR:L/UI:N/S:C/C:L/I:H/A:N` | 18.7 before 19.2.8; 19.3 before 19.3.5; 19.4 before 19.4.2 | sim4n6 (HackerOne) |
+| CVE-2026-14814 | Permissive Regular Expression in Repository File Access (CE/EE) | 8.2 | `AV:N/AC:H/PR:L/UI:N/S:C/C:H/I:H/A:N` | all before 19.2.8; 19.3 before 19.3.5; 19.4 before 19.4.2 | ahacker1 (HackerOne) |
+| CVE-2026-81839 | Incorrect Authorization in Scheduled Pipeline Execution Policy (EE) | 7.7 | `AV:N/AC:H/PR:L/UI:R/S:C/C:H/I:H/A:N` | 18.1 before 19.2.8; 19.3 before 19.3.5; 19.4 before 19.4.2 | no_01 (HackerOne) |
+| CVE-2026-96893 | Improper Neutralization for LLM Prompting in GitLab Duo Agent Platform (EE) | 7.3 | `AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:N` | 19.1 before 19.2.8; 19.3 before 19.3.5; 19.4 before 19.4.2 | GitLab internal (Mert Coskuner) |
+| CVE-2026-105458 | Governance Control Bypass in Duo Agent Platform (EE) | 4.3 | `AV:N/AC:L/PR:L/UI:N/S:U/C:N/I:L/A:N` | 19.1 before 19.2.8; 19.3 before 19.3.5; 19.4 before 19.4.2 | GitLab internal (Rahul Barnwal) |
+
+The other seventeen are mediums and lows: a GitLab Pages information exposure (CVE-2026-101168, 6.2), an open redirect in the Kubernetes proxy (CVE-2026-7767, 5.8), three GraphQL authorization gaps (CVE-2026-16275, CVE-2026-84284, CVE-2026-85529, 5.3 each), merge-request page cache poisoning (CVE-2026-100755, 4.6), five more authorization checks (CVE-2026-14552, CVE-2026-6567, CVE-2026-104661, CVE-2026-14210, CVE-2026-5954, CVE-2026-92528, CVE-2026-78335), an SSRF in repository import (CVE-2026-100104, 3.5), and two lows in project import, the package registry and project CI/CD settings (CVE-2026-82632, CVE-2026-103549, CVE-2026-9268).
+
+### The 10.0
+
+The CNA record for CVE-2026-97229 says the bug "could have allowed an unauthenticated user to execute arbitrary code on the GitLab server via a specially crafted regular expression in a CI/CD configuration, due to insufficient regular expression validation." The vendor's title names the component: the CI/CD regular expression compiler, and the class: integer overflow. The record references two HackerOne reports (4055749 and 4058589) and GitLab work item 630686.
+
+Three weeks earlier the same reporter had two authenticated 9.9s fixed in 19.4.1: CVE-2026-89078, a double free in the regular expression parser, and CVE-2026-93577, an integer overflow in the regular expression compiler. The affected range of the new bug starts where the earlier fixes shipped (19.2.7, 19.3.3, 19.4.1 were the fixed versions in September; 19.2 before 19.2.8 is affected now), so an instance that upgraded for September's release is affected by this one. The September bugs needed a user who could push a `.gitlab-ci.yml`; this one has `PR:N`. The release post does not say which unauthenticated path reaches the compiler, and this advisory does not guess.
+
+### The AI-feature fixes
+
+CVE-2026-96893 is the first GitLab CVE whose vendor title says "LLM Prompting." The record: an authenticated user could "inject specially crafted content into AI agent instructions, potentially causing unintended command execution attributed to other users, due to improper neutralization of special elements in AI conversation context construction." The vector has `UI:R`, so a second user has to act on the poisoned context. CVE-2026-105458 is a governance-control bypass in the same Duo Agent Platform, the third such bypass after CVE-2026-92529 in September. Both are EE-only and need 19.1 or later. The separately versioned AI Gateway's 9.9 sandbox escape (CVE-2026-90970) was fixed on 2026-10-02 and has [its own file](2026-10-gitlab-ai-gateway-duo-flow-prompt-template-sandbox-escape.md).
+
+### The CI/CD secrets path
+
+CVE-2026-14814 lets a user poison cached responses for raw repository files so that targeted users' CI/CD pipelines execute crafted content and may expose protected environment variables. It affects every version before 19.2.8, 19.3 before 19.3.5 and 19.4 before 19.4.2. Combined with CVE-2026-16301, where a Developer can start pipelines on protected branches through the downstream pipeline creation service (18.7 and later), the release closes two routes from "has a project role" to "runs a job with protected variables."
+
+### What the vendor says about urgency
+
+The post says GitLab "strongly recommend[s]" that affected self-managed installations upgrade "as soon as possible," that GitLab.com already runs the patched version, and that GitLab Dedicated customers need no action. The patches include database migrations, so a single-node instance has downtime while they run; multi-node instances can use the zero-downtime procedure. 19.3.5 also fixes a 19.3.4 bug on merge-request pages with the Ona integration enabled. Security issues are made public on the issue tracker 90 days after release. The Hacker News covered the release on 2026-10-13 and noted that last month's unauthenticated file read, CVE-2026-85706, saw in-the-wild probes within hours of disclosure, which is the reason to treat a 10.0 with `PR:N` as a same-day upgrade.
+
+## Am I affected?
+
+```bash
+# Self-managed: the version is in the admin area, the API, or the package
+curl -s -H "PRIVATE-TOKEN: $GITLAB_TOKEN" "$GITLAB_URL/api/v4/version"
+# Omnibus
+sudo gitlab-rake gitlab:env:info 2>/dev/null | grep -i '^GitLab information' -A2
+# Anything 19.2.x below 19.2.8, 19.3.x below 19.3.5, or 19.4.x below 19.4.2 has CVE-2026-97229.
+# Anything below 19.2.8 has CVE-2026-14814 regardless of minor line.
+```
+
+GitLab.com users are not affected. Dedicated tenants are patched by the vendor.
+
+## If you are affected
+
+1. **Upgrade to 19.4.2, 19.3.5 or 19.2.8 today.** Plan the migration downtime for single-node instances rather than postponing.
+2. **Until the upgrade lands, put the instance behind an authenticating proxy or VPN.** The 10.0 needs no account; cutting unauthenticated reach removes it. Protected-variable exposure (CVE-2026-14814) and the protected-branch pipeline path (CVE-2026-16301) still need a role.
+3. **After upgrading, review CI/CD variables and pipeline history.** Rotate protected and masked variables on projects whose raw files are fetched by pipelines, and look for pipelines on protected branches started by Developer-role users since 2026-08-01: [playbooks/rotating-cloud-credentials.md](../playbooks/rotating-cloud-credentials.md), [playbooks/if-your-webapp-was-compromised.md](../playbooks/if-your-webapp-was-compromised.md).
+4. **Duo Agent Platform users:** read the agent's recent conversation contexts for instructions that no team member wrote, and keep the governance settings under review until 19.4.2 is on.
+
+## Prevention
+
+- **A regular-expression engine that takes attacker input is a parser, and parsers need fuzzing budgets.** Three code-execution bugs in one compiler in three weeks from one reporter means the component is still being tested; expect more releases on this line: [prevention/ci-cd-hardening.md](../prevention/ci-cd-hardening.md).
+- **Keep self-managed source hosting off the public internet.** Each of the last four GitLab critical releases carried something that needed no login or only a Developer role.
+- **AI agent instructions assembled from repository and conversation content are an injection surface inside the forge itself**, not only in the IDE: [prevention/mcp-hygiene.md](../prevention/mcp-hygiene.md), [prevention/agent-sandboxing.md](../prevention/agent-sandboxing.md).
+
+## Sources
+- [GitLab — Critical Patch Release: 19.4.2, 19.3.5, 19.2.8](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-4-2-released/) — fetched 2026-10-13: the full fix table with titles, CVSS 3.1 scores and vectors, affected ranges and reporters, the GitLab.com and Dedicated statements, the migration and downtime notes, the 19.3.4 Ona regression, the 90-day disclosure policy. Dated 2026-10-12 on the [patch-releases Atom feed](https://docs.gitlab.com/releases/patch-releases.xml) (fetched 2026-10-13).
+- CVE Services (CNA: GitLab), fetched 2026-10-13, all published 2026-10-13 01:05 to 01:08 UTC: [CVE-2026-97229](https://cveawg.mitre.org/api/cve/CVE-2026-97229) (10.0, the unauthenticated wording, HackerOne reports 4055749 and 4058589, work item 630686), [CVE-2026-92883](https://cveawg.mitre.org/api/cve/CVE-2026-92883) (8.7, "improper sanitization of HTML attributes in syntax-highlighted output"), [CVE-2026-16301](https://cveawg.mitre.org/api/cve/CVE-2026-16301) (8.5, Developer role, downstream pipeline creation service), [CVE-2026-14814](https://cveawg.mitre.org/api/cve/CVE-2026-14814) (8.2, poisoned cached raw-file responses, protected environment variables), [CVE-2026-96893](https://cveawg.mitre.org/api/cve/CVE-2026-96893) (7.3, "inject specially crafted content into AI agent instructions").
+- [The Hacker News — GitLab Patches CVSS 10.0 Flaw That Could Let Unauthenticated Users Run Server Code](https://thehackernews.com/2026/10/gitlab-patches-cvss-100-flaw-that-could.html) — fetched 2026-10-13: the four headline CVEs, the CVE-2026-90970 and CVE-2026-85706 context, the "in-the-wild probes within hours" line on last month's file read.
+- Related in this corpus: [GitLab 19.4.1 regex RCE and Duo/MCP batch](2026-09-gitlab-19-4-1-regex-rce-duo-mcp-batch.md) (CVE-2026-89078, CVE-2026-93577, same reporter, same compiler), [GitLab CVE-2026-85706 unauthenticated file read, KEV](2026-09-gitlab-cve-2026-85706-unauth-file-read-kev.md), [GitLab AI Gateway prompt-template sandbox escape](2026-10-gitlab-ai-gateway-duo-flow-prompt-template-sandbox-escape.md) (CVE-2026-90970).

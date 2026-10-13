@@ -2,11 +2,31 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-10-12. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-10-13. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-10-05 — **MALFEX: one operator's npm packages since 2023 (40,767 downloads) deliver a Windows RAT and stealer; loader moved into a native addon, imgdecode 1.0.3 live 2026-10-13**
+Eight malicious packages over three years (Overlord RAT loaders, the movinlike Discord, browser, Telegram and wallet stealer, and the function-flag downloader that had 37,419 downloads and no advisory for fourteen months); npm replaced function-flag, function-color and cdn-img-fetch with security stubs on 2026-10-07 and 10-08, and the operator answered with `imgdecode`, a nine-line package whose prebuilt N-API addon runs at module load on an interactive Windows console, so `--ignore-scripts` and CI detonation see nothing. Grep lockfiles for the nine names. A Windows host that ran `npm install` on one of the eight install-hook packages with scripts enabled is compromised; for `imgdecode`, only a host that loaded the module in an interactive Windows console is, and a lockfile, cache or unused install is exposure to remove. Rotate from a clean machine.
+→ [advisories/2026-10-malfex-npm-windows-rat-stealer-campaign-native-addon-loader.md](advisories/2026-10-malfex-npm-windows-rat-stealer-campaign-native-addon-loader.md)
+
+### 2026-10-06 — **CyberXero: an initial access broker ran 51 Claude Code agent definitions and PentAGI against WordPress sites and Ukrainian utilities; 628,000 records (SOCRadar, 2026-10-06)**
+Found through the actor's own exposed working directory (90,000 files of agent session logs, token-bearing scripts and victim exports); 32 web shells in 61 seconds from one automated run, four Ukrainian utilities exfiltrated, refusals held on several requests and were evaded by session resets with an "authorized test" framing. Not a product flaw. Operators: keep agent session logs and memory off reachable paths and rotate anything in them; web operators: audit WordPress, Magento, PrestaShop and Redis for rogue admins, plugins and keys. Paired with SOCRadar's Operation Master report (2026-09-24).
+→ [advisories/2026-10-cyberxero-claude-code-agent-swarm-initial-access-broker-ukraine-exposed-logs.md](advisories/2026-10-cyberxero-claude-code-agent-swarm-initial-access-broker-ukraine-exposed-logs.md)
+
+### 2026-10-12 — **GitLab 19.4.2: unauthenticated code execution from a crafted CI/CD regular expression (CVE-2026-97229, CVSS 10.0); Duo Agent Platform prompt-injection fix (CVE-2026-96893)**
+The third regex code-execution bug in the CI/CD compiler from the same reporter in three weeks, and the first with no login required; 19.2 before 19.2.8, 19.3 before 19.3.5, 19.4 before 19.4.2. The same release fixes raw-file cache poisoning that runs crafted content in targeted pipelines and exposes protected variables (CVE-2026-14814, 8.2), Developer-role pipelines on protected branches (CVE-2026-16301, 8.5), an 8.7 stored XSS in syntax highlighting, and injected content reaching Duo agent instructions as another user (CVE-2026-96893, 7.3). GitLab.com and Dedicated are done; self-managed upgrades today and sits behind an authenticating proxy until then.
+→ [advisories/2026-10-gitlab-19-4-2-unauthenticated-cicd-regex-rce-cvss-10-duo-agent-prompt-injection.md](advisories/2026-10-gitlab-19-4-2-unauthenticated-cicd-regex-rce-cvss-10-duo-agent-prompt-injection.md)
+
+### 2026-10-12 — **Continue CLI runs chained commands past its Bash allow rules and denylist (CVE-2026-109560, CVE-2026-76072), no fix; VulnCheck batch adds sandboxed.sh, deepsec, Network-AI**
+Every published `@continuedev/cli` (latest 1.5.47, 2026-06-18) matches a `Bash(prefix*)` rule against the whole command line and, unattended, relies on a denylist that misses most of the filesystem; both issues are open with no maintainer reply and the vendor tab is empty. Stop running it headless on content you do not control. sandboxed.sh's fix is an environment flag that is off by default (CVE-2026-109569, 9.3); deepsec below 1.1.17 wrote files on the orchestrator host from a sandbox tarball (CVE-2026-109375); Network-AI's Claude Code PreToolUse deny gate was bypassed through non-first fields until 5.15.2 (CVE-2026-109331).
+→ [advisories/2026-10-continue-cli-bash-rule-chaining-bypass-vulncheck-agent-sandbox-batch.md](advisories/2026-10-continue-cli-bash-rule-chaining-bypass-vulncheck-agent-sandbox-batch.md)
+
+### 2026-10-13 — **Claude Desktop on Windows ran a git.exe found in the opened project directory (CVE-2026-88066, CVSS 4.0 7.5); fixed 1.8089.0, auto-updated**
+The same bug Cursor had in July, now in Claude Desktop: `git.exe` launched by bare name resolved from the working directory first, so a binary of that name in a cloned or shared repository ran on project open. Auto-update delivered the fix; a pinned or managed install needs 1.8089.0. A `git.exe` at the top level of a project folder you opened in an affected version is the artefact (a nested fixture or bundled portable Git is not on the search path); correlate its write time with when you opened the project before treating the machine as having run attacker code. CVE Services had no record on the sweep date.
+→ [advisories/2026-10-claude-desktop-windows-git-exe-search-path-rce-cve-2026-88066.md](advisories/2026-10-claude-desktop-windows-git-exe-search-path-rce-cve-2026-88066.md)
 
 ### 2026-10-06 — **Reactime: 20 of 22 repository branches carried a folder-open VS Code task that ran a stealer, 2026-06-01 to 10-07; npm package clean**
 A compromised contributor account rewrote branch tips with forged 2020-dated commits that replaced 387 files; opening a non-default branch in VS Code (or building it, on 15 branches) ran a stealer that resolves its server from an Ethereum transaction and rewrites VS Code and Discord to re-run. Maintainers reset the branches on 10-07; Deep Woods call the tradecraft PolinRider-consistent. If you cloned any branch but `master` or `dev` in the window and opened it, treat the machine as compromised, reinstall the editor and chat client, and rotate everything; turn `task.allowAutomaticTasks` off everywhere.
@@ -1008,6 +1028,10 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 ---
 
 ## 🟠 RECENT — verify exposure
+
+### 2026-09-21 — **Zod, nub and standard-schema repositories took malicious install-hook commits from a stolen git push credential (2026-09-21); no zod release reached npm; nub release blocked**
+Six commits on zod's `main` added a preinstall loader that resolves a server from a public blockchain contract and runs what it downloads, and switched the release workflow to publish on push; the trusted-publishing environment the push credential could not start is why nothing shipped, and the same-day revert is why 4.6.6 (2026-10-11) is clean. nub's tag-triggered release did reach npm and the publish-time scanner held `@nubjs/nub@0.9.4`. The maintainer says the key was taken during an agent sandbox test that ran a compromised package. Only a pre-rewrite clone or git dependency of zod could have run anything, and only through a scripts-enabled install in the window; whether the hook fired at all is unresolved (one reading of the removed commit has the key outside `scripts`), so treat such an install as potentially affected unless you can show the hook did not run. A `preinstall` entry in zod's manifests is the artefact of the revision, not proof of execution.
+→ [advisories/2026-10-zod-nub-standard-schema-repository-compromise-stolen-git-credential-install-hook-loader.md](advisories/2026-10-zod-nub-standard-schema-repository-compromise-stolen-git-credential-install-hook-loader.md)
 
 ### 2026-09-16 — **TinaCMS (the `/admin` editing panel on many generated Next.js and Astro sites): a doubled slash in the hash-router path makes the admin frame an attacker origin and trust its `postMessage` channel, so one crafted link run by a signed-in editor sends any GraphQL query or mutation with the editor's token and returns the result to the attacker (CVE-2026-108261, CVSS 9.3; fixed `tinacms` 3.14.0 / `@tinacms/app` 2.5.14 on 2026-09-14, CVE 2026-10-09)** — a bypass of the incomplete June fix (3.9.3); on self-hosted backends the `authentication` collection's password hashes are in reach.
 Upgrade both packages together and rebuild the admin bundle; on self-hosted backends rotate editor passwords; review the content repository's recent commits for edits no editor made.
