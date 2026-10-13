@@ -6,7 +6,7 @@ last_updated: 2026-10-13
 severity: critical
 status: patched
 ecosystems: [gitlab, self-hosted, ci-cd, source-hosting, ai-agents]
-tools_affected: ["GitLab CE/EE 19.2.0 through 19.2.7, 19.3.0 through 19.3.4, 19.4.0 and 19.4.1 (CVE-2026-97229)", "GitLab CE/EE 19.1 and later before the same fixes (CVE-2026-92883 XSS in syntax highlighting)", "GitLab CE/EE 18.7 and later (CVE-2026-16301 protected-branch pipelines)", "GitLab CE/EE all versions before 19.2.8 (CVE-2026-14814 raw-file cache poisoning)", "GitLab EE 19.1 and later Duo Agent Platform (CVE-2026-96893, CVE-2026-105458)", "GitLab EE 18.1 and later scheduled pipeline execution policies (CVE-2026-81839)"]
+tools_affected: ["GitLab CE/EE 19.2.0 through 19.2.7, 19.3.0 through 19.3.4, 19.4.0 and 19.4.1 (CVE-2026-97229)", "GitLab CE/EE 19.1 before 19.2.8, 19.3 before 19.3.5, 19.4 before 19.4.2 (CVE-2026-92883 XSS in syntax highlighting)", "GitLab CE/EE 18.7 before 19.2.8, 19.3 before 19.3.5, 19.4 before 19.4.2 (CVE-2026-16301 protected-branch pipelines)", "GitLab CE/EE all versions before 19.2.8, 19.3 before 19.3.5, 19.4 before 19.4.2 (CVE-2026-14814 raw-file cache poisoning)", "GitLab EE 19.1 before 19.2.8, 19.3 before 19.3.5, 19.4 before 19.4.2 Duo Agent Platform (CVE-2026-96893, CVE-2026-105458)", "GitLab EE 18.1 before 19.2.8, 19.3 before 19.3.5, 19.4 before 19.4.2 scheduled pipeline execution policies (CVE-2026-81839)"]
 tags: [cve, rce, unauthenticated, regex, ci-cd, gitlab, duo, ai-agent, prompt-injection, cache-poisoning, secrets-exposure, authorization-bypass, patch-release]
 ---
 

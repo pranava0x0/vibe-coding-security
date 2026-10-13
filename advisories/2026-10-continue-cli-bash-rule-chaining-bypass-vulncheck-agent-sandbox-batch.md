@@ -69,7 +69,7 @@ grep -rn 'SANDBOXED_SH_NSENTER_USE_TARGET_ROOT' /etc/systemd /etc/default ~/.con
 # unset or anything but 1 means container workspaces see the host root
 
 # deepsec: below 1.1.17 is affected
-npm ls deepsec 2>/dev/null; npx deepsec --version 2>/dev/null
+npm ls deepsec 2>/dev/null; npm ls -g deepsec 2>/dev/null   # local metadata only; do not use npx, which can fetch and run the latest package
 
 # Network-AI: below 5.15.2 has the hook bypass; check the installed hook too
 npm ls -g network-ai 2>/dev/null
