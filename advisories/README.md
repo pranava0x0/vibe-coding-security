@@ -4,6 +4,9 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-09-21 | [Zod, nub and standard-schema repositories took malicious install-hook commits from a stolen git push credential (2026-09-21); no zod release reached npm; nub release blocked](2026-10-zod-nub-standard-schema-repository-compromise-stolen-git-credential-install-hook-loader.md) | high | contained |
+| 2026-10-05 | [MALFEX: one operator's npm packages since 2023 (40,767 downloads) deliver a Windows RAT and stealer; loader moved into a native addon, imgdecode 1.0.3 live 2026-10-13](2026-10-malfex-npm-windows-rat-stealer-campaign-native-addon-loader.md) | high | active |
+| 2026-10-06 | [CyberXero: an initial access broker ran 51 Claude Code agent definitions and PentAGI against WordPress sites and Ukrainian utilities; 628,000 records (SOCRadar, 2026-10-06)](2026-10-cyberxero-claude-code-agent-swarm-initial-access-broker-ukraine-exposed-logs.md) | high | active |
 | 2026-10-12 | [GitLab 19.4.2: unauthenticated code execution from a crafted CI/CD regular expression (CVE-2026-97229, CVSS 10.0); Duo Agent Platform prompt-injection fix (CVE-2026-96893)](2026-10-gitlab-19-4-2-unauthenticated-cicd-regex-rce-cvss-10-duo-agent-prompt-injection.md) | critical | patched |
 | 2026-10-12 | [Continue CLI runs chained commands past its Bash allow rules and denylist (CVE-2026-109560, CVE-2026-76072), no fix; VulnCheck batch adds sandboxed.sh, deepsec, Network-AI](2026-10-continue-cli-bash-rule-chaining-bypass-vulncheck-agent-sandbox-batch.md) | high | active |
 | 2026-10-13 | [Claude Desktop on Windows ran a git.exe found in the opened project directory (CVE-2026-88066, CVSS 4.0 7.5); fixed 1.8089.0, auto-updated](2026-10-claude-desktop-windows-git-exe-search-path-rce-cve-2026-88066.md) | high | patched |

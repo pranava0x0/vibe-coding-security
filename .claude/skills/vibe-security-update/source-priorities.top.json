@@ -47,8 +47,8 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 44,
-   "last_hit": "2026-10-12"
+   "hits": 45,
+   "last_hit": "2026-10-13"
   },
   {
    "domain": "github.com/advisories",
@@ -83,20 +83,20 @@
   {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
-   "hits": 24,
-   "last_hit": "2026-10-12"
+   "hits": 25,
+   "last_hit": "2026-10-13"
   },
   {
    "domain": "safedep.io",
    "weight": 20.0,
-   "hits": 20,
-   "last_hit": "2026-10-08"
+   "hits": 21,
+   "last_hit": "2026-10-13"
   },
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 58,
-   "last_hit": "2026-10-10"
+   "hits": 59,
+   "last_hit": "2026-10-13"
   },
   {
    "domain": "sentinelone.com",
@@ -119,8 +119,8 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 102,
-   "last_hit": "2026-10-10"
+   "hits": 103,
+   "last_hit": "2026-10-13"
   },
   {
    "domain": "theregister.com",
@@ -137,8 +137,8 @@
   {
    "domain": "vulncheck.com",
    "weight": 20.0,
-   "hits": 22,
-   "last_hit": "2026-10-12"
+   "hits": 23,
+   "last_hit": "2026-10-13"
   },
   {
    "domain": "wiz.io",
@@ -147,10 +147,10 @@
    "last_hit": "2026-09-12"
   },
   {
-   "domain": "blog.rust-lang.org",
+   "domain": "api.npmjs.org",
    "weight": 18.0,
-   "hits": 5,
-   "last_hit": "2026-09-24"
+   "hits": 14,
+   "last_hit": "2026-10-13"
   }
  ]
 }

@@ -13,7 +13,7 @@ You are running a fresh sweep of vibe-coding-relevant security incidents and int
 |---|---|---|
 | [`references/queries.md`](references/queries.md) | the literal search strings + rotation lists | Step 1. **The only file that may go into a delegated agent's prompt.** |
 | [`references/triage-patterns.md`](references/triage-patterns.md) | why each query exists, and the named attack classes | Step 2 onward, **main session only** |
-| [`LEARNINGS.md`](LEARNINGS.md) | durable rules distilled from ~97 prior runs | Step 0, every run |
+| [`LEARNINGS.md`](LEARNINGS.md) | durable rules distilled from ~98 prior runs | Step 0, every run |
 | [`fallback.log.md`](fallback.log.md) | one row per safeguard stop, model switch, permission block or rate-limit event | append-only, the moment an event appears |
 
 ## Output for the user (always include at end)
@@ -44,6 +44,8 @@ A wrong-but-confident advisory is worse than no advisory: readers act on it, and
 9. **Check version boundaries against the primary research and vendor fix evidence.** A reviewed upper version is not a fixed version. Description-derived OSV ranges can misread inclusive affected endpoints as fixes. Never resolve disagreements by automatically preferring a registry; cite both and leave fix status unknown when unsupported.
 10. **Capture and validate evidence for finding tables.** Follow [the evidence workflow](../../../sources/mcp-remote-evidence.md#validation-and-limits). ID-first `F-<number>` tables require a manifest and CVE/NVD/OSV JSON snapshots under `sources/cve-evidence/`. Run `python tools/validate_cve_evidence.py --live` before publishing a sweep; network failure or record drift requires review. Use `--refresh` only to capture reviewed updates, then regenerate the score block with `--scores <advisory-id>`. The offline gate checks mappings, score attribution and known version conflicts; other prose still needs source review.
 
+11. **A fix is what the default does.** Before writing "fixed in," open the referenced commit or pull request: a default-off flag, an unmerged PR, or a version the registry or the repository never published is not a fix. Say what an upgrade with no further action gives the reader.
+
 These are enforced by Step 6's gate (`build → validate → pytest`) plus the link checker. The gate is the floor, not the ceiling — snapshot checks cover the registered finding tables; unstructured claims still need manual verification.
 
 ### Incorrect-data classes seen so far
@@ -66,6 +68,10 @@ Each row is a shape of wrong-but-plausible data that has shipped from this routi
 | Fix commit without a release | a CNA range reads "before 2.0.0" because a fix commit bumps the version, while the registry has never published 2.0.0 (mac-shell-mcp: one npm version, 1.0.4, and a 2.0.0 commit), so "upgrade to 2.0.0" sends readers to a version that does not exist | `npm view <pkg> versions` / `pip index versions` and the repository releases page; when the fixed version is absent from the registry, write "fix exists only as commit X; no release carries it as of DATE" and advise removal, not upgrade |
 | Placeholder or self-contradicting vendor advisory | a vendor GHSA page prints `<PATCHED_VERSION>`, or an affected range that overlaps its own patched range (Strapi GHSA-7mqx-wwh4-f9fw: `<= 5.44.0` affected beside `>= 5.25.0` patched) | fetch the CNA record (`cveawg.mitre.org/api/cve/<id>`) and use its range; cite the vendor page for the mechanism and say it carries a placeholder |
 | Catalog label read as mechanism | a KEV `vulnerabilityName` or CWE label ("Cleartext Storage of Sensitive Information") is written up as what the bug does, when the primary describes a different mechanism (a filter-side oracle) | describe the mechanism from the vendor or researcher primary; quote the catalog label as the catalog's label |
+| Opt-in fix written as patched | a CNA record references a fix commit, and the commit adds a default-off flag or an environment variable the author says to leave off (sandboxed.sh: `SANDBOXED_SH_NSENTER_USE_TARGET_ROOT`), or the only fix is an unmerged pull request | open the commit or PR and read the default; write "mitigated where the operator sets X" or "fix proposed, not merged"; never "fixed in" |
+| CNA version line absent from the repository | a record's range names a version (sandboxed.sh "through 1.3.0") that the repository's releases page never tagged (newest v0.12.0) | print both, say the record's version source is unstated, and do not derive an "upgrade to" line from it |
+| Thread or headline claim contradicted by the body | a Hacker News or blog title asserts a registry compromise ("Zod 4.6.6 compromised by malware?") while the registry timeline, the maintainer's note and the write-up's own body say nothing was published | set `status` and `severity` from the registry `time` field and the primaries, and record the title as the reason readers may believe otherwise |
+| Operator post-mortem credited with the control that held | a registry operator's incident write-up implies its scanner caught a package that the maintainer says never reached the pipeline, because the release workflow could not be started by the stolen credential | quote both primaries, name the disagreement, and credit the control each one actually describes; a repository-level flag and a publish-time hold are different events |
 
 
 ---
@@ -107,7 +113,7 @@ The repo's `.claude/settings.json` keeps the switch on (`switchModelsOnFlag: tru
 1. **Write at defender altitude from the first draft.** State what the code reads, where it writes and how it spreads, one clause each, with package names, versions, dates, file paths and credential categories. Do not narrate the loader chain, quote payload code, reproduce encoded strings, or print live download, C2, onion, IP or wallet addresses. Link the researcher's write-up for mechanics.
 2. **Order the writing, and checkpoint.** Save every non-malware advisory and update first, with their `ALERTS.md` entries and README rows. Then run the Step 6 gate once and make a **checkpoint commit** on the sweep branch (`git commit -m "sweep YYYY-MM-DD: checkpoint"`, then `git push`). Only then write worm, stealer and campaign advisories, each with its index entries, one file per `Write` call, never as a Bash heredoc. A run that ends after the checkpoint still has its work on the remote branch.
 3. **After a stop, do not re-send.** The first action after the stop notice is to append `<planned filename slug>: <one-line scope>` under `deferred_after_classifier_stop` in today's run-log entry (create the entry stub if Step 5 has not run yet) and commit it. Do not retry, reword or shorten the stopped file in this run. Move on to the next item. The next run writes the deferred file from the primary sources, at defender altitude. If the same file has been deferred twice, do not try a third time: add an `ALERTS.md` entry of three lines (product, versions, the primary-source link) and record it under `blockers` for the owner.
-4. **Keep indicators out of context.** Every `WebFetch` or delegated fetch of a malware or campaign write-up asks for behaviour, affected packages and versions, dates and remediation, and says to omit live addresses, hashes and payload text. When fetching such a page with `curl`, strip URLs, dotted quads and hex strings before the text enters the conversation (`LEARNINGS.md` §35). A delegated report that carries exploitation steps is stopped too (2026-10-01).
+4. **Keep indicators out of context.** Every `WebFetch` or delegated fetch of a malware or campaign write-up asks for behaviour, affected packages and versions, dates and remediation, and says to omit live addresses, hashes and payload text. When fetching such a page with `curl`, strip URLs, dotted quads and hex strings before the text enters the conversation, and strip defanged forms too: `hxxp` schemes and any token carrying `[.]` or `[:]` (`LEARNINGS.md` §35, §47). A delegated report that carries exploitation steps is stopped too (2026-10-01).
 5. **Log every event the moment it appears.** When the transcript shows a safeguard stop, a model switch notice, an overload fallback notice, a permission block or a rate-limit refusal, append one row to [`fallback.log.md`](fallback.log.md) before doing anything else: date, session id, event, from → to, what you were doing, cause, resolution. Also list the event labels under `classifier_events` in the run-log entry, and name the switch in the end-of-run summary. After a switch the rest of the run proceeds on the fallback model; do not try to switch back.
 
 ### Why the sweep needs this more than most projects
@@ -143,7 +149,7 @@ python3 tools/sweep_context.py   # refreshes advisory-index.jsonl + source-prior
 
 | Read | Why | ~Tokens |
 |---|---|---|
-| [`LEARNINGS.md`](LEARNINGS.md) | durable rules from prior runs | ~2K |
+| [`LEARNINGS.md`](LEARNINGS.md) | durable rules from prior runs | ~25K (grep the section headers, then read the newest ten sections and §1 to §6) |
 | `runs.log.md` | the last 7 entries only — recent context | ~17K |
 | `source-priorities.top.json` | the top sources Step 1 actually uses | ~0.5K |
 | `references/queries.md` | the query list | ~1K |
@@ -432,7 +438,7 @@ Use `weight` to:
 These apply to advisories, `ALERTS.md` entries, README rows, run-log notes, PR descriptions and the end-of-run summary.
 
 - **Lead with the fact.** First sentence: product, affected range, what an attacker gets, fixed version or "no fix". No scene-setting.
-- **Titles are one line.** `title:` and `ALERTS.md` headings carry one claim in at most 25 words: product, flaw, id, fix. The detail belongs in the TL;DR. Recent titles ran past 60 words and repeated the TL;DR.
+- **Titles are one line.** `title:` and `ALERTS.md` headings carry one claim in at most 25 words: product, flaw, id, fix. The detail belongs in the TL;DR. Recent titles ran past 60 words and repeated the TL;DR. `tests/test_refusal_fallback.py` fails the gate on a title over 25 words for any advisory disclosed on or after 2026-10-10; count before writing, and change the ALERTS heading and README row with it.
 - **Plain sentences.** One idea per sentence. No em-dash chains; use a full stop or a comma. No semicolons joining clauses. No parentheses holding a second sentence.
 - **No filler.** Cut "it's important to note", "in today's landscape", "a stark reminder", "underscores", "highlights the need", "robust", "seamless", "cutting-edge", "game-changing", "delve", "leverage" as a verb, and the "not just X but Y" shape. No rhetorical questions, no closing morals.
 - **No decoration.** No emoji outside the three tier headers in `ALERTS.md`. No bold on whole sentences. No "Key takeaways" or "Conclusion" sections.
