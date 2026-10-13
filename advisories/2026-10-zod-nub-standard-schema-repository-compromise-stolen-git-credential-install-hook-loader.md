@@ -79,7 +79,7 @@ A pre-rewrite revision with no scripts-enabled install from it is cleanup (rebas
 ## If you are affected
 
 1. **If an install with lifecycle scripts enabled ran from a pre-rewrite clone on a machine and you cannot show the hook did not run:** treat the machine as compromised. Rotate every credential on it, starting with git push credentials and SSH keys, then npm and GitHub tokens, then cloud and AI-provider keys: [playbooks/if-you-ran-malicious-postinstall.md](../playbooks/if-you-ran-malicious-postinstall.md), [playbooks/if-your-npm-token-leaked.md](../playbooks/if-your-npm-token-leaked.md), [playbooks/rotating-cloud-credentials.md](../playbooks/rotating-cloud-credentials.md).
-2. **If you maintain a fork of zod:** rebase onto the rewritten `main` and delete the stale branch; the six commits should not survive anywhere you publish from.
+2. **If you maintain a fork of zod:** do not `git rebase` a branch that descends from the pre-rewrite `main`, because the rebase replays the six commits and their reverts onto the new history and recreates the loader in your fork. Start a fresh branch from the rewritten `main`, cherry-pick only your own audited commits onto it, delete the old branch, and force-push nothing that still contains the window; the six commits should not survive anywhere you publish from.
 3. **If you own packages whose release fires on a tag push:** the nub path is the one that reached the registry. Move to a manually triggered, environment-scoped publish: [prevention/ci-cd-hardening.md](../prevention/ci-cd-hardening.md).
 
 ## Prevention

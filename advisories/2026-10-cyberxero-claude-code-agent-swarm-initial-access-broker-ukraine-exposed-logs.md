@@ -47,9 +47,12 @@ Two different readers.
 **If you run WordPress, Magento, PrestaShop or Redis on the internet**, CyberXero's opportunistic pipeline may have reached you, and the signs are ordinary:
 
 ```bash
-# WordPress: unexpected administrators and plugins
-wp user list --role=administrator --fields=user_login,user_registered 2>/dev/null
-wp plugin list --fields=name,status,version,update 2>/dev/null
+# WordPress: unexpected administrators and plugins, for every installation under /var/www
+find /var/www -name wp-config.php 2>/dev/null | while read -r cfg; do
+  root="$(dirname "$cfg")"; echo "== $root"
+  wp --path="$root" user list --role=administrator --fields=user_login,user_registered --allow-root 2>&1 | head -20
+  wp --path="$root" plugin list --fields=name,status,version,update --allow-root 2>&1 | head -40
+done
 # web shells: PHP changed since the campaign's first infrastructure (July 2026) under each installation's wp-content
 find /var/www -name wp-config.php 2>/dev/null | while read -r cfg; do
   find "$(dirname "$cfg")/wp-content" -name '*.php' -newermt 2026-07-01 2>/dev/null
