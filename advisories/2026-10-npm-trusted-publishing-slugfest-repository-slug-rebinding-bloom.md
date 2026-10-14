@@ -41,6 +41,10 @@ Trusted publishing is the control this corpus has recommended since the [Shai-Hu
 
 ```bash
 # For each package you maintain: what repository is trusted, and does it still resolve to you?
+# `npm trust` needs npm 11.15.0 or later, write access to the package and account-level 2FA
+# (per the npm CLI docs); on an older client, read the Trusted Publisher section of the
+# package's settings page on npmjs.com instead.
+npm --version
 npm trust list <package>
 # For every slug printed: open https://github.com/<owner>/<repo>. A 404, a redirect to a
 # different name, or a repository you do not own means the binding must be deleted.
