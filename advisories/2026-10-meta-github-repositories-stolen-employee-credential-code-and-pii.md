@@ -4,10 +4,10 @@ title: "Meta: an outside group used one employee's stolen credential to read Git
 date_disclosed: 2026-10-13
 last_updated: 2026-10-14
 severity: medium
-status: contained
+status: unconfirmed
 ecosystems: [github, source-control, ai-vendor]
 tools_affected: ["Meta GitHub repositories reachable with one employee's credential (products not named)", "any organization whose repositories hold personal data or secrets a single stolen login can reach"]
-tags: [meta, github, stolen-credentials, source-code, pii-in-repos, secrets-in-repos, vendor-incident, notification, contained]
+tags: [meta, github, stolen-credentials, source-code, pii-in-repos, secrets-in-repos, vendor-incident, notification, unconfirmed]
 ---
 
 ## TL;DR
@@ -56,4 +56,4 @@ If you were notified by Meta, the company's offer covers the personal-data side.
 - [SecurityWeek — Meta says hackers took code, personal data of 1,500 in GitHub breach](https://www.securityweek.com/meta-says-hackers-took-code-personal-data-of-1500-in-github-breach/) (2026-10-13; Meta spokesperson's account, the 99/1 split, remediation steps, no attribution)
 - [Security Boulevard — Meta security breach exposes corporate code, employee data on GitHub](https://securityboulevard.com/2026/10/meta-security-breach-exposes-corporate-code-employee-data-on-github/) (2026-10-13, Jon Swartz; the same spokesperson quote, the "likely not targeting Meta" line, the earlier-GitHub-incident comparison)
 - [SecurityWeek — 500,000 active credentials left exposed on GitHub](https://www.securityweek.com/500000-active-credentials-left-exposed-on-github/) (2026-10-01; Truffle Security's figures: 1,103,438 credentials found in 224 million public repositories in August 2025, 543,699 still active at the end of July 2026, median exposure 784 days)
-- Single source for the incident: the vendor's statement to the press. No Meta bulletin, breach notice or regulator filing was located on 2026-10-14; status `contained` rests on Meta's own account that access was cut and secrets rotated.
+- Single source for the incident: the vendor's statement to the press, relayed by two outlets. No Meta bulletin, breach notice or regulator filing was located on 2026-10-14, so the status is `unconfirmed`; Meta's own account is that access was cut and secrets rotated, and the status moves to `contained` when a Meta bulletin or a filing carries it.
