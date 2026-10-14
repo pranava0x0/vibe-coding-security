@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-10-13
+**Last refreshed:** 2026-10-14
 
 ## Quick start
 
@@ -55,9 +55,13 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-10-13)
+## Active threat families (as of 2026-10-14)
 
 The highest-risk ongoing threat families for vibe coders:
+
+- **The editor's trust boundary is a filename comparison, and the operating system parses paths better than the check does (VS Code 1.141.1 ten-CVE batch and Visual Studio Copilot CVE-2026-103572, 2026-10-13)** — a crafted profile import escapes path containment to code execution (CVE-2026-102238, 9.6), three more records run code from a crafted file, a crafted workspace or a terminal notification, and content an AI coding agent reads can rewrite a lifecycle-hook file (CVE-2026-102232) or, in Visual Studio, `.mcp.json` through a trailing period Windows discards. Update the editor; a fork on an older base still has the pre-fix code.
+- **The registry's record of who you are is a credential, and it can be reassigned without your secret changing (npm SlugFest and Docker Hub GhostPat, 2026-10-12 → 10-13)** — npm trusted publishing bound packages to a repository name until first publish, so a freed slug could publish 1,500+ packages (fixed 2026-10-02: 48-hour expiry, immutable-id binding); Docker Hub's account conversion handed a live PAT to any user an attacker named, for two years (CVE-2026-105445, 9.4, fixed 2026-09-30, 304,000 pushes reviewed). `npm trust list` every package; revoke registry tokens you did not create.
+- **The LLM app platform with no security tab has eight CVEs and an unauthenticated path to super-admin (Bisheng, CERT/CC VU#166125, 2026-10-14)** — `POST /user/sso` mints JWTs for anyone and promotes an account named like the admin, no fix and no vendor reply since 2026-08-06; the Code node still runs user Python through `exec()` by the maintainer's own account. Keep such platforms off the internet.
 
 - **A stolen git push credential is stopped by the release workflow or by nothing (Zod, nub, standard-schema, 2026-09-21 → public 2026-10-11)** — one credential taken from a maintainer's workstation during an agent sandbox test put a preinstall loader on three repositories' `main`; zod's environment-scoped trusted publishing could not be started by it and nothing shipped, nub's tag-triggered release reached npm and the scanner held it. A thread title said 4.6.6 was compromised; the registry timeline says it was not.
 - **The coding agent's allow rule is a chaining point, and unattended mode makes a denylist the whole policy (Continue CLI, CVE-2026-109560 and CVE-2026-76072, no fix)** — `Bash(prefix*)` matched the whole command line past `;`, `&&` and `|`, and headless mode allows Bash with a short path denylist as the only block; both issues open with no maintainer reply, current release affected. The same VulnCheck batch: sandboxed.sh's container escape fix is a default-off flag, Vercel deepsec wrote sandbox tarball links on the host until 1.1.17, Network-AI's Claude Code deny hook checked one field until 5.15.2.
