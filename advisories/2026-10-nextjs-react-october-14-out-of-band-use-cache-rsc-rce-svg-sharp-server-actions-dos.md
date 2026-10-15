@@ -6,8 +6,8 @@ last_updated: 2026-10-15
 severity: critical
 status: patched
 ecosystems: [npm, javascript, nextjs, react, sharp]
-tools_affected: ["Next.js 16.0.0 – 16.4.0 → 16.4.1", "Next.js 10.0.0 – 15.5.27 → 15.5.28 (SVG and Server Actions fixes)", "react-server-dom-webpack / -turbopack / -parcel 19.0.0 – 19.0.8, 19.1.0 – 19.1.9, 19.2.0 – 19.2.8, 19.3.0 → 19.0.9, 19.1.10, 19.2.9, 19.3.1", "App Router apps with Cache Components and a `use cache` function returning typed arrays", "Image Optimization with `dangerouslyAllowSVG` or `next/og` on the Node.js runtime, on glibc Linux, with sharp < 0.35.5", "App Router apps with at least one Server Action"]
-tags: [cve, nextjs, react, react-server-components, rce, use-cache, cache-components, image-optimization, sharp, librsvg, server-actions, dos, out-of-band-release, upstream-dependency, no-cve]
+tools_affected: ["Next.js 16.0.0 – 16.4.0 → 16.4.1", "Next.js 10.0.0 – 15.5.27 → 15.5.28 (SVG Image Optimization RCE)", "Next.js 13.0.0 – 15.5.27 → 15.5.28 (Server Actions DoS)", "react-server-dom-webpack / -turbopack / -parcel 19.0.0 – 19.0.8, 19.1.0 – 19.1.9, 19.2.0 – 19.2.8, 19.3.0 → 19.0.9, 19.1.10, 19.2.9, 19.3.1", "App Router apps with Cache Components and a `use cache` function returning typed arrays", "Image Optimization with `dangerouslyAllowSVG` or `next/og` on the Node.js runtime, on glibc Linux, with sharp < 0.35.5", "App Router apps with at least one Server Action"]
+tags: [cve, nextjs, react, react-server-components, rce, use-cache, cache-components, image-optimization, sharp, librsvg, server-actions, dos, out-of-band-release, upstream-dependency, partial-cve-coverage]
 ---
 
 ## TL;DR

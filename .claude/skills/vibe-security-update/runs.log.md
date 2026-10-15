@@ -113,7 +113,7 @@ queries: {deep: 16, medium: 8, shallow: 7}
 new: [2026-10-nextjs-react-october-14-out-of-band-use-cache-rsc-rce-svg-sharp-server-actions-dos, 2026-10-intentkit-executor-owner-only-tool-authorization-bypass-cve-2026-76066, 2026-10-claude-code-desktop-sneakpeek-preview-pane-html-file-url-exfiltration-noma]
 updated: [2026-10-n8n-october-14-ten-advisory-batch-data-table-cross-project-webhook-xss, 2026-09-n8n-september-30-ten-advisory-batch, 2026-09-langflow-ibm-psirt-eleven-cve-batch, 2026-10-ghostaction-returns-github-actions-workflow-credential-theft-git-history-sweep, 2026-10-vulncheck-single-researcher-agent-mcp-gateway-cve-wave-mini-swe-agent-env-leak, 2026-09-nextjs-september-2026-security-release-seven-advisories]
 sources_added: [previdian.com]
-sources_weighted: [github.com, thehackernews.com, noma.security, vulncheck.com, cveawg.mitre.org, lasso.security, blog.gitguardian.com, hackmd.io, registry.npmjs.org, nextjs.org]
+sources_weighted: [github.com, thehackernews.com, noma.security, vulncheck.com, cveawg.mitre.org, lasso.security, blog.gitguardian.com, hackmd.io, registry.npmjs.org]
 blockers: [reddit-x-bsky-snippets-only, nextjs.org/blog/security-404, bleepingcomputer-403]
 classifier_events: []
 deferred_after_classifier_stop: []

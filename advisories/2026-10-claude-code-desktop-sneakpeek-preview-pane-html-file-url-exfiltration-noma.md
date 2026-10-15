@@ -26,16 +26,16 @@ Why it matters to this audience: it is the third Claude Desktop path this year w
 ## Am I affected?
 
 - You run Claude Code Desktop and it is older than 1.30096.1 (the researcher's fixed version; the app auto-updates, so check the About dialog).
-- Between 2026-07-04 and 2026-08-17 you cloned a repository you did not author and asked Claude to open or review an HTML file in it.
+- Before 2026-08-17 (the researcher's fix date; the bug predates the 2026-07-04 report and nothing bounds its start) you cloned a repository you did not author and asked Claude to open or review an HTML file in it.
 
 ```bash
 # oversized HTML files in recently cloned repositories
-find . -name '*.html' -size +256k -newermt 2026-07-01 2>/dev/null | head
+find . -name '*.html' -size +256k 2>/dev/null | head
 ```
 
 ## If you are affected
 
-Update Claude Desktop. If an untrusted repository's large HTML file was opened in the pane before 2026-08-17, treat the workstation's credentials as exposed: rotate SSH keys, cloud and registry tokens, Git and package tokens, Kubernetes credentials and Claude sessions. Follow [if-your-local-ai-agent-was-exploited.md](../playbooks/if-your-local-ai-agent-was-exploited.md), [if-your-github-pat-leaked.md](../playbooks/if-your-github-pat-leaked.md) and [rotating-cloud-credentials.md](../playbooks/rotating-cloud-credentials.md).
+Update Claude Desktop. If an untrusted repository's large HTML file was opened in the pane on a build older than 1.30096.1, treat the workstation's credentials as exposed: rotate SSH keys, cloud and registry tokens, Git and package tokens, Kubernetes credentials and Claude sessions. Follow [if-your-local-ai-agent-was-exploited.md](../playbooks/if-your-local-ai-agent-was-exploited.md), [if-your-github-pat-leaked.md](../playbooks/if-your-github-pat-leaked.md) and [rotating-cloud-credentials.md](../playbooks/rotating-cloud-credentials.md).
 
 ## Prevention
 
