@@ -2,7 +2,7 @@
 id: 2026-09-n8n-september-30-ten-advisory-batch
 title: "n8n — ten advisories on 2026-09-30 (eight High): an MCP workflow-validation interpreter that lets a read-only user become instance owner via prototype mutation, code execution through the Git node's log operation, an HMAC bypass that approves waiting executions without a signature, a cross-user hijack of pending agent tool approvals, unauthenticated OAuth-client disk exhaustion, SQL injection in the Microsoft SQL node, two stored XSS, credential checks that miss nested sub-workflows; fixed 1.123.83 / 2.42.1 / 2.41.4"
 date_disclosed: 2026-09-30
-last_updated: 2026-09-30
+last_updated: 2026-10-15
 severity: high
 status: patched
 ecosystems: [npm, n8n, ai-agents, mcp]
@@ -60,7 +60,24 @@ grep -rE 'N8N_ENABLED_MODULES|NODES_EXCLUDE|N8N_CONTENT_SECURITY_POLICY' /path/t
 - The AI features are the new privilege boundary: treat the MCP server, agent tool approvals and the AI builder as admin-grade surfaces — scope MCP OAuth clients minimally, keep shared agents out of multi-member projects, and never let an approval gate be the only control on a command-execution step. [prevention/mcp-hygiene.md](../prevention/mcp-hygiene.md), [prevention/agent-sandboxing.md](../prevention/agent-sandboxing.md).
 - Run n8n behind an identity-aware proxy; unauthenticated endpoints (authorize, waiting-webhook, hosted chat) keep appearing in these batches. [prevention/credential-hygiene.md](../prevention/credential-hygiene.md).
 
+## Update 2026-10-15: VulnCheck assigned six CVE ids on 2026-10-14, and three more 2026-09-30 advisories surfaced through them
+
+The `mcp` and `agent` database listings on 2026-10-15 carried six n8n rows with VulnCheck as CNA, all published 2026-10-14, each referencing one vendor advisory. The vendor pages still say "No known CVE". The pairing, from each record's `references`:
+
+| CVE | Vendor advisory | VulnCheck title | CVSS 4.0 |
+|---|---|---|---|
+| CVE-2026-110842 | GHSA-5jr4-xmvf-frmj | Prototype pollution via MCP workflow-validation interpreter | 7.7 |
+| CVE-2026-110845 | GHSA-x8wx-g24x-3549 | Code execution via Git node log operation | 7.7 |
+| CVE-2026-110841 | GHSA-p3pg-xw4f-m72c | Authorization bypass in agent chat resume tool approval | 6.1 |
+| CVE-2026-110850 | GHSA-x25p-9mr6-cwgp | Credential check bypass via agent node parameters | 7.2 |
+| CVE-2026-110851 | GHSA-2r5r-xgvc-rj4p | Cross-project agent ownership transfer via Agents create endpoint | 6.1 |
+| CVE-2026-110852 | GHSA-4c7j-qff5-r9cx | Unauthenticated workflow execution via dynamic-path webhook resolution | 6.3 |
+
+The last three vendor advisories were not in this file. All three are dated 2026-09-30 on the tab and fixed in the same 1.123.83, 2.42.1 and 2.41.4 lines, so the batch was thirteen, not ten: the shared-workflow credential check did not inspect the agent node's model and per-tool credential parameters, so an editor could have the owner's credentials resolved for tools they control (GHSA-x25p-9mr6-cwgp, 7.2, reporter sm1ee); the Agents create endpoint accepted a caller-supplied id and overwrote an existing agent without checking which project owned it (GHSA-2r5r-xgvc-rj4p, 6.1, sm1ee); and the webhook resolver matched dynamic-path URLs on the path alone, ignoring the server-generated identifier that was the only unguessable part, so an unauthenticated caller could run workflows in unrelated projects with those projects' credentials, with form and MCP routes on the same resolver (GHSA-4c7j-qff5-r9cx, 6.3, reporter foxmiti). The VulnCheck records' ranges match the vendor pages (`< 1.123.83`, `2.0.0 < 2.41.4`, `2.42.0 < 2.42.1`). Status stays `patched`; the fix versions do not change.
+
 ## Sources
+- [CVE-2026-110842](https://cveawg.mitre.org/api/cve/CVE-2026-110842), [CVE-2026-110845](https://cveawg.mitre.org/api/cve/CVE-2026-110845), [CVE-2026-110841](https://cveawg.mitre.org/api/cve/CVE-2026-110841), [CVE-2026-110850](https://cveawg.mitre.org/api/cve/CVE-2026-110850), [CVE-2026-110851](https://cveawg.mitre.org/api/cve/CVE-2026-110851), [CVE-2026-110852](https://cveawg.mitre.org/api/cve/CVE-2026-110852) — CVE Services records (VulnCheck CNA, 2026-10-14), fetched 2026-10-15; the GHSA pairing is from each record's references.
+- [GHSA-x25p-9mr6-cwgp](https://github.com/n8n-io/n8n/security/advisories/GHSA-x25p-9mr6-cwgp), [GHSA-2r5r-xgvc-rj4p](https://github.com/n8n-io/n8n/security/advisories/GHSA-2r5r-xgvc-rj4p), [GHSA-4c7j-qff5-r9cx](https://github.com/n8n-io/n8n/security/advisories/GHSA-4c7j-qff5-r9cx) — the three 2026-09-30 advisories added 2026-10-15.
 
 All vendor advisory pages fetched directly 2026-09-30; each shows "No known CVE" at fetch time.
 - [n8n — security advisories index](https://github.com/n8n-io/n8n/security/advisories) — ten entries dated 2026-09-30.

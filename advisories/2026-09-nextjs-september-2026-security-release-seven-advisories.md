@@ -2,7 +2,7 @@
 id: 2026-09-nextjs-september-2026-security-release-seven-advisories
 title: "Next.js September 2026 security release (2026-09-30, 16.3.8 / 15.5.27): seven advisories — Image Optimization SSRF through an allow-listed remote pattern (CVE-2026-94483, High 8.3), two SSG/ISR cache-poisoning bugs, a Draft Mode `use cache` leak, a root-param cache leak, a `dynamicParams` bypass on OG-image routes, and a `next dev` MCP endpoint any website the developer visits can read (CVE-2026-94486) — while the pre-announced *critical* and one *high* were postponed for an upstream dependency; sharp 0.35.5 separately fixes a librsvg RCE (CVE-2026-96889, 8.9)"
 date_disclosed: 2026-09-30
-last_updated: 2026-10-09
+last_updated: 2026-10-15
 severity: high
 status: patched
 ecosystems: [npm, javascript, nextjs, react, sharp]
@@ -68,6 +68,10 @@ Vercel-hosted apps are not affected by CVE-2026-94543; Netlify says its Image CD
 ## Update 2026-10-09: the postponed fixes have a date
 
 On 2026-10-08 Vercel pre-announced an out-of-band security update for Wednesday 2026-10-14. The post says it "will address three vulnerabilities in upstream dependencies: two Critical and one High", and that two of the fixes are the ones postponed from the September release. No ids, components or affected versions are published yet. The advisories ship with the update. Status here stays `patched` for the seven September advisories. The October items get their own entry when they land.
+
+## Update 2026-10-15: the out-of-band release shipped on 2026-10-14
+
+`next@16.4.1` and `next@15.5.28` closed the postponed critical and high, plus a third advisory, on 2026-10-14: the `use cache` typed-array RCE (GHSA-673q-mjm6-r5xr, 9.5, from React's RSC advisory GHSA-xqc2-xf4c-x3h3), the SVG Image Optimization RCE that carries the librsvg id CVE-2026-96889 from this file (GHSA-2464-fhr4-w9xw, 9.5), and a Server Actions DoS (GHSA-p3m5-59mp-jv5r, 8.2). Written up in [the October 14 file](2026-10-nextjs-react-october-14-out-of-band-use-cache-rsc-rce-svg-sharp-server-actions-dos.md); note there that `next@15.5.28` still accepts `sharp` 0.34.x.
 
 ## Prevention
 

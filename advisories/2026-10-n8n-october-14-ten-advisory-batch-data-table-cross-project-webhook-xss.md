@@ -1,8 +1,8 @@
 ---
 id: 2026-10-n8n-october-14-ten-advisory-batch-data-table-cross-project-webhook-xss
-title: "n8n: ten advisories on 2026-10-14, cross-project Data Table access from a crafted workflow ID, webhook stored XSS; fixed 1.123.85, 2.43.5, 2.44.1"
+title: "n8n: fifteen advisories on 2026-10-14, cross-project Data Table access from a crafted workflow ID, webhook stored XSS; fixed 1.123.85, 2.43.5, 2.44.1"
 date_disclosed: 2026-10-14
-last_updated: 2026-10-14
+last_updated: 2026-10-15
 severity: high
 status: patched
 ecosystems: [npm, n8n, ai-agents]
@@ -59,7 +59,20 @@ Upgrade to 1.123.85, 2.43.5 or 2.44.1; on the v1 line, disable the Data Tables m
 - `NODES_EXCLUDE` the nodes you do not use; the file node, the Git node and Chat Hub each appear in a workaround this month.
 - [credential-hygiene](../prevention/credential-hygiene.md) and [ci-cd-hardening](../prevention/ci-cd-hardening.md).
 
+## Update 2026-10-15: five more 2026-10-14 advisories sit on page 2 of the tab
+
+The tab's first page holds ten rows and the batch was written from that page. Page 2, read 2026-10-15, carries five more entries dated 2026-10-14, so the day's batch is fifteen. The five:
+
+- **Local Gateway deep link re-pairs to an attacker's instance, GHSA-cwm2-vhf5-27q9, 5.9.** A crafted `n8n-computer-use://` link made the Local Gateway desktop app connect to an attacker's n8n instance without confirmation, and permissions the user had already granted carried over, so the attacker could act on the user's computer through the gateway. Affected below 2.42.1 and 2.41.4, fixed 2.42.1 and 2.41.4. Workarounds: set `allowedOrigins` to the paired instance URL instead of the default wildcard, quit the app when idle, disable Computer Use if unused. Reporter nlgbao1340.
+- **Prototype pollution in workflow-history compaction, GHSA-fvv4-gmv9-xqf5, 7.1 (High).** A low-privileged user saves a workflow whose connections object carries a reserved key; the periodic compaction task's diff routine pollutes built-in objects for the whole process and the instance then fails logins and writes. Affected below 2.41.4; the Patches section names 2.41.4 and 2.42.1. Workaround `N8N_WORKFLOW_HISTORY_ENABLED=false`. Reporter Masofgon.
+- **Slack Trigger webhook sends the workspace token to any host, GHSA-3c3p-5959-3ghr, 6.3.** The signing secret is optional and the check returned success when it was absent, so an unauthenticated caller who knows the webhook URL could make the node send the Slack access token to a host of their choice and read the response back. Affected below 1.123.83, 2.42.1 and 2.41.4, fixed in those. Set a Signature Secret on every Slack credential, turn off Download Files, enable `N8N_SSRF_PROTECTION_ENABLED`, rotate Slack tokens on trigger workflows.
+- **Execute Sub-workflow `source: url` / `source: localFile` bypasses the shared-workflow credential guard, GHSA-8crx-5h96-q72q, 5.1.** The save-time check cannot see sub-workflows loaded at run time, so an editor gets the project's credentials resolved and decrypted through one. Fixed 1.123.85, 2.44.1, 2.43.5. Reporter kemrec.
+- **Credential permission check skips nodes whose default parameters are omitted, GHSA-v9cx-v88r-42vw, 5.1.** Stored parameters omit defaults, defaults are restored at execution, so a member runs a workflow that uses a credential they cannot access and sends the decrypted value out. Fixed 1.123.85, 2.44.1, 2.43.5. Reporter Masofgon.
+
+The fix lines are unchanged: 1.123.85, 2.43.5 and 2.44.1 close the whole day, and the two fixed in 2.42.1 and 2.41.4 were already closed on 2026-09-30. Still no CVE on any of the fifteen. The six CVE ids VulnCheck assigned on 2026-10-14 belong to the [September 30 batch](2026-09-n8n-september-30-ten-advisory-batch.md), not to these.
+
 ## Sources
 - [n8n — GHSA-wvjj-qg37-pv73](https://github.com/n8n-io/n8n/security/advisories/GHSA-wvjj-qg37-pv73), [GHSA-mp7q-23hg-35cf](https://github.com/n8n-io/n8n/security/advisories/GHSA-mp7q-23hg-35cf), [GHSA-m7gv-mpg5-7c9v](https://github.com/n8n-io/n8n/security/advisories/GHSA-m7gv-mpg5-7c9v), [GHSA-43v8-hjhm-chjp](https://github.com/n8n-io/n8n/security/advisories/GHSA-43v8-hjhm-chjp), [GHSA-qmvv-q3c9-wpp7](https://github.com/n8n-io/n8n/security/advisories/GHSA-qmvv-q3c9-wpp7), [GHSA-8vrr-mgc5-jg55](https://github.com/n8n-io/n8n/security/advisories/GHSA-8vrr-mgc5-jg55), [GHSA-pcr3-v5vr-qppf](https://github.com/n8n-io/n8n/security/advisories/GHSA-pcr3-v5vr-qppf), [GHSA-mgpr-56r4-5c67](https://github.com/n8n-io/n8n/security/advisories/GHSA-mgpr-56r4-5c67), [GHSA-65mv-v8rp-54wc](https://github.com/n8n-io/n8n/security/advisories/GHSA-65mv-v8rp-54wc), [GHSA-crfj-5wv6-8v86](https://github.com/n8n-io/n8n/security/advisories/GHSA-crfj-5wv6-8v86) (all published 2026-10-14; descriptions, CVSS 4.0 vectors, affected and patched versions, workarounds, reporters)
-- [n8n security advisories tab](https://github.com/n8n-io/n8n/security/advisories) (the ten rows, read 2026-10-14)
+- [n8n security advisories tab](https://github.com/n8n-io/n8n/security/advisories) (the ten rows, read 2026-10-14) and [page 2](https://github.com/n8n-io/n8n/security/advisories?page=2) (five more 2026-10-14 rows, read 2026-10-15)
+- [GHSA-cwm2-vhf5-27q9](https://github.com/n8n-io/n8n/security/advisories/GHSA-cwm2-vhf5-27q9), [GHSA-fvv4-gmv9-xqf5](https://github.com/n8n-io/n8n/security/advisories/GHSA-fvv4-gmv9-xqf5), [GHSA-3c3p-5959-3ghr](https://github.com/n8n-io/n8n/security/advisories/GHSA-3c3p-5959-3ghr), [GHSA-8crx-5h96-q72q](https://github.com/n8n-io/n8n/security/advisories/GHSA-8crx-5h96-q72q), [GHSA-v9cx-v88r-42vw](https://github.com/n8n-io/n8n/security/advisories/GHSA-v9cx-v88r-42vw) (the page-2 five, fetched 2026-10-15)
 - [npm registry — n8n](https://registry.npmjs.org/n8n) (`time` field: 2.44.1 2026-10-14T07:43Z, 2.43.5 08:15Z, 1.123.85 08:28Z, 2.42.2 and 2.41.5 2026-10-01; dist-tags latest 2.43.5, next 2.44.1, rc 1.123.85, read 2026-10-14)

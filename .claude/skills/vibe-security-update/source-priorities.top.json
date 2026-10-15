@@ -47,8 +47,8 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 46,
-   "last_hit": "2026-10-14"
+   "hits": 47,
+   "last_hit": "2026-10-15"
   },
   {
    "domain": "github.com/advisories",
@@ -83,8 +83,8 @@
   {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
-   "hits": 26,
-   "last_hit": "2026-10-14"
+   "hits": 27,
+   "last_hit": "2026-10-15"
   },
   {
    "domain": "safedep.io",
@@ -119,8 +119,8 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 104,
-   "last_hit": "2026-10-14"
+   "hits": 105,
+   "last_hit": "2026-10-15"
   },
   {
    "domain": "theregister.com",
@@ -137,8 +137,8 @@
   {
    "domain": "vulncheck.com",
    "weight": 20.0,
-   "hits": 24,
-   "last_hit": "2026-10-14"
+   "hits": 25,
+   "last_hit": "2026-10-15"
   },
   {
    "domain": "wiz.io",

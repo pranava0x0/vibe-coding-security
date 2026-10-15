@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-10-14
+**Last refreshed:** 2026-10-15
 
 ## Quick start
 
@@ -55,10 +55,11 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-10-14)
+## Active threat families (as of 2026-10-15)
 
 The highest-risk ongoing threat families for vibe coders:
 
+- **The framework release you were told to wait for carries two advisories no scanner sees (Next.js 16.4.1 / 15.5.28 and React 19.3.1, 2026-10-14)** — an unauthenticated RCE in `use cache` functions returning typed arrays (GHSA-673q-mjm6-r5xr, 9.5) and a Server Actions DoS have no CVE, so `npm audit` is silent; the SVG Image Optimization RCE carries librsvg's CVE-2026-96889 and `next@15.5.28` still accepts the vulnerable `sharp` 0.34.x. Upgrade both Next.js and `react-server-dom-*`, then run `npm ls sharp`.
 - **The editor's trust boundary is a filename comparison, and the operating system parses paths better than the check does (VS Code 1.141.1 ten-CVE batch and Visual Studio Copilot CVE-2026-103572, 2026-10-13)** — a crafted profile import escapes path containment to code execution (CVE-2026-102238, 9.6), three more records run code from a crafted file, a crafted workspace or a terminal notification, and content an AI coding agent reads can rewrite a lifecycle-hook file (CVE-2026-102232) or, in Visual Studio, `.mcp.json` through a trailing period Windows discards. Update the editor; a fork on an older base still has the pre-fix code.
 - **The registry's record of who you are is a credential, and it can be reassigned without your secret changing (npm SlugFest and Docker Hub GhostPat, 2026-10-12 → 10-13)** — npm trusted publishing bound packages to a repository name until first publish, so a freed slug could publish 1,500+ packages (fixed 2026-10-02: 48-hour expiry, immutable-id binding); Docker Hub's account conversion handed a live PAT to any user an attacker named, for two years (CVE-2026-105445, 9.4, fixed 2026-09-30, 304,000 pushes reviewed). `npm trust list` every package; revoke registry tokens you did not create.
 - **The LLM app platform with no security tab has eight CVEs and an unauthenticated path to super-admin (Bisheng, CERT/CC VU#166125, 2026-10-14)** — `POST /user/sso` mints JWTs for anyone and promotes an account named like the admin, no fix and no vendor reply since 2026-08-06; the Code node still runs user Python through `exec()` by the maintainer's own account. Keep such platforms off the internet.
