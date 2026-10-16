@@ -165,9 +165,18 @@ def _leading_blockquote_summary(body: str) -> str | None:
     text = re.sub(r"[*_`]+", "", text)
     text = re.sub(r"\s+", " ", text).strip()
     if len(text) > 200:
-        text = text[:197].rsplit(" ", 1)[0] + "…"
+        text = _truncate_on_word(text, 197)
     return text or None
 
+
+
+def _truncate_on_word(text: str, cut: int) -> str:
+    """Cut `text` at `cut` chars on a word boundary and append an ellipsis.
+
+    One helper for the four places build.py shortens a label (page
+    descriptions at 197, Tier-2 pointer labels at LLMS_TIER2_TITLE_MAX - 1);
+    before 2026-10-16 each was its own copy of the same idiom."""
+    return text[:cut].rsplit(" ", 1)[0] + "…"
 
 def derive_description(frontmatter: dict[str, Any], body: str) -> str:
     if frontmatter.get("description"):
@@ -205,7 +214,7 @@ def derive_description(frontmatter: dict[str, Any], body: str) -> str:
     desc = re.sub(r"[*_`]+", "", desc)
     desc = re.sub(r"\s+", " ", desc).strip()
     if len(desc) > 200:
-        desc = desc[:197].rsplit(" ", 1)[0] + "…"
+        desc = _truncate_on_word(desc, 197)
     return desc or SITE_TAGLINE
 
 
@@ -719,6 +728,12 @@ LLMS_TIER2_TITLE_MAX = 72
 # already complete, so the root now carries the newest Tier-2 pointers plus one
 # link to the full list. Size is O(1) in corpus size again.
 LLMS_TXT_TIER2_RECENT = 40
+# llms-ctx.txt lists only this many Tier-2 pointers for the same reason, and
+# links the complete advisories/llms.txt for the rest. Added 2026-10-16: the
+# ctx file breached its budget at TIER1_FLOOR with 361 untruncated one-liners
+# (122,151 of 133,493 B); a label truncation alone would have recurred at
+# roughly 650 advisories, which at ~2.6 new files a day is a few months away.
+LLMS_CTX_TIER2_RECENT = 60
 
 # Byte budgets, and the end of the hand-tuned-knob era.
 #
@@ -950,7 +965,7 @@ def _render_llms_txt(
         for p in shown:
             t = p.title
             if len(t) > LLMS_TIER2_TITLE_MAX:
-                t = t[: LLMS_TIER2_TITLE_MAX - 1].rsplit(" ", 1)[0] + "…"
+                t = _truncate_on_word(t, LLMS_TIER2_TITLE_MAX - 1)
             lines.append(f"- [{t}]({_page_html_url(p)})")
         if rest:
             lines.append(
@@ -1107,9 +1122,10 @@ def _render_llms_full_txt(pages: list[Page], tier1_max: int) -> str:
 def build_llms_ctx_txt(pages: list[Page]) -> str:
     """Compact mid-tier: per-advisory TL;DR + 'am I affected?' in full for the
     LLMS_CTX_TIER1 most recently updated + all active/ongoing advisories; older,
-    resolved advisories get a one-line pointer instead (label truncated to
-    LLMS_TIER2_TITLE_MAX, page link intact — see the Tier-2 comment in
-    _render_llms_ctx_txt).
+    LLMS_CTX_TIER2_RECENT newest resolved advisories get a one-line pointer
+    (label truncated to LLMS_TIER2_TITLE_MAX) and the rest one link to the
+    complete advisories/llms.txt — see the Tier-2 comment in
+    _render_llms_ctx_txt.
 
     Tier-1 membership is solved for against LLMS_CTX_BUDGET rather than fixed
     (see the budget block above) — this file had no membership cap at all and
@@ -1135,9 +1151,9 @@ def _render_llms_ctx_txt(pages: list[Page], tier1_max: int) -> str:
         "",
         f"Generated {date.today().isoformat()}. Compact variant: alerts + per-advisory ",
         "TL;DR + 'am I affected?' commands, in full for the most recently updated and ",
-        "still-active/ongoing advisories. Older, resolved advisories are listed as a ",
-        "one-line pointer at the end — see llms-full.txt or the advisory's own page ",
-        "for their full content.",
+        "still-active/ongoing advisories. The newest older, resolved advisories are ",
+        "listed as one-line pointers at the end; the complete list is advisories/llms.txt, ",
+        "and llms-full.txt or the advisory's own page has their full content.",
         "",
         f"Index: {SITE_URL}/llms.txt | Full: {SITE_URL}/llms-full.txt | Web: {SITE_URL}/",
         "",
@@ -1191,17 +1207,21 @@ def _render_llms_ctx_txt(pages: list[Page], tier1_max: int) -> str:
         # URL, " — severity — date"). The fitter cannot shrink a term that does
         # not depend on Tier-1 membership, so the floor breached and the cap
         # test fired, as the TIER1_FLOOR comment says it should. Same fix as
-        # root llms.txt took on 2026-09-10 and 2026-09-16: drop the suffix and
-        # truncate the label to LLMS_TIER2_TITLE_MAX on a word boundary. Every
-        # advisory keeps its own page link, which is the completeness contract
-        # tests/test_llms.py checks for this file now (page link, not prose
-        # title). Full titles live in advisories/llms.txt, llms-full.txt, the
-        # page and advisories.json.
-        for p in tier2:
+        # root llms.txt took on 2026-09-20: the LLMS_CTX_TIER2_RECENT newest
+        # pointers, label truncated to LLMS_TIER2_TITLE_MAX, plus one link to
+        # advisories/llms.txt, which is complete by construction and is where
+        # tests/test_llms.py checks completeness. Size is O(1) in corpus size.
+        shown, rest = tier2[:LLMS_CTX_TIER2_RECENT], tier2[LLMS_CTX_TIER2_RECENT:]
+        for p in shown:
             t = p.title
             if len(t) > LLMS_TIER2_TITLE_MAX:
-                t = t[: LLMS_TIER2_TITLE_MAX - 1].rsplit(" ", 1)[0] + "…"
+                t = _truncate_on_word(t, LLMS_TIER2_TITLE_MAX - 1)
             lines.append(f"- [{t}]({_page_html_url(p)})")
+        if rest:
+            lines.append(
+                f"- …and {len(rest)} older advisories, every one listed with its full title in "
+                f"[advisories/llms.txt]({SITE_URL}/advisories/llms.txt)"
+            )
         lines.append("")
 
     return "\n".join(lines)

@@ -132,21 +132,28 @@ def test_llms_full_contains_every_advisory(parsed_advisories, llms_full_txt):
     assert not missing, f"Advisories missing from llms-full.txt: {missing}"
 
 
-def test_llms_ctx_contains_every_advisory(parsed_advisories, llms_ctx_txt):
-    """Every advisory appears in llms-ctx.txt, identified by its page link.
+def _advisories_missing_page_link(parsed_advisories, text: str) -> list[str]:
+    """Names of advisories whose page link (`<slug>.html`, the stable identifier)
+    is absent from `text`. Shared by the completeness checks below."""
+    return [path.name for path, _, _ in parsed_advisories if f"{path.stem}.html" not in text]
 
-    Until 2026-10-16 this checked the full prose title. Tier-2 one-liners in
-    llms-ctx.txt now truncate their label (LLMS_TIER2_TITLE_MAX, same as root
-    llms.txt since 2026-09-16) because the untruncated list alone was 92% of
-    the byte budget at 361 advisories. The page link is the stable identifier
-    and is what makes an entry complete; the full title is in advisories/
-    llms.txt, llms-full.txt and advisories.json."""
-    missing = []
-    for path, fm, _ in parsed_advisories:
-        slug = path.stem
-        if f"/advisories/{slug}.html" not in llms_ctx_txt:
-            missing.append(path.name)
-    assert not missing, f"Advisories missing from llms-ctx.txt: {missing}"
+
+def test_llms_ctx_links_complete_advisory_index(llms_ctx_txt):
+    """llms-ctx.txt must point a reader at the complete per-section index.
+
+    Until 2026-10-16 this file carried every advisory as a full-title one-liner
+    and the test here required every prose title. That list alone was 92% of
+    the byte budget at 361 advisories and breached it at TIER1_FLOOR, where the
+    Tier-1 fitter has nothing left to trim. The ctx file now follows the root
+    file (2026-09-20): LLMS_CTX_TIER2_RECENT newest pointers plus one link to
+    advisories/llms.txt, which test_advisories_llms_txt_lists_every_advisory
+    keeps complete."""
+    assert "/advisories/llms.txt" in llms_ctx_txt, "llms-ctx.txt does not link advisories/llms.txt"
+
+
+def test_llms_ctx_tier2_is_bounded():
+    """Guards the 2026-10-16 fix: ctx Tier 2 is count-bounded, not O(corpus)."""
+    assert 0 < _build.LLMS_CTX_TIER2_RECENT <= 100
 
 
 def test_advisories_llms_txt_lists_every_advisory(parsed_advisories, dist_dir):
@@ -163,7 +170,7 @@ def test_advisories_llms_txt_lists_every_advisory(parsed_advisories, dist_dir):
     untruncated title also lives there, on the page, and in advisories.json.
     """
     section = (dist_dir / "advisories" / "llms.txt").read_text(encoding="utf-8")
-    missing = [path.name for path, _, _ in parsed_advisories if f"{path.stem}.html" not in section]
+    missing = _advisories_missing_page_link(parsed_advisories, section)
     assert not missing, f"Advisories missing from advisories/llms.txt: {missing}"
 
 
