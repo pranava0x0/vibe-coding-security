@@ -841,6 +841,31 @@ def _fit_tier1_max(render: Callable[[int], str], hi: int, budget: int) -> str:
     return best
 
 
+def _tier2_pointer_lines(tier2: list[Page], recent_n: int) -> list[str]:
+    """One-line pointers for the `recent_n` newest Tier-2 advisories, then one
+    line linking advisories/llms.txt, which is complete by construction.
+
+    Shared by root llms.txt (bounded 2026-09-20) and llms-ctx.txt (bounded
+    2026-10-16) so the two files cannot drift. The index link is emitted
+    whether or not anything was left over: the files' headers promise it, and
+    tests/test_llms.py asserts it, independent of the corpus size."""
+    out: list[str] = []
+    shown, rest = tier2[:recent_n], tier2[recent_n:]
+    for p in shown:
+        label = p.title
+        if len(label) > LLMS_TIER2_TITLE_MAX:
+            label = _truncate_on_word(label, LLMS_TIER2_TITLE_MAX - 1)
+        out.append(f"- [{label}]({_page_html_url(p)})")
+    index_link = f"[advisories/llms.txt]({SITE_URL}/advisories/llms.txt)"
+    if rest:
+        out.append(
+            f"- …and {len(rest)} older advisories, every one listed with its full title in {index_link}"
+        )
+    else:
+        out.append(f"- The complete list, every title in full, is {index_link}")
+    return out
+
+
 def _advisory_pages(pages: list[Page]) -> list[Page]:
     return [p for p in pages if p.section == "advisories" and not p.is_index]
 
@@ -932,7 +957,7 @@ def _render_llms_txt(
         # 36 (not 60) keeps ~3KB of budget margin for future sweeps.
         desc = p.description
         if len(desc) > 36:
-            desc = desc[:35].rsplit(" ", 1)[0] + "…"
+            desc = _truncate_on_word(desc, 35)
         lines.append(
             f"- [{p.title}]({_page_html_url(p)}) ([md]({_page_md_url(p)})){meta}: {desc}"
         )
@@ -961,17 +986,7 @@ def _render_llms_txt(
         # per-section index for the rest; the completeness contract in
         # tests/test_llms.py checks advisories/llms.txt (complete by
         # construction) and that the root links to it.
-        shown, rest = tier2[:LLMS_TXT_TIER2_RECENT], tier2[LLMS_TXT_TIER2_RECENT:]
-        for p in shown:
-            t = p.title
-            if len(t) > LLMS_TIER2_TITLE_MAX:
-                t = _truncate_on_word(t, LLMS_TIER2_TITLE_MAX - 1)
-            lines.append(f"- [{t}]({_page_html_url(p)})")
-        if rest:
-            lines.append(
-                f"- …and {len(rest)} older advisories, every one listed with its full title in "
-                f"[advisories/llms.txt]({SITE_URL}/advisories/llms.txt)"
-            )
+        lines.extend(_tier2_pointer_lines(tier2, LLMS_TXT_TIER2_RECENT))
         lines.append("")
 
     for slug, label, _ in SECTIONS:
@@ -1211,17 +1226,7 @@ def _render_llms_ctx_txt(pages: list[Page], tier1_max: int) -> str:
         # pointers, label truncated to LLMS_TIER2_TITLE_MAX, plus one link to
         # advisories/llms.txt, which is complete by construction and is where
         # tests/test_llms.py checks completeness. Size is O(1) in corpus size.
-        shown, rest = tier2[:LLMS_CTX_TIER2_RECENT], tier2[LLMS_CTX_TIER2_RECENT:]
-        for p in shown:
-            t = p.title
-            if len(t) > LLMS_TIER2_TITLE_MAX:
-                t = _truncate_on_word(t, LLMS_TIER2_TITLE_MAX - 1)
-            lines.append(f"- [{t}]({_page_html_url(p)})")
-        if rest:
-            lines.append(
-                f"- …and {len(rest)} older advisories, every one listed with its full title in "
-                f"[advisories/llms.txt]({SITE_URL}/advisories/llms.txt)"
-            )
+        lines.extend(_tier2_pointer_lines(tier2, LLMS_CTX_TIER2_RECENT))
         lines.append("")
 
     return "\n".join(lines)
