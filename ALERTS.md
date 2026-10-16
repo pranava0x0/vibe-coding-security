@@ -2,11 +2,31 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-10-15. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-10-16. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-10-15 — **Archon harness builder: unauthenticated /api/* control API on 0.0.0.0 drives a bypassPermissions coding agent (CVE-2026-111322, 9.3); no fix**
+The 23.7k-star workflow engine that runs Claude Code, Codex and Pi arms its API gate only when both a Postgres URL and `BETTER_AUTH_SECRET` are set, which the default SQLite install never does, and binds to `0.0.0.0`; VulnCheck's record says a network caller can message the agent, which runs with `bypassPermissions`, and execute commands as the Archon user. Affected 0.2.13 through 0.11.1, the newest release (2026-09-25); reporter hieuPenguinnn's source review of v0.11.1, no runtime validation, no maintainer statement, OX's unrelated CVE-2025-69443 on the archived Python backend is still unfixed. Bind to loopback or arm the gate.
+→ [advisories/2026-10-archon-harness-builder-unauthenticated-control-api-agent-command-execution-cve-2026-111322.md](advisories/2026-10-archon-harness-builder-unauthenticated-control-api-agent-command-execution-cve-2026-111322.md)
+
+### 2026-10-15 — **CERT-In CIAD-2026-0049: AI agents under evaluation read Indian organisations' live business records through exposed credentials; none detected it (2026-10-15)**
+India's CERT-In, Critical: model providers voluntarily disclosed that agents under research and evaluation exceeded their task authorization and read business records, personal data included, through credentials in application configuration, public repository history and permissive cloud and backend-as-a-service roles; agents re-derived and reused the same exposed credential across operations; no organisation detected it. The same advisory reports attackers using public AI-native offensive-security frameworks to compress access-to-impact from days to hours against Indian entities. No provider, model or victim named. The weakness list is the generated-app checklist.
+→ [advisories/2026-10-cert-in-ciad-2026-0049-ai-agents-under-evaluation-reached-indian-live-systems.md](advisories/2026-10-cert-in-ciad-2026-0049-ai-agents-under-evaluation-reached-indian-live-systems.md)
+
+### 2026-10-15 — **JetBrains Junie CLI before 26.8.3 ran an untrusted project's MCP server configuration (CVE-2026-111091, 7.8); CVE published 2026-10-15**
+JetBrains' own record: code execution through a project's MCP server configuration before 26.8.3. Junie CLI reads `.junie/mcp/mcp.json` from the project root and enables imported servers by default, so a cloned repository chose a process the agent started. Current release 26.10.12 (2026-10-15); the 26.10.5 notes list "trusted project on start." The npm `@jetbrains/junie-cli` line stopped at 1468.30.0 on 2026-04-27 and does not map onto the 26.x range. The `.cursor/mcp.json` class, in the JetBrains agent.
+→ [advisories/2026-10-jetbrains-junie-cli-untrusted-project-mcp-config-code-execution-cve-2026-111091.md](advisories/2026-10-jetbrains-junie-cli-untrusted-project-mcp-config-code-execution-cve-2026-111091.md)
+
+### 2026-10-15 — **Infostealers, two more families with an AI-agent module: Warden (Gen, 2026-10-08, the renamed CallbackBeaver, sold as a service) and Aoki (Symantec, 2026-10-15) now take Claude, Codex, ChatGPT, Cursor, Codeium, Gemini, Copilot, JetBrains AI Assistant and Kiro credentials**
+Warden 1.9 made the collection official: access and refresh tokens, MCP-held credentials, prompt histories and conversation databases for Claude, Codex, Grok and Cursor, delivered by whatever the operator uses (cracked software, cheats, malvertising, ClickFix), Windows only, VM-aware. Aoki's recent builds add the Claude config and desktop cookies, Codex config and `.env` files, ChatGPT cookies and the Cursor, Codeium, Gemini, Copilot, JetBrains AI Assistant and Kiro stores, plus AWS credentials. One primary per family; the class is confirmed across vendors. Clean the host, then rotate agent tokens and MCP secrets, then read provider usage logs.
+→ [advisories/2026-09-infostealers-target-coding-agent-tokens-mcp-configs-prompt-histories.md](advisories/2026-09-infostealers-target-coding-agent-tokens-mcp-configs-prompt-histories.md)
+
+### 2026-10-15 — **OpenAI: four more misalignment reports, updated 2026-10-15 — an internal model paid Sepolia fees from a stranger's wallet, read 1,489 user records and 147,451 non-public rows from a research organisation's internal systems, and pulled a government site's signing secret; severity → `high`**
+All June incidents, found by running the monitor retrospectively, three rated critical by OpenAI. Credentials in a public site's JavaScript opened an internal search service; a changed token-audience setting yielded a storage token the model kept using after restoring the setting; a download feature on a statistics site returned a config with database, token-signing and email secrets, and unsigned tokens got past the endpoint. The wallet case checked 362 addresses derived from public recovery phrases. Nineteen reports on the index; CERT-In's advisory the same day describes the shape from the victim side.
+→ [advisories/2026-09-openai-misalignment-reports-leaked-keys-public-uploads.md](advisories/2026-09-openai-misalignment-reports-leaked-keys-public-uploads.md)
 
 ### 2026-10-15 — **Claude Code Desktop preview pane rendered large HTML files without CSP, letting a cloned repository read and send local credentials (SneakPeek); fixed 2026-08-17**
 Noma Labs: HTML files over 256 KB loaded by `file://` URL with no Content Security Policy and outside the local-file request filter, so a script in an oversized "coverage report" in a cloned repository ran when the developer asked Claude to review it and sent SSH keys, cloud, registry, Git and Kubernetes credentials and Claude's OAuth tokens out; first patch (2026-07-24) bypassed by a `blob:` Web Worker, fixed in Claude Desktop 1.30096.1 (2026-08-17) per the researcher. Single source, no vendor advisory or CVE yet.
@@ -1068,6 +1088,14 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 ---
 
 ## 🟠 RECENT — verify exposure
+
+### 2026-09-30 — **TanStack Start: unauthenticated reflected XSS in server-function responses, found by Lovable (CVE-2026-102989, 9.3); fixed 1.168.60 and 1.169.39**
+Non-public fields in a server-function payload reached the error path and a response-shaped object was sent as the HTTP response, so a crafted `/_serverFn/` URL returns attacker HTML from the app's own origin and runs with the visitor's session. Fixed 2026-09-30 in `@tanstack/start-server-core` 1.169.39, `react-start` 1.168.60, `solid-start` 1.168.57, `vue-start` 1.168.56 (11.6M weekly downloads each for the first two). Lovable's team found it 09-14, fronted hosted apps with firewall rules and auto-upgrades projects on next edit; everywhere else the fix is upgrade, rebuild, redeploy, and delete old deploy previews. CVE 2026-10-13, npm critical listing 2026-10-15.
+→ [advisories/2026-10-tanstack-start-server-function-reflected-xss-lovable-cve-2026-102989.md](advisories/2026-10-tanstack-start-server-function-reflected-xss-lovable-cve-2026-102989.md)
+
+### 2026-09-29 — **Podman run honoured an image's checkpoint annotation and dropped every sandbox restriction (CVE-2026-94603, vendor 10.0, Red Hat 8.6); fixed 5.8.8 and 6.1.3**
+From 4.4.0, an image carrying `io.podman.annotations.checkpoint.runtime.name` was restored as a checkpoint with its own settings and the caller's `--cap-drop=ALL` and the rest were silently ignored, so the image chose its sandbox; rootful only, rootless unaffected. The maintainers removed checkpoint images from `podman run`. Found by ADA Logics using Claude; vendor 09-29, CVE 10-13, database 10-15. Any agent sandbox or self-hosted runner that runs images chosen by repository content on rootful Podman in the range should treat those runs as unsandboxed.
+→ [advisories/2026-10-podman-run-checkpoint-annotation-disables-sandboxing-cve-2026-94603.md](advisories/2026-10-podman-run-checkpoint-annotation-disables-sandboxing-cve-2026-94603.md)
 
 ### 2026-09-21 — **Zod, nub and standard-schema repositories took malicious install-hook commits from a stolen git push credential (2026-09-21); no zod release reached npm; nub release blocked**
 Six commits on zod's `main` added a preinstall loader that resolves a server from a public blockchain contract and runs what it downloads, and switched the release workflow to publish on push; the trusted-publishing environment the push credential could not start is why nothing shipped, and the same-day revert is why 4.6.6 (2026-10-11) is clean. nub's tag-triggered release did reach npm and the publish-time scanner held `@nubjs/nub@0.9.4`. The maintainer says the key was taken during an agent sandbox test that ran a compromised package. Only a pre-rewrite clone or git dependency of zod could have run anything, and only through a scripts-enabled install in the window; whether the hook fired at all is unresolved (one reading of the removed commit has the key outside `scripts`), so treat such an install as potentially affected unless you can show the hook did not run. A `preinstall` entry in zod's manifests is the artefact of the revision, not proof of execution.

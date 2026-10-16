@@ -2,7 +2,7 @@
 id: 2026-10-nextjs-react-october-14-out-of-band-use-cache-rsc-rce-svg-sharp-server-actions-dos
 title: "Next.js 16.4.1 and 15.5.28, React 19.3.1: unauthenticated RCE through `use cache` typed arrays and SVG image optimization, Server Actions DoS (2026-10-14)"
 date_disclosed: 2026-10-14
-last_updated: 2026-10-15
+last_updated: 2026-10-16
 severity: critical
 status: patched
 ecosystems: [npm, javascript, nextjs, react, sharp]
@@ -62,6 +62,10 @@ Upgrade to `next@16.4.1` or `next@15.5.28`, rebuild and redeploy; the fix is in 
 - Pin `sharp` explicitly in apps that accept image uploads or generate OG images, and check `npm ls sharp` after every framework upgrade.
 - Keep Cache Components and `dangerouslyAllowSVG` off unless the app needs them. See [supply-chain-attack-surface.md](../prevention/supply-chain-attack-surface.md).
 
+## Update 2026-10-16 — the vendor's release post exists, and it disagrees with the registry on `sharp`
+
+Next.js published "Next.js Security Update for Upstream Vulnerabilities" on 2026-10-14 (Josh Story, Karim Rahal, Sebastian Silbermann); the 10-15 sweep found `nextjs.org/blog/security` returning 404 and the blog index without it, and Hacker News surfaced the post on 2026-10-16. It confirms the three advisories and their severities as written above, names the React advisories GHSA-xqc2-xf4c-x3h3 and GHSA-h3gv-c5rc-p453 as the upstreams of the `use cache` and Server Actions items, still carries no CVE for either, and states the SVG workaround as "ensure the version of `sharp` used by Next.js is 0.35.5 or later." One sentence needs a caveat: "Upgrading Next.js to the patched versions ensures package managers automatically provide a fixed version of `sharp` to Next.js." That holds for `next@16.4.1`, whose `optionalDependencies.sharp` is `^0.35.5`. For `next@15.5.28` the pin re-checked on 2026-10-16 is `^0.34.3 || ^0.35.5`, so a lockfile that already resolves `sharp` 0.34.x satisfies the range and `npm install next@15.5.28` does not move it. The `npm ls sharp` check above stands for the 15.x line. Both statements are recorded; the registry pin is the one a package manager reads.
+
 ## Sources
 - [GHSA-673q-mjm6-r5xr, Next.js vendor tab](https://github.com/vercel/next.js/security/advisories/GHSA-673q-mjm6-r5xr) — `use cache` RCE, 9.5, affected and patched versions, no workaround.
 - [GHSA-2464-fhr4-w9xw, Next.js vendor tab](https://github.com/vercel/next.js/security/advisories/GHSA-2464-fhr4-w9xw) — SVG Image Optimization RCE, CVE-2026-96889, sharp 0.35.5 workaround, credits.
@@ -72,3 +76,4 @@ Upgrade to `next@16.4.1` or `next@15.5.28`, rebuild and redeploy; the fix is in 
 - [The Hacker News, 2026-10-15](https://thehackernews.com/2026/10/nextjs-ships-out-of-band-patch-for-two.html) — `dangerouslyAllowSVG` and `next/og` paths, the `sharp.block` interim step, the 15.5.28 `sharp` range, the `npm audit` gap, Netlify's statement, no exploitation as of 2026-10-15.
 - [Next.js September 2026 release file](2026-09-nextjs-september-2026-security-release-seven-advisories.md) — the postponed critical and high this release closes, and the sharp 0.35.5 fix date.
 - npm registry `time` for `next` and `react-server-dom-webpack`, fetched 2026-10-15 — publish timestamps; `npm view next@<v> optionalDependencies.sharp` — the sharp pins.
+- [Next.js blog — Next.js Security Update for Upstream Vulnerabilities](https://nextjs.org/blog/nextjs-security-update-october-14-2026) — 2026-10-14; the vendor post: the three advisories, the React upstream ids, the `sharp` 0.35.5 workaround and the "automatically provide a fixed version" sentence; fetched 2026-10-16. `npm view next@15.5.28 optionalDependencies.sharp` re-run 2026-10-16: `^0.34.3 || ^0.35.5`.
