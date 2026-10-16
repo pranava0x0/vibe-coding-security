@@ -133,10 +133,18 @@ def test_llms_full_contains_every_advisory(parsed_advisories, llms_full_txt):
 
 
 def test_llms_ctx_contains_every_advisory(parsed_advisories, llms_ctx_txt):
+    """Every advisory appears in llms-ctx.txt, identified by its page link.
+
+    Until 2026-10-16 this checked the full prose title. Tier-2 one-liners in
+    llms-ctx.txt now truncate their label (LLMS_TIER2_TITLE_MAX, same as root
+    llms.txt since 2026-09-16) because the untruncated list alone was 92% of
+    the byte budget at 361 advisories. The page link is the stable identifier
+    and is what makes an entry complete; the full title is in advisories/
+    llms.txt, llms-full.txt and advisories.json."""
     missing = []
     for path, fm, _ in parsed_advisories:
-        title = str(fm.get("title", "")).strip()
-        if title and title not in llms_ctx_txt:
+        slug = path.stem
+        if f"/advisories/{slug}.html" not in llms_ctx_txt:
             missing.append(path.name)
     assert not missing, f"Advisories missing from llms-ctx.txt: {missing}"
 

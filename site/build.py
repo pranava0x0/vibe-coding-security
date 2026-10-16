@@ -1107,7 +1107,9 @@ def _render_llms_full_txt(pages: list[Page], tier1_max: int) -> str:
 def build_llms_ctx_txt(pages: list[Page]) -> str:
     """Compact mid-tier: per-advisory TL;DR + 'am I affected?' in full for the
     LLMS_CTX_TIER1 most recently updated + all active/ongoing advisories; older,
-    resolved advisories get a one-line pointer instead.
+    resolved advisories get a one-line pointer instead (label truncated to
+    LLMS_TIER2_TITLE_MAX, page link intact — see the Tier-2 comment in
+    _render_llms_ctx_txt).
 
     Tier-1 membership is solved for against LLMS_CTX_BUDGET rather than fixed
     (see the budget block above) — this file had no membership cap at all and
@@ -1183,12 +1185,23 @@ def _render_llms_ctx_txt(pages: list[Page], tier1_max: int) -> str:
     if tier2:
         lines.append("## More advisories (older, resolved — one line each)")
         lines.append("")
+        # 2026-10-16: Tier 2 was this file's O(n) term too. At TIER1_FLOOR the
+        # render was 133,493 B against a 132,300 B budget, and 122,151 B of
+        # that was 361 one-liners at a mean of 345 B each (full title, absolute
+        # URL, " — severity — date"). The fitter cannot shrink a term that does
+        # not depend on Tier-1 membership, so the floor breached and the cap
+        # test fired, as the TIER1_FLOOR comment says it should. Same fix as
+        # root llms.txt took on 2026-09-10 and 2026-09-16: drop the suffix and
+        # truncate the label to LLMS_TIER2_TITLE_MAX on a word boundary. Every
+        # advisory keeps its own page link, which is the completeness contract
+        # tests/test_llms.py checks for this file now (page link, not prose
+        # title). Full titles live in advisories/llms.txt, llms-full.txt, the
+        # page and advisories.json.
         for p in tier2:
-            sev = p.frontmatter.get("severity", "")
-            date_d = p.frontmatter.get("date_disclosed", "")
-            meta = " — ".join(str(x) for x in [sev, date_d] if x)
-            meta = f" — {meta}" if meta else ""
-            lines.append(f"- [{p.title}]({_page_html_url(p)}){meta}")
+            t = p.title
+            if len(t) > LLMS_TIER2_TITLE_MAX:
+                t = t[: LLMS_TIER2_TITLE_MAX - 1].rsplit(" ", 1)[0] + "…"
+            lines.append(f"- [{t}]({_page_html_url(p)})")
         lines.append("")
 
     return "\n".join(lines)
