@@ -15,6 +15,22 @@
 
 ## Archived entries
 
+## 2026-10-09
+
+```yaml
+queries: {deep: 16, medium: 16, shallow: 8}
+new: [2026-08-pydantic-ai-web-chat-ui-cross-site-agent-tool-execution-cve-batch, 2026-07-fast-jwt-rsa-hs256-algorithm-confusion-third-incomplete-fix-cve-batch, 2026-10-handlebars-compile-ast-javascript-injection-bypass-cve-batch, 2026-10-ollama-api-pull-path-traversal-root-rce-docker-restart, 2026-10-aws-agent-plugins-databases-on-aws-command-injection-toolkit-token-cdk-bulletins, 2026-10-nvidia-dcgm-exporter-exposed-gpu-telemetry-pprof-dos, 2026-10-barracuda-dual-target-phishing-prompt-injection-email-ai-assistants]
+updated: [2026-05-praisonai-auth-bypass, 2026-08-microsoft-august-patch-tuesday-ai-agent-cves, 2026-09-bifrost-mcp-client-registration-unauth-rce]
+sources_added: [cert.pl, lava.security, api.msrc.microsoft.com, blog.barracuda.com, raw.githubusercontent.com]
+sources_weighted: [github.com/advisories, github.com, cveawg.mitre.org, aws.amazon.com, research.jfrog.com, stepsecurity.io, blog.gitguardian.com, theregister.com, thehackernews.com, helpnetsecurity.com, unite.ai, infosecurity-magazine.com, api.npmjs.org, registry.npmjs.org, pypi.org, pypistats.org]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, securityweek-front-page-cloudflare-403-to-curl, socket.dev-blog-cloudflare-403-to-curl, github-advisory-GHSA-x7f2-404-both-forms, github-tree-and-search-api-scope-blocked-use-raw-githubusercontent, openclaw.ai-blog-rough-week-connection-reset, kev-json-no-new-in-scope, hn-algolia-ok]
+classifier_events: [safeguard-stop]
+deferred_after_classifier_stop:
+  - 2026-10-ghostaction-returns-github-actions-workflow-credential-theft-git-history-sweep: GitHub Actions credential-theft campaign, 2026-10-08 wave (345 repos per StepSecurity 2026-10-09; 772 repos Aug 31 → Sep 30 per GitGuardian); sources StepSecurity "GhostAction Returns", GitGuardian "772 Repos Hit", kitao/pyxel issue 742 and uber/athenadriver issue 83 (Socket threat research, 2026-10-09); write from those four at defender altitude, hunting markers only, no endpoint
+```
+
+**Notes.** Full-coverage scheduled sweep (social/web/industry/open-source cited; agent-orchestration tabs Claude Code/Cursor/Codex/gemini-cli/Cline/OpenHands/SWE-agent/aider/OpenClaw + Windows node/goose/MCP TS+Python SDKs/LangChain/LangGraph/Semantic Kernel/n8n/Langflow/Flowise/PraisonAI/LiteLLM/Coder/pydantic-ai; frontend Next.js/React/Vite/Svelte/SvelteKit/Tailwind/shadcn/sharp; backend/auth Supabase auth/NextAuth/better-auth/Clerk/Prisma/FastAPI/Streamlit/python-genai/ZITADEL/Payload/trigger.dev/GitPython; Dots/Instinct/Perplexity Computer searched, nothing new). Direct WebSearch/WebFetch + curl; no subagents. KEV (dateAdded ≥ 10-02): five 2015–2023 ids on 10-08, NetScaler, Zammad ×2 — nothing new in scope. **The run's shape:** six of seven new files came from database listings and vendor tabs, one (NVIDIA DCGM) from the Register front page; the two backfills (pydantic-ai 08-12, fast-jwt 07-28) were ten- and five-advisory vendor tabs whose CVEs were all assigned on 10-08. **Judgement calls:** Handlebars filed `high` with both 9.8/9.2 shown (needs an untrusted object at `compile()` or `allowProtoMethodsByDefault`); NVIDIA DCGM `medium` (DoS CVE plus a configuration exposure; the bulletin's "4.8.2 affected and fixed" conflict recorded); Barracuda `active`/medium with two sources and no product named; Ollama dated 10-08 by the CNA, the v0.35.0 release page's "28 Sep" noted without a year. **Declined:** Splunk MCP CVE-2026-76286 (5.3, needs `mcp_tool_execute` role), SiYuan's four 10-02/05 GHSAs (product already in the MCP batch; no CVE), OpenHands CVE-2026-19022 (VulDB record, 0.62.0, Aug), Kimi Code CVE-2026-17534 (5.5, July), knowns CVE-2026-86540, vLLM's eight 10-05/06 moderates, Capgo, Coraza, mechanize, Backstage, Telerik, AnyDesk/GoBalance/Pixel Pwn2Own/TLD-hijack (out of audience), GlassWorm themes (already the 10-05 update), CVE-2026-42560 (go-pkgz/auth, not Supabase). **Open items:** write the deferred GhostAction file first next run; CVE-2026-85180 (Ollama SSRF) fix version; Pydantic AI GHSA-fpf4 CVE; AWS GHSA-x7f2 page; python-jose PR #422; Next.js postponed critical; PraisonAI pages 3–18 still never diffed. Skill: LEARNINGS §43, two triage-patterns bullets, five sources added; queries.md untouched (frozen).
+
 ## 2026-10-08
 
 ```yaml
