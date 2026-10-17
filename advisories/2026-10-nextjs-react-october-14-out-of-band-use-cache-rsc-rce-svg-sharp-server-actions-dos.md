@@ -2,7 +2,7 @@
 id: 2026-10-nextjs-react-october-14-out-of-band-use-cache-rsc-rce-svg-sharp-server-actions-dos
 title: "Next.js 16.4.1 and 15.5.28, React 19.3.1: unauthenticated RCE through `use cache` typed arrays and SVG image optimization, Server Actions DoS (2026-10-14)"
 date_disclosed: 2026-10-14
-last_updated: 2026-10-16
+last_updated: 2026-10-17
 severity: critical
 status: patched
 ecosystems: [npm, javascript, nextjs, react, sharp]
@@ -77,3 +77,4 @@ Next.js published "Next.js Security Update for Upstream Vulnerabilities" on 2026
 - [Next.js September 2026 release file](2026-09-nextjs-september-2026-security-release-seven-advisories.md) — the postponed critical and high this release closes, and the sharp 0.35.5 fix date.
 - npm registry `time` for `next` and `react-server-dom-webpack`, fetched 2026-10-15 — publish timestamps; `npm view next@<v> optionalDependencies.sharp` — the sharp pins.
 - [Next.js blog — Next.js Security Update for Upstream Vulnerabilities](https://nextjs.org/blog/nextjs-security-update-october-14-2026) — 2026-10-14; the vendor post: the three advisories, the React upstream ids, the `sharp` 0.35.5 workaround and the "automatically provide a fixed version" sentence; fetched 2026-10-16. `npm view next@15.5.28 optionalDependencies.sharp` re-run 2026-10-16: `^0.34.3 || ^0.35.5`.
+- [HOL Guard — Next.js October 2026 security update: two unauthenticated RCEs; check sharp too](https://hol.org/blog/cve-2026-96889-nextjs-october-2026-security-update-rce) — 2026-10-14, modified 2026-10-17, no individual author; reaches the same conclusion as the pin check above ("There is no fixed 0.34.x release; the only fixed sharp is 0.35.5"), recommends an `overrides` pin and `npm ls next sharp`; on the Hacker News front page 2026-10-16. Third-party corroboration only; the registry pin is the evidence.

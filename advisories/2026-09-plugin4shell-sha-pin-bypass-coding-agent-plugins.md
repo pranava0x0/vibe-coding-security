@@ -2,7 +2,7 @@
 id: 2026-09-plugin4shell-sha-pin-bypass-coding-agent-plugins
 title: "Plugin4Shell — Claude Code, OpenAI Codex, GitHub Copilot and Gemini CLI all checked out a pinned plugin commit without verifying they landed on it, so a repository owner can serve different code under a reviewed SHA and auto-update it into every installed agent; Claude Code and Codex are patched, Copilot and the retired Gemini CLI are not; Anthropic assigned CVE-2026-86063 on 2026-10-09"
 date_disclosed: 2026-09-17
-last_updated: 2026-10-10
+last_updated: 2026-10-17
 severity: high
 status: mitigated
 ecosystems: [claude-code, codex, github-copilot, gemini-cli, git, agent-plugins, skills]
@@ -81,6 +81,10 @@ On **2026-10-09** the `anthropics/claude-code` advisory tab gained [GHSA-pq7j-f9
 
 Three things to record. The advisory lands 115 days after the npm fix (2.1.179, 2026-06-16) and 22 days after Air's publication, so a reader who only watches the vendor tab or Dependabot learned of this in October. the CVE Services API returned no record for CVE-2026-86063 on 2026-10-10, the same shape as CVE-2026-103435 last week, a vendor advisory printing an id that CVE Services does not have yet (that one resolved in two days); cite the GHSA and re-check. The Codex, Copilot and Gemini CLI positions are unchanged by this: no new vendor statement for any of the three was found this sweep, so status stays `mitigated`.
 
+## Update — 2026-10-17: CVE-2026-86063 now resolves (GitHub CNA, 2026-10-13); the vendor page re-read prints 7.5 with UI:A where it printed 7.7 with UI:P a week ago
+
+CVE Services now has the record: [CVE-2026-86063](https://cveawg.mitre.org/api/cve/CVE-2026-86063), CNA GitHub, published 2026-10-13, affected `claude-code` < 2.1.179, CVSS 4.0 **7.5** with vector `AV:N/AC:L/AT:P/PR:N/UI:A/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N`, CWE-494 and CWE-829, referencing the vendor advisory and the v2.1.179 release. The [GitHub Advisory Database row](https://github.com/advisories/GHSA-pq7j-f95f-qfcv) is dated 2026-10-15 (reviewed), and the `claude` listing carried it that day with the CVE attached. The vendor advisory page, re-read 2026-10-17, prints 7.5 and `UI:A` (active user interaction); on 2026-10-10 this file recorded 7.7 and `UI:P` from the same page. The description did not change; the user-interaction metric did, and the score moved with it. Both readings are kept here with their dates. Nothing changes for readers: fixed line 2.1.179, auto-update users already had it, Codex, Copilot and Gemini CLI positions unchanged, status `mitigated`.
+
 ## Sources
 - [Air Security — Plugin4Shell: Zero Click RCE Vulnerability found in top 4 most popular coding agents](https://www.air.security/blog-posts/plugin4shell) — primary; the two variants, the `git rev-parse` fix, the per-vendor timeline (Anthropic 06-17, Google 08-04, Codex verified 08-12), the GitHub-vs-Bitbucket host behaviour, researcher names. Fetched 2026-09-18.
 - [The Hacker News — Plugin4Shell Lets Repository Owners Swap Pinned Plugin Code Across Four AI Coding Agents](https://thehackernews.com/2026/09/plugin4shell-lets-repository-owners.html) — 2026-09-18; OpenAI's fix description quote, "no CVE as of September 18," GitHub's branch-name block. Fetched 2026-09-18.
@@ -91,3 +95,4 @@ Three things to record. The advisory lands 115 days after the npm fix (2.1.179, 
 - [Google Developers Blog — An important update: Transitioning Gemini CLI to Antigravity CLI](https://developers.googleblog.com/an-important-update-transitioning-gemini-cli-to-antigravity-cli/) — 2026-05-19 announcement, 2026-06-18 cutover, enterprise carve-out. Fetched 2026-09-18.
 - npm registry `time` fields for `@anthropic-ai/claude-code` (2.1.179 → 2026-06-16), `@openai/codex` (0.146.0 → 2026-07-29) and `@google/gemini-cli` (0.60.0 → 2026-09-15, not deprecated) — queried 2026-09-18.
 - **2026-10-10 update sources** — [anthropics/claude-code — GHSA-pq7j-f95f-qfcv](https://github.com/anthropics/claude-code/security/advisories/GHSA-pq7j-f95f-qfcv) (fetched 2026-10-10; published 2026-10-09; CVE-2026-86063, CVSS 4.0 7.7, affected < 2.1.179, patched 2.1.179, the description quoted above, credit); CVE Services API, CVE-2026-86063 (queried 2026-10-10: no record yet, so no link; re-check next sweep); npm `time` for `@anthropic-ai/claude-code` 2.1.179 (2026-06-16; re-queried 2026-10-10, latest 2.1.296 on 2026-10-09).
+- **2026-10-17 update sources** — [CVE-2026-86063, CVE Services record (GitHub CNA)](https://cveawg.mitre.org/api/cve/CVE-2026-86063) (published 2026-10-13; 7.5, `UI:A` vector, CWE-494/829, the advisory and release references); [GitHub Advisory Database, GHSA-pq7j-f95f-qfcv](https://github.com/advisories/GHSA-pq7j-f95f-qfcv) (reviewed row dated 2026-10-15, NVD 2026-10-13); the vendor advisory page re-read 2026-10-17 (7.5, `UI:A`).
