@@ -26,7 +26,7 @@ pip show lmcache 2>/dev/null | grep -i version      # 0.3.9 through 0.5.5 (and 0
 # e.g. a multi-node or Kubernetes deployment binding on all interfaces.
 ss -ltnp 2>/dev/null | grep 5555
 ```
-An LMCache embedded inside a single vLLM process does not open the port and is not remotely exploitable. JFrog gives operators no way to tell whether a server has already been hit.
+An LMCache embedded inside a single vLLM process does not open the port and is not remotely exploitable. JFrog gave operators no way to tell whether a server had already been hit; the maintainers' 2026-10-13 guidance (below) is to review connections from unexpected sources, unexpected child processes, shells and outbound connections, and to treat a port reachable from untrusted networks as a compromise.
 
 ## If you are affected
 Upgrade every server and worker to 0.5.6 or later in one step (see the 2026-10-17 update below: the wire format changed and mixed versions do not connect). Until then, keep the LMCache ZMQ transport off routable networks — bind it to localhost or a trusted cluster-internal network only, and do not set `--host` to a routable address. A firewall reduces exposure but does not remove it, since any host that can open a connection can run code; segment the serving tier and do not run the container as root; official non-root images start at 0.5.6. See [agent-sandboxing.md](../prevention/agent-sandboxing.md) and [if-your-webapp-was-compromised.md](../playbooks/if-your-webapp-was-compromised.md). If the port was reachable from an untrusted network before the upgrade, treat the host as compromised and rotate what it held.

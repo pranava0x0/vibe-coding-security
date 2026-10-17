@@ -1,6 +1,6 @@
 ---
 id: 2026-09-plugin4shell-sha-pin-bypass-coding-agent-plugins
-title: "Plugin4Shell — Claude Code, OpenAI Codex, GitHub Copilot and Gemini CLI all checked out a pinned plugin commit without verifying they landed on it, so a repository owner can serve different code under a reviewed SHA and auto-update it into every installed agent; Claude Code and Codex are patched, Copilot and the retired Gemini CLI are not; Anthropic assigned CVE-2026-86063 on 2026-10-09"
+title: "Plugin4Shell — Claude Code, OpenAI Codex, GitHub Copilot and Gemini CLI all checked out a pinned plugin commit without verifying they landed on it, so a repository owner can serve different code under a reviewed SHA and auto-update it into every installed agent; Claude Code and Codex are patched, Copilot and the retired Gemini CLI are not; the Claude Code half is CVE-2026-86063 (vendor GHSA 2026-10-09, GitHub CNA record 2026-10-13)"
 date_disclosed: 2026-09-17
 last_updated: 2026-10-17
 severity: high
