@@ -1,20 +1,20 @@
 ---
 id: 2026-10-npm-dependency-confusion-native-addon-beacon-cluster-galicia-kmf-cloudflare-module-ci-token-theft
-title: "Five npm dependency-confusion lures with prebuilt native-addon beacons, one escalating to CI token theft (2026-10-09 to 10-11); all unpublished"
+title: "Five npm dependency-confusion lures with prebuilt native-addon beacons, one escalating to CI token theft; uploaded 2026-10-09, all unpublished"
 date_disclosed: 2026-10-09
 last_updated: 2026-10-18
 severity: medium
 status: contained
 ecosystems: [npm, ci-cd]
-tools_affected: ["any npm project whose .npmrc lets an internal or plausible-internal name fall through to the public registry", "CI runners and build images that installed @galicia-toolkit-nestjs/paas 999.0.3 through 999.0.6, kmf-bootstrap 100.100.100 through 100.100.106, kmf-vendor-pack 99.0.0 through 100.100.106, ksp-app 100.100.100, or cloudflare_module 1.0.0, 1.0.1, 3.0.0 or 99.0.1", "bundlers that resolved an internal cloudflare_module name from the public registry (import-time beacon)"]
+tools_affected: ["any npm project whose .npmrc lets an internal or plausible-internal name fall through to the public registry", "CI runners and build images that installed @galicia-toolkit-nestjs/paas 999.0.3 through 999.0.6, kmf-bootstrap 100.100.100 through 100.100.106, kmf-vendor-pack 99.0.0 through 100.100.106, ksp-app 100.100.100 or 100.100.101 (the second from the registry timeline only), or cloudflare_module 0.1.0 (registry only), 1.0.0, 1.0.1, 3.0.0 or 99.0.1", "bundlers that resolved an internal cloudflare_module name from the public registry (import-time beacon)"]
 tags: [dependency-confusion, supply-chain, npm, native-addon, preinstall, postinstall, import-time, reconnaissance, credential-theft, ci-cd, osv-mal, contained]
 ---
 
 ## TL;DR
 
-Between 2026-10-09 15:48 and 2026-10-11 UTC, five package names shaped like internal dependencies appeared on the public npm registry at versions chosen to win resolution over any private copy (999.0.x, 100.100.x, 99.0.x): `@galicia-toolkit-nestjs/paas`, `kmf-bootstrap`, `kmf-vendor-pack`, `ksp-app` and `cloudflare_module`. Four ran at install time through a `preinstall` or `postinstall` hook that loaded a prebuilt native addon shipped in the tarball (`prebuilds/linux-x64/*.node`, with a Windows build in the scoped package), so there was no JavaScript payload to read and no `binding.gyp` to build. The addon forked a detached process that collected the hostname, username, working directory, OS and Node versions, the package name and the configured npm registry URL, and sent them to attacker infrastructure over HTTP, a raw socket or DNS lookups. The later versions of `@galicia-toolkit-nestjs/paas` went further and read the full values of CI and cloud secrets from environment variables, among them `NPM_TOKEN`, `NODE_AUTH_TOKEN` and `GITHUB_TOKEN`. `cloudflare_module` fired its beacon at install time and again whenever anything `require()`d it. None of the five spreads on its own. The registry's `time` field shows the `kmf-*` and `ksp-app` names unpublished at 22:12 UTC on 2026-10-09, within seven hours of the first upload, and the scoped package is gone entirely. OSV holds a malicious-package record for each (MAL-2026-17723, 17744, 17746, 17768, 17770), sourced from Amazon Inspector with SafeDep, OpenSSF Package Analysis and InvisiRisk corroborating some; Corgea's write-up of 2026-10-12 is the one narrative source.
+On 2026-10-09, between 15:48 and 22:59 UTC, five package names shaped like internal dependencies appeared on the public npm registry at versions chosen to win resolution over any private copy (999.0.x, 100.100.x, 99.0.x): `@galicia-toolkit-nestjs/paas`, `kmf-bootstrap`, `kmf-vendor-pack`, `ksp-app` and `cloudflare_module`. Four ran at install time through a `preinstall` or `postinstall` hook that loaded a prebuilt native addon shipped in the tarball (`prebuilds/linux-x64/*.node`, with a Windows build in the scoped package), so there was no JavaScript payload to read and no `binding.gyp` to build. The addon forked a detached process that collected the hostname, username, working directory, OS and Node versions, the package name and the configured npm registry URL, and sent them to attacker infrastructure over HTTP, a raw socket or DNS lookups. The later versions of `@galicia-toolkit-nestjs/paas` went further and read the full values of CI and cloud secrets from environment variables, among them `NPM_TOKEN`, `NODE_AUTH_TOKEN` and `GITHUB_TOKEN`. `cloudflare_module` fired its beacon at install time and again whenever anything `require()`d it. None of the five spreads on its own. The registry's `time` field shows the `kmf-*` and `ksp-app` names unpublished at 22:12 UTC on 2026-10-09, within seven hours of the first upload, and the scoped package is gone entirely. OSV holds a malicious-package record for each, published 2026-10-09 to 2026-10-11 (MAL-2026-17723, MAL-2026-17744, MAL-2026-17746, MAL-2026-17768, MAL-2026-17770), sourced from Amazon Inspector with SafeDep, OpenSSF Package Analysis and InvisiRisk corroborating some; Corgea's write-up of 2026-10-12 is the one narrative source.
 
-The trigger condition for a compromised host is specific: a machine ran `npm install` (or `npm ci`) on a project where one of these names resolved from the public registry at one of the listed versions, with lifecycle scripts enabled, or executed code that imported `cloudflare_module`. A lockfile entry is the evidence; a live-registry check that comes back empty proves nothing, because the packages are already gone.
+The trigger condition for a compromised host is specific: a machine ran `npm install` (or `npm ci`) on a project where one of these names resolved from the public registry at one of the listed versions, the registry-only ones included, with lifecycle scripts enabled, or executed code that imported `cloudflare_module`. A lockfile entry is the evidence; a live-registry check that comes back empty proves nothing, because the packages are already gone.
 
 ## What happened
 
@@ -40,7 +40,7 @@ The condition is a resolved install of one of the five names at a listed version
 
 ```bash
 # lockfiles and manifests, every checkout and CI cache you have
-grep -rE '"(@galicia-toolkit-nestjs/paas|kmf-bootstrap|kmf-vendor-pack|ksp-app|cloudflare_module)"' --include=package-lock.json --include=yarn.lock --include=pnpm-lock.yaml --include=package.json . 2>/dev/null
+grep -rE '(@galicia-toolkit-nestjs/paas|kmf-bootstrap|kmf-vendor-pack|ksp-app|cloudflare_module)' --include=package-lock.json --include=yarn.lock --include=pnpm-lock.yaml --include=package.json . 2>/dev/null
 
 # the npm cache index on a workstation or runner image
 grep -rlE 'galicia-toolkit-nestjs|kmf-bootstrap|kmf-vendor-pack|ksp-app|cloudflare_module' ~/.npm/_cacache/index-v5 2>/dev/null | head
@@ -48,10 +48,10 @@ grep -rlE 'galicia-toolkit-nestjs|kmf-bootstrap|kmf-vendor-pack|ksp-app|cloudfla
 # internal registry or proxy logs: any of the five names served from upstream between 2026-10-09 15:00 UTC and 2026-10-11
 ```
 
-- A hit on `@galicia-toolkit-nestjs/paas` at 999.0.5 or 999.0.6 on a runner with CI secrets in the environment is token theft, not reconnaissance. Treat every token the runner held as taken.
+- A hit on `@galicia-toolkit-nestjs/paas` at any of 999.0.3 through 999.0.6 on a runner with CI secrets in the environment is token theft until shown otherwise. The OSV record splits the behaviour into early versions (DNS beacon) and later versions (the addon reading secrets) without naming the boundary version, so treat every token the runner held as taken.
 - A hit on any other name is a beacon that told the attacker your hostname, user, working directory and internal registry URL, which is the information needed to choose the next name. Expect follow-up lures against the namespaces your registry URL implies.
 - `npm` debug logs do not record which lifecycle scripts ran. A hit on a machine where scripts were enabled is an unprovable install, which this corpus classes as unknown and treats as compromised.
-- `--ignore-scripts` blocks the four `postinstall` and `preinstall` paths. It does not block the `cloudflare_module` import-time beacon.
+- `--ignore-scripts` blocks the `postinstall` and `preinstall` paths on all five names. It does not block the second path on `cloudflare_module`, the beacon that fires when the module is imported.
 
 ## If you are affected
 
