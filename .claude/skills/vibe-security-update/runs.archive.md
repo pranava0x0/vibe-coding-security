@@ -15,6 +15,22 @@
 
 ## Archived entries
 
+## 2026-10-12
+
+```yaml
+queries: {deep: 16, medium: 14, shallow: 6}
+new: [2026-10-strapi-kev-relational-filter-admin-hash-leak-2026-recurrence, 2026-10-agno-tool-call-confirmation-gate-team-delegation-vuldb-cves, 2026-10-reactime-repository-compromise-vscode-folder-open-task-polinrider]
+updated: [2026-10-vulncheck-single-researcher-agent-mcp-gateway-cve-wave-mini-swe-agent-env-leak, 2026-09-deepseek-harness-host-header-sandbox-escape]
+sources_added: [deepwoodssec.com, strapi.io, ghostccamm.com, vuldb.com]
+sources_weighted: [github.com, github.com/advisories, cveawg.mitre.org, vulncheck.com, hackmd.io, cisa.gov, services.nvd.nist.gov, registry.npmjs.org, pypi.org]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, novati-2026-09-30-warning-post-not-located, socradar-operation-master-report-not-located, zdi-published-index-truncates-webfetch, gtig-blog-index-undated, divd-cases-page-truncated, nvidia-product-security-not-walked, kev-json-ok, hn-algolia-ok]
+classifier_events: [safeguard-stop]
+deferred_after_classifier_stop: [2026-10-cyberxero-claude-code-agent-swarm-initial-access-broker-ukraine-exposed-logs: SOCRadar 2026-10-06 report on an initial access broker running 51 Claude Code agent definitions and PentAGI with Cobalt Strike against WordPress sites and Ukrainian utilities, found through the actor's exposed working directory; THN 2026-10-12 pickup adds a second SOCRadar report (Operation Master); offensive-use class per LEARNINGS §41(3); primaries socradar.io/blog/cyberxero-ai-iab-ukraine-critical-infrastructure/ and thehackernews.com/2026/10/cyberxero-uses-claude-code-in-campaign.html]
+```
+
+**Notes.** Full-coverage scheduled sweep (front pages THN/SecurityWeek/Register, HN Algolia, KEV JSON, database listings mcp/npm-critical/pip-critical/agent/claude/llm/codex/cursor, VulnCheck and ZDI indexes, AWS bulletins, alignment.openai.com, 36 vendor tabs incl. Strapi for the first time, blog indexes Cloudflare/PyPI/Rust/Aikido/StepSecurity/SafeDep/Unit 42/Anthropic/OpenClaw/Next.js, Fireworks bulletins, kb.cert, DIVD; Tier A/B/C searches direct, no subagents). **Classifier:** one safeguard stop on the `Write` of the CyberXero offensive-use advisory after the checkpoint commit; the partial file was removed, the row is in `fallback.log.md`, the file is deferred above with its primaries, nothing re-sent, no model switch; the Reactime campaign file written a minute earlier passed. **Shape:** none of the three new files came from a search; Strapi came from the KEV feed plus a never-opened vendor tab (zero files, ten rows), Agno from the `agent` listing's two VulDB rows, Reactime from the HN Algolia feed (5 points). **Judgement calls:** Strapi `high`/`active` on the KEV addition with the 9.2 and 9.3 shown as the CNA's and the KEV CWE label noted as a label, not a mechanism; Agno `unconfirmed`/high per §10 (issues plus open PRs, VulDB CNA, no maintainer word); Reactime `contained`/high on the analyst write-up plus the maintainers' documented branch reset; mac-shell-mcp's "before 2.0.0" recorded as a conflict because the fix is a commit with no npm release (1.0.4 is the only version). **Declined:** ccTLD certificate hijack, AnyPwn, SonicWall, Thelia (out of audience); OX 15,465-MCP-server contributed piece and Token Security BYOA piece (vendor content); Backstage CVE-2026-106501 and Quasar CVE-2026-106102 (out of audience); Wanwu/JeecgBoot/houtini records (listed by id in the wave file, not opened); "Attack of the vibe coded Photoshop clones" (no security content). **Open items:** CyberXero file (deferred); Next.js out-of-band release 2026-10-14; Agno PRs #10523/#10124 and a maintainer reply; mac-shell-mcp npm release; Unla/Plano/pinclaw fixes; Strapi outlet coverage of the KEV addition; CVE-2026-86063 record; python-jose PR #422; PraisonAI pages 3-18. Skill: LEARNINGS §46, SKILL.md incorrect-data table (+2 rows), two triage-patterns bullets, four sources added; queries.md untouched (frozen).
+
+
 ## 2026-10-11
 
 ```yaml

@@ -35,8 +35,14 @@
   {
    "domain": "csoonline.com",
    "weight": 20.0,
-   "hits": 13,
-   "last_hit": "2026-10-01"
+   "hits": 14,
+   "last_hit": "2026-10-19"
+  },
+  {
+   "domain": "cveawg.mitre.org",
+   "weight": 20.0,
+   "hits": 16,
+   "last_hit": "2026-10-19"
   },
   {
    "domain": "cybersecuritynews.com",
@@ -53,8 +59,8 @@
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 53,
-   "last_hit": "2026-10-18"
+   "hits": 54,
+   "last_hit": "2026-10-19"
   },
   {
    "domain": "helpnetsecurity.com",
@@ -113,14 +119,14 @@
   {
    "domain": "stepsecurity.io",
    "weight": 20.0,
-   "hits": 30,
-   "last_hit": "2026-10-10"
+   "hits": 31,
+   "last_hit": "2026-10-19"
   },
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 107,
-   "last_hit": "2026-10-17"
+   "hits": 108,
+   "last_hit": "2026-10-19"
   },
   {
    "domain": "theregister.com",
@@ -137,20 +143,14 @@
   {
    "domain": "vulncheck.com",
    "weight": 20.0,
-   "hits": 28,
-   "last_hit": "2026-10-18"
+   "hits": 29,
+   "last_hit": "2026-10-19"
   },
   {
    "domain": "wiz.io",
    "weight": 20.0,
    "hits": 15,
    "last_hit": "2026-09-12"
-  },
-  {
-   "domain": "api.npmjs.org",
-   "weight": 19.0,
-   "hits": 15,
-   "last_hit": "2026-10-16"
   }
  ]
 }

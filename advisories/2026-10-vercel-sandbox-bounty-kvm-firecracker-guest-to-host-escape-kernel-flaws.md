@@ -2,12 +2,12 @@
 id: 2026-10-vercel-sandbox-bounty-kvm-firecracker-guest-to-host-escape-kernel-flaws
 title: "The microVM under the agent sandbox: Vercel's $1M Sandbox challenge (1,285 reports in two weeks) surfaced two Linux-kernel networking defects — one leaks host kernel memory, one crashes the host — with CVEs pending, and on 2026-10-06 researcher Paulos Yibelo said he has a full KVM guest-to-host-root escape found through the same program, which Vercel's CEO publicly confirmed for a $50,000 award; no CVE, no details, disclosure ongoing"
 date_disclosed: 2026-10-06
-last_updated: 2026-10-07
+last_updated: 2026-10-19
 severity: high
 status: unconfirmed
 ecosystems: [firecracker, kvm, linux-kernel, vercel, ai-agents]
 tools_affected: ["Vercel Sandbox", "Firecracker microVM-based agent sandboxes", "KVM hosts (per the researcher's claim)", "any product that runs untrusted agent-generated code in a microVM on a shared host"]
-tags: [sandbox-escape, hypervisor, kvm, firecracker, linux-kernel, bug-bounty, zero-day, agent-sandboxing, unconfirmed, pending-cve]
+tags: [sandbox-escape, hypervisor, kvm, firecracker, linux-kernel, bug-bounty, zero-day, agent-sandboxing, unconfirmed, pending-cve, egress-bypass, out-of-scope]
 ---
 
 ## TL;DR
@@ -39,7 +39,12 @@ You cannot test for an undisclosed bug, and this project does not probe hosts. W
 ## Prevention
 - [agent-sandboxing](../prevention/agent-sandboxing.md) — defence in depth below the microVM: minimal guest kernel, no unnecessary virtio devices, egress control at the host, and assume the hypervisor will have a bad month.
 
+## Update 2026-10-19: VerCellBreak, an egress-allowlist bypass through a trusted server's certificate fetch, which Vercel ruled out of scope
+
+AIR Security (Matan Elgabsi and Or Nevo, 2026-10-12) described a different boundary of the same product. Vercel Sandbox lets the operator allowlist outbound domains and filters by SNI. A compromised agent inside the sandbox presents a client certificate to an allowed server; the certificate's Authority Information Access extension points at an attacker URL that carries a base64-encoded secret, and the allowed server fetches that URL during chain validation, so the secret reaches the attacker while the sandbox only ever connected to the allowed domain. Any secret the agent can read leaves this way, the example being a private key on disk. No Vercel server was exploited. Vercel classified the report as out of scope under the bug bounty because the exploit depends on an external server that Vercel does not operate; the post gives no report date and no fix. AIR's advice matches this file's Prevention section: egress control is risk reduction, not a boundary, once a trusted endpoint makes outbound requests on the agent's behalf. The kernel claims above remain unconfirmed as of 2026-10-19.
+
 ## Sources
 - [The Register — Security researcher claims they found KVM guest-host escape flaw](https://www.theregister.com/offbeat/2026/10/06/security-researcher-claims-they-found-kvm-guest-host-escape-flaw/5301267) — 2026-10-06; Yibelo's and Rauch's quoted posts, the $50,000 award, "no chat on relevant mailing lists," the list of KVM-dependent vendors. The X posts themselves were not opened by this sweep (search snippets only).
 - [SecurityWeek — $1 Million Sandbox Challenge Uncovers Linux Kernel Flaws](https://www.securityweek.com/1-million-sandbox-challenge-uncovers-linux-kernel-flaws/) — 2026-09-15; the 1,285 / 1-7-15-49-19 / ~$325k figures, "two independent defects in the Linux kernel's networking stack," memory leak and deterministic crash, CVEs pending, the no-customer-data statement, the Eve triage agent.
 - [Vercel — $1 million hacker challenge for Vercel Sandbox](https://vercel.com/blog/one-million-dollar-hacker-challenge-for-vercel-sandbox) — 2026-08-18 (Andy Riancho): program dates, the architecture and scope statements quoted above, the "microVM, not the container" boundary, the $50,000 / $1M terms.
+- [AIR Security, VerCellBreak: How we escaped Vercel's hardened sandbox](https://www.air.security/blog-posts/vercel-break) — 2026-10-12; the SNI allowlist, the mTLS and AIA mechanism, the out-of-scope classification; read 2026-10-19.
