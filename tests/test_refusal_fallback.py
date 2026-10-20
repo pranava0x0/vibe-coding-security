@@ -243,7 +243,7 @@ def test_malicious_artifact_advisories_use_blocklist_template(parsed_advisories)
         )
         for heading in sections:
             # Dated "## Update YYYY-MM-DD: ..." sections are how Step 2 records changes.
-            if heading in ALLOWED_SECTIONS or heading.startswith("## Update "):
+            if heading in ALLOWED_SECTIONS or re.match(r"^## Update \d{4}-\d{2}-\d{2}\b", heading):
                 continue
             raise AssertionError(
                 f"{path.name}: drop '{heading}'. A malicious-artifact advisory names the "
