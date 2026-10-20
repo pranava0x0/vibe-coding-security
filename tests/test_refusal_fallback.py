@@ -185,7 +185,7 @@ ALLOWED_SECTIONS = (
 
 
 def _sections(body: str) -> tuple[dict[str, str], list[str]]:
-    """Split on level-2 headings outside fences; also return every other heading."""
+    """Split on level-2 headings outside fences; also return every other heading and any text before the first section."""
     out: dict[str, str] = {}
     other: list[str] = []
     current = None
@@ -205,6 +205,8 @@ def _sections(body: str) -> tuple[dict[str, str], list[str]]:
             other.append(line.strip())
         if current:
             out[current] += line + "\n"
+        elif line.strip():
+            other.append(line.strip())  # body text before the first section
     return out, other
 
 
@@ -245,7 +247,7 @@ def test_malicious_artifact_advisories_use_blocklist_template(parsed_advisories)
         sections, other_headings = _sections(body)
         assert not other_headings, (
             f"{path.name}: drop {other_headings}. A malicious-artifact advisory uses only "
-            "the level-2 template sections, with no sub-headings."
+            "the level-2 template sections, with no sub-headings and no text before ## TL;DR."
         )
         assert _has_table(sections.get("## Packages and versions", "")), (
             f"{path.name}: a kind: malicious-artifact advisory needs a "
