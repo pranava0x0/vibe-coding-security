@@ -1,0 +1,53 @@
+# Malicious-software advisories written before the malicious-artifact template
+# (PR #135, 2026-10-19). They are exempt from test_new_malicious_advisories_carry_kind.
+# Do not add to this list. A new file tagged worm, stealer, malicious-package and
+# similar must set kind: malicious-artifact instead.
+2025-09-copypasta-license-attack-ai-code-virus.md
+2025-09-shai-hulud-original.md
+2025-10-glassworm-vscode-worm.md
+2025-11-shai-hulud-second-coming.md
+2025-12-shai-hulud-3-test-payload.md
+2026-02-clawhavoc-clawhub-skills.md
+2026-02-sandworm-mode-npm-worm.md
+2026-03-axios-compromise.md
+2026-04-bitwarden-cli-shai-hulud-third-coming.md
+2026-04-vercel-context-ai-breach.md
+2026-05-mini-shai-hulud-may19-wave.md
+2026-05-pcpjack-counter-worm.md
+2026-05-shai-hulud-copycat-wave.md
+2026-05-tanstack-mini-shai-hulud.md
+2026-05-zichatbot-pypi-zulip-c2.md
+2026-06-gluestack-react-native-aria-rat.md
+2026-06-ironworm-npm-rust-ebpf.md
+2026-06-mastra-ai-npm-compromise.md
+2026-06-miasma-immobiliarelabs-backstage-wave.md
+2026-06-miasma-redhat-cloud-services-compromise.md
+2026-06-miasma-wave5-microsoft-azure-github.md
+2026-06-operation-navy-ghost-pyrogram.md
+2026-06-phantom-gyp-miasma-wave4.md
+2026-07-alibaba-lib-mtop-npm-rat-cluster.md
+2026-07-chainveil-vitevenom-npm-blockchain-c2.md
+2026-07-copilot-word-selfpropagating-prompt-injection.md
+2026-07-fakeagent-claude-artifact-malvertising.md
+2026-07-joyfill-npm-devpopper-rat.md
+2026-07-jscrambler-npm-preinstall-infostealer.md
+2026-07-payment-sdk-typosquat-npm-pypi.md
+2026-07-rollup-polyfill-npm-lazarus.md
+2026-07-trae-solidity-extension-onchain-c2.md
+2026-08-arrayref-proc-macro1-crates-io.md
+2026-08-keyv-mini-shai-hulud-npm-worm.md
+2026-08-openvsx-evil-twin-extensions.md
+2026-08-revstealer-fake-claude-opus5-desktop.md
+2026-09-anthropic-claude-session-infostealer-hijack.md
+2026-09-carbonato-docker-botnet-hermes-agent-ai-key-harvest.md
+2026-09-dirtyblanket-npm-express-typosquat-linux-ssh-worm.md
+2026-09-gtig-adversarial-ai-agentic-pipelines.md
+2026-09-infostealers-target-coding-agent-tokens-mcp-configs-prompt-histories.md
+2026-09-jfrog-artifactory-auth-bypass-chain-kev.md
+2026-09-mandiant-hijacked-coding-assistant-session-shai-hulud-saas.md
+2026-09-rust-maintainers-fake-interview-video-call-campaign.md
+2026-09-shai-hulud-111-day-dormant-payload-mcp-package.md
+2026-09-ulid-xyz-npm-transitive-rat-chain-microsoftsystem64.md
+2026-09-weaselbiscuit-npm-chrome-extension-storage-stealer.md
+2026-10-malfex-npm-windows-rat-stealer-campaign-native-addon-loader.md
+2026-10-tensorlake-npm-shai-hulud-hostage-token-wipe.md

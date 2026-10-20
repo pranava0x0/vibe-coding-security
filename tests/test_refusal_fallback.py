@@ -218,6 +218,11 @@ def test_malicious_artifact_advisories_use_blocklist_template(parsed_advisories)
             f"{path.name}: a kind: malicious-artifact advisory needs a "
             "'## Packages and versions' section with a table of ecosystem, name and versions."
         )
+        missing = [h for h in ALLOWED_SECTIONS if h not in sections]
+        assert not missing, (
+            f"{path.name}: a malicious-artifact advisory needs every template section; "
+            f"missing {missing}."
+        )
         for heading in sections:
             # Dated "## Update YYYY-MM-DD: ..." sections are how Step 2 records changes.
             if heading in ALLOWED_SECTIONS or heading.startswith("## Update "):
@@ -242,13 +247,19 @@ MALICIOUS_TAGS = {"worm", "self-propagating", "infostealer", "stealer", "rat", "
                   "malicious-package", "typosquat", "malware"}
 
 
-def test_new_malicious_advisories_carry_kind(parsed_advisories):
+def _legacy_malicious(repo_root: Path) -> set[str]:
+    text = (repo_root / "tests" / "legacy_malicious_advisories.txt").read_text(encoding="utf-8")
+    return {l.strip() for l in text.splitlines() if l.strip() and not l.startswith("#")}
+
+
+def test_new_malicious_advisories_carry_kind(parsed_advisories, repo_root: Path):
     # Without the tag the template test above never runs, so a new worm or
-    # stealer file could slip back to narrative prose. Older files are exempt.
-    cutoff = date(2026, 10, 20)
+    # stealer file could slip back to narrative prose. The exemption is keyed to
+    # the files that existed when the template landed, not to date_disclosed,
+    # because a deferred or late-found advisory can describe an older incident.
+    legacy = _legacy_malicious(repo_root)
     for path, fm, _body in parsed_advisories:
-        raw = fm.get("date_disclosed")
-        if not isinstance(raw, date) or raw < cutoff:
+        if path.name in legacy:
             continue
         hits = MALICIOUS_TAGS & {str(t).lower() for t in fm.get("tags") or []}
         if hits:
