@@ -220,7 +220,11 @@ def _has_table(text: str) -> bool:
     header = _cells(rows[0])
     if not all(any(col in h for h in header) for col in TABLE_COLUMNS):
         return False
-    return all(len(_cells(r)) == len(header) for r in rows[2:])
+    required = [i for i, h in enumerate(header) if any(col in h for col in TABLE_COLUMNS)]
+    return all(
+        len(cells) == len(header) and all(cells[i] for i in required)
+        for cells in (_cells(r) for r in rows[2:])
+    )
 
 
 def test_malicious_artifact_advisories_use_blocklist_template(parsed_advisories):
