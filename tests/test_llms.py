@@ -92,6 +92,17 @@ def test_llms_outputs_are_count_bounded():
     assert _build.LLMS_TXT_TIER1 <= 60
     assert _build.LLMS_CTX_TIER1 <= 40
     assert _build.LLMS_FULL_TIER1 <= 60
+    assert 0 < _build.LLMS_FULL_TIER2_RECENT <= 300
+
+
+def test_llms_full_tier2_tldr_is_bounded(llms_full_txt):
+    """Guards the 2026-10-20 fix: the TL;DR + pointer form in llms-full.txt is
+    count-bounded, not O(corpus). Checks the rendered file: the number of
+    "older/resolved" pointer lines is at most LLMS_FULL_TIER2_RECENT."""
+    pointers = llms_full_txt.count("_Full write-up (older/resolved, not inlined here) at ")
+    assert pointers <= _build.LLMS_FULL_TIER2_RECENT, (
+        f"llms-full.txt has {pointers} TL;DR pointers; bound is {_build.LLMS_FULL_TIER2_RECENT}"
+    )
 
 
 def test_llms_budgets_are_derived_from_caps():

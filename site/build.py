@@ -734,6 +734,16 @@ LLMS_TXT_TIER2_RECENT = 40
 # (122,151 of 133,493 B); a label truncation alone would have recurred at
 # roughly 650 advisories, which at ~2.6 new files a day is a few months away.
 LLMS_CTX_TIER2_RECENT = 60
+# llms-full.txt keeps the TL;DR + pointer form for only this many Tier-2
+# advisories (newest first) and lists the rest as one line each: full title,
+# page URL, .md mirror. Added 2026-10-20: the full file breached its budget
+# with Tier 1 already at TIER1_FLOOR, and the measurement was 366 Tier-2
+# TL;DR entries at ~1.8 KB each (645 KB of a 1,004 KB file) — the same O(n)
+# term the ctx file had on 2026-10-16, one file over. Every advisory keeps its
+# title and links here (test_llms_full_contains_every_advisory), so nothing
+# becomes unreachable; the freed room lets the fitter grow Tier 1 back above
+# the floor instead of shrinking coverage.
+LLMS_FULL_TIER2_RECENT = 200
 
 # Byte budgets, and the end of the hand-tuned-knob era.
 #
@@ -1063,7 +1073,10 @@ def build_llms_full_txt(pages: list[Page]) -> str:
 def _render_llms_full_txt(pages: list[Page], tier1_max: int) -> str:
     advisories = _advisory_pages(pages)
     tier1, tier2 = _split_tiers(advisories, LLMS_FULL_TIER1, tier1_max)
-    tier2_ids = {id(p) for p in tier2}
+    # Tier 2 keeps recency order from _split_tiers: the newest
+    # LLMS_FULL_TIER2_RECENT keep a TL;DR, the rest are one line each.
+    tier2_ids = {id(p) for p in tier2[:LLMS_FULL_TIER2_RECENT]}
+    tier2_line_ids = {id(p) for p in tier2[LLMS_FULL_TIER2_RECENT:]}
 
     out: list[str] = [
         f"# {SITE_NAME} — full corpus",
@@ -1072,8 +1085,9 @@ def _render_llms_full_txt(pages: list[Page], tier1_max: int) -> str:
         "",
         f"Every playbook, prevention guide, and source list concatenated for LLM ingestion, plus ",
         f"the {len(tier1)} most recently updated advisories (and every still-active/ongoing one) ",
-        f"in full. Older, resolved advisories appear as a title + link + TL;DR pointer instead of ",
-        f"their full body — each still has its own full page and `.md` mirror, one click away. ",
+        f"in full. The next {LLMS_FULL_TIER2_RECENT} older, resolved advisories appear as a title + link + TL;DR ",
+        f"pointer instead of their full body, and the rest as one line each (title, page, `.md` mirror) — ",
+        f"each still has its own full page and `.md` mirror, one click away. ",
         f"The canonical web version of each document is linked above its content.",
         "",
         "---",
@@ -1084,6 +1098,11 @@ def _render_llms_full_txt(pages: list[Page], tier1_max: int) -> str:
         out.append(f"# {group_label}")
         out.append("")
         for p in group_pages:
+            if p.section == "advisories" and id(p) in tier2_line_ids:
+                # One-line Tier 2 (2026-10-20): title + links only. See
+                # LLMS_FULL_TIER2_RECENT for why the TL;DR form is bounded.
+                out.append(f"- {p.title} — {_page_html_url(p)} ({_page_md_url(p)})")
+                continue
             out.append(f"---")
             out.append("")
             out.append(f"<!-- source: {p.source_path.relative_to(REPO_ROOT)} -->")
