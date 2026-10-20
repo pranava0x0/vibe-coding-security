@@ -168,3 +168,143 @@ def test_new_advisory_titles_are_short(parsed_advisories):
             f"{path.name}: title is {words} words. Titles on or after {cutoff} must be "
             "25 words or fewer; move detail into the body."
         )
+
+
+# Every main-session safeguard stop from 2026-10-05 to 2026-10-19 was the
+# sweep's own prose about malicious software (LEARNINGS.md §54). The corpus only
+# needs the artifact's identity and the remediation, so these files use a
+# table-first template with no narrative section.
+ALLOWED_SECTIONS = (
+    "## TL;DR",
+    "## Packages and versions",
+    "## Am I affected?",
+    "## If you are affected",
+    "## Prevention",
+    "## Sources",
+)
+
+
+def _sections(body: str) -> tuple[dict[str, str], list[str]]:
+    """Split on level-2 headings outside fences; also return every other heading and any text before the first section."""
+    out: dict[str, str] = {}
+    other: list[str] = []
+    current = None
+    fence = ""
+    for line in body.splitlines():
+        m = re.match(r"^(`{3,}|~{3,})", line)
+        if m:
+            if not fence:
+                fence = m.group(1)
+            elif line.startswith(fence[0] * len(fence)):
+                fence = ""
+        elif not fence and line.startswith("## "):
+            current = line.strip()
+            out[current] = ""
+            continue
+        elif not fence and re.match(r"^#{1,6}\s", line):
+            other.append(line.strip())
+        if current:
+            out[current] += line + "\n"
+        elif line.strip():
+            other.append(line.strip())  # body text before the first section
+    return out, other
+
+
+TABLE_COLUMNS = ("ecosystem", "name", "version", "action")
+
+
+def _cells(row: str) -> list[str]:
+    return [c.strip().lower() for c in row.strip().strip("|").split("|")]
+
+
+def _has_table(text: str) -> bool:
+    # Header must name the ecosystem, name, versions and action columns, the
+    # second row must be the separator, and every data row must fill each column.
+    # The first contiguous block of pipe rows; a blank or prose line ends it,
+    # because Markdown would not render rows past that point as one table.
+    rows: list[str] = []
+    for line in text.splitlines():
+        if re.match(r"^\|.*\|\s*$", line):
+            rows.append(line)
+        elif rows:
+            break
+    if len(rows) < 3 or not re.match(r"^\|(\s*:?-{3,}:?\s*\|)+\s*$", rows[1]):
+        return False
+    header = _cells(rows[0])
+    if not all(any(col in h for h in header) for col in TABLE_COLUMNS):
+        return False
+    required = [i for i, h in enumerate(header) if any(col in h for col in TABLE_COLUMNS)]
+    return all(
+        len(cells) == len(header) and all(cells[i] for i in required)
+        for cells in (_cells(r) for r in rows[2:])
+    )
+
+
+def test_malicious_artifact_advisories_use_blocklist_template(parsed_advisories):
+    for path, fm, body in parsed_advisories:
+        if fm.get("kind") != "malicious-artifact":
+            continue
+        sections, other_headings = _sections(body)
+        assert not other_headings, (
+            f"{path.name}: drop {other_headings}. A malicious-artifact advisory uses only "
+            "the level-2 template sections, with no sub-headings and no text before ## TL;DR."
+        )
+        assert _has_table(sections.get("## Packages and versions", "")), (
+            f"{path.name}: a kind: malicious-artifact advisory needs a "
+            "'## Packages and versions' section with a table of ecosystem, name and versions."
+        )
+        missing = [h for h in ALLOWED_SECTIONS if not sections.get(h, "").strip()]
+        assert not missing, (
+            f"{path.name}: a malicious-artifact advisory needs every template section, each with content; "
+            f"missing or empty: {missing}."
+        )
+        for heading in sections:
+            # Dated "## Update YYYY-MM-DD: ..." sections are how Step 2 records changes.
+            if heading in ALLOWED_SECTIONS or re.match(r"^## Update \d{4}-\d{2}-\d{2}\b", heading):
+                continue
+            raise AssertionError(
+                f"{path.name}: drop '{heading}'. A malicious-artifact advisory names the "
+                "artifact and the remediation and links the write-up for behaviour. "
+                f"Allowed sections: {', '.join(ALLOWED_SECTIONS)}, and dated Update sections."
+            )
+
+
+def test_skill_writes_malicious_artifacts_last(repo_root: Path):
+    text = _skill(repo_root)
+    assert "Write malicious-artifact files last" in text, (
+        "SKILL.md must keep malicious-artifact files at the end of the run, after the "
+        "checkpoint commit and the review rounds, so a stop and the switch it can cause "
+        "leave nothing else for the run to do."
+    )
+
+
+MALICIOUS_TAGS = {"worm", "self-propagating", "infostealer", "stealer", "rat", "backdoor",
+                  "malicious-package", "typosquat", "malware"}
+
+
+def _malicious_tags(fm: dict) -> set[str]:
+    # malicious-package, malicious-extension, malicious-skill, malicious-mcp-server, ...
+    tags = {str(t).lower() for t in fm.get("tags") or []}
+    return {t for t in tags if t in MALICIOUS_TAGS or t.startswith("malicious-")}
+
+
+def _legacy_malicious(repo_root: Path) -> set[str]:
+    text = (repo_root / "tests" / "legacy_malicious_advisories.txt").read_text(encoding="utf-8")
+    return {l.strip() for l in text.splitlines() if l.strip() and not l.startswith("#")}
+
+
+def test_new_malicious_advisories_carry_kind(parsed_advisories, repo_root: Path):
+    # Without the tag the template test above never runs, so a new worm or
+    # stealer file could slip back to narrative prose. The exemption is keyed to
+    # the files that existed when the template landed, not to date_disclosed,
+    # because a deferred or late-found advisory can describe an older incident.
+    legacy = _legacy_malicious(repo_root)
+    for path, fm, _body in parsed_advisories:
+        if path.name in legacy:
+            continue
+        hits = _malicious_tags(fm)
+        if hits:
+            assert fm.get("kind") == "malicious-artifact", (
+                f"{path.name}: tagged {sorted(hits)} but has no 'kind: malicious-artifact'. "
+                "Use the malicious-artifact template in CONTRIBUTING.md."
+            )

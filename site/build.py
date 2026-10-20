@@ -1366,6 +1366,7 @@ def build_advisories_json(pages: list[Page]) -> str:
                 "tags": p.frontmatter.get("tags", []),
                 "url": _page_html_url(p),
                 "markdown_url": _page_md_url(p),
+                **({"kind": k} if (k := p.frontmatter.get("kind")) else {}),
             })
     data.sort(key=lambda x: str(x.get("date_disclosed") or ""), reverse=True)
     return json.dumps({"generated": date.today().isoformat(), "advisories": data}, indent=2)
@@ -1399,6 +1400,10 @@ def build_advisory_schema() -> str:
             "ecosystems": {"type": "array", "items": {"type": "string"}},
             "tools_affected": {"type": "array", "items": {"type": "string"}},
             "tags": {"type": "array", "items": {"type": "string"}},
+            "kind": {
+                "enum": ["malicious-artifact"],
+                "description": "malicious-artifact: a package, extension, MCP server, skill or repository not to install."
+            },
             "description": {"type": "string"},
         },
     }
