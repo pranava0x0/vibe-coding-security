@@ -53,6 +53,47 @@ Link to relevant prevention doc(s).
 - [Title](https://url) — what this source contributed.
 ```
 
+## Malicious-artifact advisories
+
+Use this shape for anything a reader could install that is malicious or compromised: packages, extensions, MCP servers, skills, workflows and repositories, including worms, stealers and credential-theft campaigns that ship as one. The reader needs to know what not to install and what to do if they already did. How the code steals, spreads or hides is in the researcher's write-up. Link that write-up and do not restate it.
+
+```markdown
+---
+id: YYYY-MM-short-id
+title: "Malicious <name> <ecosystem> packages: remove and rotate <credential category>"
+kind: malicious-artifact
+date_disclosed: YYYY-MM-DD
+last_updated: YYYY-MM-DD
+severity: critical | high | medium
+status: active | contained | patched | mitigated | historical | unconfirmed
+ecosystems: [npm | pypi | vscode | mcp | github-actions | ...]
+tools_affected: [list of tools/projects that should care]
+tags: [supply-chain, malicious-package, ...]
+---
+
+## TL;DR
+Two sentences: what to remove or block, and what to rotate if it ran.
+
+## Packages and versions
+
+| Ecosystem | Name | Bad versions | Clean version or action | Registry state (date checked) | Record |
+|---|---|---|---|---|---|
+| npm | `example-pkg` | 1.2.3, 1.2.4 | remove; no clean release | removed (YYYY-MM-DD) | MAL-YYYY-NNNN |
+
+## Am I affected?
+Lockfile greps, installed-package checks, and the file paths the artifact leaves.
+
+## If you are affected
+Credential categories to rotate, files to delete, and the playbook link.
+
+## Prevention
+Link to relevant prevention doc(s).
+
+## Sources
+```
+
+Use these sections and no others. The TL;DR does not describe behaviour. Never include payload code, encoded strings, or live download, C2, onion, IP or wallet addresses.
+
 ## Playbook template
 
 Use this for new entries in `playbooks/`. Pattern:
@@ -127,6 +168,7 @@ We're not the right home for:
 - Generic "how to do AppSec" content — there are 100 better resources.
 - Vendor marketing (please).
 - Speculation without sources.
+- Write-ups of attackers using AI tools against third parties that name nothing a reader could install.
 
 When in doubt, open an issue and ask before doing the work.
 

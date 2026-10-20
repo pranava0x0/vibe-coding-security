@@ -168,3 +168,91 @@ def test_new_advisory_titles_are_short(parsed_advisories):
             f"{path.name}: title is {words} words. Titles on or after {cutoff} must be "
             "25 words or fewer; move detail into the body."
         )
+
+
+# Every main-session safeguard stop from 2026-10-05 to 2026-10-19 was the
+# sweep's own prose about malicious software (LEARNINGS.md §54). The corpus only
+# needs the artifact's identity and the remediation, so these files use a
+# table-first template with no narrative section.
+ALLOWED_SECTIONS = (
+    "## TL;DR",
+    "## Packages and versions",
+    "## Am I affected?",
+    "## If you are affected",
+    "## Prevention",
+    "## Sources",
+)
+
+
+def _sections(body: str) -> dict[str, str]:
+    out: dict[str, str] = {}
+    current = None
+    fence = ""
+    for line in body.splitlines():
+        m = re.match(r"^(`{3,}|~{3,})", line)
+        if m:
+            if not fence:
+                fence = m.group(1)
+            elif line.startswith(fence[0] * len(fence)):
+                fence = ""
+        elif not fence and line.startswith("## "):
+            current = line.strip()
+            out[current] = ""
+            continue
+        if current:
+            out[current] += line + "\n"
+    return out
+
+
+def _has_table(text: str) -> bool:
+    rows = [l for l in text.splitlines() if re.match(r"^\|.*\|\s*$", l)]
+    return len(rows) >= 3 and re.match(r"^\|(\s*:?-{3,}:?\s*\|)+\s*$", rows[1]) is not None
+
+
+def test_malicious_artifact_advisories_use_blocklist_template(parsed_advisories):
+    for path, fm, body in parsed_advisories:
+        if fm.get("kind") != "malicious-artifact":
+            continue
+        sections = _sections(body)
+        assert _has_table(sections.get("## Packages and versions", "")), (
+            f"{path.name}: a kind: malicious-artifact advisory needs a "
+            "'## Packages and versions' section with a table of ecosystem, name and versions."
+        )
+        for heading in sections:
+            # Dated "## Update YYYY-MM-DD: ..." sections are how Step 2 records changes.
+            if heading in ALLOWED_SECTIONS or heading.startswith("## Update "):
+                continue
+            raise AssertionError(
+                f"{path.name}: drop '{heading}'. A malicious-artifact advisory names the "
+                "artifact and the remediation and links the write-up for behaviour. "
+                f"Allowed sections: {', '.join(ALLOWED_SECTIONS)}, and dated Update sections."
+            )
+
+
+def test_skill_writes_malicious_artifacts_last(repo_root: Path):
+    text = _skill(repo_root)
+    assert "Write malicious-artifact files last" in text, (
+        "SKILL.md must keep malicious-artifact files at the end of the run, after the "
+        "checkpoint commit and the review rounds, so a stop and the switch it can cause "
+        "leave nothing else for the run to do."
+    )
+
+
+MALICIOUS_TAGS = {"worm", "self-propagating", "infostealer", "stealer", "rat", "backdoor",
+                  "malicious-package", "typosquat", "malware"}
+
+
+def test_new_malicious_advisories_carry_kind(parsed_advisories):
+    # Without the tag the template test above never runs, so a new worm or
+    # stealer file could slip back to narrative prose. Older files are exempt.
+    cutoff = date(2026, 10, 20)
+    for path, fm, _body in parsed_advisories:
+        raw = fm.get("date_disclosed")
+        if not isinstance(raw, date) or raw < cutoff:
+            continue
+        hits = MALICIOUS_TAGS & {str(t).lower() for t in fm.get("tags") or []}
+        if hits:
+            assert fm.get("kind") == "malicious-artifact", (
+                f"{path.name}: tagged {sorted(hits)} but has no 'kind: malicious-artifact'. "
+                "Use the malicious-artifact template in CONTRIBUTING.md."
+            )
