@@ -204,9 +204,23 @@ def _sections(body: str) -> dict[str, str]:
     return out
 
 
+TABLE_COLUMNS = ("ecosystem", "name", "version", "action")
+
+
+def _cells(row: str) -> list[str]:
+    return [c.strip().lower() for c in row.strip().strip("|").split("|")]
+
+
 def _has_table(text: str) -> bool:
+    # Header must name the ecosystem, name, versions and action columns, the
+    # second row must be the separator, and every data row must fill each column.
     rows = [l for l in text.splitlines() if re.match(r"^\|.*\|\s*$", l)]
-    return len(rows) >= 3 and re.match(r"^\|(\s*:?-{3,}:?\s*\|)+\s*$", rows[1]) is not None
+    if len(rows) < 3 or not re.match(r"^\|(\s*:?-{3,}:?\s*\|)+\s*$", rows[1]):
+        return False
+    header = _cells(rows[0])
+    if not all(any(col in h for h in header) for col in TABLE_COLUMNS):
+        return False
+    return all(len(_cells(r)) == len(header) for r in rows[2:])
 
 
 def test_malicious_artifact_advisories_use_blocklist_template(parsed_advisories):
@@ -247,6 +261,12 @@ MALICIOUS_TAGS = {"worm", "self-propagating", "infostealer", "stealer", "rat", "
                   "malicious-package", "typosquat", "malware"}
 
 
+def _malicious_tags(fm: dict) -> set[str]:
+    # malicious-package, malicious-extension, malicious-skill, malicious-mcp-server, ...
+    tags = {str(t).lower() for t in fm.get("tags") or []}
+    return {t for t in tags if t in MALICIOUS_TAGS or t.startswith("malicious-")}
+
+
 def _legacy_malicious(repo_root: Path) -> set[str]:
     text = (repo_root / "tests" / "legacy_malicious_advisories.txt").read_text(encoding="utf-8")
     return {l.strip() for l in text.splitlines() if l.strip() and not l.startswith("#")}
@@ -261,7 +281,7 @@ def test_new_malicious_advisories_carry_kind(parsed_advisories, repo_root: Path)
     for path, fm, _body in parsed_advisories:
         if path.name in legacy:
             continue
-        hits = MALICIOUS_TAGS & {str(t).lower() for t in fm.get("tags") or []}
+        hits = _malicious_tags(fm)
         if hits:
             assert fm.get("kind") == "malicious-artifact", (
                 f"{path.name}: tagged {sorted(hits)} but has no 'kind: malicious-artifact'. "
