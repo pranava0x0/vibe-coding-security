@@ -420,7 +420,7 @@ git push
 ```
 Cloud session: do not retry remote branch deletion. The session proxy drops every `git push --delete` and refuses the refs API, and has since 2026-09-23. Delete the local branch, say once in the summary that the remote branch remains, and continue the run. The owner removes stale `jam/*` branches from a local checkout.
 
-The `git config` lines are local (repo-scoped), not `--global` — a cloud-run sweep has no pre-existing identity and would otherwise commit as its own default bot account (this is also why commit messages must never carry a `Co-Authored-By:`/`Claude-Session:` trailer — see CLAUDE.md's git discipline section).
+The `git config` lines are local (repo-scoped), not `--global` — a cloud-run sweep has no pre-existing identity and would otherwise commit as its own default bot account (this is also why commit messages, PR descriptions and PR comments follow the attribution rule in the repository's `CLAUDE.md`).
 
 If the push is rejected (non-fast-forward), a sweep landed while you worked — `git fetch && git rebase origin/main`, re-run Step 6, then push. **Never force-push.** After pushing, confirm the deploy actually goes green (`gh run watch` on the "Deploy site to GitHub Pages" workflow) — a successful push but failed deploy means the live site is still stale.
 
