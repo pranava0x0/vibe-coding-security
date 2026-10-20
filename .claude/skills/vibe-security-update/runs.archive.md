@@ -15,6 +15,21 @@
 
 ## Archived entries
 
+## 2026-10-13
+
+```yaml
+queries: {deep: 16, medium: 10, shallow: 9}
+new: [2026-10-gitlab-19-4-2-unauthenticated-cicd-regex-rce-cvss-10-duo-agent-prompt-injection, 2026-10-continue-cli-bash-rule-chaining-bypass-vulncheck-agent-sandbox-batch, 2026-10-claude-desktop-windows-git-exe-search-path-rce-cve-2026-88066, 2026-10-cyberxero-claude-code-agent-swarm-initial-access-broker-ukraine-exposed-logs, 2026-10-zod-nub-standard-schema-repository-compromise-stolen-git-credential-install-hook-loader, 2026-10-malfex-npm-windows-rat-stealer-campaign-native-addon-loader]
+updated: [2026-09-orkes-conductor-graalvm-workflow-rce-exploited, 2026-09-coder-registry-cloudflare-terraform-supply-chain, 2026-10-barracuda-dual-target-phishing-prompt-injection-email-ai-assistants, 2026-10-vulncheck-single-researcher-agent-mcp-gateway-cve-wave-mini-swe-agent-env-leak]
+sources_added: []
+sources_weighted: [github.com, docs.gitlab.com, cveawg.mitre.org, vulncheck.com, thehackernews.com, socradar.io, checkmarx.com, safedep.io, securityweek.com, news.ycombinator.com, registry.npmjs.org, api.npmjs.org, malwarebytes.com, hn.algolia.com, vuldb.com, dev.to]
+blockers: [reddit-webfetch-403, x-bsky-search-snippets-only, vuldb-advisory-page-403, zod-issue-6658-deleted, cve-2026-88066-record-dne, zdi-published-index-stale-webfetch, nvidia-product-security-not-walked, kev-json-ok, hn-algolia-ok, securityweek-curl-403-webfetch-ok]
+classifier_events: []
+deferred_after_classifier_stop: []
+```
+
+**Notes.** Full-coverage scheduled sweep (front pages THN/SecurityWeek/Register, HN Algolia on 14 terms, KEV JSON, listings mcp/npm-critical/pip-critical/agent/claude/llm/codex/cursor, VulnCheck index, 32 vendor tabs, AWS bulletins, ZDI, alignment.openai.com, kb.cert, blog indexes Cloudflare/Aikido/StepSecurity/SafeDep/Unit 42/Anthropic/OpenClaw/PyPI/GitHub changelog, Fireworks bulletin, Next.js blog; Tier A/B/C direct, no subagents). **Classifier:** none. The deferred CyberXero file was written first after the checkpoint from two SOCRadar summaries plus THN and passed; Zod and MALFEX passed on one `Write` each. **Shape:** none of the six new files came from a search. Zod came from the HN Algolia feed (180 points, a title the facts contradict), GitLab from the THN front page and the patch feed, Continue CLI and sandboxed.sh from the `agent` listing, Claude Desktop from the Claude Code tab (published the same morning), MALFEX from the SafeDep index, CyberXero from the deferral. **Judgement calls:** Zod `contained`/high with the registry timeline as the deciding fact and both primaries' disagreement recorded; Continue batch `active`/high because the current release is affected by two unfixed records; sandboxed.sh's default-off flag written as mitigated-where-set, its "1.3.0" recorded as a conflict with the releases page; Claude Desktop single-source (vendor GHSA, CVE record DNE); MALFEX `active`/high on the live `imgdecode` 1.0.3; CyberXero `active`/high as offensive use, not a product flaw; Operation Master kept inside the CyberXero file as SOCRadar's claims. **Gate:** three first-draft titles failed the 25-word test; fixed in file, ALERTS and README together. **Declined:** LG TVs, MarkLogic, Danfoss, Ivanti KEV row, Bricksforge, SonicWall, Ledger implant, Telegram Desktop, OTRS, FreeRDP wave, EdgeEver, TinyLLaVA (out of audience); Anthropic Cyber Mission, Google devsite pickle RCE write-up, AISI Astra post (already in the Astra file), Payload 10-08 wave (already tracked), Coder 09-01 registry (tracked), Malwarebytes piece (added as pickup only). **Open items:** Next.js out-of-band release 2026-10-14 (two criticals, one high, upstream); CVE-2026-88066 record; Continue issues #13288 and #13001; deepsec PR #46; orb flag default; `imgdecode` takedown; Agno PRs; mac-shell-mcp release; Strapi outlet coverage; python-jose PR #422; PraisonAI pages 3-18; NVIDIA product-security 2026 folder. Skill: LEARNINGS §47, SKILL.md rule 11 and four incorrect-data rows, five triage-patterns bullets, defang-strip note; queries.md untouched (frozen).
+
 ## 2026-10-12
 
 ```yaml
