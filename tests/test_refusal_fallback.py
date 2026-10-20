@@ -184,8 +184,10 @@ ALLOWED_SECTIONS = (
 )
 
 
-def _sections(body: str) -> dict[str, str]:
+def _sections(body: str) -> tuple[dict[str, str], list[str]]:
+    """Split on level-2 headings outside fences; also return every other heading."""
     out: dict[str, str] = {}
+    other: list[str] = []
     current = None
     fence = ""
     for line in body.splitlines():
@@ -199,9 +201,11 @@ def _sections(body: str) -> dict[str, str]:
             current = line.strip()
             out[current] = ""
             continue
+        elif not fence and re.match(r"^#{1,6}\s", line):
+            other.append(line.strip())
         if current:
             out[current] += line + "\n"
-    return out
+    return out, other
 
 
 TABLE_COLUMNS = ("ecosystem", "name", "version", "action")
@@ -214,7 +218,14 @@ def _cells(row: str) -> list[str]:
 def _has_table(text: str) -> bool:
     # Header must name the ecosystem, name, versions and action columns, the
     # second row must be the separator, and every data row must fill each column.
-    rows = [l for l in text.splitlines() if re.match(r"^\|.*\|\s*$", l)]
+    # The first contiguous block of pipe rows; a blank or prose line ends it,
+    # because Markdown would not render rows past that point as one table.
+    rows: list[str] = []
+    for line in text.splitlines():
+        if re.match(r"^\|.*\|\s*$", line):
+            rows.append(line)
+        elif rows:
+            break
     if len(rows) < 3 or not re.match(r"^\|(\s*:?-{3,}:?\s*\|)+\s*$", rows[1]):
         return False
     header = _cells(rows[0])
@@ -231,15 +242,19 @@ def test_malicious_artifact_advisories_use_blocklist_template(parsed_advisories)
     for path, fm, body in parsed_advisories:
         if fm.get("kind") != "malicious-artifact":
             continue
-        sections = _sections(body)
+        sections, other_headings = _sections(body)
+        assert not other_headings, (
+            f"{path.name}: drop {other_headings}. A malicious-artifact advisory uses only "
+            "the level-2 template sections, with no sub-headings."
+        )
         assert _has_table(sections.get("## Packages and versions", "")), (
             f"{path.name}: a kind: malicious-artifact advisory needs a "
             "'## Packages and versions' section with a table of ecosystem, name and versions."
         )
-        missing = [h for h in ALLOWED_SECTIONS if h not in sections]
+        missing = [h for h in ALLOWED_SECTIONS if not sections.get(h, "").strip()]
         assert not missing, (
-            f"{path.name}: a malicious-artifact advisory needs every template section; "
-            f"missing {missing}."
+            f"{path.name}: a malicious-artifact advisory needs every template section, each with content; "
+            f"missing or empty: {missing}."
         )
         for heading in sections:
             # Dated "## Update YYYY-MM-DD: ..." sections are how Step 2 records changes.
