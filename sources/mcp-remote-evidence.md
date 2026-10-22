@@ -25,7 +25,8 @@ Exact fields to inspect:
 - Mapping: CVE `containers.cna.references[].url`.
 - Attribution and score: CVE `containers.adp[].providerMetadata`, `title`, and `metrics[].cvssV3_1` (score, severity and full vector). MITRE supplied no CNA metrics in these records.
 - NVD status: `vulnerabilities[0].cve.vulnStatus` is `Deferred`; the four `metrics.cvssMetricV31[]` entries identify CISA's provider UUID and type `Secondary`.
-- OSV conflict: `affected[].ranges[].database_specific.extracted_events[]` marks 0.1.38 as fixed, with source `DESCRIPTION`. The corresponding CVE descriptions include 0.1.38 in the affected range. None of those inferred boundaries establishes a vendor fix.
+- OSV conflict: `affected[].ranges[].database_specific.extracted_events[]` marks 0.1.38 as fixed, with source `DESCRIPTION`. The corresponding CVE descriptions include 0.1.38 in the affected range.
+- Update 2026-10-22: OSV's records for CVE-2026-51995, CVE-2026-51996, CVE-2026-51997 and CVE-2026-52001 (`modified` 2026-10-21) no longer carry the description-derived `fixed: 0.1.38` events; the git range now ends in `last_affected` and `v0.1.38` is listed as affected. The manifest's `version_conflicts` was reviewed and set to empty on the refresh of 2026-10-22; the advisory keeps the original conflict note as history beside a dated snapshot-refresh paragraph. The tests inject a synthetic conflict so the disposition checks do not depend on OSV's live state. None of those inferred boundaries establishes a vendor fix.
 
 ## Impact and severity
 
