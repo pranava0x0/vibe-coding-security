@@ -3276,7 +3276,8 @@
    "hits": 3,
    "last_hit": "2026-10-20",
    "tier": "research",
-   "weight": 8
+   "weight": 8,
+   "_added": "2026-10-20"
   },
   "layerxsecurity.com": {
    "_added": "2026-05-19",
@@ -4644,7 +4645,8 @@
    "ecosystems": [
     "paas"
    ],
-   "tier": "vendor"
+   "tier": "vendor",
+   "_added": "2026-10-22"
   },
   "blog.rubygems.org": {
    "ecosystems": [
@@ -5420,7 +5422,8 @@
     "nodejs",
     "npm"
    ],
-   "tier": "vendor"
+   "tier": "vendor",
+   "_added": "2026-10-22"
   },
   "notebookcheck.net": {
    "ecosystems": [
@@ -5514,7 +5517,8 @@
    "ecosystems": [
     "php"
    ],
-   "tier": "vendor"
+   "tier": "vendor",
+   "_added": "2026-10-22"
   },
   "picussecurity.com": {
    "ecosystems": [
@@ -5663,7 +5667,8 @@
    "ecosystems": [
     "paas"
    ],
-   "tier": "vendor"
+   "tier": "vendor",
+   "_added": "2026-10-22"
   },
   "straiker.ai": {
    "_added": "2026-09-08",
@@ -5724,7 +5729,8 @@
    "ecosystems": [
     "php"
    ],
-   "tier": "vendor"
+   "tier": "vendor",
+   "_added": "2026-10-22"
   },
   "thoughts.apoorvdayal.com": {
    "weight": 5,

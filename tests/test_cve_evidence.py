@@ -37,7 +37,9 @@ def inject_conflict(root):
     description-derived `fixed: 0.1.38` event beside a CVE description that
     includes 0.1.38), so the disposition checks do not depend on OSV's live state."""
     def add_fixed(d):
-        d["affected"][0]["ranges"][0].setdefault("events", []).append({"fixed": "0.1.38"})
+        rng = d["affected"][0]["ranges"][0]
+        rng.setdefault("database_specific", {}).setdefault("extracted_events", []).append(
+            {"fixed": "0.1.38", "source": "DESCRIPTION"})
     change_json(root, CVE + ".osv.json", add_fixed)
     change_json(root, ADVISORY + ".evidence.json", lambda d: d.update(version_conflicts={CVE: ["0.1.38"]}))
 
