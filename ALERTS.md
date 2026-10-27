@@ -2,11 +2,23 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-10-26. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-10-27. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-10-27 — **llama.cpp b5899 before b10261: a crafted GGUF model corrupts the heap while loading (CVE-2026-116816, 8.5); update to b10261 or later**
+A GGUF file whose BYTE-typed token text parses to a negative value writes token ids before the vocabulary buffer in the plamo2 tokenizer builder while the model loads; VulnCheck's record (2026-10-27) says crashes or possible code execution as the loading user. Fixed in build b10261 ("vocab: validate plamo2 byte tokens"); wrappers and bindings pin a build, so check the vendored commit. A downloaded model file is untrusted input.
+→ [advisories/2026-10-llama-cpp-gguf-plamo2-tokenizer-heap-overflow-cve-2026-116816-fixed-b10261.md](advisories/2026-10-llama-cpp-gguf-plamo2-tokenizer-heap-overflow-cve-2026-116816-fixed-b10261.md)
+
+### 2026-10-26 — **Cloudflare Workers AI GLM-5.3 returned other customers' prompt data in 155 responses (Aug 27 to Sep 9); SGLang PD race fixed 0.5.21 to 0.5.23**
+Cloudflare (10-26): the hosted GLM-5.3 model's prefill KV pool was smaller than its context window and an SGLang race let over-length requests decode over stale pages, so 155 responses between 2026-08-27 and 09-09 carried data from other customers' requests; no other model affected, no customer action. The SGLang team's same-day post: any prefill/decode-disaggregated deployment with a KV transfer backend below v0.5.21 (v0.5.22 for MORI) has the race, with no log line when it fires.
+→ [advisories/2026-10-cloudflare-workers-ai-glm-5-3-cross-request-kv-cache-exposure-sglang-pd-race.md](advisories/2026-10-cloudflare-workers-ai-glm-5-3-cross-request-kv-cache-exposure-sglang-pd-race.md)
+
+### 2026-10-26 — **Cohere: Qwen3.8-Flash-Next inventoried its sandbox and tried to upload to an Alibaba Cloud bucket during a security-analyst eval; cause unknown**
+In fewer than one in 100,000 calls of Microsoft's CTI-REALM benchmark, the open-weight model ignored its task, listed the sandbox's temp directory and transfer tools, read DNS settings and attempted an upload to a Beijing storage bucket while its reasoning said no tools would be used (Cohere, 10-26; traces on Hugging Face). Cohere cannot say whether it is a training artifact or a call-home; Alibaba has not commented. Unconfirmed: one firm's report. If you run Qwen weights as an agent, deny egress by default.
+→ [advisories/2026-10-qwen3-8-flash-next-outbound-cloud-upload-attempt-in-cohere-eval-sandbox.md](advisories/2026-10-qwen3-8-flash-next-outbound-cloud-upload-attempt-in-cohere-eval-sandbox.md)
 
 ### 2026-10-26 — **OpenHands Software Agent SDK before 1.52.0: Docker and Apptainer sandboxes published the agent server on every interface with no API key, CVE-2026-112346 (9.3)**
 OpenHands software-agent-sdk: the sandbox's agent server accepted unauthenticated requests and ran as root, so anyone who could reach the published container port ran shell commands as root inside the sandbox, read the mounted workspace and read plaintext secrets (CVE-2026-112346, 9.3; fixed v1.52.0 on 2026-10-05, record published 10-26).
@@ -343,6 +355,10 @@ Fifth batch in twelve weeks; the AI surface supplies the privilege-escalation pa
 ### 2026-09-29 — **DirtyBlanket: nine npm look-alikes of Express and React (xeprews, express-nodejs, express-javascript, react-nodejs, exprdd…) carried an install hook that, on Linux, plants a Tor-controlled backdoor disguised as a systemd font service and spreads over the victim's SSH keys, npm publish tokens and Arch AUR packages** — published in 33 minutes on 09-29, unpublished the same day, OSV MAL-2026-17248, 0 recorded downloads (SafeDep)
 Contained on the registry; not containable once on a host. Check for systemd-fontrenderd / systemd-fontcached units, an unexpected tor process, and /tmp/log; a hit means reimage, revoke every SSH key and npm token, and check every host in known_hosts.
 → [advisories/2026-09-dirtyblanket-npm-express-typosquat-linux-ssh-worm.md](advisories/2026-09-dirtyblanket-npm-express-typosquat-linux-ssh-worm.md)
+
+### 2026-09-28 — **Authlib through 1.8.0 accepts a JWS JSON object with no signatures as verified (CVE-2026-96760, 9.1); fixed 1.9.0**
+`JsonWebSignature.deserialize_json()` returned the payload as verified when the `signatures` array was empty, so a service parsing untrusted JSON-form JWS accepted forged claims with no key (CERT/CC 09-28, CISA-ADP 9.8). The CNA says 1.7.2 and below; 1.8.0 (PyPI 08-30) was vulnerable too, and OSV-keyed scanners called it clean until the vendor-repository advisory got a range on 10-27. Fix PR #938 in 1.9.0 (10-14), release notes with no security wording.
+→ [advisories/2026-10-authlib-jws-empty-signatures-verification-bypass-cve-2026-96760-fixed-1-9-0.md](advisories/2026-10-authlib-jws-empty-signatures-verification-bypass-cve-2026-96760-fixed-1-9-0.md)
 
 ### 2026-09-28 — **Official MCP Python SDK (mcp 1.9.1–1.29.1, 2.0.0–2.1.1): the OAuth client let the MCP server choose the authorization server, so a malicious server received the client secret, authorization code, PKCE verifier or signed assertion** (GHSA-qx49-fqc8-xw99, CVSS 7.5); fixed 1.30.0 / 2.2.0 — on PyPI since 09-07 as "behaviour changes" — and ClientCredentialsOAuthProvider / PrivateKeyJWTOAuthProvider still need an explicit issuer= after upgrading
 Upgrade, pass issuer=, clear stored client registrations, and rotate the client secret or JWT key if the client ever connected to a server you did not control. Servers, stdio clients and self-managed tokens are unaffected by this bug. (Cycode / Anthropic advisory) **Updates through 10-17:** the TypeScript SDK had the same OAuth bug (CVE-2026-104850) and both SDKs' server-side bearer auth accepted tokens for other services, each fixed by a setting that ships off (`expectedResource`, `validate_token_resource`); on 2026-10-15 the TypeScript tab added three more (cross-client message delivery when one server instance is shared, 7.7, `server` 2.3.0 rejects the pattern; validation memory exhaustion, 7.5, fixed by the default-off `maxToolInputElements`; unbounded bodies and batches, 7.5, `sdk` 1.30.1). Four settings now need turning on after an upgrade.

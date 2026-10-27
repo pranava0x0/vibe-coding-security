@@ -15,6 +15,21 @@
 
 ## Archived entries
 
+## 2026-10-16
+
+```yaml
+queries: {deep: 16, medium: 10, shallow: 6}
+new: [2026-10-archon-harness-builder-unauthenticated-control-api-agent-command-execution-cve-2026-111322, 2026-10-tanstack-start-server-function-reflected-xss-lovable-cve-2026-102989, 2026-10-jetbrains-junie-cli-untrusted-project-mcp-config-code-execution-cve-2026-111091, 2026-10-podman-run-checkpoint-annotation-disables-sandboxing-cve-2026-94603, 2026-10-cert-in-ciad-2026-0049-ai-agents-under-evaluation-reached-indian-live-systems]
+updated: [2026-09-openai-misalignment-reports-leaked-keys-public-uploads, 2026-10-nextjs-react-october-14-out-of-band-use-cache-rsc-rce-svg-sharp-server-actions-dos, 2026-09-infostealers-target-coding-agent-tokens-mcp-configs-prompt-histories]
+sources_added: [cert-in.org.in, junie.jetbrains.com, wionews.com, security.com]
+sources_weighted: [cveawg.mitre.org, vulncheck.com, hackmd.io, github.com, github.com/advisories, ox.security, tanstack.com, lovable.dev, netlify.com, jetbrains.com, access.redhat.com, thehackernews.com, securityweek.com, alignment.openai.com, coindesk.com, nextjs.org, gendigital.com, registry.npmjs.org, api.npmjs.org, hn.algolia.com]
+blockers: [reddit-x-bsky-snippets-only, jetbrains-issues-fixed-page-js-rendered, junie-whats-new-newest-five-only, redhat-blog-security-channel-404, oracle-security-alerts-403, openai-news-not-fetched, security-googleblog-redirects-blog-google, llms-ctx-budget-breach-fixed-in-build]
+classifier_events: []
+deferred_after_classifier_stop: []
+```
+
+**Notes.** Full scheduled sweep, all direct: three front pages (`WebFetch`), HN Algolia on 16 terms, KEV JSON (seven rows, none audience), listings mcp/agent/claude/llm/cursor/codex/npm-critical/pip-critical, 24 vendor tabs including the auth SDKs, FastAPI, Prisma, Streamlit, python-genai, aider, SWE-agent, OpenHands (nothing new on any), kb.cert.org, VulnCheck index, AWS bulletins, ZDI, alignment.openai.com, blog indexes Cloudflare/Aikido/StepSecurity/SafeDep/Socket/Unit 42/GitGuardian/Anthropic/Microsoft TI/Wiz/Noma/Databricks/PyPI; Tier A/B/C as 32 `WebSearch` calls, none of which returned a same-week item the fetches had not. **Classifier:** none; the stealer material went in as an Update section through `Edit` after the checkpoint and passed. **Shape:** every new file came from a fetch, not a search: Archon from the `agent` listing (zero files, 23.7k stars), TanStack Start from the reviewed-critical npm listing (vendor 09-30, CNA 10-13, listing 10-15), Junie from the `mcp` listing, Podman from the `claude` listing through its credit line, CERT-In from THN's front page. **Judgement calls:** Podman rated `high` against the vendor's 10.0 (Red Hat 8.6, rootful only, attacker-chosen image required), reasoning in the file; misalignment home file moved `medium` → `high` on the 10-15 reports (a third party's internal systems, a government site's secrets); Warden and Aoki went into the September infostealer file (Warden is CallbackBeaver renamed) rather than new files; CERT-In and OpenAI kept as two records. **Build:** `llms-ctx.txt` breached at the Tier-1 floor on Tier-2 one-liners; fixed in `site/build.py` and `tests/test_llms.py` as LEARNINGS §50(1). **Declined:** Nginx UI nine advisories (MCP add path skips REST validation, authenticated, panel product, vendor 07-17, listing 10-15), WSP MCP CVE-2026-109382 (subscriber-level, tracked product), Signals Corps header census (The Register 10-15, research), Unit 42 CL-UNK-1211 (no named tool), Harbor SSRF, Samsung QA-Board, Xen grant-table race (Claude-credited, not stack), Ledger implants, Cursor Origin marketplace launch, PyPI email-reputation post (registry control; source note), Eye Security cooldown post, AWS 2026-136/137, kb.cert.org TLS notes, ZDI Buildx and Genesis World, KEV rows. **Open items:** Archon maintainer response and a release past 0.11.1; the Junie 26.8.3 changelog text; CVE ids for the Next.js `use cache` and Server Actions advisories; the SneakPeek GHSA on the Claude Code tab; CVE-2026-88066 and the Bisheng ids (DNE re-check); mac-shell-mcp release; python-jose PR #422; Agno PRs; Nginx UI patched versions.
+
 ## 2026-10-15
 
 ```yaml
