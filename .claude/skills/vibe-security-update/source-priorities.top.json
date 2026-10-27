@@ -17,8 +17,8 @@
   {
    "domain": "aws.amazon.com",
    "weight": 20.0,
-   "hits": 15,
-   "last_hit": "2026-10-26"
+   "hits": 16,
+   "last_hit": "2026-10-27"
   },
   {
    "domain": "bleepingcomputer.com",
@@ -29,8 +29,8 @@
   {
    "domain": "cisa.gov",
    "weight": 20.0,
-   "hits": 22,
-   "last_hit": "2026-10-26"
+   "hits": 23,
+   "last_hit": "2026-10-27"
   },
   {
    "domain": "csoonline.com",
@@ -41,8 +41,8 @@
   {
    "domain": "cveawg.mitre.org",
    "weight": 20.0,
-   "hits": 19,
-   "last_hit": "2026-10-26"
+   "hits": 20,
+   "last_hit": "2026-10-27"
   },
   {
    "domain": "cybersecuritynews.com",
@@ -53,20 +53,26 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 52,
-   "last_hit": "2026-10-22"
+   "hits": 53,
+   "last_hit": "2026-10-27"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 57,
-   "last_hit": "2026-10-26"
+   "hits": 58,
+   "last_hit": "2026-10-27"
   },
   {
    "domain": "helpnetsecurity.com",
    "weight": 20.0,
    "hits": 13,
    "last_hit": "2026-10-09"
+  },
+  {
+   "domain": "hn.algolia.com",
+   "weight": 20.0,
+   "hits": 16,
+   "last_hit": "2026-10-27"
   },
   {
    "domain": "microsoft.com",
@@ -85,6 +91,12 @@
    "weight": 20.0,
    "hits": 14,
    "last_hit": "2026-10-16"
+  },
+  {
+   "domain": "pypi.org",
+   "weight": 20.0,
+   "hits": 16,
+   "last_hit": "2026-10-27"
   },
   {
    "domain": "registry.npmjs.org",
@@ -125,32 +137,20 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 111,
-   "last_hit": "2026-10-26"
+   "hits": 112,
+   "last_hit": "2026-10-27"
   },
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 56,
-   "last_hit": "2026-10-26"
+   "hits": 57,
+   "last_hit": "2026-10-27"
   },
   {
    "domain": "unit42.paloaltonetworks.com",
    "weight": 20.0,
    "hits": 10,
    "last_hit": "2026-10-11"
-  },
-  {
-   "domain": "vulncheck.com",
-   "weight": 20.0,
-   "hits": 31,
-   "last_hit": "2026-10-22"
-  },
-  {
-   "domain": "wiz.io",
-   "weight": 20.0,
-   "hits": 17,
-   "last_hit": "2026-10-26"
   }
  ]
 }

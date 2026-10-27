@@ -2,7 +2,7 @@
 id: 2026-09-coder-registry-cloudflare-terraform-supply-chain
 title: "Coder registry compromise — a stolen Cloudflare API key rerouted registry.coder.com for 14 hours, serving credential-stealing Terraform modules to AI-workspace provisioners (GHSA-vx42-ghc9-gw65)"
 date_disclosed: 2026-09-01
-last_updated: 2026-10-18
+last_updated: 2026-10-27
 severity: critical
 status: patched
 ecosystems: [terraform, coder, cloud-dev-environment, ai-agents]
@@ -98,6 +98,10 @@ Three of the August advisories credit Anthropic's Security Team by reference num
 → [prevention/ci-cd-hardening.md](../prevention/ci-cd-hardening.md) — scope provisioning credentials as narrowly as possible; an AI-agent workspace needs its model-provider/MCP keys, not the full provisioning credential set.
 → [prevention/credential-hygiene.md](../prevention/credential-hygiene.md) — short-lived tokens over long-lived keys so a 14-hour exposure window is a rotation, not a standing breach.
 
+## Update 2026-10-27 — Coder GHSA-2x8w-q434-f76p (High 7.7): the web dashboard minted a full-access API key into a sub-agent's external app link, so code in a workspace could take over its owner; fixed 2.38.2, 2.37.6, 2.36.9, 2.34.14, 2.29.23
+
+Published on `coder/coder` on 2026-10-27 (no CVE; CVSS 3.1 7.7 `AV:N/AC:H/PR:L/UI:R/S:C/C:H/I:H/A:N`, CWE-201): the dashboard replaced the `$SESSION_TOKEN` placeholder in external workspace-app URLs with a newly minted API key without checking whether the app belonged to a sub-agent. Sub-agent apps are registered at runtime by code in the workspace, such as a devcontainer or an AI agent, so a sub-agent could register an app using an allowed custom protocol such as `vscode:` with the placeholder and an attacker-chosen destination, and when the owner clicked it the dashboard minted a full-access key and opened the URL with it; the attacker controls the app's name and icon. The `coder open app` CLI already refused this for sub-agents (GHSA-v54h-cp2w-9x4g); the dashboard did not. Affected 2.24.0 before 2.29.23, 2.30.0 before 2.34.14, 2.35.0 before 2.36.0 (end of life, no patch), 2.36.0 before 2.36.9, 2.37.0 before 2.37.6, 2.38.0 before 2.38.2. Fix PR #31208: no substitution for sub-agent apps, and for other external apps only when the link opens a known Coder IDE handler and points at the same deployment. Workaround: do not click external apps under devcontainer or other sub-agents unless you trust the workspace's code. Credits a customer security team and manus-pi; fix by EhabY. For this corpus the point is that an AI agent running inside the workspace is exactly the sub-agent the advisory describes. Also on the tab since the last read: GHSA-373r-678h-hjc6 (2026-10-21, Moderate), an encoded path traversal in the AI Gateway passthrough that let users reach unintended upstream provider endpoints, still without a CVE.
+
 ## Sources
 - [Coder — GHSA-h58h-qvv5-xvwg: Workspace proxy hostname prefix match lets an attacker-controlled domain steal a victim's workspace app credential](https://github.com/coder/coder/security/advisories/GHSA-h58h-qvv5-xvwg) — vendor advisory, published 2026-08-10: CVSS 7.7, affected/fixed ranges, the `syd.co` example, reporter credits. Fetched 2026-09-20.
 - [coder/coder — security advisories tab](https://github.com/coder/coder/security/advisories) — fetched 2026-09-20: the five 2026-08-10 advisories and the 2026-09-01 registry advisory.
@@ -113,3 +117,4 @@ Three of the August advisories credit Anthropic's Security Team by reference num
 - [coder/coder — GHSA-vprw-xcrv-287h: IP spoofing via X-Forwarded-For header parsing enables rate-limit bypass and audit log falsification](https://github.com/coder/coder/security/advisories/GHSA-vprw-xcrv-287h) — fetched 2026-10-18: published 2026-08-11, Moderate, before 2.34.7, credit ANT-2026-22432, PR #26646, the single-value-header workaround.
 - [GitHub Advisory Database — query `coder`, sorted by publication](https://github.com/advisories?query=coder+sort%3Apublished-desc) — fetched 2026-10-18: the eleven 2026-10-17 rows.
 - [coder/coder — security advisories, page 2](https://github.com/coder/coder/security/advisories?page=2) — fetched 2026-10-18: the ten 2026-06-12 advisories behind the July file's CVEs; nothing newer than page 1.
+- **2026-10-27 update sources** — [coder/coder — GHSA-2x8w-q434-f76p](https://github.com/coder/coder/security/advisories/GHSA-2x8w-q434-f76p) (fetched 2026-10-27: published Oct 27, 2026, High 7.7 with vector, the six affected ranges and five patched versions, the 2.35 end-of-life note, the mechanism, the CLI comparison, PR #31208, workaround, credits); [coder/coder — Security Advisories](https://github.com/coder/coder/security/advisories) (fetched 2026-10-27: page 1 of 4, GHSA-2x8w-q434-f76p newest, GHSA-373r-678h-hjc6 dated Oct 21, 2026).

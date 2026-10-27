@@ -2,7 +2,7 @@
 id: 2026-10-agno-tool-call-confirmation-gate-team-delegation-vuldb-cves
 title: "Agno runs model-requested tool calls with no default confirmation gate and delegates with the leader's identity (CVE-2026-108819, CVE-2026-108820); fix PRs open, no release"
 date_disclosed: 2026-10-12
-last_updated: 2026-10-12
+last_updated: 2026-10-27
 severity: high
 status: unconfirmed
 ecosystems: [pypi, ai-agents, agno]
@@ -65,3 +65,4 @@ grep -rn "Team(" --include=*.py . 2>/dev/null | grep -v "mode=\"tasks\"\|mode='t
 - [GitHub Advisory Database — `agent` listing sorted by published date](https://github.com/advisories?query=agent+sort%3Apublished-desc) — fetched 2026-10-12: GHSA-fxvj-hc6f-3f6v and GHSA-rh58-m2cv-88pv, both unreviewed, published 2026-10-12.
 - Registry, checked 2026-10-12: `pip index versions agno` shows 3.1.3 latest, with 3.1.2, 3.1.1, 3.1.0 and 3.0.0 through 3.0.11 published; no release note was located that names either issue.
 - Related in this corpus: [PraisonAI and the agent-framework MCP batch](2026-08-agent-framework-mcp-cve-batch.md), [one reporter's MITRE agent-framework wave](2026-09-ro1me-open-source-agent-framework-llm-output-execution-cve-wave.md), [LangGrinch](2025-12-langchain-langgrinch.md).
+- Related (2026-10-27): an older, vendor-acknowledged and patched Agno RCE reviewed by the advisory database today is filed separately as [Agno eval on field_type](2026-10-agno-function-call-field-type-eval-rce-fixed-2-3-24.md); it is unrelated to the two VulDB records above.
