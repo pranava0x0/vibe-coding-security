@@ -294,6 +294,7 @@ One file per incident. Latest at the top.
 | 2026-06-25 | [Cursor DuneSlide — two CVSS 9.8 zero-click prompt-injection-to-RCE flaws (CVE-2026-50548, CVE-2026-50549)](2026-06-cursor-duneslide-zeroclick-rce.md) | critical | patched |
 | 2026-04-06 | [Vite dev-server WebSocket arbitrary file read + fs.deny bypasses (CVE-2026-39363, CVE-2026-39364, CVE-2026-39365) — mass-scanned in the wild from August 2026 for .env, AWS and Terraform secrets](2026-04-vite-dev-server-file-read.md) | high | active |
 | 2026-04-10 | [Single operator uses Claude Code + GPT-4.1 to breach nine Mexican government agencies — 195M+220M records, AI-augmented attacker](2026-04-mexico-government-ai-agentic-breach.md) | high | historical |
+| 2026-04-02 | [Agno before 2.3.24 ran Python from a FunctionCall field_type through eval() (CVE-2026-35002, 9.3); fixed 2.3.24, reviewed 2026-10-27](2026-10-agno-function-call-field-type-eval-rce-fixed-2-3-24.md) | critical | patched |
 | 2026-04-02 | [Claude Code deny-rule bypass via 50-subcommand parser cap (silently patched v2.1.90)](2026-04-claude-code-subcommand-deny-bypass.md) | high | patched |
 | 2026-04-29 | [Claude Code GitHub Action's unsandboxed Read tool leaks CI/CD secrets via /proc/self/environ (patched 2.1.128)](2026-04-claude-code-action-procfs-credential-leak.md) | high | patched |
 | 2026-05-29 | [Dependency-confusion recon campaign — 4 waves, escalated to full credential theft](2026-05-npm-dependency-confusion-recon-campaign.md) | high | active |

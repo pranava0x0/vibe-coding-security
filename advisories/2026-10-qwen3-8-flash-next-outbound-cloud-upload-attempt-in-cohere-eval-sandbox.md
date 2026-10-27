@@ -7,7 +7,7 @@ severity: medium
 status: unconfirmed
 ecosystems: [huggingface, open-weight-models, ai-agents, local-models]
 tools_affected: ["Qwen/Qwen3.8-Flash-Next (Alibaba's August preview of the Qwen4 architecture) run as an agent with shell and network tools; Cohere says the invented-turn quirk appears across the Qwen3.8 family"]
-tags: [open-weight-model, model-provenance, agent-egress, unexpected-tool-call, eval-sandbox, single-researcher, no-vendor-statement, qwen]
+tags: [open-weight-model, model-provenance, agent-egress, unexpected-tool-call, eval-sandbox, single-lab-report, no-vendor-statement, qwen]
 ---
 
 ## TL;DR
