@@ -2,7 +2,7 @@
 id: ongoing-vibe-platform-exposure
 title: "Vibe-coded app data exposure — Lovable, Bolt, Replit, Base44 pattern issues"
 date_disclosed: 2025
-last_updated: 2026-08-23
+last_updated: 2026-10-26
 severity: high
 status: ongoing
 ecosystems: [lovable, bolt, replit, v0, supabase, base44]
@@ -88,6 +88,14 @@ Base44 patched the vulnerability promptly after Wiz's responsible disclosure. Wi
 
 Security firm **Theori** published findings from its **Xint Code** AI-code-scanning platform (published 2026-07-22) comparing three AI-assisted development scenarios rather than just scanning apps after the fact: a **greenfield app built from a well-written spec** (experienced-developer oversight), a **greenfield app built from a minimal "just build this" prompt** (casual/vibe-coded), and a **brownfield app** — the legacy PHP forum **Gnuboard7**, migrated to a Laravel + React stack and then AI-hardened. Each was scanned for 30 minutes combining runtime and source analysis. Combined result: **434 exploitable vulnerabilities** — **196** in the two greenfield apps, **238** in the hardened brownfield app. By category: **93 denial-of-service/rate-limiting** flaws, **88 authorization/IDOR** flaws, **54 access-boundary/traversal/SSRF** flaws, and **23 critical-severity** findings (11 hardcoded secrets, 6 debug-mode RCE). The headline finding for larger/legacy codebases specifically: **IDOR/authorization flaws made up only 11% of findings in the small greenfield apps but 28% in the larger brownfield app** — fine-grained authorization holds up while an app is small and breaks down as it grows, even when the AI was explicitly asked to harden the code rather than just extend it. Consistent with, and adds a controlled-comparison methodology to, the RedAccess/Escape.tech findings already tracked in this advisory.
 
+## October 2026 — three platform breaches in one week: Zeabur (every customer secret), PingCAP TiDB Cloud (account records and source), Andromeda (credentials)
+
+- **Zeabur** (prelim post 10-19): plaintext AWS keys, a non-expiring cluster-admin token and plaintext root passwords in a private config repository gave an attacker the environment-variable store on October 14 to 15; 3,218,965 variable records across 321,810 accounts, plus zSend keys, API tokens, managed databases and backups; the platform shuts down December 31. Own advisory: [Zeabur breach](2026-10-zeabur-october-security-incident-env-var-store-breach-shutdown-december-31.md). This is the follow-on to the August GitHub App private-key leak noted earlier in this file.
+- **PingCAP / TiDB Cloud** (10-19): stolen service-account credentials, September 9 to October 7; source code, TiDB Cloud account records including SQL-editor text, an encrypted API-key table and billing data accessed; four vulnerabilities fixed 10-14; no evidence of customer TiDB data access. Rotate TiDB Cloud API keys and any credential pasted into the SQL editor.
+- **Andromeda** (10-20): credentials accessed from about October 9, attributed by the vendor to an industry-wide attack; access disabled 10-13; keys rotated.
+
+The common cause is a long-lived credential in a place the platform did not treat as production: a config repo, a service account, a stored key. The customer-side action is the same each time: rotate what the platform held, at the issuer.
+
 ## Sources
 - [Vibe Eval — Vibe Coding Security: Risks, Vulnerabilities, and Fixes (2026)](https://vibe-eval.com/vibe-coding-security-risks)
 - [The Next Web — Lovable security crisis: 48 days of exposed projects, closed bug reports](https://thenextweb.com/news/lovable-vibe-coding-security-crisis-exposed)
@@ -104,3 +112,4 @@ Security firm **Theori** published findings from its **Xint Code** AI-code-scann
 - [IANS Research — Easy-to-Build, Easy-to-Expose: How Vibe Coding Is Creating New Data Risks](https://www.iansresearch.com/resources/all-blogs/post/security-blog/2026/05/15/easy-to-build--easy-to-expose--how-vibe-coding-is-creating-new-data-risks)
 - [Futurism — Vibe Coded Apps Are Spilling Users' Personal Information Directly Into the Maw of Greedy Hackers](https://futurism.com/artificial-intelligence/vibe-coded-apps-spilling-personal-information)
 - [SecurityWeek — Vibe-Coded Apps Riddled With Exploitable Security Flaws](https://www.securityweek.com/vibe-coded-apps-riddled-with-exploitable-security-flaws/) — Theori Xint Code study, fetched directly; greenfield-vs-brownfield methodology, 434 total findings.
+- **October 2026 sources** — [Zeabur — October 2026 security incident (preliminary)](https://zeabur.com/blogs/october-2026-security-incident) — fetched 2026-10-26; [PingCAP — Security update, October 2026](https://www.pingcap.com/trust-hub/security/security-update-october-2026/) — fetched 2026-10-26; [Andromeda — October 2026 security incident](https://andromeda.ai/security-updates/october-2026-security-incident) — fetched 2026-10-26.

@@ -32,6 +32,18 @@ def change_json(root, name, mutate):
     path.write_text(json.dumps(data))
 
 
+def inject_conflict(root):
+    """Re-create the OSV disagreement the corpus carried until 2026-10-21 (a
+    description-derived `fixed: 0.1.38` event beside a CVE description that
+    includes 0.1.38), so the disposition checks do not depend on OSV's live state."""
+    def add_fixed(d):
+        rng = d["affected"][0]["ranges"][0]
+        rng.setdefault("database_specific", {}).setdefault("extracted_events", []).append(
+            {"fixed": "0.1.38", "source": "DESCRIPTION"})
+    change_json(root, CVE + ".osv.json", add_fixed)
+    change_json(root, ADVISORY + ".evidence.json", lambda d: d.update(version_conflicts={CVE: ["0.1.38"]}))
+
+
 def test_repository_evidence():
     assert evidence.validate_all() == []
 
@@ -125,16 +137,19 @@ def test_missing_snapshot(corpus):
 
 
 def test_version_conflict_requires_public_disposition(corpus):
+    inject_conflict(corpus)
     change_json(corpus, ADVISORY + ".evidence.json", lambda d: d.update(version_conflicts={}))
     assert any("OSV fixed-version conflicts" in e for e in evidence.validate_all(corpus))
 
 
 def test_resolved_osv_conflict_requires_review(corpus):
+    inject_conflict(corpus)
     change_json(corpus, CVE + ".osv.json", lambda d: d.update(affected=[]))
     assert any("OSV fixed-version conflicts" in e for e in evidence.validate_all(corpus))
 
 
 def test_removed_public_conflict_note(corpus):
+    inject_conflict(corpus)
     path = corpus / "advisories" / f"{ADVISORY}.md"
     path.write_text(path.read_text().replace("Do not use that OSV boundary as proof of a fix.", ""))
     assert any("disposition missing" in e for e in evidence.validate_all(corpus))

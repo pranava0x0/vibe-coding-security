@@ -2,7 +2,7 @@
 id: 2026-09-aws-security-agent-mcp-s3-bucket-squat
 title: "AWS Security Agent MCP server and the aws-agents-for-devsecops plugin — the scan-input S3 bucket name is derived from your account id and was never ownership-checked, so a pre-registered bucket receives your private source archive, credentials and infrastructure state (CVE-2026-87912 / CVE-2026-87913); upgrading does not free a bucket someone already took"
 date_disclosed: 2026-09-10
-last_updated: 2026-10-01
+last_updated: 2026-10-22
 severity: medium
 status: patched
 ecosystems: [pypi, mcp, aws, ai-agents]
@@ -65,6 +65,13 @@ AWS published bulletin **2026-121-AWS** on **2026-10-01**: in `awslabs.security-
 ```bash
 pip show awslabs.security-agent-mcp-server 2>/dev/null | grep Version   # < 0.2.0 = both CVEs; latest 0.2.1
 ```
+
+
+## Update 2026-10-22 — the same bucket-squat shape in the SageMaker Python SDK's `default_bucket()`: CVE-2026-112408 (8.1), fixed 2.257.3 and 3.10.0 (AWS bulletin 2026-142, 2026-10-21)
+
+AWS bulletin 2026-142 and the Amazon CNA record (published 2026-10-21, CVSS 3.1 8.1 `AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H`, reporter Dan Gansel of Upwind Security) describe the pattern this file was written for, in the SDK most SageMaker users call: `default_bucket()` uses a predictably named S3 bucket and "does not check that the caller's AWS account owns it," so a remote actor who creates that bucket first can reach code execution in the target SageMaker execution environment and obtain its IAM credentials. Affected V2 before 2.257.3 and V3 3.0.0 before 3.10.0; fixed in those versions; `pip` package `sagemaker`. If you cannot upgrade, pass a bucket your account owns through the `default_bucket` parameter of `sagemaker.Session` or the SDK configuration file, and "do not rely on the auto-generated default bucket name." Forks must port the fix. The GHSA referenced by the bulletin, GHSA-5rx8-8fr2-f855, was not opened this sweep. Listed here rather than in a new file because the product differs but the vendor, the CNA and the mechanism are the same as the file above; it is the third AWS bucket-ownership finding this corpus holds after this file and the [Bedrock AgentCore cluster](2026-07-aws-bedrock-agentcore-cve-cluster.md).
+
+Sources for this update: [AWS Security Bulletin 2026-142 — CVE-2026-112408](https://aws.amazon.com/security/security-bulletins/2026-142-aws/) — fetched 2026-10-22 (2026-10-21): affected and fixed versions, the quoted mechanism and workaround, the credit; [CVE Services — CVE-2026-112408](https://cveawg.mitre.org/api/cve/CVE-2026-112408) — fetched 2026-10-22: Amazon CNA, published 2026-10-21, 8.1 and vector, the ranges, references to the two release tags and PyPI pages.
 
 ## Sources
 

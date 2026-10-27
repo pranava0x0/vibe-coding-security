@@ -3,7 +3,7 @@ id: 2026-10-ovhcloud-cli-release-assets-replaced-v0-11-0-to-v0-15-0
 title: "Compromised OVHcloud CLI release archives v0.11.0 to v0.15.0 (2026-10-19, 94 minutes): reinstall v0.16.0 and rotate cloud, SSH, npm and AI-tool credentials"
 kind: malicious-artifact
 date_disclosed: 2026-10-19
-last_updated: 2026-10-20
+last_updated: 2026-10-26
 severity: high
 status: contained
 ecosystems: [github-releases, go, cli, cloud-tooling]
@@ -44,6 +44,10 @@ Per the vendor advisory: a compromised OVHcloud developer's GitHub account, regi
 - [Supply-chain attack surface](../prevention/supply-chain-attack-surface.md): a release page is mutable unless the repository enables release immutability, and a tag pointing at the right commit says nothing about the archive next to it.
 - [Credential hygiene](../prevention/credential-hygiene.md): the vendor's rotation list is the inventory of what a CLI on a developer laptop can read.
 
+## Update 2026-10-26 — StepSecurity's write-up (10-19) adds the account, the window, the on-disk markers and the GlassWorm link
+
+StepSecurity names the GitHub account used (`HassenBF`), confirms the 12:47 to 14:21 UTC window and that v0.16.0 was published clean at 17:16 UTC, and notes that release immutability was not enabled on the repository, which is why assets could be replaced in place. Defender signals it lists: a `/tmp/envchecker-*` file, a `~/init.json` file, a binary whose `ovhcloud version` prints `undefined`, and a build stamped with a commit (`5ead8ef…`) that does not exist in the repository; file hashes for the replaced archives are on the post. The loader fetched its second stage through a blockchain dead-drop in the GlassWorm style, which is the basis for the campaign link. Credits: alink-tothepast, Ivan Kwiatkowski, OpenSourceMalware.
+
 ## Sources
 - [ovh/ovhcloud-cli — GHSA-862f-55f5-vmvw: ovhcloud-cli security incident - October 19th, 2026](https://github.com/ovh/ovhcloud-cli/security/advisories/GHSA-862f-55f5-vmvw) — fetched 2026-10-20: published 2026-10-20, High, no CVE, the affected assets and versions, patched 0.16.0, the UTC timeline, the affected and not-affected statements, the root-cause and immutability statements, the detection checks and the credential-file list quoted above. Read for artifacts and remediation only.
 - [ovh/ovhcloud-cli — issue #300: Release assets of v0.13.0–v0.15.0 replaced on 2026-10-19 with a dirty build of a later commit](https://github.com/ovh/ovhcloud-cli/issues/300) — fetched 2026-10-20: the reporter's observations (checksum mismatch, different uploading account, build metadata), the maintainers' replies ("All binaries involved have been deleted at 16:21 GMT+2", the immutable v0.16.0, the promised post-mortem), closed 2026-10-20.
@@ -51,3 +55,4 @@ Per the vendor advisory: a compromised OVHcloud developer's GitHub account, regi
 - [The Hacker News — Hackers Hijack Five OVHcloud CLI Releases to Distribute Secret-Stealing Malware](https://thehackernews.com/2026/10/hackers-hijack-five-ovhcloud-cli.html) — 2026-10-20: the exposure paths, the Homebrew, `go install` and Docker statements, the OpenSourceMalware timeline attribution, the GlassWorm inference, `gh release verify-asset`, and `~/.ovh.conf`. Read for artifacts and remediation only.
 - Not fetched: OpenSourceMalware's write-up (the site index rendered without posts this sweep) and OVHcloud's X announcement (not openable); both are cited through The Hacker News and the vendor advisory.
 - Related in this corpus: [GlassWorm](2025-10-glassworm-vscode-worm.md) for the campaign the account was linked to by inference, [Coder registry](2026-09-coder-registry-cloudflare-terraform-supply-chain.md) for a release channel swapped under an unchanged tag.
+- **2026-10-26 update source** — [StepSecurity — OVHcloud CLI GitHub release swap (GlassWorm)](https://www.stepsecurity.io/blog/ovhcloud-cli-github-release-swap-glassworm) — fetched 2026-10-26 (2026-10-19): the account, the timeline, immutability status, the markers, hashes, credits.
