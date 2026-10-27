@@ -2,7 +2,7 @@
 id: 2026-08-claude-code-desktop-ghsa-batch
 title: "Claude Code / Claude Desktop's own GHSA index: 8 more advisories (Feb–Jun 2026) this repo hadn't tracked"
 date_disclosed: 2026-02-06
-last_updated: 2026-10-07
+last_updated: 2026-10-26
 severity: high
 status: patched
 ecosystems: [claude-code, claude-desktop, anthropic]
@@ -108,6 +108,10 @@ Two record-keeping notes. The GHSA page prints the CVE id, but **CVE Services re
 
 The 2026-10-05 note above recorded `CVE_RECORD_DNE` for CVE-2026-103435. Re-queried 2026-10-07: the record is **PUBLISHED**, `assignerShortName: Anthropic`, `datePublished` 2026-10-07T12:50Z (reserved 2026-09-30), title "Arbitrary File Write via Write-Time Symlink Following (TOCTOU) in Claude Code," affected `@anthropic-ai/claude-code` **< 2.1.129**, CVSS 4.0 **7.7** with the same vector as the vendor page, single reference GHSA-5j29-h97v-84ch. The description matches the GHSA verbatim; nothing else changed. NVD and the database mirrors will follow. Open item closed; status unchanged (`patched`). The tab was re-walked the same day: still the three September/October entries (GHSA-v234-4jrq-mgg6 09-25, GHSA-gfvf-j8jh-jxxw / CVE-2026-103012 09-29, GHSA-5j29-h97v-84ch 10-05) — nothing new.
 
+## Update 2026-10-26 — a High advisory published today: a time-of-check gap in the Edit tool let a process already inside the Bash sandbox on macOS redirect an edit to a file outside the project (CVE-2026-88968, CVSS 7.7, fixed 2.1.251)
+
+GHSA-5xjx-9qx6-jcrv (published 2026-10-26, High, CVSS 4.0 7.7, CWE-59 and CWE-367): on macOS, code running in Claude Code's Bash sandbox could race the Edit tool's path check against its write, so a benign edit landed on a file the sandbox was meant to keep out of reach. Affected `@anthropic-ai/claude-code` below 2.1.251; the fix shipped in 2.1.251 on 2026-08-28, so any install updated since then is covered; the current release on 10-26 is 2.1.311. Credit Sunder Singh (mahoraga007). It is the same check-then-use class as the 2026-10-05 entry above, reached from the other side: there a workspace-local attacker, here code the agent itself ran in the sandbox.
+
 ## Sources
 
 - **2026-10-05 update sources** — [anthropics/claude-code — GHSA-5j29-h97v-84ch: Arbitrary File Write via Write-Time Symlink Following (TOCTOU) in Claude Code](https://github.com/anthropics/claude-code/security/advisories/GHSA-5j29-h97v-84ch) (vendor, published 2026-10-05: High 7.7, the vector, CWE-22/61/367, < 2.1.129 → 2.1.129, the description quoted above, credit); [CVE Services — CVE-2026-103435](https://cveawg.mitre.org/api/cve/CVE-2026-103435) (queried 2026-10-05: `CVE_RECORD_DNE`); [anthropics/claude-code — Security Advisories index](https://github.com/anthropics/claude-code/security/advisories) (re-walked 2026-10-05: the 10-05 entry plus the 09-25 and 09-29 entries already tracked here).
@@ -129,3 +133,4 @@ The 2026-10-05 note above recorded `CVE_RECORD_DNE` for CVE-2026-103435. Re-quer
 
 - **2026-09-26 update source** — [anthropics/claude-code — GHSA-v234-4jrq-mgg6, "Claude Desktop (macOS): opening a malicious file from a Cowork folder could run commands on the host"](https://github.com/anthropics/claude-code/security/advisories/GHSA-v234-4jrq-mgg6) — published 2026-09-25; High, CVSS 4.0 8.5, affected ≥ 1.1.3918 < 1.15962.0, fixed 1.15962.0, the CVE-2026-43284 kernel note and the 1.11847.5 (2026-06-09) kernel fix, credits. Fetched 2026-09-26. [NVD API — CVE-2026-43284](https://services.nvd.nist.gov/rest/json/cves/2.0?cveId=CVE-2026-43284) confirms the kernel CVE (xfrm/esp in-place decrypt on shared skb frags, published 2026-05-08).
 - **2026-10-07 update source** — [CVE Services — CVE-2026-103435](https://cveawg.mitre.org/api/cve/CVE-2026-103435) (queried 2026-10-07: `PUBLISHED`, CNA Anthropic, datePublished 2026-10-07, < 2.1.129, CVSS 4.0 7.7, GHSA-5j29-h97v-84ch reference); [anthropics/claude-code — Security Advisories](https://github.com/anthropics/claude-code/security/advisories) (re-walked 2026-10-07, unchanged).
+- **2026-10-26 update source** — [anthropics/claude-code — GHSA-5xjx-9qx6-jcrv](https://github.com/anthropics/claude-code/security/advisories/GHSA-5xjx-9qx6-jcrv) — fetched 2026-10-26: CVE-2026-88968, High, 7.7, CWE-59/367, `< 2.1.251`, credit; `npm view @anthropic-ai/claude-code time` run 2026-10-26: 2.1.251 published 2026-08-28, latest 2.1.311.

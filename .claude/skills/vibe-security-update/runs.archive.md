@@ -15,6 +15,22 @@
 
 ## Archived entries
 
+## 2026-10-15
+
+```yaml
+queries: {deep: 16, medium: 8, shallow: 7}
+new: [2026-10-nextjs-react-october-14-out-of-band-use-cache-rsc-rce-svg-sharp-server-actions-dos, 2026-10-intentkit-executor-owner-only-tool-authorization-bypass-cve-2026-76066, 2026-10-claude-code-desktop-sneakpeek-preview-pane-html-file-url-exfiltration-noma]
+updated: [2026-10-n8n-october-14-ten-advisory-batch-data-table-cross-project-webhook-xss, 2026-09-n8n-september-30-ten-advisory-batch, 2026-09-langflow-ibm-psirt-eleven-cve-batch, 2026-10-ghostaction-returns-github-actions-workflow-credential-theft-git-history-sweep, 2026-10-vulncheck-single-researcher-agent-mcp-gateway-cve-wave-mini-swe-agent-env-leak, 2026-09-nextjs-september-2026-security-release-seven-advisories]
+sources_added: [previdian.com]
+sources_weighted: [github.com, thehackernews.com, noma.security, vulncheck.com, cveawg.mitre.org, lasso.security, blog.gitguardian.com, hackmd.io, registry.npmjs.org]
+blockers: [reddit-x-bsky-snippets-only, nextjs.org/blog/security-404, bleepingcomputer-403]
+classifier_events: []
+deferred_after_classifier_stop: []
+```
+
+**Notes.** Full scheduled sweep, all direct: three front pages, HN Algolia on 16 terms, KEV JSON (no audience rows), listings mcp/agent/claude/llm/npm-critical/pip-critical, VulnCheck index, kb.cert.org, 22 vendor tabs including the auth SDKs and the backend stack, AWS bulletins, ZDI, alignment.openai.com (no new stamps), blog indexes GitGuardian/Aikido/StepSecurity/SafeDep/Unit 42/Cloudflare/Anthropic; Tier A/B/C as 31 `WebSearch` calls. **Classifier:** none; no malware or campaign file this run. **Shape:** the Next.js release was on THN's front page and the vendor tab the morning after npm; search engines still returned the September advisories for "Next.js October 2026". The n8n CVEs came from the `mcp` and `agent` listings as VulnCheck rows whose references pointed at three vendor advisories the 2026-09-30 file never had, and the vendor tab's page 2 held five 2026-10-14 rows that yesterday's "ten" missed. The Langflow exploitation story is one vendor's honeypot (Previdian) via THN; the primary is a live counter (1,553 on read, 1,423 in the article), both dated in the file. holaOS and NullHub joined the VulnCheck wave file (same reporter profiles). SneakPeek is single-source (Noma) and filed `unconfirmed` with the researcher's fixed version; re-check the Claude Code tab for the pending GHSA. **Judgement calls:** Next.js rated critical/patched with the upstream librsvg id named as upstream, not as a Next.js CVE; the React DoS advisory's two ranges printed as a conflict; Langflow IBM file moved to `active` on honeypot exploitation of a fixed CVE, with the vendor page described as only volume and timing. **Declined:** Komodo Periphery 9.3 and Lowcoder (VU#456950, VU#382143, not the stack), Signals Corps HTTP-header prompt-injection census (217M headers, 30 attempts; research), Barracuda/Malwarebytes AI-assistant phishing (research, no product), HiddenLayer Jev decision-model injection (not the audience), MoviePilot ExecuteCommandTool, AWS 2026-134/135, Genesis World ZDI 0-days, PAN-OS, Cisco, Ahsay, Ivanti KEV rows, NGINX five flaws, Drupal, Cloudflare/OpenAI discovery post. **Open items:** CVE-2026-88066 and the three Bisheng VU ids still DNE on 10-15; the Claude Code tab for SneakPeek's GHSA; CVE ids for the Next.js `use cache` and Server Actions advisories; n8n CVEs for the 2026-10-14 fifteen; IntentKit maintainer response; holaOS and NullHub fixes; Netlify or Vercel statements on the SVG path; mac-shell-mcp release; Continue issues; deepsec PR; Agno PRs; python-jose PR #422. Skill: LEARNINGS §49, SKILL.md three incorrect-data rows and a tab-pagination note, two triage-patterns bullets; queries.md untouched (frozen).
+
+
 ## 2026-10-14
 
 ```yaml

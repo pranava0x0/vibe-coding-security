@@ -11,26 +11,26 @@
   {
    "domain": "aikido.dev",
    "weight": 20.0,
-   "hits": 23,
-   "last_hit": "2026-10-22"
+   "hits": 24,
+   "last_hit": "2026-10-26"
   },
   {
    "domain": "aws.amazon.com",
    "weight": 20.0,
-   "hits": 14,
-   "last_hit": "2026-10-22"
+   "hits": 15,
+   "last_hit": "2026-10-26"
   },
   {
    "domain": "bleepingcomputer.com",
    "weight": 20.0,
-   "hits": 33,
-   "last_hit": "2026-09-20"
+   "hits": 34,
+   "last_hit": "2026-10-26"
   },
   {
    "domain": "cisa.gov",
    "weight": 20.0,
-   "hits": 21,
-   "last_hit": "2026-10-22"
+   "hits": 22,
+   "last_hit": "2026-10-26"
   },
   {
    "domain": "csoonline.com",
@@ -41,8 +41,8 @@
   {
    "domain": "cveawg.mitre.org",
    "weight": 20.0,
-   "hits": 18,
-   "last_hit": "2026-10-22"
+   "hits": 19,
+   "last_hit": "2026-10-26"
   },
   {
    "domain": "cybersecuritynews.com",
@@ -59,8 +59,8 @@
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 56,
-   "last_hit": "2026-10-22"
+   "hits": 57,
+   "last_hit": "2026-10-26"
   },
   {
    "domain": "helpnetsecurity.com",
@@ -95,14 +95,14 @@
   {
    "domain": "safedep.io",
    "weight": 20.0,
-   "hits": 22,
-   "last_hit": "2026-10-22"
+   "hits": 23,
+   "last_hit": "2026-10-26"
   },
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 63,
-   "last_hit": "2026-10-22"
+   "hits": 64,
+   "last_hit": "2026-10-26"
   },
   {
    "domain": "sentinelone.com",
@@ -113,26 +113,26 @@
   {
    "domain": "socket.dev",
    "weight": 20.0,
-   "hits": 32,
-   "last_hit": "2026-10-22"
+   "hits": 33,
+   "last_hit": "2026-10-26"
   },
   {
    "domain": "stepsecurity.io",
    "weight": 20.0,
-   "hits": 32,
-   "last_hit": "2026-10-22"
+   "hits": 33,
+   "last_hit": "2026-10-26"
   },
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 110,
-   "last_hit": "2026-10-22"
+   "hits": 111,
+   "last_hit": "2026-10-26"
   },
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 55,
-   "last_hit": "2026-10-22"
+   "hits": 56,
+   "last_hit": "2026-10-26"
   },
   {
    "domain": "unit42.paloaltonetworks.com",
@@ -149,8 +149,8 @@
   {
    "domain": "wiz.io",
    "weight": 20.0,
-   "hits": 16,
-   "last_hit": "2026-10-22"
+   "hits": 17,
+   "last_hit": "2026-10-26"
   }
  ]
 }
