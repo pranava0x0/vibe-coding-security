@@ -6,12 +6,12 @@ last_updated: 2026-10-28
 severity: high
 status: patched
 ecosystems: [npm, n8n, ai-agents, mcp]
-tools_affected: ["n8n (npm) before 1.123.89, before 2.45.5 and before 2.46.1", "n8n Function, Function Item and LangChain Code nodes (deprecated and blocked by default from 2.42.6 / 2.43.3 / 2.44.0)", "n8n Edit Image node (bundled GraphicsMagick in the official Docker image)", "n8n workflow expression evaluation", "n8n Browser Use upload tool", "n8n Chat Trigger embedded chat", "n8n MCP OAuth dynamic client registration endpoints", "n8n NocoDB, MongoDB, Vector Store (OracleDB) and Asana Trigger nodes", "n8n credential-using nodes that follow cross-origin redirects", "n8n Enterprise end-user credential connect flow"]
+tools_affected: ["n8n (npm) before 2.45.5 and before 2.46.1 (all twelve); before 1.123.89 on the v1 line (seven of the twelve; the deprecated-nodes 8.7 lists no v1 range)", "n8n Function, Function Item and LangChain Code nodes (deprecated and blocked by default from 2.42.6 / 2.43.3 / 2.44.0)", "n8n Edit Image node (bundled GraphicsMagick in the official Docker image)", "n8n workflow expression evaluation", "n8n Browser Use upload tool", "n8n Chat Trigger embedded chat", "n8n MCP OAuth dynamic client registration endpoints", "n8n NocoDB, MongoDB, Vector Store (OracleDB) and Asana Trigger nodes", "n8n credential-using nodes that follow cross-origin redirects", "n8n Enterprise end-user credential connect flow"]
 tags: [n8n, ghsa-batch, workflow-automation, credential-hub, sandbox-escape, rce, image-processing, mcp-oauth, open-redirect, ssrf, credential-leak, sql-injection, patched]
 ---
 
 ## TL;DR
-n8n published twelve advisories on 2026-10-28, none with a CVE, and the security team's community bulletin the same morning lists all twelve; the fixes are `1.123.89` (v1), `2.45.5` (stable) and `2.46.1` (beta), all on npm between 07:18 and 07:25 UTC, and the advisories also name a `3.0.1` that npm does not carry as of 2026-10-28. The three High ones: the deprecated Function, Function Item and LangChain Code nodes let anyone who can edit a workflow run code in the n8n main process outside the task-runner sandbox (GHSA-9p7v-45m2-wxgj, 8.7; blocked by default since 2.42.6 / 2.43.3 / 2.44.0 on 10-09 and 10-13), workflow expression evaluation could be escaped for code execution on the host (GHSA-gx3v-3x3v-f8r5, 7.7), and the GraphicsMagick build in the official Docker image carries known component flaws, so an untrusted image through the Edit Image node could run code on the instance (GHSA-f2cw-9483-7vcp, 7.7). The nine Moderates include the MCP OAuth registration endpoints acting as an unauthenticated open redirector, the Browser Use upload tool reading any file the n8n process can read, and three more credential-leak paths. Upgrade; the vendor labels every workaround short-term.
+n8n published twelve advisories on 2026-10-28, none with a CVE, and the security team's community bulletin the same morning lists all twelve; the fixes are `2.45.5` (stable) and `2.46.1` (beta) for all twelve and `1.123.89` for the seven that list a v1 range, all on npm between 07:18 and 07:25 UTC; the advisories also name a `3.0.1` that npm does not carry as of 2026-10-28. The three High ones: the deprecated Function, Function Item and LangChain Code nodes let anyone who can edit a workflow run code in the n8n main process outside the task-runner sandbox (GHSA-9p7v-45m2-wxgj, 8.7; blocked by default since 2.42.6 / 2.43.3 / 2.44.0 on 10-09 and 10-13), workflow expression evaluation could be escaped for code execution on the host (GHSA-gx3v-3x3v-f8r5, 7.7), and the GraphicsMagick build in the official Docker image carries known component flaws, so an untrusted image through the Edit Image node could run code on the instance (GHSA-f2cw-9483-7vcp, 7.7). The nine Moderates include the MCP OAuth registration endpoints acting as an unauthenticated open redirector, the Browser Use upload tool reading any file the n8n process can read, and three more credential-leak paths. Upgrade; the vendor labels every workaround short-term.
 
 ## What happened
 
@@ -35,8 +35,10 @@ Three of the twelve were fixed before the batch day and published with it (the d
 ## Am I affected?
 
 ```bash
-# Installed version; below 1.123.89 (v1), 2.45.5 (stable) or 2.46.1 (beta) is affected.
-# The advisories also list 3.0.1; npm has no 3.x release as of 2026-10-28.
+# Installed version; below 2.45.5 (stable) or 2.46.1 (beta) is affected by all twelve.
+# The v1 line: 1.123.89 fixes seven (expression isolation, GraphicsMagick, NocoDB, cross-origin headers,
+# Chat Trigger, MongoDB, MCP OAuth redirect); the deprecated-nodes 8.7, Browser Use, the Enterprise OAuth hijack,
+# Asana and OracleDB list no v1 range. The advisories also list 3.0.1; npm has no 3.x release as of 2026-10-28.
 npm ls -g n8n 2>/dev/null | grep n8n
 docker ps --format '{{.Image}}' | grep n8n
 npm view n8n dist-tags   # stable/latest 2.45.5, beta/next/rc 2.46.1 on 2026-10-28
