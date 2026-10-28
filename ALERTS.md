@@ -2,11 +2,31 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-10-27. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-10-28. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-10-28 — **n8n: twelve advisories on 2026-10-28, three High: deprecated Code nodes run in the main process (8.7), expression-isolation escape, GraphicsMagick RCE; fixed 1.123.89, 2.45.5, 2.46.1**
+Twelve n8n advisories, no CVEs, all fixed in 1.123.89, 2.45.5 and 2.46.1 (npm 07:18 to 07:25 UTC; the listed 3.0.1 is not on npm). The deprecated Function, Function Item and LangChain Code nodes let any workflow editor run code in the main process outside the task-runner sandbox (GHSA-9p7v-45m2-wxgj, 8.7; blocked by default since 10-09), expression evaluation could be escaped for host code execution (GHSA-gx3v-3x3v-f8r5, 7.7), and the Docker image's GraphicsMagick makes an untrusted image through Edit Image a remote code execution path (GHSA-f2cw-9483-7vcp, 7.7). The MCP OAuth registration endpoints were an unauthenticated open redirector and Browser Use's upload tool read any server file. Upgrade and migrate the deprecated nodes.
+→ [advisories/2026-10-n8n-october-28-twelve-advisory-batch-deprecated-code-nodes-expression-isolation-graphicsmagick.md](advisories/2026-10-n8n-october-28-twelve-advisory-batch-deprecated-code-nodes-expression-isolation-graphicsmagick.md)
+
+### 2026-10-27 — **LiteLLM Enterprise proxy: an unauthenticated request reads a local file and leaks the master key (GHSA-w4c7-34wj-hqm8, 10.0); fixed 1.106.5 and three backports**
+A LiteLLM proxy with an Enterprise license accepted an unauthenticated request to any LLM route that read a local file and sent it to a URL the request chose; `/proc/self/environ` gives the master key and every provider key, and the vendor says some configurations reach Python execution as root (CVSS 10.0, no CVE, two independent finders). Fixed 1.103.10, 1.104.8, 1.105.6 and 1.106.5 on 2026-10-27; unlicensed open-source deployments do not load the code. If an Enterprise proxy was internet-reachable, rotate the master key, salt key and provider keys.
+→ [advisories/2026-10-litellm-enterprise-unauthenticated-file-read-master-key-leak-ghsa-w4c7-34wj-hqm8.md](advisories/2026-10-litellm-enterprise-unauthenticated-file-read-master-key-leak-ghsa-w4c7-34wj-hqm8.md)
+
+### 2026-10-27 — **NVIDIA NeMo Agent Toolkit 1.0 to 1.8.0: network-reachable missing authentication, CVE-2026-65145 (10.0), and a local SQL injection CVE-2026-65151; fixed 1.9.0**
+NVIDIA's bulletin 5912 (10-27): a missing authentication check in the NeMo Agent Toolkit that "might lead to code execution, escalation of privileges, data tampering, denial of service, and information disclosure", CVSS 10.0, versions 1.0 to 1.8.0, fixed 1.9.0 (PyPI 2026-09-10, seven weeks before the bulletin); and a local SQL injection in 1.4 to 1.6 (8.4, fixed 1.7.0). The vendor names no component. Credits include ZDI, so a detailed advisory may follow. Upgrade any reachable toolkit server now and rotate what its environment held.
+→ [advisories/2026-10-nvidia-nemo-agent-toolkit-missing-authentication-cve-2026-65145-cvss-10-fixed-1-9-0.md](advisories/2026-10-nvidia-nemo-agent-toolkit-missing-authentication-cve-2026-65145-cvss-10-fixed-1-9-0.md)
+
+### 2026-10-27 — **Warp: a vendor in its infrastructure was exploited; agent traces and telemetry for about 1% of users may be exposed (CEO statement, 2026-10-27)**
+Warp's CEO said on X, as quoted by BleepingComputer, that a vendor in Warp's infrastructure was exploited and AI agent traces and telemetry for roughly 1% of users may be exposed; Warp detected it within hours, engaged CrowdStrike, told law enforcement and notified affected users. Vendor, data stores, dates and whether traces held prompts or credentials are unstated; the status page's 10-23 "Degraded API reliability" entry says nothing about data. Unconfirmed: one statement read through coverage. Rotate anything a Warp agent session could have printed.
+→ [advisories/2026-10-warp-vendor-breach-agent-traces-telemetry-one-percent-of-users.md](advisories/2026-10-warp-vendor-breach-agent-traces-telemetry-one-percent-of-users.md)
+
+### 2026-10-15 — **undici, Node.js's fetch engine: eight CVEs on 2026-10-15, cross-user cache poisoning (CVE-2026-109829), TLS pinning silently dropped (CVE-2026-109383), five process crashes; fixed 6.29.1, 7.30.1, 8.12.2**
+Eight undici CVEs from the OpenJS CNA (10-15; three reviewed into the database 10-27): with `compose(redirect(), cache())` and a shared store a cross-origin redirect's response is cached under the trusted URL and private responses can be served to others (7.4); `Agent` JSON-cloned its options and dropped a `checkServerIdentity` pin, so the default `fetch()` dispatcher accepted certificates the pin should have rejected (7.4); a TLS 1.2 renegotiation or excess content-encodings from a malicious server ends the process (7.5, 7.5). Fixed 6.29.1, 7.30.1, 8.12.2, and in Node's 10-21 releases.
+→ [advisories/2026-10-undici-october-15-eight-cve-batch-cache-poisoning-tls-pinning-bypass-cve-2026-109829-109383.md](advisories/2026-10-undici-october-15-eight-cve-batch-cache-poisoning-tls-pinning-bypass-cve-2026-109829-109383.md)
 
 ### 2026-10-27 — **llama.cpp b5899 before b10261: a crafted GGUF model corrupts the heap while loading (CVE-2026-116816, 8.5); update to b10261 or later**
 A GGUF file whose BYTE-typed token text parses to a negative value writes token ids before the vocabulary buffer in the plamo2 tokenizer builder while the model loads; VulnCheck's record (2026-10-27) says crashes or possible code execution as the loading user. Fixed in build b10261 ("vocab: validate plamo2 byte tokens"); wrappers and bindings pin a build, so check the vendored commit. A downloaded model file is untrusted input.

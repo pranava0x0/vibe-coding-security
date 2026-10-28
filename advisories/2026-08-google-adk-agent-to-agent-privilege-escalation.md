@@ -2,7 +2,7 @@
 id: 2026-08-google-adk-agent-to-agent-privilege-escalation
 title: "\"I'll Just Call You\" — a public PR comment tricks Google ADK's low-privilege triage bot into invoking its own maintainer-only agent, leaking API keys and a GCP service-account key"
 date_disclosed: 2026-08-03
-last_updated: 2026-08-03
+last_updated: 2026-10-28
 severity: high
 status: patched
 ecosystems: [ai-agents, github-actions]
@@ -59,8 +59,13 @@ You're affected if: (1) a low-privilege agent's *output* (a comment, a label, a 
 - **Never let one agent's output be the sole trigger for a more-privileged agent's action.** Require a human-in-the-loop confirmation, or at minimum an out-of-band signed token, before crossing a privilege boundary between agents.
 - This is the same **decorator-as-documentation** root cause this repo tracks in SDK tool-annotation frameworks (Semantic Kernel, Flowise) and agent-platform tool-registration APIs (Composio) — here it's a CI dispatch string instead of a code annotation, but the lesson is identical: a matching pattern is not an authorization check.
 
+## Update 2026-10-28 — a second ADK record: FileArtifactService let one app list, read, overwrite or delete another app's artifacts under a shared root (CVE-2026-115522, 5.3); fixed 1.39.1 and 2.7.0 in August, record published 2026-10-28
+
+Google's CNA published **CVE-2026-115522** on 2026-10-28, "Cross-Application Artifact Namespace Isolation in Google Agent Development Kit (ADK) for Python", CVSS 4.0 5.3 (`AV:N/AC:L/AT:N/PR:L/UI:N/VC:L/VI:L/VA:N`), CWE-668: `FileArtifactService` accepted `app_name` across its public methods but built on-disk paths without it (`root/users/{user_id}/...` rather than `root/apps/{app_name}/users/{user_id}/...`), so two applications sharing a `FileArtifactService` root and a `user_id` (and `session_id` for session-scoped artifacts) could list, read, overwrite or delete each other's artifacts. Version 2.6.0 scoped writes by app but kept a legacy fallback for reads and deletes; 2.7.0 and 1.39.1 remove it and enforce per-app paths. Affected `google-adk` 1.19.0 before 1.39.1 and 2.0.0a1 before 2.7.0; PyPI dates 2.7.0 to 2026-08-13 and 1.39.1 to 2026-08-27, ten weeks before the record, and `google-adk` is 2.13.0 as of 2026-10-28. The database row (GHSA-hjvp-7px2-52j7) is unreviewed with "Unknown" version fields; the ranges here are the CNA's. This is a different bug from the triage-bot escalation this file covers and from [CoreBreak](2026-08-corebreak-agent-harness-tool-call-forgery.md); it matters where several agents share one artifact directory on a host, which is the default-looking setup in a multi-agent demo.
+
 ## Sources
 
 - [Pillar Security — "I'll Just Call You: Agent-to-Agent Privilege Boundary Failures in CI/CD on Google's ADK Repository"](https://www.pillar.security/blog/ill-just-call-you-agent-to-agent-privilege-boundary-failures-in-ci-cd-on-googles-adk-repository) — primary research, full attack chain, credential exposure detail, disclosure timeline, Google's remediation.
 - [GIGAZINE — "A hacking technique against Google ADK has been discovered that involves 'hacking low-privilege agents and executing code with higher privileges'"](https://gigazine.net/gsc_news/en/20260804-agent-development-kit-attack) — independent confirmation, attack-chain summary, "collaborator vs. bot" permission detail.
 - Cross-reference: [CoreBreak](2026-08-corebreak-agent-harness-tool-call-forgery.md) — a different Google ADK vulnerability (forged tool-call authorization, CVE-2026-18236) in the same product, unrelated root cause.
+- **2026-10-28 update sources** — [CVE Services — CVE-2026-115522](https://cveawg.mitre.org/api/cve/CVE-2026-115522) (queried 2026-10-28: CNA Google, published 2026-10-28, title, affected ranges, CVSS 4.0 5.3 with vector, the path description, issue #5618, PR #5619, three commits, release tags v1.39.1 and v2.7.0); [GitHub Advisory Database — GHSA-hjvp-7px2-52j7](https://github.com/advisories/GHSA-hjvp-7px2-52j7) (fetched 2026-10-28: unreviewed, version fields "Unknown"); PyPI `google-adk` release JSON (queried 2026-10-28: 2.7.0 2026-08-13, 1.39.1 2026-08-27; latest 2.13.0).
