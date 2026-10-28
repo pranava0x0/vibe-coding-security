@@ -2,7 +2,7 @@
 id: 2026-10-artex-claude-code-south-korea-bank-intrusions-exposed-logs
 title: "A financially-motivated operator drove intrusions at five South Korean banks with Claude Code plus the Chinese open-source agentic-pentest tool ARTEX; CrowdStrike recovered the whole operation — Claude Code session histories, memory files, ARTEX configs and a résumé-writing prompt — from the attacker's own exposed directories (CrowdStrike, 2026-10-07)"
 date_disclosed: 2026-10-07
-last_updated: 2026-10-08
+last_updated: 2026-10-28
 severity: high
 status: active
 ecosystems: [claude-code, ai-agents]
@@ -29,7 +29,12 @@ If you run AI coding agents, keep their session logs, memory files and MCP/agent
 ## Prevention
 Treat agent session and memory files as sensitive artifacts, not scratch data ([mcp-hygiene.md](../prevention/mcp-hygiene.md), [credential-hygiene.md](../prevention/credential-hygiene.md)); assume AI tooling compresses an intrusion campaign into hours, and prioritise exposure, privilege and segmentation over patch cadence ([ci-cd-hardening.md](../prevention/ci-cd-hardening.md)).
 
+## Update 2026-10-28 — a UK registrar's breach notice names ARTEX: 123 Reg (GoDaddy) says an intrusion from 2026-09-18 read customer contact data and attributes it to the operator behind the South Korean campaign
+
+The Register reported on 2026-10-28 that 123 Reg, the UK domain registrar owned by GoDaddy, is notifying customers of what it calls "the first known AI-driven cyberattack against our company": an intrusion that began 2026-09-18, whose activity the company says "was limited to reading" customer relationship data (names, phone numbers, countries, language and currency preferences, account creation dates, products on accounts, marketing preferences, company VAT numbers), with copies possibly taken. Per the company's spokesperson as quoted, investigators found AI attack "skills" on Chinese infrastructure including copies of skills Anthropic has open-sourced, the attacker used ARTEX, and the core attacker infrastructure was hosted in China and Singapore; the company suspects the same actor CrowdStrike's CSA-261162 describes against South Korean financial institutions, which is this file's incident, and a Chinese state-linked group known for abusing Claude Code. The company reported to law enforcement, the FTC and UK and EU data-protection authorities and worked with Singapore ISPs to take down attacker servers. The attribution is the victim's assessment as relayed by one outlet; CrowdStrike has not published a link between the two, and this file records the claim as 123 Reg's. For readers: 123 Reg customers should expect phishing that uses the exposed contact data, enable two-step verification, and sign in through the site rather than a link.
+
 ## Sources
 - [CrowdStrike — Unknown Threat Actor Uses ARTEX to Target South Korean Finance](https://www.crowdstrike.com/en-us/blog/unknown-threat-actor-uses-artex-to-target-south-korean-finance/) (2026-10-07, Ashley Campion: exposed directory, Claude Code session/memory files, ARTEX configs, DeepSeek/GLM/Grok backends, the "YY" résumé prompt and Telegram handle, MITRE ATT&CK mapping, IOC categories)
 - [The Register — CrowdStrike finds possible bank hacker's CV among exposed AI logs](https://www.theregister.com/cyber-crime/2026/10/08/crowdstrike-finds-possible-bank-hackers-cv-among-exposed-ai-logs/5301908) (2026-10-08, Connor Jones: five named lenders, affected-customer counts, the résumé detail, closed-sourcing of ARTEX, Oct 19 parliamentary audit)
 - [The Hacker News — ARTEX AI Pentesting Tool Used in Data Theft Attacks on South Korean Financial Firms](https://thehackernews.com/2026/10/artex-ai-pentesting-tool-used-in-data.html) (2026-10-08: relays CrowdStrike, two-server setup, model backends)
+- **2026-10-28 update source** — [The Register — 123 Reg discloses AI cyberattack on customer data, suspects China nexus](https://www.theregister.com/cyber-crime/2026/10/28/123-reg-discloses-ai-cyberattack-on-customer-data-suspects-china-nexus/5305936) (fetched 2026-10-28: Connor Jones, the 09-18 start, the data categories, the "limited to reading" statement, the ARTEX and skills findings, the China and Singapore infrastructure, the CSA-261162 link as the company's suspicion, the regulator notifications, the customer guidance).

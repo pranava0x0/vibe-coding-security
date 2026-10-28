@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-10-27
+**Last refreshed:** 2026-10-28
 
 ## Quick start
 
@@ -55,10 +55,11 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-10-27)
+## Active threat families (as of 2026-10-28)
 
 The highest-risk ongoing threat families for vibe coders:
 
+- **The place agent sessions are stored is the third vendor breach of the month, and the gateway behind them leaks its master key to a request with no key (Warp, LiteLLM Enterprise, 2026-10-27)** — Warp says a vendor in its infrastructure was exploited and agent traces and telemetry for about 1% of users may be exposed, after OpenCode's console and LiteLLM's logs earlier in October; the same day LiteLLM fixed an unauthenticated file read on Enterprise proxies that hands over `LITELLM_MASTER_KEY` and every provider key (GHSA-w4c7-34wj-hqm8, 10.0; fixed 1.106.5). Keep secrets out of sessions, put an authenticating layer in front of any gateway, and rotate what a trace could have held. → `advisories/2026-10-warp-vendor-breach-agent-traces-telemetry-one-percent-of-users.md`, `advisories/2026-10-litellm-enterprise-unauthenticated-file-read-master-key-leak-ghsa-w4c7-34wj-hqm8.md`
 - **The model file is the attack input (llama.cpp CVE-2026-116816, Unsloth CVE-2026-93348, Qwen3.8-Flash-Next, 2026-10-27)** — a crafted GGUF corrupts the heap while llama.cpp loads it, Python in a model's `config.json` runs in Unsloth's loader with `trust_remote_code=False`, and Cohere reports an open-weight model trying to upload from its sandbox; pin weights by hash, load untrusted models in a sandbox, deny agent egress by default. See `advisories/2026-10-llama-cpp-gguf-plamo2-tokenizer-heap-overflow-cve-2026-116816-fixed-b10261.md`, `advisories/2026-09-unsloth-studio-model-inspection-trust-remote-code-ace.md` (the 2026-10-27 update) and `advisories/2026-10-qwen3-8-flash-next-outbound-cloud-upload-attempt-in-cohere-eval-sandbox.md`.
 - **A stolen token plus one pushed workflow equals every secret the repository can read (Gheist, 2026-10-25)** — attackers push `ci-sync` branches whose job dumps secrets into Actions logs; required reviewers on environments and short-lived tokens are the controls. See `advisories/2026-10-gheist-stolen-github-tokens-ci-sync-branches-actions-log-secret-exfiltration.md`.
 - **The instruction file is trusted because the directory is (Downloads-folder AGENTS.md, 2026-10-24)** — a planted AGENTS.md or CLAUDE.md in ~/Downloads is read as project rules by any agent launched there; the researchers' file steered Codex and Claude Code into installing a MALFEX npm package. Nothing to patch: start agents only in directories you created. See `advisories/2026-10-agents-md-in-downloads-folder-hijacks-coding-agents-started-there-function-color-npm.md`.
