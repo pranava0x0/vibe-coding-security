@@ -3032,6 +3032,18 @@
    "tier": "research",
    "weight": 9
   },
+  "blog.checkpoint.com": {
+   "ecosystems": [
+    "checkpoint-agent-framework-cluster",
+    "cursor",
+    "langgraph",
+    "yoba-fake-ai-desktop-apps-github-releases"
+   ],
+   "hits": 3,
+   "last_hit": "2026-10-29",
+   "tier": "research",
+   "weight": 9
+  },
   "docs.litellm.ai": {
    "_added": "2026-05-30",
    "ecosystems": [
@@ -3361,18 +3373,6 @@
    "hits": 1,
    "last_decayed": "2026-10-22",
    "last_hit": "2026-05-30",
-   "tier": "research",
-   "weight": 8
-  },
-  "blog.checkpoint.com": {
-   "ecosystems": [
-    "checkpoint-agent-framework-cluster",
-    "cursor",
-    "langgraph"
-   ],
-   "hits": 2,
-   "last_decayed": "2026-10-11",
-   "last_hit": "2026-08-11",
    "tier": "research",
    "weight": 8
   },
