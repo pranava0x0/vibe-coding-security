@@ -26,7 +26,7 @@ The Register reports (2026-10-29) that Radware researchers found at least 83 Git
 - You maintain a public repository with a workflow that triggers on `issues`, `issue_comment`, `pull_request_target` or `discussion` events and uses `${{ github.event.issue.body }}`, `${{ github.event.comment.body }}`, a title, or a PR body inside a `run:` step. That is the vulnerable shape regardless of this campaign.
 
 ```bash
-grep -rnE 'github\.event\.(issue|comment|pull_request|discussion)\.(body|title)' .github/workflows/ | grep -v 'env:'
+grep -rnE 'github\.event\.(issue|comment|pull_request|discussion)\.(body|title)' .github/workflows/   # a hit inside a run: step is the vulnerable shape; a hit under env: is the fix
 git log --all --since=2026-08-31 --until=2026-09-03 --format='%h %an %s' -- .github/workflows/   # workflow changes around the campaign day
 ```
 

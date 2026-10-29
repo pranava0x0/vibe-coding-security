@@ -31,8 +31,8 @@ Since 15.2.0 (npm 2026-10-25), running `npx claude-mem install` on a machine wit
 ## Am I affected?
 
 ```bash
-npm ls -g claude-mem 2>/dev/null; npx claude-mem --version 2>/dev/null   # 15.2.0 or later
-ls -d ~/.claude/projects ~/.codex ~/.gemini ~/.config/opencode 2>/dev/null      # histories the scan reads
+npm ls -g claude-mem 2>/dev/null; npm ls claude-mem 2>/dev/null          # 15.2.0 or later; do not use npx here, it would fetch and run the package
+ls -d ~/.claude/projects ~/.codex ~/.gemini ~/.config/opencode 2>/dev/null      # four of the five history locations the scan reads; the Antigravity CLI path was not read this run
 ```
 
 - You are affected if you ran `npx claude-mem install` on 15.2.0 or later on a machine where setup had not been completed before, and the browser setup page opened. The issue says the upload begins on page load.

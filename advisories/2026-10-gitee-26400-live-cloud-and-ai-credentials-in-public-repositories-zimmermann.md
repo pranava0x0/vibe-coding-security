@@ -27,7 +27,7 @@ Independent researcher Ben Zimmermann, writing on MongoDB's blog on 2026-10-28, 
 
 ```bash
 git log -p --all | grep -nE 'sk-[A-Za-z0-9]{20,}|LTAI[A-Za-z0-9]{12,}|hf_[A-Za-z0-9]{30,}|sk-or-v1-|lsv2_' | head   # OpenAI, Alibaba Cloud, Hugging Face, OpenRouter, LangSmith shapes in history
-pip install -q kingfisher 2>/dev/null || true; trufflehog git file://. --only-verified 2>/dev/null | head           # either scanner; run both if you can
+trufflehog git file://. --only-verified 2>/dev/null | head    # one scanner; the post shows each tool alone finds about half, so also run MongoDB's Kingfisher (a Rust binary from its GitHub releases, not a PyPI package)
 ```
 
 - Any match in a repository that was ever public, on any host, is a credential to revoke at the issuer, whether or not the current tree still contains it.
