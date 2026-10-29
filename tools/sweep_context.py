@@ -168,7 +168,7 @@ def build_top_sources() -> list[dict[str, Any]]:
     items.sort(
         key=lambda e: (
             -weight(e),
-            -(e.get("hits") or 0),
+            -(e["hits"] if isinstance(e.get("hits"), (int, float)) else 0),
             _neg_date(str(e.get("last_hit") or "")),
             str(e.get("domain", "")),
         )
