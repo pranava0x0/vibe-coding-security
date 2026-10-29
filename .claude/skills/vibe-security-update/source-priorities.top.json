@@ -3,112 +3,10 @@
  "note": "top 25 by weight; regenerate with tools/sweep_context.py",
  "sources": [
   {
-   "domain": "advisories.gitlab.com",
+   "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 23,
-   "last_hit": "2026-09-23"
-  },
-  {
-   "domain": "aikido.dev",
-   "weight": 20.0,
-   "hits": 24,
-   "last_hit": "2026-10-26"
-  },
-  {
-   "domain": "aws.amazon.com",
-   "weight": 20.0,
-   "hits": 17,
-   "last_hit": "2026-10-28"
-  },
-  {
-   "domain": "bleepingcomputer.com",
-   "weight": 20.0,
-   "hits": 34,
-   "last_hit": "2026-10-26"
-  },
-  {
-   "domain": "cisa.gov",
-   "weight": 20.0,
-   "hits": 24,
-   "last_hit": "2026-10-28"
-  },
-  {
-   "domain": "csoonline.com",
-   "weight": 20.0,
-   "hits": 14,
-   "last_hit": "2026-10-19"
-  },
-  {
-   "domain": "cveawg.mitre.org",
-   "weight": 20.0,
-   "hits": 21,
-   "last_hit": "2026-10-28"
-  },
-  {
-   "domain": "cybersecuritynews.com",
-   "weight": 20.0,
-   "hits": 45,
-   "last_hit": "2026-10-08"
-  },
-  {
-   "domain": "github.com",
-   "weight": 20.0,
-   "hits": 54,
-   "last_hit": "2026-10-28"
-  },
-  {
-   "domain": "github.com/advisories",
-   "weight": 20.0,
-   "hits": 59,
-   "last_hit": "2026-10-28"
-  },
-  {
-   "domain": "helpnetsecurity.com",
-   "weight": 20.0,
-   "hits": 13,
-   "last_hit": "2026-10-09"
-  },
-  {
-   "domain": "hn.algolia.com",
-   "weight": 20.0,
-   "hits": 16,
-   "last_hit": "2026-10-27"
-  },
-  {
-   "domain": "microsoft.com",
-   "weight": 20.0,
-   "hits": 8,
-   "last_hit": "2026-09-30"
-  },
-  {
-   "domain": "nvd.nist.gov",
-   "weight": 20.0,
-   "hits": 62,
-   "last_hit": "2026-10-06"
-  },
-  {
-   "domain": "ox.security",
-   "weight": 20.0,
-   "hits": 14,
-   "last_hit": "2026-10-16"
-  },
-  {
-   "domain": "pypi.org",
-   "weight": 20.0,
-   "hits": 17,
-   "last_hit": "2026-10-28"
-  },
-  {
-   "domain": "registry.npmjs.org",
-   "weight": 20.0,
-   "hits": 33,
-   "last_hit": "2026-10-28"
-  },
-  {
-   "domain": "safedep.io",
-   "weight": 20.0,
-   "hits": 23,
-   "last_hit": "2026-10-26"
+   "hits": 113,
+   "last_hit": "2026-10-29"
   },
   {
    "domain": "securityweek.com",
@@ -117,10 +15,52 @@
    "last_hit": "2026-10-26"
   },
   {
-   "domain": "sentinelone.com",
+   "domain": "nvd.nist.gov",
    "weight": 20.0,
-   "hits": 18,
-   "last_hit": "2026-09-15"
+   "hits": 62,
+   "last_hit": "2026-10-06"
+  },
+  {
+   "domain": "github.com/advisories",
+   "weight": 20.0,
+   "hits": 60,
+   "last_hit": "2026-10-29"
+  },
+  {
+   "domain": "theregister.com",
+   "weight": 20.0,
+   "hits": 59,
+   "last_hit": "2026-10-29"
+  },
+  {
+   "domain": "github.com",
+   "weight": 20.0,
+   "hits": 55,
+   "last_hit": "2026-10-29"
+  },
+  {
+   "domain": "cybersecuritynews.com",
+   "weight": 20.0,
+   "hits": 45,
+   "last_hit": "2026-10-08"
+  },
+  {
+   "domain": "registry.npmjs.org",
+   "weight": 20.0,
+   "hits": 34,
+   "last_hit": "2026-10-29"
+  },
+  {
+   "domain": "bleepingcomputer.com",
+   "weight": 20.0,
+   "hits": 34,
+   "last_hit": "2026-10-26"
+  },
+  {
+   "domain": "vulncheck.com",
+   "weight": 20.0,
+   "hits": 33,
+   "last_hit": "2026-10-29"
   },
   {
    "domain": "socket.dev",
@@ -135,22 +75,82 @@
    "last_hit": "2026-10-26"
   },
   {
-   "domain": "thehackernews.com",
+   "domain": "cisa.gov",
    "weight": 20.0,
-   "hits": 112,
+   "hits": 25,
+   "last_hit": "2026-10-29"
+  },
+  {
+   "domain": "aikido.dev",
+   "weight": 20.0,
+   "hits": 24,
+   "last_hit": "2026-10-26"
+  },
+  {
+   "domain": "safedep.io",
+   "weight": 20.0,
+   "hits": 23,
+   "last_hit": "2026-10-26"
+  },
+  {
+   "domain": "advisories.gitlab.com",
+   "weight": 20.0,
+   "hits": 23,
+   "last_hit": "2026-09-23"
+  },
+  {
+   "domain": "cveawg.mitre.org",
+   "weight": 20.0,
+   "hits": 22,
+   "last_hit": "2026-10-29"
+  },
+  {
+   "domain": "aws.amazon.com",
+   "weight": 20.0,
+   "hits": 18,
+   "last_hit": "2026-10-29"
+  },
+  {
+   "domain": "pypi.org",
+   "weight": 20.0,
+   "hits": 18,
+   "last_hit": "2026-10-29"
+  },
+  {
+   "domain": "wiz.io",
+   "weight": 20.0,
+   "hits": 18,
    "last_hit": "2026-10-27"
   },
   {
-   "domain": "theregister.com",
+   "domain": "sentinelone.com",
    "weight": 20.0,
-   "hits": 58,
-   "last_hit": "2026-10-28"
+   "hits": 18,
+   "last_hit": "2026-09-15"
   },
   {
-   "domain": "unit42.paloaltonetworks.com",
+   "domain": "hn.algolia.com",
    "weight": 20.0,
-   "hits": 10,
-   "last_hit": "2026-10-11"
+   "hits": 17,
+   "last_hit": "2026-10-29"
+  },
+  {
+   "domain": "api.npmjs.org",
+   "weight": 20.0,
+   "hits": 16,
+   "last_hit": "2026-10-29"
+  },
+  {
+   "domain": "csoonline.com",
+   "weight": 20.0,
+   "hits": 14,
+   "last_hit": "2026-10-19"
+  },
+  {
+   "domain": "ox.security",
+   "weight": 20.0,
+   "hits": 14,
+   "last_hit": "2026-10-16"
   }
  ]
 }

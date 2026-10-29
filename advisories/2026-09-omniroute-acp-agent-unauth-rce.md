@@ -2,7 +2,7 @@
 id: 2026-09-omniroute-acp-agent-unauth-rce
 title: "OmniRoute (66K-star self-hosted AI gateway) — unauthenticated RCE through the custom ACP agent endpoint when requireLogin is off (CVE-2026-88062, CVSS 9.5–10.0); vendor, NVD and the advisory database disagree on which version is fixed"
 date_disclosed: 2026-09-03
-last_updated: 2026-09-14
+last_updated: 2026-10-29
 severity: critical
 status: patched
 ecosystems: [npm, ai-gateways, llm-routers, self-hosted]
@@ -61,6 +61,12 @@ You are affected if you ran OmniRoute ≤ 3.8.49 (and possibly 3.8.50) reachable
 - [Credential hygiene](../prevention/credential-hygiene.md) — a router that holds keys for 352 providers is a single point of total loss; scope each upstream key to what the gateway needs and cap spend.
 - [Supply-chain attack surface](../prevention/supply-chain-attack-surface.md)
 - Never run an AI gateway with login disabled, even "just locally": the [DeepSeek Harness](2026-09-deepseek-harness-host-header-sandbox-escape.md), [NemoClaw/Ollama](2026-08-nvidia-nemoclaw-openshell-cve-batch.md) and [MCP bind-all-interfaces](2026-08-agent-framework-mcp-cve-batch.md) entries are the same lesson.
+
+## Update 2026-10-29 — a management-scoped API key or `oma_` token could replace the dashboard password without the current one (CVE-2026-118984, 7.0); fixed 3.8.52
+
+VulnCheck published CVE-2026-118984 on 2026-10-29: OmniRoute **3.8.0 before 3.8.52** let holders of manage- or admin-scoped API keys or `oma_` access tokens change the management password through `POST /api/settings/require-login` without supplying the current password, so a leaked machine credential could lock out the operator, take over the dashboard login, or disable the login requirement entirely, which is the precondition for the unauthenticated ACP path in this file. CVSS 4.0 7.0 (`AV:N/AC:L/AT:N/PR:H/UI:N/VC:N/VI:H/VA:L`), CVSS 3.1 5.5. The fix is PR #16897, "fix(security): machine credentials cannot change login settings or security policy", merged 2026-10-17 into `release/v3.8.52` (commit dde27f4): once a password exists, API keys of any scope and `oma_` tokens get 403 on that route, a dashboard session must send `currentPassword`, `PATCH /api/settings` requires the `admin` scope and security-policy keys require an operator credential, and refused attempts are audited as `settings.update_failed` with reason `OPERATOR_REQUIRED`. The PR cites a private security report and names no reporter; the record credits Rachid Marcil (gsmarcil), who is a co-author on the merge. Release v3.8.52 is dated 19 Oct on GitHub and its notes count one security entry without text. Upgrade to 3.8.52 or later and treat any `oma_` token or manage-scoped key that was ever exposed as able to have changed the password.
+
+Sources for this update: [CVE Services — CVE-2026-118984](https://cveawg.mitre.org/api/cve/CVE-2026-118984) — fetched 2026-10-29: CNA VulnCheck, published 2026-10-29, the range, the description, both scores, the references, the credit. [cheaper-inference/OmniRoute — PR #16897](https://github.com/cheaper-inference/OmniRoute/pull/16897) — fetched 2026-10-29: merged 2026-10-17 into `release/v3.8.52`, the route-by-route changes, the audit event, the private-report mention. [cheaper-inference/OmniRoute — release v3.8.52](https://github.com/cheaper-inference/OmniRoute/releases/tag/v3.8.52) — fetched 2026-10-29: dated 19 Oct, one security entry counted, no text for it on the page.
 
 ## Sources
 - [OmniRoute — GHSA-hf57-cqmx-p4gr: OmniRoute ACP Custom-Agent Remote Code Execution (RCE)](https://github.com/diegosouzapw/OmniRoute/security/advisories/GHSA-hf57-cqmx-p4gr) — vendor advisory, fetched 2026-09-14: mechanism (`execFileSync` via `refreshAgentCache`/`detectAgent`), the `requireLogin=false`/bootstrap precondition, the `LOCAL_ONLY_API_PREFIXES` omission, "before 3.8.49 / update to 3.8.49," published 2026-09-03, reporter c111mb3r.

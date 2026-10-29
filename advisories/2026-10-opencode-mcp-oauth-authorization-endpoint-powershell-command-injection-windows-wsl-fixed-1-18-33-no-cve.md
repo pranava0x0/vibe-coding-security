@@ -1,13 +1,13 @@
 ---
 id: 2026-10-opencode-mcp-oauth-authorization-endpoint-powershell-command-injection-windows-wsl-fixed-1-18-33-no-cve
-title: "OpenCode 1.0.137 to 1.18.32 on Windows and WSL: a remote MCP server's OAuth authorization endpoint ran PowerShell at sign-in; fixed 1.18.33, no CVE"
+title: "OpenCode 1.0.137 to 1.18.32 on Windows and WSL: a remote MCP server's OAuth endpoint ran PowerShell at sign-in; fixed 1.18.33; CVE-2026-119025 (via `open`)"
 date_disclosed: 2026-10-19
-last_updated: 2026-10-22
+last_updated: 2026-10-29
 severity: high
 status: patched
 ecosystems: [npm, ai-coding-agents, mcp, windows]
 tools_affected: ["opencode-ai (npm) 1.0.137 through 1.18.32 on Windows and WSL; macOS and Linux not affected", "any developer who ran `opencode mcp auth` against a remote MCP server not under their control", "other MCP clients that pass a server-supplied URL to the `open` npm package below 11.0.0 on Windows"]
-tags: [mcp, oauth, command-injection, powershell, open-package, windows, wsl, opencode, no-cve, silent-fix, out-of-threat-model, pillar-security, cwe-78, mcp-remote-class]
+tags: [mcp, oauth, command-injection, powershell, open-package, windows, wsl, opencode, cve, vulncheck, upstream-cve, silent-fix, out-of-threat-model, pillar-security, cwe-78, mcp-remote-class]
 ---
 
 ## TL;DR
@@ -42,6 +42,12 @@ Why it is here: it is the mcp-remote bug class a year on, in a coding agent with
 
 - [MCP hygiene](../prevention/mcp-hygiene.md): every server-controlled field is untrusted input, including OAuth discovery; bind discovery to the configured origin.
 - [Agent sandboxing](../prevention/agent-sandboxing.md).
+
+## Update 2026-10-29 — a CVE exists after all, filed against the `open` library with OpenCode as an affected product: CVE-2026-119025 (VulnCheck, 7.7)
+
+VulnCheck published CVE-2026-119025 on 2026-10-29 for `open` 7.2.0 before 11.0.0, listing `anomalyco/opencode` **1.0.137 before 1.18.33** and `modelcontextprotocol/inspector` 2.0.0 before 2.12.0 as affected products, with Eilon Cohen (Pillar Security) credited and the OpenCode PR #51414 and commit 29f07e0c among the references. CVSS 4.0 7.7, CVSS 3.1 7.5. The vendor still has no advisory on its tab; the id is the library's. A dependency scanner keyed to this CVE will flag `open` below 11.0.0 in a lockfile and will not flag OpenCode itself, because `opencode-ai` ships a bundle with no `open` entry in its `dependencies`; the inventory-by-version advice above stands. MCP Inspector's own advisory (GHSA-q978-78c7-phqw, 2026-10-21, fixed 2.12.0) and the pins other MCP clients still carry are in [the `open` advisory](2026-10-open-npm-powershell-url-injection-cve-2026-119025-mcp-inspector-opencode-downstream-pins.md). The "no CVE" in this file's title and the `no-cve` tag described the state until 2026-10-29.
+
+Sources for this update: [CVE Services — CVE-2026-119025](https://cveawg.mitre.org/api/cve/CVE-2026-119025) — fetched 2026-10-29: the three affected products and ranges, the scores, the references, the credit. npm `opencode-ai`, read 2026-10-29: no `open` in `dependencies`.
 
 ## Sources
 - [Pillar Security — Open and Shut: Remote Code Execution in opencode via MCP OAuth](https://www.pillar.security/blog/open-and-shut-remote-code-execution-in-opencode-via-mcp-oauth) — fetched 2026-10-22 (page dated 2026-10-19, Eilon Cohen): affected and fixed versions, the mechanism and the chain of files, the `open` history with issue and release dates, the scheme-validation argument, the disclosure timeline, the fix contents, the peer comparison, the recommendations.

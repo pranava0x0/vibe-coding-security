@@ -2,7 +2,7 @@
 id: 2026-09-coder-registry-cloudflare-terraform-supply-chain
 title: "Coder registry compromise — a stolen Cloudflare API key rerouted registry.coder.com for 14 hours, serving credential-stealing Terraform modules to AI-workspace provisioners (GHSA-vx42-ghc9-gw65)"
 date_disclosed: 2026-09-01
-last_updated: 2026-10-27
+last_updated: 2026-10-29
 severity: critical
 status: patched
 ecosystems: [terraform, coder, cloud-dev-environment, ai-agents]
@@ -101,6 +101,12 @@ Three of the August advisories credit Anthropic's Security Team by reference num
 ## Update 2026-10-27 — Coder GHSA-2x8w-q434-f76p (High 7.7): the web dashboard minted a full-access API key into a sub-agent's external app link, so code in a workspace could take over its owner; fixed 2.38.2, 2.37.6, 2.36.9, 2.34.14, 2.29.23
 
 Published on `coder/coder` on 2026-10-27 (no CVE; CVSS 3.1 7.7 `AV:N/AC:H/PR:L/UI:R/S:C/C:H/I:H/A:N`, CWE-201): the dashboard replaced the `$SESSION_TOKEN` placeholder in external workspace-app URLs with a newly minted API key without checking whether the app belonged to a sub-agent. Sub-agent apps are registered at runtime by code in the workspace, such as a devcontainer or an AI agent, so a sub-agent could register an app using an allowed custom protocol such as `vscode:` with the placeholder and an attacker-chosen destination, and when the owner clicked it the dashboard minted a full-access key and opened the URL with it; the attacker controls the app's name and icon. The `coder open app` CLI already refused this for sub-agents (GHSA-v54h-cp2w-9x4g); the dashboard did not. Affected 2.24.0 before 2.29.23, 2.30.0 before 2.34.14, 2.35.0 before 2.36.0 (end of life, no patch), 2.36.0 before 2.36.9, 2.37.0 before 2.37.6, 2.38.0 before 2.38.2. Fix PR #31208: no substitution for sub-agent apps, and for other external apps only when the link opens a known Coder IDE handler and points at the same deployment. Workaround: do not click external apps under devcontainer or other sub-agents unless you trust the workspace's code. Credits a customer security team and manus-pi; fix by EhabY. For this corpus the point is that an AI agent running inside the workspace is exactly the sub-agent the advisory describes. Also on the tab since the last read: GHSA-373r-678h-hjc6 (2026-10-21, Moderate), an encoded path traversal in the AI Gateway passthrough that let users reach unintended upstream provider endpoints, still without a CVE.
+
+## Update 2026-10-29 — the GCE instance-identity bug is CVE-2026-118687 (VulnCheck, 2026-10-28; CVSS 4.0 8.3, 3.1 6.5)
+
+VulnCheck published CVE-2026-118687 on 2026-10-28 for GHSA-24vh-q7rg-243w (the 10-13 update above): "Coder before 2.29.21, 2.30.0 before 2.34.12, 2.35.0 before 2.35.9, 2.36.0 before 2.36.7, and 2.37.0 before 2.37.4 does not validate the audience claim of GCE instance-identity JWTs at the POST /api/v2/workspaceagents/google-instance-identity endpoint." The ranges match the vendor's backports. Scores: VulnCheck CVSS 4.0 8.3 (`AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:L/VA:N`) and CVSS 3.1 6.5, the same 3.1 vector the vendor printed. The vendor page said no CVE on 10-13; the id now exists, fifteen days later, from a research CNA. Credit matte1782.
+
+Sources for this update: [CVE Services — CVE-2026-118687](https://cveawg.mitre.org/api/cve/CVE-2026-118687) — fetched 2026-10-29: CNA VulnCheck, published 2026-10-28, the five ranges, both scores, the GHSA reference, the credit.
 
 ## Sources
 - [Coder — GHSA-h58h-qvv5-xvwg: Workspace proxy hostname prefix match lets an attacker-controlled domain steal a victim's workspace app credential](https://github.com/coder/coder/security/advisories/GHSA-h58h-qvv5-xvwg) — vendor advisory, published 2026-08-10: CVSS 7.7, affected/fixed ranges, the `syd.co` example, reporter credits. Fetched 2026-09-20.

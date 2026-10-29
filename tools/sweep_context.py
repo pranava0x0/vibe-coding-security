@@ -153,13 +153,26 @@ def build_top_sources() -> list[dict[str, Any]]:
     else:
         items = list(sources)
 
+    def _neg_date(d: str) -> str:
+        # ISO dates sort lexically; invert each digit so newer sorts first.
+        return "".join(str(9 - int(c)) if c.isdigit() else c for c in d) if d else "9999-99-99"
+
     def weight(entry: dict[str, Any]) -> float:
         for key in ("weight", "score", "priority", "hits"):
             if isinstance(entry.get(key), (int, float)):
                 return float(entry[key])
         return 0.0
 
-    items.sort(key=lambda e: (-weight(e), str(e.get("domain", ""))))
+    # weight desc, then hits desc, then most recent last_hit, then domain; a
+    # domain-only tie-break evicted productive sources once 25+ hit the cap.
+    items.sort(
+        key=lambda e: (
+            -weight(e),
+            -(e["hits"] if isinstance(e.get("hits"), (int, float)) else 0),
+            _neg_date(str(e.get("last_hit") or "")),
+            str(e.get("domain", "")),
+        )
+    )
     # `ecosystems` is deliberately dropped — it is most of the 105KB in the
     # full file and the query-building step never reads it.
     return [

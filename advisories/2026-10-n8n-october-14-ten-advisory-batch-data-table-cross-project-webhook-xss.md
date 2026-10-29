@@ -2,7 +2,7 @@
 id: 2026-10-n8n-october-14-ten-advisory-batch-data-table-cross-project-webhook-xss
 title: "n8n: fifteen advisories on 2026-10-14, cross-project Data Table access from a crafted workflow ID, webhook stored XSS; fixed 1.123.85, 2.43.5, 2.44.1"
 date_disclosed: 2026-10-14
-last_updated: 2026-10-15
+last_updated: 2026-10-29
 severity: high
 status: patched
 ecosystems: [npm, n8n, ai-agents]
@@ -70,6 +70,12 @@ The tab's first page holds ten rows and the batch was written from that page. Pa
 - **Credential permission check skips nodes whose default parameters are omitted, GHSA-v9cx-v88r-42vw, 5.1.** Stored parameters omit defaults, defaults are restored at execution, so a member runs a workflow that uses a credential they cannot access and sends the decrypted value out. Fixed 1.123.85, 2.44.1, 2.43.5. Reporter Masofgon.
 
 The fix lines are unchanged: 1.123.85, 2.43.5 and 2.44.1 close the whole day, and the two fixed in 2.42.1 and 2.41.4 were already closed on 2026-09-30. Still no CVE on any of the fifteen. The six CVE ids VulnCheck assigned on 2026-10-14 belong to the [September 30 batch](2026-09-n8n-september-30-ten-advisory-batch.md), not to these.
+
+## Update 2026-10-29 — the Chat Hub authorization bypass is CVE-2026-118640 (VulnCheck, 2026-10-28; 5.3)
+
+VulnCheck published CVE-2026-118640 on 2026-10-28 for GHSA-43v8-hjhm-chjp: "n8n before 1.123.85, 2.43.5, and 2.44.1 contains an authorization bypass vulnerability in Chat Hub that allows chat-only users to register restricted tool types." The ranges match the batch (1.123.85, 2.43.5, 2.44.1); CVSS 4.0 5.3 and 3.1 5.4; credit vonypeto. The other fourteen advisories in this batch carried no CVE when read on 2026-10-29.
+
+Sources for this update: [CVE Services — CVE-2026-118640](https://cveawg.mitre.org/api/cve/CVE-2026-118640) — fetched 2026-10-29: CNA VulnCheck, published 2026-10-28, the three ranges, both scores, the GHSA reference, the credit.
 
 ## Sources
 - [n8n — GHSA-wvjj-qg37-pv73](https://github.com/n8n-io/n8n/security/advisories/GHSA-wvjj-qg37-pv73), [GHSA-mp7q-23hg-35cf](https://github.com/n8n-io/n8n/security/advisories/GHSA-mp7q-23hg-35cf), [GHSA-m7gv-mpg5-7c9v](https://github.com/n8n-io/n8n/security/advisories/GHSA-m7gv-mpg5-7c9v), [GHSA-43v8-hjhm-chjp](https://github.com/n8n-io/n8n/security/advisories/GHSA-43v8-hjhm-chjp), [GHSA-qmvv-q3c9-wpp7](https://github.com/n8n-io/n8n/security/advisories/GHSA-qmvv-q3c9-wpp7), [GHSA-8vrr-mgc5-jg55](https://github.com/n8n-io/n8n/security/advisories/GHSA-8vrr-mgc5-jg55), [GHSA-pcr3-v5vr-qppf](https://github.com/n8n-io/n8n/security/advisories/GHSA-pcr3-v5vr-qppf), [GHSA-mgpr-56r4-5c67](https://github.com/n8n-io/n8n/security/advisories/GHSA-mgpr-56r4-5c67), [GHSA-65mv-v8rp-54wc](https://github.com/n8n-io/n8n/security/advisories/GHSA-65mv-v8rp-54wc), [GHSA-crfj-5wv6-8v86](https://github.com/n8n-io/n8n/security/advisories/GHSA-crfj-5wv6-8v86) (all published 2026-10-14; descriptions, CVSS 4.0 vectors, affected and patched versions, workarounds, reporters)
