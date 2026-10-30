@@ -6,7 +6,7 @@ last_updated: 2026-10-30
 severity: high
 status: active
 ecosystems: [cursor, github-copilot, claude-desktop, codex, vscode, electron]
-tools_affected: ["Cursor before the silent fix of 2026-10-01 (integrated browser)", "GitHub Copilot app 1.1.27 (browser preview); fixed 1.1.29", "Claude Desktop (file:// page read through a web worker); reported 2026-07-23 and 2026-07-24, fix status per the SneakPeek file", "Codex (file:// pages read any file); unfixed as of 2026-10-29", "VS Code (same web-worker read as Claude Desktop); unfixed as of 2026-10-29"]
+tools_affected: ["Cursor before the silent fix of 2026-10-01 (integrated browser)", "GitHub Copilot 1.1.27, as the post names it (browser preview); fixed 1.1.29, a line that matches the github/app releases", "Claude Desktop (file:// page read through a web worker); reported 2026-07-23 and 2026-07-24, fix status per the SneakPeek file", "Codex (file:// pages read any file); unfixed as of 2026-10-29", "VS Code (same web-worker read as Claude Desktop); unfixed as of 2026-10-29"]
 tags: [embedded-browser, electron, file-url, local-file-read, prompt-injection, address-bar-spoofing, cursor, github-copilot, claude-desktop, codex, vscode, silent-fix, no-cve, unpatched, forever-security, workspace-trust]
 ---
 
@@ -39,7 +39,7 @@ The post does not give platform or version numbers for Cursor, Claude Desktop, C
 
 - You open repositories or HTML files you did not author in Codex or VS Code and the tool renders them in its own browser pane. Until a fix ships, that pane can read any file your account can.
 - You run Cursor and did not update after 2026-10-01: the composer path is fixed only in builds after that date, and Cursor has published no version number for it.
-- You run the GitHub Copilot app below 1.1.29.
+- You run a GitHub Copilot client on the 1.1.x line below 1.1.29 (the post names only "GitHub Copilot").
 - You run Claude Desktop below 1.30096.1 (Noma's fixed version); see the SneakPeek file for the check.
 
 ```bash

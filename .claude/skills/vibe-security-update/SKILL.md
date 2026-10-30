@@ -192,7 +192,7 @@ python3 tools/sweep_context.py   # refreshes advisory-index.jsonl + source-prior
 | `source-priorities.top.json` | the top sources Step 1 actually uses | ~0.5K |
 | `references/queries.md` | the query list | ~1K |
 
-**Do not read `ALERTS.md`, `advisories/README.md`, `advisory-index.jsonl`, the full `source-priorities.json`, or `runs.archive.md` into context.** They are `grep` targets, not reading material. Step 0 previously mandated ~345K tokens of reading — more than fits in a context window, so it silently truncated every run, which is how the classifier workaround kept getting rediscovered and how the 2026-06-19 stale-checkout duplication happened.
+**Do not read `ALERTS.md`, `advisories/README.md`, `advisory-index.jsonl`, the full `source-priorities.json`, `runs.archive.md`, or `LEARNINGS.archive.md` into context.** They are `grep` targets, not reading material. Step 0 previously mandated ~345K tokens of reading — more than fits in a context window, so it silently truncated every run, which is how the classifier workaround kept getting rediscovered and how the 2026-06-19 stale-checkout duplication happened.
 
 Check what the last run left for you:
 

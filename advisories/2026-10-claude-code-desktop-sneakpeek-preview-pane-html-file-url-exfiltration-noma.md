@@ -7,7 +7,7 @@ severity: high
 status: mitigated
 ecosystems: [claude-code, claude-desktop, electron]
 tools_affected: ["Claude Code Desktop (Claude Desktop app) before 1.30096.1, per the researcher", "developers who clone untrusted repositories and ask Claude to review HTML files in them"]
-tags: [claude-code, claude-desktop, electron, preview-pane, csp, file-url, data-exfiltration, credential-theft, untrusted-repository, single-source, no-cve-yet]
+tags: [claude-code, claude-desktop, electron, preview-pane, csp, file-url, data-exfiltration, credential-theft, untrusted-repository, two-researchers, no-cve-yet]
 ---
 
 ## TL;DR
