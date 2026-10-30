@@ -2,7 +2,7 @@
 id: 2026-10-n8n-october-28-twelve-advisory-batch-deprecated-code-nodes-expression-isolation-graphicsmagick
 title: "n8n: twelve advisories on 2026-10-28, three High: deprecated Code nodes run in the main process (8.7), expression-isolation escape, GraphicsMagick RCE; fixed 1.123.89, 2.45.5, 2.46.1"
 date_disclosed: 2026-10-28
-last_updated: 2026-10-28
+last_updated: 2026-10-30
 severity: high
 status: patched
 ecosystems: [npm, n8n, ai-agents, mcp]
@@ -68,6 +68,15 @@ Upgrade to 1.123.89, 2.45.5 or 2.46.1. Then move any Function, Function Item or 
 - Put `/webhook/*`, `/mcp-oauth/*` and chat endpoints behind the proxy rules the batch keeps asking for, and set `N8N_SSRF_PROTECTION_ENABLED=true`.
 - The container image is a dependency: rebuild on the vendor's tag, do not pin a digest for months.
 - [credential-hygiene](../prevention/credential-hygiene.md), [agent-sandboxing](../prevention/agent-sandboxing.md) and [ci-cd-hardening](../prevention/ci-cd-hardening.md).
+
+
+## Update 2026-10-30 — the deprecated-nodes advisory is CVE-2026-119408 (VulnCheck, 2026-10-30; 8.7 / 8.8), with a range that names the 10-09 block versions rather than the 10-28 releases
+
+VulnCheck published CVE-2026-119408 for GHSA-9p7v-45m2-wxgj on 2026-10-30: "n8n before 2.42.6, 2.43.x before 2.43.3, and 3.x before 3.0.1 contains a remote code execution vulnerability via deprecated Function, Function Item, and LangChain Code nodes running outside task runner isolation." CVSS 4.0 8.7 and 3.1 8.8. Its `affected` entries are `< 2.42.6`, `2.43.0 to < 2.43.3` and `3.0.0 to < 3.0.1`, and its references are the vendor advisory, fix commit ea8417e2 and the `n8n@2.42.6` release tag.
+
+Two things to read against the file above. First, the record's range follows the fix commit, so it names the versions where the block landed (2.42.6 and 2.43.3 on 2026-10-09 per the registry) and not the 10-28 releases the vendor advisory also lists; both are right, and the registry dates settle it: an instance on 2.42.6 or 2.43.3 has had the block since 10-09. Second, the record repeats the `3.0.1` line that npm does not carry (`npm view n8n versions` on 2026-10-30 still holds no 3.x), so the only installable fixed versions remain 2.42.6, 2.43.3, 2.44.0 and the three 10-28 releases. The record names no v1 line at all; the vendor advisory's `1.123.89` is the v1 fix and is on npm.
+
+Sources for this update: [CVE Services — CVE-2026-119408](https://cveawg.mitre.org/api/cve/CVE-2026-119408) — fetched 2026-10-30: CNA VulnCheck, published 2026-10-30, the three ranges, both scores, the GHSA, commit and tag references; npm registry `n8n` `time`, queried 2026-10-30: 2.42.6 2026-10-09 07:30, 2.43.3 10-09 08:19, no 3.0.0 or 3.0.1, `latest` 2.45.7.
 
 ## Sources
 

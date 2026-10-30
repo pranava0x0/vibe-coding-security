@@ -171,7 +171,7 @@ Report these as **"not covered"**, never as "nothing found."
 - **`techcrunch.com`** — guessed slugs 404; search for the URL. **403:** `techrepublic.com`, `cnbc.com`, `cbc.ca`, `darkreading.com`, `marketscreener.com`.
   **`theregister.com/<date>/`** day indexes 404 — use `/security/`. **`technology.org`** — JS wall.
 - **`aws.amazon.com/security/security-bulletins/<id>/`** — lower-case id only (`2026-127-aws`). **`supabase.com/changelog/<slug>`** — `WebFetch` 403; append `.md`, `curl`.
-- **Cloud-session Python** — no `markdown`/`pytest`; `python -m pip install markdown==3.7 Pygments==2.18.0 pytest==8.3.3` (skip the Debian PyYAML; bare `pip` is another interpreter).
+- **Marketplace version lists (§60):** `open-vsx.org/api/<pub>/<ext>/<ver>`, VS Marketplace `extensionquery` POST, `api.wordpress.org/plugins/info/1.2/?action=plugin_information&request[slug]=<s>`.
 
 ## Out of scope for this project
 

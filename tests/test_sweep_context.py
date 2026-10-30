@@ -44,6 +44,7 @@ STEP0_TOKEN_BUDGET = 80_000
 # are allowed to grow forever, which is exactly why nothing may read them whole.
 GREP_ONLY = [
     "advisory-index.jsonl",
+    "LEARNINGS.archive.md",
     "source-priorities.json",
     "runs.archive.md",
 ]

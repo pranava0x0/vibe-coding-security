@@ -2,7 +2,7 @@
 id: 2026-09-coder-registry-cloudflare-terraform-supply-chain
 title: "Coder registry compromise — a stolen Cloudflare API key rerouted registry.coder.com for 14 hours, serving credential-stealing Terraform modules to AI-workspace provisioners (GHSA-vx42-ghc9-gw65)"
 date_disclosed: 2026-09-01
-last_updated: 2026-10-29
+last_updated: 2026-10-30
 severity: critical
 status: patched
 ecosystems: [terraform, coder, cloud-dev-environment, ai-agents]
@@ -107,6 +107,19 @@ Published on `coder/coder` on 2026-10-27 (no CVE; CVSS 3.1 7.7 `AV:N/AC:H/PR:L/U
 VulnCheck published CVE-2026-118687 on 2026-10-28 for GHSA-24vh-q7rg-243w (the 10-13 update above): "Coder before 2.29.21, 2.30.0 before 2.34.12, 2.35.0 before 2.35.9, 2.36.0 before 2.36.7, and 2.37.0 before 2.37.4 does not validate the audience claim of GCE instance-identity JWTs at the POST /api/v2/workspaceagents/google-instance-identity endpoint." The ranges match the vendor's backports. Scores: VulnCheck CVSS 4.0 8.3 (`AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:L/VA:N`) and CVSS 3.1 6.5, the same 3.1 vector the vendor printed. The vendor page said no CVE on 10-13; the id now exists, fifteen days later, from a research CNA. Credit matte1782.
 
 Sources for this update: [CVE Services — CVE-2026-118687](https://cveawg.mitre.org/api/cve/CVE-2026-118687) — fetched 2026-10-29: CNA VulnCheck, published 2026-10-28, the five ranges, both scores, the GHSA reference, the credit.
+
+
+## Update 2026-10-30 — three more Coder advisories on 2026-10-29 (read-only roles could fetch an external agent's token; scoped keys minted unscoped keys; Web Push read exhausted coderd memory); fixed 2.38.4, 2.37.8, 2.36.11, 2.34.16, 2.29.24
+
+Three vendor advisories published on `coder/coder` on 2026-10-29, all Moderate, all "No known CVE" when read, all fixed in the same five versions.
+
+- **GHSA-9frj-7f83-x984 (6.5, `PR:H`, CWE-200/863).** `GET /api/v2/workspaces/{workspace}/external-agent/{agent}/credentials` returned the agent token and the start command to anyone with read access to the workspace, while every other agent-level route required `ssh` access. Premium deployments using external workspaces (`coder_external_agent`) were affected; Template Admins, Organization Admins and the Owner role with owner workspace access disabled were among the roles that could read another user's token, then read the owner's Git SSH key and external auth tokens, the agent manifest with its environment variables, and connect as the agent to receive the owner's sessions. The fix requires `ssh` access and returns 404 otherwise, which removes some admins' ability to fetch install commands for other users' external workspaces. Reported by Habib0x0, @jondavid-black and a customer security team.
+- **GHSA-x3gf-xv6p-56hf (6.8, `AC:H`, CWE-266).** A scoped API key or OAuth2 access token that could create API keys created them without inheriting its own scopes, allow list or expiry; a request with no scopes defaulted to `coder:all`, so a limited token minted a full-access key, for other users too when the caller was an Owner. The fix makes new keys inherit the creator's scopes and allow list, rejects escalation with 403 and caps expiry; `/oauth2/authorize` now returns `invalid_scope` in restricted cases, a behaviour change for clients that relied on the default. Reported by a customer security team and Muted Cybersecurity.
+- **GHSA-64xh-rgcx-gg65 (6.5, `PR:L`, CWE-400/770).** Web Push delivery read the push endpoint's whole response into memory with no size limit or timeout, and any authenticated user chooses that endpoint when subscribing, so one subscription pointed at a server that never stops sending took `coderd` down and could again after each restart. Web Push is on by default since 2.33.0; 2.21.0 to 2.32.x are affected only with the `web-push` experiment enabled. The fix caps reads and headers at 64 KiB and adds a 30-second client timeout. Credited to Anthropic's Security Team (ANT-2026-24Z4555M) and Adam Korczynski of Ada Logics.
+
+The affected lines are `>= 2.38.0 < 2.38.4`, `>= 2.37.0 < 2.37.8`, `>= 2.36.0 < 2.36.11`, `>= 2.30.0 < 2.34.16` and `>= 2.35.0 < 2.36.0` (end of life) on all three, with the lower bound of the oldest line at 2.26.0, 2.28.0 and 2.21.0 respectively. The first two are the same shape as GHSA-2x8w-q434-f76p above: a credential handed to a caller the role model did not mean to give it to, in a product whose workspaces run AI agents with the owner's keys. The vendor tab now carries four October advisories; CVE ids may follow from VulnCheck as they did on 10-17 and 10-28.
+
+Sources for this update: [GHSA-9frj-7f83-x984](https://github.com/coder/coder/security/advisories/GHSA-9frj-7f83-x984), [GHSA-x3gf-xv6p-56hf](https://github.com/coder/coder/security/advisories/GHSA-x3gf-xv6p-56hf) and [GHSA-64xh-rgcx-gg65](https://github.com/coder/coder/security/advisories/GHSA-64xh-rgcx-gg65) — fetched 2026-10-30: published Oct 29, 2026, the scores and vectors, the six affected ranges and five patched versions, the mechanisms, fixes and credits as summarised; [coder/coder — security advisories](https://github.com/coder/coder/security/advisories) — fetched 2026-10-30: the three 10-29 rows beside the 10-27 and 10-21 ones.
 
 ## Sources
 - [Coder — GHSA-h58h-qvv5-xvwg: Workspace proxy hostname prefix match lets an attacker-controlled domain steal a victim's workspace app credential](https://github.com/coder/coder/security/advisories/GHSA-h58h-qvv5-xvwg) — vendor advisory, published 2026-08-10: CVSS 7.7, affected/fixed ranges, the `syd.co` example, reporter credits. Fetched 2026-09-20.
