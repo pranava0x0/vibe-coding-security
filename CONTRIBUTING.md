@@ -157,6 +157,8 @@ ID-first `F-<number>` tables require saved registry snapshots and a manifest. Ru
 - **Date everything.** Format: `YYYY-MM-DD`. Update `last_updated` in frontmatter when you touch an advisory. Stamp volatile facts (EPSS/KEV, "as of" counts) with their date.
 - **Cite multiple sources** when possible. At least two independent reporters before promoting to a full advisory; a single-source claim is `status: unconfirmed`.
 - **Concrete > abstract.** Always include a command, a path, or a config snippet when relevant.
+- **Distinguish “downloaded” from “ran.”** A package name, version or file checksum tells you what is present. A matching filename, running program or startup job may be unrelated. Explain how to compare findings with the publisher's specific evidence before saying harmful code ran. Missing leftover files do not rule out earlier activity. Tie cleanup advice to what the reader actually found.
+- **Write for someone who is not a security specialist.** Prefer “the harmful code ran” to “payload execution” and “changes that survive a restart” to “persistence.” Explain necessary terms on first use, such as “rotate credentials” (replace passwords, keys and login tokens). Keep exact package names and commands so readers and their agents can still check them.
 - **No FUD.** Severity claims need to be defensible. If only 1,000 people downloaded the package before takedown, say so.
 - **Short.** Vibe coders are panicking. Hit the bullet points and link out for depth.
 - **Run the build before a PR:** `python site/build.py && python site/validate.py && python -m pytest tests/` — the same gate the deploy runs. A red gate blocks the deploy and freezes the live site.
