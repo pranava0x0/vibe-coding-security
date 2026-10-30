@@ -2,9 +2,9 @@
 id: 2026-10-gitlab-19-4-2-unauthenticated-cicd-regex-rce-cvss-10-duo-agent-prompt-injection
 title: "GitLab 19.4.2: unauthenticated code execution from a crafted CI/CD regular expression (CVE-2026-97229, CVSS 10.0); Duo Agent Platform prompt-injection fix (CVE-2026-96893)"
 date_disclosed: 2026-10-12
-last_updated: 2026-10-29
+last_updated: 2026-10-30
 severity: critical
-status: patched
+status: active
 ecosystems: [gitlab, self-hosted, ci-cd, source-hosting, ai-agents]
 tools_affected: ["GitLab CE/EE 19.2.0 through 19.2.7, 19.3.0 through 19.3.4, 19.4.0 and 19.4.1 (CVE-2026-97229)", "GitLab CE/EE 19.1 before 19.2.8, 19.3 before 19.3.5, 19.4 before 19.4.2 (CVE-2026-92883 XSS in syntax highlighting)", "GitLab CE/EE 18.7 before 19.2.8, 19.3 before 19.3.5, 19.4 before 19.4.2 (CVE-2026-16301 protected-branch pipelines)", "GitLab CE/EE all versions before 19.2.8, 19.3 before 19.3.5, 19.4 before 19.4.2 (CVE-2026-14814 raw-file cache poisoning)", "GitLab EE 19.1 before 19.2.8, 19.3 before 19.3.5, 19.4 before 19.4.2 Duo Agent Platform (CVE-2026-96893, CVE-2026-105458)", "GitLab EE 18.1 before 19.2.8, 19.3 before 19.3.5, 19.4 before 19.4.2 scheduled pipeline execution policies (CVE-2026-81839)"]
 tags: [cve, rce, unauthenticated, regex, ci-cd, gitlab, duo, ai-agent, prompt-injection, cache-poisoning, secrets-exposure, authorization-bypass, patch-release]
@@ -89,6 +89,15 @@ Alpine found no evidence of code execution (timing probes showed no delays; no u
 CVE-2026-97229 was not in CISA's KEV feed as read on 2026-10-29. Status stays `patched`: the fix was available before the attempt, and the incident is a missed upgrade plus a Ruby-build dependency the advisory did not spell out for custom installs.
 
 Sources for this update: [Alpine Linux — GitLab security incident: attempted exploitation of CVE-2026-97229](https://alpinelinux.org/posts/GitLab-security-incident-CVE-2026-97229.html) — fetched 2026-10-29: the timeline, the eight crashes and four partial runs, the image pull, the Ruby-build finding, the verification scope and method, the rebuild and rotations, the user actions, what remains unknown. [The Hacker News — Attacker Tried to Exploit Alpine Linux's GitLab via CVSS 10.0 Flaw Its Ruby Left Open](https://thehackernews.com/2026/10/attacker-tried-to-exploit-alpine-linuxs.html) — fetched 2026-10-29 (Swati Khandelwal): the Rapid7 PoC date, the 19.3.4 revision claim, the Sigma rules pointer. [GitLab — Critical Patch Release: 19.4.2, 19.3.5, 19.2.8](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-4-2-released/) — re-read 2026-10-29: 19.3 before 19.3.5 affected, the 19.3.4 bug note, the Ruby regexp patches listed as bug fixes. CISA KEV JSON, read 2026-10-29: no entry for CVE-2026-97229.
+
+
+## Update 2026-10-30 — CVE-2026-97229 added to CISA KEV on 2026-10-29 with a 2026-11-01 due date; status moves to `active`
+
+CISA's KEV JSON (catalog release 2026-10-29) adds CVE-2026-97229, "GitLab Community Edition and Enterprise Edition Integer Overflow or Wraparound Vulnerability", `dateAdded` 2026-10-29, `dueDate` 2026-11-01, a three-day window rather than the usual three weeks. The Hacker News (10-30) reports the addition beside Cisco's CVE-2026-76418 and cites Alpine Linux's account (the 10-29 update above) as the public exploitation evidence; CISA's row itself names no incident. The KEV listing is the catalog's label; the mechanism is in the 10-13 release post and does not change.
+
+What changes for readers: a KEV listing with a three-day deadline means CISA has evidence of exploitation beyond a single reported attempt, so any instance still below 19.4.2, 19.3.5 or 19.2.8, including the 19.3.4 trap Alpine fell into, should be treated as targeted now, and the Ruby regex-engine dependency on custom installs checked as the Alpine post describes. `status` moves from `patched` to `active`; the fix has not changed.
+
+Sources for this update: [CISA KEV JSON](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) — fetched 2026-10-30: catalog 1,764 entries released 2026-10-29, the CVE-2026-97229 row with `dateAdded` 2026-10-29 and `dueDate` 2026-11-01; [The Hacker News — CISA adds actively exploited GitLab RCE and Cisco firewall flaws to KEV](https://thehackernews.com/2026/10/cisa-adds-actively-exploited-gitlab-rce.html) — fetched 2026-10-30: dated 2026-10-30, both rows, the November 1 deadline, the Alpine account as the exploitation report.
 
 ## Sources
 - [GitLab — Critical Patch Release: 19.4.2, 19.3.5, 19.2.8](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-4-2-released/) — fetched 2026-10-13: the full fix table with titles, CVSS 3.1 scores and vectors, affected ranges and reporters, the GitLab.com and Dedicated statements, the migration and downtime notes, the 19.3.4 Ona regression, the 90-day disclosure policy. Dated 2026-10-12 on the [patch-releases Atom feed](https://docs.gitlab.com/releases/patch-releases.xml) (fetched 2026-10-13).
