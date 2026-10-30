@@ -1,6 +1,6 @@
 ---
 id: 2026-10-claude-code-extension-2-1-313-cursor-marketplace-remove-and-rotate
-title: "Malicious anthropic.claude-code 2.1.312 and 2.1.313 on the Cursor Marketplace: remove affected copies; rotate credentials if executed"
+title: "Harmful Claude Code extensions 2.1.312 and 2.1.313 from Cursor: check your installation and remove affected copies"
 kind: malicious-artifact
 date_disclosed: 2026-10-29
 last_updated: 2026-10-30
@@ -12,46 +12,48 @@ tags: [malicious-artifact, vscode-extension, cursor-marketplace, claude-code, ss
 ---
 
 ## TL;DR
-Remove affected Cursor Marketplace copies of `anthropic.claude-code` 2.1.312 or 2.1.313 and replace them with 2.1.314 or later; check the version, source and installation history below. If there is evidence of payload execution or backdoor installation, follow the cleanup guidance and rotate accessible credentials and sessions from a trusted machine; an inventory or generic hunting match alone does not confirm execution.
+Remove the harmful copies of the Claude Code extension (`anthropic.claude-code` 2.1.312 or 2.1.313) supplied through Cursor's marketplace, and use 2.1.314 or later. If checks show the harmful code ran or added a way for someone else to log in, follow the cleanup steps below and replace passwords, keys and login tokens it could have accessed; a file or program name matching a search is not enough to show this happened.
 
 ## Packages and versions
 
 | Ecosystem | Name | Bad versions | Clean version or action | Registry state (date checked) | Record |
 |---|---|---|---|---|---|
-| Cursor Marketplace (VS Code extension) | `anthropic.claude-code` (listed under the Anthropic publisher name; Cursor says Anthropic did not develop it) | 2.1.312 and 2.1.313 (modified macOS/Windows copies) | remove; after the host is cleaned, install 2.1.314 or later | removed by Cursor on 2026-10-29 at about 13:35 PT; marketplace shut down, keys rotated, rebuilt and back online (Cursor notice, read 2026-10-30) | none read (no OSV or GHSA record for the extension) |
+| Cursor Marketplace (VS Code extension) | `anthropic.claude-code` (listed under the Anthropic publisher name; Cursor says Anthropic did not develop it) | 2.1.312 and 2.1.313 (modified macOS/Windows copies) | remove; after any needed cleanup, install 2.1.314 or later | removed by Cursor on 2026-10-29 at about 13:35 PT; marketplace shut down, keys rotated, rebuilt and back online (Cursor notice, read 2026-10-30) | none read (no OSV or GHSA record for the extension) |
 | npm | `@anthropic-ai/claude-code` | none | 2.1.314 (2026-10-30 00:12 UTC) is `latest` | `time` goes 2.1.312 (10-27) to 2.1.314 with no 2.1.313 entry and no unpublish marker (2026-10-30) | none |
 | Open VSX | `anthropic.claude-code` | none | 2.1.314 (2026-10-30 01:07 UTC) | the API returns "Extension not found" for 2.1.313 (2026-10-30) | none |
 | Microsoft VS Marketplace | `anthropic.claude-code` | none | 2.1.314 (2026-10-30 01:17 to 01:20 UTC, per platform) | 2,385 version rows, none 2.1.313 (2026-10-30) | none |
 
-[Cursor's notice](https://cursor.com/blog/claude-code-extension-security-notice), updated 2026-10-30 at 11:30 PT, now lists modified **2.1.312 and 2.1.313** packages for macOS and Windows, expanding the initial 2.1.313-only scope. The distribution window remains about 02:27–13:35 PT on 2026-10-29. Cursor reports no evidence that other versions or the official distribution are affected. The registry observations above concern those separate channels; a version number shared with a compromised marketplace copy does not make the official package malicious. The earlier notice reported at most 5,000 users; the updated notice no longer gives that count. OpenSourceMalware and Phorion published independent analyses. Phorion's claim that 2.1.313 was also pulled from npm and the Microsoft marketplace was not supported by the registry timelines read earlier on 2026-10-30.
+[Cursor's notice](https://cursor.com/blog/claude-code-extension-security-notice), updated 2026-10-30 at 11:30 PT, now lists modified **2.1.312 and 2.1.313** packages for macOS and Windows, adding 2.1.312 to its earlier warning. These copies were available from about 02:27–13:35 PT on 2026-10-29. Cursor has not found evidence that other versions or copies from the official sources were affected. The table records each download source separately: an official copy is not harmful just because it shares a version number with a modified copy from Cursor. The earlier notice reported at most 5,000 users; the updated notice no longer gives that count. OpenSourceMalware and Phorion published independent analyses. Phorion's claim that 2.1.313 was also pulled from npm and the Microsoft marketplace was not supported by the registry timelines read earlier on 2026-10-30.
 
 ## Am I affected?
 
-**1. Inventory — identify the version and distribution channel.** Check whether Cursor installed or updated to a modified 2.1.312 or 2.1.313 copy from its marketplace during the window above. Current directories are only an inventory; use extension-installation/update logs or retained package records to check earlier versions and their source.
+**1. Check what you installed and where it came from.** Check whether Cursor downloaded an affected 2.1.312 or 2.1.313 copy during the times listed above. These commands list extension folders on your computer; installation and update records can help you or your agent check what was there before.
 
 ```bash
-# macOS/Linux: inventory only; this also lists clean versions such as 2.1.314
+# macOS/Linux: list installed folders, including clean versions such as 2.1.314
 ls -d ~/.cursor/extensions/anthropic.claude-code-* 2>/dev/null
 ```
 
 ```powershell
-# Windows: inventory only
+# Windows: list installed folders
 Get-ChildItem "$env:USERPROFILE\.cursor\extensions" -Directory -Filter 'anthropic.claude-code-*' -ErrorAction SilentlyContinue
 ```
 
-A machine that only ever had clean 2.1.314 is not affected by this incident solely because that directory matches. Conversely, 2.1.314 installed now does not rule out an earlier affected version. A directory name alone does not establish package provenance or execution. Compare a retained VSIX with the platform-specific SHA-256 values in Cursor's **Package version 2.1.312 / 2.1.313** indicator sections: a matching hash identifies the malicious package, not whether it ran. Do not install or launch a suspect copy to check it.
+If you only ever had clean 2.1.314, seeing its folder in this list does **not** mean this incident affected you. If you updated to 2.1.314 after using an affected version, the update alone does not tell you whether cleanup is needed.
 
-**2. Hunting leads — investigate matches before drawing conclusions.** These read-only checks find candidate files, key comments, tasks and processes. Legitimate software can use the same names; unrelated reboot jobs and SSH tunnels are not evidence of this incident.
+A folder name does not prove where a copy came from or whether it ran. If you saved the downloaded extension file (a `.vsix` file), compare its SHA-256 checksum—a value used to identify the exact file—with Cursor's published values for your version and operating system. A match identifies a harmful copy, but still does not prove it ran. Do not install or open a suspect copy just to check it.
+
+**2. Look for warning signs, then check what they mean.** The commands below only read information. They look for files, saved remote-login keys, startup jobs and running programs mentioned in the reports. Other legitimate software can have the same names, so a search result alone does not mean your computer was affected.
 
 ```bash
-# macOS/Linux: key comment and candidate helper files; corroborate below
+# macOS/Linux: look for a key label and files mentioned in the reports
 grep -n 'svc-telemetry' ~/.ssh/authorized_keys 2>/dev/null
 ls -la ~/.config/.smt ~/.config/.smtk "${TMPDIR:-/tmp}"/.stk_* 2>/dev/null
-# macOS: candidate LaunchAgent
+# macOS: look for a startup job mentioned in the reports
 ls -la ~/Library/LaunchAgents/com.apple.sysmond.plist 2>/dev/null
-# Linux: broad reboot-job discovery, including legitimate jobs
+# Linux: list jobs set to run after a restart; these may be legitimate
 crontab -l 2>/dev/null | grep -n '@reboot'
-# macOS/Linux: broad process discovery, including legitimate tunnels
+# macOS/Linux: find SSH programs; these may be legitimate remote connections
 pgrep -fl 'autossh|ssh .* -R' 2>/dev/null
 ```
 
@@ -61,27 +63,32 @@ Get-ScheduledTask -TaskName SysMon -ErrorAction SilentlyContinue
 Get-ChildItem "$env:USERPROFILE\.config\smt.cmd","$env:USERPROFILE\.config\smtk","$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Startup\sysmon.cmd" -ErrorAction SilentlyContinue
 ```
 
-Cursor currently scopes the compromised marketplace packages to macOS and Windows; the Linux paths remain research leads from the published analyses, not confirmation of a distributed Linux package.
+Cursor's current warning covers macOS and Windows copies. Researchers also listed Linux paths; finding those paths does not establish that Cursor distributed a harmful Linux copy.
 
-**3. Corroborate — distinguish a package match from execution or backdoor evidence.** Use [Cursor's indicators](https://cursor.com/blog/claude-code-extension-security-notice) to compare the actual SSH public key or its fingerprint, not just the editable `svc-telemetry` comment. An unauthorized key matching the vendor's key in an authorization file supports backdoor installation; a matching key stored only inside an unexecuted package does not. Inspect candidate persistence files and task actions without running them, and correlate their contents and timestamps with extension-installation records, endpoint process history and network logs. Payload execution can be supported by endpoint records showing the identified payload running or process-linked connections matching the vendor's network indicators. A generic cron job, process name, filename or connection to a public-IP lookup service alone is insufficient.
+**3. Check whether the harmful code ran or added remote access.** [Cursor's notice](https://cursor.com/blog/claude-code-extension-security-notice) lists the exact files, keys and connections to compare. You or someone helping you can check:
 
-No matches do **not** rule out earlier execution: persistence may fail, be removed or leave no retained logs. A failed SSH-service setup also does not prove nothing ran. If you establish an affected installation but cannot determine execution, remove the affected copy and seek help assessing exposure; precautionary credential rotation is an option, not proof of compromise.
+- **Remote-login keys:** compare the actual SSH key, or its identifying fingerprint, with Cursor's published key. The `svc-telemetry` label alone is not enough because labels can be changed. A matching, unauthorized key added to `authorized_keys`—the list of keys allowed to log in—supports a finding that unwanted remote access was set up. The same key merely stored inside a downloaded extension does not.
+- **Startup jobs and files:** inspect what they contain and when they appeared without running them. Compare that information with the extension's installation history. A matching filename or an unrelated `@reboot` job is not enough.
+- **Records of running programs and connections:** look for records showing the harmful code ran, or that it made connections matching Cursor's report. An ordinary SSH connection, or a visit to a service that tells you your public IP address, does not establish that.
+
+Finding nothing does **not** prove the harmful code never ran. Changes meant to survive a restart may have failed or been removed, and older records may be missing. If you know an affected copy was installed but cannot tell whether it ran, remove it and ask for help; you can choose to replace exposed keys as a precaution without claiming that a break-in was confirmed.
 
 ## If you are affected
 
-- **Affected package present, execution unconfirmed:** preserve installation/version details and any retained package hash, remove the affected marketplace copy, and investigate the leads above. Do not disconnect, delete unrelated jobs or rebuild solely because an inventory or generic hunting check matched. If evidence remains inconclusive, contact Cursor at `security@cursor.com`.
-- **Evidence of payload execution or backdoor installation:** follow these steps, even if persistence failed or the extension has already been upgraded:
+**You found an affected copy, but do not know whether it ran:** save its version, download source and any file checksum, then remove it. Follow the checks above or contact Cursor at `security@cursor.com`. A broad search result alone is not a reason to disconnect your computer, delete unrelated startup jobs or reinstall its operating system.
 
-1. Isolate the host and preserve relevant process, SSH, installation and network records before cleanup.
-2. Follow Cursor's platform-specific remediation guidance to remove confirmed unauthorized keys, persistence and running tunnels, then uninstall the affected extension. Uninstalling alone may leave artifacts behind; assess whether the host needs rebuilding.
-3. From a trusted machine, rotate credentials and sessions accessible from that host: SSH keys, cloud and provider API keys, GitHub and npm tokens, and environment secrets. [Rotating cloud credentials](../playbooks/rotating-cloud-credentials.md), [if your GitHub PAT leaked](../playbooks/if-your-github-pat-leaked.md), [if your npm token leaked](../playbooks/if-your-npm-token-leaked.md).
-4. After cleanup, install 2.1.314 or later from a verified distribution channel.
+**Checks show the harmful code ran or added unwanted remote access:** follow these steps even if you have already updated the extension:
+
+1. Disconnect the computer from the network. Save relevant installation, running-program and connection records before cleanup, if possible.
+2. Follow Cursor's cleanup instructions for your operating system. Remove the unwanted login keys, startup jobs and connections it identifies, then uninstall the affected extension. Removing the extension alone may leave those changes behind; get help deciding whether the operating system should be reinstalled.
+3. From another computer you trust, replace passwords, API keys and login tokens accessible from the affected computer, and sign out existing sessions. This is what security guides call **rotating credentials**. Include SSH keys, cloud and AI-provider API keys, GitHub and npm tokens, and secrets stored in environment variables (settings available to programs). See [cloud credential steps](../playbooks/rotating-cloud-credentials.md), [GitHub token steps](../playbooks/if-your-github-pat-leaked.md) and [npm token steps](../playbooks/if-your-npm-token-leaked.md).
+4. After cleanup, install 2.1.314 or later from a source you have verified.
 
 ## Prevention
 
-- Extension auto-update can deliver a compromised copy without a manual install; record the version and marketplace used. VS Code 1.123 (2026-06-03) delays automatic extension updates by two hours, but "This delay does not apply to extensions from trusted publishers such as Microsoft, GitHub, and OpenAI"; whether Cursor's marketplace applies any delay is not stated in its notice. Consider turning automatic extension updates off on machines that hold production credentials and updating on a schedule you control.
-- Prefer the extension vendor's own channel (Open VSX or the Microsoft marketplace for this extension) where the editor allows it, and know which marketplace your editor resolves against.
-- Keep fewer long-lived credentials on the workstation that runs the agent, and treat `authorized_keys` as a file to monitor: [credential hygiene](../prevention/credential-hygiene.md), [supply-chain attack surface](../prevention/supply-chain-attack-surface.md).
+- Record the extension name, version and marketplace so you can check future warnings. Automatic updates can install a harmful copy without you choosing it that day. Consider reviewing extension updates before installing them on a computer with important account access; do not leave updates off indefinitely.
+- Use the publisher's official download sources where your editor allows it. For this extension, the Open VSX and Microsoft marketplace copies are not known to be affected by this incident.
+- Give coding agents access only to the account keys they need. See [how to store and limit account keys](../prevention/credential-hygiene.md) and [where risky downloads can enter a project](../prevention/supply-chain-attack-surface.md).
 
 ## Sources
 - [Cursor — Claude Code extension security notice](https://cursor.com/blog/claude-code-extension-security-notice) — re-read 2026-10-30 after the 11:30 PT update: affected macOS/Windows marketplace copies now include 2.1.312 and 2.1.313; package hashes, SSH-key indicators, evidence-based isolation and remediation guidance. This supersedes the earlier 2.1.313-only scope and user count.
