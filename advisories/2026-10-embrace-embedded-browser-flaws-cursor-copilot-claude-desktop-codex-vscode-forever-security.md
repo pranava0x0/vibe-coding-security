@@ -43,8 +43,9 @@ The post does not give platform or version numbers for Cursor, Claude Desktop, C
 - You run Claude Desktop below 1.30096.1 (Noma's fixed version); see the SneakPeek file for the check.
 
 ```bash
-# the HTML an agent will render from a cloned repository
-find . -name '*.html' -newer .git/HEAD 2>/dev/null | head
+# the HTML a cloned repository ships, which the agent will render if asked
+git ls-files '*.html' | head
+git log --diff-filter=A --name-only --format= -- '*.html' | head   # when each was added
 ```
 
 ## If you are affected

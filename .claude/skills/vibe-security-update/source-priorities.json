@@ -6705,16 +6705,6 @@
    "tier": "vendor",
    "weight": 4
   },
-  "securitybuzz.com": {
-   "ecosystems": [
-    "claude-ai"
-   ],
-   "hits": 1,
-   "last_decayed": "2026-08-31",
-   "last_hit": "2026-07-01",
-   "tier": "aggregator",
-   "weight": 4
-  },
   "slowmist.medium.com": {
    "ecosystems": [
     "trae-ide",
@@ -7092,6 +7082,16 @@
    "last_decayed": "2026-10-22",
    "last_hit": "2026-05-30",
    "tier": "research",
+   "weight": 3
+  },
+  "securitybuzz.com": {
+   "ecosystems": [
+    "claude-ai"
+   ],
+   "hits": 1,
+   "last_decayed": "2026-10-30",
+   "last_hit": "2026-07-01",
+   "tier": "aggregator",
    "weight": 3
   },
   "smarttech247.com": {
