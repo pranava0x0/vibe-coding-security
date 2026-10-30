@@ -157,6 +157,7 @@ ID-first `F-<number>` tables require saved registry snapshots and a manifest. Ru
 - **Date everything.** Format: `YYYY-MM-DD`. Update `last_updated` in frontmatter when you touch an advisory. Stamp volatile facts (EPSS/KEV, "as of" counts) with their date.
 - **Cite multiple sources** when possible. At least two independent reporters before promoting to a full advisory; a single-source claim is `status: unconfirmed`.
 - **Concrete > abstract.** Always include a command, a path, or a config snippet when relevant.
+- **Separate inventory from execution evidence.** Package/version/hash matches establish what is present; broad file, process and cron checks are investigation leads. Explain how to correlate them with incident-specific indicators and installation, endpoint or network records before claiming execution or compromise. State that missing persistence does not rule out earlier execution, and make remediation conditional on the evidence rather than any match.
 - **No FUD.** Severity claims need to be defensible. If only 1,000 people downloaded the package before takedown, say so.
 - **Short.** Vibe coders are panicking. Hit the bullet points and link out for depth.
 - **Run the build before a PR:** `python site/build.py && python site/validate.py && python -m pytest tests/` — the same gate the deploy runs. A red gate blocks the deploy and freezes the live site.

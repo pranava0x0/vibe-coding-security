@@ -5,7 +5,7 @@ One file per incident. Latest at the top.
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
 | 2026-10-29 | [Fake qwen2-tiny model repositories on Hugging Face run code through trust_remote_code: remove the models and the miner, rotate keys](2026-10-hugging-face-qwen2-tiny-trust-remote-code-model-repositories-remove-and-rotate.md) | high | unconfirmed |
-| 2026-10-29 | [Malicious anthropic.claude-code 2.1.313 on the Cursor Marketplace: remove it, remove the added SSH key and persistence, rotate credentials](2026-10-claude-code-extension-2-1-313-cursor-marketplace-remove-and-rotate.md) | critical | contained |
+| 2026-10-29 | [Malicious anthropic.claude-code 2.1.312 and 2.1.313 on the Cursor Marketplace: remove affected copies; rotate credentials if executed](2026-10-claude-code-extension-2-1-313-cursor-marketplace-remove-and-rotate.md) | critical | contained |
 | 2026-10-29 | [Embedded browsers in Cursor, Copilot, Claude Desktop, Codex and VS Code read local files or drive the agent (Embrace); Codex and VS Code unfixed](2026-10-embrace-embedded-browser-flaws-cursor-copilot-claude-desktop-codex-vscode-forever-security.md) | high | active |
 | 2026-10-29 | [`open` npm 7.2.0 to 10.2.0 runs PowerShell from a URL on Windows and WSL (CVE-2026-119025); MCP Inspector 2.12.0 and OpenCode 1.18.33 fixed](2026-10-open-npm-powershell-url-injection-cve-2026-119025-mcp-inspector-opencode-downstream-pins.md) | high | patched |
 | 2026-10-29 | [claude-mem 15.2.0 to 15.5.0 setup uploads 30 days of Claude Code, Codex, Gemini CLI and OpenCode prompts to the vendor's cloud](2026-10-claude-mem-setup-uploads-30-days-of-agent-prompts-to-cmem-cloud-15-2-0.md) | high | ongoing |
