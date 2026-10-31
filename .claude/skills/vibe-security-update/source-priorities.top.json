@@ -5,14 +5,20 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 114,
-   "last_hit": "2026-10-30"
+   "hits": 115,
+   "last_hit": "2026-10-31"
   },
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 64,
-   "last_hit": "2026-10-26"
+   "hits": 65,
+   "last_hit": "2026-10-31"
+  },
+  {
+   "domain": "github.com/advisories",
+   "weight": 20.0,
+   "hits": 62,
+   "last_hit": "2026-10-31"
   },
   {
    "domain": "nvd.nist.gov",
@@ -21,22 +27,16 @@
    "last_hit": "2026-10-06"
   },
   {
-   "domain": "github.com/advisories",
-   "weight": 20.0,
-   "hits": 61,
-   "last_hit": "2026-10-30"
-  },
-  {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 60,
-   "last_hit": "2026-10-30"
+   "hits": 61,
+   "last_hit": "2026-10-31"
   },
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 56,
-   "last_hit": "2026-10-30"
+   "hits": 57,
+   "last_hit": "2026-10-31"
   },
   {
    "domain": "cybersecuritynews.com",
@@ -47,8 +47,20 @@
   {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
-   "hits": 35,
-   "last_hit": "2026-10-30"
+   "hits": 36,
+   "last_hit": "2026-10-31"
+  },
+  {
+   "domain": "stepsecurity.io",
+   "weight": 20.0,
+   "hits": 34,
+   "last_hit": "2026-10-31"
+  },
+  {
+   "domain": "vulncheck.com",
+   "weight": 20.0,
+   "hits": 34,
+   "last_hit": "2026-10-31"
   },
   {
    "domain": "bleepingcomputer.com",
@@ -57,19 +69,7 @@
    "last_hit": "2026-10-26"
   },
   {
-   "domain": "vulncheck.com",
-   "weight": 20.0,
-   "hits": 33,
-   "last_hit": "2026-10-29"
-  },
-  {
    "domain": "socket.dev",
-   "weight": 20.0,
-   "hits": 33,
-   "last_hit": "2026-10-26"
-  },
-  {
-   "domain": "stepsecurity.io",
    "weight": 20.0,
    "hits": 33,
    "last_hit": "2026-10-26"
@@ -81,16 +81,16 @@
    "last_hit": "2026-10-30"
   },
   {
+   "domain": "cveawg.mitre.org",
+   "weight": 20.0,
+   "hits": 24,
+   "last_hit": "2026-10-31"
+  },
+  {
    "domain": "aikido.dev",
    "weight": 20.0,
    "hits": 24,
    "last_hit": "2026-10-26"
-  },
-  {
-   "domain": "cveawg.mitre.org",
-   "weight": 20.0,
-   "hits": 23,
-   "last_hit": "2026-10-30"
   },
   {
    "domain": "safedep.io",
@@ -105,15 +105,15 @@
    "last_hit": "2026-09-23"
   },
   {
+   "domain": "hn.algolia.com",
+   "weight": 20.0,
+   "hits": 19,
+   "last_hit": "2026-10-31"
+  },
+  {
    "domain": "pypi.org",
    "weight": 20.0,
    "hits": 19,
-   "last_hit": "2026-10-30"
-  },
-  {
-   "domain": "hn.algolia.com",
-   "weight": 20.0,
-   "hits": 18,
    "last_hit": "2026-10-30"
   },
   {

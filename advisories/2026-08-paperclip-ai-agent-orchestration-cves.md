@@ -2,7 +2,7 @@
 id: 2026-08-paperclip-ai-agent-orchestration-cves
 title: "Paperclip AI agent orchestration platform — self-registration to unauthenticated RCE via malicious agent import (CVE-2026-41679, CVSS 10.0, plus 2 more)"
 date_disclosed: 2026-08-05
-last_updated: 2026-08-05
+last_updated: 2026-10-31
 severity: critical
 status: patched
 ecosystems: [ai-agents, paperclip]
@@ -48,7 +48,12 @@ You're exposed if you self-host Paperclip **< 2026.416.0**, especially if:
 - Don't rely on network-level loopback binding as your only isolation boundary — DNS rebinding defeats it. Pair with application-level authentication on every endpoint.
 - This is the same "decorator/config-is-documentation, not a security boundary" root cause this repo tracks for Semantic Kernel, Flowise's Agent-node `eval`, and Composio's tool-registration API — any platform that lets imported configuration define executable commands needs an explicit privilege check at the point commands are *defined*, not just when they're *run*.
 
+## Update 2026-10-31 — a fourth Paperclip bug gets a CVE six months after the vendor fixed it: cleanup commands set through PATCH ran in a shell (CVE-2026-119713, 8.7; vendor 9.8); same fix release, 2026.416.0
+
+VulnCheck published CVE-2026-119713 on 2026-10-30 for a vendor advisory Paperclip had carried since 2026-04-16: GHSA-vr7g-88fq-vhq3, "OS Command Injection via Execution Workspace cleanupCommand", reported 2026-04-13 by Yuval Elbar. A holder of an agent API key could set `cleanupCommand` and `teardownCommand` through `PATCH /api/execution-workspaces/:id`; when the workspace was archived, `cleanupExecutionWorkspaceArtifacts` ran them through a shell as the Paperclip server process. The CNA record names `@paperclipai/server` 2026.403.0 before 2026.416.0 and scores it CVSS 4.0 8.7 / 3.1 8.8 with `PR:L` (an agent key); the vendor page rates it Critical 9.8 with `PR:N`, because in `local_trusted` mode the request needs no authentication. Both are printed here; the file's `severity` was already `critical` for CVE-2026-41679. The fix is the same release as the three bugs above, 2026.416.0, which npm shows published on 2026-04-16 (2026.403.0 on 2026-04-04); the "published 2026-08-05" in this file's TL;DR is the date Oasis disclosed the first three, not the release date. Current `latest` on 2026-10-31 is 2026.1023.0. The GitHub Advisory Database row is GHSA-832j-x75x-r6jc (unreviewed, High, 2026-10-30). The record is six months old news for anyone on a current release and a fourth reason not to be on an April build; the triage lesson is that a research CNA can issue an id for an old vendor advisory at any time, and the id lands in scanners the day it is issued.
+
 ## Sources
 - [Oasis Security — Paperclip Vulnerabilities: CVE-2026-41679 RCE + 2 More Flaws](https://www.oasis.security/blog/paperclip-agent-vulnerabilities) — primary technical writeup: all three CVEs, attack chain, patched version.
 - [The Hacker News — Paperclip AI Flaws Let Attackers Run Host Commands via Malicious Agent Imports](https://thehackernews.com/2026/08/paperclip-ai-flaws-let-attackers-run.html) — independent confirmation.
 - [CSO Online — Critical Paperclip bugs expose AI agent trust failures](https://www.csoonline.com/article/4205630/critical-paperclip-bugs-expose-ai-agent-trust-failures.html) — independent confirmation, framing on agent-config-as-trust-boundary.
+- **2026-10-31 update sources** — [CVE Services — CVE-2026-119713](https://cveawg.mitre.org/api/cve/CVE-2026-119713) — fetched 2026-10-31: CNA VulnCheck, published 2026-10-30 15:16 UTC, `@paperclipai/server` 2026.403.0 before 2026.416.0, CVSS 4.0 8.7 and 3.1 8.8, the description, credit Yuval Elbar, references; [paperclipai/paperclip — GHSA-vr7g-88fq-vhq3](https://github.com/paperclipai/paperclip/security/advisories/GHSA-vr7g-88fq-vhq3) — fetched 2026-10-31: published 2026-04-16, reported 2026-04-13, Critical 9.8 `AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`, "No known CVE" on the page, the `local_trusted` statement, reporter YuvalElbar6; [GitHub Advisory Database — GHSA-832j-x75x-r6jc](https://github.com/advisories/GHSA-832j-x75x-r6jc) — fetched 2026-10-31: unreviewed, High, 2026-10-30; npm registry `@paperclipai/server` `time`, queried 2026-10-31: 2026.403.0 at 2026-04-04, 2026.416.0 at 2026-04-16, `latest` 2026.1023.0.

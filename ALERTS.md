@@ -2,11 +2,19 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-10-30. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-10-31. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-10-30 — **LM Studio before 0.4.22 Build 1: a crafted model repository's filenames write outside the models folder and plant a plugin that runs on every launch (CVE-2026-119979, 8.7)**
+VulnCheck's CVE-2026-119979 (10-30, credit Ariel Fogel of Pillar Security): the model downloader's `resolveDownloadRequest` accepted backslash traversal, so a model repository the user downloads can plant a plugin `manifest.json`, `install-state.json` and `mcp-bridge-config.json` and run attacker Python at each start. Fixed in 0.4.22 Build 1 (2026-08-28) with release notes that say nothing about it; current release 0.4.28. Update, and review installed plugins if an old build downloaded a model from a publisher you do not know.
+→ [advisories/2026-10-lm-studio-model-downloader-path-traversal-plugin-code-execution-cve-2026-119979-fixed-0-4-22.md](advisories/2026-10-lm-studio-model-downloader-path-traversal-plugin-code-execution-cve-2026-119979-fixed-0-4-22.md)
+
+### 2026-10-29 — **Grey-market relays reinstall Codex and Claude Code with the sandbox off and the base URL pointed at third-party servers (Symantec)**
+Symantec's Threat Hunter Team (10-29): a relay service's install script fetches the genuine CLIs from npm, then sets Codex's sandbox to full access with network on, replaces Claude Code's base URL, and writes `OPENAI_BASE_URL`, `CODEX_API_KEY`, `ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN` at user scope with relay-issued values; on one host it logged the user out of Anthropic first. About a dozen organisations since early 2026, mostly in mainland China; no abuse seen; not a vulnerability in either tool. Check `~/.claude`, `~/.codex` and your user environment for base URLs you did not set, and rotate what went through one.
+→ [advisories/2026-10-unauthorized-codex-claude-code-relays-rewrite-cli-config-disable-sandbox-symantec.md](advisories/2026-10-unauthorized-codex-claude-code-relays-rewrite-cli-config-disable-sandbox-symantec.md)
 
 ### 2026-10-29 — **Fake qwen2-tiny model repositories on Hugging Face run code through trust_remote_code: remove the models and the miner, rotate keys**
 Pluto Security (10-29): 31 Hugging Face model repositories across seven accounts (`hhzz667`, `dsxk4mr8tq`, `MENXIANGYU`, `wjsbg`, `soumikmahato`, `r1r13`, `htt0118`), named `qwen2-tiny` and variants, carry Python named in `config.json`'s `auto_map` that runs when a model is loaded with `trust_remote_code=True`, directly or through Xinference; over 32,000 downloads. Hugging Face removed the first two accounts; five were still live on 10-30. Remove the cached models and registrations, the miner, watchdog, cron entry, startup lines and any added SSH key, and rotate Hugging Face tokens, cloud credentials and SSH keys. Single firm; `unconfirmed`.
@@ -35,6 +43,10 @@ The Register (10-29) reports Radware researchers found at least 83 issues, PRs a
 ### 2026-10-29 — **Agno through 3.1.11: PandasTools calls any pandas function the model names, including read_pickle (CVE-2026-119050, 9.2); no fix merged**
 VulnCheck's CVE-2026-119050 (10-29, CVSS 4.0 9.2): `PandasTools` resolves a pandas function from a model-supplied name with `getattr()` and calls it with model-supplied kwargs, so a prompt-injected agent can call `read_pickle` on an attacker path for code execution or any reader for local files. Reported on the vendor repo on 2026-07-02 (issue #8699, PR #8713 unmerged, no maintainer reply); the record says through 3.1.11 and 3.1.12 (PyPI 10-29) is not known fixed. Remove the tool from any agent that reads untrusted content.
 → [advisories/2026-10-agno-pandastools-model-chosen-pandas-function-read-pickle-rce-cve-2026-119050-no-fix.md](advisories/2026-10-agno-pandastools-model-chosen-pandas-function-read-pickle-rce-cve-2026-119050-no-fix.md)
+
+### 2026-10-28 — **ChatGPT: a public share link ran attacker JavaScript as chatgpt.com in the viewer's session and read private chats; fixed 2026-10-26 (Parameter)**
+Parameter (10-28): a shared conversation holding an HTML Preview and an interactive graph loaded MathLive into the main page, whose message listener accepted raw HTML from any frame; the sandbox around the preview held, the neighbour did not, and a script from a CSP-allowed host ran as `chatgpt.com` in the signed-in session. One click on Preview, or none in the auto-preview variant. OpenAI rated it P1 and both frontends rejected the messages by 10-26; no CVE, nothing for users to install. Treat shared chat links from strangers like any other link, and check every `postMessage` listener on pages that host untrusted frames.
+→ [advisories/2026-10-chatgpt-public-share-link-mathlive-postmessage-javascript-session-takeover-parameter-fixed-10-26.md](advisories/2026-10-chatgpt-public-share-link-mathlive-postmessage-javascript-session-takeover-parameter-fixed-10-26.md)
 
 ### 2026-10-28 — **Langflow 1.0.0 to 1.12.8: IBM bulletin of seven CVEs, two unauthenticated 9.8s (auth bypass, code generation RCE); fixed 1.13.0**
 IBM's PSIRT bulletin (10-28, modified 10-29) for Langflow OSS 1.0.0 through 1.12.8: CVE-2026-93680 (9.8) bypasses authentication and is tied to an incomplete fix of the auto-login control, CVE-2026-110186 (9.8) is unauthenticated code execution through code generation, CVE-2026-110193 (8.8) steers the Agentic Assistant into generating component code that runs OS commands, CVE-2026-110192 (6.5) exposes stored credentials, plus three Hono CVEs. One fix, 1.13.0 (PyPI 2026-10-22), which also turns automatic login off by default; back up first and follow the auto-login recovery steps.
