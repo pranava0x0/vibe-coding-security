@@ -2,7 +2,7 @@
 id: 2026-10-warp-vendor-breach-agent-traces-telemetry-one-percent-of-users
 title: "Warp: a vendor in its infrastructure was exploited; agent traces and telemetry for about 1% of users may be exposed (CEO statement, 2026-10-27)"
 date_disclosed: 2026-10-27
-last_updated: 2026-10-28
+last_updated: 2026-10-31
 severity: high
 status: unconfirmed
 ecosystems: [ai-agents, developer-tools]
@@ -44,9 +44,16 @@ Rotate provider and cloud keys, GitHub tokens and anything else an agent session
 - Decide per tool whether agent traces leave the machine; a vendor's retention is a breach surface you do not control.
 - [credential-hygiene](../prevention/credential-hygiene.md) and [agent-sandboxing](../prevention/agent-sandboxing.md).
 
+## Update 2026-10-31 — Warp's customer notification, quoted by a recipient, says agent traces "may have had secret keys in them" and lists hashed, redacted tokens to rotate
+
+A Hacker News post on 2026-10-31 (item 50314132, "Tell HN: Warp.dev Security Incident") reproduces a notification the poster says Warp sent them: "In our ongoing investigation into a recent security incident we detected that agent traces from your account may have had secret keys in them. We have no knowledge of what these keys are or if they are truly sensitive. Regardless, out of an abundance of caution, we believe it's worth considering rotating them. At this time, we have no evidence of misuse or abuse but we are sharing these initial findings as quickly as possible so you can consider the appropriate course of action. We have provided the hashed and redacted tokens below." The poster adds that their team had not used Warp "in almost a year" and that the notice concerned a colleague's data, and asks whether this contradicts Warp's zero-data-retention statements; a reply notes that such commitments usually concern training, not retention for abuse prevention.
+
+What this changes: the question this file left open, whether traces contained credentials, has a vendor answer for at least some accounts, and the remediation is now Warp's own, token by token. What it does not change: the statement is the vendor's, read through a recipient's copy, and Warp's blog (newest post 2026-10-29, "7 core components for building a software factory") still carries no notice, so the status stays unconfirmed and the recipient's retention claim is the recipient's. If you receive such a notice, rotate the listed tokens from a machine outside Warp and treat the hashed values as the vendor's identification of which secrets, not as proof of exposure.
+
 ## Sources
 
 - [NetManageIT — Warp discloses breach exposing AI agent logs, user telemetry data](https://blog.netmanageit.com/warp-discloses-breach-exposing-ai-agent-logs-user-telemetry-data/) — fetched 2026-10-28: dated 2026-10-27, attributed to BleepingComputer (Daniel Bender), the two data categories, "a third-party vendor in the project's infrastructure"; no quotes, no dates, no post URL. The BleepingComputer original returns 403 to this sweep.
 - [SecureBlink — Warp Breach Exposes Agent Traces and Telemetry for About 1% of Users](https://www.secureblink.com/threat-feeds/warp-breach-exposes-agent-traces-and-telemetry-for-about-1-of-users) — fetched 2026-10-28: dated 2026-10-28, the CEO quotes as taken from BleepingComputer, the 1% estimate, CrowdStrike and law enforcement, the 10-23 assessment, the unknowns, the "agent swarm" attribution to a report it could not find, Warp's documentation on data stores.
 - [Warp — status page](https://status.warp.dev/) — fetched 2026-10-28: October incidents of 10-16, 10-20 and 10-23 ("Degraded API reliability", 17:57 to 23:37 UTC); no data statement. [Warp — blog](https://www.warp.dev/blog) — fetched 2026-10-28: newest post 2026-10-15, no incident notice.
 - Not opened: Zach Lloyd's post on X (search snippets only; the primary statement), BleepingComputer (403).
+- Hacker News item 50314132 ("Tell HN: Warp.dev Security Incident", 2026-10-31 08:14 UTC, himata4113), read through the Algolia items API 2026-10-31: the notification text quoted above, the "almost a year" and zero-data-retention remarks, one reply. [Warp — blog](https://www.warp.dev/blog) — re-read 2026-10-31: newest post 2026-10-29, not about the incident.

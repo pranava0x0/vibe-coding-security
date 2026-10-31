@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-10-30
+**Last refreshed:** 2026-10-31
 
 ## Quick start
 
@@ -55,10 +55,11 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-10-30)
+## Active threat families (as of 2026-10-31)
 
 The highest-risk ongoing threat families for vibe coders:
 
+- **The relay reinstalls your real agent CLI with the sandbox off and its own base URL (Symantec, 2026-10-29)** — a grey-market "cheaper API" installer fetches the genuine Codex and Claude Code from npm, then rewrites `~/.codex`, `~/.claude` and user-scope `OPENAI_BASE_URL`, `CODEX_API_KEY`, `ANTHROPIC_BASE_URL` and `ANTHROPIC_AUTH_TOKEN`, so every prompt, file and secret passes a third party and a fabricated response runs unsandboxed; no vulnerability, no package to flag, only configuration drift. Audit both config files and your environment for base URLs you did not set. See `advisories/2026-10-unauthorized-codex-claude-code-relays-rewrite-cli-config-disable-sandbox-symantec.md`.
 - **The agent's browser pane is a browser with your filesystem behind it (Embrace, 2026-10-29)** — Forever Security showed the embedded browsers in Cursor, GitHub Copilot (1.1.27, as the post names it), Claude Desktop, Codex and VS Code letting a page drive the agent, spoof the address bar, or read any local file through a `file://` page or a web worker; Codex and VS Code were unfixed at publication and no CVE exists. Treat HTML in a cloned repository as content the agent will render, and keep credentials off the workstation the agent runs on. See `advisories/2026-10-embrace-embedded-browser-flaws-cursor-copilot-claude-desktop-codex-vscode-forever-security.md`.
 - **The library fixed it a year ago and the agents kept the old pin (`open` CVE-2026-119025, 2026-10-29)** — `open` 7.2.0 to 10.2.0 ran PowerShell from a URL on Windows and WSL; 11.0.0 fixed it on 2025-11-15 with no security wording, and MCP Inspector (fixed 2.12.0) and OpenCode (fixed 1.18.33) opened remote MCP servers' OAuth URLs through `^10` pins until October 2026; `mcp-remote` still declares `^10.1.0`. Run `npm ls open` in every MCP client on Windows and treat a server-supplied URL as untrusted input. → `advisories/2026-10-open-npm-powershell-url-injection-cve-2026-119025-mcp-inspector-opencode-downstream-pins.md`, `advisories/2026-10-opencode-mcp-oauth-authorization-endpoint-powershell-command-injection-windows-wsl-fixed-1-18-33-no-cve.md`
 - **Your prompt history is a dataset someone will upload, and your email is in every prompt (claude-mem 15.2.0, Claude Code issue #81138, 2026-10-29)** — claude-mem's installer reads 30 days of Claude Code, Codex, Gemini CLI and OpenCode transcripts and ships the prompts to the vendor's cloud under a checkbox that does not stop it; Claude Code itself places the account email in the model context on every request and users report it in git commits, headers and web requests. Keep secrets out of prompts, read a plugin's changelog before an install that opens a browser, and check `git log --format=%ae` on repos pushed from agent sessions. → `advisories/2026-10-claude-mem-setup-uploads-30-days-of-agent-prompts-to-cmem-cloud-15-2-0.md`, `advisories/2026-10-claude-code-account-email-injected-into-model-context-leaks-to-git-headers-websites-issue-81138.md`
