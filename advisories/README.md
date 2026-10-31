@@ -5,6 +5,7 @@ One file per incident. Latest at the top.
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
 | 2026-10-30 | [LM Studio before 0.4.22 Build 1: model-download path traversal plants a plugin that runs on every launch (CVE-2026-119979, 8.7)](2026-10-lm-studio-model-downloader-path-traversal-plugin-code-execution-cve-2026-119979-fixed-0-4-22.md) | high | patched |
+| 2026-10-29 | [DebugBear RUM snippet compromised: remove it from your sites and invalidate sessions (Polymarket drained 2026-10-29)](2026-10-debugbear-rum-snippet-compromise-polymarket-drain-remove-the-snippet.md) | high | active |
 | 2026-10-29 | [Grey-market relays reinstall Codex and Claude Code with sandbox off and base URL pointed at third-party servers (Symantec, 2026-10-29)](2026-10-unauthorized-codex-claude-code-relays-rewrite-cli-config-disable-sandbox-symantec.md) | high | ongoing |
 | 2026-10-29 | [Fake qwen2-tiny model repositories on Hugging Face run code through trust_remote_code: remove the models and the miner, rotate keys](2026-10-hugging-face-qwen2-tiny-trust-remote-code-model-repositories-remove-and-rotate.md) | high | unconfirmed |
 | 2026-10-29 | [Harmful Claude Code extensions 2.1.312 and 2.1.313 from Cursor: check your installation and remove affected copies](2026-10-claude-code-extension-2-1-313-cursor-marketplace-remove-and-rotate.md) | critical | contained |
