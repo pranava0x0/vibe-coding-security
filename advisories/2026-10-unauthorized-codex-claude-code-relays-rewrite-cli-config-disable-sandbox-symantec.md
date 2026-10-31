@@ -31,8 +31,10 @@ The relay's footprint is a base URL and a key you did not set. Read-only checks:
 # Claude Code: settings and environment
 grep -nE 'BASE_URL|AUTH_TOKEN|apiBaseUrl|baseUrl' ~/.claude/settings.json ~/.claude/settings.local.json 2>/dev/null
 env | grep -E '^(ANTHROPIC_BASE_URL|ANTHROPIC_AUTH_TOKEN|OPENAI_BASE_URL|CODEX_API_KEY)='
-# Codex: config and sandbox settings
+# Codex: config, sandbox settings, and every other file the CLI keeps (login material lives here too)
 grep -nE 'base_url|sandbox|network_access|api_key' ~/.codex/config.toml 2>/dev/null
+ls -la ~/.codex 2>/dev/null
+grep -rlE 'base_url|api_key|token' ~/.codex 2>/dev/null
 # Where the variables persist (macOS/Linux shells; check the ones you use)
 grep -nE 'ANTHROPIC_BASE_URL|OPENAI_BASE_URL|CODEX_API_KEY|ANTHROPIC_AUTH_TOKEN' ~/.zshrc ~/.zprofile ~/.bashrc ~/.bash_profile ~/.profile 2>/dev/null
 ```
@@ -42,7 +44,7 @@ grep -nE 'ANTHROPIC_BASE_URL|OPENAI_BASE_URL|CODEX_API_KEY|ANTHROPIC_AUTH_TOKEN'
 Get-ItemProperty HKCU:\Environment | Select-Object ANTHROPIC_BASE_URL, ANTHROPIC_AUTH_TOKEN, OPENAI_BASE_URL, CODEX_API_KEY
 ```
 
-A base URL that is not the vendor's own endpoint, a Codex sandbox set to full access that you did not choose, or an API key you did not create means an agent session on this machine ran through a third party. An enterprise gateway your organisation deployed on purpose will match too; confirm against your approved configuration before treating it as a finding. Also look back: a `curl | bash` or `iwr | iex` run right after an `npm install` of either CLI in your shell history is the delivery pattern Symantec describes.
+A base URL that is not the vendor's own endpoint, a Codex sandbox set to full access that you did not choose, or a key or token in any file under `~/.codex` or `~/.claude` that you did not create means an agent session on this machine ran through a third party. An enterprise gateway your organisation deployed on purpose will match too; confirm against your approved configuration before treating it as a finding. Also look back: a `curl | bash` or `iwr | iex` run right after an `npm install` of either CLI in your shell history is the delivery pattern Symantec describes.
 
 ## If you are affected
 
