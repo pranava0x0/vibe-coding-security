@@ -1,6 +1,6 @@
 ---
 id: 2026-08-mlflow-webhook-ssrf-authz-batch
-title: "MLflow — critical unauthenticated SSRF (CVSS 9.3) plus two authorization-bypass CVEs, all fixed in 3.15.0"
+title: "MLflow — unauthenticated SSRF (9.3) and authorization bypasses fixed in 3.15.0; scorer RCE (9.8) and CrewAI key leak fixed in 3.17.0"
 date_disclosed: 2026-08-02
 last_updated: 2026-11-01
 severity: critical
@@ -11,7 +11,7 @@ tags: [cve, ssrf, authorization-bypass, credential-hub, ml-tooling, dns-rebindin
 ---
 
 ## TL;DR
-MLflow — the de facto standard open-source ML experiment-tracking and model-registry server that AI/vibe-coding teams stand up to log runs, artifacts, and model versions — shipped three CVEs in one coordinated batch (2026-08-02, -04, and -17). The headline: **CVE-2026-64849** (CVSS 9.3, critical) lets an unauthenticated attacker abuse the model-registry webhook-test endpoint as a full-read SSRF into your internal network and cloud metadata service (`169.254.169.254`), by redirecting past MLflow's own SSRF guard. Two more CVEs (CVSS 8.6 and unrated-high) let authenticated users read another user's private artifacts and inject fake data into another user's experiment runs by exploiting authorization gaps in newer FastAPI-based endpoints that the older Flask-based auth middleware never learned to protect. All three are fixed in **MLflow 3.15.0** — upgrade immediately if you run a self-hosted tracking server.
+MLflow — the de facto standard open-source ML experiment-tracking and model-registry server that AI/vibe-coding teams stand up to log runs, artifacts, and model versions — shipped three CVEs in one coordinated batch (2026-08-02, -04, and -17). The headline: **CVE-2026-64849** (CVSS 9.3, critical) lets an unauthenticated attacker abuse the model-registry webhook-test endpoint as a full-read SSRF into your internal network and cloud metadata service (`169.254.169.254`), by redirecting past MLflow's own SSRF guard. Two more CVEs (CVSS 8.6 and unrated-high) let authenticated users read another user's private artifacts and inject fake data into another user's experiment runs by exploiting authorization gaps in newer FastAPI-based endpoints that the older Flask-based auth middleware never learned to protect. All three are fixed in **MLflow 3.15.0**. Update 2026-11-01: two more advisories, an unauthenticated RCE through third-party scorer deserialization (CVE-2026-116692, 9.8, affects >= 3.12.0rc0) and a CrewAI autologging path that writes provider API keys into trace spans (CVE-2026-116691), are fixed only in **3.17.0**. The safe line is now 3.17.0 or later, and any provider key that passed through a CrewAI agent while `mlflow.crewai.autolog()` was on needs rotation.
 
 ## What happened
 MLflow's default Tracking Server exposes a model-registry webhooks API. Its `POST /api/2.0/mlflow/webhooks/{id}/test` endpoint is unauthenticated by default and synchronously fetches the webhook URL, returning the upstream response status and body straight back to the caller — a textbook full-read SSRF primitive if the target-URL validation can be bypassed.
@@ -30,7 +30,8 @@ All three advisories were reported by the same researcher (GitHub handle `Pattar
 python -c "import mlflow; print(mlflow.__version__)"
 pip show mlflow 2>/dev/null | grep Version
 
-# You are affected if you run a self-hosted MLflow Tracking Server < 3.15.0
+# You are affected if you run a self-hosted MLflow Tracking Server < 3.17.0
+#  (the August batch is fixed at 3.15.0; the scorer RCE CVE-2026-116692 and the CrewAI key leak CVE-2026-116691 only at 3.17.0)
 # Especially high risk if:
 #  - the server is reachable from outside your trusted network (CVE-2026-64849 needs no auth at all)
 #  - you run it with --app-name basic-auth and multiple users/teams share one server
@@ -42,7 +43,8 @@ curl -s -o /dev/null -w "%{http_code}\n" http://<your-mlflow-host>:5000/api/2.0/
 If your MLflow server runs on cloud infrastructure (AWS/GCP/Azure), a pre-3.15.0 instance with any network reachability to the webhook-test endpoint should be treated as a live cloud-credential-theft risk, not a theoretical one — the same class of unauthenticated-SSRF-to-IMDS bug has been used for full account/cluster takeover in other tools this repo tracks (e.g. Starlette BadHost-derived apps).
 
 ## If you are affected
-1. Upgrade to **MLflow ≥ 3.15.0** immediately — all three CVEs are fixed in this single release.
+1. Upgrade to **MLflow ≥ 3.17.0**. The three August CVEs are fixed in 3.15.0; the October scorer-deserialization RCE and the CrewAI key leak are fixed only in 3.17.0 (3.17.2 is current as of 2026-11-01).
+1b. If `mlflow.crewai.autolog()` was enabled on any version from 2.19.0 to 3.16.x, rotate every LLM provider key the CrewAI agents used and delete or redact the affected traces; the keys are in the trace store in clear.
 2. If you can't upgrade immediately, put the Tracking Server behind a network boundary that blocks unauthenticated inbound access, and block outbound requests from the MLflow process to link-local/metadata addresses (`169.254.169.254`, `127.0.0.1`, RFC1918 ranges) at the network layer as a stopgap — don't rely on the application-layer guard alone, since that's exactly what these CVEs bypass.
 3. If you run `basic-auth` mode, audit model-registry and run history for artifacts or dataset records you don't recognize — CVE-2026-69148/-69146 leave no obvious crash or error, just quiet cross-user data access.
 4. Treat any cloud IAM role attached to the host running MLflow as compromised if you can't rule out pre-patch exploitation of CVE-2026-64849, and rotate accordingly.
@@ -77,7 +79,7 @@ Two vendor advisories from October reached the GitHub Advisory Database's review
 
 **[GHSA-26p8-2jq9-3vq9](https://github.com/advisories/GHSA-26p8-2jq9-3vq9), CVE-2026-116692, Critical, CVSS 3.1 9.8 (`AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H`), published to mlflow/mlflow 2026-10-09, CVE published 2026-10-27, reporter mskca.** On servers without authentication, a caller can influence which Python modules the server imports while deserializing third-party scorers, and the server instantiates the resulting class; the advisory rates this as code execution as the server process on default deployments. Affected >= 3.12.0rc0 < 3.17.0, fixed 3.17.0 (PR #25906, commit a732443). `pip index versions mlflow` on 2026-11-01 lists 3.17.2 as current.
 
-**ZDI records of 2026-10-29.** The Zero Day Initiative's published-advisories index lists nine MLflow entries dated 2026-10-29, ZDI-26-839 through ZDI-26-847: CVE-2026-118623 (PickleEvaluationArtifact deserialization RCE, 7.8), CVE-2026-118624, CVE-2026-118625 and CVE-2026-118626 (tracking-server missing-authorization issues, 5.4 to 6.3), CVE-2026-118627 (SHAP `load_explainer` deserialization RCE, 7.8), CVE-2026-118628 (`get-artifacts` SSRF, 8.2), CVE-2024-37052 (statsmodels `_load_model` deserialization RCE, 7.8), CVE-2026-64849 (webhook SSRF, 6.8) and CVE-2026-71211 (AI Gateway SSRF, 7.7). Two of those ids are already in this file: CVE-2026-64849 is the KEV-listed webhook SSRF above, which the vendor scored 9.3 and ZDI scores 6.8, and the statsmodels flavor is the 09-21 update's subject under a 2024 id. The index rows were read; the individual ZDI pages and CNA records were not opened this run, so affected ranges for the other six are not stated here.
+**ZDI records of 2026-10-29.** The Zero Day Initiative's published-advisories index lists nine MLflow entries dated 2026-10-29, ZDI-26-839 through ZDI-26-847: CVE-2026-118623 (PickleEvaluationArtifact deserialization RCE, 7.8), CVE-2026-118624, CVE-2026-118625 and CVE-2026-118626 (tracking-server missing-authorization issues, 5.4 to 6.3), CVE-2026-118627 (SHAP `load_explainer` deserialization RCE, 7.8), CVE-2026-118628 (`get-artifacts` SSRF, 8.2), CVE-2024-37052 (statsmodels `_load_model` deserialization RCE, 7.8), CVE-2026-64849 (webhook SSRF, 6.8) and CVE-2026-71211 (AI Gateway SSRF, 7.7). One of those ids is already in this file: CVE-2026-64849 is the KEV-listed webhook SSRF above, which the vendor scored 9.3 and ZDI scores 6.8. ZDI-26-845 carries a 2024 id for a statsmodels `_load_model` deserialization; whether it is the statsmodels flavor bypass of the 09-21 update (whose vendor advisory GHSA-gqvg-gmmx-x4hm says no CVE) was not checked, because the ZDI page and the CNA record were not opened, so it is listed here as the index prints it and mapped to nothing. Affected ranges for the other records are not stated here for the same reason.
 
 Status stays `active`, because CVE-2026-64849 is still in KEV and the new RCE is unauthenticated on the default server. The action is unchanged in direction and larger in scope: MLflow 3.17.0 or later, authentication in front of the tracking server, and now a rotation of every provider key that passed through a CrewAI agent while autologging was on.
 
