@@ -24,6 +24,8 @@ Lightning AI's incident page, titled "October 2026 Security Incident", carries n
 
 Scope, per the page: the Studio Platform services (Studio, Deployments, Pipelines and Drive). GPU cluster rental and the managed Kubernetes and SLURM services are not involved.
 
+Status is `ongoing` rather than `contained`: the attacker's access was cut on 10-16, but Studio, Jobs and Deployments remain offline with no date, the investigation is open and no root cause or customer count has been published.
+
 Wiz's "Black October for AI developer platforms" (2026-10-30) lists Lightning AI at October 15 with the root cause attributed to credential access, fourth of nine AI developer platforms with incidents that month, and links this page. Lightning's own page names no other platform and no campaign.
 
 This is a different incident from the April 2026 compromise of the `pytorch-lightning` PyPI package by the same vendor, filed in [PyTorch Lightning compromise](2026-04-pytorch-lightning-compromise.md). That one was a package customers installed; this one is the hosted platform where customers ran code and kept keys.

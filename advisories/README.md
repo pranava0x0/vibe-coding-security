@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-10-31 | [local-commander-agent npm 0.3.52 flagged as malware: remove it and rotate credentials on the machine it controlled](2026-10-local-commander-agent-npm-0-3-52-malware-record-remove-and-rotate.md) | high | unconfirmed |
 | 2026-10-30 | [Northflank security incident: assume every environment variable was decrypted; customers report AI API keys abused (2026-10-30)](2026-10-northflank-security-incident-assume-all-environment-variables-decrypted-ai-keys-abused.md) | critical | active |
 | 2026-10-30 | [ramparts 0.8.1 to 0.8.10 skill scanner skips nested .pyc files, passing skill bundles with import-time code (CVE-2026-120202); no fix](2026-10-ramparts-skill-scanner-nested-pyc-bypass-cve-2026-120202-no-fix.md) | high | active |
 | 2026-10-30 | [LM Studio before 0.4.22 Build 1: model-download path traversal plants a plugin that runs on every launch (CVE-2026-119979, 8.7)](2026-10-lm-studio-model-downloader-path-traversal-plugin-code-execution-cve-2026-119979-fixed-0-4-22.md) | high | patched |

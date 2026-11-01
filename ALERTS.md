@@ -8,6 +8,10 @@
 
 ## 🔴 ACTIVE — react now
 
+### 2026-10-31 — **`local-commander-agent` npm 0.3.52 flagged as malware: remove it and rotate credentials on the machine it controlled**
+GitHub's malware advisory GHSA-7j62-5j84-72fv and OSV's MAL-2026-18425 (both 2026-10-31) flag version 0.3.52 (published 2026-10-23) of the npm agent that lets ChatGPT, Claude, Cursor or any MCP client remote-control a Windows, Mac or Linux machine. The registry now returns 404 for that version alone while the same maintainer kept publishing through 0.3.61; no patched version is named and no researcher has published an analysis, so this stays `unconfirmed`. If 0.3.52 was installed, remove it and rotate SSH keys, cloud and provider credentials and tokens on that machine.
+→ [advisories/2026-10-local-commander-agent-npm-0-3-52-malware-record-remove-and-rotate.md](advisories/2026-10-local-commander-agent-npm-0-3-52-malware-record-remove-and-rotate.md)
+
 ### 2026-10-30 — **Northflank: "Assume all environment variables have been decrypted"; customers report stored AI API keys abused; rotate every secret at the issuer**
 Northflank's status page (2026-10-30, 13:58 UTC): "Assume all environment variables have been decrypted. Disable/rotate all keys." Wiz alerted the platform at 11:43 UTC; by 15:12 "multiple users" confirmed their AI keys had been used, and at 23:38 Northflank told customers to revoke user-provided secrets with the issuing provider and review AI usage and billing. Audit logs and add-on secret rotation (Postgres, MongoDB, MySQL, Redis, MinIO, RabbitMQ) were rolled out through 10-31; no root cause, customer count or region as of 11-01, incident still "Identified". Wiz's "Black October" post lists it as the ninth AI developer platform breached in October.
 → [advisories/2026-10-northflank-security-incident-assume-all-environment-variables-decrypted-ai-keys-abused.md](advisories/2026-10-northflank-security-incident-assume-all-environment-variables-decrypted-ai-keys-abused.md)
