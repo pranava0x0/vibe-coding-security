@@ -4,7 +4,7 @@ title: "Lightning AI Studio platform: compromised credentials reached customer e
 date_disclosed: 2026-10-15
 last_updated: 2026-11-01
 severity: high
-status: contained
+status: ongoing
 ecosystems: [paas, ml-platform, vibe-platform, pypi]
 tools_affected: ["Lightning AI Studio platform (Studio, Deployments, Pipelines, Drive); not the GPU cluster rental or managed Kubernetes and SLURM services, per the vendor"]
 tags: [vibe-platform, data-breach, credential-compromise, env-vars, secrets-exposure, github-tokens, cloud-credentials, black-october, wiz, lightning-ai]
