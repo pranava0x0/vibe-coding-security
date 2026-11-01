@@ -2,11 +2,23 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-10-31. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-11-01. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-10-30 — **Northflank: "Assume all environment variables have been decrypted"; customers report stored AI API keys abused; rotate every secret at the issuer**
+Northflank's status page (2026-10-30, 13:58 UTC): "Assume all environment variables have been decrypted. Disable/rotate all keys." Wiz alerted the platform at 11:43 UTC; by 15:12 "multiple users" confirmed their AI keys had been used, and at 23:38 Northflank told customers to revoke user-provided secrets with the issuing provider and review AI usage and billing. Audit logs and add-on secret rotation (Postgres, MongoDB, MySQL, Redis, MinIO, RabbitMQ) were rolled out through 10-31; no root cause, customer count or region as of 11-01, incident still "Identified". Wiz's "Black October" post lists it as the ninth AI developer platform breached in October.
+→ [advisories/2026-10-northflank-security-incident-assume-all-environment-variables-decrypted-ai-keys-abused.md](advisories/2026-10-northflank-security-incident-assume-all-environment-variables-decrypted-ai-keys-abused.md)
+
+### 2026-10-30 — **ramparts 0.8.1 to 0.8.10, the MCP and skill scanner, passes skill bundles that hide code in a nested `.pyc` (CVE-2026-120202); no fix**
+Issue #154 (2026-10-30, nedlir) and VulnCheck's CVE-2026-120202 (10-31, 7.1): ramparts' skill-bundle walk skips nested directories and compiled Python, so a `.pyc` under `scripts/<subdir>/__pycache__/` scans to zero findings while CPython runs it when the skill loads. No maintainer reply, no pull request, crates.io newest is still 0.8.10 (2026-10-01). Run `find <skill> -name '*.pyc'` on anything a clean scan let through, and reject bundles that ship bytecode.
+→ [advisories/2026-10-ramparts-skill-scanner-nested-pyc-bypass-cve-2026-120202-no-fix.md](advisories/2026-10-ramparts-skill-scanner-nested-pyc-bypass-cve-2026-120202-no-fix.md)
+
+### 2026-10-27 — **Red Hat OpenShift AI model gateway injects another tenant's provider API keys when a request names their model (CVE-2026-117574, 9.1); no fix listed**
+Red Hat CNA (public 10-27, record 10-28, reported 06-17): `ai-gateway-payload-processing` selects the tenant and credential from a model identifier the caller supplies and does not check authorization before pulling keys from the shared store, so any authenticated user can spend another tenant's LLM keys and quota. Red Hat rates it Important with a 9.1 score; the production image is "Affected" with no erratum as of 11-01, no workaround, no versions. If one gateway holds keys for several teams, meter and scope them per tenant until a fix ships.
+→ [advisories/2026-10-red-hat-openshift-ai-gateway-payload-processing-cross-tenant-api-key-injection-cve-2026-117574.md](advisories/2026-10-red-hat-openshift-ai-gateway-payload-processing-cross-tenant-api-key-injection-cve-2026-117574.md)
 
 ### 2026-10-30 — **LM Studio before 0.4.22 Build 1: a crafted model repository's filenames write outside the models folder and plant a plugin that runs on every launch (CVE-2026-119979, 8.7)**
 VulnCheck's CVE-2026-119979 (10-30, credit Ariel Fogel of Pillar Security): the model downloader's `resolveDownloadRequest` accepted backslash traversal, so a model repository the user downloads can plant a plugin `manifest.json`, `install-state.json` and `mcp-bridge-config.json` and run attacker Python at each start. Fixed in 0.4.22 Build 1 (2026-08-28) with release notes that say nothing about it; current release 0.4.28. Update, and review installed plugins if an old build downloaded a model from a publisher you do not know.
@@ -1317,6 +1329,10 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 
 ## 🟠 RECENT — verify exposure
 
+### 2026-10-15 — **Lightning AI Studio platform: compromised credentials reached customer environments and connected services; access revoked 10-16; rotate keys stored in Studios**
+Lightning AI's undated incident page: identified 2026-10-15 23:00 UTC, all platform access revoked at 01:00 UTC on 10-16, read-only Drive access back through the CLI on 10-28, Studio, Jobs and Deployments still off. "Certain customer credentials were compromised" and used to reach environments and connected third-party services; keys tied to customers' cloud accounts were revoked. The vendor's instruction is to rotate secrets, API keys and GitHub credentials stored in Studio environments and check connected services' logs. Wiz lists it fourth of nine October platform breaches. Separate from the April `pytorch-lightning` PyPI compromise.
+→ [advisories/2026-10-lightning-ai-studio-platform-credential-compromise-october-15-rotate-keys.md](advisories/2026-10-lightning-ai-studio-platform-credential-compromise-october-15-rotate-keys.md)
+
 ### 2026-09-30 — **TanStack Start: unauthenticated reflected XSS in server-function responses, found by Lovable (CVE-2026-102989, 9.3); fixed 1.168.60 and 1.169.39**
 Non-public fields in a server-function payload reached the error path and a response-shaped object was sent as the HTTP response, so a crafted `/_serverFn/` URL returns attacker HTML from the app's own origin and runs with the visitor's session. Fixed 2026-09-30 in `@tanstack/start-server-core` 1.169.39, `react-start` 1.168.60, `solid-start` 1.168.57, `vue-start` 1.168.56 (11.6M weekly downloads each for the first two). Lovable's team found it 09-14, fronted hosted apps with firewall rules and auto-upgrades projects on next edit; everywhere else the fix is upgrade, rebuild, redeploy, and delete old deploy previews. CVE 2026-10-13, npm critical listing 2026-10-15.
 → [advisories/2026-10-tanstack-start-server-function-reflected-xss-lovable-cve-2026-102989.md](advisories/2026-10-tanstack-start-server-function-reflected-xss-lovable-cve-2026-102989.md)
@@ -1340,6 +1356,10 @@ Upgrade both packages together and rebuild the admin bundle; on self-hosted back
 ### 2026-09-04 — **Google Agent Mesh (SAM) alpha: unauthenticated libp2p ingress and open OIDC enrollment ran tools on every MCP node (CVE-2026-102503, CVE-2026-103091, 9.3); fixed alpha.3 and alpha.9**
 Google's open-source agent fabric (`google/sam`, now `google/agentmesh`, 1.1k stars, "not an officially supported Google product"): in alpha.1 and alpha.2 the `/libp2p-http` ingress forwarded requests to command-and-stdio MCP servers, A2A agents and inference endpoints with no Biscuit or enrollment check (CVE-2026-102503, fixed alpha.3, 2026-08-06); through alpha.8 `GET /info` disclosed the OIDC configuration, `POST /register` enrolled any valid identity-provider token, and the default policy bound every authenticated member to wildcard services, so any token holder got a 90-day credential with execute access on every backend (CVE-2026-103091, fixed alpha.9, 2026-09-07); a third advisory let anonymous callers fetch a router's Biscuit from `/enroll/status`. Google CNA records 2026-10-19, CVSS 4.0 9.3; vendor pages 3.1 9.8. Upgrade to v0.1.1, rotate backend credentials and re-issue mesh credentials.
 → [advisories/2026-10-google-agent-mesh-sam-unauthenticated-libp2p-ingress-open-oidc-enrollment-mesh-wide-mcp-tool-execution.md](advisories/2026-10-google-agent-mesh-sam-unauthenticated-libp2p-ingress-open-oidc-enrollment-mesh-wide-mcp-tool-execution.md)
+
+### 2026-09-01 — **libheif 1.18.0 to 1.23.2: heap overflow in the `unci` decoder (CVE-2026-120208, VulnCheck 10-31); sharp's bundled libheif never compiled that decoder**
+libheif's GHSA-x8r2-mggj-j6wr (2026-09-01, vendor Critical 9.8, fixed 1.23.3 the same day) got a CVE two months later. The flaw needs `WITH_UNCOMPRESSED_CODEC=ON`, which libheif defaults to OFF and sharp-libvips' build never sets, so `next/image`, Astro and other sharp users were not exposed through the bundled binaries even on sharp 0.35.4 (libheif 1.23.2); sharp 0.35.5 bundles 1.23.5. Self-built or distribution libheif with the uncompressed codec needs 1.23.3+; the vendor says code execution was demonstrated on one WordPress deployment. A scanner flag on a sharp-bundled copy is a version match, not an exposure.
+→ [advisories/2026-09-libheif-unci-mixed-interleave-heap-overflow-cve-2026-120208-sharp-bundle-not-compiled.md](advisories/2026-09-libheif-unci-mixed-interleave-heap-overflow-cve-2026-120208-sharp-bundle-not-compiled.md)
 
 ### 2026-08-21 — **Mercury (mljar) notebook web apps: unauthenticated Jupyter terminal and kernel code execution, CVE-2026-111057 (10.0) and CVE-2026-111058 (9.8); fixed 3.2.4 and 3.2.6**
 The Streamlit-class framework runs an anonymous JupyterLab server behind a blocklist; a missing comma let `/api/terminals` through (an interactive OS shell for anyone who can reach the app, 3.0.0 through 3.2.3) and `/api/kernels` was never listed (arbitrary Python for anonymous clients, before 3.2.6). Vendor advisories 2026-08-21 and 08-31; CVE ids and database rows 2026-10-19; newest 3.2.11. Upgrade and put authentication in front of any Mercury app on a network.

@@ -2,7 +2,7 @@
 id: ongoing-vibe-platform-exposure
 title: "Vibe-coded app data exposure — Lovable, Bolt, Replit, Base44 pattern issues"
 date_disclosed: 2025
-last_updated: 2026-10-26
+last_updated: 2026-11-01
 severity: high
 status: ongoing
 ecosystems: [lovable, bolt, replit, v0, supabase, base44]
@@ -96,6 +96,12 @@ Security firm **Theori** published findings from its **Xint Code** AI-code-scann
 
 The common cause is a long-lived credential in a place the platform did not treat as production: a config repo, a service account, a stored key. The customer-side action is the same each time: rotate what the platform held, at the issuer.
 
+## October 2026 — Wiz counts nine AI developer platforms breached in one month; Northflank (10-30) tells every customer to assume all environment variables were decrypted
+
+Wiz's post of 2026-10-30, "Black October for AI developer platforms", lists nine platforms with incidents in October, in date order: Fireworks AI (10-06, own file: [Fireworks AI evaluation-job credential exposure](2026-10-fireworks-ai-evaluation-job-environment-variable-credential-exposure.md)), Andromeda (10-09, above), Zeabur (10-14, [Zeabur breach](2026-10-zeabur-october-security-incident-env-var-store-breach-shutdown-december-31.md)), Lightning AI (10-15, [Lightning AI Studio credential compromise](2026-10-lightning-ai-studio-platform-credential-compromise-october-15-rotate-keys.md), filed this run from the vendor's undated incident page), OpenCode (10-16 to 17, [OpenCode Console breach](2026-10-opencode-console-legacy-system-breach-provider-api-keys-exposed-distillation-attack.md)), Railway (10-20, [Railway environment-variable store breach](2026-10-railway-environment-variable-store-breach-rotate-every-secret.md)), Warp (10-23, [Warp vendor breach](2026-10-warp-vendor-breach-agent-traces-telemetry-one-percent-of-users.md)), CommandCode (10-28, whose only primary is a post on X that this corpus cannot open, so it is not covered here) and Northflank (10-30, [Northflank security incident](2026-10-northflank-security-incident-assume-all-environment-variables-decrypted-ai-keys-abused.md)). Wiz's one cross-platform statement: "All public reports highlight targeted exploitation, explicitly hunting stored environment variables, with a focus on those granting AI access."
+
+Northflank's status page, from 13:58 UTC on 2026-10-30: "Assume all environment variables have been decrypted. Disable/rotate all keys." By 23:38 UTC customers were reporting unauthorized use of AI API keys stored on the platform, and on 2026-11-01 the incident was still open with no root cause. The TiDB Cloud entry above is not on Wiz's list because it is a database service rather than a developer platform; the pattern is the same. If an app's secrets lived on any platform in this list, rotate them at the issuer.
+
 ## Sources
 - [Vibe Eval — Vibe Coding Security: Risks, Vulnerabilities, and Fixes (2026)](https://vibe-eval.com/vibe-coding-security-risks)
 - [The Next Web — Lovable security crisis: 48 days of exposed projects, closed bug reports](https://thenextweb.com/news/lovable-vibe-coding-security-crisis-exposed)
@@ -113,3 +119,4 @@ The common cause is a long-lived credential in a place the platform did not trea
 - [Futurism — Vibe Coded Apps Are Spilling Users' Personal Information Directly Into the Maw of Greedy Hackers](https://futurism.com/artificial-intelligence/vibe-coded-apps-spilling-personal-information)
 - [SecurityWeek — Vibe-Coded Apps Riddled With Exploitable Security Flaws](https://www.securityweek.com/vibe-coded-apps-riddled-with-exploitable-security-flaws/) — Theori Xint Code study, fetched directly; greenfield-vs-brownfield methodology, 434 total findings.
 - **October 2026 sources** — [Zeabur — October 2026 security incident (preliminary)](https://zeabur.com/blogs/october-2026-security-incident) — fetched 2026-10-26; [PingCAP — Security update, October 2026](https://www.pingcap.com/trust-hub/security/security-update-october-2026/) — fetched 2026-10-26; [Andromeda — October 2026 security incident](https://andromeda.ai/security-updates/october-2026-security-incident) — fetched 2026-10-26.
+- **2026-11-01 update sources** — [Wiz — Black October for AI developer platforms](https://www.wiz.io/blog/black-october-for-ai-developer-platforms) — fetched 2026-11-01 (dated 2026-10-30, Benjamin Read and Rami McCarthy): the nine platforms with dates and the quoted pattern; [Northflank status — Security incident](https://status.northflank.com/cmvv0rn5a092f14rutwccodpp) — fetched 2026-11-01: the 13:58 and 23:38 UTC updates quoted; [Lightning AI — October 2026 Security Incident](https://lightning.ai/blog/oct-2026-incident) — fetched 2026-11-01.
