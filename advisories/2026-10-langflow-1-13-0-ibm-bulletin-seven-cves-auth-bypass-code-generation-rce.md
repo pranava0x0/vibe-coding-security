@@ -2,7 +2,7 @@
 id: 2026-10-langflow-1-13-0-ibm-bulletin-seven-cves-auth-bypass-code-generation-rce
 title: "Langflow 1.0.0 to 1.12.8: IBM bulletin of seven CVEs, two unauthenticated 9.8s (auth bypass, code generation RCE); fixed 1.13.0"
 date_disclosed: 2026-10-28
-last_updated: 2026-10-30
+last_updated: 2026-11-02
 severity: critical
 status: patched
 ecosystems: [pypi, python, docker, agent-framework]
@@ -63,3 +63,11 @@ grep -rn 'LANGFLOW_AUTO_LOGIN' .env docker-compose*.yml 2>/dev/null   # unset or
 - PyPI `langflow` 1.13.0 release metadata, queried 2026-10-30: upload time 2026-10-22 21:20 UTC; `pip index versions langflow` lists 1.13.0 as newest.
 - [langflow-ai/langflow — security advisories](https://github.com/langflow-ai/langflow/security/advisories) — fetched 2026-10-30: newest row 2026-09-28; none of the seven ids has a vendor-tab entry.
 - Related in this corpus: [Langflow IBM PSIRT eleven-CVE batch (fixed 1.11.6)](2026-09-langflow-ibm-psirt-eleven-cve-batch.md), [Langflow fernet key, webhook bypass and Python REPL wave](2026-10-langflow-fernet-key-webhook-bypass-python-repl-cve-wave.md).
+
+## Update 2026-11-02 — a public Metasploit module for CVE-2026-93680 predates the record by six days and names a narrower range; thirty more Langflow CVEs from IBM's 2026-10-19 bulletins now have their own file
+
+The Hacker News (2026-11-02) covered the bulletin and added two facts. Rapid7's Metasploit wrap-up of 2026-10-23 announced an auxiliary module, `gather/langflow_auth_bypass_cve_2026_93680` (Richard Howe, pull request 21942), six days before IBM published the CVE record on 2026-10-29. The module's metadata says Langflow "allows unauthenticated connections to the MCP SSE endpoint", that it initialises an MCP session and lists the server's tools without running code, gives a disclosure date of 2026-09-22, and states an affected range of 1.5.0 through 1.11.4. IBM's record says 1.0.0 through 1.12.8. The two ranges come from different authors and this file keeps IBM's; a reader who copies the module's upper bound would conclude a 1.12.x instance is safe when the vendor says it is not. The Hacker News also notes that `LANGFLOW_AUTO_LOGIN` is enabled by default in 1.12.8, that its code description calls it development-only, and that the bulletin does not say whether instances with automatic login off are affected by CVE-2026-93680.
+
+The same wrap-up lists five more Langflow exploit modules: one for CVE-2026-0768, which has [its own file here](2026-09-langflow-cve-2026-0768-validate-code-rce-exploited.md), and four for CVE-2026-0769, CVE-2026-10134, CVE-2026-7873 and CVE-2026-93674, which have no file in this corpus; their records were not opened this run and the ranges Rapid7 prints for them (1.3.2, 1.0.0 to 1.9.3, 1.0.0 to 1.10.0, 1.5.0 to 1.9.0) are the module authors' statements. Separately, IBM's two bulletins of 2026-10-19 (sixteen CVEs fixed in 1.12.4 and fourteen fixed in 1.12.5, including the unauthenticated 9.8 CVE-2026-104339) published their thirty records on 2026-10-29 alongside the four above, and are now in [their own file](2026-10-langflow-october-19-ibm-bulletins-thirty-cves-unauthenticated-rce-cve-2026-104339-fixed-1-12-4-1-12-5.md). None of the ids in either file was in CISA's KEV catalog at its 2026-10-30 release. `status` and `severity` unchanged.
+
+Sources for this update: [The Hacker News — Critical Langflow Flaws Could Let Unauthenticated Attackers Run Code on Servers](https://thehackernews.com/2026/11/critical-langflow-flaws-could-let.html) (fetched 2026-11-02); [Rapid7 — Metasploit Wrap-Up 2026-10-23](https://www.rapid7.com/blog/post/pt-metasploit-wrap-up-langflow-mongodb-and-more) (fetched 2026-11-02: the six Langflow modules, authors, ranges and pull requests); [metasploit-framework — langflow_auth_bypass_cve_2026_93680.rb](https://github.com/rapid7/metasploit-framework/blob/master/modules/auxiliary/gather/langflow_auth_bypass_cve_2026_93680.rb) (fetched 2026-11-02: metadata only); [CISA KEV JSON](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) (fetched 2026-11-02, release 2026-10-30).
