@@ -5,20 +5,26 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 115,
-   "last_hit": "2026-10-31"
+   "hits": 116,
+   "last_hit": "2026-11-02"
   },
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 65,
-   "last_hit": "2026-10-31"
+   "hits": 66,
+   "last_hit": "2026-11-02"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 63,
-   "last_hit": "2026-11-01"
+   "hits": 64,
+   "last_hit": "2026-11-02"
+  },
+  {
+   "domain": "theregister.com",
+   "weight": 20.0,
+   "hits": 62,
+   "last_hit": "2026-11-02"
   },
   {
    "domain": "nvd.nist.gov",
@@ -27,16 +33,10 @@
    "last_hit": "2026-10-06"
   },
   {
-   "domain": "theregister.com",
-   "weight": 20.0,
-   "hits": 61,
-   "last_hit": "2026-10-31"
-  },
-  {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 58,
-   "last_hit": "2026-11-01"
+   "hits": 59,
+   "last_hit": "2026-11-02"
   },
   {
    "domain": "cybersecuritynews.com",
@@ -53,8 +53,8 @@
   {
    "domain": "vulncheck.com",
    "weight": 20.0,
-   "hits": 35,
-   "last_hit": "2026-11-01"
+   "hits": 36,
+   "last_hit": "2026-11-02"
   },
   {
    "domain": "stepsecurity.io",
@@ -77,25 +77,25 @@
   {
    "domain": "cisa.gov",
    "weight": 20.0,
-   "hits": 26,
-   "last_hit": "2026-10-30"
+   "hits": 27,
+   "last_hit": "2026-11-02"
   },
   {
    "domain": "cveawg.mitre.org",
    "weight": 20.0,
-   "hits": 25,
-   "last_hit": "2026-11-01"
+   "hits": 26,
+   "last_hit": "2026-11-02"
+  },
+  {
+   "domain": "safedep.io",
+   "weight": 20.0,
+   "hits": 24,
+   "last_hit": "2026-11-02"
   },
   {
    "domain": "aikido.dev",
    "weight": 20.0,
    "hits": 24,
-   "last_hit": "2026-10-26"
-  },
-  {
-   "domain": "safedep.io",
-   "weight": 20.0,
-   "hits": 23,
    "last_hit": "2026-10-26"
   },
   {
@@ -107,14 +107,14 @@
   {
    "domain": "hn.algolia.com",
    "weight": 20.0,
-   "hits": 20,
-   "last_hit": "2026-11-01"
+   "hits": 21,
+   "last_hit": "2026-11-02"
   },
   {
    "domain": "pypi.org",
    "weight": 20.0,
-   "hits": 20,
-   "last_hit": "2026-11-01"
+   "hits": 21,
+   "last_hit": "2026-11-02"
   },
   {
    "domain": "wiz.io",
