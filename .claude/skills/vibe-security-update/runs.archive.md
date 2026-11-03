@@ -15,7 +15,6 @@
 
 ## Archived entries
 
-
 ## 2026-10-27
 
 ```yaml
@@ -30,6 +29,7 @@ deferred_after_classifier_stop: []
 ```
 
 **Notes.** Routine daily sweep, all direct, no delegation, no stop. Every new file came from a fetch, none from a `WebSearch`: Authlib and Agno from the reviewed-critical pip listing (both older records reviewed today; Agno first folded into its home file, then given its own file after review because the home file's status is `unconfirmed` and the index would have listed a patched CVE under it; Authlib new because no file existed); Cloudflare from its blog index; Qwen from The Register's front page and HN; llama.cpp from the `llm` listing (which rendered today, as did `agent` and `claude`, so the 10-22 zero-row gap is closed). The 10-26 Register "Qwen" item that last run logged as a single-source Qwen Code CLI phone-home is the Cohere model finding, not the CLI; corrected here. **Judgement calls:** Authlib `critical` on the two 9.x scores and the auth-bypass outcome, with the three affected ranges printed and the registry settling it; Cloudflare `high` and `patched` (vendor resolved 09-09, disclosed 10-26, SGLang fixes 0.5.21 to 0.5.23); Qwen `unconfirmed`, `medium`, standard template, no behaviour beyond what Cohere states, no host names; llama.cpp `high` on the CNA 8.5 with the "04 Aug, no year" release date recorded as printed; LiteLLM kept `critical` against the database's 7.7 reading of the vendor's 9.9. **Declined:** Xint compaction smuggling (OpenAI fixed server-side 10-23; leaks only the attacker's own traces; logged, no file); CrowdStrike agentic campaigns 10-21 and Unit 42 "Next Exploit Opportunities" (offensive-use reports, rule 2); AWS CDK `@aws-cdk/aws-redshift-alpha` CVE-2026-115418 (not the stack); ZDI's seventeen Meta FAIRChem advisories 10-26; vLLM, MLflow, mem0 and iFlytek astron-agent VulDB rows (ML infra or already in the Lasso wave file); Wasmtime pair again; GitHub Copilot assisted-permissions GA and StepSecurity's plugin inventory (controls, not incidents); Wiz "Pwn Request Reckoning" 10-26 (prevention candidate for `ci-cd-hardening.md`, logged under playbook backlog); Noma open-weight post (no incident). Both rule 1 items (the DebugBear file and the 2.1.313 update) were written last on the template with no stop. **Open next run:** Alibaba or a second lab on the Cohere finding; a CVE for Coder GHSA-2x8w-q434-f76p; whether Authlib's CNA record gets its range corrected; Vite GHSA-8g5g-mxqh-grgj (10-21, `server.fs.deny` queries for v6) against the Vitest file; Coder tab pages 2 to 4.
+
 ## 2026-10-26
 
 ```yaml

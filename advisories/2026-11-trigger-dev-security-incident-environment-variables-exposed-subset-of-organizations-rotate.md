@@ -21,7 +21,7 @@ Trigger.dev, the TypeScript background-jobs and AI-workflow platform, said on 20
 
 **What is not known.** Whether the exposure is limited to cloud.trigger.dev or involved self-hosted operators (the post does not say; self-hosters hold their own variables, and the status page files the incident under the API component). Whether the attacker used a vulnerability in the platform, a stolen credential, or a third party. Whether variables were read in bulk or per organization. When access began. Hacker News commenters (item 50331784, 166 points) asked the same questions; one compared the Linux kernel TCP CVE and Northflank's incident as candidates, and nothing in the thread answers them. Two commenters objected to the "Resolved" state on a disclosure with no root cause.
 
-**The pattern.** By disclosure date this is the sixth hosted developer platform since 2026-10-09 to report environment-variable or stored-credential theft, after Fireworks AI (2026-10-09), Lightning AI (2026-10-15), Zeabur (2026-10-19), Railway (2026-10-21) and Northflank (2026-10-30), each tracked here; Wiz's "Black October" roundup counts nine platforms breached in October by a wider definition that includes incidents without a stored-secret store. A platform that stores customer secrets decrypted for its runtime is a single breach away from every service those secrets unlock. An October 6 Trigger.dev incident (1083239, "Some sensitive environment variables synced from Vercel were cleared") was an availability bug, not a breach, and is recorded here only so the two are not confused.
+**The pattern.** By disclosure date this is the seventh hosted developer platform since 2026-10-09 to report theft of stored customer secrets, after Fireworks AI (2026-10-09), Lightning AI (2026-10-15), OpenCode Console (2026-10-17), Zeabur (2026-10-19), Railway (2026-10-21) and Northflank (2026-10-30), each tracked here; Wiz's "Black October" roundup counts nine platforms breached in October by a wider definition. A platform that stores customer secrets decrypted for its runtime is a single breach away from every service those secrets unlock. An October 6 Trigger.dev incident (1083239, "Some sensitive environment variables synced from Vercel were cleared") was an availability bug, not a breach, and is recorded here only so the two are not confused.
 
 ## Am I affected?
 
@@ -41,7 +41,7 @@ Trigger.dev, the TypeScript background-jobs and AI-workflow platform, said on 20
 
 - Give background-job platforms scoped, short-lived credentials: a database role limited to the job's tables, a restricted Stripe key, a provider key with a spend cap. See [credential hygiene](../prevention/credential-hygiene.md).
 - Prefer a secrets manager the job fetches from at run time over variables stored decrypted in the platform, so a platform breach yields a reference and not the secret.
-- Keep an inventory of which third-party platforms hold which secrets. This is the sixth such disclosure since 2026-10-09 and the rotation has to start within hours.
+- Keep an inventory of which third-party platforms hold which secrets. This is the seventh such disclosure since 2026-10-09 and the rotation has to start within hours.
 
 ## Sources
 - [Trigger.dev — Security Disclosure: Sunday November 1st](https://trigger.dev/blog/security-incident-nov-2026) — fetched 2026-11-03: 2026-11-01, Eric Allam (CTO); the full disclosure text, "a subset of organizations", "blocked the exploit", email to impacted owners, no root cause, no count, no timeline.
