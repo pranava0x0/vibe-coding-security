@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-11-02
+**Last refreshed:** 2026-11-03
 
 ## Quick start
 
@@ -55,10 +55,11 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-11-02)
+## Active threat families (as of 2026-11-03)
 
 The highest-risk ongoing threat families for vibe coders:
 
+- **The workflow platform that runs your jobs holds your secrets decrypted, and by disclosure date it is the seventh since 2026-10-09 to say so (Trigger.dev 2026-11-01)** — "the attacker gained unauthorized access to environment variables" for a subset of organizations, exploit blocked, no root cause; rotate every database, Stripe, Supabase and provider key that was a Trigger.dev variable. → `advisories/2026-11-trigger-dev-security-incident-environment-variables-exposed-subset-of-organizations-rotate.md`
 - **Your LLM API key is the thing being stolen, and the bill arrives in hours (LLMjacking, GTIG 2026-11-02)** — Mandiant's 2026 incidents: stolen IAM keys, GitHub tokens and session tokens, provider keys harvested from public repositories and validated with `max_tokens=1`, LiteLLM CVE-2026-40217 used to mint admin keys, and a resale service (Jet Night) pushing 500,000 calls onto one victim in eight hours; charges above $100,000 a day. Scope and cap every key, alert on LLM service enablement in cloud audit logs, rotate anything that was ever public. → `advisories/2026-11-llmjacking-stolen-cloud-and-llm-api-keys-billed-for-inference-gtig-jet-night-unc6993.md`
 - **The sandbox the framework installed for your LLM-written code had every permission (Prefab UI CVE-2026-120338, 10.0, fixed 0.21.0; Langflow's thirty October CVEs, fixed 1.12.4 and 1.12.5)** — Prefab's Pyodide sandbox, reachable through FastMCP's `generate_prefab_ui` tool, ran Deno with read, write and network allowed, so model-written Python read and wrote server files and could persist through a `.pth` file; the fix shipped on 2026-10-26 with no advisory and the vendor GHSA still 404s. IBM's two 2026-10-19 Langflow bulletins (one unauthenticated 9.8, three 9.9s) surfaced only when their thirty records landed on 2026-10-29 beside the 1.13.0 bulletin's four. Upgrade `prefab-ui` to 0.21.0+ and Langflow to 1.13.0, and read what permissions a bundled sandbox starts with. → `advisories/2026-11-prefab-ui-generative-ui-sandbox-deno-permissions-host-file-write-cve-2026-120338-fixed-0-21-0.md`, `advisories/2026-10-langflow-october-19-ibm-bulletins-thirty-cves-unauthenticated-rce-cve-2026-104339-fixed-1-12-4-1-12-5.md`
 - **Nine AI developer platforms in one month, and the ninth says assume everything was decrypted (Northflank 2026-10-30, Lightning AI 2026-10-15, Wiz "Black October")** — Northflank told every customer to assume all environment variables were decrypted and to rotate all keys at the issuer, with customers reporting AI API key abuse within hours; Lightning AI revoked all Studio access after "certain customer credentials were compromised". Wiz lists Fireworks AI, Andromeda, Zeabur, Lightning AI, OpenCode, Railway, Warp, CommandCode and Northflank, all hunting stored environment variables with a focus on AI keys. A hosting platform's secret store is a copy of every provider key your app has; keep the issuer-side inventory that lets you rotate in one pass, and meter every key.
