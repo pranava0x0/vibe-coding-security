@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-11-03 | [Forged commit in the antd-img-crop GitHub repository: do not install from git; the npm package is clean](2026-11-antd-img-crop-github-repository-forged-commit-do-not-install-from-git-npm-clean.md) | high | unconfirmed |
 | 2026-11-02 | [A backslash in the URL authority passes urlparse and reaches urllib3 as a different host: CrewAI CVE-2026-120630 (fixed 1.15.17) and Langflow CVE-2026-19304 (fixed 1.11.3)](2026-11-urlparse-backslash-authority-ssrf-guard-bypass-crewai-cve-2026-120630-langflow-cve-2026-19304-fixed.md) | high | patched |
 | 2026-11-02 | [MCP server CVEs, November: AWS Serverless MCP Server project-name path traversal (CVE-2026-116635, fixed 0.2.1); Instatic MCP read tools skip row authorization (CVE-2026-121458, fixed 0.0.21)](2026-11-mcp-server-november-cve-batch-aws-serverless-mcp-server-path-traversal-instatic-mcp-authorization.md) | medium | patched |
 | 2026-11-02 | [WorkOS incident 2026-10-30: an internal sales API exposed CRM contacts, support summaries and customer Slack excerpts; production untouched, expect targeted phishing](2026-11-workos-october-30-internal-sales-tool-incident-crm-support-slack-excerpts-phishing-risk.md) | medium | ongoing |

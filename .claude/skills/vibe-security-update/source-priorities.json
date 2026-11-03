@@ -84,6 +84,7 @@
    "ecosystems": [
     "9router",
     "amplify-data-construct-downloads",
+    "antd-img-crop-weekly",
     "baileys-forks-downloads",
     "download-count-inflation",
     "fast-jwt-downloads",
@@ -116,8 +117,8 @@
     "vitest",
     "zod"
    ],
-   "hits": 17,
-   "last_hit": "2026-10-30",
+   "hits": 18,
+   "last_hit": "2026-11-03",
    "tier": "official",
    "weight": 20
   },
@@ -1090,14 +1091,15 @@
     "chaindrop-update",
     "ci-cd",
     "claude-code",
+    "claude-code-extension-postmortem-2026-10-30",
     "github-actions",
     "npm",
     "npm-dependency-confusion",
     "semantic-kernel",
     "storm-3168-azure-destructive"
    ],
-   "hits": 8,
-   "last_hit": "2026-09-30",
+   "hits": 9,
+   "last_hit": "2026-11-03",
    "tier": "vendor",
    "weight": 20
   },
@@ -1411,6 +1413,7 @@
     "9router-0.5.99",
     "9router-release-dates",
     "amplify-data-construct-1.17.4",
+    "antd-img-crop-time-4-30-0",
     "apexacc-cli-deprecated-still-resolves",
     "apexfdn-apex-security-holder",
     "apexfdn-copilot-mcp-live",
@@ -1508,14 +1511,15 @@
     "weaselbiscuit-takedown",
     "zod"
    ],
-   "hits": 37,
-   "last_hit": "2026-11-01",
+   "hits": 38,
+   "last_hit": "2026-11-03",
    "tier": "official",
    "weight": 20
   },
   "safedep.io": {
    "ecosystems": [
     "ai-coding-assistant-hijack-469-locations",
+    "antd-img-crop-forged-commit",
     "antv",
     "asyncapi-miasma",
     "cline",
@@ -1524,6 +1528,7 @@
     "github",
     "github-actions",
     "hades",
+    "hugo-paper",
     "malfex",
     "marketfront-dependency-confusion",
     "megalodon",
@@ -1540,8 +1545,8 @@
     "sckit-implant-framework",
     "tensorlake-mini-shai-hulud"
    ],
-   "hits": 24,
-   "last_hit": "2026-11-02",
+   "hits": 25,
+   "last_hit": "2026-11-03",
    "tier": "research",
    "weight": 20
   },
@@ -3619,6 +3624,19 @@
    "tier": "vendor",
    "weight": 8
   },
+  "cursor.com": {
+   "_added": "2026-10-30",
+   "ecosystems": [
+    "claude-code-extension",
+    "claude-code-extension-notice-reread-2026-11-02",
+    "claude-code-extension-notice-reread-2026-11-03",
+    "claude-code-extension-security-notice"
+   ],
+   "hits": 4,
+   "last_hit": "2026-11-03",
+   "tier": "vendor",
+   "weight": 8
+  },
   "datadoghq.com": {
    "_added": "2026-05-18",
    "ecosystems": [
@@ -3889,18 +3907,6 @@
    "last_decayed": "2026-10-22",
    "last_hit": null,
    "tier": "independent",
-   "weight": 7
-  },
-  "cursor.com": {
-   "_added": "2026-10-30",
-   "ecosystems": [
-    "claude-code-extension",
-    "claude-code-extension-notice-reread-2026-11-02",
-    "claude-code-extension-security-notice"
-   ],
-   "hits": 3,
-   "last_hit": "2026-11-02",
-   "tier": "vendor",
    "weight": 7
   },
   "cyata.ai": {
@@ -4301,6 +4307,18 @@
    "hits": 2,
    "last_hit": "2026-10-14",
    "tier": "vendor",
+   "weight": 6
+  },
+  "api.osv.dev": {
+   "_added": "2026-11-01",
+   "ecosystems": [
+    "antd-img-crop-zero-records",
+    "better-auth-query",
+    "local-commander-agent-mal-2026-18425"
+   ],
+   "hits": 2,
+   "last_hit": "2026-11-03",
+   "tier": "official",
    "weight": 6
   },
   "api.wordpress.org": {
@@ -4939,17 +4957,6 @@
     "gitlab-cve-97229-incident-post"
    ],
    "tier": "vendor"
-  },
-  "api.osv.dev": {
-   "_added": "2026-11-01",
-   "ecosystems": [
-    "local-commander-agent-mal-2026-18425",
-    "better-auth-query"
-   ],
-   "hits": 1,
-   "last_hit": "2026-11-01",
-   "tier": "official",
-   "weight": 5
   },
   "asymmetricsecurity.com": {
    "_added": "2026-10-04",

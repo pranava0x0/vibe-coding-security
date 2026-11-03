@@ -45,16 +45,16 @@
    "last_hit": "2026-10-08"
   },
   {
+   "domain": "registry.npmjs.org",
+   "weight": 20.0,
+   "hits": 38,
+   "last_hit": "2026-11-03"
+  },
+  {
    "domain": "vulncheck.com",
    "weight": 20.0,
    "hits": 37,
    "last_hit": "2026-11-03"
-  },
-  {
-   "domain": "registry.npmjs.org",
-   "weight": 20.0,
-   "hits": 37,
-   "last_hit": "2026-11-01"
   },
   {
    "domain": "stepsecurity.io",
@@ -89,8 +89,8 @@
   {
    "domain": "safedep.io",
    "weight": 20.0,
-   "hits": 24,
-   "last_hit": "2026-11-02"
+   "hits": 25,
+   "last_hit": "2026-11-03"
   },
   {
    "domain": "aikido.dev",
@@ -129,16 +129,16 @@
    "last_hit": "2026-11-01"
   },
   {
+   "domain": "api.npmjs.org",
+   "weight": 20.0,
+   "hits": 18,
+   "last_hit": "2026-11-03"
+  },
+  {
    "domain": "sentinelone.com",
    "weight": 20.0,
    "hits": 18,
    "last_hit": "2026-09-15"
-  },
-  {
-   "domain": "api.npmjs.org",
-   "weight": 20.0,
-   "hits": 17,
-   "last_hit": "2026-10-30"
   },
   {
    "domain": "csoonline.com",

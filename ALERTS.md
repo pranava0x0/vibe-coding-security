@@ -8,6 +8,10 @@
 
 ## 🔴 ACTIVE — react now
 
+### 2026-11-03 — **Forged commit in the antd-img-crop GitHub repository: do not install from git; the npm package is clean**
+SafeDep (2026-11-03) reports a commit force-pushed to `nanxiaobei/antd-img-crop` on 2026-10-31 15:12 UTC from the maintainer's account, rebuilt to look like the March 4.30.0 release commit, and an earlier dropper in the same maintainer's `hugo-paper` theme from 2026-08-21 to 2026-10-21. The npm package `antd-img-crop` ends at 4.30.0 (2026-03-12, about 97,000 weekly downloads) and OSV has no record, so registry installs are fine and scanners read clean; a clone, fork or `github:` install after the force push is the exposure. Single source, `unconfirmed`; rotate browser, SSH, `.env`, `.npmrc`, keychain and wallet material if a git checkout ran.
+→ [advisories/2026-11-antd-img-crop-github-repository-forged-commit-do-not-install-from-git-npm-clean.md](advisories/2026-11-antd-img-crop-github-repository-forged-commit-do-not-install-from-git-npm-clean.md)
+
 ### 2026-11-02 — **A backslash in the URL authority passes urlparse and reaches urllib3 as a different host: CrewAI CVE-2026-120630 (fixed 1.15.17) and Langflow CVE-2026-19304 (fixed 1.11.3)**
 CERT/CC published the CrewAI record on 2026-11-02 for a bug fixed on PyPI on 2026-08-20: `validate_url` checked the `urlparse` host and then fetched the raw string, so `ScrapeWebsiteTool` reached internal addresses from a model-chosen URL. IBM's August bulletin covers the same parser discrepancy in Langflow's RSS and SearXNG components (7.7), beside an unauthenticated SSRF in the LMStudio components (CVE-2026-19305, 8.6), all fixed in 1.11.3. Upgrade both, and check any `urlparse`-then-`requests` allowlist you wrote yourself.
 → [advisories/2026-11-urlparse-backslash-authority-ssrf-guard-bypass-crewai-cve-2026-120630-langflow-cve-2026-19304-fixed.md](advisories/2026-11-urlparse-backslash-authority-ssrf-guard-bypass-crewai-cve-2026-120630-langflow-cve-2026-19304-fixed.md)
