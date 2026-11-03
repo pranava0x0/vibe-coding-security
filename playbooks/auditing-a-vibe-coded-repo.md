@@ -23,7 +23,7 @@ Vibe-coded apps fail in predictable ways. Recent research:
 
 The agent that wrote the code is the *worst* auditor of it. Do this with a fresh-context agent or a human.
 
-## The 14-point audit (do this in order)
+## The 15-point audit (do this in order)
 
 ### 1. Secrets in client bundles
 
@@ -180,6 +180,10 @@ Portfolio-site and resume generators — and general-purpose agents asked to "wr
 - Prefer generalizing an over-specific claim (exact employer, title, internal program name) when precision isn't needed for the page's purpose.
 - Don't let the agent add contact details, internal identifiers, or scheduling/availability info "for completeness."
 - Re-review bio/profile content whenever a new project or press mention gets added — disclosure tends to creep upward as more gets appended over time, not downward.
+
+### 15. Browser automation that renders external content
+
+Trace which browser opens each URL, including redirects and third-party assets on localhost pages. Check its actual version and sandbox settings, especially in agents, link checkers, scrapers and CI. See [Playwright browser checks and safe launch settings](../advisories/2026-11-playwright-chromium-patch-gap.md).
 
 ## Automated help
 
