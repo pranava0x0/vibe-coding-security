@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-11-02
+**Last refreshed:** 2026-11-03
 
 ## Quick start
 
@@ -55,8 +55,9 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-11-02)
+## Active threat families (as of 2026-11-03)
 
+- **The workflow platform that runs your jobs holds your secrets decrypted, and the sixth one since 2026-10-06 just said so (Trigger.dev 2026-11-01)** — "the attacker gained unauthorized access to environment variables" for a subset of organizations, exploit blocked, no root cause; rotate every database, Stripe, Supabase and provider key that was a Trigger.dev variable. [Advisory](advisories/2026-11-trigger-dev-security-incident-environment-variables-exposed-subset-of-organizations-rotate.md)
 The highest-risk ongoing threat families for vibe coders:
 
 - **Your LLM API key is the thing being stolen, and the bill arrives in hours (LLMjacking, GTIG 2026-11-02)** — Mandiant's 2026 incidents: stolen IAM keys, GitHub tokens and session tokens, provider keys harvested from public repositories and validated with `max_tokens=1`, LiteLLM CVE-2026-40217 used to mint admin keys, and a resale service (Jet Night) pushing 500,000 calls onto one victim in eight hours; charges above $100,000 a day. Scope and cap every key, alert on LLM service enablement in cloud audit logs, rotate anything that was ever public. → `advisories/2026-11-llmjacking-stolen-cloud-and-llm-api-keys-billed-for-inference-gtig-jet-night-unc6993.md`

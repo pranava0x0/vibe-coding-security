@@ -2,11 +2,27 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-11-02. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-11-03. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-11-02 — **CrewAI CVE-2026-120630 and Langflow CVE-2026-19304: a backslash in the URL authority passes `urlparse` and reaches `urllib3` as a different host; fixed crewai-tools 1.15.17 and Langflow 1.11.3**
+CERT/CC published the CrewAI record on 2026-11-02 for a bug fixed on PyPI on 2026-08-20: `validate_url` checked the `urlparse` host and then fetched the raw string, so `ScrapeWebsiteTool` reached internal addresses from a model-chosen URL. IBM's August bulletin covers the same parser discrepancy in Langflow's RSS and SearXNG components (7.7), beside an unauthenticated SSRF in the LMStudio components (CVE-2026-19305, 8.6), all fixed in 1.11.3. Upgrade both, and check any `urlparse`-then-`requests` allowlist you wrote yourself.
+→ [advisories/2026-11-urlparse-backslash-authority-ssrf-guard-bypass-crewai-cve-2026-120630-langflow-cve-2026-19304-fixed.md](advisories/2026-11-urlparse-backslash-authority-ssrf-guard-bypass-crewai-cve-2026-120630-langflow-cve-2026-19304-fixed.md)
+
+### 2026-11-02 — **AWS Serverless MCP Server before 0.2.1: a project name with `../` or an absolute path reads and, with `--enable-write`, overwrites JSON files outside the status directory (CVE-2026-116635); Instatic MCP read tools skip row authorization (CVE-2026-121458)**
+AWS bulletin 2026-164 and the awslabs/mcp advisory (2026-11-02, CVSS 6.1 local) fix the deployment-status traversal in `awslabs.aws-serverless-mcp-server` 0.2.1, published 2026-10-30, with "No workarounds are available". VulnCheck's CVE-2026-121458 (2026-11-03, 7.1) covers Instatic 0.0.12 before 0.0.21, whose `content_get_document` and `content_list_documents` MCP tools returned other users' drafts without the HTTP API's checks. AWS also issued CVE-2026-120497 for the removed `aidlc-traceability` CLI's HTML reports.
+→ [advisories/2026-11-mcp-server-november-cve-batch-aws-serverless-mcp-server-path-traversal-instatic-mcp-authorization.md](advisories/2026-11-mcp-server-november-cve-batch-aws-serverless-mcp-server-path-traversal-instatic-mcp-authorization.md)
+
+### 2026-11-02 — **WorkOS: an internal sales API exposed CRM contacts, support summaries and customer Slack excerpts (detected 2026-10-30); production untouched, expect phishing that quotes your support history**
+WorkOS's bulletin (2026-11-02) says an unauthorized actor reached "an internal API used by our sales and marketing tools" with access to Salesforce and Snowflake data: business contacts, account histories, "summaries and excerpts from sales calls, support discussions, and customer Slack conversations", and product-usage and directory-health metadata. "There is no evidence that WorkOS application data was accessed" and no production impact, so no key rotates for this; verify any SSO, redirect-URI or billing change request through a channel you start. The notification reached Hacker News through a recipient before the bulletin existed.
+→ [advisories/2026-11-workos-october-30-internal-sales-tool-incident-crm-support-slack-excerpts-phishing-risk.md](advisories/2026-11-workos-october-30-internal-sales-tool-incident-crm-support-slack-excerpts-phishing-risk.md)
+
+### 2026-11-01 — **Trigger.dev: "the attacker gained unauthorized access to environment variables" for a subset of organizations; exploit blocked, no root cause, no count, status page says Resolved**
+Trigger.dev's CTO disclosed the incident on 2026-11-01 and emailed impacted account owners; the status page closed it at 22:50 UTC the same day with no timeline or cause, and a spokesperson told The Register to wait for a full report. Every secret stored as a Trigger.dev variable (database URLs, Stripe and Supabase keys, LLM provider keys) is the exposure. If you were emailed, rotate from a clean machine and read the logs of every service those variables unlock; this is the sixth hosted developer platform since 2026-10-06 to report environment-variable theft.
+→ [advisories/2026-11-trigger-dev-security-incident-environment-variables-exposed-subset-of-organizations-rotate.md](advisories/2026-11-trigger-dev-security-incident-environment-variables-exposed-subset-of-organizations-rotate.md)
 
 ### 2026-11-02 — **LLMjacking: stolen cloud and LLM API keys billed for inference at $100,000 a day; GTIG names Jet Night and UNC6993**
 Google Threat Intelligence Group and Mandiant (2026-11-02) describe 2026 incidents in which stolen IAM credentials, service account keys, GitHub personal access tokens, hijacked session tokens and provider API keys harvested from public repositories were used to run inference on the victim's account: over $100,000 in charges in a day, $1 million cumulative at some organisations, 500,000 API calls in under eight hours from the Jet Night resale service, keys validated with `max_tokens=1` requests, and LiteLLM CVE-2026-40217 exploited to turn virtual keys into admin credentials. Scope and cap every key, alert on LLM service enablement and invocation in cloud audit logs, and rotate anything that was ever in a public repository.

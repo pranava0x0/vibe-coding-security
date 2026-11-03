@@ -17,14 +17,14 @@
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 64,
-   "last_hit": "2026-11-02"
+   "hits": 65,
+   "last_hit": "2026-11-03"
   },
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 62,
-   "last_hit": "2026-11-02"
+   "hits": 63,
+   "last_hit": "2026-11-03"
   },
   {
    "domain": "nvd.nist.gov",
@@ -35,8 +35,8 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 59,
-   "last_hit": "2026-11-02"
+   "hits": 60,
+   "last_hit": "2026-11-03"
   },
   {
    "domain": "cybersecuritynews.com",
@@ -45,16 +45,16 @@
    "last_hit": "2026-10-08"
   },
   {
+   "domain": "vulncheck.com",
+   "weight": 20.0,
+   "hits": 37,
+   "last_hit": "2026-11-03"
+  },
+  {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
    "hits": 37,
    "last_hit": "2026-11-01"
-  },
-  {
-   "domain": "vulncheck.com",
-   "weight": 20.0,
-   "hits": 36,
-   "last_hit": "2026-11-02"
   },
   {
    "domain": "stepsecurity.io",
@@ -75,15 +75,15 @@
    "last_hit": "2026-10-26"
   },
   {
+   "domain": "cveawg.mitre.org",
+   "weight": 20.0,
+   "hits": 27,
+   "last_hit": "2026-11-03"
+  },
+  {
    "domain": "cisa.gov",
    "weight": 20.0,
    "hits": 27,
-   "last_hit": "2026-11-02"
-  },
-  {
-   "domain": "cveawg.mitre.org",
-   "weight": 20.0,
-   "hits": 26,
    "last_hit": "2026-11-02"
   },
   {
@@ -107,26 +107,26 @@
   {
    "domain": "hn.algolia.com",
    "weight": 20.0,
-   "hits": 21,
-   "last_hit": "2026-11-02"
+   "hits": 22,
+   "last_hit": "2026-11-03"
   },
   {
    "domain": "pypi.org",
    "weight": 20.0,
-   "hits": 21,
-   "last_hit": "2026-11-02"
+   "hits": 22,
+   "last_hit": "2026-11-03"
+  },
+  {
+   "domain": "aws.amazon.com",
+   "weight": 20.0,
+   "hits": 19,
+   "last_hit": "2026-11-03"
   },
   {
    "domain": "wiz.io",
    "weight": 20.0,
    "hits": 19,
    "last_hit": "2026-11-01"
-  },
-  {
-   "domain": "aws.amazon.com",
-   "weight": 20.0,
-   "hits": 18,
-   "last_hit": "2026-10-29"
   },
   {
    "domain": "sentinelone.com",
