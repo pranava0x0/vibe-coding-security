@@ -1369,6 +1369,10 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 
 ## 🟠 RECENT — verify exposure
 
+### 2026-11-02 — **Playwright agents and scrapers: check the actual Chromium build and sandbox**
+Playwright 1.64.1 bundles Chromium 156.0.8078.4, before the October 27 and 29 Chrome patches. For external browsing, use updated stable Chrome with the sandbox enabled. A local test dependency alone is not evidence of compromise.
+→ [Browser versions, launch settings and cache checks](advisories/2026-11-playwright-chromium-patch-gap.md)
+
 ### 2026-10-15 — **Lightning AI Studio platform: compromised credentials reached customer environments and connected services; access revoked 10-16; rotate keys stored in Studios**
 Lightning AI's undated incident page: identified 2026-10-15 23:00 UTC, all platform access revoked at 01:00 UTC on 10-16, read-only Drive access back through the CLI on 10-28, Studio, Jobs and Deployments still off. "Certain customer credentials were compromised" and used to reach environments and connected third-party services; keys tied to customers' cloud accounts were revoked. The vendor's instruction is to rotate secrets, API keys and GitHub credentials stored in Studio environments and check connected services' logs. Wiz lists it fourth of nine October platform breaches. Separate from the April `pytorch-lightning` PyPI compromise.
 → [advisories/2026-10-lightning-ai-studio-platform-credential-compromise-october-15-rotate-keys.md](advisories/2026-10-lightning-ai-studio-platform-credential-compromise-october-15-rotate-keys.md)
