@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-11-02 | [Playwright 1.64.1 Chromium patch gap and sandbox settings](2026-11-playwright-chromium-patch-gap.md) | high | mitigated |
 | 2026-11-02 | [LLMjacking: stolen cloud and LLM API keys billed for inference at $100,000 a day; GTIG names Jet Night and UNC6993 (2026-11-02)](2026-11-llmjacking-stolen-cloud-and-llm-api-keys-billed-for-inference-gtig-jet-night-unc6993.md) | high | ongoing |
 | 2026-11-02 | [Chainlit 2.12.0: a `..;` segment bypasses the MCP allowed_urls path scope (CVE-2026-120492, no fix); 2.12.0 was the fix for SSRF CVE-2026-45019](2026-11-chainlit-2-12-0-mcp-allowed-urls-semicolon-path-bypass-cve-2026-120492-no-fix.md) | medium | mitigated |
 | 2026-11-01 | [Prefab UI 0.14.0 to 0.20.2: Generative UI sandbox ran Deno with full permissions, LLM code reads and writes server files (CVE-2026-120338, 10.0); fixed 0.21.0](2026-11-prefab-ui-generative-ui-sandbox-deno-permissions-host-file-write-cve-2026-120338-fixed-0-21-0.md) | critical | patched |

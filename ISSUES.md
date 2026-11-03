@@ -10,6 +10,10 @@ _None open._
 
 ## Fixed
 
+### Browser automation coverage — 2026-11-03
+
+The repo audit omitted browser executables downloaded separately from their automation packages. Added a [Playwright advisory](advisories/2026-11-playwright-chromium-patch-gap.md) and a browser-launch check to the audit playbook. Root cause: content gap.
+
 ### Sweep routine: silent switch from Fable 5.1 to Opus 4.8, and three recurring wastes of turns — 2026-10-09
 
 Prompted by a review of the daily routine's run logs for 2026-09-09 to 2026-10-08. Four problems.
