@@ -2,7 +2,7 @@
 id: 2026-10-northflank-security-incident-assume-all-environment-variables-decrypted-ai-keys-abused
 title: "Northflank security incident: assume every environment variable was decrypted; customers report AI API keys abused (2026-10-30)"
 date_disclosed: 2026-10-30
-last_updated: 2026-11-01
+last_updated: 2026-11-04
 severity: critical
 status: active
 ecosystems: [paas, kubernetes, docker, vibe-platform]
@@ -61,3 +61,4 @@ Why it is here: a vibe-coded app's whole secret set, the database URL, the Strip
 - [Wiz — Black October for AI developer platforms](https://www.wiz.io/blog/black-october-for-ai-developer-platforms) — fetched 2026-11-01: dated 2026-10-30, authors Benjamin Read and Rami McCarthy; the nine-platform list with dates and the environment-variable pattern quoted above; Northflank's entry links the status page.
 - [Hacker News — Northflank Breached (item 50305025)](https://hn.algolia.com/api/v1/items/50305025) — read 2026-11-01 through the Algolia items API: posted 2026-10-30 15:10 UTC, 475 points, 31 top-level comments, link target the status page.
 - [Qovery — Northflank Security Incident (October 30, 2026): What Happened and How to Protect Your Secrets](https://www.qovery.com/blog/northflank-security-incident-secrets-own-cloud) — fetched 2026-11-01: a competitor's write-up (Romaric Philogene, 2026-10-30) that reproduces the status-page timeline and notes the absent root cause and the unaddressed bring-your-own-cloud question; used only for what it attributes to the status page and to Wiz.
+- [SecurityWeek — AI-Linked Breaches Mount as WorkOS, Northflank, Trigger.dev Disclose Hacks](https://www.securityweek.com/ai-linked-breaches-mount-as-workos-northflank-trigger-dev-disclose-hacks/) — fetched 2026-11-04 (2026-11-04, Ionut Arghire): lists the incident with the status page as its only source, frames the month's platform breaches as a hunt for monetisable AI access tokens, and quotes Wiz on several actors using the same compromised keys.

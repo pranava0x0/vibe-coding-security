@@ -2,7 +2,7 @@
 id: 2026-11-trigger-dev-security-incident-environment-variables-exposed-subset-of-organizations-rotate
 title: "Trigger.dev security incident 2026-11-01: an attacker read environment variables for a subset of organizations; no root cause published"
 date_disclosed: 2026-11-01
-last_updated: 2026-11-03
+last_updated: 2026-11-04
 severity: high
 status: ongoing
 ecosystems: [trigger-dev, background-jobs, nextjs, supabase, environment-variables, hosted-platform]
@@ -50,3 +50,4 @@ Trigger.dev, the TypeScript background-jobs and AI-workflow platform, said on 20
 - [The Register — Thieves pilfer environment variables from Trigger AI workflow tool](https://www.theregister.com/security/2026/11/02/thieves-pilfer-environment-variables-from-trigger-ai-workflow-tool/5306998) — fetched 2026-11-03: 2026-11-02 16:44 UTC, Brandon Vigliarolo; the spokesperson's "wait for a full incident report", the Stripe, Supabase and Slack webhooks, customers named from the vendor's site without any claim they were affected.
 - Hacker News item 50331784 ("Trigger.dev customer environment variables exposed", 166 points, about 86 comments), read through the Algolia items API 2026-11-03: the "Resolved" objections, the root-cause speculation, no commenter claiming to be affected or staff.
 - [triggerdotdev/trigger.dev — security advisories](https://github.com/triggerdotdev/trigger.dev/security/advisories) — fetched 2026-11-03: newest advisory 2026-10-20 (GHSA-65rr-73jq-6qhf); no advisory for this incident.
+- [SecurityWeek — AI-Linked Breaches Mount as WorkOS, Northflank, Trigger.dev Disclose Hacks](https://www.securityweek.com/ai-linked-breaches-mount-as-workos-northflank-trigger-dev-disclose-hacks/) — fetched 2026-11-04 (2026-11-04, Ionut Arghire): lists the incident with the blog post as its only source and adds no detail. The blog post re-read 2026-11-04 has no update section, no root cause and no count; GitBook's 2026-11-02 incident is filed separately.
