@@ -2,7 +2,7 @@
 id: 2026-11-workos-october-30-internal-sales-tool-incident-crm-support-slack-excerpts-phishing-risk
 title: "WorkOS incident 2026-10-30: an internal sales API exposed CRM contacts, support summaries and customer Slack excerpts; production untouched, expect targeted phishing"
 date_disclosed: 2026-11-02
-last_updated: 2026-11-03
+last_updated: 2026-11-04
 severity: medium
 status: ongoing
 ecosystems: [workos, auth-sdk, saas-vendor, crm, slack, salesforce, snowflake]
@@ -47,3 +47,4 @@ WorkOS, the authentication and SSO vendor behind many generated apps' login flow
 - [Cryptika — Hackers Use ARTEX AI to Breach WorkOS and Access Customer Slack Conversations](https://www.cryptika.com/hackers-use-artex-ai-to-breach-workos-and-access-customer-slack-conversations/) — fetched 2026-11-03: 2026-11-03, credited to Cyber Security News; confirms the bulletin does not name the framework and that the ARTEX description comes from GTIG, Mandiant and Wiz research, not from WorkOS.
 - [WorkOS — blog index](https://workos.com/blog) — fetched 2026-11-03: no post about the incident as of the read; the newest posts are 2026-11-03.
 - [Mallory — WorkOS Breach Exposes Sales and Support Data Through Internal Application](https://mallory.ai/stories/01a19eb9-b051-73cc-ba2e-fa100274adf1) — fetched 2026-11-03: an aggregator timeline that links only Cryptika, Cyber Security News and the HN item; it adds the statement that "traffic from Hong Kong and China does not establish attribution", which is its own.
+- [SecurityWeek — AI-Linked Breaches Mount as WorkOS, Northflank, Trigger.dev Disclose Hacks](https://www.securityweek.com/ai-linked-breaches-mount-as-workos-northflank-trigger-dev-disclose-hacks/) — fetched 2026-11-04 (2026-11-04, Ionut Arghire): restates the bulletin, says the attack "relied on" the Artex framework, notes Artex's reported use by Storm-0940 elsewhere without attributing WorkOS to that group, lists the incident beside Chainstack (2026-10-26, third-party component, customer database and password hashes). The WorkOS bulletin re-read 2026-11-04 carries no update after 2026-11-02 and still no customer count.
