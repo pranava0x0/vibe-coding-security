@@ -6282,6 +6282,16 @@
    "tier": "research",
    "weight": 5
   },
+  "sekoia.com": {
+   "weight": 5,
+   "hits": 1,
+   "last_hit": "2026-11-04",
+   "ecosystems": [
+    "web",
+    "third-party-script"
+   ],
+   "tier": "research"
+  },
   "siliconangle.com": {
    "ecosystems": [
     "claude-cowork",

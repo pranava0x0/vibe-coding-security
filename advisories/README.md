@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-11-04 | [Plerdy SEO Tracker click script served modified code from 2026-08-27 to 2026-09-03 (Sekoia, APT29): check whether your site embedded it and tell visitors](2026-11-plerdy-seo-tracker-click-script-compromised-august-27-to-september-3-check-embeds-and-visitors.md) | medium | contained |
 | 2026-11-03 | [GitBook security incident 2026-11-02: infrastructure credentials taken by an attacker using AI agents; rotate API tokens, Git Sync and integration secrets, re-authenticate the MCP server](2026-11-gitbook-november-2-security-incident-ai-agents-rotate-api-tokens-git-sync-secrets-reauth-mcp-server.md) | high | ongoing |
 | 2026-11-03 | [SurrealDB published 27 advisories with 4.0.0 on 2026-11-03: MCP session hijack CVE-2026-121419 (fixed 3.3.0), MCP identifier statement injection (fixed 4.0.0)](2026-11-surrealdb-4-0-0-day-twenty-seven-advisories-mcp-session-hijack-cve-2026-121419-fixed-3-3-0-mcp-identifier-injection-fixed-4-0-0.md) | high | patched |
 | 2026-11-03 | [Binance's initial findings on the 2026-10-29 theft: trojanized AI coding tool from a search result, fake-interview coding assignment, internal AI tool as pivot](2026-11-binance-october-29-heist-initial-findings-trojanized-ai-coding-tool-search-result-fake-interview-assignment-internal-ai-tool.md) | high | ongoing |

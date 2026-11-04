@@ -8,6 +8,10 @@
 
 ## 🔴 ACTIVE — react now
 
+### 2026-11-04 — **Plerdy SEO Tracker click script served modified code from 2026-08-27 to 2026-09-03 (Sekoia, APT29): check whether your site embedded it and tell visitors**
+Sekoia (2026-11-04) reports that the click-tracking file Plerdy serves from its own host carried modified code from 2026-08-27 to 2026-09-03 and sent visitors on out-of-date iOS and Android devices to exploit delivery for already-fixed flaws; thousands of sites, most Ukrainian, loaded it, and the report names no vendor statement. If your site embedded the script in that window, remove or re-verify the embed, invalidate sessions issued to mobile visitors during the window, and tell them to update their devices and rotate saved passwords.
+→ [advisories/2026-11-plerdy-seo-tracker-click-script-compromised-august-27-to-september-3-check-embeds-and-visitors.md](advisories/2026-11-plerdy-seo-tracker-click-script-compromised-august-27-to-september-3-check-embeds-and-visitors.md)
+
 ### 2026-11-03 — **GitBook security incident 2026-11-02: infrastructure credentials taken by an attacker using AI agents; rotate API tokens, Git Sync and integration secrets, re-authenticate the MCP server**
 GitBook's incident page says an attacker "gained unauthorized access to some of our infrastructure credentials" at 19:00 CET on 2026-11-02 in "a sophisticated, highly targeted attack using AI agents" and may have accessed integration tokens, Git Sync secrets, API tokens and visitor questions to GitBook Assistant. Every personal API token was revoked; GitBook tells organizations to rotate GitBook and third-party tokens, published-integration secrets, and re-authenticate the GitBook MCP server. Resolved 2026-11-04 11:36 CET, post-mortem promised within 24 hours, no root cause or count. The account that reached a wide audience was a customer's support-ticket reply on Hacker News.
 → [advisories/2026-11-gitbook-november-2-security-incident-ai-agents-rotate-api-tokens-git-sync-secrets-reauth-mcp-server.md](advisories/2026-11-gitbook-november-2-security-incident-ai-agents-rotate-api-tokens-git-sync-secrets-reauth-mcp-server.md)
