@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-11-04
+**Last refreshed:** 2026-11-05
 
 ## Quick start
 
@@ -55,10 +55,11 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-11-04)
+## Active threat families (as of 2026-11-05)
 
 The highest-risk ongoing threat families for vibe coders:
 
+- **The feature that hands your phone's instructions to your desktop agent also takes them from any browser extension (Claude Dispatch, Forever Security 2026-11-04); the microVM under your code sandbox gave guest root the VMM's memory for eight weeks after the silent fix (Firecracker CVE-2026-122192); and Next.js shipped seven more cache-isolation and cookie-header fixes (16.4.5, 15.5.29, 2026-11-03)** — a browser extension with access to claude.ai could open the Dispatch page, address the user's Claude Desktop, send prompts and click its own approvals until the agent ran a command; Anthropic closed the May report as a duplicate and Dispatch is still in limited beta (`unconfirmed`, one researcher). Firecracker 0.23.0 to 1.16.1 let a root guest on a snapshot-restored microVM with a balloon read and modify Firecracker process memory; fixed 1.16.2 and 1.17.0 on 2026-09-10 as a bugfix, CVE on 2026-11-04. Next.js: four `use cache` root-param and binary-argument leaks, a self-hosted shell poisoning, an Edge header exposing HttpOnly cookies to same-origin script, an SVG rejection bypass. Kernel (browser infrastructure for agents) and GitBook's post-mortem (SSO flaw, misconfigured GitHub App) extend the platform wave; Jan 0.8.5 to 0.8.7 followed dangling symlinks out of the workspace (CVE-2026-122235, fixed 0.8.8).
 - **The docs platform's MCP connection is a credential to rotate, and the agent-memory database shipped 27 no-CVE advisories beside one CVE (GitBook 2026-11-02, SurrealDB 4.0.0 2026-11-03)** — GitBook says an attacker using AI agents took infrastructure credentials and may have read API tokens, Git Sync secrets, integration tokens and visitor questions; it revoked every personal token and tells organizations to re-authenticate the GitBook MCP server. SurrealDB's tab carries 27 no-CVE advisories patched only in 4.0.0 (MCP identifier injection, JavaScript bridge capability bypass, bucket symlink traversal) beside VulnCheck's CVE-2026-121419 for the older MCP session hijack advisory (fixed 3.3.0); Binance's initial findings start with a trojanized AI coding tool from a search result and a fake-interview assignment.
 - **The workflow platform that runs your jobs holds your secrets decrypted, and by disclosure date it is the seventh since 2026-10-09 to say so (Trigger.dev 2026-11-01)** — "the attacker gained unauthorized access to environment variables" for a subset of organizations, exploit blocked, no root cause; rotate every database, Stripe, Supabase and provider key that was a Trigger.dev variable. → `advisories/2026-11-trigger-dev-security-incident-environment-variables-exposed-subset-of-organizations-rotate.md`
 - **Your LLM API key is the thing being stolen, and the bill arrives in hours (LLMjacking, GTIG 2026-11-02)** — Mandiant's 2026 incidents: stolen IAM keys, GitHub tokens and session tokens, provider keys harvested from public repositories and validated with `max_tokens=1`, LiteLLM CVE-2026-40217 used to mint admin keys, and a resale service (Jet Night) pushing 500,000 calls onto one victim in eight hours; charges above $100,000 a day. Scope and cap every key, alert on LLM service enablement in cloud audit logs, rotate anything that was ever public. → `advisories/2026-11-llmjacking-stolen-cloud-and-llm-api-keys-billed-for-inference-gtig-jet-night-unc6993.md`

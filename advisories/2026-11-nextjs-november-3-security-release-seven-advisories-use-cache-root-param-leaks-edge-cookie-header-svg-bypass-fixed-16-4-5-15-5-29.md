@@ -1,0 +1,72 @@
+---
+id: 2026-11-nextjs-november-3-security-release-seven-advisories-use-cache-root-param-leaks-edge-cookie-header-svg-bypass-fixed-16-4-5-15-5-29
+title: "Next.js 2026-11-03 security release: seven advisories, use cache root-param leaks, Edge HttpOnly cookie header, SVG rejection bypass; fixed 16.4.5 and 15.5.29"
+date_disclosed: 2026-11-03
+last_updated: 2026-11-05
+severity: medium
+status: patched
+ecosystems: [nextjs, npm, vercel, react, javascript]
+tools_affected: ["next 16.0.0 through 16.4.4 (the advisories print <= 16.4.2; the fix is 16.4.5)", "next 15.0.0 through 15.5.28 for the Edge cookie header and the SVG rejection bypass (fix 15.5.29)", "self-hosted next start deployments with Cache Components for the shell-poisoning and response-framing issues", "any vibe-coded app on Next.js 15 or 16 that sets session cookies on Edge routes or runs multi-tenant use cache functions"]
+tags: [cve-pending, ghsa, nextjs, security-release, cache-components, use-cache, root-params, cross-tenant, cache-poisoning, httponly, edge-runtime, image-optimization, svg, self-hosted, vendor-advisory, patched]
+---
+
+## TL;DR
+Vercel's scheduled November release (2026-11-03) fixes seven Moderate advisories in Next.js 16.4.5 and 15.5.29: four cache-isolation bugs in Cache Components and `use cache` that can serve one tenant's or user's cached content to another, a shared fallback-shell poisoning on self-hosted `next start` deployments, an Edge-runtime response header that duplicates `Set-Cookie` into a header same-origin JavaScript can read (so an HttpOnly session cookie is readable by any script on the page), and an image-optimizer bypass of `dangerouslyAllowSVG: false` that reaches the SVG decoder the October RCE lived in. The release post calls the `unstable_cache` leak "High Severity" while its advisory page says Moderate 6.3; the advisory pages print CVE-2026-119346 to CVE-2026-119351 and CVE-2026-119790, none of which CVE Services had on 2026-11-05, and list no patched versions. Upgrade from the release post: `next@16.4.5` (published 18:01 UTC) or `next@15.5.29` (18:36 UTC).
+
+## What happened
+
+**The seven, from the release post and the advisory pages.**
+
+1. **GHSA-mfr8-8qww-v76h, cross-root-param disclosure through `unstable_cache()`.** Affected 16.3.0 and later. When the same `'use cache'` function is called directly during rendering and through `unstable_cache()`, and it reads a root param (a tenant id, a locale), a race during the first fill after process start let the `unstable_cache()` caller join the in-flight fill and receive another request's result without the root-param check, then store it under a key lacking the root param. Later requests with other root-param values got the same data until revalidation or eviction. Workaround: never nest `'use cache'` inside `unstable_cache()`; outside the race window this already throws. The post's heading says High Severity; the page says Moderate, CVSS 4.0 6.3 (`AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:N/VA:N`). Page prints CVE-2026-119790.
+2. **GHSA-vc7v-qv4w-wrv8, cross-root-param leak in nested `use cache` functions via delayed inner stream metadata.** Affected 16.2.0 and later; the page prints "Patched 16.4.2", which predates the advisory, while the release post names 16.4.5. An inner cached function that reads a root param and returns an early value alongside a slower promise lets the outer entry be stored before the inner's root-param dependency is recorded, so the outer entry is reused across root-param values and bypasses the inner caches' tag invalidation and lifetimes. The page calls it a variant of GHSA-h694-7cp9-m8p3 (the September release, [tracked here](2026-09-nextjs-september-2026-security-release-seven-advisories.md)) that the earlier fix did not cover. 6.3. Page prints CVE-2026-119351.
+3. **GHSA-rhh4-g77r-r9qj, cross-user disclosure and poisoning through binary `use cache` arguments.** Affected 16.0.0 through 16.4.2 per the page. Distinct `Uint8Array` or `Blob` arguments can produce the same cache identity; where an application uses such arguments to distinguish users, one caller can receive another's cached result or seed the entry another receives. 6.3. Page prints CVE-2026-119349.
+4. **GHSA-vvgp-ww4w-46vf, shared fallback-shell poisoning via request-supplied placeholder route params.** Affected 16.4.0 and later; self-hosted `next start` with `cacheComponents: true` and Partial Prefetching unset or off. One unauthenticated GET whose path segment matches the percent-encoded bracketed name of a route param is treated as an unresolved placeholder; a layout above it renders the concrete value into the shared shell, and the result, including its HTTP status, is cached under the shared key. Outcomes: a persistent 404 for every URL under that shell (if the layout calls `notFound()`), with no expiry and no logged error, or the attacker's value in server HTML that the client corrects on hydration. No markup injection, no data disclosure. Workaround: `partialPrefetching: true`. 6.3. Page prints CVE-2026-119350.
+5. **GHSA-pc58-hwjq-p385, cross-client response injection through stale compressed response framing.** Self-hosted applications that return an attacker-controlled fetched `Response` unchanged can forward decompressed body bytes with the original compressed framing headers; behind an HTTP/1.1 reverse proxy that queues pipelined requests on a shared backend connection, responses can be assigned to the wrong clients. The post says this needs the described proxy behaviour and does not apply to every proxy. The page's affected field prints two conflicting ranges (">= 16.0.0" and "< 16.0.0"). 6.3 with `AC:H`. Page prints CVE-2026-119348.
+6. **GHSA-f3mh-rxg3-f5g2, HttpOnly cookie exposure through an internal header on Edge routes.** Affected 16.0.0 through 16.4.2 and 15.0.0 through 15.5.28 per the page. App Router Edge Route Handlers and Pages Router Edge API routes that set cookies with `NextResponse.cookies.set()` also emit the internal `x-middleware-set-cookie` header in the public response, and that header, unlike `Set-Cookie`, is readable by same-origin JavaScript, HttpOnly or not. Impact needs attacker-controlled script on the same origin; the post says it is not an independent way to run script and that Node.js route handlers and `cookies().set()` were not affected in the reproduction. CVSS 4.0 6.0, `VC:H`. Page prints CVE-2026-119346.
+7. **GHSA-7qx7-33qx-rqx2, SVG rejection bypass in image optimization.** Affected 16.0.0 through 16.4.2 and 15.0.0 through 15.5.28. An image from a permitted source can be misclassified as AVIF and bypass `images.dangerouslyAllowSVG: false` (the default), after which the native backend identifies and decodes the bytes as SVG. The allowlist still applies; the post says the finding increases exposure to SVG parser resource exhaustion and decoder vulnerabilities and does not itself demonstrate XSS or RCE. The decoder it reaches is the one whose librsvg flaw was the 2026-10-14 Critical ([tracked here](2026-10-nextjs-react-october-14-out-of-band-use-cache-rsc-rce-svg-sharp-server-actions-dos.md)); the vendor pages do not connect the two, this corpus does. CVSS 4.0 6.9, availability only. Page prints CVE-2026-119347.
+
+**Versions and dates, from npm.** `next@16.4.5` was published 2026-11-03 18:01 UTC and `15.5.29` at 18:36 UTC; `latest` is 16.4.5 and `backport` is 15.5.29. 16.4.3 (2026-10-23) and 16.4.4 (2026-11-02) sit between the pages' "<= 16.4.2" upper bounds and the fix; the release post's instruction to install 16.4.5 is the one to follow, and this file treats 16.4.3 and 16.4.4 as affected because no vendor document says otherwise. None of the seven advisory pages lists a patched version when read on 2026-11-05, and one (GHSA-vc7v-qv4w-wrv8) lists 16.4.2, a version published 2026-10-15. The advance notice (2026-10-27) promised seven Medium advisories; the release post delivered seven, labelling one High in its heading.
+
+**The ids.** Each GHSA page prints a CVE id; `cveawg.mitre.org` returned `CVE_RECORD_DNE` for all seven on 2026-11-05. The ids are recorded here as what the pages print and are not used in CVE-keyed statements until they resolve. The GitHub Advisory Database's `next` listing had not yet picked up the seven when read; its newest rows were the 2026-10-22 entries for the October release.
+
+**Why it matters for vibe-coded apps.** Cache Components and `use cache` are the defaults a generator reaches for in Next.js 16, and multi-tenant apps key them on a root param. Items 1 to 3 are the shape where tenant A sees tenant B's cached page. Item 6 turns every XSS, or every third-party script, on an Edge-routed app into a session-cookie read, which removes the protection HttpOnly was there to give. Item 7 re-opens the decode path that carried last month's RCE for anyone who left `dangerouslyAllowSVG` at its safe default and believed it.
+
+## Am I affected?
+
+```bash
+npm ls next 2>/dev/null | grep -E 'next@'          # 16.0.0 to 16.4.4 or 15.0.0 to 15.5.28 is affected
+grep -rn "cacheComponents\|partialPrefetching\|dangerouslyAllowSVG" next.config.* 2>/dev/null
+grep -rln "'use cache'\|\"use cache\"" app/ src/ 2>/dev/null | head
+grep -rln "unstable_cache" app/ src/ 2>/dev/null | head
+grep -rln "runtime = ['\"]edge['\"]" app/ pages/ src/ 2>/dev/null | head   # Edge routes that may set cookies
+```
+
+- Any `'use cache'` function that reads a root param, or that is also called through `unstable_cache()`, is in items 1 and 2.
+- `Uint8Array` or `Blob` arguments to a `'use cache'` function are item 3.
+- Self-hosted `next start` with `cacheComponents: true` and no `partialPrefetching: true` is item 4; a reverse proxy that pipelines to a shared backend connection plus route handlers that forward fetched responses unchanged is item 5.
+- An Edge route handler or Edge API route that calls `NextResponse.cookies.set()` for a session cookie is item 6.
+- `next/image` with remote patterns pointing at user-uploadable hosts is item 7.
+- Vercel-hosted deployments: the post does not say which items the platform mitigated; treat the upgrade as required everywhere.
+
+## If you are affected
+
+- Upgrade: `npm install next@16.4.5` on 16.x, `npm install next@15.5.29` on 15.x, and redeploy. Pin the version in the lockfile.
+- Until then: add `partialPrefetching: true` for item 4; do not call `'use cache'` functions inside `unstable_cache()` for item 1; move session-cookie setting off Edge routes or to `cookies().set()` for item 6.
+- If a multi-tenant app ran the affected versions with Cache Components, review whether tenant-scoped cached content could have been served across tenants, and revalidate the affected tags after upgrading.
+- If an Edge route set session cookies and the app also had any script injection or an untrusted third-party script, rotate session signing keys and invalidate sessions. See [if your web app was compromised](../playbooks/if-your-webapp-was-compromised.md).
+
+## Prevention
+
+- Subscribe to the Next.js security advisories tab and the `nextjs.org/blog` advance notices; the November release was announced a week ahead, like September's and October's.
+- Keep `next` on the newest patch of your line rather than a pinned older patch; three releases in seven weeks have each carried seven or more advisories.
+- Treat cache keys as security boundaries: anything that distinguishes users or tenants must be in the key, and a framework bug in that key is a cross-tenant leak. See [auditing a vibe-coded repo](../playbooks/auditing-a-vibe-coded-repo.md).
+
+## Sources
+- [Next.js blog — November 2026 Security Release](https://nextjs.org/blog/november-2026-security-release) — fetched 2026-11-05 (2026-11-03, Jamiboy Mohammad and Sebastian Silbermann): the seven items with their impact descriptions, the "High Severity" heading on the `unstable_cache` item, the install commands for 15.5.29 and 16.4.5.
+- [Next.js blog — Upcoming Next.js November Security Release](https://nextjs.org/blog/upcoming-nextjs-security-release-november-2026) — fetched 2026-11-05 (2026-10-27): "seven medium vulnerabilities", the 2026-11-03 date, the banner linking the release.
+- [vercel/next.js — security advisories tab](https://github.com/vercel/next.js/security/advisories) — fetched 2026-11-05: seven rows dated 2026-11-03, all Moderate, beside the October and September rows.
+- The seven advisory pages, each fetched 2026-11-05, all published 2026-11-03 by eps1lon, none listing a patched version: [GHSA-mfr8-8qww-v76h](https://github.com/vercel/next.js/security/advisories/GHSA-mfr8-8qww-v76h) (16.3.0 and later, 6.3, prints CVE-2026-119790), [GHSA-vc7v-qv4w-wrv8](https://github.com/vercel/next.js/security/advisories/GHSA-vc7v-qv4w-wrv8) (16.2.0 and later, "Patched 16.4.2", 6.3, prints CVE-2026-119351), [GHSA-rhh4-g77r-r9qj](https://github.com/vercel/next.js/security/advisories/GHSA-rhh4-g77r-r9qj) (16.0.0 through 16.4.2, 6.3, prints CVE-2026-119349), [GHSA-vvgp-ww4w-46vf](https://github.com/vercel/next.js/security/advisories/GHSA-vvgp-ww4w-46vf) (16.4.0 and later, 6.3, prints CVE-2026-119350, workaround `partialPrefetching: true`), [GHSA-pc58-hwjq-p385](https://github.com/vercel/next.js/security/advisories/GHSA-pc58-hwjq-p385) (conflicting ranges, 6.3, prints CVE-2026-119348), [GHSA-f3mh-rxg3-f5g2](https://github.com/vercel/next.js/security/advisories/GHSA-f3mh-rxg3-f5g2) (16.0.0 through 16.4.2 and 15.0.0 through 15.5.28, 6.0, prints CVE-2026-119346), [GHSA-7qx7-33qx-rqx2](https://github.com/vercel/next.js/security/advisories/GHSA-7qx7-33qx-rqx2) (same ranges, 6.9, prints CVE-2026-119347).
+- CVE Services (`cveawg.mitre.org/api/cve/<id>`), queried 2026-11-05 for all seven ids: `CVE_RECORD_DNE` for each.
+- npm registry, `npm view next time` and `dist-tags`, queried 2026-11-05: 16.4.5 at 2026-11-03 18:01 UTC, 15.5.29 at 18:36 UTC, 16.4.3 at 2026-10-23, 16.4.4 at 2026-11-02, `latest` 16.4.5, `backport` 15.5.29.
+- [GitHub Advisory Database — `next` npm listing](https://github.com/advisories?query=next+sort%3Apublished-desc+ecosystem%3Anpm) — fetched 2026-11-05: newest `next` rows dated 2026-10-22; the November seven not yet present.
+- Related in this corpus: [September 2026 release](2026-09-nextjs-september-2026-security-release-seven-advisories.md), [October 14 out-of-band release](2026-10-nextjs-react-october-14-out-of-band-use-cache-rsc-rce-svg-sharp-server-actions-dos.md), [Sentry Next.js tunnel-route bypass](2026-10-sentry-nextjs-tunnelroute-middleware-bypass-cve-2026-114139-dompurify-ghsa-cg2g-xh64-v4q7.md).
