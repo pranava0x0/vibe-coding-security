@@ -1,6 +1,6 @@
 ---
 id: 2026-09-docker-sandboxes-virtiofs-symlink-host-escape
-title: "Docker Sandboxes — the microVM that runs your coding agent could read and modify arbitrary macOS host files through a virtio-fs symlink race (CVE-2026-77179, CVSS 9.4) and reach any host Unix socket (CVE-2026-79994, 8.7); fixed in 0.42.0 alongside a D-Bus host-command bug and a cross-sandbox OAuth hijack; sbx cp host-side symlink follow (CVE-2026-103916) fixed only in 0.51.0"
+title: "Docker Sandboxes — the microVM that runs your coding agent could read and modify arbitrary macOS host files through a virtio-fs symlink race (CVE-2026-77179, CVSS 9.4) and reach any host Unix socket (CVE-2026-79994, 8.7); fixed in 0.42.0 alongside a D-Bus host-command bug and a cross-sandbox OAuth hijack"
 date_disclosed: 2026-09-15
 last_updated: 2026-11-05
 severity: critical
@@ -11,7 +11,7 @@ tags: [cve, sandbox-escape, symlink, toctou, virtio-fs, microvm, agent-sandboxin
 ---
 
 ## TL;DR
-**Docker Sandboxes** is Docker's product for running AI coding agents (Claude Code, Codex, Copilot, Cursor, Devin, Gemini, Kiro, OpenCode and others) in per-agent microVMs with the project directory shared in — the isolation layer a lot of readers adopted after the run-of-agent escape bugs tracked here. Docker's docs promised "Symlinks pointing outside the workspace scope are not followed." Two advisories published 2026-09-15 show they were. **CVE-2026-77179** (CVSS 4.0 **9.4**, Critical, CWE-59; Oren Yomtov, accomplish.ai): on macOS the **virtio-fs host server** followed symlinks when reopening an unlinked file from a stored path, so a malicious guest process could replace a parent directory with a symlink and "read or modify arbitrary host files as the VMM user, potentially achieving host code execution." **CVE-2026-79994** (**8.7**, High, CWE-367; Jurre van Bergen, ThreatNotify): the guest-to-host Unix-socket relay validated a socket path and later reconnected by pathname, so a symlink swap between check and use made "the host connect to an arbitrary AF_UNIX socket outside the shared workspace." Both fixed in **0.42.0 (2026-09-07)**, whose release notes also close a bug where "a sandboxed process could get the daemon to open a host D-Bus transport and execute an arbitrary command on the host" and one where "a malicious sandbox could hijack another sandbox's OAuth login." The "malicious guest" is whatever your agent runs — a poisoned dependency, a prompt-injected agent, a test suite from an untrusted repo. Upgrade; until then prefer clone mode over read-write mounts.
+**Docker Sandboxes** is Docker's product for running AI coding agents (Claude Code, Codex, Copilot, Cursor, Devin, Gemini, Kiro, OpenCode and others) in per-agent microVMs with the project directory shared in — the isolation layer a lot of readers adopted after the run-of-agent escape bugs tracked here. Docker's docs promised "Symlinks pointing outside the workspace scope are not followed." Two advisories published 2026-09-15 show they were. **CVE-2026-77179** (CVSS 4.0 **9.4**, Critical, CWE-59; Oren Yomtov, accomplish.ai): on macOS the **virtio-fs host server** followed symlinks when reopening an unlinked file from a stored path, so a malicious guest process could replace a parent directory with a symlink and "read or modify arbitrary host files as the VMM user, potentially achieving host code execution." **CVE-2026-79994** (**8.7**, High, CWE-367; Jurre van Bergen, ThreatNotify): the guest-to-host Unix-socket relay validated a socket path and later reconnected by pathname, so a symlink swap between check and use made "the host connect to an arbitrary AF_UNIX socket outside the shared workspace." Both fixed in **0.42.0 (2026-09-07)**, whose release notes also close a bug where "a sandboxed process could get the daemon to open a host D-Bus transport and execute an arbitrary command on the host" and one where "a malicious sandbox could hijack another sandbox's OAuth login." The "malicious guest" is whatever your agent runs — a poisoned dependency, a prompt-injected agent, a test suite from an untrusted repo. Upgrade; until then prefer clone mode over read-write mounts. **Update 2026-11-05:** a third symlink finding, CVE-2026-103916 (`sbx cp` follows a workspace symlink on the host side, 0.28.0 before 0.51.0), is fixed only in 0.51.0; see the Update below.
 
 ## What happened
 
@@ -30,7 +30,7 @@ tags: [cve, sandbox-escape, symlink, toctou, virtio-fs, microvm, agent-sandboxin
 ## Am I affected?
 
 ```bash
-sbx version 2>/dev/null || docker sandbox version 2>/dev/null   # need >= 0.42.0
+sbx version 2>/dev/null || docker sandbox version 2>/dev/null   # need >= 0.42.0 for the virtio-fs and socket bugs; >= 0.51.0 for the sbx cp symlink follow (CVE-2026-103916, Update 2026-11-05)
 # macOS: is the host-side VMM process older than the fix? Check the release you installed:
 ls -la ~/.docker/sandboxes 2>/dev/null; docker desktop version 2>/dev/null
 # Which workspaces were shared read-write (direct mount) rather than clone/mountless?
@@ -41,7 +41,7 @@ If a sandbox ran untrusted code (an unreviewed repo's tests, a dependency instal
 
 ## If you are affected
 
-- Upgrade to **0.42.0 or later** and restart existing sandboxes.
+- Upgrade to **0.51.0 or later** (0.42.0 fixed the two September CVEs; 0.51.0, 2026-11-03, fixes the `sbx cp` host-side symlink follow CVE-2026-103916) and restart existing sandboxes.
 - Audit the host user's dotfiles and startup hooks for changes made during the exposure window (`~/.zshrc`, `~/.bash_profile`, `~/.ssh/authorized_keys`, `~/.claude/settings.json`, `~/.vscode/tasks.json`, LaunchAgents) — [`playbooks/if-your-local-ai-agent-was-exploited.md`](../playbooks/if-your-local-ai-agent-was-exploited.md).
 - Rotate credentials that lived on the host as files: [`playbooks/rotating-cloud-credentials.md`](../playbooks/rotating-cloud-credentials.md), [`playbooks/if-your-github-pat-leaked.md`](../playbooks/if-your-github-pat-leaked.md).
 
