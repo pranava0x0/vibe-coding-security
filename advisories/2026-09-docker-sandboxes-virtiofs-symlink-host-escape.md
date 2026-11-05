@@ -1,6 +1,6 @@
 ---
 id: 2026-09-docker-sandboxes-virtiofs-symlink-host-escape
-title: "Docker Sandboxes — the microVM that runs your coding agent could read and modify arbitrary macOS host files through a virtio-fs symlink race (CVE-2026-77179, CVSS 9.4) and reach any host Unix socket (CVE-2026-79994, 8.7); fixed in 0.42.0 alongside a D-Bus host-command bug and a cross-sandbox OAuth hijack"
+title: "Docker Sandboxes — the microVM that runs your coding agent could read and modify arbitrary macOS host files through a virtio-fs symlink race (CVE-2026-77179, CVSS 9.4) and reach any host Unix socket (CVE-2026-79994, 8.7); fixed in 0.42.0 alongside a D-Bus host-command bug and a cross-sandbox OAuth hijack; sbx cp host-side symlink follow (CVE-2026-103916) fixed only in 0.51.0"
 date_disclosed: 2026-09-15
 last_updated: 2026-11-05
 severity: critical

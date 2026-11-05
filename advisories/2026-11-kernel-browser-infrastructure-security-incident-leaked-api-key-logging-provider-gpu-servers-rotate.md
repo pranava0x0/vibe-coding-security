@@ -6,7 +6,7 @@ last_updated: 2026-11-05
 severity: medium
 status: contained
 ecosystems: [kernel, browser-infrastructure, web-agents, mcp, saas, api-keys]
-tools_affected: ["Kernel (kernel.sh) customers: Kernel API keys and the third-party secrets of app deployments that appeared in the logging provider's data", "browser sessions on the three affected GPU servers between 2026-11-03 05:41 and 07:46 UTC", "agents using Kernel through its SDKs, CLI or hosted MCP server with a key issued before 2026-11-03"]
+tools_affected: ["Kernel (kernel.sh) customers: Kernel API keys and the third-party secrets of app deployments that appeared in the logging provider's data", "browser sessions on the three affected GPU servers between 2026-11-03 06:09 and 07:46 UTC", "agents using Kernel through its SDKs, CLI or hosted MCP server with a key issued before 2026-11-03"]
 tags: [vendor-incident, credential-exposure, api-keys, browser-agents, logging-provider, cryptominer, artex, ai-developer-platform-wave, rotate-credentials, hacker-news]
 ---
 
@@ -19,7 +19,7 @@ Kernel, which sells cloud Chromium sessions for web agents with SDKs, a CLI and 
 
 **What Kernel is.** Its site describes "browser infrastructure for web agents and automations": cloud Chromium sessions controlled through an API, TypeScript, Python and Go SDKs and a CLI, persistent profiles, proxies, a captcha solver, live view and replays, vaults and payments, and a hosted MCP server over streamable HTTP. An agent that browses the web through Kernel authenticates with a Kernel API key; an app deployed to Kernel carries whatever third-party secrets the developer gave it. Those are the two credential categories the notice names.
 
-**The wave it joins.** This is the tenth hosted AI developer platform since 2026-10-09 to report theft of stored customer credentials, after Fireworks AI, Andromeda, Zeabur, Lightning AI, OpenCode Console, Railway, Northflank, Trigger.dev and GitBook, each tracked here, and the fourth vendor in a week (WorkOS, Chainstack, GitBook, Kernel) to name ARTEX or AI agents in its account. Kernel's "0.28% of customers" is the only count any of them has published. SecurityWeek's 2026-11-04 roundup, written before Kernel's notice, counts "at least a dozen" platforms and quotes Wiz on two cases that "shared an identical first unauthorized activity" within 30 minutes of credential access. Kernel is not in that article.
+**The wave it joins.** This is the ninth hosted AI developer platform since 2026-10-09 to report theft of stored customer credentials, after Fireworks AI, Zeabur, Lightning AI, OpenCode Console, Railway, Northflank, Trigger.dev and GitBook, each tracked here (Andromeda's 2026-10-20 notice is recorded in the pattern file and, as in the GitBook file, not counted), and the fourth vendor in a week (WorkOS, Chainstack, GitBook, Kernel) to name ARTEX or AI agents in its account. Kernel's "0.28% of customers" is the only count any of them has published. SecurityWeek's 2026-11-04 roundup, written before Kernel's notice, counts "at least a dozen" platforms and quotes Wiz on two cases that "shared an identical first unauthorized activity" within 30 minutes of credential access. Kernel is not in that article.
 
 **How it reached the public.** Hacker News item 50371427 ("Kernel.sh Hacked", 13 points, 2026-11-04 20:58 UTC) links the notice; commenters asked how the API key leaked, which the notice does not answer. No outlet had covered it on 2026-11-05.
 
@@ -27,7 +27,7 @@ Kernel, which sells cloud Chromium sessions for web agents with SDKs, a CLI and 
 
 1. **Did Kernel notify you?** The notice says affected organizations were notified and given remediation guidance on 2026-11-03. Check the account owner's inbox for a message from Kernel dated 2026-11-03 or 2026-11-04.
 2. **Keys and secrets.** List Kernel API keys issued before 2026-11-03 in your Kernel dashboard and the third-party secrets configured on any Kernel app deployment (provider keys, site credentials in vaults, payment details).
-3. **Browser sessions.** If your agents ran browser sessions on 2026-11-03 between 05:41 and 07:46 UTC, the notice says three of the four accessed servers ran browser sessions; it does not say whether session content was read.
+3. **Browser sessions.** If your agents ran browser sessions on 2026-11-03 between 06:09 UTC (first access to a customer-session server) and 07:46 UTC (servers taken offline), the notice says three of the four accessed servers ran browser sessions; it does not say whether session content was read.
 4. **Billing.** Check Kernel and the providers whose keys lived in a deployment for usage you did not generate between 2026-10-24 and 2026-11-03.
 
 ## If you are affected
