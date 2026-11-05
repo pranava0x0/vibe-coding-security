@@ -1,12 +1,12 @@
 ---
 id: 2026-11-gitbook-november-2-security-incident-ai-agents-rotate-api-tokens-git-sync-secrets-reauth-mcp-server
-title: "GitBook security incident 2026-11-02: infrastructure credentials taken by an attacker using AI agents; rotate API tokens, Git Sync and integration secrets, re-authenticate the MCP server"
+title: "GitBook security incident 2026-11-02: SSO flaw and misconfigured GitHub App gave an attacker production secrets; rotate API tokens and integration secrets, re-authenticate the MCP server"
 date_disclosed: 2026-11-03
 last_updated: 2026-11-05
 severity: high
 status: contained
 ecosystems: [gitbook, documentation, github, mcp, saas]
-tools_affected: ["GitBook organizations: personal API tokens (all revoked by GitBook), Git Sync secrets for GitHub and GitLab repositories, third-party API tokens stored for integrations, secrets of published integrations", "the GitBook MCP server connections used from Claude Code, Cursor and other agents", "visitor questions submitted to GitBook Assistant on published sites"]
+tools_affected: ["GitBook organizations: personal API tokens (all revoked by GitBook), Git Sync secrets for GitHub and GitLab repositories (rotated by GitBook per the post-mortem, no customer action), third-party API tokens stored for integrations, secrets of published integrations, signing keys of authenticated-access sites with a custom backend", "the GitBook MCP server connections used from Claude Code, Cursor and other agents", "visitor questions submitted to GitBook Assistant on published sites"]
 tags: [vendor-incident, credential-exposure, api-tokens, git-sync, mcp, documentation-platform, ai-agents, rotate-credentials, hacker-news, status-page, postmortem-published, sso, github-app, cloudflare-api-key]
 ---
 
@@ -36,10 +36,11 @@ GitBook says an attacker "gained unauthorized access to some of our infrastructu
 ## If you are affected
 
 - Rotate GitBook API tokens (the old ones are already revoked), the third-party tokens stored for integrations, and the secrets of published integrations, in that order, as GitBook's page instructs.
-- Treat Git Sync as a repository credential: rotate or reinstall the GitHub App or GitLab token GitBook used, and audit the repository for pushes you did not make. See [if your GitHub PAT leaked](../playbooks/if-your-github-pat-leaked.md).
+- Git Sync: the post-mortem says GitBook rotated the GitHub App keys and GitLab tokens itself and no customer action is needed; still audit each synced repository for commits, pushes or app actions since 2026-11-02 16:32 UTC, because GitBook says it cannot determine whether any were taken. See [if your GitHub PAT leaked](../playbooks/if-your-github-pat-leaked.md).
+- Authenticated access with a custom backend: regenerate the signing key in the GitBook app and update the backend (the one customer action the post-mortem adds).
 - Re-authenticate the GitBook MCP server in every agent that had it configured, and remove stale entries from `.mcp.json`, Cursor and Claude Code MCP settings. See [MCP hygiene](../prevention/mcp-hygiene.md).
 - If a docs page was altered, publish a notice to readers before restoring it, because the altered page is what readers already acted on.
-- Watch for the post-mortem and re-check this file. GitBook promised it by 2026-11-05.
+- The post-mortem is published (2026-11-04 20:30 CET, summarised in the Update below); GitBook promises further write-ups in the coming weeks.
 
 ## Prevention
 

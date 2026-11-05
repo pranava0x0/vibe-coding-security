@@ -7,7 +7,7 @@ severity: high
 status: unconfirmed
 ecosystems: [claude, claude-desktop, claude-cowork, browser-extension, anthropic]
 tools_affected: ["Claude Desktop with Dispatch enabled (macOS, Windows, Linux) paired with the Claude mobile app", "claude.ai web sessions in a browser that has a third-party extension with access to claude.ai", "per the researcher, Claude Code Remote Control and Claude Cowork sessions (not demonstrated in the post)"]
-tags: [prompt-injection, browser-extension, cross-device, claude-desktop, dispatch, cowork, remote-control, approval-bypass, no-cve, vendor-declined, forever-security, single-researcher]
+tags: [prompt-injection, browser-extension, cross-device, claude-desktop, dispatch, cowork, remote-control, approval-bypass, no-cve, vendor-response-per-researcher, forever-security, single-researcher]
 ---
 
 ## TL;DR
