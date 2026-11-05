@@ -2,7 +2,7 @@
 id: ongoing-vibe-platform-exposure
 title: "Vibe-coded app data exposure — Lovable, Bolt, Replit, Base44 pattern issues"
 date_disclosed: 2025
-last_updated: 2026-11-01
+last_updated: 2026-11-05
 severity: high
 status: ongoing
 ecosystems: [lovable, bolt, replit, v0, supabase, base44]
@@ -102,9 +102,12 @@ Wiz's post of 2026-10-30, "Black October for AI developer platforms", lists nine
 
 Northflank's status page, from 13:58 UTC on 2026-10-30: "Assume all environment variables have been decrypted. Disable/rotate all keys." By 23:38 UTC customers were reporting unauthorized use of AI API keys stored on the platform, and on 2026-11-01 the incident was still open with no root cause. The TiDB Cloud entry above is not on Wiz's list because it is a database service rather than a developer platform; the pattern is the same. If an app's secrets lived on any platform in this list, rotate them at the issuer.
 
+## November 2026 — SecurityWeek counts "at least a dozen"; GitBook (11-02) and Kernel (notice 11-04) join the list, and GitBook's post-mortem is the first to name a root cause
+
+SecurityWeek's roundup of 2026-11-04 says at least a dozen AI developer platforms were hit in a month and names CommandCode, Northflank, Trigger.dev, Chainstack and WorkOS as the most recent, with initial access ranging from compromised credentials to third-party dependencies and exploited vulnerabilities; it quotes Wiz on two cases that "shared an identical first unauthorized activity" within 30 minutes of credential access, and on several actors using the same stolen keys, "a robust market for this type of credential". Two platforms not in that article have their own files: [GitBook](2026-11-gitbook-november-2-security-incident-ai-agents-rotate-api-tokens-git-sync-secrets-reauth-mcp-server.md), whose post-mortem (2026-11-04) is the first in this wave to publish a root cause (an SSO login flaw, then a misconfigured GitHub App, then a Cloudflare API key and production secrets), and [Kernel](2026-11-kernel-browser-infrastructure-security-incident-leaked-api-key-logging-provider-gpu-servers-rotate.md), the browser-infrastructure vendor whose notice (2026-11-04) traces its incident to a leaked customer API key, a download from its logging provider, and cryptominers on GPU servers, and is the first to publish a customer share (0.28%). Andromeda's own notice (2026-10-20, re-read 2026-11-05) still gives no root cause and says a third-party forensic investigation continues.
+
 ## Sources
 - [Vibe Eval — Vibe Coding Security: Risks, Vulnerabilities, and Fixes (2026)](https://vibe-eval.com/vibe-coding-security-risks)
-- [The Next Web — Lovable security crisis: 48 days of exposed projects, closed bug reports](https://thenextweb.com/news/lovable-vibe-coding-security-crisis-exposed)
 - [AIThinkerLab — Lovable AI Security Vulnerabilities: 16 Critical Flaws](https://aithinkerlab.com/lovable-ai-security-vulnerabilities-vibe-hacking/)
 - [Mobb — The Hidden Security Crisis in AI-Generated Apps: 40% Are Leaking Sensitive Data](https://www.mobb.ai/blog/the-hidden-security-crisis-in-ai-generated-apps)
 - [Android Headlines — Vibe Coding Rise is Fueling a Surge in Security Vulnerabilities](https://www.androidheadlines.com/2026/05/vibe-coding-security-risks-data-leaks-ai-apps.html)
@@ -120,3 +123,4 @@ Northflank's status page, from 13:58 UTC on 2026-10-30: "Assume all environment 
 - [SecurityWeek — Vibe-Coded Apps Riddled With Exploitable Security Flaws](https://www.securityweek.com/vibe-coded-apps-riddled-with-exploitable-security-flaws/) — Theori Xint Code study, fetched directly; greenfield-vs-brownfield methodology, 434 total findings.
 - **October 2026 sources** — [Zeabur — October 2026 security incident (preliminary)](https://zeabur.com/blogs/october-2026-security-incident) — fetched 2026-10-26; [PingCAP — Security update, October 2026](https://www.pingcap.com/trust-hub/security/security-update-october-2026/) — fetched 2026-10-26; [Andromeda — October 2026 security incident](https://andromeda.ai/security-updates/october-2026-security-incident) — fetched 2026-10-26.
 - **2026-11-01 update sources** — [Wiz — Black October for AI developer platforms](https://www.wiz.io/blog/black-october-for-ai-developer-platforms) — fetched 2026-11-01 (dated 2026-10-30, Benjamin Read and Rami McCarthy): the nine platforms with dates and the quoted pattern; [Northflank status — Security incident](https://status.northflank.com/cmvv0rn5a092f14rutwccodpp) — fetched 2026-11-01: the 13:58 and 23:38 UTC updates quoted; [Lightning AI — October 2026 Security Incident](https://lightning.ai/blog/oct-2026-incident) — fetched 2026-11-01.
+- **2026-11-05 update sources** — [SecurityWeek — AI-Linked Breaches Mount as WorkOS, Northflank, Trigger.dev Disclose Hacks](https://www.securityweek.com/ai-linked-breaches-mount-as-workos-northflank-trigger-dev-disclose-hacks/) — fetched 2026-11-05 (2026-11-04, Ionut Arghire): the dozen count, the five named platforms, the Wiz quotes, the Chainstack details; [Andromeda — October 2026 security incident](https://andromeda.ai/security-updates/october-2026-security-incident) — re-fetched 2026-11-05: still dated 2026-10-20, no root cause.
