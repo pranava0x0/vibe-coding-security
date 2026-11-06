@@ -2,7 +2,7 @@
 id: 2026-11-nextjs-november-3-security-release-seven-advisories-use-cache-root-param-leaks-edge-cookie-header-svg-bypass-fixed-16-4-5-15-5-29
 title: "Next.js 2026-11-03 security release: seven advisories, use cache root-param leaks, Edge HttpOnly cookie header, SVG rejection bypass; fixed 16.4.5 and 15.5.29"
 date_disclosed: 2026-11-03
-last_updated: 2026-11-05
+last_updated: 2026-11-06
 severity: medium
 status: patched
 ecosystems: [nextjs, npm, vercel, react, javascript]
@@ -61,7 +61,12 @@ grep -rln "runtime = ['\"]edge['\"]" app/ pages/ src/ 2>/dev/null | head   # Edg
 - Keep `next` on the newest patch of your line rather than a pinned older patch; three releases in seven weeks have each carried seven or more advisories.
 - Treat cache keys as security boundaries: anything that distinguishes users or tenants must be in the key, and a framework bug in that key is a cross-tenant leak. See [auditing a vibe-coded repo](../playbooks/auditing-a-vibe-coded-repo.md).
 
+## Update 2026-11-06 — the seven advisory pages now list patched versions and ranges; the CVE ids still do not exist on CVE Services
+
+Re-read on 2026-11-06, every one of the seven pages shows a "Patched versions" field and a CVE id, where on 11-05 six showed none and one showed 16.4.2. As read today: GHSA-f3mh-rxg3-f5g2 (Edge HttpOnly cookie header, 6.0, CVE-2026-119346) affected 16.0.0 to 16.4.4 and 15.0.0 to 15.5.28, patched 16.4.5 and 15.5.29; GHSA-7qx7-33qx-rqx2 (SVG rejection bypass, 6.9, CVE-2026-119347) the same two ranges and fixes; GHSA-pc58-hwjq-p385 (response framing, 6.3, CVE-2026-119348) affected 16.0.0 to 16.4.4 and `<= 15.5.28`, patched 16.4.5 and 15.5.29, the conflicting `< 16.0.0` range of 11-05 gone; GHSA-rhh4-g77r-r9qj (`use cache` binary arguments, 6.3, CVE-2026-119349) 16.0.0 to 16.4.4, patched 16.4.5; GHSA-vvgp-ww4w-46vf (fallback-shell poisoning, 6.3, CVE-2026-119350) 16.4.0 to 16.4.4, patched 16.4.5; GHSA-vc7v-qv4w-wrv8 (nested `use cache` delayed metadata, 6.3, CVE-2026-119351) 16.2.0 to 16.4.4, patched 16.4.5; GHSA-mfr8-8qww-v76h (`unstable_cache` root params, 6.3, CVE-2026-119790) 16.3.0 to 16.4.4, patched 16.4.5. The pages now agree with the release post and `npm view next time`, so the "treat 16.4.3 and 16.4.4 as affected" line above is confirmed by the vendor pages rather than inferred. The seven CVE ids returned `CVE_RECORD_DNE` from `cveawg.mitre.org` again on 2026-11-06, three days after the pages first printed them; they remain printed-but-unresolved and are kept out of CVE-keyed statements.
+
 ## Sources
+- The seven Next.js vendor advisory pages (`github.com/vercel/next.js/security/advisories/`, ids as listed in the 11-06 update) re-read on 2026-11-06 (ranges, patched versions and CVE ids as listed in the 11-06 update); `cveawg.mitre.org/api/cve/<id>` for CVE-2026-119346 to 119351 and 119790, all `CVE_RECORD_DNE` on 2026-11-06.
 - [Next.js blog — November 2026 Security Release](https://nextjs.org/blog/november-2026-security-release) — fetched 2026-11-05 (2026-11-03, Jamiboy Mohammad and Sebastian Silbermann): the seven items with their impact descriptions, the "High Severity" heading on the `unstable_cache` item, the install commands for 15.5.29 and 16.4.5.
 - [Next.js blog — Upcoming Next.js November Security Release](https://nextjs.org/blog/upcoming-nextjs-security-release-november-2026) — fetched 2026-11-05 (2026-10-27): "seven medium vulnerabilities", the 2026-11-03 date, the banner linking the release.
 - [vercel/next.js — security advisories tab](https://github.com/vercel/next.js/security/advisories) — fetched 2026-11-05: seven rows dated 2026-11-03, all Moderate, beside the October and September rows.
