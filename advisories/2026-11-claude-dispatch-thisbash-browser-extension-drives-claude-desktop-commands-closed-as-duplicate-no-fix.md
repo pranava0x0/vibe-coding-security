@@ -2,7 +2,7 @@
 id: 2026-11-claude-dispatch-thisbash-browser-extension-drives-claude-desktop-commands-closed-as-duplicate-no-fix
 title: "Claude Dispatch: a browser extension on claude.ai can drive Claude Desktop into running commands (ThisBash); Anthropic closed it as a duplicate, no fix"
 date_disclosed: 2026-11-04
-last_updated: 2026-11-05
+last_updated: 2026-11-06
 severity: high
 status: unconfirmed
 ecosystems: [claude, claude-desktop, claude-cowork, browser-extension, anthropic]
@@ -45,7 +45,12 @@ Forever Security (Gal Weizman, 2026-11-04) reports that Claude Dispatch, the fea
 - Treat browser extensions as endpoint software: review permissions, control installation, and re-review when permissions change. See [credential hygiene](../prevention/credential-hygiene.md).
 - Monitor agent activity on developer machines for unexpected package installs, configuration changes, credential reads and new outbound connections.
 
+## Update 2026-11-06 — The Hacker News reports the same research; Anthropic gave it no statement; the support page says Dispatch "isn't available to new users" and nothing about retirement
+
+The Hacker News ([2026-11-06](https://thehackernews.com/2026/11/malicious-browser-extensions-could-use.html), Swati Khandelwal) carries Forever Security's findings with the same timeline (report accepted as valid 2026-05-19, closed as a duplicate of an internally known issue, retirement targeted for the end of October per the researchers) and says the researchers consider the flaw still exploitable. It contains no Anthropic statement; every vendor position in it is still the researcher's account, so the file stays `unconfirmed`. The support page, re-read the same day, says Dispatch is "in limited beta on some Pro, Max, and Ultra plans", "isn't available to new users", and that existing users "can keep using it for now"; it does not mention retirement, deprecation or an end date, and still shows "Updated this week" with no calendar date. The end-of-October retirement the researchers were told about has not happened on the page's evidence.
+
 ## Sources
+- [The Hacker News — Malicious Browser Extensions Could Use Claude Dispatch to Run Code on Users' Computers](https://thehackernews.com/2026/11/malicious-browser-extensions-could-use.html) — fetched 2026-11-06: 2026-11-06; same research, no Anthropic statement, the "closed to new users" help-page line. [Claude Help — Assign tasks from anywhere in Claude (Cowork)](https://support.claude.com/en/articles/13947068-assign-tasks-from-anywhere-in-claude-cowork) — re-read 2026-11-06: limited beta on some Pro, Max and Ultra plans, not available to new users, no retirement text, "Updated this week".
 - [Forever Security — ThisBash Escape: Claude Dispatch Flaw Enables Browser Extensions RCE on the OS](https://forever.security/blog/thisbash-claude-dispatch-browser-extension-rce) — fetched 2026-11-05 (dated 2026-11-04, Gal Weizman): the feature description, the six-step chain, the prerequisites, the Calculator proof of concept, the timeline, the "acknowledged the validity of our findings, but closed the report as a duplicate" and retirement statements (the researcher's account of Anthropic's communications, no direct quotes), the Remote Control and Cowork claim, the recommendations. Single researcher; no second firm.
 - [The Register — Anthropic won't fix a Claude Dispatch flaw that could let attackers execute remote commands across corporate boundaries](https://www.theregister.com/research/2026/11/05/anthropic-wont-fix-a-claude-dispatch-flaw-that-could-let-attackers-execute-remote-commands-across-corporate-boundaries/5307684) — fetched 2026-11-05 (2026-11-05): the exclusive reporting of the same research, the 18% to 71% personal-account figure for six organizations, the 2026-10-30 support-page check, Anthropic's non-response to the outlet's questions, no CVE and no bounty. Outlet pickup of the same researcher, counted as one source.
 - [Anthropic support — Assign tasks from anywhere in Claude Cowork](https://support.claude.com/en/articles/13947068-assign-tasks-from-anywhere-in-claude-cowork) — fetched 2026-11-05: Dispatch in limited beta on some Pro, Max and Ultra plans, closed to new users, requires Claude Desktop and the mobile app, the routing to Claude Code, the safety warnings, "Updated this week" with no date.

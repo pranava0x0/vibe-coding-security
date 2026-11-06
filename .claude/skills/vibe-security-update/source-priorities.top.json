@@ -5,20 +5,20 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 118,
-   "last_hit": "2026-11-05"
+   "hits": 119,
+   "last_hit": "2026-11-06"
   },
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 68,
-   "last_hit": "2026-11-05"
+   "hits": 69,
+   "last_hit": "2026-11-06"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 67,
-   "last_hit": "2026-11-05"
+   "hits": 68,
+   "last_hit": "2026-11-06"
   },
   {
    "domain": "theregister.com",
@@ -29,8 +29,8 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 62,
-   "last_hit": "2026-11-05"
+   "hits": 63,
+   "last_hit": "2026-11-06"
   },
   {
    "domain": "nvd.nist.gov",
@@ -47,14 +47,14 @@
   {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
-   "hits": 39,
-   "last_hit": "2026-11-05"
+   "hits": 40,
+   "last_hit": "2026-11-06"
   },
   {
    "domain": "vulncheck.com",
    "weight": 20.0,
-   "hits": 39,
-   "last_hit": "2026-11-05"
+   "hits": 40,
+   "last_hit": "2026-11-06"
   },
   {
    "domain": "stepsecurity.io",
@@ -77,8 +77,8 @@
   {
    "domain": "cveawg.mitre.org",
    "weight": 20.0,
-   "hits": 29,
-   "last_hit": "2026-11-05"
+   "hits": 30,
+   "last_hit": "2026-11-06"
   },
   {
    "domain": "cisa.gov",
@@ -87,16 +87,16 @@
    "last_hit": "2026-11-02"
   },
   {
+   "domain": "hn.algolia.com",
+   "weight": 20.0,
+   "hits": 25,
+   "last_hit": "2026-11-06"
+  },
+  {
    "domain": "safedep.io",
    "weight": 20.0,
    "hits": 25,
    "last_hit": "2026-11-03"
-  },
-  {
-   "domain": "hn.algolia.com",
-   "weight": 20.0,
-   "hits": 24,
-   "last_hit": "2026-11-05"
   },
   {
    "domain": "aikido.dev",
@@ -105,16 +105,16 @@
    "last_hit": "2026-10-26"
   },
   {
+   "domain": "pypi.org",
+   "weight": 20.0,
+   "hits": 23,
+   "last_hit": "2026-11-06"
+  },
+  {
    "domain": "advisories.gitlab.com",
    "weight": 20.0,
    "hits": 23,
    "last_hit": "2026-09-23"
-  },
-  {
-   "domain": "pypi.org",
-   "weight": 20.0,
-   "hits": 22,
-   "last_hit": "2026-11-03"
   },
   {
    "domain": "aws.amazon.com",

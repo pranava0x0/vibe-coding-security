@@ -1,10 +1,10 @@
 ---
 id: 2026-11-trigger-dev-security-incident-environment-variables-exposed-subset-of-organizations-rotate
-title: "Trigger.dev security incident 2026-11-01: an attacker read environment variables for a subset of organizations; no root cause published"
+title: "Trigger.dev incident 2026-11-01: attacker used customer root API keys to read environment variables for 0.66% of customers; vector withheld, keys revoked"
 date_disclosed: 2026-11-01
-last_updated: 2026-11-04
+last_updated: 2026-11-06
 severity: high
-status: ongoing
+status: contained
 ecosystems: [trigger-dev, background-jobs, nextjs, supabase, environment-variables, hosted-platform]
 tools_affected: ["Trigger.dev cloud (cloud.trigger.dev) organizations, a subset of which were emailed on 2026-11-01", "every secret stored as a Trigger.dev environment variable: database URLs, Stripe and Supabase keys, LLM provider keys, OAuth client secrets, secrets-manager credentials", "the apps and services those variables unlock"]
 tags: [vendor-incident, credential-exposure, environment-variables, background-jobs, workflow-platform, ai-agents, rotate-credentials, no-root-cause, status-page, hacker-news]
@@ -43,7 +43,16 @@ Trigger.dev, the TypeScript background-jobs and AI-workflow platform, said on 20
 - Prefer a secrets manager the job fetches from at run time over variables stored decrypted in the platform, so a platform breach yields a reference and not the secret.
 - Keep an inventory of which third-party platforms hold which secrets. This is the seventh such disclosure since 2026-10-09 and the rotation has to start within hours.
 
+## Update 2026-11-06 — the incident report: 0.66 percent of customers, the attacker held customer root API keys, the vector is withheld, and the exposed keys were revoked
+
+Trigger.dev published its [report](https://trigger.dev/blog/security-incident-report-nov-2026) on 2026-11-06 (Matt Aitken, CEO), and the status page's second update at 12:27 UTC links it. The facts it adds: the incident affected "0.66% of all customers"; the attacker "obtained customer root API keys for some environments" and used them to read environment variables and to list recent runs, deployments and schedules, which exposed run and deployment ids, task names, idempotency keys, statuses, tags, errors and schedule external ids; and "no evidence that the attacker accessed any other customer data, any services, any of our production databases, or any customer dashboard accounts." How the attacker obtained the keys is not stated: the company is "unable to comment on the specific attack vector currently" to protect the investigation. The timeline is unchanged, alerts and blocking on 2026-11-01, the first customer email at about 21:36 UTC and a second on 11-02 at about 20:27 UTC. Self-hosted deployments were not impacted; webhook signing secrets were not exposed and need no rotation; environment variables are encrypted at rest and decrypted for each run.
+
+The actions are the ones already in this file, now with the vendor's sentence that "If you have not received an impact notification, your organization was not affected": regenerate Trigger.dev API keys (the exposed ones are already revoked), rotate every credential that lived in an affected environment and revoke the old ones at their providers. The company has released IP allowlisting for scoped API keys and OIDC support, rotated its internal secrets, applied automated account restrictions and engaged an incident-response firm and law enforcement.
+
+`ongoing` to `contained`: the vendor's own sentences now say the access is removed, the vector mitigated, the exposed keys revoked and the scope counted, which is what this corpus means by contained; the title changes with it. It is not a closed case, because the vector is undisclosed and a later report may reopen the question of what else the keys reached. The earlier incident 1083239 on the same status page (Vercel-synced variables cleared, 2026-10-06) is still an availability bug and not part of this one.
+
 ## Sources
+- [Trigger.dev — Security incident report: November 1, 2026](https://trigger.dev/blog/security-incident-report-nov-2026) — fetched 2026-11-06: 2026-11-06, Matt Aitken; 0.66 percent, root API keys, the listed metadata, the withheld vector, the timeline, the FAQ on self-hosting and webhook secrets, the changes made. [status.trigger.dev](https://status.trigger.dev/) — fetched 2026-11-06: incident 1110434 second update 12:27 UTC linking the report.
 - [Trigger.dev — Security Disclosure: Sunday November 1st](https://trigger.dev/blog/security-incident-nov-2026) — fetched 2026-11-03: 2026-11-01, Eric Allam (CTO); the full disclosure text, "a subset of organizations", "blocked the exploit", email to impacted owners, no root cause, no count, no timeline.
 - [Trigger.dev status — incident 1110434](https://status.trigger.dev/incident/1110434) — fetched 2026-11-03: same text, component API, Resolved 2026-11-01 22:50 UTC, one update only.
 - [Trigger.dev status page](https://status.trigger.dev/) — fetched 2026-11-03: the incident list, including 1083239 (2026-10-06, Vercel-synced sensitive variables cleared, availability only).

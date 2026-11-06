@@ -2,7 +2,7 @@
 id: 2026-04-flowise-rce-cluster
 title: "Flowise RCE cluster — CVE-2025-59528 actively exploited + April 2026 Agent-node cluster (CVE-2026-41265 et al.)"
 date_disclosed: 2026-04-07
-last_updated: 2026-10-10
+last_updated: 2026-11-06
 severity: critical
 status: ongoing
 ecosystems: [npm, ai-agents, llm-workflow]
@@ -124,7 +124,20 @@ A walk of the `FlowiseAI/Flowise` advisory tab on 2026-10-10 found four advisori
 
 The first three say "patched 3.1.4" for a release that shipped on 2026-07-29, a month before the advisories, which is the archived-repository pattern again: the fix predates the disclosure and no release will follow it. The fourth joins the six unpatched 09-26 CVEs as a reason the status stays `ongoing`. Operators of the Enterprise tier should read the first two as the actionable items: a tenant boundary that any workspace manager can cross is a hosted-platform problem, not a self-hosted one.
 
+## Update — 2026-11-06: Era reports in-the-wild exploitation of the 2024 `overrideConfig` bug (CVE-2024-58351, fixed 2.1.4) by a Chinese-language framework it calls "Greeter"; 4,372 Flowise instances exposed by its count
+
+Era's research team ([2026-11-03](https://era.security/blog/greeter-flowise-ai-infrastructure-attack)) ran seven Flowise honeypots on 1.8.2 in four regions from July to October 2026 and describes an exploitation framework that sends a "hello" chat message and then abuses [CVE-2024-58351](https://github.com/FlowiseAI/Flowise/security/advisories/GHSA-5cph-wvm9-45gj), the `overrideConfig` code-injection path that VulnCheck's CNA record (2026-06-20) scores 9.8 and describes as enabled by default with no allow-list, relying on vm2 for sandboxing, and reachable through the web embed and the Prediction API. The vendor advisory (2024-11-21, reporter ryanhalliday) lists no CVE and names 2.1.4 as the fix; npm dates 2.1.4 to 2024-11-13. This CVE had no entry in this corpus before today, because the April cluster above starts at the 2026 Agent-node bugs; it is older and still being exploited.
+
+Era's exposure count is a chain of estimates, printed here as the post prints it: Shodan returned 4,372 unique internet-exposed Flowise instances; 3,277 of those reported a version; 703 of those (21.5 percent) had no authentication; 46 of those appeared to share the vulnerable conditions, which the post gives as 6.5 percent of the unauthenticated set and 1.4 percent of the versioned set. None of these is a count of compromised hosts. SecurityWeek's roundup ([2026-11-06](https://www.securityweek.com/in-other-news-trezor-implant-llmjacking-bills-hit-1m-sap-flaws-weaponized-within-days/)) repeats the 4,372 figure and the framework name; it is pickup of the same post, not a second finder, and no vendor statement exists because the repository has been archived since August.
+
+Era's defender list matches this file's: keep the instance off the internet or behind proxy authentication, require authentication on the Prediction API, block untrusted callers from supplying executable code through request configuration, review prediction request bodies for the override key rather than chat history, run as a non-root user without the Docker socket, scope the workload's cloud identity narrowly and require IMDSv2. Any instance below 2.1.4 that has ever been reachable from the internet should be treated as compromised.
+
+```bash
+npm ls flowise 2>/dev/null | grep -o 'flowise@[0-9.]*'    # < 2.1.4: CVE-2024-58351; < 3.1.4: the 2026 clusters above; the repository is archived
+```
+
 ## Sources
+- [Era — "Greeter": a Flowise exploitation framework](https://era.security/blog/greeter-flowise-ai-infrastructure-attack) — fetched 2026-11-06: 2026-11-03, Era Research Team; seven honeypots on 1.8.2, July to October 2026; CVE-2024-58351; the 4,372 / 3,277 / 703 / 46 chain; the defender list. [Flowise GHSA-5cph-wvm9-45gj](https://github.com/FlowiseAI/Flowise/security/advisories/GHSA-5cph-wvm9-45gj) — fetched 2026-11-06: 2024-11-21, High, no CVE field, fixed 2.1.4; CNA record for CVE-2024-58351 (VulnCheck, 2026-06-20, 9.8 / 9.3) read from `cveawg.mitre.org`; `npm view flowise time` for 2.1.4 (2024-11-13) and 3.1.4 (2026-07-29). [SecurityWeek — In Other News, 2026-11-06](https://www.securityweek.com/in-other-news-trezor-implant-llmjacking-bills-hit-1m-sap-flaws-weaponized-within-days/) — pickup.
 - [GitHub Security Advisory GHSA-vcwp-f9rq-3887 — CVE-2026-91931 Flowise Custom MCP npx RCE](https://github.com/FlowiseAI/Flowise/security/advisories/GHSA-vcwp-f9rq-3887) — fetched 2026-09-16; CVSS 9.0, fixed 3.1.4, `npx`-package execution PoC.
 - [GitHub Security Advisory GHSA-x7x8-95gh-42xm — CVE-2026-91932 Flowise Custom MCP `cwd` bypass RCE](https://github.com/FlowiseAI/Flowise/security/advisories/GHSA-x7x8-95gh-42xm) — fetched 2026-09-16; CVSS 9.0, fixed 3.1.4, unvalidated `cwd` parameter.
 - [NVD — CVE-2026-52098](https://nvd.nist.gov/vuln/detail/CVE-2026-52098) — fetched 2026-09-16 via the NVD API; MITRE CNA, CVSS 9.8, RCE via `/api/v1/prediction/<flowId>` in 3.1.2.
