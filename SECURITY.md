@@ -44,11 +44,19 @@ The `main` branch has no runtime dependencies. Build-time dependencies:
 - `markdown==3.7`, `PyYAML==6.0.2`, `Pygments==2.18.0` ([requirements.txt](site/requirements.txt))
 - All install scripts disabled where possible. See [prevention/npm-hardening.md](prevention/npm-hardening.md) for the discipline we apply.
 
-**Last advisory sweep on these build deps:** 2026-05-17. (Refresh if >7 days old per the universal CLAUDE.md.)
+**Last advisory sweep on these build deps:** 2026-11-06 (`pip index versions` for the four pins; see the self-audit section below for the hash-pinning note).
 
 ## Site security headers
 
 GitHub Pages provides HTTPS by default. We do not currently set custom security headers (CSP, HSTS, etc.) because GitHub Pages doesn't allow it. The static site has no JS that fetches user input, no forms, no third-party analytics, and no cookies — so the attack surface is minimal.
+
+## Self-audits with Cloudflare's security-audit skill
+
+Since 2026-11-06 this repository audits its own build pipeline, tools, tests and workflows with a vendored copy of Cloudflare's open-source [`security-audit` skill](https://github.com/cloudflare/security-audit-skill) at [`.claude/skills/security-audit/`](.claude/skills/security-audit/UPSTREAM.md). The skill coordinates read-only reconnaissance and hunting agents, hands every candidate to an independent verifier, and writes `findings.json` checked by the skill's own validators; only a candidate with a complete source trace and a bounded observed result becomes `confirmed`. Target code runs only inside an OS-level sandbox (user, mount and network namespaces, read-only target, empty environment, resource limits).
+
+- **Cadence:** a `quick` run on the build pipeline after any change to `site/`, `tools/`, `tests/` or `.github/workflows/`, and at least one run per quarter. The daily content sweep does not run it.
+- **Where the results live:** every run's `REPORT.md`, `FINDINGS-DETAIL.md` and `NEEDS-VALIDATION.md` are published under [`security-audits/`](security-audits/), including rejected candidates, so the record shows what the tool found and what it did not.
+- **How to run it here:** open Claude Code in this repository and ask for `/security-audit` on `site/ tools/ tests/ .github/` with the `quick` profile and an explicit agent budget; keep the output directory outside the tree, then copy the three reports into `security-audits/` with the date prefix. The audience-facing guide is [prevention/agent-security-audit.md](prevention/agent-security-audit.md).
 
 ## Acknowledgements
 

@@ -17,6 +17,7 @@
 3. **Already compromised and need to recover?** → [playbooks/](playbooks/) — credential rotation, package removal, blast-radius assessment.
 4. **Trying not to get hit in the first place?** → [prevention/](prevention/) — start with the [attack-surface map](prevention/supply-chain-attack-surface.md), then npm hardening, CI/CD (GitHub Actions) hardening, MCP hygiene, credential storage, sandboxing.
 5. **Want to monitor this stuff yourself?** → [sources/](sources/) — who to follow on X, which blogs, which feeds.
+6. **Want an agent to audit the app you just generated?** → [prevention/agent-security-audit.md](prevention/agent-security-audit.md) — how to run Cloudflare's `security-audit` skill on a vibe-coded repo, what it catches and what it misses. This repo runs it on itself; results are in [security-audits/](security-audits/).
 
 ---
 
