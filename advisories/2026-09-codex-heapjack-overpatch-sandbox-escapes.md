@@ -2,11 +2,11 @@
 id: 2026-09-codex-heapjack-overpatch-sandbox-escapes
 title: "Heapjack and Overpatch — two OpenAI Codex sandbox escapes: Codex Desktop's JavaScript sandbox kept its trust token in the same V8 heap as untrusted code (read-only mode → host commands), and Codex CLI's apply_patch granted write access to the parent directory of any path in a patch (workspace-write → ~/.zshrc); fixed 0.149.0 / build 26.818.21641, no CVE, no advisory"
 date_disclosed: 2026-09-15
-last_updated: 2026-09-20
+last_updated: 2026-11-07
 severity: high
 status: patched
 ecosystems: [codex, openai, npm, macos, linux]
-tools_affected: ["OpenAI Codex CLI < 0.149.0 (@openai/codex)", "OpenAI Codex Desktop builds before 26.818.21641", "any CI or automation that runs Codex against repositories it did not author"]
+tools_affected: ["OpenAI Codex CLI < 0.149.0 (@openai/codex)", "OpenAI Codex Desktop builds before 26.818.21641", "OpenAI Codex Desktop for Windows 26.820.60940 (direct) and 26.820.7780.0 (Microsoft Store) before 26.1007.21434 / 26.1007.2314.0 (CVE-2026-110930)", "any CI or automation that runs Codex against repositories it did not author"]
 tags: [sandbox-escape, coding-agent, codex, symlink, apply-patch, heap-snapshot, silent-patch, no-cve, agent-sandboxing]
 ---
 
@@ -58,9 +58,16 @@ find . -maxdepth 3 -type l -lname "$HOME*" 2>/dev/null
 - **Treat a repository you open as input**, and run first contact in clone mode / read-only with the outer boundary on — [prevention/package-vetting-checklist.md](../prevention/package-vetting-checklist.md).
 - Watch the researcher's channel, not only the vendor's: Accomplish's three escapes (Claude Cowork, Docker Sandboxes, Codex) each appeared on its blog before any advisory or outlet.
 
+## Update — 2026-11-07: CVE-2026-110930, Codex Desktop for Windows ran attacker-supplied startup arguments from an Explorer "Open project in ChatGPT" path before sign-in (OpenAI CNA, 2026-11-05)
+
+OpenAI's CNA record CVE-2026-110930 (published 2026-11-05) says Codex Desktop for Windows "does not correctly check quotation marks in project paths from Windows Explorer. If a user selects 'Open project in ChatGPT' for an attacker-controlled library's child item, the path can add application startup arguments. These arguments can run attacker-controlled code with the current Windows user's permissions before sign-in or project trust approval." Affected and fixed: the direct download line 26.820.60940 affected, 26.1007.21434 unaffected; the Microsoft Store (MSIX) line 26.820.7780.0 affected, 26.1007.2314.0 unaffected. The record carries no CVSS; the GitHub Advisory Database row GHSA-f2g3-r2rh-7h5f (unreviewed, 2026-11-05, CWE-88) prints High 8.0 with `AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:H`, which this file records as the database's reading of a network-reachable library item, with the record's own text, a local Explorer action, as the mechanism. The record's single reference, `openai.com/security/advisories/cve-2026-110930/`, returned HTTP 403 to every route this sweep has and has no Wayback snapshot, so the record is the only text read.
+
+This is the fourth Codex Desktop CVE of the autumn after the three Git-metadata ones of 2026-09-01 in [the git-config cluster](2026-09-gitspawn-git-config-agent-rce-cluster.md) and the Heapjack read-only-mode escape above, and the first that runs before the trust prompt: a Windows library (a virtual folder that can include network locations) is the carrier, the context-menu entry is the trigger, and the user has not yet approved the project. Action on Windows: Codex Desktop at or above 26.1007.21434 (direct) or 26.1007.2314.0 (Store); `winget list OpenAI.Codex` or the Store's library page shows the build. The `openai/codex` advisory tab still lists one 2025 advisory and nothing for this or the September records.
+
 ## Sources
 - [Accomplish AI — Escaping the OpenAI Codex sandbox, twice](https://www.accomplish.ai/blog/escaping-the-openai-codex-sandbox-twice/) — primary, published 2026-09-15; the Overpatch and Heapjack mechanisms, the 2026-08-12 report and ~eight-day fix, the affected/fixed versions, the "thing doing the enforcement" line. Fetched 2026-09-20.
 - [BleepingComputer — Researchers escape OpenAI Codex sandbox to run commands on host](https://www.bleepingcomputer.com/news/security/researchers-escape-openai-codex-sandbox-to-run-commands-on-host/) — 2026-09-20 (Ax Sharma); the "one Node process… one memory heap" quote, the read-only-mode and malicious-repository detail, OpenAI contacted for comment. Fetched 2026-09-20.
 - [openai/codex — release rust-v0.149.0](https://github.com/openai/codex/releases/tag/rust-v0.149.0) — vendor record of the CLI fix: "Prevent `apply_patch` from widening write permissions" and the surrounding sandbox-hardening lines; release dated 20 Aug. Fetched 2026-09-20.
 - npm registry `time` field for `@openai/codex` (`npm view @openai/codex time`, 2026-09-20): 0.148.0 2026-08-18, **0.149.0 2026-08-20T21:09Z**, 0.150.0 2026-08-26; weekly downloads 15,573,038 for 2026-09-13 → 09-19 (`api.npmjs.org`).
 - [openai/codex — security advisories tab](https://github.com/openai/codex/security/advisories) — fetched 2026-09-20: one advisory, dated 2025-09-19; nothing for these fixes.
+- **2026-11-07 update sources** — [CVE Services — CVE-2026-110930](https://cveawg.mitre.org/api/cve/CVE-2026-110930) — fetched 2026-11-07: OpenAI CNA, published 2026-11-05, description quoted, the two affected products with affected and unaffected builds, one reference, no metrics; [GitHub Advisory Database — GHSA-f2g3-r2rh-7h5f](https://github.com/advisories/GHSA-f2g3-r2rh-7h5f) — fetched 2026-11-07: unreviewed, High 8.0 with vector, CWE-88, no package; [openai/codex — security advisories tab](https://github.com/openai/codex/security/advisories) — fetched 2026-11-07: one 2025 advisory only. The OpenAI advisory page the record references returned 403 and has no Wayback snapshot (availability API, 2026-11-07).
