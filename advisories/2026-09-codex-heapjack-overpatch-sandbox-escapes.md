@@ -1,13 +1,13 @@
 ---
 id: 2026-09-codex-heapjack-overpatch-sandbox-escapes
-title: "Heapjack and Overpatch — two OpenAI Codex sandbox escapes: Codex Desktop's JavaScript sandbox kept its trust token in the same V8 heap as untrusted code (read-only mode → host commands), and Codex CLI's apply_patch granted write access to the parent directory of any path in a patch (workspace-write → ~/.zshrc); fixed 0.149.0 / build 26.818.21641, no CVE, no advisory"
+title: "Heapjack and Overpatch — two OpenAI Codex sandbox escapes: Codex Desktop's JavaScript sandbox kept its trust token in the same V8 heap as untrusted code (read-only mode → host commands), and Codex CLI's apply_patch granted write access to the parent directory of any path in a patch (workspace-write → ~/.zshrc); fixed 0.149.0 / build 26.818.21641, no CVE, no advisory for the September escapes; 2026-11-07 update adds CVE-2026-110930 for Windows"
 date_disclosed: 2026-09-15
 last_updated: 2026-11-07
 severity: high
 status: patched
 ecosystems: [codex, openai, npm, macos, linux]
 tools_affected: ["OpenAI Codex CLI < 0.149.0 (@openai/codex)", "OpenAI Codex Desktop builds before 26.818.21641", "OpenAI Codex Desktop for Windows 26.820.60940 (direct) and 26.820.7780.0 (Microsoft Store) before 26.1007.21434 / 26.1007.2314.0 (CVE-2026-110930)", "any CI or automation that runs Codex against repositories it did not author"]
-tags: [sandbox-escape, coding-agent, codex, symlink, apply-patch, heap-snapshot, silent-patch, no-cve, agent-sandboxing]
+tags: [sandbox-escape, coding-agent, codex, symlink, apply-patch, heap-snapshot, silent-patch, no-cve-september-escapes, cve, windows, agent-sandboxing]
 ---
 
 ## TL;DR
@@ -62,7 +62,7 @@ find . -maxdepth 3 -type l -lname "$HOME*" 2>/dev/null
 
 OpenAI's CNA record CVE-2026-110930 (published 2026-11-05) says Codex Desktop for Windows "does not correctly check quotation marks in project paths from Windows Explorer. If a user selects 'Open project in ChatGPT' for an attacker-controlled library's child item, the path can add application startup arguments. These arguments can run attacker-controlled code with the current Windows user's permissions before sign-in or project trust approval." Affected and fixed: the direct download line 26.820.60940 affected, 26.1007.21434 unaffected; the Microsoft Store (MSIX) line 26.820.7780.0 affected, 26.1007.2314.0 unaffected. The record carries no CVSS; the GitHub Advisory Database row GHSA-f2g3-r2rh-7h5f (unreviewed, 2026-11-05, CWE-88) prints High 8.0 with `AV:N/AC:L/PR:L/UI:R/S:U/C:H/I:H/A:H`, which this file records as the database's reading of a network-reachable library item, with the record's own text, a local Explorer action, as the mechanism. The record's single reference, `openai.com/security/advisories/cve-2026-110930/`, returned HTTP 403 to every route this sweep has and has no Wayback snapshot, so the record is the only text read.
 
-This is the fourth Codex Desktop CVE of the autumn after the three Git-metadata ones of 2026-09-01 in [the git-config cluster](2026-09-gitspawn-git-config-agent-rce-cluster.md) and the Heapjack read-only-mode escape above, and the first that runs before the trust prompt: a Windows library (a virtual folder that can include network locations) is the carrier, the context-menu entry is the trigger, and the user has not yet approved the project. Action on Windows: Codex Desktop at or above 26.1007.21434 (direct) or 26.1007.2314.0 (Store); `winget list OpenAI.Codex` or the Store's library page shows the build. The `openai/codex` advisory tab still lists one 2025 advisory and nothing for this or the September records.
+This is the fifth Codex Desktop CVE of the autumn after the four Git-metadata ones of 2026-09-01 (CVE-2026-19590, CVE-2026-19591, CVE-2026-19592, CVE-2026-19593) in [the git-config cluster](2026-09-gitspawn-git-config-agent-rce-cluster.md); the Heapjack escape above has no CVE. It is the first that runs before the trust prompt: a Windows library (a virtual folder that can include network locations) is the carrier, the context-menu entry is the trigger, and the user has not yet approved the project. Action on Windows: Codex Desktop at or above 26.1007.21434 (direct) or 26.1007.2314.0 (Store); `winget list OpenAI.Codex` or the Store's library page shows the build. The `openai/codex` advisory tab still lists one 2025 advisory and nothing for this or the September records.
 
 ## Sources
 - [Accomplish AI — Escaping the OpenAI Codex sandbox, twice](https://www.accomplish.ai/blog/escaping-the-openai-codex-sandbox-twice/) — primary, published 2026-09-15; the Overpatch and Heapjack mechanisms, the 2026-08-12 report and ~eight-day fix, the affected/fixed versions, the "thing doing the enforcement" line. Fetched 2026-09-20.

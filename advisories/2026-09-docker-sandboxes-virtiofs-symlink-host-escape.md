@@ -74,7 +74,7 @@ Docker's CNA record CVE-2026-121614 (published 2026-11-03, CVSS 4.0 7.1 `AV:L/AC
 
 The fix is in v0.50.0, dated 26 Oct on the releases page, whose Security section reads "Host Git commands no longer run programs configured by a sandbox through the workspace repository's `.git` directory"; the page prints no CVE and does not name `fsmonitor` or clone mode. The record's range therefore ends one release before the 0.51.0 `sbx cp` fix in the 2026-11-05 update above, and an installation that upgraded for that one has this one too. The mechanism is the GitSpawn class tracked in [the git-config agent RCE cluster](2026-09-gitspawn-git-config-agent-rce-cluster.md): the sandbox is the untrusted party, the workspace `.git/config` is the carrier, and the host's own `git` invocation is the executor. A direct-mode sandbox with a read-write mount is the stated path to the configuration; the record also says the read-only host mount given to a clone-mode sandbox does not prevent the later host-side command from reading the configuration.
 
-Action: `sbx version`; anything below 0.50.0 runs host Git against sandbox-written configuration, and below 0.51.0 has the `sbx cp` symlink bug as well. Until upgraded, do not run `sbx kit push` or create a clone-mode sandbox from a repository an untrusted sandbox has written to with a read-write mount.
+Action: `sbx version`; 0.31.0 up to 0.49.x runs host Git against sandbox-written configuration (the record starts the range at 0.31.0), and 0.28.0 up to 0.50.x has the `sbx cp` symlink bug as well. Until upgraded, do not run `sbx kit push` or create a clone-mode sandbox from a repository an untrusted sandbox has written to with a read-write mount.
 
 ## Sources
 
