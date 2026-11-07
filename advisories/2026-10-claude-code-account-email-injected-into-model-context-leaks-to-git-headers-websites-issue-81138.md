@@ -2,11 +2,11 @@
 id: 2026-10-claude-code-account-email-injected-into-model-context-leaks-to-git-headers-websites-issue-81138
 title: "Claude Code puts the account email in every model prompt; users report it in git commits, headers and web requests (issue #81138)"
 date_disclosed: 2026-07-25
-last_updated: 2026-11-06
+last_updated: 2026-11-07
 severity: medium
 status: mitigated
 ecosystems: [claude-code, npm, ai-coding-agents]
-tools_affected: ["@anthropic-ai/claude-code 2.1.220 through 2.1.316 when signed in with a Claude account (the `oauthAccount` path): the address is in context with no check", "2.1.317 and 2.1.318 (npm `latest` on 2026-11-06): the address is still in context; a default-on check covers shell calls that name a User-Agent, and per the changelog asks before a web or shell call sends it", "the npm `stable` dist-tag, which pointed at 2.1.311 on 2026-11-06, carries no check", "API-key, Bedrock and Vertex authentication reportedly do not inject it"]
+tools_affected: ["@anthropic-ai/claude-code 2.1.220 through 2.1.316 when signed in with a Claude account (the `oauthAccount` path): the address is in context with no check", "2.1.317 through 2.1.319 (npm `latest` and `next` on 2026-11-07): the address is still in context; a default-on check covers shell calls that name a User-Agent, and per the changelog asks before a web or shell call sends it", "the npm `stable` dist-tag, which still pointed at 2.1.311 on 2026-11-07, carries no check", "API-key, Bedrock and Vertex authentication reportedly do not inject it"]
 tags: [privacy, pii, system-prompt, claude-code, data-leak, git-identity, user-agent, prompt-injection-surface, vendor-response, built-in-mod, open-issue, hacker-news, partial-fix]
 ---
 
@@ -67,6 +67,10 @@ CLI=$(readlink -f "$(which claude)"); grep -ao 'userEmail:`[^`]\{0,200\}' "$CLI"
 
 **Status.** `ongoing` to `mitigated`: a default-on control exists from 2.1.317 and the vendor has said, through a team member's forum comment, that the address will be removed from context. It is not `patched`: the address is still in every prompt on 2.1.318, the published check covers one command shape, and the `stable` channel ships without it. Re-check after the release the comment promises; if the address leaves the context, this file moves to `patched` for signed-in users.
 
+## Update 2026-11-07 — 2.1.319 is `latest` and carries no removal; `stable` is still 2.1.311
+
+`npm view @anthropic-ai/claude-code dist-tags time` on 2026-11-07: `latest` 2.1.319 and `next` 2.1.319 (published 2026-11-06 00:58 UTC), `stable` 2.1.311 (2026-10-26). The CHANGELOG entry for 2.1.319 lists auto-mode, MCP-task, gateway and permission changes and no line about the account email; the only email line in the file is still 2.1.317's "Added a check that asks before a web or shell tool call sends your account email address to the network". The removal a Claude Code team member promised on Hacker News for "early next week" has not shipped in any channel as of this read, and the `stable` channel still has no check. Status stays `mitigated`. Separately, a second Claude Code on-disk store carrying user secrets was reported this week: [the `.claude/settings.local.json` approved-command file](2026-11-claude-code-settings-local-json-standing-approval-stores-approved-commands-with-secrets-1122-public-github-copies.md).
+
 ## Sources
 - [anthropics/claude-code — issue #81138: Account email (PII) is injected into the model's system prompt without consent, disclosure…](https://github.com/anthropics/claude-code/issues/81138) — fetched 2026-10-29: opened 2026-07-25, the decompiled construction site, the version history 2.1.220 to 2.1.289, the five leak reports with dates and commenters, the `IS_DEMO` finding, the closed sibling issues, no vendor response, 19 comments.
 - [Hacker News — Tell HN: Claude Code adds your email to the prompt, the LLM sends it to websites](https://news.ycombinator.com/item?id=50286306) — fetched 2026-10-29 through the Algolia API: posted 2026-10-29 by TekMol, links the issue and a Reddit thread (not opened; reddit.com is not reachable from this sweep).
@@ -79,3 +83,4 @@ CLI=$(readlink -f "$(which claude)"); grep -ao 'userEmail:`[^`]\{0,200\}' "$CLI"
 - [anthropics/claude-code — issue #55743](https://github.com/anthropics/claude-code/issues/55743) and [issue #37201](https://github.com/anthropics/claude-code/issues/37201) — fetched 2026-11-06: the May and March reports, both closed by a bot with no maintainer reply.
 - `npm view @anthropic-ai/claude-code time dist-tags` — read 2026-11-06: 2.1.317 published 2026-11-02 23:57 UTC, 2.1.318 11-03, 2.1.319 11-06 (`next`); `stable` 2.1.311, `latest` 2.1.318.
 - Related in this corpus: [Claude Code and Claude Desktop advisory batches](2026-08-claude-code-desktop-ghsa-batch.md) for the product's own disclosure channel, which carries nothing on this behaviour.
+- `npm view @anthropic-ai/claude-code dist-tags time` — read 2026-11-07: `latest` and `next` 2.1.319 (2026-11-06 00:58 UTC), `stable` 2.1.311; [CHANGELOG.md](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md) — fetched 2026-11-07: the 2.1.319 entry, no email line.
