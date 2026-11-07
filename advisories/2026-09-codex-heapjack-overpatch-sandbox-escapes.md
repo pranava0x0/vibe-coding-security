@@ -5,9 +5,9 @@ date_disclosed: 2026-09-15
 last_updated: 2026-11-07
 severity: high
 status: patched
-ecosystems: [codex, openai, npm, macos, linux]
+ecosystems: [codex, openai, npm, macos, linux, windows]
 tools_affected: ["OpenAI Codex CLI < 0.149.0 (@openai/codex)", "OpenAI Codex Desktop builds before 26.818.21641", "OpenAI Codex Desktop for Windows 26.820.60940 (direct) and 26.820.7780.0 (Microsoft Store) before 26.1007.21434 / 26.1007.2314.0 (CVE-2026-110930)", "any CI or automation that runs Codex against repositories it did not author"]
-tags: [sandbox-escape, coding-agent, codex, symlink, apply-patch, heap-snapshot, silent-patch, no-cve-september-escapes, cve, windows, agent-sandboxing]
+tags: [sandbox-escape, coding-agent, codex, symlink, apply-patch, heap-snapshot, silent-patch, no-cve, cve, windows, agent-sandboxing]
 ---
 
 ## TL;DR

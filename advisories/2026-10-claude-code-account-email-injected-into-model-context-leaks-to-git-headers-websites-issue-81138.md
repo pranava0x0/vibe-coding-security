@@ -6,7 +6,7 @@ last_updated: 2026-11-07
 severity: medium
 status: mitigated
 ecosystems: [claude-code, npm, ai-coding-agents]
-tools_affected: ["@anthropic-ai/claude-code 2.1.220 through 2.1.316 when signed in with a Claude account (the `oauthAccount` path): the address is in context with no check", "2.1.317 and 2.1.318 (npm `latest` on 2026-11-06): the address is still in context; a default-on check covers shell calls that name a User-Agent, and per the changelog asks before a web or shell call sends it", "the npm `stable` dist-tag, which pointed at 2.1.311 on 2026-11-06, carries no check", "API-key, Bedrock and Vertex authentication reportedly do not inject it"]
+tools_affected: ["@anthropic-ai/claude-code 2.1.220 through 2.1.316 when signed in with a Claude account (the `oauthAccount` path): the address is in context with no check", "2.1.317 through 2.1.319 (npm `latest` and `next` on 2026-11-07): the address is still in context; a default-on check covers shell calls that name a User-Agent, and per the changelog asks before a web or shell call sends it", "the npm `stable` dist-tag, which still pointed at 2.1.311 on 2026-11-07, carries no check", "API-key, Bedrock and Vertex authentication reportedly do not inject it"]
 tags: [privacy, pii, system-prompt, claude-code, data-leak, git-identity, user-agent, prompt-injection-surface, vendor-response, built-in-mod, open-issue, hacker-news, partial-fix]
 ---
 

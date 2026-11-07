@@ -7,7 +7,7 @@ severity: high
 status: active
 ecosystems: [claude-code, github, git, secrets, anthropic]
 tools_affected: ["Claude Code (terminal, VS Code and JetBrains extensions, desktop app) in any git repository where a user chose \"Yes, and don't ask again\" for a Bash command that contained a password, token or key", "every public or shared repository that has committed .claude/settings.local.json or .claude/settings.json, including its history and forks", "secret scanners that do not inspect JSON allow rules (Apiiro says gitleaks flagged 564 and TruffleHog 643 of the 1,122 files)"]
-tags: [credential-exposure, secrets-in-git, claude-code, settings-local-json, permission-rules, agent-config-files, rotate-credentials, vendor-no-response, hacker-news-front-page]
+tags: [credential-exposure, secrets-in-git, claude-code, settings-local-json, permission-rules, agent-config-files, rotate-credentials, vendor-no-response, the-hacker-news-front-page]
 ---
 
 ## TL;DR
