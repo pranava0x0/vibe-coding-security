@@ -2,7 +2,7 @@
 id: 2026-10-fireworks-ai-evaluation-job-environment-variable-credential-exposure
 title: "Fireworks AI incident: internal credentials misused to read evaluation-job environment variables, including customer API keys and third-party tokens (detected 2026-10-06)"
 date_disclosed: 2026-10-09
-last_updated: 2026-10-11
+last_updated: 2026-11-10
 severity: high
 status: active
 ecosystems: [ai-inference-platform, api-keys, fireworks-ai, secrets]
@@ -69,6 +69,23 @@ grep -rIn -i fireworks ~/.claude.json ~/.cursor ~/.openclaw ~/.config/litellm 2>
 - **Inventory where provider keys live.** Agent configs, MCP configs and CI are the usual places a Fireworks key ends up beside everything else: [prevention/supply-chain-attack-surface.md](../prevention/supply-chain-attack-surface.md).
 - **Watch the vendor's bulletin page.** Fireworks publishes incidents at `fireworks.ai/security/bulletins/`; the status was "active monitoring" when this was written, and the review of credential use was open.
 
+## Update 2026-11-09: a second bulletin widens the data scope and reports further access on 2026-10-24 through a third-party cloud provider
+
+Fireworks published "Update on October 2026 security incident" as a second page on its bulletins index, last updated 2026-11-09, status still "Active monitoring". The first bulletin's page is unchanged since 2026-10-10, so a reader who re-opens only that URL sees nothing new.
+
+**Scope, then and now.** The update says that at the time of the October bulletin "only Fireworks stored secrets (e.g. used in evaluation jobs) were known to have been accessed." It now lists account and billing information as affected, and for a limited set of accounts, secrets, datasets and incomplete models. Resource metadata: identifiers, display names, descriptions and creation times. Billing: addresses, invoice and payment history, account balance and credit usage. "Payment card numbers are not stored by Fireworks and were not impacted." For certain customers, a subset of incomplete model weights and datasets was accessed. Fireworks says it detected no impact to Inference, Training SDK or Nexus, which it describes as zero data retention by default. No count of affected accounts is given.
+
+**Further activity.** On 2026-10-23 a third-party cloud provider that hosted Fireworks research and development machines "experienced a security incident". On 2026-10-24 an unauthorized third party "used it to reach Fireworks development machines" and ran an unauthorized workload that caused additional customer data impact; Fireworks says it detected this the same day, and that as of 2026-10-25 "we have not detected further evidence of successful unauthorized access" to the platform customers use. The bulletin does not name the provider and does not say whether this was the same actor as the October access. This file does not guess the provider.
+
+**Actor and root cause.** The update links the incident to a financially motivated group that sells LLM tokens obtained through unauthorized access, the pattern this corpus tracks as [LLMjacking](2026-11-llmjacking-stolen-cloud-and-llm-api-keys-billed-for-inference-gtig-jet-night-unc6993.md). It still does not say how the internal credentials were first obtained.
+
+**What changed for customers.** Fireworks says it is notifying impacted customers with recommended actions. The page lists none beyond replying to the notification or writing to the security address in the bulletin. Self-serve dataset uploads and downloads for Batch Inference and dataset-based training are disabled during the investigation. Hardening listed: credentials and service accounts revoked and replaced, elevated privileges removed, network pathways restricted, storage and analytics access tightened, logging secured.
+
+**Headlines.** A Hacker News item on 2026-11-09 carries the title "Fireworks AI Hacked" and links a Bloomberg article whose URL slug reads "notifies customers of its second hack in weeks"; a commenter cites The Information on exposed model weights and datasets. Neither article was opened (paywalls). The vendor's page describes one incident with further activity, in one update, and this file follows the vendor's framing while recording the outlets' as theirs.
+
+**For readers.** The first bulletin's rotation advice stands. Add: if you uploaded datasets or ran fine-tuning on Fireworks before 2026-10-25, treat those datasets and any partial model weights as possibly disclosed until your notification says otherwise, and review what the datasets contain (customer records, prompts, internal documents). Billing addresses and invoice history are phishing material. Expect invoices and "account suspended" mail that looks right. Status stays `active`: the investigation is open and the vendor's status line is unchanged.
+
 ## Sources
 - [Fireworks AI — October 2026 security incident (security bulletin)](https://fireworks.ai/security/bulletins/october-2026-security-incident) — fetched 2026-10-11; last updated 2026-10-10 11:16 PDT: the quoted scope statement, the full timeline, the "likely captured" wording on API keys and tokens, the list of what was not accessed, the customer actions, the secret-name and fingerprint offer, and the contact address. The only source on the sweep date; no outlet, HN story or search result covered it.
 - Related in this corpus: [Coder registry compromise](2026-09-coder-registry-cloudflare-terraform-supply-chain.md) and [Vercel / Context.ai OAuth breach](2026-04-vercel-context-ai-breach.md), the two other tracked cases where a vendor's own internal credential was the entry point and customer secrets were the loot.
+- **2026-11-09 update sources:** [Fireworks: Update on October 2026 security incident](https://fireworks.ai/security/bulletins/october-2026-security-incident-update), fetched 2026-11-10: last updated 2026-11-09, "Active monitoring"; the widened data categories, the 2026-10-23 and 2026-10-24 events, the 2026-10-25 statement, the LLM-token-resale attribution, the disabled dataset features; no account count, no provider name, no initial access vector. [Fireworks security bulletins index](https://fireworks.ai/security/bulletins), fetched 2026-11-10: two bulletins, the October page last updated 2026-10-10. Hacker News item 50432415 ("Fireworks AI Hacked", 2026-11-09 21:26 UTC, 11 points), read through the Algolia items API on 2026-11-10 for the title, the Bloomberg link and the commenter's citation; the Bloomberg and The Information articles were not opened.

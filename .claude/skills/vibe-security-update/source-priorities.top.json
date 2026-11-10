@@ -5,14 +5,14 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 120,
-   "last_hit": "2026-11-07"
+   "hits": 121,
+   "last_hit": "2026-11-10"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 69,
-   "last_hit": "2026-11-07"
+   "hits": 70,
+   "last_hit": "2026-11-10"
   },
   {
    "domain": "securityweek.com",
@@ -23,14 +23,14 @@
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 65,
-   "last_hit": "2026-11-05"
+   "hits": 66,
+   "last_hit": "2026-11-10"
   },
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 64,
-   "last_hit": "2026-11-07"
+   "hits": 65,
+   "last_hit": "2026-11-10"
   },
   {
    "domain": "nvd.nist.gov",
@@ -47,20 +47,26 @@
   {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
-   "hits": 41,
-   "last_hit": "2026-11-07"
+   "hits": 42,
+   "last_hit": "2026-11-10"
   },
   {
    "domain": "vulncheck.com",
    "weight": 20.0,
-   "hits": 40,
-   "last_hit": "2026-11-06"
+   "hits": 41,
+   "last_hit": "2026-11-10"
   },
   {
    "domain": "stepsecurity.io",
    "weight": 20.0,
+   "hits": 35,
+   "last_hit": "2026-11-10"
+  },
+  {
+   "domain": "socket.dev",
+   "weight": 20.0,
    "hits": 34,
-   "last_hit": "2026-10-31"
+   "last_hit": "2026-11-10"
   },
   {
    "domain": "bleepingcomputer.com",
@@ -69,34 +75,34 @@
    "last_hit": "2026-10-26"
   },
   {
-   "domain": "socket.dev",
-   "weight": 20.0,
-   "hits": 33,
-   "last_hit": "2026-10-26"
-  },
-  {
    "domain": "cveawg.mitre.org",
    "weight": 20.0,
-   "hits": 31,
-   "last_hit": "2026-11-07"
+   "hits": 32,
+   "last_hit": "2026-11-10"
   },
   {
    "domain": "cisa.gov",
    "weight": 20.0,
-   "hits": 27,
-   "last_hit": "2026-11-02"
+   "hits": 28,
+   "last_hit": "2026-11-10"
   },
   {
    "domain": "hn.algolia.com",
    "weight": 20.0,
-   "hits": 26,
-   "last_hit": "2026-11-07"
+   "hits": 27,
+   "last_hit": "2026-11-10"
   },
   {
    "domain": "safedep.io",
    "weight": 20.0,
-   "hits": 25,
-   "last_hit": "2026-11-03"
+   "hits": 26,
+   "last_hit": "2026-11-10"
+  },
+  {
+   "domain": "pypi.org",
+   "weight": 20.0,
+   "hits": 24,
+   "last_hit": "2026-11-10"
   },
   {
    "domain": "aikido.dev",
@@ -105,28 +111,22 @@
    "last_hit": "2026-10-26"
   },
   {
-   "domain": "pypi.org",
-   "weight": 20.0,
-   "hits": 23,
-   "last_hit": "2026-11-06"
-  },
-  {
    "domain": "advisories.gitlab.com",
    "weight": 20.0,
    "hits": 23,
    "last_hit": "2026-09-23"
   },
   {
+   "domain": "wiz.io",
+   "weight": 20.0,
+   "hits": 20,
+   "last_hit": "2026-11-10"
+  },
+  {
    "domain": "aws.amazon.com",
    "weight": 20.0,
    "hits": 20,
    "last_hit": "2026-11-05"
-  },
-  {
-   "domain": "wiz.io",
-   "weight": 20.0,
-   "hits": 19,
-   "last_hit": "2026-11-01"
   },
   {
    "domain": "api.npmjs.org",
