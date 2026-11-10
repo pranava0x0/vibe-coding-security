@@ -1603,8 +1603,8 @@
     "sckit-implant-framework",
     "tensorlake-mini-shai-hulud"
    ],
-   "hits": 25,
-   "last_hit": "2026-11-03",
+   "hits": 26,
+   "last_hit": "2026-11-10",
    "tier": "research",
    "weight": 20
   },
@@ -1792,8 +1792,8 @@
     "tensorlake-chaindrop",
     "trapdoor"
    ],
-   "hits": 33,
-   "last_hit": "2026-10-26",
+   "hits": 34,
+   "last_hit": "2026-11-10",
    "tier": "research",
    "weight": 20
   },
@@ -1835,8 +1835,8 @@
     "vapi-ai",
     "vscode"
    ],
-   "hits": 34,
-   "last_hit": "2026-10-31",
+   "hits": 35,
+   "last_hit": "2026-11-10",
    "tier": "research",
    "weight": 20
   },
@@ -3370,6 +3370,19 @@
    "tier": "aggregator",
    "weight": 10
   },
+  "osv.dev": {
+   "ecosystems": [
+    "mal-2026-17248-dirtyblanket",
+    "mal-2026-17723-mal-2026-17744-mal-2026-17746-mal-2026-17768-mal-2026-17770",
+    "mal-2026-17923-17924-10979-12314-apex",
+    "npm",
+    "pypi"
+   ],
+   "hits": 6,
+   "last_hit": "2026-11-10",
+   "tier": "official",
+   "weight": 10
+  },
   "air.security": {
    "_added": "2026-09-18",
    "ecosystems": [
@@ -3544,19 +3557,6 @@
    "hits": 1,
    "last_decayed": "2026-10-22",
    "last_hit": "2026-05-28",
-   "tier": "official",
-   "weight": 9
-  },
-  "osv.dev": {
-   "ecosystems": [
-    "mal-2026-17248-dirtyblanket",
-    "mal-2026-17723-mal-2026-17744-mal-2026-17746-mal-2026-17768-mal-2026-17770",
-    "mal-2026-17923-17924-10979-12314-apex",
-    "npm",
-    "pypi"
-   ],
-   "hits": 5,
-   "last_hit": "2026-10-22",
    "tier": "official",
    "weight": 9
   },
@@ -4353,6 +4353,18 @@
    "tier": "independent",
    "weight": 7
   },
+  "api.osv.dev": {
+   "_added": "2026-11-01",
+   "ecosystems": [
+    "antd-img-crop-zero-records",
+    "better-auth-query",
+    "local-commander-agent-mal-2026-18425"
+   ],
+   "hits": 3,
+   "last_hit": "2026-11-10",
+   "tier": "official",
+   "weight": 7
+  },
   "0din.ai": {
    "_added": "2026-06-28",
    "ecosystems": [
@@ -4419,18 +4431,6 @@
    "hits": 2,
    "last_hit": "2026-10-14",
    "tier": "vendor",
-   "weight": 6
-  },
-  "api.osv.dev": {
-   "_added": "2026-11-01",
-   "ecosystems": [
-    "antd-img-crop-zero-records",
-    "better-auth-query",
-    "local-commander-agent-mal-2026-18425"
-   ],
-   "hits": 2,
-   "last_hit": "2026-11-03",
-   "tier": "official",
    "weight": 6
   },
   "api.wordpress.org": {

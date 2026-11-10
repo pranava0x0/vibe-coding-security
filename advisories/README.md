@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-11-09 | [Compromised @ethersphere/bee-js 13.3.0 and Swarm Desktop 0.56.2: remove, use 13.2.0 and 0.56.3, rotate keys](2026-11-ethersphere-bee-js-13-3-0-and-swarm-desktop-0-56-2-compromised-releases-remove-and-rotate.md) | high | contained |
 | 2026-11-09 | [Qubole's AWS account credentials used to assume customers' integration roles, 2026-10-14 to 10-26: secrets and S3 data read; no vendor statement](2026-11-qubole-aws-account-credentials-used-to-assume-customer-integration-roles-secrets-and-s3-read-wiz-sentra.md) | high | active |
 | 2026-11-06 | [Claude Code "don't ask again" writes approved commands, secrets included, to .claude/settings.local.json; 1,122 public GitHub copies hold secrets (Apiiro)](2026-11-claude-code-settings-local-json-standing-approval-stores-approved-commands-with-secrets-1122-public-github-copies.md) | high | active |
 | 2026-11-05 | [ChatGPT Apps SDK: a follow-up tool call was routed through a different connector for the same MCP server, developer report; no OpenAI response](2026-11-chatgpt-apps-sdk-follow-up-tool-call-routed-through-different-connector-same-mcp-server-developer-report-no-openai-response.md) | medium | unconfirmed |

@@ -59,19 +59,19 @@
   {
    "domain": "stepsecurity.io",
    "weight": 20.0,
+   "hits": 35,
+   "last_hit": "2026-11-10"
+  },
+  {
+   "domain": "socket.dev",
+   "weight": 20.0,
    "hits": 34,
-   "last_hit": "2026-10-31"
+   "last_hit": "2026-11-10"
   },
   {
    "domain": "bleepingcomputer.com",
    "weight": 20.0,
    "hits": 34,
-   "last_hit": "2026-10-26"
-  },
-  {
-   "domain": "socket.dev",
-   "weight": 20.0,
-   "hits": 33,
    "last_hit": "2026-10-26"
   },
   {
@@ -95,8 +95,8 @@
   {
    "domain": "safedep.io",
    "weight": 20.0,
-   "hits": 25,
-   "last_hit": "2026-11-03"
+   "hits": 26,
+   "last_hit": "2026-11-10"
   },
   {
    "domain": "pypi.org",
