@@ -2,7 +2,7 @@
 id: 2026-10-fireworks-ai-evaluation-job-environment-variable-credential-exposure
 title: "Fireworks AI incident: internal credentials misused to read evaluation-job environment variables, including customer API keys and third-party tokens (detected 2026-10-06)"
 date_disclosed: 2026-10-09
-last_updated: 2026-11-10
+last_updated: 2026-11-11
 severity: high
 status: active
 ecosystems: [ai-inference-platform, api-keys, fireworks-ai, secrets]
@@ -85,7 +85,26 @@ Fireworks published "Update on October 2026 security incident" as a second page 
 
 **For readers.** The first bulletin's rotation advice stands. Add: if you uploaded datasets or ran fine-tuning on Fireworks before 2026-10-25, treat those datasets and any partial model weights as possibly disclosed until your notification says otherwise, and review what the datasets contain (customer records, prompts, internal documents). Billing addresses and invoice history are phishing material. Expect invoices and "account suspended" mail that looks right. Status stays `active`: the investigation is open and the vendor's status line is unchanged.
 
+## Update 2026-11-11: Notion names Fireworks as the vendor behind exposed Notion AI chat transcripts, fewer than 1% of workspaces
+
+Notion published a help-centre notice, "Security incident involving a third-party AI vendor". The page carries no publication date. A Hacker News item linked it on 2026-11-10 (164 points). The page does not date the Fireworks incident or link a Fireworks bulletin. This file reads it as the incident tracked here because the vendor, the data type and the 2026-11-03 disconnection fit, and that link is this file's inference.
+
+**What Notion says.** "One of our vendors, Fireworks AI, notified us of a security incident impacting fewer than 1% of Notion workspaces." The exposed data is chat transcripts: any input to or output from the model written to the chat. Three uses are named: Notion AI chat content, the Insights feature, which used Fireworks for classification, and the Learning and Early Access Program, where volunteered data was used to experiment with training task-specific models. AI Meeting Notes data was not affected unless it was used as input in a Notion AI chat. The page gives no time window and no row count.
+
+**What Notion did.** "As of November 3rd" it disconnected its systems from Fireworks and stopped sending data. It deleted the data in the Fireworks system, halted all training runs, disabled Insights and stopped serving open-weight models through Fireworks. It says it is auditing critical vendors for data minimization and zero data retention.
+
+**What this adds to the Fireworks bulletins.** Fireworks' 2026-11-09 update said datasets and incomplete model weights were accessed for certain customers and named none. If it is the same incident, Notion's notice shows what such a dataset can be: end users' chat text, held by the inference vendor for training experiments. An end user of a product built on Fireworks had no way to know their text was there.
+
+**For readers.**
+
+- Notion workspace owners: check sidebar, then `?`, then `Security incident review`, on a desktop browser. Owners can download the affected-member files. Notion's advice is "We recommend that you treat this data as if it were exposed."
+- Anyone who pasted a password, API key or other credential into Notion AI: rotate it. Notion says the same.
+- If you build on an inference vendor: list what you send it beyond live requests. Fine-tuning sets, evaluation sets and logged prompts are stored data, and zero-retention terms for inference do not cover them. If your users' text was in a dataset on Fireworks before 2026-10-25, your users are in the same position as Notion's.
+
+Status stays `active`: Fireworks' bulletin still reads "Active monitoring" as last read on 2026-11-10, and this sweep did not re-read it.
+
 ## Sources
 - [Fireworks AI — October 2026 security incident (security bulletin)](https://fireworks.ai/security/bulletins/october-2026-security-incident) — fetched 2026-10-11; last updated 2026-10-10 11:16 PDT: the quoted scope statement, the full timeline, the "likely captured" wording on API keys and tokens, the list of what was not accessed, the customer actions, the secret-name and fingerprint offer, and the contact address. The only source on the sweep date; no outlet, HN story or search result covered it.
 - Related in this corpus: [Coder registry compromise](2026-09-coder-registry-cloudflare-terraform-supply-chain.md) and [Vercel / Context.ai OAuth breach](2026-04-vercel-context-ai-breach.md), the two other tracked cases where a vendor's own internal credential was the entry point and customer secrets were the loot.
 - **2026-11-09 update sources:** [Fireworks: Update on October 2026 security incident](https://fireworks.ai/security/bulletins/october-2026-security-incident-update), fetched 2026-11-10: last updated 2026-11-09, "Active monitoring"; the widened data categories, the 2026-10-23 and 2026-10-24 events, the 2026-10-25 statement, the LLM-token-resale attribution, the disabled dataset features; no account count, no provider name, no initial access vector. [Fireworks security bulletins index](https://fireworks.ai/security/bulletins), fetched 2026-11-10: two bulletins, the October page last updated 2026-10-10. Hacker News item 50432415 ("Fireworks AI Hacked", 2026-11-09 21:26 UTC, 11 points), read through the Algolia items API on 2026-11-10 for the title, the Bloomberg link and the commenter's citation; the Bloomberg and The Information articles were not opened.
+- **2026-11-11 update sources** — [Notion: Security incident involving a third-party AI vendor](https://www.notion.com/help/security-incident-involving-a-third-party-ai-vendor), fetched 2026-11-11: undated page; the quoted sentences, the three features, the 2026-11-03 disconnection, the owner review path. Hacker News item 50437106 (2026-11-10, 164 points) links it. Seen on front pages and not opened: The Hacker News "Fireworks AI Confirms Wider Breach Affecting Customer Datasets, Model Weights and Notion AI Chats" and The Register "Fireworks AI gets burned twice as customer data exposure widens", both 2026-11-10.
