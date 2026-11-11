@@ -31,7 +31,7 @@ Claroc (2026-11-10) reports that 35,578 of 37,571 live apps built with Grok's ap
 | Apps built by the vendor's own staff | 24 |
 | Other organisations identified | 30, of which 26 have more than 1,000 employees and 6 are in the Fortune 500 |
 
-"About 1 in 10" of 35,578 and "roughly 650 to 800" are both in the post and do not obviously agree. This file prints both and derives nothing. Examples the post gives: a hospital staff roster of more than 3,500 employees, a timesheet app with 18 accounts and plain-text passwords in its code, and a sales territory map covering 594 accounts.
+The post prints "about 1 in 10", "roughly 2%" and "roughly 650 to 800" without saying which share the last estimate belongs to. This file prints all three and derives nothing. Examples the post gives: a hospital staff roster of more than 3,500 employees, a timesheet app with 18 accounts and plain-text passwords in its code, and a sales territory map covering 594 accounts.
 
 **Why the apps were open, per Claroc.** In the paid account the researchers used, the publish panel offered "Anyone with the link", "Invited users" and "Only you", with "Anyone with the link" preselected. Each app is its own DNS name, so opening one leaves a record that DNS-history services index. A random-word name therefore does not keep an app private.
 

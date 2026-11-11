@@ -6,7 +6,7 @@ last_updated: 2026-11-11
 severity: critical
 status: patched
 ecosystems: [vscode, mcp, aspire, dotnet, npm, azure, copilot, jetbrains]
-tools_affected: ["Visual Studio Code before 1.145.3 (19 CVEs)", "Aspire Dashboard, Aspire.Hosting and Aspire.Cli before 13.6.5 (npm `@microsoft/aspire-cli` before 13.6.5)", "Microsoft MCP Gateway (CVE-2026-109492; fixed build printed as 1.0.0)", "Microsoft 365 Agents SDK (CVE-2026-109485; product printed as Microsoft Agent Framework SDK for .NET, fixed build 1.8.77)", "GitHub Copilot plugin for JetBrains IDEs before 1.17.0-251 (CVE-2026-83953)", "Azure OpenAI (CVE-2026-119990, fixed by Microsoft, no customer action)"]
+tools_affected: ["Visual Studio Code before 1.145.3 (19 CVEs)", "Aspire Dashboard, Aspire.Hosting and Aspire.Cli before 13.6.5 (npm `@microsoft/aspire-cli` before 13.6.5)", "Microsoft MCP Gateway (CVE-2026-109492; the record carries no usable version range)", "Microsoft 365 Agents SDK (CVE-2026-109485; product printed as Microsoft Agent Framework SDK for .NET; the record carries no usable version range)", "GitHub Copilot plugin for JetBrains IDEs before 1.17.0-251 (CVE-2026-83953)", "Azure OpenAI (CVE-2026-119990, fixed by Microsoft, no customer action)"]
 tags: [cve, msrc, patch-tuesday, vscode, mcp, mcp-install-link, workspace-trust, extension-marketplace, inline-chat, aspire, mcp-gateway, agents-sdk, azure-openai, copilot-jetbrains]
 ---
 

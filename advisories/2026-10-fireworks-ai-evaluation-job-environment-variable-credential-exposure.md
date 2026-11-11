@@ -87,13 +87,13 @@ Fireworks published "Update on October 2026 security incident" as a second page 
 
 ## Update 2026-11-11: Notion names Fireworks as the vendor behind exposed Notion AI chat transcripts, fewer than 1% of workspaces
 
-Notion published a help-centre notice, "Security incident involving a third-party AI vendor". The page carries no publication date. A Hacker News item linked it on 2026-11-10 (164 points). It is the first downstream customer of Fireworks to name itself.
+Notion published a help-centre notice, "Security incident involving a third-party AI vendor". The page carries no publication date. A Hacker News item linked it on 2026-11-10 (164 points). The page does not date the Fireworks incident or link a Fireworks bulletin. This file reads it as the incident tracked here because the vendor, the data type and the 2026-11-03 disconnection fit, and that link is this file's inference.
 
 **What Notion says.** "One of our vendors, Fireworks AI, notified us of a security incident impacting fewer than 1% of Notion workspaces." The exposed data is chat transcripts: any input to or output from the model written to the chat. Three uses are named: Notion AI chat content, the Insights feature, which used Fireworks for classification, and the Learning and Early Access Program, where volunteered data was used to experiment with training task-specific models. AI Meeting Notes data was not affected unless it was used as input in a Notion AI chat. The page gives no time window and no row count.
 
 **What Notion did.** "As of November 3rd" it disconnected its systems from Fireworks and stopped sending data. It deleted the data in the Fireworks system, halted all training runs, disabled Insights and stopped serving open-weight models through Fireworks. It says it is auditing critical vendors for data minimization and zero data retention.
 
-**What this adds to the Fireworks bulletins.** Fireworks' 2026-11-09 update said datasets and incomplete model weights were accessed for certain customers and named none. Notion's notice shows what such a dataset can be: end users' chat text, held by the inference vendor for training experiments. An end user of a product built on Fireworks had no way to know their text was there.
+**What this adds to the Fireworks bulletins.** Fireworks' 2026-11-09 update said datasets and incomplete model weights were accessed for certain customers and named none. If it is the same incident, Notion's notice shows what such a dataset can be: end users' chat text, held by the inference vendor for training experiments. An end user of a product built on Fireworks had no way to know their text was there.
 
 **For readers.**
 
