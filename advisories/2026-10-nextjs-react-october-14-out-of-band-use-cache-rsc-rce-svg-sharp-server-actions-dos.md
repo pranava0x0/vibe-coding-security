@@ -2,7 +2,7 @@
 id: 2026-10-nextjs-react-october-14-out-of-band-use-cache-rsc-rce-svg-sharp-server-actions-dos
 title: "Next.js 16.4.1 and 15.5.28, React 19.3.1: unauthenticated RCE through `use cache` typed arrays and SVG image optimization, Server Actions DoS (2026-10-14)"
 date_disclosed: 2026-10-14
-last_updated: 2026-10-17
+last_updated: 2026-11-11
 severity: critical
 status: patched
 ecosystems: [npm, javascript, nextjs, react, sharp]
@@ -66,6 +66,17 @@ Upgrade to `next@16.4.1` or `next@15.5.28`, rebuild and redeploy; the fix is in 
 
 Next.js published "Next.js Security Update for Upstream Vulnerabilities" on 2026-10-14 (Josh Story, Karim Rahal, Sebastian Silbermann); the 10-15 sweep found `nextjs.org/blog/security` returning 404 and the blog index without it, and Hacker News surfaced the post on 2026-10-16. It confirms the three advisories and their severities as written above, names the React advisories GHSA-xqc2-xf4c-x3h3 and GHSA-h3gv-c5rc-p453 as the upstreams of the `use cache` and Server Actions items, still carries no CVE for either, and states the SVG workaround as "ensure the version of `sharp` used by Next.js is 0.35.5 or later." One sentence needs a caveat: "Upgrading Next.js to the patched versions ensures package managers automatically provide a fixed version of `sharp` to Next.js." That holds for `next@16.4.1`, whose `optionalDependencies.sharp` is `^0.35.5`. For `next@15.5.28` the pin re-checked on 2026-10-16 is `^0.34.3 || ^0.35.5`, so a lockfile that already resolves `sharp` 0.34.x satisfies the range and `npm install next@15.5.28` does not move it. The `npm ls sharp` check above stands for the 15.x line. Both statements are recorded; the registry pin is the one a package manager reads.
 
+## Update 2026-11-11: the React Server Components RCE now has a CVE, CVE-2026-126187, four weeks after the fix
+
+The GitHub CNA published CVE-2026-126187 on 2026-11-10 for React advisory GHSA-xqc2-xf4c-x3h3, and the advisory entered the GitHub Advisory Database as reviewed the same day. A recency-sorted listing shows it as a new critical on 2026-11-10. It is the 2026-10-14 bug this file already covers, and the fixed versions are unchanged.
+
+- **Record.** "React: Unauthenticated Remote Code Execution in React Server Components". CVSS 4.0 9.5 (`AV:N/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:H/SI:H/SA:N`), supplied by the GitHub CNA. CWE-502.
+- **Affected.** `react-server-dom-webpack`, `react-server-dom-parcel` and `react-server-dom-turbopack` 19.0.0 before 19.0.9, 19.1.0 before 19.1.10, 19.2.0 before 19.2.9 and 19.3.0 before 19.3.1. The record keeps the advisory's limit: "extremely rare cases where responses transport multiple typed arrays and an attacker-controlled value."
+- **Registry.** `npm view react-server-dom-webpack time` shows 19.3.1, 19.2.9, 19.0.9 and 19.1.10 all published on 2026-10-14 between 16:49 and 16:56 UTC.
+- **What changes.** Scanners keyed to CVE records start flagging the affected `react-server-dom-*` versions from 2026-11-10. For twenty-seven days the fix existed with no CVE. The two Next.js advisories from the same release, GHSA-673q-mjm6-r5xr and GHSA-2464-fhr4-w9xw, still showed no CVE id in the reviewed-critical npm listing on 2026-11-11.
+
+Nothing to do if you upgraded in October. If a scanner flags this id today, check `npm ls react-server-dom-webpack react-server-dom-turbopack react-server-dom-parcel` against the four fixed versions.
+
 ## Sources
 - [GHSA-673q-mjm6-r5xr, Next.js vendor tab](https://github.com/vercel/next.js/security/advisories/GHSA-673q-mjm6-r5xr) — `use cache` RCE, 9.5, affected and patched versions, no workaround.
 - [GHSA-2464-fhr4-w9xw, Next.js vendor tab](https://github.com/vercel/next.js/security/advisories/GHSA-2464-fhr4-w9xw) — SVG Image Optimization RCE, CVE-2026-96889, sharp 0.35.5 workaround, credits.
@@ -78,3 +89,4 @@ Next.js published "Next.js Security Update for Upstream Vulnerabilities" on 2026
 - npm registry `time` for `next` and `react-server-dom-webpack`, fetched 2026-10-15 — publish timestamps; `npm view next@<v> optionalDependencies.sharp` — the sharp pins.
 - [Next.js blog — Next.js Security Update for Upstream Vulnerabilities](https://nextjs.org/blog/nextjs-security-update-october-14-2026) — 2026-10-14; the vendor post: the three advisories, the React upstream ids, the `sharp` 0.35.5 workaround and the "automatically provide a fixed version" sentence; fetched 2026-10-16. `npm view next@15.5.28 optionalDependencies.sharp` re-run 2026-10-16: `^0.34.3 || ^0.35.5`.
 - [HOL Guard — Next.js October 2026 security update: two unauthenticated RCEs; check sharp too](https://hol.org/blog/cve-2026-96889-nextjs-october-2026-security-update-rce) — 2026-10-14, modified 2026-10-17, no individual author; reaches the same conclusion as the pin check above ("There is no fixed 0.34.x release; the only fixed sharp is 0.35.5"), recommends an `overrides` pin and `npm ls next sharp`; on the Hacker News front page 2026-10-16. Third-party corroboration only; the registry pin is the evidence.
+- **2026-11-11 update sources** — [CVE Services: CVE-2026-126187](https://cveawg.mitre.org/api/cve/CVE-2026-126187), fetched 2026-11-11: GitHub CNA, published 2026-11-10; title, description, ranges, CVSS 4.0 9.5, references to the React advisory and five pull requests. [GitHub Advisory Database: GHSA-xqc2-xf4c-x3h3](https://github.com/advisories/GHSA-xqc2-xf4c-x3h3), fetched 2026-11-11: advisory dated 2026-10-14, database entry 2026-11-10, the three packages and patched versions. [Reviewed-critical npm listing](https://github.com/advisories?query=type%3Areviewed+ecosystem%3Anpm+severity%3Acritical), fetched 2026-11-11: the two Next.js rows with no CVE id. `npm view react-server-dom-webpack time`, run 2026-11-11.
