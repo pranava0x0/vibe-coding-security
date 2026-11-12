@@ -5,8 +5,8 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 122,
-   "last_hit": "2026-11-11"
+   "hits": 123,
+   "last_hit": "2026-11-12"
   },
   {
    "domain": "github.com/advisories",
@@ -17,14 +17,14 @@
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 69,
-   "last_hit": "2026-11-06"
+   "hits": 70,
+   "last_hit": "2026-11-12"
   },
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 66,
-   "last_hit": "2026-11-11"
+   "hits": 67,
+   "last_hit": "2026-11-12"
   },
   {
    "domain": "theregister.com",
@@ -63,6 +63,12 @@
    "last_hit": "2026-11-10"
   },
   {
+   "domain": "cveawg.mitre.org",
+   "weight": 20.0,
+   "hits": 34,
+   "last_hit": "2026-11-12"
+  },
+  {
    "domain": "socket.dev",
    "weight": 20.0,
    "hits": 34,
@@ -73,12 +79,6 @@
    "weight": 20.0,
    "hits": 34,
    "last_hit": "2026-10-26"
-  },
-  {
-   "domain": "cveawg.mitre.org",
-   "weight": 20.0,
-   "hits": 33,
-   "last_hit": "2026-11-11"
   },
   {
    "domain": "hn.algolia.com",

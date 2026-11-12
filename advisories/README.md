@@ -4,6 +4,8 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-11-11 | [Red Hat Quay: unauthenticated signing-key takeover (CVE-2026-123710, 9.8) and cross-tenant robot token leak (CVE-2026-110697, 9.9); restrict /keys now](2026-11-red-hat-quay-unauthenticated-signing-key-takeover-cve-2026-123710-cross-tenant-robot-token-leak-cve-2026-110697.md) | critical | active |
+| 2026-11-11 | [Node.js 22.23.5, 24.22.3, 26.13.1 fix 16 CVEs: HTTP/2 crash and memory disclosure, HTTPS heap read (CVE-2026-123864), TLS client-certificate bypasses](2026-11-nodejs-november-11-security-release-sixteen-cves-http2-crash-memory-disclosure-https-heap-read-tls-client-cert-bypass.md) | high | patched |
 | 2026-11-10 | [VS Code 1.145.3 fixes 19 CVEs (MCP server links, Workspace Trust bypasses); Aspire 13.6.5 and MCP Gateway also patched (2026-11-10)](2026-11-microsoft-november-patch-tuesday-vs-code-1-145-3-nineteen-cves-mcp-install-workspace-trust-aspire-mcp-gateway.md) | critical | patched |
 | 2026-11-10 | [Grok-built apps on grok.me: 35,578 of 37,571 open without sign-in, some holding internal data (Claroc); vendor disputes the default](2026-11-grok-build-apps-anyone-with-the-link-default-35578-open-apps-claroc.md) | high | unconfirmed |
 | 2026-11-10 | [Git 2.56.1 and six backports fix code execution on recursive clone (CVE-2026-111760) and five more CVEs; update every bundled Git](2026-11-git-2-56-1-recursive-clone-code-execution-cve-2026-111760-six-cves.md) | high | patched |
