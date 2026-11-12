@@ -5,8 +5,8 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 122,
-   "last_hit": "2026-11-11"
+   "hits": 123,
+   "last_hit": "2026-11-12"
   },
   {
    "domain": "github.com/advisories",
@@ -17,14 +17,14 @@
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 69,
-   "last_hit": "2026-11-06"
+   "hits": 70,
+   "last_hit": "2026-11-12"
   },
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 66,
-   "last_hit": "2026-11-11"
+   "hits": 67,
+   "last_hit": "2026-11-12"
   },
   {
    "domain": "theregister.com",
@@ -59,8 +59,14 @@
   {
    "domain": "stepsecurity.io",
    "weight": 20.0,
-   "hits": 35,
-   "last_hit": "2026-11-10"
+   "hits": 36,
+   "last_hit": "2026-11-12"
+  },
+  {
+   "domain": "cveawg.mitre.org",
+   "weight": 20.0,
+   "hits": 34,
+   "last_hit": "2026-11-12"
   },
   {
    "domain": "socket.dev",
@@ -73,12 +79,6 @@
    "weight": 20.0,
    "hits": 34,
    "last_hit": "2026-10-26"
-  },
-  {
-   "domain": "cveawg.mitre.org",
-   "weight": 20.0,
-   "hits": 33,
-   "last_hit": "2026-11-11"
   },
   {
    "domain": "hn.algolia.com",
@@ -95,20 +95,20 @@
   {
    "domain": "safedep.io",
    "weight": 20.0,
-   "hits": 26,
-   "last_hit": "2026-11-10"
+   "hits": 27,
+   "last_hit": "2026-11-12"
+  },
+  {
+   "domain": "aikido.dev",
+   "weight": 20.0,
+   "hits": 25,
+   "last_hit": "2026-11-12"
   },
   {
    "domain": "pypi.org",
    "weight": 20.0,
    "hits": 25,
    "last_hit": "2026-11-11"
-  },
-  {
-   "domain": "aikido.dev",
-   "weight": 20.0,
-   "hits": 24,
-   "last_hit": "2026-10-26"
   },
   {
    "domain": "advisories.gitlab.com",

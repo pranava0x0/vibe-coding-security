@@ -15,6 +15,21 @@
 
 ## Archived entries
 
+## 2026-11-03
+
+```yaml
+queries: {deep: 16, medium: 9, shallow: 6}
+new: [2026-11-antd-img-crop-github-repository-forged-commit-do-not-install-from-git-npm-clean, 2026-11-trigger-dev-security-incident-environment-variables-exposed-subset-of-organizations-rotate, 2026-11-workos-october-30-internal-sales-tool-incident-crm-support-slack-excerpts-phishing-risk, 2026-11-urlparse-backslash-authority-ssrf-guard-bypass-crewai-cve-2026-120630-langflow-cve-2026-19304-fixed, 2026-11-mcp-server-november-cve-batch-aws-serverless-mcp-server-path-traversal-instatic-mcp-authorization]
+updated: [2026-09-crewai-zdi-zero-day-agent-loading-cve-batch, 2026-10-claude-code-extension-2-1-313-cursor-marketplace-remove-and-rotate]
+sources_added: [trigger.dev, status.trigger.dev, workos.com, runtimewire.com, cryptika.com, badcast.dev]
+sources_weighted: [safedep.io, microsoft.com, cursor.com, registry.npmjs.org, api.npmjs.org, api.osv.dev, theregister.com, cveawg.mitre.org, hn.algolia.com, github.com/advisories, github.com, pypi.org, aws.amazon.com, vulncheck.com, ibm.com, news.ycombinator.com]
+blockers: [openai-security-sprint-post-403, github-activity-page-needs-sign-in, grinich-x-post-not-opened, trigger-dev-root-cause-and-count-unpublished, workos-count-unpublished, reddit-not-fetchable, x-bsky-search-snippets-only, vulncheck-index-pages-2-plus-not-walked, langflow-query-page-2-not-walked, claude-code-tab-pages-3-4-not-walked, openclaw-tab-sorted-to-september, scworld-brief-403, rescana-post-not-opened]
+classifier_events: []
+deferred_after_classifier_stop: []
+```
+
+**Notes.** Routine daily sweep, all direct, no delegation. Sources that produced: HN Algolia (Trigger.dev at 166 points, WorkOS at 75 with the notification email reproduced and the CEO's reply), the Register front page (Trigger.dev), the `agent` listing (CrewAI's CERT/CC record), the AWS bulletin index (2026-163 and 2026-164, both 11-02), the VulnCheck index (Instatic first row), SafeDep's blog index (antd-img-crop). Every `WebSearch` tier returned background or tracked items except the WorkOS query, which surfaced the Runtimewire outlet and the bulletin path. **Judgement calls:** Trigger.dev `ongoing`/`high` from the post's own words ("investigation has identified exposure", "will follow up"), not from the status page's Resolved state. WorkOS `ongoing`/`medium`: CRM and support data, no credential, phishing is the action; ARTEX recorded as the vendor's framing, no offensive detail. The CrewAI record gets its own file with Langflow's bulletin 7285639 (four SSRF ids, none tracked before) because the researcher's finding spans two products and the CrewAI home file gets a pointer Update. The AWS and Instatic records open a November MCP batch file; aidlc-traceability rides in it as AWS agentic-workflow tooling. **Declined:** Node-RED CVE-2026-58115 exploitation (Siemens CNA, OT product, VulnCheck 11-02; not the stack, no AI component); AxxonSoft CVE-2026-121023; FreeRDP nineteen VulnCheck records; Microsoft Qlib three ZDI records; psqlODBC four; russh, zip crate; Cloudflare Zero Wire (a product); the arXiv pretraining-poisoning paper (research, no artifact); the Railway "rogue agent" X post (single X source, not opened); the "OpenAI re-enabling training on Codex chats" Ask HN (no source); Anthropic's vulnerability-discovery research post and Trail of Bits' Codex backporting post (not incidents); Unit 42's monthly highlights (no item). SafeDep's October review re-grepped: TiDB, Fireworks, Railway, Zeabur, OpenCode, Warp, Cursor, Polymarket, LiteLLM, PHP all tracked; Capcom, SoftBank, Coinbase/Amplitude, Binance not the stack. **Offensive-use, no artifact:** the ARTEX attribution reporting around WorkOS. Both rule 1 items (the antd-img-crop file and the Microsoft post-mortem update to the extension file) were written after the two review rounds on the blocklist template with no stop. **Open next run:** Trigger.dev's full incident report and root cause; WorkOS per-customer notices and any count; a reviewed range on GHSA-x35j-64g3-fxg7; whether the antd-img-crop repository is restored and whether OSV or GitHub issues a record; the `langflow` query page 2; KEV for CVE-2026-93680 or CVE-2026-104339 (neither on 11-03).
+
 ## 2026-11-02
 
 ```yaml
