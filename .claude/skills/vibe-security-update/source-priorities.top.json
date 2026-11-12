@@ -59,8 +59,8 @@
   {
    "domain": "stepsecurity.io",
    "weight": 20.0,
-   "hits": 35,
-   "last_hit": "2026-11-10"
+   "hits": 36,
+   "last_hit": "2026-11-12"
   },
   {
    "domain": "cveawg.mitre.org",
@@ -95,20 +95,20 @@
   {
    "domain": "safedep.io",
    "weight": 20.0,
-   "hits": 26,
-   "last_hit": "2026-11-10"
+   "hits": 27,
+   "last_hit": "2026-11-12"
+  },
+  {
+   "domain": "aikido.dev",
+   "weight": 20.0,
+   "hits": 25,
+   "last_hit": "2026-11-12"
   },
   {
    "domain": "pypi.org",
    "weight": 20.0,
    "hits": 25,
    "last_hit": "2026-11-11"
-  },
-  {
-   "domain": "aikido.dev",
-   "weight": 20.0,
-   "hits": 24,
-   "last_hit": "2026-10-26"
   },
   {
    "domain": "advisories.gitlab.com",

@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-11-12 | [GitHub repositories with `wfx-docs` pull requests or unexpected CI workflow commits since 2026-11-10: remove the changes and rotate CI secrets](2026-11-github-hijacked-accounts-wfx-docs-pull-requests-ci-workflow-changes-remove-and-rotate.md) | critical | active |
 | 2026-11-11 | [Red Hat Quay: unauthenticated signing-key takeover (CVE-2026-123710, 9.8) and cross-tenant robot token leak (CVE-2026-110697, 9.9); restrict /keys now](2026-11-red-hat-quay-unauthenticated-signing-key-takeover-cve-2026-123710-cross-tenant-robot-token-leak-cve-2026-110697.md) | critical | active |
 | 2026-11-11 | [Node.js 22.23.5, 24.22.3, 26.13.1 fix 16 CVEs: HTTP/2 crash and memory disclosure, HTTPS heap read (CVE-2026-123864), TLS client-certificate bypasses](2026-11-nodejs-november-11-security-release-sixteen-cves-http2-crash-memory-disclosure-https-heap-read-tls-client-cert-bypass.md) | high | patched |
 | 2026-11-10 | [VS Code 1.145.3 fixes 19 CVEs (MCP server links, Workspace Trust bypasses); Aspire 13.6.5 and MCP Gateway also patched (2026-11-10)](2026-11-microsoft-november-patch-tuesday-vs-code-1-145-3-nineteen-cves-mcp-install-workspace-trust-aspire-mcp-gateway.md) | critical | patched |

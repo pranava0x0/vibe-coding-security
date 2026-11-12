@@ -53,6 +53,7 @@
     "feishu-docx-mcp",
     "git-forge",
     "github",
+    "github-account-campaign-2026-11-10",
     "gitlab-incoming-email-token",
     "glassworm",
     "gluestack",
@@ -74,8 +75,8 @@
     "tensorlake",
     "vscode"
    ],
-   "hits": 24,
-   "last_hit": "2026-10-26",
+   "hits": 25,
+   "last_hit": "2026-11-12",
    "tier": "research",
    "weight": 20
   },
@@ -1599,6 +1600,7 @@
     "dirtyblanket-express-typosquat",
     "durabletask",
     "github",
+    "github-account-campaign-2026-11-10",
     "github-actions",
     "hades",
     "hugo-paper",
@@ -1618,8 +1620,8 @@
     "sckit-implant-framework",
     "tensorlake-mini-shai-hulud"
    ],
-   "hits": 26,
-   "last_hit": "2026-11-10",
+   "hits": 27,
+   "last_hit": "2026-11-12",
    "tier": "research",
    "weight": 20
   },
@@ -1827,6 +1829,7 @@
     "elementary-data",
     "ghostaction-returns-2026-10-08",
     "ghostaction-returns-advisory-2026-10-10",
+    "github-account-campaign-2026-11-10",
     "github-actions",
     "github-actions-pinning",
     "hades",
@@ -1851,8 +1854,8 @@
     "vapi-ai",
     "vscode"
    ],
-   "hits": 35,
-   "last_hit": "2026-11-10",
+   "hits": 36,
+   "last_hit": "2026-11-12",
    "tier": "research",
    "weight": 20
   },
@@ -3147,6 +3150,20 @@
    "tier": "aggregator",
    "weight": 11
   },
+  "osv.dev": {
+   "ecosystems": [
+    "github-account-campaign-2026-11-10",
+    "mal-2026-17248-dirtyblanket",
+    "mal-2026-17723-mal-2026-17744-mal-2026-17746-mal-2026-17768-mal-2026-17770",
+    "mal-2026-17923-17924-10979-12314-apex",
+    "npm",
+    "pypi"
+   ],
+   "hits": 7,
+   "last_hit": "2026-11-12",
+   "tier": "official",
+   "weight": 11
+  },
   "cyberpress.org": {
    "_added": "2026-05-19",
    "ecosystems": [
@@ -3391,19 +3408,6 @@
    "hits": 5,
    "last_hit": "2026-10-05",
    "tier": "aggregator",
-   "weight": 10
-  },
-  "osv.dev": {
-   "ecosystems": [
-    "mal-2026-17248-dirtyblanket",
-    "mal-2026-17723-mal-2026-17744-mal-2026-17746-mal-2026-17768-mal-2026-17770",
-    "mal-2026-17923-17924-10979-12314-apex",
-    "npm",
-    "pypi"
-   ],
-   "hits": 6,
-   "last_hit": "2026-11-10",
-   "tier": "official",
    "weight": 10
   },
   "air.security": {
@@ -5162,6 +5166,20 @@
    "tier": "vendor",
    "_added": "2026-10-22"
   },
+  "proxy.golang.org": {
+   "weight": 6,
+   "hits": 2,
+   "last_hit": "2026-11-12",
+   "ecosystems": [
+    "chatcli",
+    "github-account-campaign-2026-11-10",
+    "go",
+    "mcp-go",
+    "version-dates"
+   ],
+   "tier": "official",
+   "_added": "2026-11-06"
+  },
   "aepd.es": {
    "_added": "2026-09-17",
    "ecosystems": [
@@ -6341,19 +6359,6 @@
    "tier": "research",
    "_added": "2026-10-15"
   },
-  "proxy.golang.org": {
-   "weight": 5,
-   "hits": 1,
-   "last_hit": "2026-11-06",
-   "ecosystems": [
-    "go",
-    "mcp-go",
-    "chatcli",
-    "version-dates"
-   ],
-   "tier": "official",
-   "_added": "2026-11-06"
-  },
   "pwn.ai": {
    "weight": 5,
    "hits": 1,
@@ -6803,6 +6808,16 @@
    "last_hit": "2026-11-12",
    "ecosystems": [
     "quay-bug-2568072"
+   ],
+   "tier": "official",
+   "_added": "2026-11-12"
+  },
+  "repo.packagist.org": {
+   "weight": 5,
+   "hits": 1,
+   "last_hit": "2026-11-12",
+   "ecosystems": [
+    "github-account-campaign-2026-11-10"
    ],
    "tier": "official",
    "_added": "2026-11-12"

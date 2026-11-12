@@ -8,6 +8,10 @@
 
 ## 🔴 ACTIVE — react now
 
+### 2026-11-12 — **GitHub repositories with `wfx-docs` pull requests or unexpected CI workflow commits since 2026-11-10: remove the changes and rotate CI secrets**
+Since 2026-11-10, compromised GitHub accounts have opened pull requests titled "docs: dependency audit notes" from a branch named `wfx-docs` and pushed CI workflow changes to repositories they can write to. Aikido counts 4,837 accounts and 61,764 repositories probed, with a run indicated in at least 1,806. SafeDep counts 8,093 repositories that received commits. Close and delete the changes, revoke the author account, and if a workflow run followed, rotate every secret and cloud role the workflows could reach. Packagist `digitalelvis/neuronai-studio` 3.14.3 and two Go modules are also named.
+→ [advisories/2026-11-github-hijacked-accounts-wfx-docs-pull-requests-ci-workflow-changes-remove-and-rotate.md](advisories/2026-11-github-hijacked-accounts-wfx-docs-pull-requests-ci-workflow-changes-remove-and-rotate.md)
+
 ### 2026-11-11 — **Red Hat Quay: unauthenticated signing-key takeover (CVE-2026-123710, 9.8) and cross-tenant robot token leak (CVE-2026-110697, 9.9); restrict /keys now**
 Red Hat published two Critical CVEs for self-hosted Quay on 2026-11-11. CVE-2026-123710 (9.8) lets an unauthenticated client that can reach `/keys` install its own signing key and read or write any repository. CVE-2026-110697 (9.9) lets a user who can create a namespace read other tenants' robot tokens. Red Hat's product table listed Quay 3 and 5 as "Affected" on 2026-11-12. Restrict `/keys` to internal components, review service keys, and install the fixed release for your line when the errata list it. No known exploitation.
 → [advisories/2026-11-red-hat-quay-unauthenticated-signing-key-takeover-cve-2026-123710-cross-tenant-robot-token-leak-cve-2026-110697.md](advisories/2026-11-red-hat-quay-unauthenticated-signing-key-takeover-cve-2026-123710-cross-tenant-robot-token-leak-cve-2026-110697.md)
