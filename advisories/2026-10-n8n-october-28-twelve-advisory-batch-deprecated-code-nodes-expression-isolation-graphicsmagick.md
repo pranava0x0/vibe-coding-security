@@ -2,7 +2,7 @@
 id: 2026-10-n8n-october-28-twelve-advisory-batch-deprecated-code-nodes-expression-isolation-graphicsmagick
 title: "n8n: twelve advisories on 2026-10-28, three High: deprecated Code nodes run in the main process (8.7), expression-isolation escape, GraphicsMagick RCE; fixed 1.123.89, 2.45.5, 2.46.1"
 date_disclosed: 2026-10-28
-last_updated: 2026-10-30
+last_updated: 2026-11-13
 severity: high
 status: patched
 ecosystems: [npm, n8n, ai-agents, mcp]
@@ -77,6 +77,12 @@ VulnCheck published CVE-2026-119408 for GHSA-9p7v-45m2-wxgj on 2026-10-30: "n8n 
 Two things to read against the file above. First, the record's range follows the fix commit, so it names the versions where the block landed (2.42.6 and 2.43.3 on 2026-10-09 per the registry) and not the 10-28 releases the vendor advisory also lists; both are right, and the registry dates settle it: an instance on 2.42.6 or 2.43.3 has had the block since 10-09. Second, the record repeats the `3.0.1` line that npm does not carry (`npm view n8n versions` on 2026-10-30 still holds no 3.x), so the only installable fixed versions remain 2.42.6 and 2.43.3 (10-09), 2.44.0 (10-13, registry line in Sources) and the three 10-28 releases 1.123.89, 2.45.5 and 2.46.1. The record names no v1 line at all; the vendor advisory's `1.123.89` is the v1 fix and is on npm.
 
 Sources for this update: [CVE Services — CVE-2026-119408](https://cveawg.mitre.org/api/cve/CVE-2026-119408) — fetched 2026-10-30: CNA VulnCheck, published 2026-10-30, the three ranges, both scores, the GHSA, commit and tag references; npm registry `n8n` `time`, queried 2026-10-30: 2.42.6 2026-10-09 07:30, 2.43.3 10-09 08:19, no 3.0.0 or 3.0.1, `latest` 2.45.7.
+
+## Update 2026-11-13: the MCP OAuth open redirect is CVE-2026-126386 (VulnCheck, 2026-11-13; 5.1 / 4.7)
+
+VulnCheck published CVE-2026-126386 on 2026-11-13 for GHSA-rc3w-8jc8-7x3w, which the record references. Scores: CVSS 4.0 5.1 (`UI:A`), CVSS 3.1 4.7. The `affected` ranges match the vendor advisory: before 1.123.89, 2.0.0 before 2.45.5, 2.46.0 before 2.46.1, and 3.0.0 before 3.0.1. npm still lists no 3.x release as of 2026-11-13. Nothing else in this file changes. The next batch is in [the November 13 file](2026-11-n8n-november-13-five-advisory-batch-owner-takeover-custom-role-pending-invite.md).
+
+Source for this update: [CVE Services: CVE-2026-126386](https://cveawg.mitre.org/api/cve/CVE-2026-126386), fetched 2026-11-13.
 
 ## Sources
 

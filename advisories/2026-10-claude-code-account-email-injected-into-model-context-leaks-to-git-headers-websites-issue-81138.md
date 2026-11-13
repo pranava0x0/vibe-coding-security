@@ -2,7 +2,7 @@
 id: 2026-10-claude-code-account-email-injected-into-model-context-leaks-to-git-headers-websites-issue-81138
 title: "Claude Code puts the account email in every model prompt; users report it in git commits, headers and web requests (issue #81138)"
 date_disclosed: 2026-07-25
-last_updated: 2026-11-10
+last_updated: 2026-11-13
 severity: medium
 status: mitigated
 ecosystems: [claude-code, npm, ai-coding-agents]
@@ -80,6 +80,20 @@ The CHANGELOG entry for 2.1.321 carries one line on this issue: "Changed the acc
 Neither entry removes the account email from the model's context. The removal that a commenter who says they work on Claude Code promised on Hacker News for "early next week" (written 2026-11-05) is not in the changelog for any version through 2.1.322. The `stable` channel is still six versions before the first check. Status stays `mitigated`, for the same reason as before, and the affected range in this file's header now runs through 2.1.322.
 
 Two other 2.1.321 lines are security fixes with no advisory on the vendor's tab when read on 2026-11-10: "Fixed MCP OAuth requests sending secrets such as refresh tokens to another host when a server redirected them" and "Fixed a case where a read-only Bash command ran outside the sandbox without a permission prompt". 2.1.319 has the same kind of line: "Fixed a Bash permission bypass where a crafted environment prefix could hide part of a command from permission checks" and "Fixed a sandbox escape when creating a worktree". They are quoted here as changelog lines. No CVE, affected range or reporter is published for any of them, and a reader on `stable` (2.1.311) has none of the four.
+
+## Update 2026-11-13: 2.1.323 is `latest` and carries no removal; `stable` is still 2.1.311
+
+`npm view @anthropic-ai/claude-code dist-tags time` on 2026-11-13: `latest` and `next` 2.1.323 (published 2026-11-12 20:29 UTC), `stable` 2.1.311 (2026-10-26). The CHANGELOG entries for 2.1.322 and 2.1.323 contain no line about the account email or the check. The address is still in context, the check is as 2.1.321 left it, and the `stable` channel still predates the first check. Status stays `mitigated`. The affected range in this file's header should be read as running through 2.1.323.
+
+The 2.1.323 entry has several sandbox and permission lines with no advisory on the vendor's tab when read on 2026-11-13 (newest row there: 2026-10-26). They are quoted as changelog lines, with no CVE, range or severity implied:
+
+- "Fixed a case where the Bash sandbox could switch off during a session"
+- "Fixed a case where Bash permission checks missed part of a command"
+- "Fixed `sandbox.excludedCommands` letting a command that it does not name run outside the sandbox in some cases"
+- "Fixed `claude -p` and the Agent SDK running Bash unsandboxed when `--settings` or SDK settings that turn the sandbox on fail validation; Claude Code now stops at start-up and names the invalid setting"
+- "Fixed `--permission-mode auto` or a settings `defaultMode: auto` starting in a mode that could allow more when auto mode was unavailable. It now starts in Manual mode, which asks first"
+
+A user on `stable` has none of these. Sources for this update: the [CHANGELOG](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md) and the [vendor advisory tab](https://github.com/anthropics/claude-code/security/advisories), both fetched 2026-11-13, and the npm registry read the same day.
 
 ## Sources
 - [anthropics/claude-code — issue #81138: Account email (PII) is injected into the model's system prompt without consent, disclosure…](https://github.com/anthropics/claude-code/issues/81138) — fetched 2026-10-29: opened 2026-07-25, the decompiled construction site, the version history 2.1.220 to 2.1.289, the five leak reports with dates and commenters, the `IS_DEMO` finding, the closed sibling issues, no vendor response, 19 comments.

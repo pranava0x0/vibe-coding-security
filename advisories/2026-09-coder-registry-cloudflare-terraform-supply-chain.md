@@ -2,7 +2,7 @@
 id: 2026-09-coder-registry-cloudflare-terraform-supply-chain
 title: "Coder registry compromise — a stolen Cloudflare API key rerouted registry.coder.com for 14 hours, serving credential-stealing Terraform modules to AI-workspace provisioners (GHSA-vx42-ghc9-gw65)"
 date_disclosed: 2026-09-01
-last_updated: 2026-10-30
+last_updated: 2026-11-13
 severity: critical
 status: patched
 ecosystems: [terraform, coder, cloud-dev-environment, ai-agents]
@@ -120,6 +120,21 @@ Three vendor advisories published on `coder/coder` on 2026-10-29, all Moderate, 
 Each advisory lists six affected ranges and five patched versions. Shared by all three: `>= 2.38.0 < 2.38.4`, `>= 2.37.0 < 2.37.8`, `>= 2.36.0 < 2.36.11`, `>= 2.30.0 < 2.34.16` and `>= 2.35.0 < 2.36.0` (end of life, no fix). The sixth range ends at 2.29.24 and starts where each bug was introduced: `>= 2.26.0 < 2.29.24` for the external-agent token, `>= 2.28.0 < 2.29.24` for the scoped keys, `>= 2.21.0 < 2.29.24` for Web Push. The first two are the same shape as GHSA-2x8w-q434-f76p above: a credential handed to a caller the role model did not mean to give it to, in a product whose workspaces run AI agents with the owner's keys. The vendor tab now carries four October advisories; CVE ids may follow from VulnCheck as they did on 10-17 and 10-28.
 
 Sources for this update: [GHSA-9frj-7f83-x984](https://github.com/coder/coder/security/advisories/GHSA-9frj-7f83-x984), [GHSA-x3gf-xv6p-56hf](https://github.com/coder/coder/security/advisories/GHSA-x3gf-xv6p-56hf) and [GHSA-64xh-rgcx-gg65](https://github.com/coder/coder/security/advisories/GHSA-64xh-rgcx-gg65) — fetched 2026-10-30: published Oct 29, 2026, the scores and vectors, the six affected ranges and five patched versions, the mechanisms, fixes and credits as summarised; [coder/coder — security advisories](https://github.com/coder/coder/security/advisories) — fetched 2026-10-30: the three 10-29 rows beside the 10-27 and 10-21 ones.
+
+## Update 2026-11-13: two October advisories get CVE ids (CVE-2026-126308, CVE-2026-126403; VulnCheck, 2026-11-13); seven newer advisories are in a separate file
+
+VulnCheck published two records on 2026-11-13 for advisories this file already holds. Scanners keyed on CVE ids flag them from that date. Neither changes a fixed version.
+
+| CVE | Vendor advisory | Vendor score | VulnCheck scores (2026-11-13) | Fixed, per the CNA record |
+|---|---|---|---|---|
+| CVE-2026-126308 | GHSA-2x8w-q434-f76p (dashboard session token in sub-agent external app links) | 7.7 | CVSS 4.0 8.7, CVSS 3.1 7.7 | 2.38.2, 2.37.6, 2.36.9, 2.34.14, 2.29.23 |
+| CVE-2026-126403 | GHSA-9frj-7f83-x984 (external agent token readable with workspace read access) | 6.5 | CVSS 4.0 8.5, CVSS 3.1 6.5 | 2.38.4, 2.37.8, 2.36.11, 2.34.16, 2.29.24 |
+
+The pairing is from each record's `references`, which name the GHSA. Each record's title names only the 2.38 line; its `affected` list carries all the ranges, and marks 2.35.0 to 2.36.0 as affected with 2.36.0 "unaffected", which the vendor advisories describe as an end-of-life line with no fix. The vendor pages were not re-read for a CVE field.
+
+Seven advisories published on the vendor tab between 2026-11-04 and 2026-11-12 are in [the November file](2026-11-coder-november-seven-advisories-aws-iam-database-password-in-api-errors-cli-session-token.md).
+
+Sources for this update: [CVE Services: CVE-2026-126308](https://cveawg.mitre.org/api/cve/CVE-2026-126308) and [CVE-2026-126403](https://cveawg.mitre.org/api/cve/CVE-2026-126403), fetched 2026-11-13: CNA, dates, titles, descriptions, `affected`, scores, references. [GitHub Advisory Database `agent` listing](https://github.com/advisories?query=agent+sort%3Apublished-desc), fetched 2026-11-13: the two rows dated 2026-11-13.
 
 ## Sources
 - [Coder — GHSA-h58h-qvv5-xvwg: Workspace proxy hostname prefix match lets an attacker-controlled domain steal a victim's workspace app credential](https://github.com/coder/coder/security/advisories/GHSA-h58h-qvv5-xvwg) — vendor advisory, published 2026-08-10: CVSS 7.7, affected/fixed ranges, the `syd.co` example, reporter credits. Fetched 2026-09-20.
