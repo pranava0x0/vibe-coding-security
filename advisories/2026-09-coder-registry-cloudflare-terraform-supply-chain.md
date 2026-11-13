@@ -121,7 +121,7 @@ Each advisory lists six affected ranges and five patched versions. Shared by all
 
 Sources for this update: [GHSA-9frj-7f83-x984](https://github.com/coder/coder/security/advisories/GHSA-9frj-7f83-x984), [GHSA-x3gf-xv6p-56hf](https://github.com/coder/coder/security/advisories/GHSA-x3gf-xv6p-56hf) and [GHSA-64xh-rgcx-gg65](https://github.com/coder/coder/security/advisories/GHSA-64xh-rgcx-gg65) — fetched 2026-10-30: published Oct 29, 2026, the scores and vectors, the six affected ranges and five patched versions, the mechanisms, fixes and credits as summarised; [coder/coder — security advisories](https://github.com/coder/coder/security/advisories) — fetched 2026-10-30: the three 10-29 rows beside the 10-27 and 10-21 ones.
 
-## Update 2026-11-13: two October advisories get CVE ids (CVE-2026-126308, CVE-2026-126403; VulnCheck, 2026-11-13); seven newer advisories are in a separate file
+## Update 2026-11-13: two October advisories get CVE ids (CVE-2026-126308 and CVE-2026-126403, VulnCheck, 2026-11-13). Seven newer advisories are in a separate file
 
 VulnCheck published two records on 2026-11-13 for advisories this file already holds. Scanners keyed on CVE ids flag them from that date. Neither changes a fixed version.
 
@@ -130,7 +130,7 @@ VulnCheck published two records on 2026-11-13 for advisories this file already h
 | CVE-2026-126308 | GHSA-2x8w-q434-f76p (dashboard session token in sub-agent external app links) | 7.7 | CVSS 4.0 8.7, CVSS 3.1 7.7 | 2.38.2, 2.37.6, 2.36.9, 2.34.14, 2.29.23 |
 | CVE-2026-126403 | GHSA-9frj-7f83-x984 (external agent token readable with workspace read access) | 6.5 | CVSS 4.0 8.5, CVSS 3.1 6.5 | 2.38.4, 2.37.8, 2.36.11, 2.34.16, 2.29.24 |
 
-The pairing is from each record's `references`, which name the GHSA. Each record's title names only the 2.38 line; its `affected` list carries all the ranges, and marks 2.35.0 to 2.36.0 as affected with 2.36.0 "unaffected", which the vendor advisories describe as an end-of-life line with no fix. The vendor pages were not re-read for a CVE field.
+The pairing is from each record's `references`, which name the GHSA. Each record's title names only the 2.38 line. Its `affected` list carries all the ranges and marks 2.35.0 to 2.36.0 as affected with 2.36.0 "unaffected", which the vendor advisories describe as an end-of-life line with no fix. The vendor pages were not re-read for a CVE field.
 
 Seven advisories published on the vendor tab between 2026-11-04 and 2026-11-12 are in [the November file](2026-11-coder-november-seven-advisories-aws-iam-database-password-in-api-errors-cli-session-token.md).
 

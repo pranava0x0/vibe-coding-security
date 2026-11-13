@@ -15,7 +15,7 @@ node-forge 1.4.0 and earlier accept forged RSA PKCS#1 v1.5 signatures for keys w
 
 ## What happened
 
-The maintainers (the `digitalbazaar/forge` repository) published the two signature advisories on 2026-10-27, the day 1.4.1 reached npm. The vendor page for the PKCS#12 advisory was not opened; its CNA record is dated 2026-10-29. The GitHub Advisory Database listed the PKCS#12 one on 2026-10-30 and one of the signature ones on 2026-11-10, which is how it reached this sweep. The database dates are not the disclosure dates.
+The maintainers (the `digitalbazaar/forge` repository) published the two signature advisories on 2026-10-27, the day 1.4.1 reached npm. The vendor page for the PKCS#12 advisory was not opened. Its CNA record is dated 2026-10-29, lists `< 1.4.1` as affected and says "This issue is fixed in version 1.4.1." The GitHub Advisory Database listed the PKCS#12 one on 2026-10-30 and one of the signature ones on 2026-11-10, which is how it reached this sweep. The database dates are not the disclosure dates.
 
 | Advisory | CVE | Score | What it is |
 |---|---|---|---|
@@ -60,14 +60,14 @@ grep -n 'node-forge@' yarn.lock pnpm-lock.yaml 2>/dev/null
 
 ## Sources
 
-Single source for the mechanism: the vendor, for its own package. The CNA records are VulnCheck and GitHub.
+The signature mechanism comes from the vendor's two advisory pages. The PKCS#12 mechanism and its fixed version come from the GitHub CNA record. The other CNA record is VulnCheck's.
 
 - [GHSA-6qrw-m8cv-hcxf](https://github.com/digitalbazaar/forge/security/advisories/GHSA-6qrw-m8cv-hcxf), fetched 2026-11-13: published 2026-10-27, affected and patched versions, affected APIs, the quoted sentences, the workaround, the CVE id the page prints.
 - [GHSA-2g46-22mc-6gwp](https://github.com/digitalbazaar/forge/security/advisories/GHSA-2g46-22mc-6gwp), fetched 2026-11-13: published 2026-10-27, the incomplete-fix statement, the quoted sentence, the fix.
 - [CVE Services: CVE-2026-118782](https://cveawg.mitre.org/api/cve/CVE-2026-118782), fetched 2026-11-13: GitHub CNA, 2026-10-29, the description quoted above, CVSS 3.1 7.5, the reference to GHSA-jc66-7q78-782g.
 - [CVE Services: CVE-2026-85393](https://cveawg.mitre.org/api/cve/CVE-2026-85393), fetched 2026-11-13: VulnCheck, 2026-09-03, range through 1.4.0, both scores.
 - CVE Services, queried for CVE-2026-119192 on 2026-11-13: `CVE_RECORD_DNE`. The query URL is not linked because it returns 404 while no record exists.
-- [GitHub Advisory Database listing, `claude` query](https://github.com/advisories?query=claude+sort%3Apublished-desc), fetched 2026-11-13: the database publication dates of the two rows.
+- [GitHub Advisory Database listing, `claude` query](https://github.com/advisories?query=claude+sort%3Apublished-desc), fetched 2026-11-13: the two node-forge rows appear on this listing, dated 2026-11-10 and 2026-10-30.
 - [npm download counts for node-forge](https://api.npmjs.org/downloads/point/last-week/node-forge), read 2026-11-13: 53,233,919 for 2026-11-06 to 2026-11-12.
 - npm registry, `npm view node-forge time` and `dist-tags`, read 2026-11-13: publish times and `latest`.
 - Not opened: the GHSA-jc66-7q78-782g vendor page, the 1.4.1 release notes and the fix commit. The PKCS#12 facts come from the CNA record.

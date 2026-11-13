@@ -29,12 +29,10 @@ SecurityWeek (2026-11-13) reports the incident from the status page and adds a l
 
 `status` is `active` because the vendor says its investigation is ongoing and scope may change. The vendor's own sentence is that the access path is closed.
 
-A web search returned an earlier status entry titled "Security Incident Notification – March 6, 2026". It was not opened and this file makes no claim about it.
-
 ## Am I affected?
 
 - You have an Apify account. Search your mailbox for a notification from Apify dated 2026-11-11 or later. Apify says accounts with no email have not been identified as affected so far, and that this may change.
-- You build Actors from private GitHub repositories. Apify revoked the GitHub connection and builds from those repositories need it reconnected.
+- You build Actors from private GitHub repositories. Apify says it revoked some OAuth connections "including GitHub" and tells these users to reconnect it.
 - An agent, an MCP client, a workflow tool or a CI job holds an Apify API token. Find where tokens live:
 
 ```bash

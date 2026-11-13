@@ -11,11 +11,11 @@ tags: [coder, ghsa-batch, cloud-dev-environment, credential-leak, session-token,
 ---
 
 ## TL;DR
-Coder published seven advisories between 2026-11-04 and 2026-11-12, none with a CVE. The one rated High (GHSA-w4m3-qhx8-c649, vendor 8.1): on deployments that use AWS IAM database authentication, a failed database connection put the connection URL, with its temporary password, into API error responses that unauthenticated requests could trigger. Releases 2.39.1, 2.38.7, 2.37.11, 2.34.19 and 2.29.27, all dated 2026-11-10 on the Go module proxy, carry the fixes for all seven. Lines 2.30 to 2.33, 2.35 and 2.36 are end-of-life and get no patch.
+Coder published seven advisories between 2026-11-04 and 2026-11-12, none with a CVE. The one rated High (GHSA-w4m3-qhx8-c649, vendor 8.1): on deployments that use AWS IAM database authentication, a failed database connection put the connection URL, with its temporary password, into API error responses that unauthenticated requests could trigger. Releases 2.39.1, 2.38.7, 2.37.11, 2.34.19 and 2.29.27, all dated 2026-11-10 on the Go module proxy, carry the fixes for all seven. The newest advisories list no patch for lines 2.30 to 2.33 and 2.35, which the vendor calls end-of-life, and most list none for 2.36.
 
 ## What happened
 
-The vendor tab (`coder/coder`, five pages) showed seven rows dated 2026-11-04 to 2026-11-12 when read on 2026-11-13. Earlier Coder advisories are in [the Coder home file](2026-09-coder-registry-cloudflare-terraform-supply-chain.md). All seven pages print "No known CVE".
+The vendor tab (`coder/coder`, five pages, of which pages 1 and 2 were read) showed seven rows dated 2026-11-04 to 2026-11-12 when read on 2026-11-13. Earlier Coder advisories are in [the Coder home file](2026-09-coder-registry-cloudflare-terraform-supply-chain.md). All seven pages print "No known CVE".
 
 | GHSA | Published | Vendor score | What it is | First fixed releases |
 |---|---|---|---|---|
@@ -47,7 +47,7 @@ ps aux | grep -E 'samesite-auth-cookie[ =]none'   # widens the CSRF advisory
 ```
 
 - Below 2.39.1 on 2.39, below 2.38.7 on 2.38, below 2.37.11 on 2.37, below 2.34.19 on 2.34, or below 2.29.27 on 2.29: at least one of the seven applies.
-- On 2.30 to 2.33, 2.35 or 2.36: affected with no patch on that line.
+- On 2.30 to 2.33, 2.35 or 2.36: affected by the newer advisories with no patch on that line. The table shows the last patch each line received.
 - For the database password: check server logs and CLI output from any database outage for a connection URL.
 - For the CLI token: review templates for external app URLs that contain `$SESSION_TOKEN`.
 
@@ -56,7 +56,7 @@ ps aux | grep -E 'samesite-auth-cookie[ =]none'   # widens the CSRF advisory
 1. Upgrade to the patched release on your line. Move off end-of-life lines.
 2. If you use `awsiamrds` and had a database outage or failover on an affected version, review database audit logs for that window and check user accounts and roles for changes. The temporary password expires, but changes made with it do not.
 3. If users ran `coder open app` against templates you do not fully trust, have them sign out to end their sessions, and delete their API tokens. [Rotating cloud credentials](../playbooks/rotating-cloud-credentials.md) covers what a workspace owner's session can reach.
-4. Restart workspaces after the upgrade so they run the updated agent. `read_skill_file` fails on older agents until then.
+4. Restart workspaces after the upgrade so they run the updated agent. The skill-symlink advisory says `read_skill_file` fails on workspaces running an older agent until they restart.
 
 ## Prevention
 

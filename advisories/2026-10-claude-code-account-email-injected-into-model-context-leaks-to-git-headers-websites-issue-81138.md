@@ -81,7 +81,7 @@ Neither entry removes the account email from the model's context. The removal th
 
 Two other 2.1.321 lines are security fixes with no advisory on the vendor's tab when read on 2026-11-10: "Fixed MCP OAuth requests sending secrets such as refresh tokens to another host when a server redirected them" and "Fixed a case where a read-only Bash command ran outside the sandbox without a permission prompt". 2.1.319 has the same kind of line: "Fixed a Bash permission bypass where a crafted environment prefix could hide part of a command from permission checks" and "Fixed a sandbox escape when creating a worktree". They are quoted here as changelog lines. No CVE, affected range or reporter is published for any of them, and a reader on `stable` (2.1.311) has none of the four.
 
-## Update 2026-11-13: 2.1.323 is `latest` and carries no removal; `stable` is still 2.1.311
+## Update 2026-11-13: 2.1.323 is `latest` and carries no removal, and `stable` is still 2.1.311
 
 `npm view @anthropic-ai/claude-code dist-tags time` on 2026-11-13: `latest` and `next` 2.1.323 (published 2026-11-12 20:29 UTC), `stable` 2.1.311 (2026-10-26). The CHANGELOG entries for 2.1.322 and 2.1.323 contain no line about the account email or the check. The address is still in context, the check is as 2.1.321 left it, and the `stable` channel still predates the first check. Status stays `mitigated`. The affected range in this file's header should be read as running through 2.1.323.
 
