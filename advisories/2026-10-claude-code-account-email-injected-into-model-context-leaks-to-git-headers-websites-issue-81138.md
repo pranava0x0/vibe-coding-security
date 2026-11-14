@@ -2,7 +2,7 @@
 id: 2026-10-claude-code-account-email-injected-into-model-context-leaks-to-git-headers-websites-issue-81138
 title: "Claude Code puts the account email in every model prompt; users report it in git commits, headers and web requests (issue #81138)"
 date_disclosed: 2026-07-25
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 severity: medium
 status: mitigated
 ecosystems: [claude-code, npm, ai-coding-agents]
@@ -95,6 +95,14 @@ The 2.1.323 entry has several sandbox and permission lines with no advisory on t
 
 A user on `stable` has none of these. Sources for this update: the [CHANGELOG](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md) and the [vendor advisory tab](https://github.com/anthropics/claude-code/security/advisories), both fetched 2026-11-13, and the npm registry read the same day.
 
+## Update 2026-11-14: 2.1.325 widens the check to scripts, file writes, web fetches and MCP calls; `stable` is still 2.1.311
+
+Read on 2026-11-14. `npm view @anthropic-ai/claude-code dist-tags` prints `latest` 2.1.325, `next` 2.1.325 and `stable` 2.1.311. The registry dates 2.1.324 to 2026-11-13 18:42 UTC and 2.1.325 to 2026-11-13 20:07 UTC.
+
+The CHANGELOG entry for 2.1.325 has this line: "Improved the account email check: it now also refuses your email as a client's identity in scripts a command runs, file writes, web fetches and MCP calls". That widens the check that 2.1.321 had narrowed to one shell command shape. It is a changelog line. Page 1 of the advisory tab, read 2026-11-14, has no row for it. The `tools_affected` line in the header should be read as running through 2.1.325, with the wider check from 2.1.325. No line in 2.1.322 to 2.1.325 that mentions the email says the address was removed from the model's context. The status stays `mitigated`. The `stable` channel still predates the first check in 2.1.317.
+
+The same entry lists "Fixed a security issue in how zstd-compressed responses are decoded", with no detail and no row on page 1 of the advisory tab. It is quoted here as a changelog line.
+
 ## Sources
 - [anthropics/claude-code — issue #81138: Account email (PII) is injected into the model's system prompt without consent, disclosure…](https://github.com/anthropics/claude-code/issues/81138) — fetched 2026-10-29: opened 2026-07-25, the decompiled construction site, the version history 2.1.220 to 2.1.289, the five leak reports with dates and commenters, the `IS_DEMO` finding, the closed sibling issues, no vendor response, 19 comments.
 - [Hacker News — Tell HN: Claude Code adds your email to the prompt, the LLM sends it to websites](https://news.ycombinator.com/item?id=50286306) — fetched 2026-10-29 through the Algolia API: posted 2026-10-29 by TekMol, links the issue and a Reddit thread (not opened; reddit.com is not reachable from this sweep).
@@ -109,3 +117,5 @@ A user on `stable` has none of these. Sources for this update: the [CHANGELOG](h
 - Related in this corpus: [Claude Code and Claude Desktop advisory batches](2026-08-claude-code-desktop-ghsa-batch.md) for the product's own disclosure channel, which carries nothing on this behaviour.
 - `npm view @anthropic-ai/claude-code dist-tags time` — read 2026-11-07: `latest` and `next` 2.1.319 (2026-11-06 00:58 UTC), `stable` 2.1.311; [CHANGELOG.md](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md) — fetched 2026-11-07: the 2.1.319 entry, no email line.
 - **2026-11-10 update sources:** [anthropics/claude-code CHANGELOG.md](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md), fetched 2026-11-10: the 2.1.322, 2.1.321 and 2.1.319 entries quoted above; no entry removes the address from context. `npm view @anthropic-ai/claude-code dist-tags time`, run 2026-11-10: `latest` and `next` 2.1.322, `stable` 2.1.311, 2.1.321 at 2026-11-09 19:02 UTC, no 2.1.320. [anthropics/claude-code security advisories](https://github.com/anthropics/claude-code/security/advisories), page 1 fetched 2026-11-10: no advisory for the four changelog fixes.
+- [Claude Code CHANGELOG](https://raw.githubusercontent.com/anthropics/claude-code/main/CHANGELOG.md), re-read 2026-11-14: the 2.1.325 entry, the two quoted lines. `npm view @anthropic-ai/claude-code dist-tags time`, run 2026-11-14.
+- [anthropics/claude-code security advisories](https://github.com/anthropics/claude-code/security/advisories), page 1 read 2026-11-14: ten rows, the newest dated 2026-10-26.

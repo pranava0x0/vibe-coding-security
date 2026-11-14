@@ -2,7 +2,7 @@
 id: 2026-11-apify-internal-systems-breach-account-credentials-accessed-oauth-connections-revoked
 title: "Apify breach: an intruder used a compromised credential to obtain account credentials on 2026-11-09 and 11-10; rotate API tokens and reconnect GitHub"
 date_disclosed: 2026-11-11
-last_updated: 2026-11-13
+last_updated: 2026-11-14
 severity: high
 status: active
 ecosystems: [apify, saas, web-scraping, ai-agents, oauth, github]
@@ -65,9 +65,21 @@ This file's advice, which Apify has not stated:
 - Do not keep long-lived third-party secrets in a scraping platform's inputs or environment when a short-lived one works.
 - Grant a platform's GitHub App access to the repositories it builds from, not to the whole organisation.
 
+## Update 2026-11-14
+
+Apify posted a fourth update on 2026-11-13 at 17:36 CET, read on 2026-11-14. The investigation and response are ongoing, so the status stays `active`.
+
+- Apify says it now stores API tokens only as hashes, has added network restrictions between internal services and has strengthened internal authentication. A security review of its stack and log analysis continue.
+- Apify recommends restricting storage access in Console under Settings, General resource access. It says that while a storage is open, anyone who knows a storage ID can read that storage.
+- Apify warns about phishing and says it will never ask for passwords, 2FA codes or payment details.
+- The next update is due within 72 hours. A post-mortem with root cause and remediation is promised within a week.
+
+SecurityWeek's article, re-read on 2026-11-14, cites Apify's figure of 91,000 customers worldwide. That is Apify's customer count, not a count of affected accounts. Apify has given none.
+
 ## Sources
 
 - [Apify status: Security incident](https://status.apify.com/incidents/sxd1dj5j6749), fetched 2026-11-13: the three updates quoted above, the affected components.
-- [SecurityWeek: Apify Confirms Customer Data Accessed in Cyberattack](https://www.securityweek.com/apify-confirms-customer-data-accessed-in-cyberattack/), fetched 2026-11-13 (dated 2026-11-13): the data list attributed to a customer-shared notification, the customer count, the statement that no account count is disclosed.
+- [SecurityWeek: Apify Confirms Customer Data Accessed in Cyberattack](https://www.securityweek.com/apify-confirms-customer-data-accessed-in-cyberattack/), fetched 2026-11-13 and again 2026-11-14 (dated 2026-11-13): the data list attributed to a customer-shared notification, the customer count, the statement that no account count is disclosed.
+- [Apify status: Security incident](https://status.apify.com/incidents/sxd1dj5j6749), re-read 2026-11-14: the fourth update, dated 2026-11-13 17:36 CET. Hacker News item 50486258 (2026-11-13, 96 points) links the page and was seen through the Algolia feed only.
 - Hacker News item 50472323, seen 2026-11-13 through the Algolia search feed: the status page submitted on 2026-11-12, 11 points. The item page and its comments were not opened.
 - Not opened: the Reddit thread SecurityWeek cites (`reddit.com` is not fetchable from this sweep) and Apify's notification email.

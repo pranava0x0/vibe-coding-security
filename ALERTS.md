@@ -2,19 +2,43 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-11-13. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-11-14. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
 
+### 2026-11-13 — **Bitrise security incident: unauthorized access to an internal system, all services taken offline on 2026-11-13; rotate secrets, access tokens and certificates**
+Bitrise detected unauthorized access to an internal system on 2026-11-13 at 16:32 UTC and took every service offline. It says the system holds no customer data and that no exposure of customer data, secrets or source code has been found. It still asks users to rotate Git credentials now, and secrets, access tokens and certificates once sign-in is back. Restoration was ongoing on 2026-11-14. Single source: the vendor's status page.
+→ [advisories/2026-11-bitrise-security-incident-internal-system-access-all-services-offline-rotate-secrets.md](advisories/2026-11-bitrise-security-incident-internal-system-access-all-services-offline-rotate-secrets.md)
+
+### 2026-11-13 — **agent-device 0.21.36: a remote caller with a daemon token can read host files through `file://` navigation (CVE-2026-129130); upgrade to 0.21.37**
+agent-device 0.21.36 (npm, 682,584 weekly downloads) let a remote caller with a daemon token open a `file://` URL and read host files through `snapshot`. Vendor score 7.7, VulnCheck 7.1. Only 0.21.36 is affected, on npm from 2026-11-02 to 2026-11-12. Run `npm ls agent-device` and upgrade to 0.21.37.
+→ [advisories/2026-11-agent-device-0-21-36-remote-open-file-url-local-file-disclosure-cve-2026-129130-fixed-0-21-37.md](advisories/2026-11-agent-device-0-21-36-remote-open-file-url-local-file-disclosure-cve-2026-129130-fixed-0-21-37.md)
+
 ### 2026-11-13 — **n8n: five advisories on 2026-11-13, two High (owner takeover through a custom role, pending-invite takeover); fixed 1.123.96, 2.47.6, 2.48.3**
 Five n8n advisories, no CVEs. A user with a custom instance role that has user management permissions could take the owner account (GHSA-q8rc-7m84-mfvj, 7.5), and a member who could list users could set the password of an account with a pending invitation (GHSA-m7qq-gm3x-v79g, 7.7; fixed earlier in 1.123.90 and 2.14.0). Three Medium ones cover path parameters in integration nodes, trigger credentials at activation and Bedrock endpoint SSRF. Fixed 1.123.96, 2.47.6 and 2.48.3 on npm 2026-11-13. The listed 3.2.2 is not on npm.
 → [advisories/2026-11-n8n-november-13-five-advisory-batch-owner-takeover-custom-role-pending-invite.md](advisories/2026-11-n8n-november-13-five-advisory-batch-owner-takeover-custom-role-pending-invite.md)
 
+### 2026-11-12 — **PostgreSQL 18.7, 17.12, 16.16, 15.20, 14.25 fix 52 CVEs; a database user who can create objects can run code as the server (CVE-2026-6460)**
+PostgreSQL's 2026-11-12 release fixes 52 CVEs, 32 of them scored 8.8. CVE-2026-6460 lets a database user who can create objects run code as the server's operating-system user. CVE-2026-116322 lets an unauthenticated client restart a PostgreSQL 18 server. Several ids are in `pg_dump`, `pg_restore`, `psql`, `reindexdb` and `vacuumdb`. Update server and client tools. 14.25 is the last PostgreSQL 14 release. No managed-provider notice was opened.
+→ [advisories/2026-11-postgresql-november-12-release-52-cves-type-confusion-code-execution-cve-2026-6460-fixed-18-7.md](advisories/2026-11-postgresql-november-12-release-52-cves-type-confusion-code-execution-cve-2026-6460-fixed-18-7.md)
+
+### 2026-11-12 — **IBM ContextForge MCP Gateway: eight CVEs; a request header overrides the gateway's upstream credential (CVE-2026-110279, 8.1); upgrade to 1.1.1**
+Eight IBM CVEs for ContextForge MCP Gateway. An authenticated user can replace the gateway-held upstream credential with an `X-Upstream-Authorization` header (CVE-2026-110279, 8.1), and identity propagation reaches MCP servers configured not to receive it (CVE-2026-110278, 7.4). Five ids are fixed in 1.1.0 and three need 1.1.1. Upgrade `mcp-contextforge-gateway` to 1.1.1.
+→ [advisories/2026-11-ibm-contextforge-mcp-gateway-eight-cves-upstream-credential-override-identity-replay-fixed-1-1-1.md](advisories/2026-11-ibm-contextforge-mcp-gateway-eight-cves-upstream-credential-override-identity-replay-fixed-1-1-1.md)
+
+### 2026-11-12 — **LiteLLM proxy: an authenticated caller can read server environment values, including the master key, through Azure Entra request parameters (GHSA-2rwg-2wh4-7c4f); fixed 1.109.1**
+A LiteLLM proxy user with a key for one Azure model could send six Azure Entra credential parameters in a request and get server environment values back in the error, including provider keys and `LITELLM_MASTER_KEY`. Vendor score 7.7, no CVE. Applies where neither `AZURE_API_KEY` nor `AZURE_OPENAI_API_KEY` is set. Fixed in 1.106.9, 1.108.6 and 1.109.1.
+→ [advisories/2026-11-litellm-proxy-azure-entra-request-parameters-leak-environment-and-master-key-ghsa-2rwg-2wh4-7c4f.md](advisories/2026-11-litellm-proxy-azure-entra-request-parameters-leak-environment-and-master-key-ghsa-2rwg-2wh4-7c4f.md)
+
 ### 2026-11-12 — **GitHub repositories with `wfx-docs` pull requests or unexpected CI workflow commits since 2026-11-10: remove the changes and rotate CI secrets**
 Since 2026-11-10, compromised GitHub accounts have opened pull requests titled "docs: dependency audit notes" from a branch named `wfx-docs` and pushed CI workflow changes to repositories they can write to. Aikido counts 4,837 accounts and 61,764 repositories probed, with a run indicated in at least 1,806. SafeDep counts 8,093 repositories that received commits. Close and delete the changes, revoke the author account, and if a workflow run followed, rotate every secret and cloud role the workflows could reach. Packagist `digitalelvis/neuronai-studio` 3.14.3 and two Go modules are also named.
 → [advisories/2026-11-github-hijacked-accounts-wfx-docs-pull-requests-ci-workflow-changes-remove-and-rotate.md](advisories/2026-11-github-hijacked-accounts-wfx-docs-pull-requests-ci-workflow-changes-remove-and-rotate.md)
+
+### 2026-11-11 — **OpenAI Codex repository: Depi reports an issue-labeler workflow prompt injection that could have reached the `@openai/codex` npm release; fixed, nothing published**
+Depi reports that the issue-labeler workflow in `openai/codex` ran a coding agent on issue text from any GitHub user, and that a chain in a test environment reached CI tokens and cache write access that could have published `@openai/codex` to npm. The researchers published nothing and say OpenAI fixed it. One research source, no OpenAI statement. Codex users have nothing to patch. Check your own workflows that run an agent on issue text.
+→ [advisories/2026-11-openai-codex-repository-issue-labeler-workflow-prompt-injection-npm-release-path-depi.md](advisories/2026-11-openai-codex-repository-issue-labeler-workflow-prompt-injection-npm-release-path-depi.md)
 
 ### 2026-11-11 — **Coder: seven advisories from 2026-11-04 to 11-12; unauthenticated API errors could leak an AWS IAM database password (8.1); fixed 2.39.1, 2.38.7, 2.37.11**
 Seven Coder advisories, no CVEs. With `CODER_PG_AUTH=awsiamrds`, a failed database connection put the connection URL and its 15-minute password into API errors that unauthenticated requests could trigger (GHSA-w4m3-qhx8-c649, 8.1). Also: `coder open app` sent the session token to template app URLs, agent-supplied status links, two `coderd` crashes, a CSRF exemption bug and a skill-file symlink read. Upgrade to 2.39.1, 2.38.7, 2.37.11, 2.34.19 or 2.29.27 (2026-11-10). The newest advisories list no patch for end-of-life lines 2.30 to 2.33 and 2.35.
