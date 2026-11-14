@@ -25,7 +25,7 @@ Bitrise's status page carries one incident, "Security Incident", marked SEV-1, s
 | 2026-11-14 02:29 | No evidence of exposure found. Services are being restored in phases, with no estimate for full restoration. Rotating secrets is recommended once services are back. |
 | 2026-11-14 03:36 to 14:34 | Restoration progressing. Sign-in to app.bitrise.io is expected soon. Rotate secrets, access tokens and certificates once you can sign in. |
 
-Two statements on the page pull in different directions. The first update says the incident affected "some internal secrets" and tells users to rotate Git credentials. Later updates say no evidence of customer exposure was found. Both are printed. The page gives no cause, no actor and no count.
+Two statements on the page pull in different directions. The first update says the incident affected "some internal secrets" and tells users to rotate Git credentials. Later updates say no evidence of customer exposure was found. Both are printed. The times also differ: the 20:44 update says detection was within the last hour, and the 01:26 update gives 16:32 UTC. The page gives no cause, no actor and no count.
 
 No outlet coverage was found on 2026-11-14. A Hacker News item (50489750, 4 points) links the status page. This file has one source, the vendor.
 

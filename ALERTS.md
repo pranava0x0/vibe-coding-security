@@ -21,10 +21,10 @@ Five n8n advisories, no CVEs. A user with a custom instance role that has user m
 → [advisories/2026-11-n8n-november-13-five-advisory-batch-owner-takeover-custom-role-pending-invite.md](advisories/2026-11-n8n-november-13-five-advisory-batch-owner-takeover-custom-role-pending-invite.md)
 
 ### 2026-11-12 — **PostgreSQL 18.7, 17.12, 16.16, 15.20, 14.25 fix 52 CVEs; a database user who can create objects can run code as the server (CVE-2026-6460)**
-PostgreSQL's 2026-11-12 release fixes 52 CVEs, 32 of them scored 8.8. CVE-2026-6460 lets a database user who can create objects run code as the server's operating-system user. CVE-2026-116322 lets an unauthenticated client restart a PostgreSQL 18 server. Several ids are in `pg_dump`, `pg_restore`, `psql`, `reindexdb` and `vacuumdb`. Update server and client tools. 14.25 is the last PostgreSQL 14 release. No managed-provider notice was found.
+PostgreSQL's 2026-11-12 release fixes 52 CVEs, 32 of them scored 8.8. CVE-2026-6460 lets a database user who can create objects run code as the server's operating-system user. CVE-2026-116322 lets an unauthenticated client restart a PostgreSQL 18 server. Several ids are in `pg_dump`, `pg_restore`, `psql`, `reindexdb` and `vacuumdb`. Update server and client tools. 14.25 is the last PostgreSQL 14 release. No managed-provider notice was opened.
 → [advisories/2026-11-postgresql-november-12-release-52-cves-type-confusion-code-execution-cve-2026-6460-fixed-18-7.md](advisories/2026-11-postgresql-november-12-release-52-cves-type-confusion-code-execution-cve-2026-6460-fixed-18-7.md)
 
-### 2026-11-12 — **IBM ContextForge MCP Gateway: eight CVEs on 2026-11-13; a request header overrides the gateway's upstream credential (CVE-2026-110279, 8.1); upgrade to 1.1.1**
+### 2026-11-12 — **IBM ContextForge MCP Gateway: eight CVEs; a request header overrides the gateway's upstream credential (CVE-2026-110279, 8.1); upgrade to 1.1.1**
 Eight IBM CVEs for ContextForge MCP Gateway. An authenticated user can replace the gateway-held upstream credential with an `X-Upstream-Authorization` header (CVE-2026-110279, 8.1), and identity propagation reaches MCP servers configured not to receive it (CVE-2026-110278, 7.4). Five ids are fixed in 1.1.0 and three need 1.1.1. Upgrade `mcp-contextforge-gateway` to 1.1.1.
 → [advisories/2026-11-ibm-contextforge-mcp-gateway-eight-cves-upstream-credential-override-identity-replay-fixed-1-1-1.md](advisories/2026-11-ibm-contextforge-mcp-gateway-eight-cves-upstream-credential-override-identity-replay-fixed-1-1-1.md)
 

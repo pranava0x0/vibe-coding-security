@@ -1,6 +1,6 @@
 ---
 id: 2026-11-ibm-contextforge-mcp-gateway-eight-cves-upstream-credential-override-identity-replay-fixed-1-1-1
-title: "IBM ContextForge MCP Gateway: eight CVEs on 2026-11-13; a request header overrides the gateway's upstream credential (CVE-2026-110279, 8.1); upgrade to 1.1.1"
+title: "IBM ContextForge MCP Gateway: eight CVEs; a request header overrides the gateway's upstream credential (CVE-2026-110279, 8.1); upgrade to 1.1.1"
 date_disclosed: 2026-11-12
 last_updated: 2026-11-14
 severity: high
@@ -15,7 +15,7 @@ IBM published eight CVEs for ContextForge MCP Gateway on 2026-11-12 and 2026-11-
 
 ## What happened
 
-The CVE Services records, all from the IBM CNA and all published 2026-11-13, were read on 2026-11-14. The count of eight was made from those records. Each record references one IBM bulletin.
+The file is dated by the first bulletins, 2026-11-12. The CVE Services records, all from the IBM CNA and all published 2026-11-13, were read on 2026-11-14. The count of eight was made from those records. Each record references one IBM bulletin.
 
 | Id | IBM score | Affected | Fixed | What IBM says |
 |---|---|---|---|---|

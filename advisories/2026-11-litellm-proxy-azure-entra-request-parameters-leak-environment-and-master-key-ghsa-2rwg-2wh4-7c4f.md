@@ -6,12 +6,12 @@ last_updated: 2026-11-14
 severity: high
 status: patched
 ecosystems: [pypi, python, litellm, llm-gateway, azure]
-tools_affected: ["litellm (PyPI) before 1.106.9, 1.108.x before 1.108.6, 1.109.0", "LiteLLM proxy deployments with at least one `azure/` or `azure_ai/` model and no `AZURE_API_KEY` or `AZURE_OPENAI_API_KEY` set", "agents and applications that share a LiteLLM proxy across users or teams"]
+tools_affected: ["litellm (PyPI) below 1.106.9, below 1.108.6, below 1.109.1 and below 1.110.0-rc.2, as the advisory lists them", "LiteLLM proxy deployments with at least one `azure/` or `azure_ai/` model and no `AZURE_API_KEY` or `AZURE_OPENAI_API_KEY` set", "agents and applications that share a LiteLLM proxy across users or teams"]
 tags: [litellm, llm-gateway, pypi, secret-exfiltration, master-key, azure, entra-id, authenticated, no-cve, patched]
 ---
 
 ## TL;DR
-LiteLLM's proxy did not block six Azure Entra ID credential parameters in request bodies. A user with any key that can call one Azure model could send them and get server-side values back in the error, including provider API keys, the database URL and `LITELLM_MASTER_KEY`. The vendor advisory, published 2026-11-12, scores it 7.7 and lists no CVE. Fixed in 1.106.9, 1.108.6, 1.109.1 and 1.110.0-rc.2. All four are on PyPI.
+LiteLLM's proxy did not block six Azure Entra ID credential parameters in request bodies. A user with any key that can call one Azure model could send them and get server-side values back in the error, including provider API keys, the database URL and `LITELLM_MASTER_KEY`. The vendor advisory, published 2026-11-12, scores it 7.7 and lists no CVE. Fixed in 1.106.9, 1.108.6, 1.109.1 and 1.110.0-rc.2. All four are on PyPI. The advisory names no fixed 1.107 release.
 
 ## What happened
 
@@ -38,7 +38,7 @@ No CVE exists, so a scanner keyed on CVE ids will not flag this.
 
 ## If you are affected
 
-1. Upgrade to 1.106.9, 1.108.6 or 1.109.1 for your line.
+1. Upgrade to 1.106.9, 1.108.6 or 1.109.1 for your line, or 1.110.0-rc.2 if you run the release candidate. From a 1.107 version, move to 1.108.6 or later.
 2. Until then, block the six parameters in request bodies at a reverse proxy in front of LiteLLM. This is the vendor's workaround.
 3. If untrusted callers held keys while you ran an affected version, rotate `LITELLM_MASTER_KEY`, the provider keys in the proxy's environment and the database password. This step is this file's advice. See [playbooks/rotating-cloud-credentials.md](../playbooks/rotating-cloud-credentials.md).
 

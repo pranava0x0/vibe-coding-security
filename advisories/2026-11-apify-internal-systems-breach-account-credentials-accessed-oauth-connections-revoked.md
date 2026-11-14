@@ -79,7 +79,7 @@ SecurityWeek's article, re-read on 2026-11-14, cites Apify's figure of 91,000 cu
 ## Sources
 
 - [Apify status: Security incident](https://status.apify.com/incidents/sxd1dj5j6749), fetched 2026-11-13: the three updates quoted above, the affected components.
-- [SecurityWeek: Apify Confirms Customer Data Accessed in Cyberattack](https://www.securityweek.com/apify-confirms-customer-data-accessed-in-cyberattack/), fetched 2026-11-13 (dated 2026-11-13): the data list attributed to a customer-shared notification, the customer count, the statement that no account count is disclosed.
+- [SecurityWeek: Apify Confirms Customer Data Accessed in Cyberattack](https://www.securityweek.com/apify-confirms-customer-data-accessed-in-cyberattack/), fetched 2026-11-13 and again 2026-11-14 (dated 2026-11-13): the data list attributed to a customer-shared notification, the customer count, the statement that no account count is disclosed.
 - [Apify status: Security incident](https://status.apify.com/incidents/sxd1dj5j6749), re-read 2026-11-14: the fourth update, dated 2026-11-13 17:36 CET. Hacker News item 50486258 (2026-11-13, 96 points) links the page and was seen through the Algolia feed only.
 - Hacker News item 50472323, seen 2026-11-13 through the Algolia search feed: the status page submitted on 2026-11-12, 11 points. The item page and its comments were not opened.
 - Not opened: the Reddit thread SecurityWeek cites (`reddit.com` is not fetchable from this sweep) and Apify's notification email.
