@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-11-13
+**Last refreshed:** 2026-11-14
 
 ## Quick start
 
@@ -55,10 +55,11 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-11-13)
+## Active threat families (as of 2026-11-14)
 
 The highest-risk ongoing threat families for vibe coders:
 
+- **The database, the CI platform and the model gateway under your app all shipped security news in two days (PostgreSQL 52 CVEs 2026-11-12; Bitrise incident 2026-11-13; LiteLLM and ContextForge 2026-11-12)** — PostgreSQL 18.7, 17.12, 16.16, 15.20 and 14.25 fix a bug that lets a database user who can create objects run code as the server (CVE-2026-6460). Bitrise took every service offline after unauthorized access to an internal system and asks users to rotate secrets, tokens and certificates. A LiteLLM proxy key holder could read the master key through Azure Entra request parameters (fixed 1.109.1). A ContextForge MCP Gateway user could override the gateway-held upstream credential with a header (fixed 1.1.1).
 - **A platform your agents hold a token for was breached, and two self-hosted control planes shipped security batches (Apify 2026-11-11; n8n five advisories 2026-11-13; Coder seven advisories 2026-11-04 to 11-12)** — Apify says an intruder obtained account credentials and it revoked OAuth connections including GitHub. Status: **active**, investigation ongoing. n8n fixed an owner takeover through custom roles in 2.47.6 and 2.48.3. Coder fixed an AWS IAM database password leak in unauthenticated API errors in 2.39.1 and four backports. Rotate Apify API tokens and upgrade both servers. See `advisories/2026-11-apify-internal-systems-breach-account-credentials-accessed-oauth-connections-revoked.md`, `advisories/2026-11-n8n-november-13-five-advisory-batch-owner-takeover-custom-role-pending-invite.md` and `advisories/2026-11-coder-november-seven-advisories-aws-iam-database-password-in-api-errors-cli-session-token.md`.
 - **GitHub account campaign with `wfx-docs` pull requests (November 2026)** — Compromised accounts open pull requests titled "docs: dependency audit notes" and push CI workflow changes to repositories they can write to. Status: **active**. Check pull requests, branches and workflow run gaps since 2026-11-10, then rotate CI secrets and review cloud trust policies. See `advisories/2026-11-github-hijacked-accounts-wfx-docs-pull-requests-ci-workflow-changes-remove-and-rotate.md`.
 - **The editor's MCP install link and its Workspace Trust prompt were both bypassable, and a recursive clone ran the repository's code (VS Code 1.145.3, nineteen CVEs, MSRC 2026-11-10; Git 2.56.1, CVE-2026-111760, 2026-11-10); an inference engine bug breached a confidential-computing provider with no CVE and no upstream advisory (NEAR AI on SGLang, 2026-11-09); and an app builder's share setting left 35,578 generated apps open (Grok apps on grok.me, Claroc 2026-11-10, vendor disputes the default)** — update VS Code and every bundled Git, add MCP servers by hand and never from a link, keep model servers off untrusted networks, and open every published app in a private window.
