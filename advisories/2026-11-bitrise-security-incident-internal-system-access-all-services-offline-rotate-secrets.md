@@ -2,7 +2,7 @@
 id: 2026-11-bitrise-security-incident-internal-system-access-all-services-offline-rotate-secrets
 title: "Bitrise security incident: unauthorized access to an internal system, all services taken offline on 2026-11-13; rotate secrets, access tokens and certificates"
 date_disclosed: 2026-11-13
-last_updated: 2026-11-14
+last_updated: 2026-11-15
 severity: high
 status: active
 ecosystems: [bitrise, ci-cd, mobile, saas, github, code-signing]
@@ -11,7 +11,7 @@ tags: [breach, vendor-incident, bitrise, ci-cd, mobile, code-signing, secrets, c
 ---
 
 ## TL;DR
-Bitrise, the mobile CI/CD service, detected suspicious activity in an internal cloud environment on 2026-11-13 at 16:32 UTC, confirmed unauthorized access to an internal system, and took every service offline. Bitrise says the system does not store customer data and that it has found no evidence that customer data, secrets or source code were exposed. It still tells users to rotate secrets, access tokens and certificates once they can sign in. Services were still being restored when the status page was read on 2026-11-14 at about 15:00 UTC.
+Bitrise, the mobile CI/CD service, detected suspicious activity in an internal cloud environment on 2026-11-13 at 16:32 UTC, confirmed unauthorized access to an internal system, and took every service offline. Bitrise says the system does not store customer data and that it has found no evidence that customer data, secrets or source code were exposed. It still tells users to rotate secrets, access tokens and certificates once they can sign in. Services were still being restored when the status page was read on 2026-11-14 at about 15:00 UTC. On 2026-11-15 at 14:23 UTC the page said api.bitrise.io and app.bitrise.io were back in a limited safety mode with most features unavailable, and the incident was still unresolved.
 
 ## What happened
 
@@ -48,6 +48,19 @@ No outlet coverage was found on 2026-11-14. A Hacker News item (50489750, 4 poin
 - Give CI short-lived, scoped credentials through OIDC federation where the provider supports it, so a platform incident leaves little to rotate.
 - Keep an inventory of what each CI app can reach. See [prevention/ci-cd-hardening.md](../prevention/ci-cd-hardening.md), [playbooks/rotating-cloud-credentials.md](../playbooks/rotating-cloud-credentials.md) and [playbooks/if-your-github-pat-leaked.md](../playbooks/if-your-github-pat-leaked.md).
 
+## Update 2026-11-15: sign-in and the API return in a limited safety mode; a 2026-11-14 update refers to signs of a live attack; still unresolved
+
+The status page was re-read on 2026-11-15 at about 15:20 UTC. It carried 18 more updates after the 2026-11-14 14:34 UTC one. The incident is listed as unresolved, SEV-1, All Users. Updates are paraphrased except where quoted.
+
+| Posted (UTC) | What Bitrise said |
+|---|---|
+| 2026-11-14 16:05 to 19:31 | app.bitrise.io is back online in a limited safety mode. |
+| 2026-11-14 20:35 | Work continues on restoring logins and build infrastructure. Bitrise wrote that it shut down and rotated all the secrets its platform uses "minutes after we saw an indication of live a attack on our internal system" (wording as printed). |
+| 2026-11-14 21:45 to 2026-11-15 07:32 | Only app.bitrise.io is back, in limited safety mode. Full restoration is not expected before 2026-11-15. |
+| 2026-11-15 08:32 to 14:23 | api.bitrise.io and app.bitrise.io are back online in limited safety mode. Most features remain unavailable. |
+
+Every update repeats the recommendation to rotate all secrets, access tokens and certificates stored in Bitrise once you can sign in. Sign-in is now possible, so step 2 and step 3 above can be done today. The page still gives no cause, no actor, no count and no post-mortem date. No other incident was opened on or after 2026-11-14. `status` stays `active`.
+
 ## Sources
 
 Single source: the vendor.
@@ -55,3 +68,4 @@ Single source: the vendor.
 - [Bitrise status](https://status.bitrise.io), fetched 2026-11-14: the "Security Incident" entry (incident id 7055z4g9nbck), seventeen updates from 2026-11-13 20:44 UTC to 2026-11-14 14:34 UTC, SEV-1, All Users, unresolved.
 - Hacker News item 50489750, seen 2026-11-14 through the Algolia search feed: the status page submitted on 2026-11-13, 4 points. The item page was not opened.
 - Not covered: the incident's own URL, Bitrise's blog and trust centre, and any customer email.
+- [Bitrise status](https://status.bitrise.io), re-read 2026-11-15: 18 further updates from 2026-11-14 16:05 UTC to 2026-11-15 14:23 UTC, the incident still unresolved. The count of 18 was made in code from the page's timestamps. Only the 20:35 sentence is quoted.
