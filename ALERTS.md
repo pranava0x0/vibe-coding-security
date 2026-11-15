@@ -2,14 +2,18 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-11-14. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-11-15. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
 
+### 2026-11-13 — **Cursor incident update: a key issued to Fireworks exposed agent traces holding credentials, which led to the tampered Claude Code extension**
+Cursor says an attacker used an access key it had issued to Fireworks AI, exposed by Fireworks, to copy coding agent traces from a shared bucket. Some traces from sessions outside Privacy Mode held unredacted credentials. Cursor's figures are less than 0.01% of customers for API credentials and fewer than 0.05% of users for traces. The same intrusion placed the tampered `anthropic.claude-code` 2.1.312 and 2.1.313 copies on Cursor's marketplace cache on 2026-10-29. Cursor believes the incident is contained. Rotate keys named in Cursor's notice and anything sent to Cursor support.
+→ [advisories/2026-11-cursor-security-incident-fireworks-issued-key-agent-traces-credentials-exposed-marketplace-cache.md](advisories/2026-11-cursor-security-incident-fireworks-issued-key-agent-traces-credentials-exposed-marketplace-cache.md)
+
 ### 2026-11-13 — **Bitrise security incident: unauthorized access to an internal system, all services taken offline on 2026-11-13; rotate secrets, access tokens and certificates**
-Bitrise detected unauthorized access to an internal system on 2026-11-13 at 16:32 UTC and took every service offline. It says the system holds no customer data and that no exposure of customer data, secrets or source code has been found. It still asks users to rotate Git credentials now, and secrets, access tokens and certificates once sign-in is back. Restoration was ongoing on 2026-11-14. Single source: the vendor's status page.
+Bitrise detected unauthorized access to an internal system on 2026-11-13 at 16:32 UTC and took every service offline. It says the system holds no customer data and that no exposure of customer data, secrets or source code has been found. It still asks users to rotate Git credentials now, and secrets, access tokens and certificates once sign-in is back. On 2026-11-15 sign-in and the API were back in a limited safety mode and the incident was still unresolved. Single source: the vendor's status page.
 → [advisories/2026-11-bitrise-security-incident-internal-system-access-all-services-offline-rotate-secrets.md](advisories/2026-11-bitrise-security-incident-internal-system-access-all-services-offline-rotate-secrets.md)
 
 ### 2026-11-13 — **agent-device 0.21.36: a remote caller with a daemon token can read host files through `file://` navigation (CVE-2026-129130); upgrade to 0.21.37**
@@ -55,6 +59,10 @@ Red Hat published two Critical CVEs for self-hosted Quay on 2026-11-11. CVE-2026
 ### 2026-11-11 — **Node.js 22.23.5, 24.22.3, 26.13.1 fix 16 CVEs: HTTP/2 crash and memory disclosure, HTTPS heap read (CVE-2026-123864), TLS client-certificate bypasses**
 Node.js 22.23.5, 24.22.3 and 26.13.1 fix 16 CVEs, seven rated High by the project. An unauthenticated client can crash a default HTTP/2 server on 24.x and 26.x (CVE-2026-123863). CVE-2026-123864 (HTTPS) and CVE-2026-123866 (HTTP/2) can send a client memory from other connections, which the project says can include TLS private keys. Two flaws bypass per-hostname client-certificate policies. Upgrade and restart; no workaround is listed and no attacks are reported. End-of-life lines get no fix.
 → [advisories/2026-11-nodejs-november-11-security-release-sixteen-cves-http2-crash-memory-disclosure-https-heap-read-tls-client-cert-bypass.md](advisories/2026-11-nodejs-november-11-security-release-sixteen-cves-http2-crash-memory-disclosure-https-heap-read-tls-client-cert-bypass.md)
+
+### 2026-11-10 — **Kong AI Gateway 2.2.1 and Gateway Enterprise fix nine CVEs: SQL injection through a model name (CVE-2026-92544), cached responses served to other callers**
+Kong fixed nine CVEs on 2026-11-10. CVE-2026-92544 (Kong 8.7) lets a client run SQL against the Kong database through a crafted model name in the LLM usage counters. Five ids let a cached response reach a different caller. Upgrade AI Gateway 2.2.0 to 2.2.1 and Gateway Enterprise to 3.16.0.2, 3.15.0.7, 3.14.0.17, 3.13.0.12 or 3.10.0.20. CVE-2026-92442 is only partially fixed. Kong's records do not say whether the AI Gateway 2.3 line is affected or fixed.
+→ [advisories/2026-11-kong-ai-gateway-2-2-1-gateway-enterprise-nine-cves-llm-usage-counter-sql-injection-cache-cross-caller.md](advisories/2026-11-kong-ai-gateway-2-2-1-gateway-enterprise-nine-cves-llm-usage-counter-sql-injection-cache-cross-caller.md)
 
 ### 2026-11-10 — **Git 2.56.1 and six backports fix code execution on recursive clone (CVE-2026-111760) and five more CVEs; update every bundled Git**
 GitHub announced Git 2.56.1 on 2026-11-10 with backports 2.55.1, 2.54.1, 2.53.1, 2.52.1, 2.51.3 and 2.50.2 for six CVEs. CVE-2026-111760 runs a malicious repository's code on any machine that clones it with `--recurse-submodules`. The others cover a path traversal from a malicious server, memory corruption on merges and binary patches, and file access through `git fast-import`. Update Git and every application that bundles its own copy: GitHub says Desktop and the Copilot app builds are being coordinated, and The Hacker News found no Git for Windows release at 19:09 UTC on 2026-11-10. CVE Services had no record for the three ids queried on 2026-11-11. Single primary: GitHub's post.
