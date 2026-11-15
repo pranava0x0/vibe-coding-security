@@ -41,7 +41,7 @@ Prompts and code of Privacy Mode users, customer code repositories, Cursor's pro
 
 ### The extension count
 
-"At most 5,000 users who requested specific cached versions of the extension" may have received the tampered build. This is the same upper bound earlier coverage carried. It is a count of requests for those cached versions, not a count of compromised machines.
+"At most 5,000 users who requested specific cached versions of the extension" may have received the tampered build. This is the same upper bound earlier coverage carried. It is an upper bound on users who requested those cached versions, not a count of compromised machines.
 
 ### What Fireworks has said
 
@@ -55,7 +55,7 @@ Cursor says it moved all inference off Fireworks, deactivated the key and cut Fi
 
 - Cursor says it contacted affected customers directly and sent team admins lists of affected keys. Check the inbox of the account owner and each team admin for a notice from Cursor.
 - Cursor says that if you received no notification about coding agent traces, your data was not in those traces.
-- You are in the population the traces came from if you used Cursor's agent outside Privacy Mode, mostly in 2025. Check your current setting in Cursor's settings under privacy. This step is this file's advice.
+- You are in the population the traces came from if you used Cursor's agent outside Privacy Mode, mostly in 2025. Check whether Privacy Mode is on for your account or team now. This step is this file's advice.
 - You have separate exposure if you ever sent a key, token or password to Cursor support.
 - You have separate exposure if Cursor installed or updated `anthropic.claude-code` to 2.1.312 or 2.1.313 on 2026-10-29. The checks are in the [extension advisory](2026-10-claude-code-extension-2-1-313-cursor-marketplace-remove-and-rotate.md).
 

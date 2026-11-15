@@ -3,7 +3,7 @@ id: 2026-10-claude-code-extension-2-1-313-cursor-marketplace-remove-and-rotate
 title: "Harmful Claude Code extensions 2.1.312 and 2.1.313 from Cursor: check your installation and remove affected copies"
 kind: malicious-artifact
 date_disclosed: 2026-10-29
-last_updated: 2026-11-03
+last_updated: 2026-11-15
 severity: critical
 status: contained
 ecosystems: [vscode-extension, cursor-marketplace, npm, open-vsx]
@@ -129,3 +129,16 @@ Microsoft Security Research published its analysis on 2026-10-30 (surfaced on Ha
 Cursor's notice, re-read 2026-11-03, still carries the 2026-10-30 11:30 PT update stamp and no publication path. The Microsoft Defender threat analytics report is titled for 2.1.313 alone; the post groups both versions as tampered without saying whether 2.1.312 carried a different payload or the same one.
 
 Sources for this update: [Microsoft Security Blog — Inside the malicious Claude Code-branded Cursor extension with a persistent SSH backdoor](https://www.microsoft.com/en-us/security/blog/2026/10/30/inside-malicious-claude-code-branded-cursor-extension-persistent-ssh-backdoor/) (fetched 2026-11-03: 2026-10-30, Microsoft Security Research; the two versions, the Cursor window, the Visual Studio Marketplace and npm statement, Anthropic's statement to Microsoft, the inspection locations and the remediation order); [Cursor — Claude Code extension security notice](https://cursor.com/blog/claude-code-extension-security-notice) (re-read 2026-11-03: "Anthropic.claude-code version 2.1.312 and 2.1.313 for Windows and MacOS", update stamp 2026-10-30 11:30 PT, no count, no publication path); Hacker News item 50332497 ("Postmortem on Claude Code Cursor extension hack", 8 points, 2026-11-02), read through the Algolia API 2026-11-03 for the link only.
+
+## Update 2026-11-15 — Cursor explains the publication path: a credential taken from its internal data was used to place the copies on the marketplace cache; at most 5,000 users; last activity 2026-11-01
+
+Cursor published "An update on our recent security incident" on 2026-11-13. It answers the question the earlier Updates left open.
+
+- **How the copies got there.** Cursor says the copies were placed "directly on the cache" that serves its extension marketplace, using a credential taken from Cursor's exposed internal data. Cursor says that exposure began with an access key it had issued to Fireworks AI. The full chain is in the [Cursor incident advisory](2026-11-cursor-security-incident-fireworks-issued-key-agent-traces-credentials-exposed-marketplace-cache.md).
+- **Versions.** The post names `Anthropic.claude-code` 2.1.312 and 2.1.313, as the table above does.
+- **Count.** "At most 5,000 users who requested specific cached versions of the extension" may have received a tampered copy. This is Cursor's upper bound. The copies were available for about 11 hours on 2026-10-29.
+- **Other channels.** Cursor says Open VSX, the marketplace's source, never carried the copies, and that "Anthropic did not publish this copy, and this was not a vulnerability in Anthropic's product." It says it validated the other marketplace extensions as authentic and rebuilt the marketplace.
+- **Current state.** "The last attacker activity we have seen was on November 1, and it was blocked." Cursor says it believes the incident is contained. `status` stays `contained`.
+- **What to do.** Unchanged. Cursor repeats that "Uninstalling the extension alone may not be enough" and points to its October notice. The checks and steps above still apply. Cursor says it notified affected users and helped revoke exposed credentials. A notice from Cursor about this extension is a reason to complete every step above.
+
+**2026-11-15 update sources:** [Cursor: An update on our recent security incident](https://cursor.com/blog/security-incident-update), dated 2026-11-13, fetched 2026-11-15: the cache placement, the versions, the 5,000 upper bound, the 11 hours, the Open VSX and Anthropic sentences, the 2026-11-01 last activity. [The Hacker News: Cursor Says Stolen Fireworks AI Key Led to Trojanized Claude Code Extension Incident](https://thehackernews.com/2026/11/stolen-fireworks-ai-key-led-to-cursor.html), dated 2026-11-15, fetched 2026-11-15: a restatement of the post. Cursor's October notice was not re-read this run.

@@ -11,7 +11,7 @@ tags: [cve, kong, ai-gateway, llm-gateway, sql-injection, cache-poisoning, cross
 ---
 
 ## TL;DR
-Kong released fixes on 2026-11-10 for nine CVEs in Kong AI Gateway and Kong Gateway Enterprise. CVE-2026-92544 (Kong CNA, 8.7) lets a client run SQL against the Kong database through a crafted model name, which the LLM usage counters wrote without escaping. Five ids are caching flaws that can serve one caller's response to another. Upgrade AI Gateway 2.2.0 to 2.2.1, and Gateway Enterprise to 3.16.0.2, 3.15.0.7, 3.14.0.17, 3.13.0.12 or 3.10.0.20. One id, CVE-2026-92442, is only partially fixed. Kong's record does not say whether AI Gateway 2.3.0 is affected.
+Kong released fixes on 2026-11-10 for nine CVEs in Kong AI Gateway and Kong Gateway Enterprise. CVE-2026-92544 (Kong CNA, 8.7) lets a client run SQL against the Kong database through a crafted model name, which the LLM usage counters wrote without escaping. Five ids are caching flaws that can serve one caller's response to another. Upgrade AI Gateway 2.2.0 to 2.2.1, and Gateway Enterprise to 3.16.0.2, 3.15.0.7, 3.14.0.17, 3.13.0.12 or 3.10.0.20. One id, CVE-2026-92442, is only partially fixed. Kong's records do not say whether the AI Gateway 2.3 line is affected or fixed.
 
 ## What happened
 
@@ -42,14 +42,14 @@ Teams cache LLM responses to cut cost. The Gateway Enterprise changelog lists th
 ### Three things the records do not settle
 
 - **CVE-2026-92442 is partially fixed.** The changelog says: "Partially fixed CVE-2026-92442" by including the authenticated consumer's id in the cache key. It adds that responses marked `Cache-Control: private` or `no-store` "can still be cached; this is not addressed in this release."
-- **AI Gateway 2.3.0 is not covered either way.** The records list AI Gateway as 2.2.0, fixed in 2.2.1. The changelog dates 2.3.0 on 2026-11-04, six days before the fix, and 2.3.1 on 2026-11-10. The 2.3.1 section lists six upstream nginx patches and none of the nine ids. No Kong document read says 2.3.0 carried the fixes. Run 2.3.1 and ask Kong if you ran 2.3.0.
+- **AI Gateway 2.3.0 is not covered either way.** The records list AI Gateway as 2.2.0, fixed in 2.2.1. The changelog dates 2.3.0 on 2026-11-04, six days before the fix, and 2.3.1 on 2026-11-10. The 2.3.1 section lists six upstream nginx patches and none of the nine ids. No Kong document read says whether 2.3.0 or 2.3.1 carries the nine fixes. Ask Kong before treating the 2.3 line as fixed or as unaffected.
 - **Gateway Enterprise 3.11 and 3.12 are not in the records.** The ranges name the 3.10, 3.13, 3.14, 3.15 and 3.16 lines only. The records do not say the other lines are unaffected.
 
 The AI Gateway 2.2.1 section also bumps the bundled Brotli from 1.1.0 to 1.2.1 for CVE-2026-111497 and applies upstream nginx patches for six nginx CVEs. Those are upstream ids, not Kong's.
 
 ## Am I affected?
 
-- You run Kong AI Gateway 2.2.0, or Kong Gateway Enterprise on a line and build inside the ranges above. `kong version` prints the build.
+- You run Kong AI Gateway 2.2.0, or Kong Gateway Enterprise on a line and build inside the ranges above.
 - You route LLM traffic through Kong. The usage counters are the component in CVE-2026-92544.
 - You enabled `proxy-cache`, `proxy-cache-advanced`, `graphql-proxy-cache-advanced`, `ai-semantic-cache` or `request-callout` on a Route that more than one caller can reach.
 - You use the SAML plugin with an identity provider that shares a signing key across Service Providers.
@@ -58,7 +58,7 @@ The records name Kong Gateway Enterprise and Kong AI Gateway. They do not name t
 
 ## If you are affected
 
-1. Upgrade to AI Gateway 2.2.1 or 2.3.1, or to the fixed Gateway Enterprise build on your line.
+1. Upgrade AI Gateway 2.2.0 to 2.2.1, or Gateway Enterprise to the fixed build on your line. On AI Gateway 2.3.x, ask Kong whether the nine fixes are present. The changelog does not say.
 2. Purge the caches of the plugins above after upgrading. Entries stored under the old keys are the ones at risk. This step is this file's advice.
 3. For GraphQL caching, do not rely on `Cache-Control: private` or `no-store` to keep a response out of the cache. Kong says that part is not fixed.
 4. If untrusted clients could set the model name before the upgrade, review the Kong database for unexpected changes and rotate the credentials it stores. This step is this file's advice. No source reports exploitation.
