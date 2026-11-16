@@ -1,4 +1,4 @@
-markdown==3.7
+markdown==3.9
 PyYAML==6.0.2
-Pygments==2.18.0
-pytest==8.3.3
+Pygments==2.21.0
+pytest==9.0.3

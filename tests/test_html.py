@@ -168,7 +168,7 @@ def test_advisories_index_has_itemlist_jsonld(dist_dir):
 # `site/build.py` renders Markdown with raw HTML passed through, and the daily
 # sweep writes that Markdown after reading web pages it does not control. A tag
 # pasted outside a code span would be published as live HTML on a site with no
-# Content-Security-Policy. Until the renderer sanitizes its output, this is the
+# Content-Security-Policy. The renderer escapes raw HTML; this is the second
 # gate: the only script a page may carry is JSON-LD, and the only inline event
 # handlers are the ones in `site/template.html` itself.
 
@@ -193,7 +193,11 @@ class _ActiveHTMLFinder(HTMLParser):
         self.handlers: list[tuple[str, str, str]] = []
 
     def handle_starttag(self, tag, attrs):
-        d = {name: (value or "") for name, value in attrs}
+        # A browser keeps the first of two attributes with the same name. Tag-level
+        # checks read that one. Every occurrence is still checked on its own below.
+        d: dict[str, str] = {}
+        for name, value in attrs:
+            d.setdefault(name, value or "")
         if tag == "script":
             if d.get("type", "").strip().lower() != "application/ld+json" or "src" in d:
                 self.found.append(f"<script {sorted(d)}>")
@@ -201,7 +205,8 @@ class _ActiveHTMLFinder(HTMLParser):
             self.found.append(f"<{tag}>")
         elif tag == "meta" and d.get("http-equiv", "").strip().lower() == "refresh":
             self.found.append("<meta http-equiv=refresh>")
-        for name, value in d.items():
+        for name, value in attrs:
+            value = value or ""
             if name.startswith("on"):
                 self.handlers.append((tag, name, value))
             elif name == "srcdoc":
@@ -266,6 +271,10 @@ def test_active_html_detector_catches_each_shape():
         '<a href=" java&#9;script:x()">y</a>',
         '<a HREF="JavaScript:x()">y</a>',
         '<button formaction="javascript:x()">y</button>',
+        '<a href="javascript:x()" href="https://example.com/">y</a>',
+        '<a href="https://example.com/" href="javascript:x()">y</a>',
+        '<script type="text/javascript" type="application/ld+json">x()</script>',
+        '<img src=x title=">" onerror="x()">',
     ):
         assert _active_html(sample), sample
     for sample in (
@@ -278,3 +287,87 @@ def test_active_html_detector_catches_each_shape():
     handler = '<button onclick="t()">menu</button>'
     assert not _active_html(f"<body>{handler}</body>", handler)
     assert _active_html('<button onclick="other()">menu</button>', handler)
+
+
+# --- Renderer output control ----------------------------------------------
+
+def _render(markdown_text: str) -> str:
+    import sys
+
+    site_dir = str(Path(__file__).resolve().parent.parent / "site")
+    if site_dir not in sys.path:
+        sys.path.insert(0, site_dir)
+    import build  # type: ignore
+
+    return build.render_markdown(markdown_text)[0]
+
+
+def test_renderer_escapes_raw_html():
+    for source in (
+        "Text <script>x()</script> more",
+        "<script>x()</script>",
+        '<img src="a.png" onerror="x()">',
+        '<iframe src="https://example.com"></iframe>',
+        "<div>\n\n<script>x()</script>\n\n</div>",
+        'Path scripts/<subdir>/file and <a href="javascript:x()">link</a>',
+    ):
+        rendered = _render(source)
+        assert not _active_html(rendered), (source, rendered)
+    assert "&lt;subdir&gt;" in _render("Path scripts/<subdir>/file")
+
+
+def test_renderer_neutralizes_markdown_made_active_content():
+    for source in (
+        "[link](javascript:x())",
+        "[link](JaVaScRiPt:x())",
+        "[link](data:text/html,x)",
+        "![image](javascript:x())",
+        '[link](https://example.com){: onclick="x()" }',
+        "<javascript:x()>",
+    ):
+        rendered = _render(source)
+        assert not _active_html(rendered), (source, rendered)
+        assert "onclick" not in rendered.lower()
+        assert "x()" not in rendered or "&lt;" in rendered, (source, rendered)
+    for source in (
+        "[link](javascript:x())",
+        "[link](data:text/html,x)",
+        "[link][ref]\n\n[ref]: javascript:x()",
+        "[link](jav&#x61;script:x())",
+    ):
+        assert 'href="#"' in _render(source), source
+    assert "&lt;javascript:" in _render("<javascript:x()>")
+    fenced = _render('~~~ { .text use_pygments=false onmouseover="x()" style="a:b" }\ncode\n~~~\n')
+    assert "onmouseover" not in fenced and "style=" not in fenced and "code" in fenced, fenced
+    assert not _active_html(fenced), fenced
+    assert "language-" in _render("```{ .python }\nx = 1\n```\n") or "code" in _render("```{ .python }\nx = 1\n```\n")
+    example = _render('````markdown\n``` { .python title="x" }\nprint(1)\n```\n````\n')
+    assert "title=" in example and ".python" in example, example
+    indented_example = _render('Text.\n\n    ``` { .python title="x" }\n')
+    assert "title=" in indented_example, indented_example
+    styled = _render('[a](x){: style="position:fixed" ping="https://example.com" ONCLICK="x()" }')
+    for attribute in ("style", "ping", "onclick"):
+        assert attribute not in styled.lower(), styled
+    kept = _render("[a](https://example.com/x) [b](../playbooks/x.md) [c](#top) [d](mailto:a@example.com)")
+    for target in ('href="https://example.com/x"', 'href="../playbooks/x.md"', 'href="#top"', "mailto:"):
+        assert target in kept, kept
+
+
+def test_renderer_keeps_code_and_drops_marker_comments():
+    rendered = _render("<!-- cve-metrics:start -->\n\nBody text.\n\n```html\n<!-- kept -->\n<script>x()</script>\n```\n")
+    assert "cve-metrics" not in rendered
+    assert "kept" in rendered and "Body text." in rendered
+    assert "<script>" not in rendered
+    indented = _render("Text.\n\n    <!-- indented -->\n    code\n")
+    assert "indented" in indented and "code" in indented
+
+
+def test_jsonld_cannot_close_its_script_element(all_html_files):
+    pattern = re.compile(r'<script type="application/ld\+json">(.*?)</script>', re.DOTALL)
+    checked = 0
+    for page in all_html_files:
+        for payload in pattern.findall(page.read_text(encoding="utf-8")):
+            checked += 1
+            assert "<" not in payload and ">" not in payload, page.name
+            json.loads(payload)
+    assert checked, "no JSON-LD found in built pages"

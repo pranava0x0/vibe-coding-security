@@ -6,15 +6,21 @@
 
 ## Open
 
-### Site build passes raw HTML in Markdown through to the published pages — 2026-11-16
-
-`render_markdown` in `site/build.py` calls Python-Markdown with no sanitizer, so an HTML tag written outside a code span in any advisory, playbook or `ALERTS.md` entry is published as HTML. The daily sweep writes that Markdown after reading web pages it does not control. GitHub Pages sets no Content-Security-Policy. A `<script>` tag pasted outside a code span would run script on the published site. The unfinished 2026-11-06 run of Cloudflare's `security-audit` skill raised this, and reading the code on 2026-11-16 confirmed it. No active tag is in the built site today. `tests/test_html.py` now fails the gate on a `<script>`, `<iframe>`, `<object>`, `<embed>`, inline event handler or similar active HTML in a built page. The renderer is unchanged. Root cause: **code bug** (missing output control). Status: open.
+_None open._
 
 ## Fixed
 
+### Site build passed raw HTML in Markdown through to the published pages — 2026-11-16
+
+`render_markdown` in `site/build.py` called Python-Markdown with no output control, so an HTML tag written outside a code span was published as HTML. The daily sweep writes that Markdown after reading web pages it does not control, and GitHub Pages sets no Content-Security-Policy. The unfinished 2026-11-06 run of Cloudflare's `security-audit` skill raised this. Root cause: **code bug**. Fix: the renderer no longer processes raw HTML, so a tag outside a code span is escaped and shown as text. Marker comment lines are dropped. Links and images with a scheme other than `http`, `https` or `mailto` point at nothing, and event-handler attributes set through `attr_list` are removed. `tests/test_html.py` checks the renderer and every built page. Two pages changed: the `mcp-remote` evidence page lost two marker comments from its HTML, and the ramparts advisory now shows the text `scripts/<subdir>/`, which the old renderer had swallowed as a tag.
+
+### Build pins inside advisory ranges — 2026-11-16
+
+`site/requirements.txt` pinned `markdown` 3.7, `Pygments` 2.18.0 and `pytest` 8.3.3, each inside the range of a published advisory, and the dependency log in `SECURITY.md` had last been checked on 2026-05-17. Root cause: **process** (no recurring check). Fix: pins raised to 3.9, 2.21.0 and 9.0.3. The Pygments change alters code-block markup on 356 pages with no visible difference intended.
+
 ### No coverage of 3D, simulation and scientific-computing tools — 2026-11-16
 
-The corpus had no file on Blender, OpenUSD, FreeCAD, ComfyUI, Omniverse, Isaac, BioNeMo or the MCP bridges to them, and the sweep's query list never named them. The owner's digital-twin project checked this corpus before installing Blender and `usd-core` and found nothing, while both had CVEs published in the previous three weeks. Root cause: **content gap** (audience definition stopped at web and agent tooling). Fix: a rotation list and a new query in the sweep's query file, filing criteria in the skill, `LEARNINGS.md` §75 with the channels, nine unfiled CVE ids and two other leads, a section in `sources/advisory-feeds.md`, and three backfill advisories (Blender, OpenUSD, blender-mcp).
+The corpus had no file on Blender, OpenUSD, FreeCAD, ComfyUI, Omniverse, Isaac, BioNeMo or the MCP bridges to them, and the sweep's query list never named them. The owner's digital-twin project checked this corpus before installing Blender and `usd-core` and found nothing, while both had CVEs published in the previous three weeks. Root cause: **content gap** (audience definition stopped at web and agent tooling). Fix: a rotation list and a new query in the sweep's query file, filing criteria in the skill, `LEARNINGS.md` §75 with the channels, nine unfiled CVE ids and two other leads, a section in `sources/advisory-feeds.md`, and three backfill advisories (Blender, OpenUSD, blender-mcp), then five more the same day (FreeCAD, ComfyUI, ComfyUI-Manager, NVIDIA BioNeMo, NVIDIA Isaac Lab).
 
 ### Browser automation coverage — 2026-11-03
 
