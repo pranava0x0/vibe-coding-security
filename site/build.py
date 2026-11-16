@@ -329,6 +329,27 @@ class _DropCommentLines(Preprocessor):
         return [line for line in lines if not _COMMENT_LINE_RE.match(line)]
 
 
+_FENCE_ATTRS_RE = re.compile(r"^(?P<fence>\s*(?:`{3,}|~{3,}))\s*\{(?P<attrs>[^}\n]*)\}\s*$")
+
+
+class _PlainFenceHeaders(Preprocessor):
+    """Reduce a fenced block's `{ ... }` header to its language class.
+
+    `fenced_code` builds its HTML before the element tree exists, so attributes
+    in a fence header never reach `_InertOutput`. Only `.language` is kept."""
+
+    def run(self, lines):
+        out = []
+        for line in lines:
+            match = _FENCE_ATTRS_RE.match(line)
+            if match:
+                language = next((token[1:] for token in match.group("attrs").split()
+                                 if re.fullmatch(r"\.[A-Za-z0-9_+\-]+", token)), "")
+                line = f"{match.group('fence')}{language}"
+            out.append(line)
+        return out
+
+
 def render_markdown(body: str) -> tuple[str, str, list[tuple[int, str, str]]]:
     md = markdown.Markdown(extensions=[
         "fenced_code", "tables", "toc", "sane_lists", "codehilite", "attr_list",
@@ -341,6 +362,7 @@ def render_markdown(body: str) -> tuple[str, str, list[tuple[int, str, str]]]:
     # tag written outside a code span is escaped and shown as text, not rendered.
     md.preprocessors.deregister("html_block")
     md.inlinePatterns.deregister("html")
+    md.preprocessors.register(_PlainFenceHeaders(md), "plain_fence_headers", 27)
     md.preprocessors.register(_DropCommentLines(md), "drop_comment_lines", 22)
     md.treeprocessors.register(_InertOutput(md), "inert_output", -10)
     html_out = md.convert(body)

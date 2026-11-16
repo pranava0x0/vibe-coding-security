@@ -337,6 +337,10 @@ def test_renderer_neutralizes_markdown_made_active_content():
     ):
         assert 'href="#"' in _render(source), source
     assert "&lt;javascript:" in _render("<javascript:x()>")
+    fenced = _render('~~~ { .text use_pygments=false onmouseover="x()" style="a:b" }\ncode\n~~~\n')
+    assert "onmouseover" not in fenced and "style=" not in fenced and "code" in fenced, fenced
+    assert not _active_html(fenced), fenced
+    assert "language-" in _render("```{ .python }\nx = 1\n```\n") or "code" in _render("```{ .python }\nx = 1\n```\n")
     styled = _render('[a](x){: style="position:fixed" ping="https://example.com" ONCLICK="x()" }')
     for attribute in ("style", "ping", "onclick"):
         assert attribute not in styled.lower(), styled
