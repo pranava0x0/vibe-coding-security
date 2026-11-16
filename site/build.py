@@ -54,6 +54,8 @@ from typing import Any
 from xml.sax.saxutils import escape as xml_escape
 
 import markdown  # type: ignore
+from markdown.preprocessors import Preprocessor  # type: ignore
+from markdown.treeprocessors import Treeprocessor  # type: ignore
 import yaml  # type: ignore
 
 
@@ -279,6 +281,54 @@ def rewrite_links(
     return re.sub(r'href="([^"]+)"', replace, html_text)
 
 
+_SAFE_URL_SCHEMES = {"http", "https", "mailto"}
+_URL_ATTRIBUTES = ("href", "src")
+_URL_NOISE_RE = re.compile(r"[\x00-\x20]+")
+_URL_SCHEME_RE = re.compile(r"^([a-z][a-z0-9+.\-]*):")
+
+
+def _is_safe_url(url: str) -> bool:
+    """True for relative URLs, fragments and the schemes in `_SAFE_URL_SCHEMES`."""
+    compact = _URL_NOISE_RE.sub("", html.unescape(url)).lower()
+    scheme = _URL_SCHEME_RE.match(compact)
+    return scheme is None or scheme.group(1) in _SAFE_URL_SCHEMES
+
+
+class _InertOutput(Treeprocessor):
+    """Remove what Markdown syntax itself can make active.
+
+    A Markdown link may carry any URL scheme, and `attr_list` lets the source
+    set any attribute. Drop event handlers, inline styles and other attributes
+    that load or send, and point a link or image with an unlisted scheme at
+    nothing."""
+
+    def run(self, root):
+        for element in root.iter():
+            for name in list(element.attrib):
+                lowered = name.lower()
+                if (lowered.startswith("on") or ":" in lowered
+                        or lowered in ("srcdoc", "formaction", "action", "style", "ping", "srcset")):
+                    del element.attrib[name]
+                elif lowered in _URL_ATTRIBUTES and not _is_safe_url(element.attrib[name]):
+                    element.attrib[name] = "#"
+
+
+_COMMENT_LINE_RE = re.compile(r"^ {0,3}<!--.*?-->\s*$")
+
+
+class _DropCommentLines(Preprocessor):
+    """Drop lines that are only an HTML comment.
+
+    Tools mark regions of an advisory with comment lines such as
+    `<!-- cve-metrics:start -->`. With raw HTML disabled they would be shown
+    as text. A top-level fenced block is already stashed when this runs, and
+    a line indented four or more spaces is left alone, so a comment inside
+    code is kept."""
+
+    def run(self, lines):
+        return [line for line in lines if not _COMMENT_LINE_RE.match(line)]
+
+
 def render_markdown(body: str) -> tuple[str, str, list[tuple[int, str, str]]]:
     md = markdown.Markdown(extensions=[
         "fenced_code", "tables", "toc", "sane_lists", "codehilite", "attr_list",
@@ -286,6 +336,13 @@ def render_markdown(body: str) -> tuple[str, str, list[tuple[int, str, str]]]:
         "codehilite": {"css_class": "code", "guess_lang": False},
         "toc": {"toc_depth": "2-3", "permalink": False, "anchorlink": False},
     })
+    # The sweep writes this Markdown after reading web pages it does not control,
+    # and the site has no Content-Security-Policy. Without these two processors a
+    # tag written outside a code span is escaped and shown as text, not rendered.
+    md.preprocessors.deregister("html_block")
+    md.inlinePatterns.deregister("html")
+    md.preprocessors.register(_DropCommentLines(md), "drop_comment_lines", 22)
+    md.treeprocessors.register(_InertOutput(md), "inert_output", -10)
     html_out = md.convert(body)
     toc_html = md.toc  # type: ignore[attr-defined]
     headings: list[tuple[int, str, str]] = []
@@ -355,7 +412,7 @@ def build_sidebar(current: Page, all_pages: list[Page]) -> str:
                 active2 = current.output_path == item.output_path
                 cls = ' class="active"' if active2 else ""
                 sev = str(item.frontmatter.get("severity", "")).lower()
-                dot = f' <span class="dot dot-{sev}" aria-hidden="true"></span>' if sev else ""
+                dot = f' <span class="dot dot-{html.escape(sev, quote=True)}" aria-hidden="true"></span>' if sev else ""
                 parts.append(
                     f'<li><a href="{url2}"{cls}>{html.escape(item.title)}{dot}</a></li>'
                 )
@@ -527,7 +584,10 @@ def build_jsonld(page: Page, page_url: str, all_pages: list[Page]) -> str:
             "url": page_url,
             "isPartOf": {"@type": "WebSite", "name": SITE_NAME_DISPLAY, "url": SITE_URL},
         }
-    return '<script type="application/ld+json">' + json.dumps(data) + "</script>"
+    # A title holding "</script>" must not end the element, so the three
+    # characters HTML gives meaning to are written as JSON escapes.
+    payload = json.dumps(data).replace("<", "\\u003c").replace(">", "\\u003e").replace("&", "\\u0026")
+    return '<script type="application/ld+json">' + payload + "</script>"
 
 
 # ────────────────────────────────────────────────────────────────────────────
@@ -1346,7 +1406,7 @@ def build_atom_feed(pages: list[Page]) -> str:
         out.append(f"    <updated>{updated}</updated>")
         out.append(f"    <summary>{xml_escape(p.description)}</summary>")
         for tag in p.frontmatter.get("tags", []):
-            out.append(f'    <category term="{xml_escape(str(tag))}"/>')
+            out.append(f'    <category term="{xml_escape(str(tag), {'"': "&quot;"})}"/>')
         out.append("  </entry>")
     out.append('</feed>')
     return "\n".join(out)

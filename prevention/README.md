@@ -12,6 +12,7 @@ Hardening guides — the things you do **before** an incident so the incident do
 | Vetting MCP servers before connecting them | [mcp-hygiene.md](mcp-hygiene.md) |
 | Where credentials live (and where they shouldn't) | [credential-hygiene.md](credential-hygiene.md) |
 | Running agents inside containers/VMs | [agent-sandboxing.md](agent-sandboxing.md) |
+| Auditing your app with an agent security-audit skill | [agent-security-audit.md](agent-security-audit.md) |
 | 60-second checklist before any new install | [package-vetting-checklist.md](package-vetting-checklist.md) |
 
 ## The 6 highest-leverage habits

@@ -41,10 +41,10 @@ We follow a coordinated disclosure model:
 
 The `main` branch has no runtime dependencies. Build-time dependencies:
 
-- `markdown==3.7`, `PyYAML==6.0.2`, `Pygments==2.18.0` ([requirements.txt](site/requirements.txt))
+- `markdown==3.9`, `PyYAML==6.0.2`, `Pygments==2.21.0`, `pytest==9.0.3` ([requirements.txt](site/requirements.txt))
 - All install scripts disabled where possible. See [prevention/npm-hardening.md](prevention/npm-hardening.md) for the discipline we apply.
 
-**Last advisory sweep on these build deps:** 2026-05-17. (Refresh if >7 days old per the universal CLAUDE.md.)
+**Last advisory sweep on these build deps:** 2026-11-16, against the GitHub Advisory Database. Three pins were inside an advisory range and were raised: `markdown` 3.7 to 3.9 (CVE-2025-69534, fixed 3.8.1), `Pygments` 2.18.0 to 2.21.0 (CVE-2026-4539, fixed 2.20.0) and `pytest` 8.3.3 to 9.0.3 (CVE-2025-71176, fixed 9.0.3). `PyYAML` 6.0.2 is outside every listed range. pytest 9 needs Python 3.10 or later, and CI runs 3.12.
 
 ## Agent source audits (Cloudflare `security-audit` skill)
 
@@ -68,7 +68,7 @@ Cloudflare's open-source [`security-audit` skill](https://github.com/cloudflare/
 
 | Date | Mode | Scope | Result |
 |---|---|---|---|
-| 2026-11-06 | full audit, `quick` profile | build pipeline | Not completed. No report was published. One lead was checked by hand on 2026-11-16 and is tracked in [ISSUES.md](ISSUES.md): `site/build.py` renders Markdown with raw HTML passed through. `tests/test_html.py` now rejects active tags in built pages, and the renderer is unchanged. |
+| 2026-11-06 | full audit, `quick` profile | build pipeline | Not completed. No report was published. One lead was checked by hand on 2026-11-16 and is recorded in [ISSUES.md](ISSUES.md): `site/build.py` renders Markdown with raw HTML passed through. The renderer now escapes raw HTML, and `tests/test_html.py` rejects active tags in built pages. |
 
 ## Site security headers
 
