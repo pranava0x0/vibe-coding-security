@@ -54,6 +54,29 @@ curl -X POST "https://api.osv.dev/v1/query" -d '{"package":{"name":"chalk","ecos
 - JSON: [cisa.gov/known-exploited-vulnerabilities.json](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json)
 - Updated continuously; useful for triage prioritization.
 
+## 3D, simulation and scientific computing
+
+Blender, OpenUSD, FreeCAD, ComfyUI, Omniverse and notebook or workflow tools rarely appear in npm or PyPI advisory feeds. Their fixes arrive through research CNAs and each project's own repository. If you drive any of them with a coding agent, watch these:
+
+| Tool | Where its security fixes appear |
+|---|---|
+| Blender | No advisory page. CVE records come from VulnCheck. Release dates: `https://download.blender.org/release/` |
+| OpenUSD (`usd-core`) | `https://github.com/PixarAnimationStudios/OpenUSD/security/advisories` and ZDI advisories |
+| FreeCAD | `https://github.com/FreeCAD/FreeCAD/security/advisories` |
+| ComfyUI | `https://github.com/Comfy-Org/ComfyUI/security/advisories` and the ComfyUI-Manager repository |
+| NVIDIA Omniverse, Isaac, BioNeMo, PhysicsNeMo | `https://github.com/NVIDIA/product-security` |
+| Jupyter | `https://jupyter.org/security` and the `jupyterlab`, `jupyter_server` and `jupyterhub` repository advisory tabs |
+| Galaxy, Nextflow, QGIS | each project's repository advisory tab |
+| Siemens industrial and digital-twin products | CSAF feed: `https://cert-portal.siemens.com/productcert/csaf/ssa-feed-tlp-white.json` |
+
+```bash
+# Published advisories on a project's own tab (works where the web page needs a login or a browser)
+gh api 'repos/PixarAnimationStudios/OpenUSD/security-advisories?per_page=10' \
+  --jq '.[] | {ghsa: .ghsa_id, cve: .cve_id, severity, published_at, summary}'
+```
+
+A CVE in one of these tools is usually "local, user interaction required". When an agent opens a downloaded model, scene or checkpoint for you, the agent supplies that interaction.
+
 ## Slack / Discord communities
 
 These often see chatter before the blog posts:

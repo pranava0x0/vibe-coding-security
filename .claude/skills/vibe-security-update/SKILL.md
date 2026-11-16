@@ -340,6 +340,7 @@ For each unique candidate incident pulled from results, decide:
 - CVE in major AI-agent framework SDK (LangChain, Semantic Kernel, PraisonAI, OpenClaw, etc.), OR
 - CVE in core vibe-coding web stack (Next.js, React, Svelte, Vite, Tailwind, FastAPI, Streamlit, Prisma, NextAuth.js, Supabase) with practical exploitation path, OR
 - Malicious MCP server, OR
+- CVE, malicious add-on or malicious project file in a 3D, simulation or scientific-computing tool the audience drives with a coding agent (Blender, OpenUSD, FreeCAD, ComfyUI, Omniverse and Isaac, Jupyter, bioinformatics workflow engines), or in an MCP bridge or agent skill for one (`LEARNINGS.md` §75), OR
 - Prompt-injection PoC against vibe-coding tool, OR
 - Vibe platform data exposure with PII impact, OR
 - Cross-ecosystem worm (npm ↔ PyPI ↔ RubyGems with identical payload), OR
@@ -357,7 +358,7 @@ Always bump `last_updated` in frontmatter when touched.
 
 **C. SKIP** — log but don't write up if:
 - Already covered in an existing advisory with no new info
-- Not relevant to vibe coding audience (e.g., kernel CVE, generic enterprise vuln)
+- Not relevant to vibe coding audience (e.g., kernel CVE, generic enterprise vuln, a CAD or simulation suite known only from an industrial-control-system (ICS) advisory with no agent, MCP bridge or registry package involved)
 - Single unconfirmed source (need ≥2 independent for a full advisory)
 - An offensive-use report with no installable artifact (rule 2 under "Classifier stops and the model switch")
 
@@ -448,7 +449,7 @@ For NEW sources discovered this run (not yet in the list), add with `weight: 5, 
 
 Write the updated JSON back. Sort by weight desc for readability.
 
-Do not edit `references/queries.md`. It is at the cap in `tests/test_sweep_context.py` (3,994 of 4,000 tokens). Put new sources in `source-priorities.json` and access notes in `LEARNINGS.md`. The one exception is replacing a query string that has stopped producing with one of the same length.
+Do not edit `references/queries.md`. It is at the cap in `tests/test_sweep_context.py` (3,998 of 4,000 tokens). Put new sources in `source-priorities.json` and access notes in `LEARNINGS.md`. The one exception is replacing a query string that has stopped producing with one of the same length.
 
 ### Step 5 — Append to runs.log.md
 

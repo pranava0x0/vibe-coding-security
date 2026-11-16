@@ -26,6 +26,7 @@ A new entry lands in [ALERTS.md](../ALERTS.md) when:
 - A package with > 100k weekly downloads is compromised, OR
 - A CVE in a major AI tool (Cursor, Claude Code, Copilot, Cody, Windsurf, etc.) is published, OR
 - A malicious MCP server is publicly documented, OR
+- A 3D, simulation or scientific-computing tool that people drive with a coding agent (Blender, OpenUSD, FreeCAD, ComfyUI, Omniverse, Jupyter) has a CVE triggered by opening a file, or a malicious add-on, custom node or agent skill for one is documented, OR
 - A prompt-injection attack against a vibe-coding tool is demonstrated with PoC, OR
 - A vibe-coding platform (Lovable, Bolt, v0, Replit) has a security incident with user-data exposure.
 
