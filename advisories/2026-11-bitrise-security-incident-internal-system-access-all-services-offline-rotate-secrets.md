@@ -2,7 +2,7 @@
 id: 2026-11-bitrise-security-incident-internal-system-access-all-services-offline-rotate-secrets
 title: "Bitrise security incident: unauthorized access to an internal system, all services taken offline on 2026-11-13; rotate secrets, access tokens and certificates"
 date_disclosed: 2026-11-13
-last_updated: 2026-11-15
+last_updated: 2026-11-16
 severity: high
 status: active
 ecosystems: [bitrise, ci-cd, mobile, saas, github, code-signing]
@@ -61,6 +61,17 @@ The status page was re-read on 2026-11-15 at about 15:20 UTC. It carried 18 more
 
 Every update repeats the recommendation to rotate all secrets, access tokens and certificates stored in Bitrise once you can sign in. Sign-in is now possible, so step 2 and step 3 above can be done today. The page still gives no cause, no actor, no count and no post-mortem date. No other incident was opened on or after 2026-11-14. `status` stays `active`.
 
+## Update 2026-11-16: builds are being restored for paid workspaces; Bitrise contacts customers with identified impact directly; still unresolved
+
+The incident page was re-read on 2026-11-16 at about 15:30 UTC. Its newest update is dated 2026-11-16 13:23 UTC. The incident is still unresolved, SEV-1, All Users.
+
+- Builds (CI) and BuildHub are "gradually getting restored", and "workspaces with a paid subscription can start builds". The 12:45 UTC update adds Release Management and CodePush.
+- "The investigation is ongoing. Customers with identified impact are contacted directly." The sentence first appears in the 2026-11-16 08:14 UTC update, found by searching the page text in code. It is the first statement on the page that some customers have identified impact. The page gives no count and does not say what the impact is.
+- Bitrise says it enabled a "Protected Secret Masked Review" feature, first mentioned in the 2026-11-15 17:35 UTC update, to help users find the secrets to rotate, under Workflow Editor, Secrets and under Workspace settings, Shared resources.
+- The recommendation is unchanged: rotate all secrets, access tokens and certificates stored in Bitrise.
+
+The page still gives no cause and no post-mortem date. `status` stays `active`. If Bitrise has not contacted you, that is not a statement that you are unaffected. Rotate anyway.
+
 ## Sources
 
 Single source: the vendor.
@@ -69,3 +80,4 @@ Single source: the vendor.
 - Hacker News item 50489750, seen 2026-11-14 through the Algolia search feed: the status page submitted on 2026-11-13, 4 points. The item page was not opened.
 - Not covered: the incident's own URL, Bitrise's blog and trust centre, and any customer email.
 - [Bitrise status](https://status.bitrise.io), re-read 2026-11-15: 18 further updates from 2026-11-14 16:05 UTC to 2026-11-15 14:23 UTC, the incident still unresolved. The count of 18 was made in code from the page's timestamps. Only the 20:35 sentence is quoted.
+- [Bitrise status: Security Incident](https://status.bitrise.io/incidents/7055z4g9nbck), re-read 2026-11-16 with `curl`: the 13:23 UTC and 12:45 UTC updates quoted above.
