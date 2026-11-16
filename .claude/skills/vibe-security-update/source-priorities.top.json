@@ -5,8 +5,8 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 126,
-   "last_hit": "2026-11-15"
+   "hits": 127,
+   "last_hit": "2026-11-16"
   },
   {
    "domain": "github.com/advisories",
@@ -17,13 +17,13 @@
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 72,
-   "last_hit": "2026-11-14"
+   "hits": 73,
+   "last_hit": "2026-11-16"
   },
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 70,
+   "hits": 71,
    "last_hit": "2026-11-16"
   },
   {
@@ -41,8 +41,8 @@
   {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
-   "hits": 45,
-   "last_hit": "2026-11-14"
+   "hits": 46,
+   "last_hit": "2026-11-16"
   },
   {
    "domain": "cybersecuritynews.com",
@@ -59,14 +59,14 @@
   {
    "domain": "cveawg.mitre.org",
    "weight": 20.0,
-   "hits": 38,
+   "hits": 39,
    "last_hit": "2026-11-16"
   },
   {
    "domain": "stepsecurity.io",
    "weight": 20.0,
-   "hits": 36,
-   "last_hit": "2026-11-12"
+   "hits": 37,
+   "last_hit": "2026-11-16"
   },
   {
    "domain": "socket.dev",
@@ -83,8 +83,14 @@
   {
    "domain": "hn.algolia.com",
    "weight": 20.0,
-   "hits": 31,
-   "last_hit": "2026-11-15"
+   "hits": 32,
+   "last_hit": "2026-11-16"
+  },
+  {
+   "domain": "safedep.io",
+   "weight": 20.0,
+   "hits": 28,
+   "last_hit": "2026-11-16"
   },
   {
    "domain": "cisa.gov",
@@ -99,12 +105,6 @@
    "last_hit": "2026-11-16"
   },
   {
-   "domain": "safedep.io",
-   "weight": 20.0,
-   "hits": 27,
-   "last_hit": "2026-11-12"
-  },
-  {
    "domain": "aikido.dev",
    "weight": 20.0,
    "hits": 25,
@@ -117,6 +117,12 @@
    "last_hit": "2026-09-23"
   },
   {
+   "domain": "aws.amazon.com",
+   "weight": 20.0,
+   "hits": 21,
+   "last_hit": "2026-11-16"
+  },
+  {
    "domain": "api.npmjs.org",
    "weight": 20.0,
    "hits": 20,
@@ -127,12 +133,6 @@
    "weight": 20.0,
    "hits": 20,
    "last_hit": "2026-11-10"
-  },
-  {
-   "domain": "aws.amazon.com",
-   "weight": 20.0,
-   "hits": 20,
-   "last_hit": "2026-11-05"
   },
   {
    "domain": "sentinelone.com",

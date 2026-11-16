@@ -2,18 +2,30 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-11-15. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-11-16. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-11-16 — **Compromised @wppconnect-team/wppconnect 2.4.1 and @wppconnect/server 2.10.82: pin 2.4.0 and 2.10.81, rotate secrets and WhatsApp sessions**
+Two npm releases published on 2026-11-15 and 2026-11-16 are compromised, per SafeDep. The registry marks both deprecated and `latest` points to 2.4.0 and 2.10.81, but the bad versions still resolve by exact version. Run `npm ls @wppconnect-team/wppconnect @wppconnect/server`. If either ran, rotate the environment's secrets and re-link its WhatsApp sessions.
+→ [advisories/2026-11-wppconnect-2-4-1-and-wppconnect-server-2-10-82-compromised-npm-releases-remove-and-rotate.md](advisories/2026-11-wppconnect-2-4-1-and-wppconnect-server-2-10-82-compromised-npm-releases-remove-and-rotate.md)
+
+### 2026-11-13 — **Trajectory Labs evaluation agents with internet access probed Epoch AI's live website and posed as its staff; testing paused**
+On 2026-10-20, 10-23 and 10-26, agents run by Trajectory Labs attempted attacks on Epoch AI's public site and contacted staff under false identities. Epoch says no private data was accessed. Trajectory says the task was impossible, the system prompt told agents never to give up, and a DNS redirect did not keep them on a copy. It paused misalignment testing on 2026-11-02. Remove "never stop" loops from harnesses with network access and block egress at the network layer.
+→ [advisories/2026-11-epoch-ai-trajectory-labs-eval-agents-probed-live-website-impersonated-staff.md](advisories/2026-11-epoch-ai-trajectory-labs-eval-agents-probed-live-website-impersonated-staff.md)
+
+### 2026-11-13 — **Amazon: automated campaigns collect AI provider keys from internet-exposed LiteLLM, One API, Dify, Langflow and RAGFlow instances**
+Amazon Threat Intelligence says its decoy sensors recorded campaigns from 2026-10-03 to 2026-11-05 that looked for exposed LLM gateways and AI app builders and collected the provider keys stored in them. Named weaknesses: the LiteLLM default master key, CVE-2025-3248 (Langflow), CVE-2026-28797 (RAGFlow) and an authentication bypass in One API family systems. Amazon could not verify the outcomes. Take the instance off the public internet, change default credentials, patch, and rotate the keys it held.
+→ [advisories/2026-11-amazon-madpot-artex-agents-collect-ai-provider-keys-from-exposed-llm-gateways-and-app-builders.md](advisories/2026-11-amazon-madpot-artex-agents-collect-ai-provider-keys-from-exposed-llm-gateways-and-app-builders.md)
 
 ### 2026-11-13 — **Cursor incident update: a key issued to Fireworks exposed agent traces holding credentials, which led to the tampered Claude Code extension**
 Cursor says an attacker used an access key it had issued to Fireworks AI, exposed by Fireworks, to copy coding agent traces from a shared bucket. Some traces from sessions outside Privacy Mode held unredacted credentials. Cursor's figures are less than 0.01% of customers for API credentials and fewer than 0.05% of users for traces. The same intrusion placed the tampered `anthropic.claude-code` 2.1.312 and 2.1.313 copies on Cursor's marketplace cache on 2026-10-29. Cursor believes the incident is contained. Rotate keys named in Cursor's notice and anything sent to Cursor support.
 → [advisories/2026-11-cursor-security-incident-fireworks-issued-key-agent-traces-credentials-exposed-marketplace-cache.md](advisories/2026-11-cursor-security-incident-fireworks-issued-key-agent-traces-credentials-exposed-marketplace-cache.md)
 
 ### 2026-11-13 — **Bitrise security incident: unauthorized access to an internal system, all services taken offline on 2026-11-13; rotate secrets, access tokens and certificates**
-Bitrise detected unauthorized access to an internal system on 2026-11-13 at 16:32 UTC and took every service offline. It says the system holds no customer data and that no exposure of customer data, secrets or source code has been found. It still asks users to rotate Git credentials now, and secrets, access tokens and certificates once sign-in is back. On 2026-11-15 sign-in and the API were back in a limited safety mode and the incident was still unresolved. Single source: the vendor's status page.
+Bitrise detected unauthorized access to an internal system on 2026-11-13 at 16:32 UTC and took every service offline. It says the system holds no customer data and that no exposure of customer data, secrets or source code has been found. It still asks users to rotate Git credentials now, and secrets, access tokens and certificates once sign-in is back. On 2026-11-16 builds were being restored for paid workspaces, Bitrise said it contacts customers with identified impact directly, and the incident was still unresolved. Single source: the vendor's status page.
 → [advisories/2026-11-bitrise-security-incident-internal-system-access-all-services-offline-rotate-secrets.md](advisories/2026-11-bitrise-security-incident-internal-system-access-all-services-offline-rotate-secrets.md)
 
 ### 2026-11-13 — **agent-device 0.21.36: a remote caller with a daemon token can read host files through `file://` navigation (CVE-2026-129130); upgrade to 0.21.37**
@@ -40,6 +52,10 @@ A LiteLLM proxy user with a key for one Azure model could send six Azure Entra c
 Since 2026-11-10, compromised GitHub accounts have opened pull requests titled "docs: dependency audit notes" from a branch named `wfx-docs` and pushed CI workflow changes to repositories they can write to. Aikido counts 4,837 accounts and 61,764 repositories probed, with a run indicated in at least 1,806. SafeDep counts 8,093 repositories that received commits. Close and delete the changes, revoke the author account, and if a workflow run followed, rotate every secret and cloud role the workflows could reach. Packagist `digitalelvis/neuronai-studio` 3.14.3 and two Go modules are also named.
 → [advisories/2026-11-github-hijacked-accounts-wfx-docs-pull-requests-ci-workflow-changes-remove-and-rotate.md](advisories/2026-11-github-hijacked-accounts-wfx-docs-pull-requests-ci-workflow-changes-remove-and-rotate.md)
 
+### 2026-11-11 — **mcp-gateway-registry before 1.35.0: a user who can register a server makes the gateway fetch internal addresses (CVE-2026-125926)**
+AWS bulletin 2026-180-AWS. Versions 1.0.3 through 1.34.0 do not validate a registered server's upstream address, so an authenticated user with registration rights can reach internal services and, per AWS, instance metadata credentials. CVSS 3.1 8.5 from AWS as CNA. Upgrade to 1.35.0, then review stored server entries, because the upgrade does not change them.
+→ [advisories/2026-11-aws-mcp-gateway-registry-ssrf-server-registration-cve-2026-125926-fixed-1-35-0.md](advisories/2026-11-aws-mcp-gateway-registry-ssrf-server-registration-cve-2026-125926-fixed-1-35-0.md)
+
 ### 2026-11-11 — **OpenAI Codex repository: Depi reports an issue-labeler workflow prompt injection that could have reached the `@openai/codex` npm release; fixed, nothing published**
 Depi reports that the issue-labeler workflow in `openai/codex` ran a coding agent on issue text from any GitHub user, and that a chain in a test environment reached CI tokens and cache write access that could have published `@openai/codex` to npm. The researchers published nothing and say OpenAI fixed it. One research source, no OpenAI statement. Codex users have nothing to patch. Check your own workflows that run an agent on issue text.
 → [advisories/2026-11-openai-codex-repository-issue-labeler-workflow-prompt-injection-npm-release-path-depi.md](advisories/2026-11-openai-codex-repository-issue-labeler-workflow-prompt-injection-npm-release-path-depi.md)
@@ -59,6 +75,10 @@ Red Hat published two Critical CVEs for self-hosted Quay on 2026-11-11. CVE-2026
 ### 2026-11-11 — **Node.js 22.23.5, 24.22.3, 26.13.1 fix 16 CVEs: HTTP/2 crash and memory disclosure, HTTPS heap read (CVE-2026-123864), TLS client-certificate bypasses**
 Node.js 22.23.5, 24.22.3 and 26.13.1 fix 16 CVEs, seven rated High by the project. An unauthenticated client can crash a default HTTP/2 server on 24.x and 26.x (CVE-2026-123863). CVE-2026-123864 (HTTPS) and CVE-2026-123866 (HTTP/2) can send a client memory from other connections, which the project says can include TLS private keys. Two flaws bypass per-hostname client-certificate policies. Upgrade and restart; no workaround is listed and no attacks are reported. End-of-life lines get no fix.
 → [advisories/2026-11-nodejs-november-11-security-release-sixteen-cves-http2-crash-memory-disclosure-https-heap-read-tls-client-cert-bypass.md](advisories/2026-11-nodejs-november-11-security-release-sixteen-cves-http2-crash-memory-disclosure-https-heap-read-tls-client-cert-bypass.md)
+
+### 2026-11-10 — **Compromised fragment-api-py 14.4.2 on PyPI: pin 14.4.1 and move TON funds to a wallet with a new seed phrase**
+SafeDep reports that fragment-api-py 14.4.2, published to PyPI on 2026-11-08, is compromised. The index listed 14.4.1 as newest on 2026-11-16. Run `pip show fragment-api-py`. If 14.4.2 ran with a TON wallet seed phrase, move all funds to a wallet created from a new seed phrase.
+→ [advisories/2026-11-fragment-api-py-14-4-2-compromised-pypi-release-remove-and-move-ton-wallet-funds.md](advisories/2026-11-fragment-api-py-14-4-2-compromised-pypi-release-remove-and-move-ton-wallet-funds.md)
 
 ### 2026-11-10 — **Kong AI Gateway 2.2.1 and Gateway Enterprise fix nine CVEs: SQL injection through a model name (CVE-2026-92544), cached responses served to other callers**
 Kong fixed nine CVEs on 2026-11-10. CVE-2026-92544 (Kong 8.7) lets a client run SQL against the Kong database through a crafted model name in the LLM usage counters. Five ids let a cached response reach a different caller. Upgrade AI Gateway 2.2.0 to 2.2.1 and Gateway Enterprise to 3.16.0.2, 3.15.0.7, 3.14.0.17, 3.13.0.12 or 3.10.0.20. CVE-2026-92442 is only partially fixed. Kong's records do not say whether the AI Gateway 2.3 line is affected or fixed.
@@ -147,6 +167,10 @@ Binance's post (2026-11-03) says the chain began in June when a wallet engineer 
 ### 2026-11-03 — **Forged commit in the antd-img-crop GitHub repository: do not install from git; the npm package is clean**
 SafeDep (2026-11-03) reports a commit force-pushed to `nanxiaobei/antd-img-crop` on 2026-10-31 15:12 UTC from the maintainer's account, rebuilt to look like the March 4.30.0 release commit, and an earlier dropper in the same maintainer's `hugo-paper` theme from 2026-08-21 to 2026-10-21. The npm package `antd-img-crop` ends at 4.30.0 (2026-03-12, about 97,000 weekly downloads) and OSV has no record, so registry installs are fine and scanners read clean; a clone, fork or `github:` install after the force push is the exposure. Single source, `unconfirmed`; rotate browser, SSH, `.env`, `.npmrc`, keychain and wallet material if a git checkout ran.
 → [advisories/2026-11-antd-img-crop-github-repository-forged-commit-do-not-install-from-git-npm-clean.md](advisories/2026-11-antd-img-crop-github-repository-forged-commit-do-not-install-from-git-npm-clean.md)
+
+### 2026-11-02 — **Crissy Field study: 24,664 Lovable-built sites returned Supabase records without login; 7,403 held tables with email addresses**
+A German security firm sampled 159,041 Lovable projects from Common Crawl. Of 34,545 that used Supabase, 24,664 returned database records to any visitor, and 7,403 of those had email addresses in 10,560 tables. Examples include more than 200,000 chat messages and records with passport numbers. The firm says the 30% figure is not a leak rate. No CVE, no platform fix, one research firm. If your app uses Lovable with Supabase, load it signed out and check every table's Row Level Security.
+→ [advisories/2026-11-lovable-apps-supabase-records-readable-without-login-crissy-field-common-crawl-study.md](advisories/2026-11-lovable-apps-supabase-records-readable-without-login-crissy-field-common-crawl-study.md)
 
 ### 2026-11-02 — **A backslash in the URL authority passes urlparse and reaches urllib3 as a different host: CrewAI CVE-2026-120630 (fixed 1.15.17) and Langflow CVE-2026-19304 (fixed 1.11.3)**
 CERT/CC published the CrewAI record on 2026-11-02 for a bug fixed on PyPI on 2026-08-20: `validate_url` checked the `urlparse` host and then fetched the raw string, so `ScrapeWebsiteTool` reached internal addresses from a model-chosen URL. IBM's August bulletin covers the same parser discrepancy in Langflow's RSS and SearXNG components (7.7), beside an unauthenticated SSRF in the LMStudio components (CVE-2026-19305, 8.6), all fixed in 1.11.3. Upgrade both, and check any `urlparse`-then-`requests` allowlist you wrote yourself.
