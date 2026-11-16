@@ -193,7 +193,11 @@ class _ActiveHTMLFinder(HTMLParser):
         self.handlers: list[tuple[str, str, str]] = []
 
     def handle_starttag(self, tag, attrs):
-        d = {name: (value or "") for name, value in attrs}
+        # A browser keeps the first of two attributes with the same name. Tag-level
+        # checks read that one. Every occurrence is still checked on its own below.
+        d: dict[str, str] = {}
+        for name, value in attrs:
+            d.setdefault(name, value or "")
         if tag == "script":
             if d.get("type", "").strip().lower() != "application/ld+json" or "src" in d:
                 self.found.append(f"<script {sorted(d)}>")
@@ -201,7 +205,8 @@ class _ActiveHTMLFinder(HTMLParser):
             self.found.append(f"<{tag}>")
         elif tag == "meta" and d.get("http-equiv", "").strip().lower() == "refresh":
             self.found.append("<meta http-equiv=refresh>")
-        for name, value in d.items():
+        for name, value in attrs:
+            value = value or ""
             if name.startswith("on"):
                 self.handlers.append((tag, name, value))
             elif name == "srcdoc":
@@ -266,6 +271,10 @@ def test_active_html_detector_catches_each_shape():
         '<a href=" java&#9;script:x()">y</a>',
         '<a HREF="JavaScript:x()">y</a>',
         '<button formaction="javascript:x()">y</button>',
+        '<a href="javascript:x()" href="https://example.com/">y</a>',
+        '<a href="https://example.com/" href="javascript:x()">y</a>',
+        '<script type="text/javascript" type="application/ld+json">x()</script>',
+        '<img src=x title=">" onerror="x()">',
     ):
         assert _active_html(sample), sample
     for sample in (
