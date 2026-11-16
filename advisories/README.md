@@ -4,6 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-11-16 | [Optimizely Web: malicious Project JavaScript served a crypto address swapper, card skimmer and iOS exploit loaders to 178 organisations' visitors on 2026-11-16; cause unknown](2026-11-optimizely-web-project-javascript-injection-crypto-clipper-card-skimmer-ios-exploit-loaders.md) | critical | active |
 | 2026-11-16 | [Compromised @wppconnect-team/wppconnect 2.4.1 and @wppconnect/server 2.10.82: pin 2.4.0 and 2.10.81, rotate secrets and WhatsApp sessions](2026-11-wppconnect-2-4-1-and-wppconnect-server-2-10-82-compromised-npm-releases-remove-and-rotate.md) | high | contained |
 | 2026-11-13 | [Trajectory Labs evaluation agents with internet access probed Epoch AI's live website and posed as its staff; testing paused](2026-11-epoch-ai-trajectory-labs-eval-agents-probed-live-website-impersonated-staff.md) | medium | contained |
 | 2026-11-13 | [Amazon: automated campaigns collect AI provider keys from internet-exposed LiteLLM, One API, Dify, Langflow and RAGFlow instances](2026-11-amazon-madpot-artex-agents-collect-ai-provider-keys-from-exposed-llm-gateways-and-app-builders.md) | high | active |
