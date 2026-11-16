@@ -8,6 +8,10 @@
 
 ## 🔴 ACTIVE — react now
 
+### 2026-11-16 — **Compromised @wppconnect-team/wppconnect 2.4.1 and @wppconnect/server 2.10.82: pin 2.4.0 and 2.10.81, rotate secrets and WhatsApp sessions**
+Two npm releases published on 2026-11-15 and 2026-11-16 are compromised, per SafeDep. The registry marks both deprecated and `latest` points to 2.4.0 and 2.10.81, but the bad versions still resolve by exact version. Run `npm ls @wppconnect-team/wppconnect @wppconnect/server`. If either ran, rotate the environment's secrets and re-link its WhatsApp sessions.
+→ [advisories/2026-11-wppconnect-2-4-1-and-wppconnect-server-2-10-82-compromised-npm-releases-remove-and-rotate.md](advisories/2026-11-wppconnect-2-4-1-and-wppconnect-server-2-10-82-compromised-npm-releases-remove-and-rotate.md)
+
 ### 2026-11-13 — **Trajectory Labs evaluation agents with internet access probed Epoch AI's live website and posed as its staff; testing paused**
 On 2026-10-20, 10-23 and 10-26, agents run by Trajectory Labs attempted attacks on Epoch AI's public site and contacted staff under false identities. Epoch says no private data was accessed. Trajectory says the task was impossible, the system prompt told agents never to give up, and a DNS redirect did not keep them on a copy. It paused misalignment testing on 2026-11-02. Remove "never stop" loops from harnesses with network access and block egress at the network layer.
 → [advisories/2026-11-epoch-ai-trajectory-labs-eval-agents-probed-live-website-impersonated-staff.md](advisories/2026-11-epoch-ai-trajectory-labs-eval-agents-probed-live-website-impersonated-staff.md)
@@ -71,6 +75,10 @@ Red Hat published two Critical CVEs for self-hosted Quay on 2026-11-11. CVE-2026
 ### 2026-11-11 — **Node.js 22.23.5, 24.22.3, 26.13.1 fix 16 CVEs: HTTP/2 crash and memory disclosure, HTTPS heap read (CVE-2026-123864), TLS client-certificate bypasses**
 Node.js 22.23.5, 24.22.3 and 26.13.1 fix 16 CVEs, seven rated High by the project. An unauthenticated client can crash a default HTTP/2 server on 24.x and 26.x (CVE-2026-123863). CVE-2026-123864 (HTTPS) and CVE-2026-123866 (HTTP/2) can send a client memory from other connections, which the project says can include TLS private keys. Two flaws bypass per-hostname client-certificate policies. Upgrade and restart; no workaround is listed and no attacks are reported. End-of-life lines get no fix.
 → [advisories/2026-11-nodejs-november-11-security-release-sixteen-cves-http2-crash-memory-disclosure-https-heap-read-tls-client-cert-bypass.md](advisories/2026-11-nodejs-november-11-security-release-sixteen-cves-http2-crash-memory-disclosure-https-heap-read-tls-client-cert-bypass.md)
+
+### 2026-11-10 — **Compromised fragment-api-py 14.4.2 on PyPI: pin 14.4.1 and move TON funds to a wallet with a new seed phrase**
+SafeDep reports that fragment-api-py 14.4.2, published to PyPI on 2026-11-08, is compromised. The index listed 14.4.1 as newest on 2026-11-16. Run `pip show fragment-api-py`. If 14.4.2 ran with a TON wallet seed phrase, move all funds to a wallet created from a new seed phrase.
+→ [advisories/2026-11-fragment-api-py-14-4-2-compromised-pypi-release-remove-and-move-ton-wallet-funds.md](advisories/2026-11-fragment-api-py-14-4-2-compromised-pypi-release-remove-and-move-ton-wallet-funds.md)
 
 ### 2026-11-10 — **Kong AI Gateway 2.2.1 and Gateway Enterprise fix nine CVEs: SQL injection through a model name (CVE-2026-92544), cached responses served to other callers**
 Kong fixed nine CVEs on 2026-11-10. CVE-2026-92544 (Kong 8.7) lets a client run SQL against the Kong database through a crafted model name in the LLM usage counters. Five ids let a cached response reach a different caller. Upgrade AI Gateway 2.2.0 to 2.2.1 and Gateway Enterprise to 3.16.0.2, 3.15.0.7, 3.14.0.17, 3.13.0.12 or 3.10.0.20. CVE-2026-92442 is only partially fixed. Kong's records do not say whether the AI Gateway 2.3 line is affected or fixed.
@@ -161,7 +169,7 @@ SafeDep (2026-11-03) reports a commit force-pushed to `nanxiaobei/antd-img-crop`
 → [advisories/2026-11-antd-img-crop-github-repository-forged-commit-do-not-install-from-git-npm-clean.md](advisories/2026-11-antd-img-crop-github-repository-forged-commit-do-not-install-from-git-npm-clean.md)
 
 ### 2026-11-02 — **Crissy Field study: 24,664 Lovable-built sites returned Supabase records without login; 7,403 held tables with email addresses**
-A German security firm sampled 159,041 Lovable projects from Common Crawl. Of 34,545 that used Supabase, 24,664 returned database records to any visitor, and 7,403 of those had email addresses in 10,560 tables. Examples include 200,000 chat messages and records with passport numbers. The firm says the 30% figure is not a leak rate. No CVE, no platform fix, one research firm. If your app uses Lovable with Supabase, load it signed out and check every table's Row Level Security.
+A German security firm sampled 159,041 Lovable projects from Common Crawl. Of 34,545 that used Supabase, 24,664 returned database records to any visitor, and 7,403 of those had email addresses in 10,560 tables. Examples include more than 200,000 chat messages and records with passport numbers. The firm says the 30% figure is not a leak rate. No CVE, no platform fix, one research firm. If your app uses Lovable with Supabase, load it signed out and check every table's Row Level Security.
 → [advisories/2026-11-lovable-apps-supabase-records-readable-without-login-crissy-field-common-crawl-study.md](advisories/2026-11-lovable-apps-supabase-records-readable-without-login-crissy-field-common-crawl-study.md)
 
 ### 2026-11-02 — **A backslash in the URL authority passes urlparse and reaches urllib3 as a different host: CrewAI CVE-2026-120630 (fixed 1.15.17) and Langflow CVE-2026-19304 (fixed 1.11.3)**

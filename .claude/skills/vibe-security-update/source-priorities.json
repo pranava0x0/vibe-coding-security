@@ -1633,10 +1633,11 @@
     "vm2-3.12.2",
     "vm2-release-dates",
     "weaselbiscuit-takedown",
+    "wppconnect-time-dist-tags-deprecation",
     "zod"
    ],
-   "hits": 45,
-   "last_hit": "2026-11-14",
+   "hits": 46,
+   "last_hit": "2026-11-16",
    "tier": "official",
    "weight": 20
   },
@@ -1649,6 +1650,7 @@
     "cline",
     "dirtyblanket-express-typosquat",
     "durabletask",
+    "fragment-api-py-14-4-2",
     "github",
     "github-account-campaign-2026-11-10",
     "github-actions",
@@ -1668,10 +1670,11 @@
     "redhat",
     "safedep-blog-index",
     "sckit-implant-framework",
-    "tensorlake-mini-shai-hulud"
+    "tensorlake-mini-shai-hulud",
+    "wppconnect-2-4-1"
    ],
-   "hits": 27,
-   "last_hit": "2026-11-12",
+   "hits": 28,
+   "last_hit": "2026-11-16",
    "tier": "research",
    "weight": 20
   },

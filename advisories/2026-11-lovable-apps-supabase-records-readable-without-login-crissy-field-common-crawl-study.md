@@ -11,7 +11,7 @@ tags: [vibe-platform, data-exposure, supabase, row-level-security, lovable, pii,
 ---
 
 ## TL;DR
-Crissy Field GmbH, a German security firm, reports that 24,664 websites built with Lovable sent Supabase database records to any visitor on page load, with no login. Read-only requests with the same public key found email addresses in 10,560 tables on 7,403 of those sites. Examples include more than 80,000 profiles and 200,000 chat messages from one forum, and more than 1,000 records with identity document details. There is no CVE and no platform fix. If you built an app with Lovable and Supabase, check every table's access rules today. `status` is `unconfirmed` because every count comes from one firm.
+Crissy Field GmbH, a German security firm, reports that 24,664 websites built with Lovable sent Supabase database records to any visitor on page load, with no login. Read-only requests with the same public key found email addresses in 10,560 tables on 7,403 of those sites. Examples include more than 80,000 profiles and more than 200,000 chat messages from one forum, and more than 1,000 records with identity document details. There is no CVE and no platform fix. If you built an app with Lovable and Supabase, check every table's access rules today. `status` is `unconfirmed` because every count comes from one firm.
 
 ## What happened
 
