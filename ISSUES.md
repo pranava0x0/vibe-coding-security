@@ -8,7 +8,7 @@
 
 ### Site build passes raw HTML in Markdown through to the published pages — 2026-11-16
 
-`render_markdown` in `site/build.py` calls Python-Markdown with no sanitizer, so an HTML tag written outside a code span in any advisory, playbook or `ALERTS.md` entry is published as HTML. The daily sweep writes that Markdown after reading web pages it does not control. GitHub Pages sets no Content-Security-Policy. A `<script>` tag pasted outside a code span would run script on the published site. The unfinished 2026-11-06 run of Cloudflare's `security-audit` skill raised this, and reading the code on 2026-11-16 confirmed it. No active tag is in the built site today. `tests/test_html.py` now fails the gate on a `<script>`, `<iframe>`, `<object>`, `<embed>` or inline event handler in a built page. The renderer is unchanged. Root cause: **code bug** (missing output control). Status: open.
+`render_markdown` in `site/build.py` calls Python-Markdown with no sanitizer, so an HTML tag written outside a code span in any advisory, playbook or `ALERTS.md` entry is published as HTML. The daily sweep writes that Markdown after reading web pages it does not control. GitHub Pages sets no Content-Security-Policy. A `<script>` tag pasted outside a code span would run script on the published site. The unfinished 2026-11-06 run of Cloudflare's `security-audit` skill raised this, and reading the code on 2026-11-16 confirmed it. No active tag is in the built site today. `tests/test_html.py` now fails the gate on a `<script>`, `<iframe>`, `<object>`, `<embed>`, inline event handler or similar active HTML in a built page. The renderer is unchanged. Root cause: **code bug** (missing output control). Status: open.
 
 ## Fixed
 

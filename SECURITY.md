@@ -68,7 +68,7 @@ Cloudflare's open-source [`security-audit` skill](https://github.com/cloudflare/
 
 | Date | Mode | Scope | Result |
 |---|---|---|---|
-| 2026-11-06 | full audit, `quick` profile | build pipeline | Not completed. No report was published. One lead was checked by hand on 2026-11-16 and is tracked in [ISSUES.md](ISSUES.md): `site/build.py` renders Markdown with raw HTML passed through, and no test rejects active HTML in content. |
+| 2026-11-06 | full audit, `quick` profile | build pipeline | Not completed. No report was published. One lead was checked by hand on 2026-11-16 and is tracked in [ISSUES.md](ISSUES.md): `site/build.py` renders Markdown with raw HTML passed through. `tests/test_html.py` now rejects active tags in built pages, and the renderer is unchanged. |
 
 ## Site security headers
 

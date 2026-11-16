@@ -172,10 +172,10 @@ def test_advisories_index_has_itemlist_jsonld(dist_dir):
 # gate: the only script a page may carry is JSON-LD, and the only inline event
 # handlers are the ones in `site/template.html` itself.
 
-_SCRIPT_OPEN = re.compile(r"<script\b([^>]*)>", re.IGNORECASE)
+_SCRIPT_OPEN = re.compile(r"<script\b([^<>]*)>", re.IGNORECASE)
 _EMBEDDING_TAG = re.compile(r"<(iframe|frame|frameset|object|embed|applet|base|form)\b", re.IGNORECASE)
 _JSON_LD_TYPE = re.compile(r"""^\s*type\s*=\s*["']application/ld\+json["']\s*$""", re.IGNORECASE)
-_META_REFRESH = re.compile(r"""<meta\b[^>]*http-equiv\s*=\s*["']?refresh""", re.IGNORECASE)
+_META_REFRESH = re.compile(r"""<meta\b[^<>]*http-equiv\s*=\s*["']?refresh""", re.IGNORECASE)
 _HANDLER_TAG = re.compile(r"""<[a-zA-Z][^<>]*[\s/"']on[a-z]+\s*=[^<>]*>""", re.IGNORECASE)
 _SCRIPT_URL = re.compile(r"""(?:href|src)\s*=\s*["']?\s*(?:javascript|vbscript):""", re.IGNORECASE)
 

@@ -20,7 +20,7 @@ VulnCheck published five CVE records on 2026-10-30, all credited to Tristan Mada
 | CVE | Where | What a crafted file does | VulnCheck CVSS 3.1 / 4.0 |
 |---|---|---|---|
 | CVE-2026-119718 | `ptcache_data_alloc()`, point cache files read beside a `.blend` | heap buffer overflow, crash or code execution | 7.8 / 8.5 |
-| CVE-2026-119719 | `thumb_data_vertical_flip()` in the thumbnail extractor | out-of-bounds write when `blender-thumbnailer` or the Windows shell extension previews the file | 7.8 / 8.5 |
+| CVE-2026-119719 | `thumb_data_vertical_flip()` in the thumbnail extractor | out-of-bounds write when `blender-thumbnailer` or the Windows shell extension previews the file, crash or code execution | 7.8 / 8.5 |
 | CVE-2026-119722 | `read_struct()` | heap out-of-bounds access, crash or code execution | 7.8 / 8.5 |
 | CVE-2026-119721 | `blo_bhead_id_*` accessors in `readfile.cc` | heap over-read when the file is browsed or appended from, crash or memory disclosure | 6.1 / 6.9 |
 | CVE-2026-119720 | `read_file_dna()` | out-of-bounds read, crash | 5.5 / 6.8 |
@@ -31,7 +31,7 @@ All five records reference Blender pull request 164279, "Core: Harden blend file
 
 Red Hat's record for CVE-2026-119722 rates it Important, 7.8, and describes it as arbitrary code execution through a crafted `.blend` file.
 
-**An older record on the same code.** CVE-2026-60103 (VulnCheck, 2026-07-13, credited to Saad ELHARAJ) is an out-of-bounds read in `sdna_expand_names()`, affecting Blender 3.0.0 through 5.1.2, scored 6.1. The record lists a fix commit and no fixed release number.
+**An older record on the same code.** CVE-2026-60103 (VulnCheck, 2026-07-13, credited to Saad ELHARAJ) is an out-of-bounds read in `sdna_expand_names()`, affecting Blender 3.0.0 through 5.1.2, scored 6.1. The record lists a fix commit and no fixed release number, so this file does not say which release closes it.
 
 **Why this matters for agent users.** People now ask coding agents to "import this model" or "render this scene", and MCP bridges such as blender-mcp load assets from third-party libraries. In both cases the agent opens the file. Blender's manual says auto execution of scripts in a `.blend` is off by default and is controlled by the Auto Run Python Scripts preference and `--disable-autoexec`. Those controls cover scripts. These five bugs are in the file reader, which runs before any script setting applies.
 
