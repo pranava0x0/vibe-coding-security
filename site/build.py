@@ -329,23 +329,36 @@ class _DropCommentLines(Preprocessor):
         return [line for line in lines if not _COMMENT_LINE_RE.match(line)]
 
 
-_FENCE_ATTRS_RE = re.compile(r"^(?P<fence>\s*(?:`{3,}|~{3,}))\s*\{(?P<attrs>[^}\n]*)\}\s*$")
+_FENCE_OPEN_RE = re.compile(r"^ {0,3}(?P<fence>`{3,}|~{3,})(?P<info>[^`\n]*)$")
+_FENCE_ATTRS_RE = re.compile(r"^\s*\{(?P<attrs>[^}\n]*)\}\s*$")
 
 
 class _PlainFenceHeaders(Preprocessor):
     """Reduce a fenced block's `{ ... }` header to its language class.
 
     `fenced_code` builds its HTML before the element tree exists, so attributes
-    in a fence header never reach `_InertOutput`. Only `.language` is kept."""
+    in a fence header never reach `_InertOutput`. Only `.language` is kept.
+    Lines inside an open fence, and lines indented four or more spaces, are
+    code and are left as written."""
 
     def run(self, lines):
         out = []
+        open_fence = ""
         for line in lines:
-            match = _FENCE_ATTRS_RE.match(line)
-            if match:
-                language = next((token[1:] for token in match.group("attrs").split()
-                                 if re.fullmatch(r"\.[A-Za-z0-9_+\-]+", token)), "")
-                line = f"{match.group('fence')}{language}"
+            match = _FENCE_OPEN_RE.match(line)
+            if open_fence:
+                closes = (match and not match.group("info").strip()
+                          and match.group("fence")[0] == open_fence[0]
+                          and len(match.group("fence")) >= len(open_fence))
+                if closes:
+                    open_fence = ""
+            elif match:
+                open_fence = match.group("fence")
+                attrs = _FENCE_ATTRS_RE.match(match.group("info"))
+                if attrs:
+                    language = next((token[1:] for token in attrs.group("attrs").split()
+                                     if re.fullmatch(r"\.[A-Za-z0-9_+\-]+", token)), "")
+                    line = f"{line[:match.start('fence')]}{open_fence}{language}"
             out.append(line)
         return out
 
