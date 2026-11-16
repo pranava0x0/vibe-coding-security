@@ -23,7 +23,7 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 70,
+   "hits": 71,
    "last_hit": "2026-11-16"
   },
   {
@@ -59,7 +59,7 @@
   {
    "domain": "cveawg.mitre.org",
    "weight": 20.0,
-   "hits": 38,
+   "hits": 39,
    "last_hit": "2026-11-16"
   },
   {
@@ -101,8 +101,8 @@
   {
    "domain": "pypi.org",
    "weight": 20.0,
-   "hits": 26,
-   "last_hit": "2026-11-14"
+   "hits": 27,
+   "last_hit": "2026-11-16"
   },
   {
    "domain": "aikido.dev",

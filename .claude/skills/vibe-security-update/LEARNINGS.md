@@ -400,7 +400,26 @@ Five things from **2026-11-15**:
 
 Source notes: `cursor.com/blog/<slug>` renders to `WebFetch`; `techcrunch.com/<date>/<slug>` renders when the URL comes from another page; `oag.ca.gov/ecrime/databreach/reports/<id>` renders without the PDF; `status.bitrise.io` returns all updates to `curl` with timestamps as `Nov 15 , 14:23 UTC`; `fireworks.ai/security/bulletins` renders; four `WebSearch` calls returned nothing dated this month.
 
-## 75. A study two weeks old arrives as the day's top thread; a sample chain's percentage is not a platform rate; a cloud vendor's threat report is an advisory for the products it names; an upgrade can fix new writes and leave stored state; and a daily fetch that is skipped costs five days
+## 75. 3D, simulation and scientific-computing tools are in scope
+
+Scope change on **2026-11-16**, at the owner's request, outside a sweep. The corpus held no file on Blender, OpenUSD, FreeCAD, ComfyUI, Omniverse, Isaac, BioNeMo or any MCP bridge to them, while each had 2026 CVEs. Three backfill files were written that day (Blender five-CVE batch, OpenUSD CVE-2026-92211, blender-mcp four CVEs).
+
+1. **The trigger is a file or an add-on, and an agent opens it for the reader.** These records score `AV:L` with `UI:R`. "Import this model" or "render this scene" is the user interaction. **Rule:** do not skip a 3D or science-tool CVE for being local. File it when a project file, asset, checkpoint, notebook, add-on, custom node or agent skill is the route, and say in the file that script-execution settings do not cover parser bugs.
+2. **An MCP bridge to a desktop tool runs model-written code by design, and its guard can be opt-in.** blender-mcp's validator is off unless `BLENDER_MCP_SAFE_MODE=1`. **Rule:** for a bridge, read the README and the guard's own module documentation for the default, and set `mitigated`, not `patched`, when the default is off.
+3. **A renamed package leaves a stub that only depends on the new name.** `blender-mcp` 2.0.0 depends on `mcp-for-blender>=2.0.0`. **Rule:** read the dependency list (`requires_dist` in the PyPI JSON) of the newest release of the old name and tell readers to check both names.
+4. **A CNA record can name one version while the vendor's repository advisory gives the range.** ZDI's record for OpenUSD says `v26.03`; Pixar's tab says `<= 26.08`. **Rule:** read the vendor tab through `gh api repos/<org>/<repo>/security-advisories` and print both. The GitHub Advisory Database had no row for the CVE.
+
+**Channels, one rotation slot per sweep (Tier C item 9):**
+
+- Repository tabs with published advisories when read: `PixarAnimationStudios/OpenUSD` (13), `FreeCAD/FreeCAD` (9), `Comfy-Org/ComfyUI` (4), `Comfy-Org/ComfyUI-Manager` (2), `AcademySoftwareFoundation/openexr` (95), `jupyterlab/jupyterlab` (17), `jupyter-server/jupyter_server` (15), `jupyterhub/jupyterhub` (15), `galaxyproject/galaxy` (6), `nextflow-io/nextflow` (3), `qgis/QGIS` (2), `neka-nat/freecad-mcp` (1), `biopython/biopython` (1). Empty tabs when read: Isaac Lab, Isaac Sim, PhysicsNeMo, MuJoCo, AlphaFold, Gazebo, OpenVDB, three.js, assimp, Snakemake, RDKit, OpenMM, Biomni, ParaView, trimesh, Open3D, Godot, unity-mcp, pandapower, EnergyPlus, OpenModelica.
+- Blender has no advisory tab. The CNA is VulnCheck. The evidence is the referenced pull request at `projects.blender.org/api/v1/repos/blender/blender/pulls/<n>` (the HTML page is 403) and the dates on `download.blender.org/release/Blender<line>/`.
+- NVIDIA bulletins (Isaac, Omniverse, BioNeMo, PhysicsNeMo): the `NVIDIA/product-security` mirror already in `queries.md`.
+- `cert-portal.siemens.com/productcert/csaf/ssa-feed-tlp-white.json` and `www.3ds.com/trust-center/security/security-advisories` render. They are ICS and CAD suites; file only when an agent, an MCP bridge or a registry package is involved.
+- **Blocked when read:** `autodesk.com/trust/security-advisories`, `cert-portal.siemens.com/productcert/` (HTML), `unrealengine.com/en-US/security`, `mathworks.com/support/security.html` and `blender.org` return 403; `unity.com/security/advisories` returns 404.
+
+**Backfill leads, not verified and not filed.** Each came from one search. Grep the id, open the CNA record and the vendor page, then file or drop: FreeCAD CVE-2026-73233, CVE-2026-73234, CVE-2026-73235; ComfyUI CVE-2026-68771, CVE-2026-56672, CVE-2026-56673; ComfyUI-Manager CVE-2025-67303; NVIDIA BioNeMo CVE-2026-24164; NVIDIA Isaac Lab CVE-2026-65141; the `neka-nat/freecad-mcp` advisory; scanner reports on Biomni agent-skill copies (no CVE); ComfyUI-Easy-Use CVE-2026-123790 (CERT/CC record of 2026-11-12, range 1.3.6 through 1.4.1, seen 2026-11-16, declined that day before this section had merged). Remove a lead from this list when it is filed or dropped.
+
+## 76. A study two weeks old arrives as the day's top thread; a sample chain's percentage is not a platform rate; a cloud vendor's threat report is an advisory for the products it names; an upgrade can fix new writes and leave stored state; and a daily fetch that is skipped costs five days
 
 Six things from **2026-11-16**:
 
@@ -410,4 +429,3 @@ Six things from **2026-11-16**:
 4. **mcp-gateway-registry 1.35.0 validates server addresses on registration and modification and leaves stored entries alone.** **Rule:** read the advisory's post-upgrade section. When a fix does not touch stored state, `patched` stands only with the review step in the TL;DR and the ALERTS entry. New SKILL.md row.
 5. **AWS bulletin 2026-180-AWS was published on 2026-11-11 and found on 11-16 in an outlet's weekly CVE list.** The bulletin index is a listed daily fetch, and the run logs of 11-12 to 11-15 do not record reading it. **Rule:** the direct fetches in Step 1 are not the part to cut when a run is short. Cut searches first. The THN weekly recap's CVE list is a backstop: grep every id that sits beside an AI, MCP or developer product name.
 6. **Two outlets described the same identification differently.** TechCrunch wrote that it "has learned" the vendor in Uber's notices. SecurityWeek wrote that an Uber spokesperson confirmed it to TechCrunch. **Rule:** print both sentences with their outlets and dates, and do not upgrade the claim on the second outlet's wording without re-reading the first. New SKILL.md row. The same care applies to a model name that one party to an incident states and the other declines to confirm (Trajectory and Epoch).
-

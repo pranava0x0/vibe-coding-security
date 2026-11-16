@@ -333,7 +333,7 @@ Don't repeat queries already run within the last 24h (check `runs.log.md`).
 
 **A vendor's follow-up incident post is its own fetch, and it can join two files.** Cursor's 2026-11-13 update (`cursor.com/blog/security-incident-update`, a 6-point Algolia item and the THN lead two days later) said the 2026-10-29 marketplace compromise began with a key Cursor had issued to Fireworks, and listed agent traces, support data and credentials as exposed. For every incident file whose cause reads "unexplained", re-open the vendor's blog index each run; file the vendor's data exposure as its own incident, update the upstream vendor's file, and leave the rule 1 artifact file for the end of the run. State breach filings (`oag.ca.gov/ecrime/databreach/reports/<id>`) give a breach date when the vendor names no provider. A vendor that is its own CNA may publish only changelog lines (Kong, `developer.konghq.com/ai-gateway/changelog/`): the `llm` listing row is the cue, and the changelog is read with `curl` and split by version in code (`LEARNINGS.md` §74).
 
-**A study can be two weeks old when it becomes the day's lead, and a cloud vendor's threat-intel blog is an advisory channel for the products it names.** On 2026-11-16 the lead was a 995-point Hacker News item on Crissy Field's count of Lovable-built sites returning Supabase records without login. Handelsblatt had reported it on 2026-11-02 and no query, listing or English front page carried it. Read the Algolia feed's highest-point items of the last three days whatever the query term, read the thread through the items API for vendor-affiliated handles, and date the file by the first press report the study names. Amazon's MadPot post (`aws.amazon.com/blogs/security/`) named the self-hosted gateways and app builders whose stored provider keys were being collected: file it for the operators of those products, with the weakness named per product and no attacker tooling. An evaluation lab's incident report and the target's report (`epoch.ai/publications/`, `trajectorylabs.com/blog/`) are two primaries for one event. The AWS bulletin index is a daily fetch: bulletin 2026-180-AWS sat five days until the THN weekly recap's CVE list showed it, so grep that list every Monday and cut searches, not direct fetches, when a run is short (`LEARNINGS.md` §75).
+**A study can be two weeks old when it becomes the day's lead, and a cloud vendor's threat-intel blog is an advisory channel for the products it names.** On 2026-11-16 the lead was a 995-point Hacker News item on Crissy Field's count of Lovable-built sites returning Supabase records without login. Handelsblatt had reported it on 2026-11-02 and no query, listing or English front page carried it. Read the Algolia feed's highest-point items of the last three days whatever the query term, read the thread through the items API for vendor-affiliated handles, and date the file by the first press report the study names. Amazon's MadPot post (`aws.amazon.com/blogs/security/`) named the self-hosted gateways and app builders whose stored provider keys were being collected: file it for the operators of those products, with the weakness named per product and no attacker tooling. An evaluation lab's incident report and the target's report (`epoch.ai/publications/`, `trajectorylabs.com/blog/`) are two primaries for one event. The AWS bulletin index is a daily fetch: bulletin 2026-180-AWS sat five days until the THN weekly recap's CVE list showed it, so grep that list every Monday and cut searches, not direct fetches, when a run is short (`LEARNINGS.md` §76).
 
 **Report source-access gaps as "not covered," never as "nothing found."** The standing gaps are listed in `queries.md`; a future sweep reading the log needs to know whether a quiet category was quiet or merely unreachable.
 
@@ -347,6 +347,7 @@ For each unique candidate incident pulled from results, decide:
 - CVE in major AI-agent framework SDK (LangChain, Semantic Kernel, PraisonAI, OpenClaw, etc.), OR
 - CVE in core vibe-coding web stack (Next.js, React, Svelte, Vite, Tailwind, FastAPI, Streamlit, Prisma, NextAuth.js, Supabase) with practical exploitation path, OR
 - Malicious MCP server, OR
+- CVE, malicious add-on or malicious project file in a 3D, simulation or scientific-computing tool the audience drives with a coding agent (Blender, OpenUSD, FreeCAD, ComfyUI, Omniverse and Isaac, Jupyter, bioinformatics workflow engines), or in an MCP bridge or agent skill for one (`LEARNINGS.md` §75), OR
 - Prompt-injection PoC against vibe-coding tool, OR
 - Vibe platform data exposure with PII impact, OR
 - Cross-ecosystem worm (npm ↔ PyPI ↔ RubyGems with identical payload), OR
@@ -364,7 +365,7 @@ Always bump `last_updated` in frontmatter when touched.
 
 **C. SKIP** — log but don't write up if:
 - Already covered in an existing advisory with no new info
-- Not relevant to vibe coding audience (e.g., kernel CVE, generic enterprise vuln)
+- Not relevant to vibe coding audience (e.g., kernel CVE, generic enterprise vuln, a CAD or simulation suite known only from an industrial-control-system (ICS) advisory with no agent, MCP bridge or registry package involved)
 - Single unconfirmed source (need ≥2 independent for a full advisory)
 - An offensive-use report with no installable artifact (rule 2 under "Classifier stops and the model switch")
 
@@ -455,7 +456,7 @@ For NEW sources discovered this run (not yet in the list), add with `weight: 5, 
 
 Write the updated JSON back. Sort by weight desc for readability.
 
-Do not edit `references/queries.md`. It is at the cap in `tests/test_sweep_context.py` (3,994 of 4,000 tokens). Put new sources in `source-priorities.json` and access notes in `LEARNINGS.md`. The one exception is replacing a query string that has stopped producing with one of the same length.
+Do not edit `references/queries.md`. It is at the cap in `tests/test_sweep_context.py` (3,998 of 4,000 tokens). Put new sources in `source-priorities.json` and access notes in `LEARNINGS.md`. The one exception is replacing a query string that has stopped producing with one of the same length.
 
 ### Step 5 — Append to runs.log.md
 

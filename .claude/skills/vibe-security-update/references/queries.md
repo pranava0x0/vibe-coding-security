@@ -71,8 +71,9 @@ Prepend top sources from `source-priorities.top.json` via `allowed_domains` on r
 6. `malicious VS Code extension {year}` / `Open VSX malicious extension`
 7. `{agent} skills marketplace malicious {year}`
 8. `{corporate parent} security bulletin {AI product} {year}` — rotate IBM
-   (Langflow, ContextForge), NVIDIA (NemoClaw, OpenShell, NIM), Microsoft,
-   Google, Salesforce; the parent's PSIRT page is where the batch lands
+   (Langflow, ContextForge), NVIDIA (NemoClaw, OpenShell, NIM, Isaac, BioNeMo), Microsoft,
+   Google, Salesforce
+9. `{3D or science tool} CVE OR advisory {year}`
 
 ---
 
@@ -103,6 +104,9 @@ Rotate a different subset each sweep; floors, not ceilings.
   extension stores
 - **Agent skill / plugin marketplaces:** ClawHub, Claude Code skills, MCP
   registries
+- **3D / simulation / science (§75):** Blender, OpenUSD, FreeCAD,
+  ComfyUI, Omniverse / Isaac, Jupyter, Nextflow, Galaxy; MCP bridges
+  (`blender-mcp`, `freecad-mcp`, `unity-mcp`)
 
 ## Primary-source domains worth querying directly
 
@@ -140,10 +144,10 @@ Bare pointers; the *why* lives in `triage-patterns.md` and `LEARNINGS.md`.
 - **Personal agents** (`<product> zero-day OR token`): Meta Muse, dots, Grok Bot, Instinct, Perplexity Computer; `objective-see.org`, `malwarebytes.com/blog`, `venturebeat.com`.
 - **Researcher blogs:** remedio.io, upguard.com/blog, 0day.click, cyata.ai, layerxsecurity.com, pillar.security, oasis.security, tenetsecurity.ai, labs.zenity.io, novee.security, danusminimus.github.io, oddguan.com, manifold.security, paddo.dev, embracethered.com, itmeetsot.eu, forever.security, air.security, hacktron.ai, opensourcemalware.com, research.empiricalsecurity.com, crowdstrike.com/en-us/blog, accomplish.ai/blog, cycode.com, glow.io, threatdown.com.
 - **Eval-vendor posts:** `irregular.com/research`. **Victim post-mortems:** `crowdsec.net/blog`. **Agent reports:** `transluce.org/investigations`, `asymmetricsecurity.com/newsroom`.
-- **Coding-tool upload/telemetry (§30):** `"<tool>" upload OR telemetry OR privacy` — Grok Build, ZCode, Kimi Code, Qwen Code, Trae, Kiro; `blog.ferstar.org`, `blog.vonng.com`, `eu.36kr.com`, `panews.io`.
+- **Coding-tool upload/telemetry (§30):** `"<tool>" upload OR telemetry OR privacy` — Grok Build, ZCode, Kimi Code, Qwen Code, Trae, Kiro.
 - **`api.npmjs.org/downloads/point/last-week/<pkg>`** — millions on a stub = inflation.
 - **Sandbox vendor CNA:** `github.com/docker/sbx-releases/releases`.
-- **Incident sites:** `collusion.wiki`, `rubyhack.ai`, `lasstorg.substack.com`. **Regulators:** `aepd.es`, `oag.ca.gov`.
+- **Regulators:** `aepd.es`, `oag.ca.gov`.
 - **Platform blog indexes (post-mortems with no CVE):** `blog.cloudflare.com`, `openclaw.ai/blog`, `docs.gitlab.com/releases/patches/`, `vercel.com/blog`, `payloadcms.com/posts/releases` ("hardening" = undisclosed fixes, §40).
 - **Cross-vendor researcher reports:** outlets (`unite.ai`, `thenextweb.com`) name the organisations; build the table from `cveawg.mitre.org` + the credited fix PRs (§40).
 
