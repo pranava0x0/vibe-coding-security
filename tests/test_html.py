@@ -161,3 +161,64 @@ def test_advisories_index_has_itemlist_jsonld(dist_dir):
     a = _audit(dist_dir / "advisories" / "index.html")
     types = {json.loads(b).get("@type") for b in a.jsonld_blobs}
     assert "ItemList" in types, "advisories index should have ItemList JSON-LD"
+
+
+# --- Active HTML in built pages -------------------------------------------
+#
+# `site/build.py` renders Markdown with raw HTML passed through, and the daily
+# sweep writes that Markdown after reading web pages it does not control. A tag
+# pasted outside a code span would be published as live HTML on a site with no
+# Content-Security-Policy. Until the renderer sanitizes its output, this is the
+# gate: the only script a page may carry is JSON-LD, and the only inline event
+# handlers are the ones in `site/template.html` itself.
+
+_SCRIPT_OPEN = re.compile(r"<script\b([^>]*)>", re.IGNORECASE)
+_EMBEDDING_TAG = re.compile(r"<(iframe|frame|frameset|object|embed|applet|base|form)\b", re.IGNORECASE)
+_JSON_LD_TYPE = re.compile(r"""^\s*type\s*=\s*["']application/ld\+json["']\s*$""", re.IGNORECASE)
+_META_REFRESH = re.compile(r"""<meta\b[^>]*http-equiv\s*=\s*["']?refresh""", re.IGNORECASE)
+_HANDLER_TAG = re.compile(r"""<[a-zA-Z][^<>]*[\s/"']on[a-z]+\s*=[^<>]*>""", re.IGNORECASE)
+_SCRIPT_URL = re.compile(r"""(?:href|src)\s*=\s*["']?\s*(?:javascript|vbscript):""", re.IGNORECASE)
+
+
+def _active_html(page_html: str, template_handler_tags: set[str]) -> list[str]:
+    found: list[str] = []
+    for attrs in _SCRIPT_OPEN.findall(page_html):
+        if not _JSON_LD_TYPE.match(attrs):
+            found.append(f"<script{attrs}>")
+    found += [f"<{tag}>" for tag in _EMBEDDING_TAG.findall(page_html)]
+    found += [tag for tag in _HANDLER_TAG.findall(page_html) if tag not in template_handler_tags]
+    found += _SCRIPT_URL.findall(page_html)
+    found += _META_REFRESH.findall(page_html)
+    return found
+
+
+def test_built_pages_carry_no_active_html(all_html_files, dist_dir, repo_root):
+    template = (repo_root / "site" / "template.html").read_text(encoding="utf-8")
+    template_handler_tags = set(_HANDLER_TAG.findall(template))
+    assert all_html_files, "no built pages to check"
+    offenders = {}
+    for page in all_html_files:
+        found = _active_html(page.read_text(encoding="utf-8"), template_handler_tags)
+        if found:
+            offenders[str(page.relative_to(dist_dir))] = found[:3]
+    assert not offenders, (
+        "Built pages contain active HTML that did not come from the template. "
+        "Put the tag in a code span or fenced block in the Markdown source, or remove "
+        "it if it came from copied web content:\n"
+        + "\n".join(f"  {name}: {tags}" for name, tags in sorted(offenders.items())[:10])
+    )
+
+
+def test_active_html_detector_catches_each_shape():
+    assert _active_html("<p>ok</p><script>x()</script>", set())
+    assert _active_html('<iframe src="https://example.com"></iframe>', set())
+    assert _active_html('<img src="a.png" onerror="x()">', set())
+    assert _active_html('<a href="javascript:x()">y</a>', set())
+    assert _active_html('<img src=x ONERROR=x()>', set())
+    assert _active_html('<svg/onload=x()>', set())
+    assert _active_html('<img src="a"onerror=x()>', set())
+    assert _active_html('<script src="//example.com/x.js" data-x="application/ld+json"></script>', set())
+    assert _active_html('<base href="https://example.com/">', set())
+    assert _active_html('<meta http-equiv="refresh" content="0;url=https://example.com/">', set())
+    assert not _active_html('<script type="application/ld+json">{}</script><p>on = 1</p>', set())
+    assert not _active_html("<pre>&lt;script&gt;x()&lt;/script&gt;</pre>", set())

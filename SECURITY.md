@@ -46,6 +46,30 @@ The `main` branch has no runtime dependencies. Build-time dependencies:
 
 **Last advisory sweep on these build deps:** 2026-05-17. (Refresh if >7 days old per the universal CLAUDE.md.)
 
+## Agent source audits (Cloudflare `security-audit` skill)
+
+Cloudflare's open-source [`security-audit` skill](https://github.com/cloudflare/security-audit-skill) runs a multi-agent source audit. A full run launches at least four reconnaissance agents, hunters, a critic and a verifier, so it is used here rarely and on a narrow scope. This repository's executable surface is 2,574 lines of Python in `site/` and `tools/` (counted 2026-11-16) plus two workflows. The rest is Markdown.
+
+**When to run it**
+
+- Never as part of the daily content sweep. Advisories, `ALERTS.md` and the skill's own notes are content, not code.
+- Run it in full audit mode with the `quick` profile when a pull request changes how text becomes published HTML or how a workflow holds credentials: the render path in `site/build.py`, `site/template.html`, `.github/workflows/`, or a tool that fetches from the network.
+- Otherwise twice a year, in January and July, as a scoped `quick` run on `site/ tools/ .github/workflows/`.
+- For a single question or one diff, use the skill's guidance mode. It does not run the six phases or write report files.
+
+**How to run it**
+
+- Set an agent budget in the request. The skill's minimum is four reconnaissance calls, one critic and one verifier, and it reports an incomplete run when the budget cannot cover more.
+- Install the skill outside this repository, pinned to a reviewed commit, and keep the output directory outside this repository. Do not copy the skill into the tree.
+- It does not check dependencies for known CVEs. The dependency log above stays a separate step.
+- Check every finding the skill marks `confirmed` against the file and line it cites before acting on it.
+
+**Record**
+
+| Date | Mode | Scope | Result |
+|---|---|---|---|
+| 2026-11-06 | full audit, `quick` profile | build pipeline | Not completed. No report was published. One lead was checked by hand on 2026-11-16 and is tracked in [ISSUES.md](ISSUES.md): `site/build.py` renders Markdown with raw HTML passed through, and no test rejects active HTML in content. |
+
 ## Site security headers
 
 GitHub Pages provides HTTPS by default. We do not currently set custom security headers (CSP, HSTS, etc.) because GitHub Pages doesn't allow it. The static site has no JS that fetches user input, no forms, no third-party analytics, and no cookies — so the attack surface is minimal.
