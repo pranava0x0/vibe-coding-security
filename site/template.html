@@ -89,5 +89,22 @@
   {{TOC}}
 </div>
 
+<div id="share-status" class="toast" role="status" aria-live="polite"></div>
+<script>
+(function(){var s=document.getElementById('share-status'),last,timer;
+document.addEventListener('click',function(e){
+var a=e.target.closest?e.target.closest('a.share'):null;
+if(!a||e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;
+var u=a.href,t=document.title,h=a.closest('h2,h3,td');
+if(h){var c=h.cloneNode(true);c.querySelectorAll('.share').forEach(function(x){x.remove()});t=c.textContent.trim()||t}
+if(navigator.share&&matchMedia('(pointer:coarse)').matches){e.preventDefault();navigator.share({title:t,url:u}).catch(function(){});return}
+if(!navigator.clipboard||!navigator.clipboard.writeText)return;
+e.preventDefault();
+navigator.clipboard.writeText(u).then(function(){
+if(a.hash&&a.pathname===location.pathname)history.replaceState(null,'',a.hash);
+if(last)last.classList.remove('copied');last=a;a.classList.add('copied');s.textContent='Link copied';
+clearTimeout(timer);timer=setTimeout(function(){a.classList.remove('copied');s.textContent=''},2000);
+},function(){location.href=u})});})();
+</script>
 </body>
 </html>

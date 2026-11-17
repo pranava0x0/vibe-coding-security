@@ -428,15 +428,25 @@ article {
 
 .meta-rows {
   display: grid;
-  gap: 0.5rem 1.25rem;
-  grid-template-columns: 1fr;
+  gap: 0.5rem 1rem;
+  grid-template-columns: max-content minmax(0, 1fr);
+  align-items: baseline;
 }
 
-@media (min-width: 540px) {
-  .meta-rows {
-    grid-template-columns: max-content 1fr;
-  }
+.meta-more { margin-top: 0.6rem; }
+.meta-more > summary {
+  cursor: pointer;
+  color: var(--fg-muted);
+  font-size: 0.82rem;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
 }
+.meta-more > summary::-webkit-details-marker { display: none; }
+.meta-more > summary::before { content: "▸"; margin-right: 0.45rem; }
+.meta-more[open] > summary::before { content: "▾"; }
+.meta-more > summary:hover { color: var(--fg); }
+.meta-more[open] > summary { margin-bottom: 0.4rem; }
 
 .meta-row {
   display: contents;
@@ -450,9 +460,6 @@ article {
   letter-spacing: 0.04em;
 }
 
-@media (min-width: 540px) {
-  .meta-label { padding-top: 2px; }
-}
 
 .meta-row time { color: var(--fg-strong); font-variant-numeric: tabular-nums; }
 
@@ -471,7 +478,8 @@ article {
   font-size: 0.78rem;
   color: var(--fg);
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
-  white-space: nowrap;
+  max-width: 100%;
+  overflow-wrap: anywhere;
 }
 .chip-tag {
   font-size: 0.72rem;
@@ -662,6 +670,27 @@ article {
 .markdown-body tr:last-child td { border-bottom: 0; }
 .markdown-body tr:nth-child(even) td { background: var(--bg-elev); }
 
+/* Advisories index on phones: one card per row, title first, then
+   date · severity · status on one line, instead of a 4-column table that
+   squeezed each title into a ~70px column. */
+@media (max-width: 699px) {
+  .markdown-body table.adv-index { display: block; border: 0; border-radius: 0; overflow: visible; }
+  .adv-index thead { display: none; }
+  .adv-index tbody { display: block; }
+  .adv-index tr {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: 0.2rem 0.75rem;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+  .markdown-body .adv-index tr td { display: block; padding: 0; border: 0; background: none; }
+  .adv-index td:nth-child(2) { grid-column: 1 / -1; grid-row: 1; font-size: 0.95rem; }
+  .adv-index td:nth-child(1),
+  .adv-index td:nth-child(3),
+  .adv-index td:nth-child(4) { grid-row: 2; color: var(--fg-muted); font-size: 0.8rem; }
+}
+
 .markdown-body hr {
   border: 0;
   border-top: 1px solid var(--border);
@@ -707,10 +736,115 @@ article {
 .footer a { color: var(--fg-muted); }
 .footer a:hover { color: var(--fg); }
 
+/* Home: latest advisories */
+.markdown-body .latest h2 { margin-top: 0; }
+.latest-list { list-style: none; padding: 0 !important; margin: 0.5rem 0 0.75rem !important; }
+.latest-list li {
+  margin: 0 !important;
+  padding: 0.6rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.latest-list li > a { font-weight: 600; }
+.latest-meta { display: block; margin-top: 0.15rem; font-size: 0.82rem; color: var(--fg-muted); }
+.sev-text-critical { color: var(--sev-critical); font-weight: 600; }
+.sev-text-high { color: var(--sev-high); font-weight: 600; }
+.sev-text-medium { color: var(--sev-medium); }
+.sev-text-low { color: var(--sev-low); }
+.latest-more { font-weight: 600; }
+.markdown-body .latest-meta .share {
+  min-width: 0;
+  min-height: 24px;
+  margin: -6px 0 -6px 0.4rem;
+  padding: 0 0.55rem;
+  font-size: 0.75rem;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--bg-elev);
+  position: relative;
+}
+.markdown-body .latest-meta .share::before { content: ""; position: absolute; inset: -10px -4px; }
+
+/* ────────── Share links ────────── */
+
+/* Heading "#" and alert "Share" controls. A 44px tap area on touch screens;
+   on a mouse-driven screen the "#" fades in on heading hover or focus. */
+.markdown-body .share {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  margin: -10px 0;
+  vertical-align: middle;
+  color: var(--fg-muted);
+  font-weight: 400;
+  font-size: 0.9em;
+  text-decoration: none;
+}
+.markdown-body .share:hover,
+.markdown-body .share:focus-visible { color: var(--link); text-decoration: none; }
+.markdown-body h3 .share[aria-label$="alert"],
+.markdown-body td .share {
+  min-width: 0;
+  padding: 0 0.6rem;
+  margin: -10px 0 -10px 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  min-height: 28px;
+  background: var(--bg-elev);
+  position: relative;
+}
+/* The pill is drawn at 28px; this invisible area makes the tap target 44px. */
+.markdown-body h3 .share[aria-label$="alert"]::before,
+.markdown-body td .share::before {
+  content: "";
+  position: absolute;
+  inset: -8px -4px;
+}
+.markdown-body td .share { white-space: nowrap; }
+.share.copied,
+.markdown-body .share.copied { color: var(--status-patched); border-color: var(--status-patched); }
+@media (hover: hover) and (pointer: fine) {
+  .markdown-body h2 > .share[aria-label$="section"],
+  .markdown-body h3 > .share[aria-label$="section"] { opacity: 0; }
+  .markdown-body h2:hover > .share,
+  .markdown-body h3:hover > .share,
+  .markdown-body .share:focus-visible,
+  .markdown-body :target > .share { opacity: 1; }
+  .markdown-body h3 .share[aria-label$="alert"],
+  .markdown-body td .share { min-height: 24px; }
+}
+.markdown-body h2:target,
+.markdown-body h3:target {
+  background: var(--bg-elev-2);
+  box-shadow: -0.5rem 0 0 var(--bg-elev-2), 0.5rem 0 0 var(--bg-elev-2);
+  border-radius: var(--r-sm);
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 100;
+  padding: 0.55rem 1rem;
+  border-radius: var(--r-md);
+  background: var(--fg-strong);
+  color: var(--bg);
+  font-size: 0.875rem;
+  font-weight: 600;
+  pointer-events: none;
+}
+.toast:empty { display: none; }
+
+.nav-more a { font-weight: 600; }
+
 /* ────────── Print ────────── */
 
 @media print {
-  .topbar, .sidebar, .toc, .footer, .menu-toggle, .skip, .breadcrumb { display: none !important; }
+  .topbar, .sidebar, .toc, .footer, .menu-toggle, .skip, .breadcrumb, .share, .toast, .page-actions { display: none !important; }
   .layout { grid-template-columns: 1fr !important; }
   .content { padding: 0 !important; }
   article { max-width: 100% !important; }

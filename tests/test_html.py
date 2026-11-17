@@ -169,7 +169,7 @@ def test_advisories_index_has_itemlist_jsonld(dist_dir):
 # sweep writes that Markdown after reading web pages it does not control. A tag
 # pasted outside a code span would be published as live HTML on a site with no
 # Content-Security-Policy. The renderer escapes raw HTML; this is the second
-# gate: the only script a page may carry is JSON-LD, and the only inline event
+# gate: the only scripts a page may carry are JSON-LD and the template's own, and the only inline event
 # handlers are the ones in `site/template.html` itself.
 
 _EMBEDDING_TAGS = {"iframe", "frame", "frameset", "object", "embed", "applet", "base", "form"}
@@ -226,7 +226,14 @@ def _scan(page_html: str) -> _ActiveHTMLFinder:
     return finder
 
 
+_TEMPLATE_SCRIPT = re.compile(r"<script>.*?</script>", re.DOTALL)
+
+
 def _active_html(page_html: str, template_html: str = "") -> list[str]:
+    # The template's own inline script (the share-link handler) is allowed only
+    # byte for byte; any other script on a page is still reported.
+    for block in _TEMPLATE_SCRIPT.findall(template_html):
+        page_html = page_html.replace(block, "")
     allowed_handlers = set(_scan(template_html).handlers)
     allowed_tags = set(_HANDLER_TAG.findall(template_html))
     finder = _scan(page_html)
