@@ -40,10 +40,15 @@ def test_alert_id_prefers_the_arrow_link_over_earlier_citations():
     assert '<h3 id="2026-11-own">' in out
 
 
-def test_two_alerts_for_one_advisory_get_distinct_ids():
-    block = '<h3 id="{}">t</h3><p><a href="advisories/2026-11-foo.html">x</a></p>'
-    out, _ = stable_alert_ids(block.format("a") + block.format("b"))
-    assert re.findall(r'<h3 id="([^"]+)">', out) == ["2026-11-foo", "2026-11-foo-2"]
+def test_repeat_alerts_keep_their_ids_when_a_newer_update_is_added():
+    block = '<h3 id="{}">{} — t</h3><p><a href="advisories/2026-09-foo.html">x</a></p>'
+    feed = block.format("a", "2026-10-15") + block.format("b", "2026-09-16")
+    out, _ = stable_alert_ids(feed)
+    assert re.findall(r'<h3 id="([^"]+)">', out) == ["2026-09-foo-2026-10-15", "2026-09-foo"]
+    # A newer update inserted at the top must not shift the older ids.
+    out2, _ = stable_alert_ids(block.format("c", "2026-11-01") + feed)
+    assert re.findall(r'<h3 id="([^"]+)">', out2) == [
+        "2026-09-foo-2026-11-01", "2026-09-foo-2026-10-15", "2026-09-foo"]
 
 
 def test_alert_headings_get_a_share_pill_and_sections_get_a_hash():

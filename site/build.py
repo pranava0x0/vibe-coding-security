@@ -591,33 +591,57 @@ def _share_link(href: str, label: str, text: str, describedby: str = "") -> str:
             f'aria-label="{html.escape(label, quote=True)}"{desc}>{text}</a>')
 
 
+_ALERT_DATE_RE = re.compile(r"^\s*(\d{4}-\d{2}(?:-\d{2})?)")
+
+
 def stable_alert_ids(rendered: str) -> tuple[str, dict[str, str]]:
     """Give each alert h3 the id of the advisory it links to.
 
     The Markdown `toc` extension slugs the heading text, so an alert's anchor
     changed every time its title was edited. The advisory file stem does not
-    change, which makes `alerts.html#<stem>` a link that keeps working. An
-    alert with no advisory link keeps its text slug. Returns the new HTML and a
-    map of old id → new id for the page's heading list."""
-    remap: dict[str, str] = {}
+    change, which makes `alerts.html#<stem>` a link that keeps working.
+
+    Several alerts can follow one advisory (updates). The earliest-dated one
+    keeps the plain stem and later ones get `<stem>-<date>`, so adding a new
+    update, or moving an entry between tiers, never changes an existing id.
+    An alert with no advisory link keeps its text slug. Returns the new HTML
+    and a map of old id → new id for the page's heading list."""
+    blocks = list(_ALERT_BLOCK_RE.finditer(rendered))
+    groups: dict[str, list[tuple[str, int]]] = {}
+    for i, m in enumerate(blocks):
+        link = _ALERT_ARROW_HREF_RE.search(m.group(3)) or _ADVISORY_HREF_RE.search(m.group(3))
+        if link:
+            date = _ALERT_DATE_RE.match(m.group(2))
+            groups.setdefault(link.group(1), []).append((date.group(1) if date else "", i))
+
     used: set[str] = set(re.findall(r'\sid="([^"]+)"', rendered))
+    assigned: dict[int, str] = {}
+    for stem, members in groups.items():
+        # Oldest first; same-date ties fall back to bottom-up feed order.
+        members.sort(key=lambda dm: (dm[0] or "9999", -dm[1]))
+        for rank, (date, i) in enumerate(members):
+            base = stem if rank == 0 else f"{stem}-{date or rank + 1}"
+            new_id, n = base, 2
+            while new_id in used and new_id != blocks[i].group(1):
+                new_id = f"{base}-{n}"
+                n += 1
+            used.discard(blocks[i].group(1))
+            used.add(new_id)
+            assigned[i] = new_id
 
-    def replace(match: re.Match[str]) -> str:
-        old_id, inner, rest = match.group(1), match.group(2), match.group(3)
-        link = _ALERT_ARROW_HREF_RE.search(rest) or _ADVISORY_HREF_RE.search(rest)
-        if not link:
-            return match.group(0)
-        base = link.group(1)
-        new_id, n = base, 2
-        while new_id in used and new_id != old_id:
-            new_id = f"{base}-{n}"
-            n += 1
-        used.discard(old_id)
-        used.add(new_id)
-        remap[old_id] = new_id
-        return f'<h3 id="{new_id}">{inner}</h3>{rest}'
-
-    return _ALERT_BLOCK_RE.sub(replace, rendered), remap
+    remap: dict[str, str] = {}
+    out: list[str] = []
+    pos = 0
+    for i, m in enumerate(blocks):
+        out.append(rendered[pos:m.start()])
+        if i in assigned:
+            remap[m.group(1)] = assigned[i]
+            out.append(f'<h3 id="{assigned[i]}">{m.group(2)}</h3>{m.group(3)}')
+        else:
+            out.append(m.group(0))
+        pos = m.end()
+    out.append(rendered[pos:])
+    return "".join(out), remap
 
 
 def add_share_links(rendered: str, page: Page) -> str:
