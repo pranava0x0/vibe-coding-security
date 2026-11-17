@@ -598,6 +598,20 @@ article {
 }
 .markdown-body blockquote p { margin: 0.4rem 0; }
 
+/* Quoted social post (site/build.py _PostCards). Static, no third-party JS. */
+.markdown-body blockquote.post-card {
+  max-width: 34rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  color: var(--fg);
+}
+.markdown-body blockquote.post-card p:last-child {
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+}
+
 .markdown-body code {
   font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
   font-size: 0.88em;

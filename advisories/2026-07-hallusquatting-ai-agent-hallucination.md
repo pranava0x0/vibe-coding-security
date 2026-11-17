@@ -42,7 +42,7 @@ history | grep -E 'git clone|npm install|pip install' | tail -50
 → [prevention/agent-sandboxing.md](../prevention/agent-sandboxing.md) — require explicit human confirmation (with the actual URL visible, not just a name) before any agent-initiated clone or install.
 
 ## Why this matters for vibe coders
-Slopsquatting has mostly been discussed as a package-registry problem (`pip install <hallucinated-name>`). HalluSquatting shows the same mechanic reaches further: repository clones and, notably, **agent "skill"/plugin installs** — a marketplace surface this repo already tracks as poorly gated (see [ClawHavoc](2026-02-clawhavoc-clawhub-skills.md)). A 100% success rate on hallucinated skill installs specifically is a strong signal that skill marketplaces need the same name-verification discipline as package registries, not less.
+Slopsquatting has mostly been discussed as a package-registry problem (`pip install <hallucinated-name>`). HalluSquatting shows the same mechanic reaches further: repository clones and **agent "skill"/plugin installs** — a marketplace surface this repo already tracks as poorly gated (see [ClawHavoc](2026-02-clawhavoc-clawhub-skills.md)). A 100% success rate on hallucinated skill installs specifically is a strong signal that skill marketplaces need the same name-verification discipline as package registries, not less.
 
 ## Sources
 - [The Hacker News — New "HalluSquatting" Attack Could Trick AI Coding Agents Into Installing Malware](https://thehackernews.com/2026/07/new-hallusquatting-attack-could-trick.html)

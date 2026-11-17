@@ -313,6 +313,33 @@ class _InertOutput(Treeprocessor):
                     element.attrib[name] = "#"
 
 
+_POST_HOSTS = ("x.com", "twitter.com", "bsky.app", "mastodon.social", "threads.net")
+_POST_URL_RE = re.compile(r"^https://(?:www\.)?([a-z0-9.-]+)/")
+
+
+class _PostCards(Treeprocessor):
+    """Style a quoted social post as a card, with no third-party script.
+
+    A blockquote whose last paragraph links to a post on X, Bluesky, Mastodon
+    or Threads gets `class="post-card"`:
+
+        > Post text, quoted exactly.
+        >
+        > [@handle on X, 2026-11-16](https://x.com/handle/status/123)
+    """
+
+    def run(self, root):
+        for quote in root.iter("blockquote"):
+            paras = [c for c in quote if c.tag == "p"]
+            if not paras:
+                continue
+            for link in paras[-1].iter("a"):
+                host = _POST_URL_RE.match(link.get("href", ""))
+                if host and host.group(1).removeprefix("www.") in _POST_HOSTS:
+                    quote.set("class", "post-card")
+                    break
+
+
 _COMMENT_LINE_RE = re.compile(r"^ {0,3}<!--.*?-->\s*$")
 
 
@@ -378,6 +405,7 @@ def render_markdown(body: str) -> tuple[str, str, list[tuple[int, str, str]]]:
     md.preprocessors.register(_PlainFenceHeaders(md), "plain_fence_headers", 27)
     md.preprocessors.register(_DropCommentLines(md), "drop_comment_lines", 22)
     md.treeprocessors.register(_InertOutput(md), "inert_output", -10)
+    md.treeprocessors.register(_PostCards(md), "post_cards", -20)
     html_out = md.convert(body)
     toc_html = md.toc  # type: ignore[attr-defined]
     headings: list[tuple[int, str, str]] = []

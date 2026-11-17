@@ -95,7 +95,7 @@ More broadly, this incident is a signal to audit **all** AI productivity tools t
 - **Audit connected apps quarterly.** Most enterprise services expose this in their admin panels. Remove any integration that is no longer actively used.
 - **Prefer API keys with IP-allowlisting** over OAuth grants where possible — they're easier to scope and revoke selectively.
 - **Monitor for anomalous API usage patterns** on your Salesforce/HubSpot integration accounts — bulk record reads from an AI tool at 2 AM are suspicious.
-- **Treat every AI productivity tool as a potential upstream supply-chain exposure.** The question is not just "do we trust this vendor?" but "if this vendor's systems were breached, what could attackers do with our OAuth tokens?"
+- **Treat every AI productivity tool as a potential upstream supply-chain exposure.** For each one, list what an attacker could do with your OAuth tokens if the vendor were breached.
 - See the AI-tool OAuth pivot pattern: [Vercel/Context.ai](2026-04-vercel-context-ai-breach.md), [Composio](2026-05-composio-ai-agent-platform-breach.md)
 
 ## Sources

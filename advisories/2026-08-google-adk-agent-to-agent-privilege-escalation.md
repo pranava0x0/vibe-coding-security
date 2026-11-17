@@ -57,7 +57,7 @@ You're affected if: (1) a low-privilege agent's *output* (a comment, a label, a 
 → [prevention/agent-sandboxing.md](../prevention/agent-sandboxing.md)
 - **An agent that reads untrusted text and holds a credential is a privilege-escalation primitive that speaks natural language.** Treat any dispatch mechanism between agents of different privilege levels as a security boundary requiring real authorization, not a string match.
 - **Never let one agent's output be the sole trigger for a more-privileged agent's action.** Require a human-in-the-loop confirmation, or at minimum an out-of-band signed token, before crossing a privilege boundary between agents.
-- This is the same **decorator-as-documentation** root cause this repo tracks in SDK tool-annotation frameworks (Semantic Kernel, Flowise) and agent-platform tool-registration APIs (Composio) — here it's a CI dispatch string instead of a code annotation, but the lesson is identical: a matching pattern is not an authorization check.
+- This is the same **decorator-as-documentation** root cause this repo tracks in SDK tool-annotation frameworks (Semantic Kernel, Flowise) and agent-platform tool-registration APIs (Composio) — here it is a CI dispatch string instead of a code annotation. A matching pattern is not an authorization check.
 
 ## Update 2026-10-28 — a second ADK record: FileArtifactService let one app list, read, overwrite or delete another app's artifacts under a shared root (CVE-2026-115522, 5.3); fixed 1.39.1 and 2.7.0 in August, record published 2026-10-28
 
