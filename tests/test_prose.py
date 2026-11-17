@@ -70,6 +70,14 @@ def test_scanner_catches_known_slop_and_skips_quotes():
     assert all(no in (4, 5) for no, *_ in p_hits), p_hits
 
 
+def test_scanner_skips_blockquotes_and_joins_soft_breaks():
+    p_hits, _ = slop_scan.scan_text("> A robust fix is now available.\n>\n> [@a on X](https://x.com/a/status/1)\n")
+    assert not p_hits
+    p_hits, s_hits = slop_scan.scan_text("It is worth\nnoting this.\n\n" + " ".join(["w"] * 20) + "\n" + " ".join(["w"] * 20) + ".\n")
+    assert any(name == "worth-noting" for _, name, _, _ in p_hits)
+    assert any(name.startswith("long-sentence") for _, name, _ in s_hits)
+
+
 def test_scanner_flags_style_on_long_sentences():
     long = " ".join(["word"] * (slop_scan.MAX_WORDS + 1)) + "."
     _, s_hits = slop_scan.scan_text(f"A short one. {long}\nX — Y.\n")

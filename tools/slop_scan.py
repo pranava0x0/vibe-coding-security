@@ -44,25 +44,41 @@ def load_patterns() -> list[tuple[str, re.Pattern[str], str]]:
     return out
 
 
-def prose_lines(text: str):
-    """Yield (line_number, cleaned_text) for prose lines.
+_LIST_ITEM = re.compile(r"^(?:[-*+]|\d+[.)])\s")
 
-    Skips frontmatter, fenced code, headings, tables and Sources entries'
-    link text. Strips links, inline code and quoted strings."""
-    body_start = 0
+
+def _clean(s: str) -> str:
+    s = _LINK.sub("LINK", s)
+    s = _CODE.sub("CODE", s)
+    return _QUOTE.sub("QUOTE", s)
+
+
+def prose_lines(text: str):
+    """Yield (line_number, cleaned_text) for each prose paragraph or list item.
+
+    Lines joined by a soft line break are one paragraph, reported at its first
+    line. Skips frontmatter, fenced code, headings, tables and blockquotes
+    (quoted material, such as a social post). Strips links, inline code and
+    quoted strings."""
     fm = _FRONTMATTER.match(text)
     if fm:
-        body_start = text[: fm.end()].count("\n")
-        text = "\n" * body_start + text[fm.end():]
+        text = "\n" * text[: fm.end()].count("\n") + text[fm.end():]
     text = _FENCE.sub(lambda m: "\n" * m.group(0).count("\n"), text)
+    start, buf = 0, []
     for no, line in enumerate(text.splitlines(), 1):
         s = line.strip()
-        if not s or s.startswith(("#", "|", "<!--")):
-            continue
-        s = _LINK.sub("LINK", s)
-        s = _CODE.sub("CODE", s)
-        s = _QUOTE.sub("QUOTE", s)
-        yield no, s
+        breaks = not s or s.startswith(("#", "|", "<!--", ">"))
+        if breaks or _LIST_ITEM.match(s):
+            if buf:
+                yield start, _clean(" ".join(buf))
+            start, buf = no, []
+            if breaks:
+                continue
+        if not buf:
+            start = no
+        buf.append(s)
+    if buf:
+        yield start, _clean(" ".join(buf))
 
 
 def scan_text(text: str, patterns=None):
