@@ -8,8 +8,8 @@
 
 ## 🔴 ACTIVE — react now
 
-### 2026-11-16 — **Optimizely Web: malicious Project JavaScript served a crypto address swapper, card skimmer and iOS exploit loaders to 178 organisations' visitors on 2026-11-16; cause unknown**
-[Report URI](https://blog.report-uri.com/worlds-largest-brands-infected-with-malware-via-optimizely/) found attacker code in 188 Optimizely Web Project JavaScript snippets from 178 organisations, swapping crypto addresses and skimming cards. Audit every project's Project JavaScript and rotate Optimizely credentials. Update iOS to 18.7.3 or 26.3.
+### 2026-11-16 — **Optimizely Web: injected Project JavaScript reached 178 organisations' visitors on 2026-11-16; Optimizely says an Experimentation vulnerability was exploited and is fixed**
+[Optimizely](https://status.optimizely.com/incidents/ftw0fh9wx43z) says an attacker exploited a vulnerability in Experimentation to add malicious JavaScript to customer projects, and that it is fixed. [Report URI](https://blog.report-uri.com/worlds-largest-brands-infected-with-malware-via-optimizely/) found the code in 188 snippets from 178 organisations. Audit every project's Project JavaScript and rotate Optimizely credentials.
 → [advisories/2026-11-optimizely-web-project-javascript-injection-crypto-clipper-card-skimmer-ios-exploit-loaders.md](advisories/2026-11-optimizely-web-project-javascript-injection-crypto-clipper-card-skimmer-ios-exploit-loaders.md)
 
 ### 2026-11-16 — **MCP server CVEs, 2026-11-16: awslabs Timestream for InfluxDB token leak, AWS Pricing file write, Kubeshark, code-review-mcp-server; all fixed**

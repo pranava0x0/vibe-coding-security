@@ -11,7 +11,7 @@ tags: [cve, ghsa, mcp, mcp-server, prompt-injection, credential-exposure, path-t
 ---
 
 ## TL;DR
-Five CVE records for four MCP servers were published on 2026-11-16, and every fix was already on its registry. `awslabs.timestream-for-influxdb-mcp-server` before 0.0.19 could send its InfluxDB API token to a URL placed in the agent's context ([AWS bulletin 2026-185](https://aws.amazon.com/security/security-bulletins/2026-185-aws/), CVE-2026-126681). Upgrade it and rotate the token. Upgrade `awslabs.aws-pricing-mcp-server` to 1.0.31, Kubeshark to 53.4.0 and `code-review-mcp-server` to 1.5.3. In each case the attacker is content that the agent reads.
+Five CVE records for four MCP servers were published on 2026-11-16, and every fix predates its record by three to five months. `awslabs.timestream-for-influxdb-mcp-server` before 0.0.19 could send its InfluxDB API token to a URL placed in the agent's context ([AWS bulletin 2026-185](https://aws.amazon.com/security/security-bulletins/2026-185-aws/), CVE-2026-126681). Upgrade it and rotate the token. Upgrade `awslabs.aws-pricing-mcp-server` to 1.0.31, Kubeshark to 53.4.0 and `code-review-mcp-server` to 1.5.3. In each case the attacker is content that the agent reads.
 
 ## What happened
 

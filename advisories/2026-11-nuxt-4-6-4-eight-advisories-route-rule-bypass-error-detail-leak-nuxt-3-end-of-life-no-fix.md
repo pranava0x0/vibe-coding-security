@@ -48,7 +48,7 @@ ls app/pages/**/\[...*\].vue pages/**/\[...*\].vue 2>/dev/null      # catch-all 
 ls ~/package-lock.json ~/pnpm-lock.yaml ~/yarn.lock ~/pnpm-workspace.yaml 2>/dev/null   # stray files above the project
 ```
 
-- `nuxt` 4.x before 4.6.4: affected by all eight, subject to each advisory's conditions.
+- `nuxt` 4.x before 4.6.4: affected. From 4.6.0 the ranges of all eight apply, subject to each advisory's conditions.
 - `nuxt` 3.x at any version: affected by the encoded-slash bypass, the error-detail leak, the island collision and the webpack or rspack dev-server issue. From 3.5.0 the parent-directory dev-server issue applies too. No upgrade on the 3.x line fixes them.
 - Access control that lives only in `routeRules` or in `server/middleware` path checks is the exposed part. Checks inside the page's own data handlers still run.
 
