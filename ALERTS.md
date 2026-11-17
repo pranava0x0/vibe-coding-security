@@ -8,6 +8,10 @@
 
 ## 🔴 ACTIVE — react now
 
+### 2026-11-16 — **Optimizely Web: malicious Project JavaScript served a crypto address swapper, card skimmer and iOS exploit loaders to 178 organisations' visitors on 2026-11-16; cause unknown**
+An attacker wrote code into the Project JavaScript of many unrelated Optimizely Web projects. Report URI found it in 188 snippets from 178 organisations, 32 in banking and finance, including HSBC sites in 11 countries, Equifax and ABN AMRO. The code swapped crypto addresses, skimmed cards typed into a site's own forms, sent readable cookies and loaded iOS exploit kit pages. 1 of 188 snippets was still infected at 21:52 UTC. No Optimizely statement, no CVE id, cause unknown. Audit every project's Project JavaScript, rotate Optimizely credentials, and update iOS to 18.7.3 or 26.3.
+→ [advisories/2026-11-optimizely-web-project-javascript-injection-crypto-clipper-card-skimmer-ios-exploit-loaders.md](advisories/2026-11-optimizely-web-project-javascript-injection-crypto-clipper-card-skimmer-ios-exploit-loaders.md)
+
 ### 2026-11-16 — **Compromised @wppconnect-team/wppconnect 2.4.1 and @wppconnect/server 2.10.82: pin 2.4.0 and 2.10.81, rotate secrets and WhatsApp sessions**
 Two npm releases published on 2026-11-15 and 2026-11-16 are compromised, per SafeDep. The registry marks both deprecated and `latest` points to 2.4.0 and 2.10.81, but the bad versions still resolve by exact version. Run `npm ls @wppconnect-team/wppconnect @wppconnect/server`. If either ran, rotate the environment's secrets and re-link its WhatsApp sessions.
 → [advisories/2026-11-wppconnect-2-4-1-and-wppconnect-server-2-10-82-compromised-npm-releases-remove-and-rotate.md](advisories/2026-11-wppconnect-2-4-1-and-wppconnect-server-2-10-82-compromised-npm-releases-remove-and-rotate.md)
