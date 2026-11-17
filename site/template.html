@@ -92,19 +92,28 @@
 <div id="share-status" class="toast" role="status" aria-live="polite"></div>
 <script>
 (function(){var s=document.getElementById('share-status'),last,timer;
+function here(a){if(a.hash&&a.pathname===location.pathname)history.replaceState(null,'',a.hash)}
+function say(a,m){if(last)last.classList.remove('copied');last=a;a.classList.add('copied');s.textContent=m;
+clearTimeout(timer);timer=setTimeout(function(){a.classList.remove('copied');s.textContent=''},2000)}
 document.addEventListener('click',function(e){
 var a=e.target.closest?e.target.closest('a.share'):null;
 if(!a||e.button||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;
-var u=a.href,t=document.title,h=a.closest('h2,h3,td');
-if(h){var c=h.cloneNode(true);c.querySelectorAll('.share').forEach(function(x){x.remove()});t=c.textContent.trim()||t}
-if(navigator.share&&matchMedia('(pointer:coarse)').matches){e.preventDefault();navigator.share({title:t,url:u}).catch(function(){});return}
-if(!navigator.clipboard||!navigator.clipboard.writeText)return;
 e.preventDefault();
-navigator.clipboard.writeText(u).then(function(){
-if(a.hash&&a.pathname===location.pathname)history.replaceState(null,'',a.hash);
-if(last)last.classList.remove('copied');last=a;a.classList.add('copied');s.textContent='Link copied';
-clearTimeout(timer);timer=setTimeout(function(){a.classList.remove('copied');s.textContent=''},2000);
-},function(){location.href=u})});})();
+var u=a.href,t=document.title,h=a.closest('h2,h3,td,li');
+if(h){var c=h.cloneNode(true);c.querySelectorAll('.share').forEach(function(x){x.remove()});t=c.textContent.trim()||t}
+here(a);
+if(navigator.share&&matchMedia('(hover:none) and (pointer:coarse)').matches){navigator.share({title:t,url:u}).catch(function(){});return}
+function ask(){window.prompt('Copy this link:',u)}
+if(!navigator.clipboard||!navigator.clipboard.writeText){ask();return}
+navigator.clipboard.writeText(u).then(function(){say(a,'Link copied')},ask)});
+addEventListener('beforeprint',function(){document.querySelectorAll('details.meta-more').forEach(function(d){d.open=true})});
+var id=decodeURIComponent(location.hash.slice(1));
+if(id&&!document.getElementById(id)){
+document.querySelectorAll('.markdown-body h2[id],.markdown-body h3[id]').forEach(function(x){
+if(id===null)return;var c=x.cloneNode(true);c.querySelectorAll('.share').forEach(function(y){y.remove()});
+var g=c.textContent.normalize('NFKD').replace(/[^\x00-\x7f]/g,'').replace(/[^\w\s-]/g,'').trim().toLowerCase().replace(/[-\s]+/g,'-');
+if(g===id){history.replaceState(null,'','#'+x.id);x.scrollIntoView();id=null}})}
+})();
 </script>
 </body>
 </html>

@@ -36,6 +36,13 @@
   --status-ongoing:    #b392f0;
   --status-historical: #8b949e;
 
+  /* Severity / success colours used as text (not fills): AA contrast per theme. */
+  --sev-critical-text: #f85149;
+  --sev-high-text:     #ff8e3c;
+  --sev-medium-text:   #d29922;
+  --sev-low-text:      #56d364;
+  --ok-text:           #56d364;
+
   --content-max: 760px;
   --sidebar-w: 280px;
   --toc-w: 240px;
@@ -62,6 +69,11 @@
     --code-bg: #f6f8fa;
     --link: #0969da;
     --link-hover: #0550ae;
+    --sev-critical-text: #cf222e;
+    --sev-high-text:     #bc4c00;
+    --sev-medium-text:   #9a6700;
+    --sev-low-text:      #1a7f37;
+    --ok-text:           #1a7f37;
   }
 }
 
@@ -746,10 +758,10 @@ article {
 }
 .latest-list li > a { font-weight: 600; }
 .latest-meta { display: block; margin-top: 0.15rem; font-size: 0.82rem; color: var(--fg-muted); }
-.sev-text-critical { color: var(--sev-critical); font-weight: 600; }
-.sev-text-high { color: var(--sev-high); font-weight: 600; }
-.sev-text-medium { color: var(--sev-medium); }
-.sev-text-low { color: var(--sev-low); }
+.sev-text-critical { color: var(--sev-critical-text); font-weight: 600; }
+.sev-text-high { color: var(--sev-high-text); font-weight: 600; }
+.sev-text-medium { color: var(--sev-medium-text); }
+.sev-text-low { color: var(--sev-low-text); }
 .latest-more { font-weight: 600; }
 .markdown-body .latest-meta .share {
   min-width: 0;
@@ -805,7 +817,7 @@ article {
 }
 .markdown-body td .share { white-space: nowrap; }
 .share.copied,
-.markdown-body .share.copied { color: var(--status-patched); border-color: var(--status-patched); }
+.markdown-body .share.copied { color: var(--ok-text); border-color: var(--ok-text); }
 @media (hover: hover) and (pointer: fine) {
   .markdown-body h2 > .share[aria-label$="section"],
   .markdown-body h3 > .share[aria-label$="section"] { opacity: 0; }

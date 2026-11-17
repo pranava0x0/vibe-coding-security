@@ -577,12 +577,18 @@ ALERTS_OUTPUT = Path("alerts.html")
 _HEADING_RE = re.compile(r'<h([23]) id="([^"]+)">(.*?)</h\1>', re.DOTALL)
 _ALERT_BLOCK_RE = re.compile(r'<h3 id="([^"]+)">(.*?)</h3>(.*?)(?=<h[1-3][ >]|\Z)', re.DOTALL)
 _ADVISORY_HREF_RE = re.compile(r'href="advisories/([A-Za-z0-9][A-Za-z0-9._-]*)\.html"')
-_INDEX_ROW_LINK_RE = re.compile(r'(<td><a href="(20[0-9]{2}-[A-Za-z0-9._-]+\.html)">.*?</a>)', re.DOTALL)
+# An alert's own advisory is the "→ [advisories/...]" link that ends the entry;
+# the body may cite other advisories first.
+_ALERT_ARROW_HREF_RE = re.compile(r'→\s*<a href="advisories/([A-Za-z0-9][A-Za-z0-9._-]*)\.html"')
+_INDEX_ROW_LINK_RE = re.compile(r'(<td><a href="([A-Za-z0-9][A-Za-z0-9._-]*\.html)">.*?</a>)', re.DOTALL)
 
 
-def _share_link(href: str, label: str, text: str) -> str:
+def _share_link(href: str, label: str, text: str, describedby: str = "") -> str:
+    # aria-describedby points at the heading, so a screen reader's link list
+    # says which section or alert each of the many identical labels belongs to.
+    desc = f' aria-describedby="{html.escape(describedby, quote=True)}"' if describedby else ""
     return (f'<a class="share" href="{html.escape(href, quote=True)}" '
-            f'aria-label="{html.escape(label, quote=True)}">{text}</a>')
+            f'aria-label="{html.escape(label, quote=True)}"{desc}>{text}</a>')
 
 
 def stable_alert_ids(rendered: str) -> tuple[str, dict[str, str]]:
@@ -598,7 +604,7 @@ def stable_alert_ids(rendered: str) -> tuple[str, dict[str, str]]:
 
     def replace(match: re.Match[str]) -> str:
         old_id, inner, rest = match.group(1), match.group(2), match.group(3)
-        link = _ADVISORY_HREF_RE.search(rest)
+        link = _ALERT_ARROW_HREF_RE.search(rest) or _ADVISORY_HREF_RE.search(rest)
         if not link:
             return match.group(0)
         base = link.group(1)
@@ -626,9 +632,9 @@ def add_share_links(rendered: str, page: Page) -> str:
     def heading(match: re.Match[str]) -> str:
         level, hid, inner = match.group(1), match.group(2), match.group(3)
         if alerts and level == "3":
-            link = _share_link(f"#{hid}", "Share link to this alert", "Share")
+            link = _share_link(f"#{hid}", "Share link to this alert", "Share", hid)
         else:
-            link = _share_link(f"#{hid}", "Copy link to this section", "#")
+            link = _share_link(f"#{hid}", "Copy link to this section", "#", hid)
         return f'<h{level} id="{hid}">{inner} {link}</h{level}>'
 
     out = _HEADING_RE.sub(heading, rendered)

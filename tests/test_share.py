@@ -33,6 +33,13 @@ def test_alert_id_is_the_advisory_stem():
     assert remap == {"2026-11-16-long-title-slug": "2026-11-foo"}
 
 
+def test_alert_id_prefers_the_arrow_link_over_earlier_citations():
+    rendered = ('<h3 id="x">t</h3><p>See <a href="advisories/2025-01-other.html">o</a>.</p>'
+                '<p>→ <a href="advisories/2026-11-own.html">x</a></p>')
+    out, _ = stable_alert_ids(rendered)
+    assert '<h3 id="2026-11-own">' in out
+
+
 def test_two_alerts_for_one_advisory_get_distinct_ids():
     block = '<h3 id="{}">t</h3><p><a href="advisories/2026-11-foo.html">x</a></p>'
     out, _ = stable_alert_ids(block.format("a") + block.format("b"))
@@ -41,8 +48,8 @@ def test_two_alerts_for_one_advisory_get_distinct_ids():
 
 def test_alert_headings_get_a_share_pill_and_sections_get_a_hash():
     out = add_share_links('<h2 id="s">S</h2><h3 id="a">A</h3>', _alerts_page())
-    assert '<a class="share" href="#s" aria-label="Copy link to this section">#</a></h2>' in out
-    assert '<a class="share" href="#a" aria-label="Share link to this alert">Share</a></h3>' in out
+    assert '<a class="share" href="#s" aria-label="Copy link to this section" aria-describedby="s">#</a></h2>' in out
+    assert '<a class="share" href="#a" aria-label="Share link to this alert" aria-describedby="a">Share</a></h3>' in out
 
 
 def test_built_alerts_link_every_entry_by_advisory_stem(dist_dir):
