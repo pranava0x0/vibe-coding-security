@@ -89,6 +89,11 @@ TOP_LEVEL_PAGES: list[tuple[str, str]] = [
     ("ISSUES.md", "issues.html"),
 ]
 
+# Sidebar lists at most this many pages per section; the section index has the rest.
+SIDEBAR_MAX_ITEMS = 15
+# Above this many h3s the right-rail TOC lists h2s only (the alerts feed has 500+).
+TOC_MAX_H3 = 40
+
 FRONTMATTER_RE = re.compile(r"^---\n(.*?)\n---\n", re.DOTALL)
 
 
@@ -441,6 +446,17 @@ def build_sidebar(current: Page, all_pages: list[Page]) -> str:
                 items.sort(key=lambda p: str(p.frontmatter.get("date_disclosed", "")), reverse=True)
             else:
                 items.sort(key=lambda p: p.title.lower())
+            total = len(items)
+            if total > SIDEBAR_MAX_ITEMS:
+                # Listing every advisory made the sidebar ~85% of each advisory
+                # page's bytes. Show the newest ones, keep the current page in
+                # view, and link the full index for the rest.
+                shown = items[:SIDEBAR_MAX_ITEMS]
+                if current.section == slug and not current.is_index and all(
+                    p.output_path != current.output_path for p in shown
+                ):
+                    shown.append(current)
+                items = shown
             parts.append('<ul class="nav-section-items">')
             for item in items:
                 url2 = relative_url(item, current)
@@ -450,6 +466,10 @@ def build_sidebar(current: Page, all_pages: list[Page]) -> str:
                 dot = f' <span class="dot dot-{html.escape(sev, quote=True)}" aria-hidden="true"></span>' if sev else ""
                 parts.append(
                     f'<li><a href="{url2}"{cls}>{html.escape(item.title)}{dot}</a></li>'
+                )
+            if total > len(items):
+                parts.append(
+                    f'<li class="nav-more"><a href="{url}">All {total} {html.escape(label.lower())} →</a></li>'
                 )
             parts.append('</ul>')
         parts.append('</div>')
@@ -498,22 +518,36 @@ def build_meta_bar(page: Page) -> str:
             for e in fm["ecosystems"]
         )
         rows.append(f'<div class="meta-row"><span class="meta-label">Ecosystems</span><span class="chips">{chips}</span></div>')
+    # Tools and tags can run to a dozen long chips. Folded, so the TL;DR
+    # starts on the first screen of a phone.
+    more: list[str] = []
     if fm.get("tools_affected"):
         chips = "".join(
             f'<span class="chip chip-tool">{html.escape(str(t))}</span>'
             for t in fm["tools_affected"]
         )
-        rows.append(f'<div class="meta-row"><span class="meta-label">Tools</span><span class="chips">{chips}</span></div>')
+        more.append(f'<div class="meta-row"><span class="meta-label">Tools</span><span class="chips">{chips}</span></div>')
     if fm.get("tags"):
         chips = "".join(
             f'<span class="chip chip-tag">{html.escape(str(t))}</span>'
             for t in fm["tags"]
         )
-        rows.append(f'<div class="meta-row"><span class="meta-label">Tags</span><span class="chips">{chips}</span></div>')
+        more.append(f'<div class="meta-row"><span class="meta-label">Tags</span><span class="chips">{chips}</span></div>')
     if rows:
         parts.append('<div class="meta-rows">')
         parts.extend(rows)
         parts.append('</div>')
+    if more:
+        n_tools = len(fm.get("tools_affected") or [])
+        n_tags = len(fm.get("tags") or [])
+        label = ", ".join(x for x in (
+            f"{n_tools} tool{'s' if n_tools != 1 else ''}" if n_tools else "",
+            f"{n_tags} tag{'s' if n_tags != 1 else ''}" if n_tags else "",
+        ) if x)
+        parts.append(f'<details class="meta-more"><summary>Affected tools and tags ({label})</summary>'
+                     '<div class="meta-rows">')
+        parts.extend(more)
+        parts.append('</div></details>')
 
     parts.append('</aside>')
     return "\n".join(parts)
@@ -522,14 +556,150 @@ def build_meta_bar(page: Page) -> str:
 def build_toc(page: Page) -> str:
     if not page.headings or len(page.headings) < 3:
         return ""
+    max_depth = 3
+    if sum(1 for depth, _, _ in page.headings if depth == 3) > TOC_MAX_H3:
+        max_depth = 2
     parts: list[str] = ['<aside class="toc" aria-label="On this page"><h2 class="toc-title">On this page</h2><ol class="toc-list">']
     for depth, slug, name in page.headings:
-        if depth > 3:
+        if depth > max_depth:
             continue
         cls = f"toc-d{depth}"
         parts.append(f'<li class="{cls}"><a href="#{html.escape(slug)}">{html.escape(name)}</a></li>')
     parts.append('</ol></aside>')
     return "\n".join(parts)
+
+
+# ────────────────────────────────────────────────────────────────────────────
+# Share links (direct links to alerts, advisories and sections)
+# ────────────────────────────────────────────────────────────────────────────
+
+ALERTS_OUTPUT = Path("alerts.html")
+_HEADING_RE = re.compile(r'<h([23]) id="([^"]+)">(.*?)</h\1>', re.DOTALL)
+_ALERT_BLOCK_RE = re.compile(r'<h3 id="([^"]+)">(.*?)</h3>(.*?)(?=<h[1-3][ >]|\Z)', re.DOTALL)
+_ADVISORY_HREF_RE = re.compile(r'href="advisories/([A-Za-z0-9][A-Za-z0-9._-]*)\.html"')
+# An alert's own advisory is the "→ [advisories/...]" link that ends the entry;
+# the body may cite other advisories first.
+_ALERT_ARROW_HREF_RE = re.compile(r'→\s*<a href="advisories/([A-Za-z0-9][A-Za-z0-9._-]*)\.html"')
+_INDEX_ROW_LINK_RE = re.compile(r'(<td><a href="([A-Za-z0-9][A-Za-z0-9._-]*\.html)">.*?</a>)', re.DOTALL)
+
+
+def _share_link(href: str, label: str, text: str, describedby: str = "") -> str:
+    # aria-describedby points at the heading, so a screen reader's link list
+    # says which section or alert each of the many identical labels belongs to.
+    desc = f' aria-describedby="{html.escape(describedby, quote=True)}"' if describedby else ""
+    return (f'<a class="share" href="{html.escape(href, quote=True)}" '
+            f'aria-label="{html.escape(label, quote=True)}"{desc}>{text}</a>')
+
+
+_ALERT_DATE_RE = re.compile(r"^\s*(\d{4}-\d{2}(?:-\d{2})?)")
+
+
+def stable_alert_ids(rendered: str) -> tuple[str, dict[str, str]]:
+    """Give each alert h3 the id of the advisory it links to.
+
+    The Markdown `toc` extension slugs the heading text, so an alert's anchor
+    changed every time its title was edited. The advisory file stem does not
+    change, which makes `alerts.html#<stem>` a link that keeps working.
+
+    Several alerts can follow one advisory (updates). The earliest-dated one
+    keeps the plain stem and later ones get `<stem>-<date>`, so adding a new
+    update, or moving an entry between tiers, never changes an existing id.
+    An alert with no advisory link keeps its text slug. Returns the new HTML
+    and a map of old id → new id for the page's heading list."""
+    blocks = list(_ALERT_BLOCK_RE.finditer(rendered))
+    groups: dict[str, list[tuple[str, int]]] = {}
+    for i, m in enumerate(blocks):
+        link = _ALERT_ARROW_HREF_RE.search(m.group(3)) or _ADVISORY_HREF_RE.search(m.group(3))
+        if link:
+            date = _ALERT_DATE_RE.match(m.group(2))
+            groups.setdefault(link.group(1), []).append((date.group(1) if date else "", i))
+
+    used: set[str] = set(re.findall(r'\sid="([^"]+)"', rendered))
+    assigned: dict[int, str] = {}
+    for stem, members in groups.items():
+        # Oldest first; same-date ties fall back to bottom-up feed order.
+        members.sort(key=lambda dm: (dm[0] or "9999", -dm[1]))
+        for rank, (date, i) in enumerate(members):
+            base = stem if rank == 0 else f"{stem}-{date or rank + 1}"
+            new_id, n = base, 2
+            while new_id in used and new_id != blocks[i].group(1):
+                new_id = f"{base}-{n}"
+                n += 1
+            used.discard(blocks[i].group(1))
+            used.add(new_id)
+            assigned[i] = new_id
+
+    remap: dict[str, str] = {}
+    out: list[str] = []
+    pos = 0
+    for i, m in enumerate(blocks):
+        out.append(rendered[pos:m.start()])
+        if i in assigned:
+            remap[m.group(1)] = assigned[i]
+            out.append(f'<h3 id="{assigned[i]}">{m.group(2)}</h3>{m.group(3)}')
+        else:
+            out.append(m.group(0))
+        pos = m.end()
+    out.append(rendered[pos:])
+    return "".join(out), remap
+
+
+def add_share_links(rendered: str, page: Page) -> str:
+    """Append a share control to every h2/h3 that has an id.
+
+    On the alerts feed each h3 is an alert and gets a visible "Share" pill; on
+    other pages a quieter "#" link. On the advisories index, each row's
+    advisory link gets one too, so an advisory can be shared from the list
+    without opening it first."""
+    alerts = page.output_path == ALERTS_OUTPUT
+
+    def heading(match: re.Match[str]) -> str:
+        level, hid, inner = match.group(1), match.group(2), match.group(3)
+        if alerts and level == "3":
+            link = _share_link(f"#{hid}", "Share link to this alert", "Share", hid)
+        else:
+            link = _share_link(f"#{hid}", "Copy link to this section", "#", hid)
+        return f'<h{level} id="{hid}">{inner} {link}</h{level}>'
+
+    out = _HEADING_RE.sub(heading, rendered)
+    if page.section == "advisories" and page.is_index:
+        # Hook for the stacked-card layout on narrow screens (style.css).
+        out = out.replace("<table>", '<table class="adv-index">', 1)
+        out = _INDEX_ROW_LINK_RE.sub(
+            lambda m: f'{m.group(1)} {_share_link(m.group(2), "Share link to this advisory", "Share")}',
+            out,
+        )
+    return out
+
+
+HOME_LATEST_N = 5
+
+
+def build_home_latest(all_pages: list[Page]) -> str:
+    """Newest advisories at the top of the home page, one tap from landing."""
+    advisories = [p for p in all_pages if p.section == "advisories" and not p.is_index]
+    advisories.sort(key=lambda p: str(p.frontmatter.get("date_disclosed", "")), reverse=True)
+    items = []
+    for p in advisories[:HOME_LATEST_N]:
+        sev = html.escape(str(p.frontmatter.get("severity", "")).lower(), quote=True)
+        when = html.escape(str(p.frontmatter.get("date_disclosed", "")))
+        href = html.escape(p.output_path.as_posix(), quote=True)
+        items.append(
+            f'<li><a href="{href}">{html.escape(p.title)}</a> '
+            f'<span class="latest-meta"><time datetime="{when}">{when}</time>'
+            + (f' · <span class="sev-text sev-text-{sev}">{sev}</span>' if sev else "")
+            + f' {_share_link(href, "Share link to this advisory", "Share")}</span></li>'
+        )
+    if not items:
+        return ""
+    return (
+        '<section class="latest" aria-labelledby="latest-advisories">'
+        '<h2 id="latest-advisories">Latest advisories</h2>'
+        f'<ol class="latest-list">{"".join(items)}</ol>'
+        '<p class="latest-more"><a href="alerts.html">All active alerts →</a> · '
+        '<a href="advisories/index.html">All advisories →</a></p>'
+        '</section>'
+    )
 
 
 def build_breadcrumb(page: Page, all_pages: list[Page]) -> str:
@@ -563,6 +733,7 @@ def build_page_actions(page: Page) -> str:
         gh_edit = REPO_URL
     return (
         '<div class="page-actions">'
+        f'<a href="{html.escape(page.output_path.name)}" class="page-action share">Share</a>'
         f'<a href="{md_url}" class="page-action" rel="alternate">View raw markdown</a>'
         f'<a href="{gh_edit}" class="page-action" rel="noopener">Edit on GitHub ↗</a>'
         '</div>'
@@ -702,7 +873,11 @@ def preprocess(pages: list[Page]) -> None:
             relpath_in_repo = p.source_path.relative_to(REPO_ROOT)
         except ValueError:
             relpath_in_repo = None
-        p.rendered_html = rewrite_links(rendered, relpath_in_repo, src_map)
+        rendered = rewrite_links(rendered, relpath_in_repo, src_map)
+        if p.output_path == ALERTS_OUTPUT:
+            rendered, remap = stable_alert_ids(rendered)
+            headings = [(d, remap.get(s, s), n) for d, s, n in headings]
+        p.rendered_html = add_share_links(rendered, p)
         p.toc_html = toc
         p.headings = headings
 
@@ -746,7 +921,8 @@ def render_page(page: Page, all_pages: list[Page], template: str) -> str:
         "{{META}}": meta_bar,
         "{{ACTIONS}}": actions,
         "{{TOC}}": toc,
-        "{{CONTENT}}": page.rendered_html,
+        "{{CONTENT}}": (build_home_latest(all_pages) if page.output_path == Path("index.html") else "")
+        + page.rendered_html,
         "{{BUILD_DATE}}": date.today().isoformat(),
         "{{JSONLD}}": jsonld,
         "{{SITE_URL}}": SITE_URL,

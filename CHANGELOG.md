@@ -9,6 +9,13 @@ The format is loosely based on [Keep a Changelog](https://keepachangelog.com/en/
 
 ## [Unreleased]
 
+### Added — share links and lighter pages (2026-11-17)
+
+- **Share buttons and direct links across the site.** Every page header has a Share button; every alert in the feed and every row of the advisories index has one; every section heading has a `#` link. On a phone it opens the share sheet, on a desktop it copies the link. Alert links are `alerts.html#<advisory-file-stem>`, so they keep working when an alert's title is edited.
+- **Advisory pages are 80% smaller** (195 KB → 37 KB raw). The sidebar lists the 15 newest advisories plus the current one and links the full index, instead of all ~490. The built site drops from 102 MB to 28 MB.
+- **Alerts feed is 23% smaller**: its right-rail contents list shows the section headings, not all 500+ alerts.
+- **Fewer taps on a phone.** The home page opens with the five newest advisories. Advisory pages fold the tools and tags lists so the TL;DR starts on the first screen. The advisories index shows one card per advisory below 700px instead of a four-column table.
+
 ### Changed — sweep skill restructure (2026-08-29)
 
 Prompted by two recurring failures in the automated daily sweeps: research subagents being rejected by Sonnet 5's cyber-safeguards classifier, and a Step 0 preamble that had grown past a context window.
