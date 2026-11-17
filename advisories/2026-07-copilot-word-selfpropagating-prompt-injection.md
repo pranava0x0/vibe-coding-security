@@ -53,6 +53,6 @@ This repo mostly tracks prompt injection reaching agents through code, MCP tool 
 
 ## Sources
 
-- [enklypesalt.com — Context Collapse, Part 3: AI Worming through Word](https://enklypesalt.com/posts/context-collapse-part3-ai-worming-through-word/) — primary researcher disclosure: full timeline, technique, exploitability caveats, and explicit statement that no robust mitigation exists.
+- [enklypesalt.com — Context Collapse, Part 3: AI Worming through Word](https://enklypesalt.com/posts/context-collapse-part3-ai-worming-through-word/) — primary researcher disclosure: full timeline, technique, exploitability caveats, and the statement that no full mitigation exists.
 - [The Register — Word worm crawls into Copilot, spreads chaos](https://www.theregister.com/security/2026/07/29/word_worm_crawls_into_copilot_spreads_chaos/5280588) — independent reporting confirming researcher identity, timeline, and Microsoft's official response.
 - [Malwarebytes — Hidden prompt turns Microsoft Copilot into an AI worm](https://www.malwarebytes.com/blog/ai/2026/07/hidden-microsoft-copilot-ai-worm) — independent corroboration of the technical mechanism and reproduction after Microsoft's mitigations.

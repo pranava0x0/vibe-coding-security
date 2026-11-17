@@ -1,0 +1,15 @@
+# AI-slop patterns checked by tools/slop_scan.py and tests/test_prose.py.
+# One per line: name<TAB>Python regex (case-insensitive)<TAB>what to write instead.
+# Text inside "quotes", `code` and [link text](url) is skipped, so a source's own
+# words never trip a pattern. Add a line whenever review finds a slop sentence
+# the scanner missed, with the date and the file it came from in the name.
+source-motive	\b(which (its|the|their) (post|blog|report|article) promotes|markets itself as|commercial interest|has a product to sell)\b	Cut it. Say what the source found and link it. A source's business is not a fact about the incident.
+source-interdependence	\b(draws? on each other|draw on the same|cite each other)\b	Cut it, or name the one shared primary source and link it.
+file-meta	\b(this is this file's|this file's (note|reading|inference|view)|not the sources')	State the fact. If it is inferred, write "No source says X" or "inferred from Y".
+worth-noting	\b(worth noting|it'?s important to note|it is important to note|notably,|interestingly,)	Cut the opener and state the fact.
+filler-verbs	\b(underscores (the|that|how|a|an|its|why)|underscoring|highlights the need|serves as a reminder|stark reminder|sheds light)\b	Cut it. State the fact the sentence is propping up.
+filler-adjectives	\b(robust|seamless(ly)?|cutting-edge|game-?changing|groundbreaking|ever-evolving|landscape of)\b	Use the concrete property, or cut it.
+ai-verbs	\b(delves?|delving|leverag(e|es|ing) (the|a|an|its|their))\b	Use "uses", "reads", "looks at".
+not-just-but	\bnot (just|only|merely) [^.;]{1,80}? but\b	Say the second thing on its own.
+relative-date	\b(in today's|today's (three|two|four|release|releases|batch)|earlier this (week|month)|(?<!\d )(?<!the )last week|yesterday)\b	Write the YYYY-MM-DD date.
+closing-moral	\b(the lesson (here )?is|the takeaway is|key takeaways?|in conclusion|the bottom line)\b	Cut it. End on the last fact or action.

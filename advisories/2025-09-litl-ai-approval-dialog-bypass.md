@@ -42,7 +42,7 @@ As a result, **neither tool has a structural fix as of June 2026**. The attack r
 
 LITL compounds **any** indirect prompt injection finding. If attacker-controlled text can reach the agent's context — via a poisoned README, a malicious MCP tool response ([Agentjacking](2026-06-agentjacking-sentry-mcp-injection.md)), a GitHub issue, or fetched web content — LITL can then manipulate the approval dialog to make dangerous commands appear safe. The combination means:
 
-- Even when `--dangerously-skip-permissions` is NOT set, approval dialogs do not provide robust protection.
+- Even when `--dangerously-skip-permissions` is NOT set, approval dialogs can be spoofed and do not protect you.
 - The LITL attack is particularly dangerous in agentic pipelines where the agent processes external content (issues, PRs, web pages, MCP data) before making tool calls.
 - Removing the approval dialog (via `--dangerously-skip-permissions`) eliminates LITL as an attack surface, but also removes all human oversight — a tradeoff that helps attackers in the opposite direction.
 

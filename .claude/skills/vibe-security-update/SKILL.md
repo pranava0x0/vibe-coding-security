@@ -402,6 +402,7 @@ For every **NEW** advisory:
   - 🟠 recent = last 12 months
   - 🟡 historical = older OR pattern-class
   - Maintain latest-on-top within each tier.
+  - Entry body: at most 3 sentences and 50 words. Sentence 1 is what is affected and what an attacker gets. The last sentence is the action. At least one inline link to the primary source sits in the sentence it supports; the `→` line to the advisory stays. Detail belongs in the advisory. `tests/test_prose.py` fails the gate on a longer or uncited entry dated on or after 2026-11-17.
 - **advisories/README.md** — add one new row: `| date_disclosed | [title](filename.md) | severity | status |`. Match the frontmatter's `date_disclosed`, `severity`, and `status` fields exactly — don't hand-write a different date or severity than what's in the advisory file itself.
 
 For every **UPDATED** advisory whose `severity` or `status` changed (e.g. `patched` → `active` after a KEV escalation, or a severity bump after a new CVSS score lands):
@@ -507,6 +508,7 @@ python tools/validate_cve_evidence.py --live
 ```bash
 python tools/update-alerts-date.py  # ensure ALERTS.md date is current
 python tools/sweep_context.py       # refresh advisory-index.jsonl + source-priorities.top.json
+python tools/slop_scan.py           # AI-slop patterns + style on files changed vs main; fix every hit
 python site/build.py        # must succeed
 python site/validate.py     # must print "All checks passed."
 python -m pytest tests/ -q  # must be all-green (matches the deploy's `pytest tests/ -v`)
@@ -519,6 +521,8 @@ If any step fails, **fix it before committing** (or revert the offending advisor
 - **llms.txt size caps** (`tests/test_llms.py`) no longer need hand-tuning — `build.py` binary-searches the largest Tier-1 membership that fits each budget (`_fit_tier1_max`), so a build cannot exceed one by construction. If a cap test fails now it means something real: either the fitter was unwired, or even `TIER1_FLOOR` no longer fits. The fix is to **triage stale `status: active`/`ongoing` advisories back to `patched`/`historical`** — each one is a mandatory Tier-1 entry regardless of age — never to raise a cap or reintroduce a hardcoded membership constant.
 - **`status` enum** — valid values are `active | contained | patched | mitigated | ongoing | historical | unconfirmed` (use `unconfirmed` for single-source incidents).
 - **`GHSA-` as a literal prose prefix (not a real id) trips the malformed-id gate as a false positive.** `test_ghsa_ids_well_formed` regex-matches any `GHSA-xxxxx` token in advisory text, including inside ordinary prose like a heading that says "found via a direct GHSA-index page-walk" (the token `GHSA-index` matches the pattern's prefix and gets flagged as a malformed id, exactly as if it were fabricated). This surfaced 2026-08-18 in a heading describing the *process* of walking a vendor's own GHSA advisory list, not citing an actual GHSA id. Fix is always to reword the prose (e.g. "advisory list" or "advisory index" instead of "GHSA-index") — never to weaken the regex or add an exception, since the check's whole purpose is catching exactly this shape of near-miss. When writing about the GHSA *system* generically (not citing a specific id), avoid starting a hyphenated compound with the literal string `GHSA-`.
+
+**Slop loop (every run).** `tools/slop_scan.py` reads `tools/slop_patterns.tsv`; `tests/test_prose.py` fails the gate on any pattern hit in the corpus and on style hits in advisories disclosed on or after 2026-11-17. Before committing, reread each new TL;DR and `ALERTS.md` entry for slop the list missed: asides about a source's motives or business, notes about this file's own reasoning, openers, morals, and sentences that pack two facts. For each one found, rewrite it and add a pattern line to `tools/slop_patterns.tsv` in the same commit, then run `python tools/slop_scan.py --all` and fix any older file the new pattern catches. Append each before/after pair to [`references/slop-examples.md`](references/slop-examples.md), and read that file before writing any prose. Name the added patterns in the run log.
 
 Then the lightweight checks: frontmatter complete on new files; `ALERTS.md` parses; `advisories/README.md` has a row per advisory; no secret/PII pasted in.
 
@@ -584,7 +588,11 @@ These apply to advisories, `ALERTS.md` entries, README rows, run-log notes, PR d
 
 - **Lead with the fact.** First sentence: product, affected range, what an attacker gets, fixed version or "no fix". No scene-setting.
 - **Titles are one line.** `title:` and `ALERTS.md` headings carry one claim in at most 25 words: product, flaw, id, fix. The detail belongs in the TL;DR. Recent titles ran past 60 words and repeated the TL;DR. `tests/test_refusal_fallback.py` fails the gate on a title over 25 words for any advisory disclosed on or after 2026-10-10; count before writing, and change the ALERTS heading and README row with it.
-- **Plain sentences.** One idea per sentence. No em-dash chains; use a full stop or a comma. No semicolons joining clauses. No parentheses holding a second sentence.
+- **Short.** At most 35 words a sentence. A TL;DR is at most five sentences. Cut a sentence that does not change what the reader checks or does.
+- **Plain sentences.** One idea per sentence. No em-dashes. Use a full stop or a comma. No semicolons joining clauses. No parentheses holding a second sentence.
+- **Cite inline.** Put the link in the sentence it supports: "[Report URI](url) found the code in 188 snippets." The TL;DR carries at least one inline link to the primary source. `## Sources` stays as the full list.
+- **Quote social posts as cards.** When an X, Bluesky, Mastodon or Threads post is a source, quote it as a blockquote whose last line links the post: `> text` / `>` / `> [@handle on X, YYYY-MM-DD](https://x.com/handle/status/ID)`. The build renders it as a post card with no third-party script. Quote the post exactly and keep it short. Never embed the platform's widget script.
+- **Facts about the incident, not about the sources.** No asides on a source's business, motives or independence ("X sells monitoring, which its post promotes", "the reports draw on each other"). No notes about this file's own reasoning ("this is this file's note"). If something is inferred, write "No source says X". Conflicts between sources stay, as two dated facts.
 - **No filler.** Cut "it's important to note", "in today's landscape", "a stark reminder", "underscores", "highlights the need", "robust", "seamless", "cutting-edge", "game-changing", "delve", "leverage" as a verb, and the "not just X but Y" shape. No rhetorical questions, no closing morals.
 - **No decoration.** No emoji outside the three tier headers in `ALERTS.md`. No bold on whole sentences. No "Key takeaways" or "Conclusion" sections.
 - **Numbers and ids stay exact.** Dates as `YYYY-MM-DD`. Versions, CVE and GHSA ids as the source prints them. No rounding words where the source gave a number.

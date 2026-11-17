@@ -20,7 +20,7 @@ Both bugs affect **every Cargo shipped before Rust 1.96.0**. **crates.io users a
 
 ## Why this is in scope for a vibe-coding feed
 
-We added Crates.io / Rust to the cross-ecosystem rotation last week after [TrapDoor](2026-05-trapdoor-cross-ecosystem-stealer.md) showed an actor running npm + PyPI + Crates.io in a single coordinated wave. CVE-2026-5223 is the **first Cargo-itself bug in this repo**, and it's the kind of primitive future TrapDoor-style attackers will compose with: drop a malicious crate that overwrites another crate's source in the *same* enterprise registry, then wait for a CI build to pick up the substituted code. It's a generalizable lesson: **build systems treat archive-extraction as plumbing, but every archive primitive — symlinks, ZIP slip, path traversal — is a supply-chain primitive in disguise.**
+We added Crates.io / Rust to the cross-ecosystem rotation in May 2026 after [TrapDoor](2026-05-trapdoor-cross-ecosystem-stealer.md) showed an actor running npm + PyPI + Crates.io in a single coordinated wave. CVE-2026-5223 is the **first Cargo-itself bug in this repo**, and it's the kind of primitive future TrapDoor-style attackers will compose with: drop a malicious crate that overwrites another crate's source in the *same* enterprise registry, then wait for a CI build to pick up the substituted code. It's a generalizable lesson: **build systems treat archive-extraction as plumbing, but every archive primitive — symlinks, ZIP slip, path traversal — is a supply-chain primitive in disguise.**
 
 ## What happened
 
