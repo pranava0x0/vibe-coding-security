@@ -2,9 +2,9 @@
 id: 2026-11-bitrise-security-incident-internal-system-access-all-services-offline-rotate-secrets
 title: "Bitrise security incident: unauthorized access to an internal system, all services taken offline on 2026-11-13; rotate secrets, access tokens and certificates"
 date_disclosed: 2026-11-13
-last_updated: 2026-11-16
+last_updated: 2026-11-17
 severity: high
-status: active
+status: contained
 ecosystems: [bitrise, ci-cd, mobile, saas, github, code-signing]
 tools_affected: ["Bitrise CI/CD (app.bitrise.io), all users", "Git provider credentials and access tokens connected to Bitrise", "secrets and environment variables stored in Bitrise apps and workspaces", "code-signing certificates and provisioning profiles uploaded to Bitrise", "mobile apps built by coding agents and shipped through Bitrise pipelines"]
 tags: [breach, vendor-incident, bitrise, ci-cd, mobile, code-signing, secrets, credential-rotation, outage, investigation-ongoing]
@@ -72,6 +72,17 @@ The incident page was re-read on 2026-11-16 at about 15:30 UTC. Its newest updat
 
 The page still gives no cause and no post-mortem date. `status` stays `active`. If Bitrise has not contacted you, that is not a statement that you are unaffected. Rotate anyway.
 
+## Update 2026-11-17: Bitrise closes the incident, says the platform is safe to use, and keeps the rotation advice; forensic investigation continues
+
+Bitrise marked the [status incident](https://status.bitrise.io/incidents/7055z4g9nbck) resolved on 2026-11-17 at 09:53 UTC. The closing update says "The immediate security risks have been addressed, and we consider Bitrise safe to use." The page held 59 updates when read, counted in code from the page's JSON.
+
+- Bitrise says it rotated all internal credentials, secrets and keys, and "revoked all potentially affected access tokens and sessions".
+- It says it rebuilt its build infrastructure "from scratch across all data centers" and reviewed every service before bringing it back.
+- It still recommends "rotating any secrets and credentials connected to Bitrise" and points to the Protected Secret Masked Review feature.
+- It says "We are now in the state of forensic investigation" and that further updates will appear in a follow-up status entry.
+
+The closing update does not say what the intruder accessed or how. `status` moves from `active` to `contained` on the vendor's "safe to use" sentence. The resolved state of the status page is not the end of the investigation.
+
 ## Sources
 
 Single source: the vendor.
@@ -81,3 +92,4 @@ Single source: the vendor.
 - Not covered: the incident's own URL, Bitrise's blog and trust centre, and any customer email.
 - [Bitrise status](https://status.bitrise.io), re-read 2026-11-15: 18 further updates from 2026-11-14 16:05 UTC to 2026-11-15 14:23 UTC, the incident still unresolved. The count of 18 was made in code from the page's timestamps. Only the 20:35 sentence is quoted.
 - [Bitrise status: Security Incident](https://status.bitrise.io/incidents/7055z4g9nbck), re-read 2026-11-16 with `curl`: the 13:23 UTC and 12:45 UTC updates quoted above.
+- [Bitrise status: Security Incident](https://status.bitrise.io/incidents/7055z4g9nbck), re-read 2026-11-17 through the page's JSON: the resolved state, the 09:53 UTC closing update and the count of 59 updates.

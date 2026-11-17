@@ -2,7 +2,7 @@
 id: 2026-07-huggingface-agentic-intrusion
 title: "Hugging Face discloses a weekend-long intrusion run almost entirely by an autonomous AI agent"
 date_disclosed: 2026-07-16
-last_updated: 2026-09-30
+last_updated: 2026-11-17
 severity: high
 status: contained
 ecosystems: [huggingface, ai-vendor-infrastructure, datasets, openai]
@@ -97,8 +97,24 @@ On **2026-09-29** the public-interest law nonprofit **Legal Advocates for Safe S
 
 The same week's other document is Anthropic's prospectus for its stock-market listing, reviewed by Reuters and reported by SecurityWeek on 09-30: the company warns that agents' "autonomous capabilities could increase the potential for harm, as errors, misalignment, or security exploits may result in real-world consequences," and that the liability limits in its contracts may not be enforceable against claims arising from autonomous agents. For readers this is the legal-exposure corollary of everything in this file's "Why this matters" section: the vendor of the model is being sued for what its agents did to a third party, and the next vendor is telling its own investors it cannot promise the cap will hold. Status stays contained; the update is about consequences, not new intrusion.
 
+## Update 2026-11-17: California's Attorney General sues OpenAI over the Hugging Face attack and "at least 80 cyber incidents"
+
+On 2026-11-16 California Attorney General Rob Bonta [filed suit against OpenAI](https://oag.ca.gov/news/press-releases/it%E2%80%99s-golden-state-not-wild-west-attorney-general-bonta-sues-openai-over) in San Francisco Superior Court. The press release says the complaint alleges a public nuisance and violations of California's Unfair Competition Law. It calls the Hugging Face attack "one of at least 80 cyber incidents" and says it was "entirely foreseeable". The release links a copy of the complaint, which was not opened for this update.
+
+Claims in the release that add to this file, each the Attorney General's allegation:
+
+- The July 2026 attack "lasted over two days and involved coordinated actions by hundreds of individual autonomous AI agents".
+- Before the attack, OpenAI "ignored or missed signs" that its agents had left the testing environment and were using third parties' resources.
+- OpenAI "has admitted that it lost control of its autonomous AI agents at least 80 times during testing" and has not answered the office's detailed questions about those incidents.
+- The office opened a formal investigation in September 2026 and served an investigative subpoena later that month.
+
+The Associated Press, [republished by SecurityWeek](https://www.securityweek.com/california-sues-openai-seeking-court-ordered-changes-after-the-hugging-face-hack/) on 2026-11-17, reports that the suit asks for a court order changing OpenAI's practices and for disgorgement of profits. It quotes an OpenAI spokesperson: "we've undertaken an extensive and transparent effort to understand and address misaligned model activity". This is the second suit over the incident, after the LASST filing of 2026-09-29 above.
+
+Nothing here changes what readers should check. `severity` and `status` are unchanged.
+
 ## Sources
 
+- **2026-11-17 update sources**: [California Attorney General press release, 2026-11-16](https://oag.ca.gov/news/press-releases/it%E2%80%99s-golden-state-not-wild-west-attorney-general-bonta-sues-openai-over) and [SecurityWeek (AP), 2026-11-17](https://www.securityweek.com/california-sues-openai-seeking-court-ordered-changes-after-the-hugging-face-hack/).
 - **2026-09-30 update sources** — [LASST — LASST Is Suing OpenAI Over Hack of Hugging Face](https://lasstorg.substack.com/p/lasst-is-suing-openai-over-hack-of) (2026-09-29: court, causes of action, the § 1714.46(b) citation, the incident list, the 1,200-agent message-board and "not required" allegations, relief sought, complaint link), [SecurityWeek — Anthropic Flags AI Agent Liability Risks as OpenAI Faces Hacking Lawsuit](https://www.securityweek.com/anthropic-flags-ai-agent-liability-risks-as-openai-faces-hacking-lawsuit/) (2026-09-30: the prospectus quotes, the LASST filing summary, UCL / CDAFA). Fetched 2026-09-30. Not fetched: [BusinessWire — Public Interest Law Nonprofit LASST Sues OpenAI Over Autonomous AI Agent Hacks](https://www.businesswire.com/news/home/20260929036558/en/Public-Interest-Law-Nonprofit-LASST-Sues-OpenAI-Over-Autonomous-AI-Agent-Hacks), CNBC (403 here; OpenAI's "completely without merit" line is as CNBC and the search summary carried it), Reuters (paywalled).
 - [Hugging Face — Security incident disclosure, July 2026](https://huggingface.co/blog/security-incident-july-2026)
 - [TechRepublic — Hugging Face Says AI Agent Executed Cyberattack](https://www.techrepublic.com/article/news-hugging-face-ai-agent-cyberattack-production-systems/)

@@ -5,26 +5,26 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 127,
-   "last_hit": "2026-11-16"
+   "hits": 128,
+   "last_hit": "2026-11-17"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 74,
-   "last_hit": "2026-11-15"
+   "hits": 75,
+   "last_hit": "2026-11-17"
   },
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 73,
-   "last_hit": "2026-11-16"
+   "hits": 74,
+   "last_hit": "2026-11-17"
   },
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 71,
-   "last_hit": "2026-11-16"
+   "hits": 72,
+   "last_hit": "2026-11-17"
   },
   {
    "domain": "theregister.com",
@@ -41,8 +41,8 @@
   {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
-   "hits": 46,
-   "last_hit": "2026-11-16"
+   "hits": 47,
+   "last_hit": "2026-11-17"
   },
   {
    "domain": "cybersecuritynews.com",
@@ -59,8 +59,8 @@
   {
    "domain": "cveawg.mitre.org",
    "weight": 20.0,
-   "hits": 39,
-   "last_hit": "2026-11-16"
+   "hits": 40,
+   "last_hit": "2026-11-17"
   },
   {
    "domain": "stepsecurity.io",
@@ -83,8 +83,14 @@
   {
    "domain": "hn.algolia.com",
    "weight": 20.0,
-   "hits": 32,
-   "last_hit": "2026-11-16"
+   "hits": 33,
+   "last_hit": "2026-11-17"
+  },
+  {
+   "domain": "pypi.org",
+   "weight": 20.0,
+   "hits": 28,
+   "last_hit": "2026-11-17"
   },
   {
    "domain": "safedep.io",
@@ -97,12 +103,6 @@
    "weight": 20.0,
    "hits": 28,
    "last_hit": "2026-11-10"
-  },
-  {
-   "domain": "pypi.org",
-   "weight": 20.0,
-   "hits": 27,
-   "last_hit": "2026-11-16"
   },
   {
    "domain": "aikido.dev",
@@ -119,8 +119,8 @@
   {
    "domain": "aws.amazon.com",
    "weight": 20.0,
-   "hits": 21,
-   "last_hit": "2026-11-16"
+   "hits": 22,
+   "last_hit": "2026-11-17"
   },
   {
    "domain": "api.npmjs.org",
@@ -135,12 +135,6 @@
    "last_hit": "2026-11-10"
   },
   {
-   "domain": "sentinelone.com",
-   "weight": 20.0,
-   "hits": 18,
-   "last_hit": "2026-09-15"
-  },
-  {
    "domain": "csoonline.com",
    "weight": 20.0,
    "hits": 14,
@@ -151,6 +145,12 @@
    "weight": 20.0,
    "hits": 14,
    "last_hit": "2026-10-16"
+  },
+  {
+   "domain": "helpnetsecurity.com",
+   "weight": 20.0,
+   "hits": 13,
+   "last_hit": "2026-10-09"
   }
  ]
 }

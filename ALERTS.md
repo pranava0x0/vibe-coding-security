@@ -2,7 +2,7 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-11-16. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-11-17. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
@@ -11,6 +11,14 @@
 ### 2026-11-16 — **Optimizely Web: malicious Project JavaScript served a crypto address swapper, card skimmer and iOS exploit loaders to 178 organisations' visitors on 2026-11-16; cause unknown**
 [Report URI](https://blog.report-uri.com/worlds-largest-brands-infected-with-malware-via-optimizely/) found attacker code in 188 Optimizely Web Project JavaScript snippets from 178 organisations, swapping crypto addresses and skimming cards. Audit every project's Project JavaScript and rotate Optimizely credentials. Update iOS to 18.7.3 or 26.3.
 → [advisories/2026-11-optimizely-web-project-javascript-injection-crypto-clipper-card-skimmer-ios-exploit-loaders.md](advisories/2026-11-optimizely-web-project-javascript-injection-crypto-clipper-card-skimmer-ios-exploit-loaders.md)
+
+### 2026-11-16 — **MCP server CVEs, 2026-11-16: awslabs Timestream for InfluxDB token leak, AWS Pricing file write, Kubeshark, code-review-mcp-server; all fixed**
+[AWS bulletin 2026-185](https://aws.amazon.com/security/security-bulletins/2026-185-aws/) says awslabs.timestream-for-influxdb-mcp-server before 0.0.19 can send its InfluxDB token to a URL in the agent's context. Upgrade it and rotate the token. Also upgrade awslabs.aws-pricing-mcp-server to 1.0.31, Kubeshark to 53.4.0 and code-review-mcp-server to 1.5.3.
+→ [advisories/2026-11-mcp-server-cves-november-16-awslabs-timestream-influxdb-token-leak-pricing-file-write-kubeshark-code-review-mcp.md](advisories/2026-11-mcp-server-cves-november-16-awslabs-timestream-influxdb-token-leak-pricing-file-write-kubeshark-code-review-mcp.md)
+
+### 2026-11-16 — **Contabo: unauthorized access to internal infrastructure on 2026-11-13 and 11-14, all VNC passwords reset; investigation ongoing**
+[Contabo](https://help.contabo.com/en/support/solutions/articles/103000426255-potential-security-incident-of-14-november) says a third party reached part of its internal infrastructure from 2026-11-13 15:29 to 2026-11-14 11:28 CET, and it reset all VNC passwords. Set a new VNC password and review server logins for that window.
+→ [advisories/2026-11-contabo-unauthorized-access-internal-infrastructure-vnc-passwords-reset-investigation-ongoing.md](advisories/2026-11-contabo-unauthorized-access-internal-infrastructure-vnc-passwords-reset-investigation-ongoing.md)
 
 ### 2026-11-16 — **Compromised @wppconnect-team/wppconnect 2.4.1 and @wppconnect/server 2.10.82: pin 2.4.0 and 2.10.81, rotate secrets and WhatsApp sessions**
 [SafeDep](https://safedep.io/blog/wppconnect-npm-whatsapp-session-stealer.md) reports npm releases @wppconnect-team/wppconnect 2.4.1 and @wppconnect/server 2.10.82 are compromised. Pin 2.4.0 and 2.10.81. If either ran, rotate the environment's secrets and re-link its WhatsApp sessions.
@@ -29,7 +37,7 @@
 → [advisories/2026-11-cursor-security-incident-fireworks-issued-key-agent-traces-credentials-exposed-marketplace-cache.md](advisories/2026-11-cursor-security-incident-fireworks-issued-key-agent-traces-credentials-exposed-marketplace-cache.md)
 
 ### 2026-11-13 — **Bitrise security incident: unauthorized access to an internal system, all services taken offline on 2026-11-13; rotate secrets, access tokens and certificates**
-[Bitrise](https://status.bitrise.io/incidents/7055z4g9nbck) detected unauthorized access to an internal system on 2026-11-13 and took all services offline. Rotate Git credentials now, and secrets, access tokens and certificates once sign-in is back.
+[Bitrise](https://status.bitrise.io/incidents/7055z4g9nbck) detected unauthorized access to internal systems on 2026-11-13 and took all services offline. It closed the incident on 2026-11-17 and says the platform is safe to use. Rotate secrets, access tokens and certificates connected to Bitrise.
 → [advisories/2026-11-bitrise-security-incident-internal-system-access-all-services-offline-rotate-secrets.md](advisories/2026-11-bitrise-security-incident-internal-system-access-all-services-offline-rotate-secrets.md)
 
 ### 2026-11-13 — **agent-device 0.21.36: a remote caller with a daemon token can read host files through `file://` navigation (CVE-2026-129130); upgrade to 0.21.37**
@@ -172,6 +180,10 @@ SurrealDB's [advisories tab](https://github.com/surrealdb/surrealdb/security/adv
 [SafeDep](https://safedep.io/blog/antd-img-crop-forged-commit-overlord-stealer.md) reports a forged commit force-pushed to the `nanxiaobei/antd-img-crop` GitHub repository on 2026-10-31. The npm package, ending at 4.30.0, is clean. If you cloned, forked or installed from GitHub after that date, rotate browser, SSH, `.env`, `.npmrc`, keychain and wallet credentials.
 → [advisories/2026-11-antd-img-crop-github-repository-forged-commit-do-not-install-from-git-npm-clean.md](advisories/2026-11-antd-img-crop-github-repository-forged-commit-do-not-install-from-git-npm-clean.md)
 
+### 2026-11-02 — **Nuxt: eight advisories on 2026-11-02, route-rule bypasses and server error details sent to clients; fixed in 4.6.4, no fix for Nuxt 3**
+[Nuxt](https://github.com/nuxt/nuxt/security/advisories) 4 before 4.6.4 lets a request skip route rules and path-based server middleware, and sends server error details to clients. Upgrade to 4.6.4. Nuxt 3 is end of life and gets no fix, so move to Nuxt 4 or apply the advisories' workarounds.
+→ [advisories/2026-11-nuxt-4-6-4-eight-advisories-route-rule-bypass-error-detail-leak-nuxt-3-end-of-life-no-fix.md](advisories/2026-11-nuxt-4-6-4-eight-advisories-route-rule-bypass-error-detail-leak-nuxt-3-end-of-life-no-fix.md)
+
 ### 2026-11-02 — **Crissy Field study: 24,664 Lovable-built sites returned Supabase records without login; 7,403 held tables with email addresses**
 [Crissy Field](https://www.crissyfield.de/research/lovable-en/) sampled 159,041 Lovable projects and found 24,664 returned Supabase records to any visitor, 7,403 with email addresses. The firm says the 30% figure is not a leak rate. Load your app signed out and check Row Level Security on every table.
 → [advisories/2026-11-lovable-apps-supabase-records-readable-without-login-crissy-field-common-crawl-study.md](advisories/2026-11-lovable-apps-supabase-records-readable-without-login-crissy-field-common-crawl-study.md)
@@ -223,6 +235,10 @@ Issue #154 (2026-10-30, nedlir) and VulnCheck's CVE-2026-120202 (10-31, 7.1): ra
 ### 2026-10-30 — **LM Studio before 0.4.22 Build 1: a crafted model repository's filenames write outside the models folder and plant a plugin that runs on every launch (CVE-2026-119979, 8.7)**
 VulnCheck's CVE-2026-119979 (10-30, credit Ariel Fogel of Pillar Security): the model downloader's `resolveDownloadRequest` accepted backslash traversal, so a model repository the user downloads can plant a plugin `manifest.json`, `install-state.json` and `mcp-bridge-config.json` and run attacker Python at each start. Fixed in 0.4.22 Build 1 (2026-08-28) with release notes that say nothing about it; current release 0.4.28. Update, and review installed plugins if an old build downloaded a model from a publisher you do not know.
 → [advisories/2026-10-lm-studio-model-downloader-path-traversal-plugin-code-execution-cve-2026-119979-fixed-0-4-22.md](advisories/2026-10-lm-studio-model-downloader-path-traversal-plugin-code-execution-cve-2026-119979-fixed-0-4-22.md)
+
+### 2026-10-29 — **SvelteKit: eight advisories on 2026-10-29, server secrets in the client bundle (CVE-2026-128118); fixed in 3.1.1, part-fixed in 2.70.4**
+[SvelteKit](https://github.com/sveltejs/kit/security/advisories/GHSA-m9j8-jcmv-hp69) 3.0.0 through 3.1.0 could put server-only imports made through `src/params.js` into the client bundle. Upgrade to 3.1.1 and the fixed adapters. On 2.x, 2.70.4 does not fix the two remote-function advisories.
+→ [advisories/2026-10-sveltekit-october-29-eight-advisories-server-secrets-in-client-bundle-fixed-3-1-1-2-70-4.md](advisories/2026-10-sveltekit-october-29-eight-advisories-server-secrets-in-client-bundle-fixed-3-1-1-2-70-4.md)
 
 ### 2026-10-29 — **Malicious SolanaUpdateTools/solana-starter-kit GitHub repository reached agents through search ranking (SolanaCry): remove the implant and rotate wallet keys**
 AIR Security (2026-10-29) showed a coding agent asked to build a Solana project selecting the top-ranked `SolanaUpdateTools/solana-starter-kit` repository (created 2025-11, 286 stars) and running its README's only install step without the developer approving it; on Windows the step leaves a hidden `%LOCALAPPDATA%` folder of NetSupport Manager components and a `SecureModule` Run value. The repository returned 404 on 2026-11-05. Check the folder and the Run value, remove them, and rotate wallet keys and every credential on the machine. `unconfirmed`: one firm, The Hacker News roundup is pickup.
