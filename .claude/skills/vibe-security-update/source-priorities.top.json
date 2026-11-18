@@ -5,14 +5,14 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 128,
-   "last_hit": "2026-11-17"
+   "hits": 129,
+   "last_hit": "2026-11-18"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 75,
-   "last_hit": "2026-11-17"
+   "hits": 76,
+   "last_hit": "2026-11-18"
   },
   {
    "domain": "securityweek.com",
@@ -23,8 +23,8 @@
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 72,
-   "last_hit": "2026-11-17"
+   "hits": 73,
+   "last_hit": "2026-11-18"
   },
   {
    "domain": "theregister.com",
@@ -41,8 +41,8 @@
   {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
-   "hits": 47,
-   "last_hit": "2026-11-17"
+   "hits": 48,
+   "last_hit": "2026-11-18"
   },
   {
    "domain": "cybersecuritynews.com",
@@ -53,14 +53,14 @@
   {
    "domain": "vulncheck.com",
    "weight": 20.0,
-   "hits": 41,
-   "last_hit": "2026-11-10"
+   "hits": 42,
+   "last_hit": "2026-11-18"
   },
   {
    "domain": "cveawg.mitre.org",
    "weight": 20.0,
-   "hits": 40,
-   "last_hit": "2026-11-17"
+   "hits": 41,
+   "last_hit": "2026-11-18"
   },
   {
    "domain": "stepsecurity.io",
@@ -71,8 +71,14 @@
   {
    "domain": "socket.dev",
    "weight": 20.0,
+   "hits": 35,
+   "last_hit": "2026-11-18"
+  },
+  {
+   "domain": "hn.algolia.com",
+   "weight": 20.0,
    "hits": 34,
-   "last_hit": "2026-11-10"
+   "last_hit": "2026-11-18"
   },
   {
    "domain": "bleepingcomputer.com",
@@ -81,22 +87,16 @@
    "last_hit": "2026-10-26"
   },
   {
-   "domain": "hn.algolia.com",
-   "weight": 20.0,
-   "hits": 33,
-   "last_hit": "2026-11-17"
-  },
-  {
    "domain": "pypi.org",
    "weight": 20.0,
-   "hits": 28,
-   "last_hit": "2026-11-17"
+   "hits": 29,
+   "last_hit": "2026-11-18"
   },
   {
    "domain": "safedep.io",
    "weight": 20.0,
-   "hits": 28,
-   "last_hit": "2026-11-16"
+   "hits": 29,
+   "last_hit": "2026-11-18"
   },
   {
    "domain": "cisa.gov",
@@ -107,8 +107,8 @@
   {
    "domain": "aikido.dev",
    "weight": 20.0,
-   "hits": 25,
-   "last_hit": "2026-11-12"
+   "hits": 26,
+   "last_hit": "2026-11-18"
   },
   {
    "domain": "advisories.gitlab.com",
@@ -123,16 +123,16 @@
    "last_hit": "2026-11-17"
   },
   {
+   "domain": "wiz.io",
+   "weight": 20.0,
+   "hits": 21,
+   "last_hit": "2026-11-18"
+  },
+  {
    "domain": "api.npmjs.org",
    "weight": 20.0,
    "hits": 20,
    "last_hit": "2026-11-14"
-  },
-  {
-   "domain": "wiz.io",
-   "weight": 20.0,
-   "hits": 20,
-   "last_hit": "2026-11-10"
   },
   {
    "domain": "csoonline.com",
