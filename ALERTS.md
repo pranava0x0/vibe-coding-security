@@ -2,11 +2,23 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-11-17. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-11-18. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-11-18 — **bunny.net: unauthorized SSH keys added to a CDN node through a hosting provider; TLS certificates reissued, replace custom certificates**
+[bunny.net](https://status.bunny.net/incidents/80vrzxmcs7s5) says unauthorized SSH keys were added to a CDN node through a hosting provider, and cached content, Pull Zone configurations and TLS certificates may have been copied. If you uploaded your own certificate, replace it with a new key and revoke the old one.
+→ [advisories/2026-11-bunny-net-infrastructure-provider-unauthorized-access-cdn-node-ssh-keys-tls-certificates-reissued.md](advisories/2026-11-bunny-net-infrastructure-provider-unauthorized-access-cdn-node-ssh-keys-tls-certificates-reissued.md)
+
+### 2026-11-17 — **Flowise 3.1.3 and 3.1.4 leak MCP server tokens without login (CVE-2026-130796); project archived, no fix. Also Supergateway, NocoDB, HyperFrames**
+[CVE-2026-130796](https://cveawg.mitre.org/api/cve/CVE-2026-130796) says Flowise 3.1.3 and 3.1.4 return MCP server tokens from a public chatflow endpoint without login. Flowise is end of life and has no fix. Take it off the public internet, rotate the tokens and plan a move.
+→ [advisories/2026-11-flowise-cve-2026-130796-mcp-server-token-disclosure-no-fix-project-archived-supergateway-nocodb-hyperframes.md](advisories/2026-11-flowise-cve-2026-130796-mcp-server-token-disclosure-no-fix-project-archived-supergateway-nocodb-hyperframes.md)
+
+### 2026-11-16 — **GitLab 19.5.6, 19.4.8 and 19.3.9 fix 37 CVEs: protected CI/CD variable race, Kubernetes Secrets read, ten Duo and MCP authorization bugs**
+[GitLab's 2026-11-16 patch release](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-5-6-released/) fixes 37 CVEs, including a race that exposes protected CI/CD variables (CVE-2026-18241) and an MCP token bug that allows merges. Upgrade self-managed GitLab to 19.5.6, 19.4.8 or 19.3.9.
+→ [advisories/2026-11-gitlab-19-5-6-patch-release-37-cves-protected-ci-variables-race-duo-agent-platform-mcp-token.md](advisories/2026-11-gitlab-19-5-6-patch-release-37-cves-protected-ci-variables-race-duo-agent-platform-mcp-token.md)
 
 ### 2026-11-16 — **Optimizely Web: injected Project JavaScript reached 178 organisations' visitors on 2026-11-16; Optimizely says an Experimentation vulnerability was exploited and is fixed**
 [Optimizely](https://status.optimizely.com/incidents/ftw0fh9wx43z) says an attacker exploited a vulnerability in Experimentation to add malicious JavaScript to customer projects, and that it is fixed. [Report URI](https://blog.report-uri.com/worlds-largest-brands-infected-with-malware-via-optimizely/) found the code in 188 snippets from 178 organisations. Audit every project's Project JavaScript and rotate Optimizely credentials.
@@ -107,6 +119,10 @@
 ### 2026-11-10 — **VS Code 1.145.3 fixes 19 CVEs (MCP server links, Workspace Trust bypasses); Aspire 13.6.5 and MCP Gateway also patched (2026-11-10)**
 [Microsoft](https://api.msrc.microsoft.com/cvrf/v3.0/cvrf/2026-Nov) fixed 19 CVEs in Visual Studio Code 1.145.3 on 2026-11-10, including remote MCP server code execution (CVE-2026-120779, 9.6). Update VS Code to 1.145.3 and Aspire to 13.6.5.
 → [advisories/2026-11-microsoft-november-patch-tuesday-vs-code-1-145-3-nineteen-cves-mcp-install-workspace-trust-aspire-mcp-gateway.md](advisories/2026-11-microsoft-november-patch-tuesday-vs-code-1-145-3-nineteen-cves-mcp-install-workspace-trust-aspire-mcp-gateway.md)
+
+### 2026-11-09 — **Arize Phoenix 13.0.0 to before 15.7.0: unauthenticated read of server environment and PHOENIX_SECRET (CVE-2026-53998, CVSS 10.0); fixed in 15.7.0**
+[Arize Phoenix](https://github.com/Arize-ai/phoenix/security/advisories/GHSA-gfv3-m769-5xm3) 13.0.0 to before 15.7.0 lets anyone who can reach the server read its environment, including PHOENIX_SECRET, with no login on a default install. Upgrade to 15.7.0 or later, then change PHOENIX_SECRET and stored provider keys.
+→ [advisories/2026-11-arize-phoenix-cve-2026-53998-unauthenticated-format-string-secret-read-fixed-15-7-0.md](advisories/2026-11-arize-phoenix-cve-2026-53998-unauthenticated-format-string-secret-read-fixed-15-7-0.md)
 
 ### 2026-11-09 — **NEAR AI: SGLang code-execution flaw used to breach an inference server (reported 2026-11-09); no CVE, no SGLang advisory or fixed version named**
 [NEAR AI](https://near.ai/blog/security-incident-report-sglang-vulnerability) reported on 2026-11-09 that an intruder used an SGLang remote code execution flaw to reach an inference server. No CVE or fixed version is named. Keep self-hosted SGLang off untrusted networks.

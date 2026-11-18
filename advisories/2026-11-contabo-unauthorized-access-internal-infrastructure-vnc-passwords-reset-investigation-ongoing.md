@@ -2,7 +2,7 @@
 id: 2026-11-contabo-unauthorized-access-internal-infrastructure-vnc-passwords-reset-investigation-ongoing
 title: "Contabo: unauthorized access to internal infrastructure on 2026-11-13 and 11-14, all VNC passwords reset; investigation ongoing"
 date_disclosed: 2026-11-16
-last_updated: 2026-11-17
+last_updated: 2026-11-18
 severity: medium
 status: active
 ecosystems: [hosting, vps, cloud, self-hosted]
@@ -53,7 +53,11 @@ The times above are in the server's own time zone. CET is UTC+1.
 - Keep provider keys and other long-lived secrets out of files on a rented server where a secrets manager is available. See [credential hygiene](../prevention/credential-hygiene.md).
 - Encrypt disks that hold secrets when the provider supports it.
 
+## Update 2026-11-18
+
+Contabo's [update of 2026-11-18 13:45 CET](https://help.contabo.com/en/support/solutions/articles/103000426255-potential-security-incident-of-14-november) says it has reported the incident to the relevant authorities. External incident response specialists are working on the forensic investigation. It repeats that there are "still no indications that personal data was leaked". The page status is still "Investigation ongoing". The update names no cause and no affected systems.
+
 ## Sources
 
-- [Contabo: Potential security incident of 14 November 2026](https://help.contabo.com/en/support/solutions/articles/103000426255-potential-security-incident-of-14-november): the vendor notice, first published 2026-11-16 21:00 CET, update of 2026-11-17 13:45 CET read on 2026-11-17. Single source: the vendor.
+- [Contabo: Potential security incident of 14 November 2026](https://help.contabo.com/en/support/solutions/articles/103000426255-potential-security-incident-of-14-november): the vendor notice, first published 2026-11-16 21:00 CET, updates of 2026-11-17 13:45 CET and 2026-11-18 13:45 CET read on those days. Single source: the vendor.
 - [Hacker News item 50528682](https://news.ycombinator.com/item?id=50528682): the submission that surfaced the notice, 2026-11-17.
