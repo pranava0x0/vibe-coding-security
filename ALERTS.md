@@ -12,6 +12,10 @@
 [bunny.net](https://status.bunny.net/incidents/80vrzxmcs7s5) says unauthorized SSH keys were added to a CDN node through a hosting provider, and cached content, Pull Zone configurations and TLS certificates may have been copied. If you uploaded your own certificate, replace it with a new key and revoke the old one.
 → [advisories/2026-11-bunny-net-infrastructure-provider-unauthorized-access-cdn-node-ssh-keys-tls-certificates-reissued.md](advisories/2026-11-bunny-net-infrastructure-provider-unauthorized-access-cdn-node-ssh-keys-tls-certificates-reissued.md)
 
+### 2026-11-17 — **Compromised agent-framework 1.26.1 and 1.26.2 on PyPI: pin 1.26.0, rotate Azure, GitHub and registry credentials**
+[PyPI's advisory](https://osv.dev/vulnerability/PYSEC-2026-4388) says agent-framework 1.26.1 and 1.26.2 were uploaded without authorization on 2026-11-17 and are now removed. Pin 1.26.0. If either was installed, rotate the Azure, Azure DevOps, GitHub and registry credentials that environment could reach.
+→ [advisories/2026-11-agent-framework-pypi-1-26-1-and-1-26-2-compromised-releases-remove-and-rotate.md](advisories/2026-11-agent-framework-pypi-1-26-1-and-1-26-2-compromised-releases-remove-and-rotate.md)
+
 ### 2026-11-17 — **Flowise 3.1.3 and 3.1.4 leak MCP server tokens without login (CVE-2026-130796); project archived, no fix. Also Supergateway, NocoDB, HyperFrames**
 [CVE-2026-130796](https://cveawg.mitre.org/api/cve/CVE-2026-130796) says Flowise 3.1.3 and 3.1.4 return MCP server tokens from a public chatflow endpoint without login. Flowise is end of life and has no fix. Take it off the public internet, rotate the tokens and plan a move.
 → [advisories/2026-11-flowise-cve-2026-130796-mcp-server-token-disclosure-no-fix-project-archived-supergateway-nocodb-hyperframes.md](advisories/2026-11-flowise-cve-2026-130796-mcp-server-token-disclosure-no-fix-project-archived-supergateway-nocodb-hyperframes.md)

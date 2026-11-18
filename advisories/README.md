@@ -5,6 +5,7 @@ One file per incident. Latest at the top.
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
 | 2026-11-18 | [bunny.net: unauthorized SSH keys added to a CDN node through a hosting provider; TLS certificates reissued, replace custom certificates](2026-11-bunny-net-infrastructure-provider-unauthorized-access-cdn-node-ssh-keys-tls-certificates-reissued.md) | medium | contained |
+| 2026-11-17 | [Compromised agent-framework 1.26.1 and 1.26.2 on PyPI: pin 1.26.0, rotate Azure, GitHub and registry credentials](2026-11-agent-framework-pypi-1-26-1-and-1-26-2-compromised-releases-remove-and-rotate.md) | high | contained |
 | 2026-11-17 | [Flowise 3.1.3 and 3.1.4 leak MCP server tokens without login (CVE-2026-130796); project archived, no fix. Also Supergateway, NocoDB, HyperFrames](2026-11-flowise-cve-2026-130796-mcp-server-token-disclosure-no-fix-project-archived-supergateway-nocodb-hyperframes.md) | high | active |
 | 2026-11-16 | [GitLab 19.5.6, 19.4.8 and 19.3.9 fix 37 CVEs: protected CI/CD variable race, Kubernetes Secrets read, ten Duo and MCP authorization bugs](2026-11-gitlab-19-5-6-patch-release-37-cves-protected-ci-variables-race-duo-agent-platform-mcp-token.md) | high | patched |
 | 2026-11-16 | [MCP server CVEs, 2026-11-16: awslabs Timestream for InfluxDB token leak, AWS Pricing file write, Kubeshark, code-review-mcp-server; all fixed](2026-11-mcp-server-cves-november-16-awslabs-timestream-influxdb-token-leak-pricing-file-write-kubeshark-code-review-mcp.md) | high | patched |
