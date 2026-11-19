@@ -2,7 +2,7 @@
 id: 2026-04-litellm-sql-injection
 title: "LiteLLM proxy pre-auth SQL injection — CVE-2026-42208 (April 2026, CISA KEV) + CVE-2026-42271 (June 2026, actively exploited)"
 date_disclosed: 2026-04-24
-last_updated: 2026-11-02
+last_updated: 2026-11-19
 severity: critical
 status: patched
 ecosystems: [pypi, ai-agents, llm-proxy, mcp]
@@ -178,3 +178,16 @@ CVE Services published CVE-2026-114612 on 2026-10-22 for GHSA-7hp6-4w63-5g45, CN
 ## Update 2026-11-02 — GTIG reports CVE-2026-40217 exploited in LLMjacking intrusions, and describes it differently from Obsidian
 
 Google Threat Intelligence Group's LLMjacking post (2026-11-02) says one actor "exploited a user ID rebind vulnerability in the LiteLLM gateway (CVE-2026-40217) to turn standard virtual keys into full administrative credentials", and lists patching LiteLLM gateways for that id among its mitigations. Obsidian Security's write-up, cited above, describes the same id as the Custom Code Guardrail `exec()` path at the end of its chain. The two descriptions are printed side by side; this file does not reconcile them. The report is in-the-wild exploitation of an id this file already records as fixed, so `status` stays `patched` and the exposure is the gateway operator who has not upgraded. See [the LLMjacking file](2026-11-llmjacking-stolen-cloud-and-llm-api-keys-billed-for-inference-gtig-jet-night-unc6993.md). Source: [GTIG — The Rise of LLMJacking](https://cloud.google.com/blog/topics/threat-intelligence/llmjacking-monetizing-compromised-cloud-models) (fetched 2026-11-02).
+
+## Update 2026-11-19: CISA adds CVE-2026-40217 to KEV
+
+CISA added CVE-2026-40217 to its [Known Exploited Vulnerabilities feed](https://www.cisa.gov/sites/default/files/feeds/known_exploited_vulnerabilities.json) on 2026-11-18, with a federal due date of 2026-12-02.
+
+- The catalog names it "BerriAI LiteLLM Unprotected Alternate Channel Vulnerability". Its description says remote attackers can execute code "via bytecode rewriting at the /guardrails/test_custom_code URI". Those are the catalog's words.
+- The entry's notes reference vendor advisory GHSA-wxxx-gvqv-xp7p. That page was not opened.
+- [The Hacker News](https://thehackernews.com/2026/11/cisa-warns-of-4-exploited-flaws-linked.html) ties the listing to the GTIG LLMjacking report covered in the 2026-11-02 update.
+- This is the fourth LiteLLM id in KEV in this file, after CVE-2026-42208, CVE-2026-42271 and CVE-2026-59822.
+
+`status` stays `patched` because fixed releases exist. An unpatched proxy that issues virtual keys to users should be treated as exposed: upgrade to the current release and rotate the master key and provider keys.
+
+Sources: CISA KEV JSON feed, catalog version 2026.11.18, read 2026-11-19. The Hacker News article is dated 2026-11-19.

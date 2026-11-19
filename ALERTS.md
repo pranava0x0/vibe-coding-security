@@ -2,11 +2,23 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-11-18. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-11-19. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-11-19 — **PHP 8.5.13, 8.4.28, 8.3.37 and 8.2.36 fix eight CVEs, seven scored 9.2: PHP-FPM request smuggling, session and use-after-free code execution**
+[PHP's 2026-11-19 security releases](https://www.php.net/archive/2026.php) fix eight CVEs, seven scored 9.2. One lets an unauthenticated request forge a PHP-FPM request when the proxy reuses backend connections. Upgrade to 8.5.13, 8.4.28, 8.3.37 or 8.2.36 and restart PHP.
+→ [advisories/2026-11-php-november-19-security-release-eight-cves-fpm-request-smuggling-session-code-execution-fixed-8-5-13.md](advisories/2026-11-php-november-19-security-release-eight-cves-fpm-request-smuggling-session-code-execution-fixed-8-5-13.md)
+
+### 2026-11-18 — **NGINX HTTP/2 heap overflow allows unauthenticated code execution (CVE-2026-123007); four more critical flaws; fixed in 1.31.9 and 1.30.7**
+[NGINX](https://nginx.org/en/security_advisories.html) 1.9.5 through 1.31.8 has an HTTP/2 memory bug that an unauthenticated attacker can use to crash workers, and to run code where ASLR is bypassed. Upgrade to 1.31.9 or 1.30.7 and restart, or turn HTTP/2 off.
+→ [advisories/2026-11-nginx-http2-heap-overflow-cve-2026-123007-unauthenticated-code-execution-fixed-1-31-9-1-30-7.md](advisories/2026-11-nginx-http2-heap-overflow-cve-2026-123007-unauthenticated-code-execution-fixed-1-31-9-1-30-7.md)
+
+### 2026-11-18 — **Ruby 4.0.10, 3.4.13 and 3.3.14 fix seven memory flaws in Regexp and string case conversion; no CVE ids yet; Ruby 3.2 unfixed**
+[Ruby](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string) fixed seven memory flaws in Regexp and string case conversion, five with code-execution proofs of concept. Upgrade to 4.0.10, 3.4.13 or 3.3.14. Ruby 3.2 and earlier get no fix.
+→ [advisories/2026-11-ruby-seven-regexp-string-memory-flaws-fixed-4-0-10-3-4-13-3-3-14-ruby-3-2-unfixed.md](advisories/2026-11-ruby-seven-regexp-string-memory-flaws-fixed-4-0-10-3-4-13-3-3-14-ruby-3-2-unfixed.md)
 
 ### 2026-11-18 — **bunny.net: unauthorized SSH keys added to a CDN node through a hosting provider; TLS certificates reissued, replace custom certificates**
 [bunny.net](https://status.bunny.net/incidents/80vrzxmcs7s5) says unauthorized SSH keys were added to a CDN node through a hosting provider, and cached content, Pull Zone configurations and TLS certificates may have been copied. If you uploaded your own certificate, replace it with a new key and revoke the old one.
@@ -1584,6 +1596,10 @@ CVSS **9.4 Critical**. Payload in GitHub PR title/issue body/comment hijacks AI 
 ### 2026-11-02 — **Playwright agents and scrapers: check the actual Chromium build and sandbox**
 Playwright 1.64.1 bundles Chromium 156.0.8078.4, [before the October 27 and 29 Chrome patches](https://github.com/microsoft/playwright/blob/v1.64.1/packages/playwright-core/browsers.json). For external browsing, use updated stable Chrome with the sandbox enabled.
 → [Browser versions, launch settings and cache checks](advisories/2026-11-playwright-chromium-patch-gap.md)
+
+### 2026-10-31 — **Obot before 0.27.0: five CVEs, including access token theft by a remote MCP server (CVE-2026-130766). Also mssql-mcp-core SQL injection**
+[CVE-2026-130766](https://cveawg.mitre.org/api/cve/CVE-2026-130766) says Obot 0.26.0 lets a malicious remote MCP server obtain a user's token for another service. Four more Obot CVEs and an `mssql-mcp` SQL injection are in the file. Upgrade Obot to 0.27.0 or later.
+→ [advisories/2026-11-obot-mcp-platform-five-cves-oauth-token-theft-ssrf-fixed-0-27-0-mssql-mcp-core-sql-injection.md](advisories/2026-11-obot-mcp-platform-five-cves-oauth-token-theft-ssrf-fixed-0-27-0-mssql-mcp-core-sql-injection.md)
 
 ### 2026-10-30 — **Blender before 4.5.15 and 5.x before 5.2.3: a crafted .blend, point cache or thumbnail can run code (five CVEs, three with code execution)**
 Blender before 4.5.15, and 5.0.0 to 5.2.2, has five memory-safety bugs in the code that reads `.blend` files, point caches and thumbnails. Three are scored 7.8 by VulnCheck and can run code as the user who opens the file. Fixed in 4.5.15 and 5.2.3, released 2026-10-22. Run `blender --version`, upgrade, and do not open `.blend` files from a source you do not trust. Turning off Auto Run Python Scripts does not cover these bugs.
