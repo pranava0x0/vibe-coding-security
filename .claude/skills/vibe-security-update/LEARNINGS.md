@@ -454,3 +454,14 @@ Five things from **2026-11-18**:
 
 Two literals written from memory were caught in review again (a GitLab version command, a product description). The SKILL.md row stands. Slop loop: no pattern added. The scanner's hits in new text are listed in the run log if any.
 
+## 79. The web server and the runtimes under the app have their own release channels; a truncated feed URL can return a page; a project page and its corporate CNA can disagree; and a vendor's review can replace "no evidence" with a count
+
+Five things from **2026-11-19**:
+
+1. **NGINX, PHP and Ruby each shipped a security release in two days, and none is on a listing the sweep fetches.** NGINX reached the corpus through a 1,462-point Hacker News item, PHP through the THN front page, Ruby through a 306-point item. **Rule:** `nginx.org/en/security_advisories.html`, `php.net/archive/<year>.php` and `ruby-lang.org/en/news/` are daily fetches with `curl`. Each prints fixed versions per line. File them on the PHP2Shell precedent, with the condition each flaw needs.
+2. **A feed URL cut to a fixed width for display returned HTTP 200 for one site and 404 for another.** The Bitrise review 404ed until the full URL came from the Algolia items API. A Krebs URL cut the same way returned a page that was never checked. **Rule:** take every URL from the API's JSON field, in full. Never fetch or cite a URL copied from a truncated listing. New SKILL.md row.
+3. **nginx.org rates CVE-2026-123007 "major" and three of the other four "medium". F5's CNA records score all five 9.2.** The record for CVE-2026-121810 prints a first affected version of `1.25.09` where nginx.org prints 1.25.0. **Rule:** print the project page's label and range beside the CNA's and say which is which. New SKILL.md row.
+4. **Bitrise's status updates said no evidence of customer exposure. Its review five days later counts files accessed in 15 customer workspaces.** **Rule:** when a vendor's review arrives, rewrite the TL;DR from the review and keep the earlier sentence only in the dated updates. New SKILL.md row.
+5. **KEV's description of LiteLLM CVE-2026-40217 is a third wording for one id**, after Obsidian's and GTIG's. The existing catalog-label row covers it. Print each wording with its source.
+
+VulnCheck issued five ids for Obot advisories from 2026-10-31, and the product had no file. §52's rule held: the listing row was the cue and the tab gave the date. The run skipped Tier B, Tier C and most tab reads, and the run log lists them as blockers. Slop loop: no pattern added. The scanner's hits in new text, if any, are fixed before commit.
