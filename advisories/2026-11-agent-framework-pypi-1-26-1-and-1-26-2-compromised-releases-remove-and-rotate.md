@@ -3,7 +3,7 @@ id: 2026-11-agent-framework-pypi-1-26-1-and-1-26-2-compromised-releases-remove-a
 title: "Compromised agent-framework 1.26.1 and 1.26.2 on PyPI: pin 1.26.0, rotate Azure, GitHub and registry credentials"
 kind: malicious-artifact
 date_disclosed: 2026-11-17
-last_updated: 2026-11-18
+last_updated: 2026-11-20
 severity: high
 status: contained
 ecosystems: [pypi, github-actions, azure]
@@ -62,7 +62,12 @@ Any hit means the environment is affected. Run the same search inside container 
 - SafeDep advises holding off on new `agent-framework` releases until Microsoft confirms they are clean.
 - See [package vetting checklist](../prevention/package-vetting-checklist.md) and [CI/CD hardening](../prevention/ci-cd-hardening.md).
 
+## Update 2026-11-20: SecurityWeek reports a maintainer confirmed the removal and an investigation
+
+[SecurityWeek](https://www.securityweek.com/microsoft-agent-framework-releases-poisoned-with-credential-stealer/) reported on 2026-11-18 that Microsoft acknowledged the incident. It says an Agent Framework maintainer wrote in a GitHub discussion that the two releases were removed from PyPI and that an investigation is under way. This run did not open the discussion. The article gives 1.26.0 as the latest clean release, and no Microsoft post-mortem was found on 2026-11-20. The actions above are unchanged.
+
 ## Sources
+- [SecurityWeek](https://www.securityweek.com/microsoft-agent-framework-releases-poisoned-with-credential-stealer/): 2026-11-18, the maintainer's statement as relayed, clean version.
 
 - [PYSEC-2026-4388](https://osv.dev/vulnerability/PYSEC-2026-4388): PyPI's advisory, published 2026-11-17, modified 2026-11-18. Read through the OSV API on 2026-11-18.
 - [Wiz](https://www.wiz.io/blog/malicious-version-of-microsofts-agent-framework-published-to-pypi): 2026-11-17, times and remediation.
