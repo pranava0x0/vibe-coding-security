@@ -4,6 +4,18 @@ Read this before writing any advisory or `ALERTS.md` entry. Append a pair each
 time review or the owner finds slop, and add a matching line to
 `tools/slop_patterns.tsv` when the shape can be matched by a regex. Newest on top.
 
+## 2026-11-20 (sweep self-review)
+
+**Sentence about the file's own history** (PHP advisory, Update)
+- Before: "The first version of this file counted eight records and missed it."
+- After: "This file listed eight records on 2026-11-19."
+- Why: the reader needs the dated fact, not an account of the mistake. Pattern `file-version-meta`.
+
+**Explanation the source does not give** (MCP batch, Jupyter rows)
+- Before: "The two ratings differ because CVE-2026-77318 needs network reach to the server and CVE-2026-77359 needs only a web page."
+- After: cut. The table prints each rating.
+- Why: the vectors do not support the stated reason. No regex matches this shape, so check every "because" against the fetched text.
+
 ## 2026-11-17 (owner review)
 
 **Aside about a source's business and independence** (Optimizely advisory, Sources)

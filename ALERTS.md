@@ -2,27 +2,39 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-11-19. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-11-20. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
 
-### 2026-11-19 — **PHP 8.5.13, 8.4.28, 8.3.37 and 8.2.36 fix eight CVEs, seven scored 9.2: PHP-FPM request smuggling, session and use-after-free code execution**
-[PHP's 2026-11-19 security releases](https://www.php.net/archive/2026.php) fix eight CVEs, seven scored 9.2. One lets an unauthenticated request forge a PHP-FPM request when the proxy reuses backend connections. Upgrade to 8.5.13, 8.4.28, 8.3.37 or 8.2.36 and restart PHP.
+### 2026-11-19 — **Twelve MCP server and coding-agent advisories published 2026-11-19 and 11-20: Jupyter MCP Server, Todoist MCP, k8s-mcp-server and seven more; fixes shipped June to October**
+The [GitHub Advisory Database](https://github.com/advisories?query=mcp+sort%3Apublished-desc) published twelve advisories for ten MCP servers and coding agents, two critical. Nine products shipped fixes between June and October, and `axon-mcp` has none. Compare installed versions with the table and remove `axon-mcp`.
+→ [advisories/2026-11-mcp-server-advisories-november-19-20-jupyter-todoist-k8s-sqlite-obsidian-codewhale-fixed-earlier.md](advisories/2026-11-mcp-server-advisories-november-19-20-jupyter-todoist-k8s-sqlite-obsidian-codewhale-fixed-earlier.md)
+
+### 2026-11-19 — **Prime Intellect: an unauthorised party swapped a DeepSeek v4.1 Flash deployment to weights modified to reduce or remove refusals, 2026-11-08 to 2026-11-10 (PI-SA-2026-001)**
+[Prime Intellect](https://primeintellect.one/security/advisories/deepseek-v4-1-flash-model-substitution) says an unauthorised party swapped one DeepSeek v4.1 Flash deployment to weights with reduced refusals from 2026-11-08 to 2026-11-10. It reports no key or credential exposure. Review outputs from that window if your application relied on refusals.
+→ [advisories/2026-11-prime-intellect-deepseek-v4-1-flash-endpoint-served-modified-weights-november-8-to-10.md](advisories/2026-11-prime-intellect-deepseek-v4-1-flash-endpoint-served-modified-weights-november-8-to-10.md)
+
+### 2026-11-19 — **PHP 8.5.13, 8.4.28, 8.3.37 and 8.2.36 fix 17 issues, seven CVEs scored 9.2: PHP-FPM request smuggling, session and use-after-free code execution**
+[PHP's 2026-11-19 security releases](https://www.php.net/archive/2026.php) fix 17 issues by [AWS's count](https://aws.amazon.com/security/security-bulletins/2026-190-aws/), seven of them CVEs scored 9.2. One lets an unauthenticated request forge a PHP-FPM request when the proxy reuses backend connections. Upgrade to 8.5.13, 8.4.28, 8.3.37 or 8.2.36 and restart PHP.
 → [advisories/2026-11-php-november-19-security-release-eight-cves-fpm-request-smuggling-session-code-execution-fixed-8-5-13.md](advisories/2026-11-php-november-19-security-release-eight-cves-fpm-request-smuggling-session-code-execution-fixed-8-5-13.md)
 
 ### 2026-11-18 — **NGINX HTTP/2 heap overflow allows unauthenticated code execution (CVE-2026-123007); four more critical flaws; fixed in 1.31.9 and 1.30.7**
 [NGINX](https://nginx.org/en/security_advisories.html) 1.9.5 through 1.31.8 has an HTTP/2 memory bug that an unauthenticated attacker can use to crash workers, and to run code where ASLR is bypassed. Upgrade to 1.31.9 or 1.30.7 and restart, or turn HTTP/2 off.
 → [advisories/2026-11-nginx-http2-heap-overflow-cve-2026-123007-unauthenticated-code-execution-fixed-1-31-9-1-30-7.md](advisories/2026-11-nginx-http2-heap-overflow-cve-2026-123007-unauthenticated-code-execution-fixed-1-31-9-1-30-7.md)
 
-### 2026-11-18 — **Ruby 4.0.10, 3.4.13 and 3.3.14 fix seven memory flaws in Regexp and string case conversion; no CVE ids yet; Ruby 3.2 unfixed**
-[Ruby](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string) fixed seven memory flaws in Regexp and string case conversion, five with code-execution proofs of concept. Upgrade to 4.0.10, 3.4.13 or 3.3.14. Ruby 3.2 and earlier get no fix.
+### 2026-11-18 — **Ruby 4.0.10, 3.4.13 and 3.3.14 fix seven memory flaws in Regexp and string case conversion, one now CVE-2026-132825 (Ruby2Shell); Ruby 3.2 unfixed**
+[Ruby](https://www.ruby-lang.org/en/news/2026/11/18/multiple-vulnerabilities-in-regexp-and-string) fixed seven memory flaws in Regexp and string case conversion, one now CVE-2026-132825 (Ruby2Shell). Upgrade to 4.0.10, 3.4.13 or 3.3.14. Ruby 3.2 and earlier get no fix.
 → [advisories/2026-11-ruby-seven-regexp-string-memory-flaws-fixed-4-0-10-3-4-13-3-3-14-ruby-3-2-unfixed.md](advisories/2026-11-ruby-seven-regexp-string-memory-flaws-fixed-4-0-10-3-4-13-3-3-14-ruby-3-2-unfixed.md)
 
 ### 2026-11-18 — **bunny.net: unauthorized SSH keys added to a CDN node through a hosting provider; TLS certificates reissued, replace custom certificates**
 [bunny.net](https://status.bunny.net/incidents/80vrzxmcs7s5) says unauthorized SSH keys were added to a CDN node through a hosting provider, and cached content, Pull Zone configurations and TLS certificates may have been copied. If you uploaded your own certificate, replace it with a new key and revoke the old one.
 → [advisories/2026-11-bunny-net-infrastructure-provider-unauthorized-access-cdn-node-ssh-keys-tls-certificates-reissued.md](advisories/2026-11-bunny-net-infrastructure-provider-unauthorized-access-cdn-node-ssh-keys-tls-certificates-reissued.md)
+
+### 2026-11-17 — **Java4Shell: OpenJDK Base64 memory corruption (CVE-2026-114938) on AVX-512 VBMI CPUs; Keycloak, Jenkins and Elasticsearch affected; fixed in 17.0.21.1, 21.0.13.1 and 25.0.5.1**
+[CVE-2026-114938](https://cveawg.mitre.org/api/cve/CVE-2026-114938) corrupts memory in OpenJDK 17.0.6 and later on x86-64 CPUs with AVX-512 VBMI, and researchers report code execution against Keycloak and Jenkins. Upgrade Java to 17.0.21.1, 21.0.13.1 or 25.0.5.1, or set `-XX:-UseBASE64Intrinsics`. Elasticsearch and Logstash have no fixed release yet.
+→ [advisories/2026-11-java4shell-openjdk-base64-cve-2026-114938-keycloak-jenkins-elasticsearch-fixed-november-jdk.md](advisories/2026-11-java4shell-openjdk-base64-cve-2026-114938-keycloak-jenkins-elasticsearch-fixed-november-jdk.md)
 
 ### 2026-11-17 — **Compromised agent-framework 1.26.1 and 1.26.2 on PyPI: pin 1.26.0, rotate Azure, GitHub and registry credentials**
 [PyPI's advisory](https://osv.dev/vulnerability/PYSEC-2026-4388) says agent-framework 1.26.1 and 1.26.2 were uploaded without authorization on 2026-11-17 and are now removed. Pin 1.26.0. If either was installed, rotate the Azure, Azure DevOps, GitHub and registry credentials that environment could reach.
