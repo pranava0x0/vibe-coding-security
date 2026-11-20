@@ -1,8 +1,8 @@
 ---
 id: 2026-11-php-november-19-security-release-eight-cves-fpm-request-smuggling-session-code-execution-fixed-8-5-13
-title: "PHP 8.5.13, 8.4.28, 8.3.37 and 8.2.36 fix eight CVEs, seven scored 9.2: PHP-FPM request smuggling, session and use-after-free code execution"
+title: "PHP 8.5.13, 8.4.28, 8.3.37 and 8.2.36 fix 17 issues, seven CVEs scored 9.2: PHP-FPM request smuggling, session and use-after-free code execution"
 date_disclosed: 2026-11-19
-last_updated: 2026-11-19
+last_updated: 2026-11-20
 severity: critical
 status: patched
 ecosystems: [php, self-hosted, web-server, docker]
@@ -11,11 +11,11 @@ tags: [cve, php, php-fpm, request-smuggling, session, use-after-free, unauthenti
 ---
 
 ## TL;DR
-[PHP released 8.5.13, 8.4.28, 8.3.37 and 8.2.36](https://www.php.net/archive/2026.php) on 2026-11-19 as security releases. The PHP Group's CNA records cover eight CVEs, seven scored 9.2. [CVE-2026-129289](https://cveawg.mitre.org/api/cve/CVE-2026-129289) lets an unauthenticated request forge a second PHP-FPM request when the front end reuses backend connections, which is not the nginx or Apache default. Upgrade and restart PHP.
+[PHP released 8.5.13, 8.4.28, 8.3.37 and 8.2.36](https://www.php.net/archive/2026.php) on 2026-11-19 as security releases. AWS counts 17 fixed issues. Nine have CVE records read for this file, seven scored 9.2. [CVE-2026-129289](https://cveawg.mitre.org/api/cve/CVE-2026-129289) lets an unauthenticated request forge a second PHP-FPM request when the front end reuses backend connections, which is not the nginx or Apache default. Upgrade and restart PHP.
 
 ## What happened
 
-All eight records were published on 2026-11-19 by the PHP Group. Scores are CVSS 4.0 and are the PHP Group's.
+All eight records in this table were published on 2026-11-19 by the PHP Group. Scores are CVSS 4.0 and are the PHP Group's.
 
 | CVE | Title on the record | Affected lines | Score |
 |---|---|---|---|
@@ -58,9 +58,23 @@ No source read reports an attack. This is the second PHP security release in a m
 - Rebuild PHP base images on every security release. The project pre-announces them on [php.net](https://www.php.net/archive/2026.php).
 - Keep one application per session store. Two applications that share a store with different serializers create the condition for CVE-2026-115560.
 
+## Update 2026-11-20: a ninth CVE record, CVE-2026-128064, sends `HTTPS://` and `FTPS://` URLs in plaintext; AWS counts 17 issues and says PHP 8.1 is affected and unfixed
+
+The PHP Group published [CVE-2026-128064](https://cveawg.mitre.org/api/cve/CVE-2026-128064) on 2026-11-19, scored 8.2 on CVSS 4.0. This file listed eight records on 2026-11-19.
+
+The record says the HTTP and FTP stream wrappers accept a URL scheme in any letter case and turn TLS on only for a lowercase scheme. A URL written `HTTPS://` or `FTPS://`, passed to `file_get_contents()`, `fopen()` or another stream function, or received as a redirect target, goes over unencrypted HTTP or FTP. An attacker who can observe the traffic reads the credentials, request bodies and files in it.
+
+[The php-src advisory](https://github.com/php/php-src/security/advisories/GHSA-f6gg-rchx-xw8j) lists the same fixed versions as the rest of the batch: 8.5.13, 8.4.28, 8.3.37 and 8.2.36.
+
+What to check: search application code and configuration for URLs with an upper-case scheme, and for server-side fetches of URLs a user or a remote server supplies. Rotate any credential such a request carried over an untrusted network.
+
+[AWS bulletin 2026-190](https://aws.amazon.com/security/security-bulletins/2026-190-aws/) says the four releases "address 17 issues" and names seven CVE ids. This file has read nine CVE records, so some fixed issues have no record read here. The bulletin also says PHP 8.1 and earlier are end of life, get no fix, and are affected by some of the issues, including CVE-2026-129289. On PHP 8.1 or earlier, move to a supported branch.
+
 ## Sources
 
 - [php.net news archive, 2026](https://www.php.net/archive/2026.php), read 2026-11-19: the four releases, each dated 19 Nov 2026 and labelled a security release.
 - [CVE-2026-129289](https://cveawg.mitre.org/api/cve/CVE-2026-129289), [CVE-2026-115560](https://cveawg.mitre.org/api/cve/CVE-2026-115560), [CVE-2026-126714](https://cveawg.mitre.org/api/cve/CVE-2026-126714), [CVE-2026-129496](https://cveawg.mitre.org/api/cve/CVE-2026-129496), [CVE-2026-129481](https://cveawg.mitre.org/api/cve/CVE-2026-129481), [CVE-2026-129182](https://cveawg.mitre.org/api/cve/CVE-2026-129182), [CVE-2026-129474](https://cveawg.mitre.org/api/cve/CVE-2026-129474), [CVE-2026-129291](https://cveawg.mitre.org/api/cve/CVE-2026-129291): PHP Group CNA records, read 2026-11-19.
 - [The Hacker News: PHP Fixes 7 Critical Flaws](https://thehackernews.com/2026/11/php-fixes-7-critical-flaws-including.html), 2026-11-19: conditions, Depthfirst's name for CVE-2026-126714, the interim step.
 - Not opened: the eight php-src advisory pages the records reference, the per-version changelogs, and Depthfirst's post.
+- [CVE-2026-128064, CVE Services record (PHP Group)](https://cveawg.mitre.org/api/cve/CVE-2026-128064) and [GHSA-f6gg-rchx-xw8j](https://github.com/php/php-src/security/advisories/GHSA-f6gg-rchx-xw8j), read 2026-11-20: the ninth CVE, its score and fixed versions.
+- [AWS security bulletin 2026-190](https://aws.amazon.com/security/security-bulletins/2026-190-aws/), 2026-11-19: the count of 17 issues, the PHP 8.1 statement.

@@ -11,20 +11,20 @@
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 77,
-   "last_hit": "2026-11-19"
+   "hits": 78,
+   "last_hit": "2026-11-20"
   },
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 75,
-   "last_hit": "2026-11-19"
+   "hits": 76,
+   "last_hit": "2026-11-20"
   },
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 74,
-   "last_hit": "2026-11-19"
+   "hits": 75,
+   "last_hit": "2026-11-20"
   },
   {
    "domain": "theregister.com",
@@ -41,8 +41,8 @@
   {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
-   "hits": 49,
-   "last_hit": "2026-11-19"
+   "hits": 50,
+   "last_hit": "2026-11-20"
   },
   {
    "domain": "cybersecuritynews.com",
@@ -51,15 +51,15 @@
    "last_hit": "2026-10-08"
   },
   {
+   "domain": "cveawg.mitre.org",
+   "weight": 20.0,
+   "hits": 43,
+   "last_hit": "2026-11-20"
+  },
+  {
    "domain": "vulncheck.com",
    "weight": 20.0,
    "hits": 43,
-   "last_hit": "2026-11-19"
-  },
-  {
-   "domain": "cveawg.mitre.org",
-   "weight": 20.0,
-   "hits": 42,
    "last_hit": "2026-11-19"
   },
   {
@@ -71,8 +71,8 @@
   {
    "domain": "hn.algolia.com",
    "weight": 20.0,
-   "hits": 35,
-   "last_hit": "2026-11-19"
+   "hits": 36,
+   "last_hit": "2026-11-20"
   },
   {
    "domain": "socket.dev",
@@ -87,16 +87,16 @@
    "last_hit": "2026-10-26"
   },
   {
+   "domain": "pypi.org",
+   "weight": 20.0,
+   "hits": 30,
+   "last_hit": "2026-11-20"
+  },
+  {
    "domain": "cisa.gov",
    "weight": 20.0,
    "hits": 29,
    "last_hit": "2026-11-19"
-  },
-  {
-   "domain": "pypi.org",
-   "weight": 20.0,
-   "hits": 29,
-   "last_hit": "2026-11-18"
   },
   {
    "domain": "safedep.io",
@@ -111,6 +111,12 @@
    "last_hit": "2026-11-18"
   },
   {
+   "domain": "aws.amazon.com",
+   "weight": 20.0,
+   "hits": 23,
+   "last_hit": "2026-11-20"
+  },
+  {
    "domain": "advisories.gitlab.com",
    "weight": 20.0,
    "hits": 23,
@@ -121,12 +127,6 @@
    "weight": 20.0,
    "hits": 22,
    "last_hit": "2026-11-19"
-  },
-  {
-   "domain": "aws.amazon.com",
-   "weight": 20.0,
-   "hits": 22,
-   "last_hit": "2026-11-17"
   },
   {
    "domain": "api.npmjs.org",

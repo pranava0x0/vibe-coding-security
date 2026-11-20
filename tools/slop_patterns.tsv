@@ -13,3 +13,4 @@ ai-verbs	\b(delves?|delving|leverag(e|es|ing) (the|a|an|its|their))\b	Use "uses"
 not-just-but	\bnot (just|only|merely) [^.;]{1,80}? but\b	Say the second thing on its own.
 relative-date	\b(in today's|today's (three|two|four|release|releases|batch)|earlier this (week|month)|(?<!\d )(?<!the )last week|yesterday)\b	Write the YYYY-MM-DD date.
 closing-moral	\b(the lesson (here )?is|the takeaway is|key takeaways?|in conclusion|the bottom line)\b	Cut it. End on the last fact or action.
+file-version-meta	\b(the first|an earlier|a previous|the original) version of this file\b	State the dated fact: "This file listed eight records on YYYY-MM-DD."

@@ -15,6 +15,22 @@
 
 ## Archived entries
 
+## 2026-11-13
+
+```yaml
+queries: {deep: 6, medium: 0, shallow: 0}
+new: [2026-11-n8n-november-13-five-advisory-batch-owner-takeover-custom-role-pending-invite, 2026-11-coder-november-seven-advisories-aws-iam-database-password-in-api-errors-cli-session-token, 2026-11-apify-internal-systems-breach-account-credentials-accessed-oauth-connections-revoked, 2026-11-node-forge-rsa-signature-forgery-low-exponent-keys-pkcs12-mac-bypass-fixed-1-4-1]
+updated: [2026-11-red-hat-quay-unauthenticated-signing-key-takeover-cve-2026-123710-cross-tenant-robot-token-leak-cve-2026-110697, 2026-09-coder-registry-cloudflare-terraform-supply-chain, 2026-10-n8n-october-28-twelve-advisory-batch-deprecated-code-nodes-expression-isolation-graphicsmagick, 2026-10-claude-code-account-email-injected-into-model-context-leaks-to-git-headers-websites-issue-81138]
+sources_added: [status.apify.com]
+sources_weighted: [github.com, github.com/advisories, cveawg.mitre.org, registry.npmjs.org, community.n8n.io, securityweek.com, proxy.golang.org, access.redhat.com, hn.algolia.com, api.npmjs.org, thehackernews.com]
+blockers: [tier-a-cut-to-six-searches-tier-b-c-not-run, reddit-apify-notification-thread-not-fetchable, apify-notification-email-not-seen, node-forge-ghsa-jc66-vendor-page-and-release-notes-not-opened, red-hat-errata-bodies-not-read, quay-releases-page-1-only, coder-tab-pages-3-to-5-not-walked, vulncheck-advisory-pages-not-opened, vendor-tabs-page-1-only-claude-code-cursor-nextjs-openclaw, langflow-flowise-praisonai-litellm-auth-sdk-tabs-not-walked, codex-cursor-llm-listings-and-agent-page-2-not-fetched, zdi-aws-bulletins-cert-cc-not-fetched, blog-indexes-cloudflare-unit42-gtig-openclaw-not-fetched, fireworks-bulletin-index-not-re-read, stepsecurity-index-rendered-zero-posts, x-bsky-search-snippets-only]
+classifier_events: []
+deferred_after_classifier_stop: []
+```
+
+**Notes.** Routine daily sweep, all direct, no delegation, no stop, no rule 1 file. Sources that produced: the n8n and Coder vendor tabs (nine of the twelve new advisories across two files had no CVE and appeared in no listing), the n8n community bulletin, the `claude` and `agent` database listings (node-forge through its credit line, two Coder ids, one n8n id), the SecurityWeek front page and the Algolia feed (Apify), and the Red Hat API (Quay errata). Six `WebSearch` calls returned background. KEV had no row after 2026-11-10. **Judgement calls:** Apify is `high`/`active` on the vendor's "investigation is ongoing"; the data list is SecurityWeek's account of a Reddit-shared notice and is labelled so; steps 4 to 8 are marked as this file's advice. node-forge is `high` on the vendor's 7.5 with the e=3 condition stated beside it; dated 2026-10-27 by the vendor pages, not the database rows of 10-30 and 11-10. Quay moved `active` to `patched` on eight errata for Quay 3; Quay 5 is still "Affected" and the TL;DR says so. Coder's seven rows went into a new file, not the registry-compromise home file, which got the two CVE ids. **Declined:** SiYuan CVE-2026-126393 and CVE-2026-126776 (Moderate; MCP skill-install SSRF, Windows path traversal; candidate for a SiYuan file if a third lands); Huginn CVE-2026-127082 and CVE-2026-127083 (JqAgent reads the server environment, 8.3; not a tracked product); Opera Neon MCP Hub CVE-2026-123139 (Opera CNA 5.8, `E:U`; a malicious extension drives the built-in Browser Operator; candidate, advisory at security.opera.com not opened); Rucio CVE-2026-100397; Mongoose CVE-2026-125120 (unchanged); Island's TypoPrompting lookalike domains (no installable artifact named on the front page); Unit 42 prompt-injection scam sites, Sekoia on Flowise exploitation attempts, RevStealer fake Claude apps (ThreatsDay items, not opened; grep `revstealer` next run); TSMC, BrickLink, Maersk; Claude outage 2026-11-13 (availability); Humble Bundle (still no vendor or outlet). **Open next run:** Apify's next status update and post-mortem; a CVE Services record for CVE-2026-119192 and for Git CVE-2026-111760 (both DNE today); n8n 3.x on npm; Quay 5 erratum; Coder tab pages 3 to 5 against the corpus by GHSA; Sonatype's PolinRider page for the 2026-11-03 wave (search result again, not opened); Claude Code `stable` (2.1.311) and the email removal; Fireworks bulletin index.
+
+
 ## 2026-11-12
 
 ```yaml
