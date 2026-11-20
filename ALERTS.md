@@ -12,12 +12,12 @@
 The [GitHub Advisory Database](https://github.com/advisories?query=mcp+sort%3Apublished-desc) published twelve advisories for ten MCP servers and coding agents, two critical. Nine products shipped fixes between June and October, and `axon-mcp` has none. Compare installed versions with the table and remove `axon-mcp`.
 → [advisories/2026-11-mcp-server-advisories-november-19-20-jupyter-todoist-k8s-sqlite-obsidian-codewhale-fixed-earlier.md](advisories/2026-11-mcp-server-advisories-november-19-20-jupyter-todoist-k8s-sqlite-obsidian-codewhale-fixed-earlier.md)
 
-### 2026-11-19 — **Prime Intellect: an unauthorised party swapped the DeepSeek v4.1 Flash endpoint to weights with refusals removed, 2026-11-08 to 2026-11-10 (PI-SA-2026-001)**
-[Prime Intellect](https://primeintellect.one/security/advisories/deepseek-v4-1-flash-model-substitution) says an unauthorised party served a DeepSeek v4.1 Flash copy with refusals removed from 2026-11-08 to 2026-11-10. It reports no prompt, key or credential exposure. Review outputs from that window if your application relied on refusals.
+### 2026-11-19 — **Prime Intellect: an unauthorised party swapped a DeepSeek v4.1 Flash deployment to weights modified to reduce or remove refusals, 2026-11-08 to 2026-11-10 (PI-SA-2026-001)**
+[Prime Intellect](https://primeintellect.one/security/advisories/deepseek-v4-1-flash-model-substitution) says an unauthorised party swapped one DeepSeek v4.1 Flash deployment to weights with reduced refusals from 2026-11-08 to 2026-11-10. It reports no key or credential exposure. Review outputs from that window if your application relied on refusals.
 → [advisories/2026-11-prime-intellect-deepseek-v4-1-flash-endpoint-served-modified-weights-november-8-to-10.md](advisories/2026-11-prime-intellect-deepseek-v4-1-flash-endpoint-served-modified-weights-november-8-to-10.md)
 
 ### 2026-11-19 — **PHP 8.5.13, 8.4.28, 8.3.37 and 8.2.36 fix 17 issues, seven CVEs scored 9.2: PHP-FPM request smuggling, session and use-after-free code execution**
-[PHP's 2026-11-19 security releases](https://www.php.net/archive/2026.php) fix 17 issues, seven of them CVEs scored 9.2. One lets an unauthenticated request forge a PHP-FPM request when the proxy reuses backend connections. Upgrade to 8.5.13, 8.4.28, 8.3.37 or 8.2.36 and restart PHP.
+[PHP's 2026-11-19 security releases](https://www.php.net/archive/2026.php) fix 17 issues by [AWS's count](https://aws.amazon.com/security/security-bulletins/2026-190-aws/), seven of them CVEs scored 9.2. One lets an unauthenticated request forge a PHP-FPM request when the proxy reuses backend connections. Upgrade to 8.5.13, 8.4.28, 8.3.37 or 8.2.36 and restart PHP.
 → [advisories/2026-11-php-november-19-security-release-eight-cves-fpm-request-smuggling-session-code-execution-fixed-8-5-13.md](advisories/2026-11-php-november-19-security-release-eight-cves-fpm-request-smuggling-session-code-execution-fixed-8-5-13.md)
 
 ### 2026-11-18 — **NGINX HTTP/2 heap overflow allows unauthenticated code execution (CVE-2026-123007); four more critical flaws; fixed in 1.31.9 and 1.30.7**

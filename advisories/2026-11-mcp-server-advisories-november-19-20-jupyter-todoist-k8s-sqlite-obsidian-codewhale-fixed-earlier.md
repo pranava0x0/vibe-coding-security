@@ -16,7 +16,7 @@ The [GitHub Advisory Database](https://github.com/advisories?query=mcp+sort%3Apu
 
 ## What happened
 
-Scanners begin to flag these from the database dates. The vendor advisory pages were not opened, so the vendor publication dates are not known. Fix dates come from the registries, read 2026-11-20.
+The database rows are dated 2026-11-19 and 2026-11-20. The vendor advisory pages were not opened, so the vendor publication dates are not known. Fix dates come from the registries, read 2026-11-20.
 
 | Product (package) | Id | Rating | Affected | Fixed, registry date | Condition in the record |
 |---|---|---|---|---|---|

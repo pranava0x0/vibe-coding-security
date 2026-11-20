@@ -62,7 +62,7 @@ No source read reports an attack. This is the second PHP security release in a m
 
 The PHP Group published [CVE-2026-128064](https://cveawg.mitre.org/api/cve/CVE-2026-128064) on 2026-11-19, scored 8.2 on CVSS 4.0. This file listed eight records on 2026-11-19.
 
-The record says the HTTP and FTP stream wrappers accept a URL scheme in any letter case and turn TLS on only for a lowercase scheme. A URL written `HTTPS://` or `FTPS://`, passed to `file_get_contents()`, `fopen()` or another stream function, or received as a redirect target, goes over unencrypted HTTP or FTP. An attacker who can observe the traffic reads the credentials, request bodies and files in it.
+The record says the HTTP and FTP stream wrappers accept a URL scheme in any letter case and enable TLS only when the scheme has a lowercase "s" at a fixed position. A URL written `HTTPS://` or `FTPS://`, passed to `file_get_contents()`, `fopen()` or another stream function, or received as a redirect target, goes over unencrypted HTTP or FTP. An attacker who can observe the traffic reads the credentials, request bodies and files in it.
 
 [The php-src advisory](https://github.com/php/php-src/security/advisories/GHSA-f6gg-rchx-xw8j) lists the same fixed versions as the rest of the batch: 8.5.13, 8.4.28, 8.3.37 and 8.2.36.
 

@@ -1,6 +1,6 @@
 ---
 id: 2026-11-prime-intellect-deepseek-v4-1-flash-endpoint-served-modified-weights-november-8-to-10
-title: "Prime Intellect: an unauthorised party swapped the DeepSeek v4.1 Flash endpoint to weights with refusals removed, 2026-11-08 to 2026-11-10 (PI-SA-2026-001)"
+title: "Prime Intellect: an unauthorised party swapped a DeepSeek v4.1 Flash deployment to weights modified to reduce or remove refusals, 2026-11-08 to 2026-11-10 (PI-SA-2026-001)"
 date_disclosed: 2026-11-19
 last_updated: 2026-11-20
 severity: medium
@@ -12,7 +12,7 @@ tags: [inference-provider, model-substitution, incident, vendor-bulletin, open-w
 
 ## TL;DR
 
-[Prime Intellect's notice PI-SA-2026-001](https://primeintellect.one/security/advisories/deepseek-v4-1-flash-model-substitution) says an unauthorised party replaced the deployment behind its `deepseek/deepseek-v4.1-flash` endpoint with a copy modified to remove refusals. The swap lasted from 2026-11-08 01:24 UTC to 2026-11-10 06:35 UTC. The vendor reports no evidence that prompts, completions, keys or other models were reached. If your application relied on the model refusing, review its outputs from that window.
+[Prime Intellect's notice PI-SA-2026-001](https://primeintellect.one/security/advisories/deepseek-v4-1-flash-model-substitution) says an unauthorised party replaced a deployment behind its `deepseek/deepseek-v4.1-flash` endpoint with a copy "modified to reduce or remove refusal behavior". The swap lasted from 2026-11-08 01:24 UTC to 2026-11-10 06:35 UTC. The vendor says no keys, customer credentials or other models were affected, and that it found no evidence prompts or completions left the cluster. If your application relied on the model refusing, review its outputs from that window.
 
 ## What happened
 
@@ -33,7 +33,8 @@ This file rates it `medium` because the vendor reports no data or credential exp
 ## Am I affected?
 
 - You called `deepseek/deepseek-v4.1-flash` through Prime Inference between 2026-11-08 01:24 UTC and 2026-11-10 06:35 UTC.
-- Other Prime Intellect models and other providers of the same model are not named in the notice.
+- The notice says no other models on the platform were modified. It says nothing about other providers of the same model.
+- Only requests served by the replaced deployment were answered by the modified model. The notice does not say what share of requests that was.
 - Check your request logs for that model and window. The vendor says it keeps no request logs.
 
 ## If you are affected
