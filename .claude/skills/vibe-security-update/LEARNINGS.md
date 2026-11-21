@@ -428,3 +428,15 @@ Five things from **2026-11-20**:
 5. **Java4Shell was declined three times as "not the stack".** Keycloak, Jenkins and Elasticsearch each published their own post within two days. **Rule:** a runtime flaw is filed on the day a tracked product publishes guidance for it, not on the third decline. Each product's post gives the condition and the fix for that product.
 
 Junie CLI's second record names a fixed version older than the first record's. The new SKILL.md row says to compare them before writing an action. The Step 0 `git reset --hard` was refused by auto mode; `git merge --ff-only origin/main` is the sync command for a session branch. Slop loop: one pattern added, a sentence about what an earlier version of the file did.
+
+## 81. A text-only forum item carries the vendor email that has no page; a study names nobody and two notices fit it; a threat report hides one product flaw; and a package declined twice had one fix a month old
+
+Five things from **2026-11-21**:
+
+1. **Two files came from Hacker News items with no URL.** One carried OpenRouter's email about MiniMax models (27 points). One carried a Portkey incident email (3 points). **Rule:** read text-only items through the Algolia items API when the title names a gateway, router or inference provider. Step 1 has the paragraph.
+2. **The Portkey email asks the reader to click a link and sign in, and nothing else confirms it.** The status host and the blog index were empty and one search found no coverage. **Rule:** file at `unconfirmed`, leave the link out, and make the in-portal banner the reader's check. New SKILL.md row.
+3. **Dragos names no provider.** Phala's report and the OpenRouter email match its dates and method, and a commenter links them. **Rule:** a provider is named only from its own notice, and the file says no source ties it to the study. New SKILL.md row.
+4. **Amazon's post is about an actor's agents and never names MONAI Label.** It says the maintainers "released a fix". The advisory says no patched version and PyPI's newest release is from 2024. The CVE record's description says exploited and its CISA enrichment says none. **Rule:** file the product from its advisory, pull request, CVE record and registry. Two new SKILL.md rows.
+5. **NLTK was declined on two runs while rows kept arriving.** One OSV package query gave 31 advisories, one fixed version, and a PyPI date a month before the first row. **Rule:** a package seen on a second run gets the OSV query that day. New SKILL.md row.
+
+A restricted `WebFetch` prompt on a package write-up still returned a behaviour summary. Only names, versions and paths were taken from it. Four literals written from memory were caught in review (a router feature, a gateway product term, a settings name, a package-manager command). The run skipped Tier B, Tier C, the tab walk and the vendor blog indexes, and the run log lists them as blockers. Slop loop: see the last line of the 2026-11-21 run-log notes.

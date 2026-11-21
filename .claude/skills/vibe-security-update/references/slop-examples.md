@@ -4,6 +4,18 @@ Read this before writing any advisory or `ALERTS.md` entry. Append a pair each
 time review or the owner finds slop, and add a matching line to
 `tools/slop_patterns.tsv` when the shape can be matched by a regex. Newest on top.
 
+## 2026-11-21 (sweep self-review)
+
+**Instruction about paperwork** (MONAI Label advisory, If you are affected)
+- Before: "Do not write "upgraded" in a ticket. There is no fixed release to upgrade to."
+- After: "There is no fixed release to upgrade to."
+- Why: the reader acts on the server, not on a ticket. Pattern `paperwork-aside-2026-11-21-monai`.
+
+**Explanation the source does not give** (NLTK advisory)
+- Before: "The 9.8 assumes the attacker supplies the argument, and most of the other 30 are denial of service or need local access."
+- After: "Both paths in the critical advisory need a caller-supplied argument, and the database rates the other 30 high or moderate."
+- Why: "assumes" and "most" were not counted or stated anywhere. No regex matches this shape.
+
 ## 2026-11-20 (sweep self-review)
 
 **Sentence about the file's own history** (PHP advisory, Update)

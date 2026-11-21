@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-11-20
+**Last refreshed:** 2026-11-21
 
 ## Quick start
 
@@ -55,10 +55,13 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-11-20)
+## Active threat families (as of 2026-11-21)
 
 The highest-risk ongoing threat families for vibe coders:
 
+- **Prompts are readable at every hop between you and the model (Dragos canary study, 2026-11-19; Phala 2026-11-10)** — Test secrets planted in two million prompts were stolen at three hosting providers, read by marketplace resellers and fetched despite Zero Data Retention flags. Keep credentials out of prompts, choose upstream providers yourself, and rotate any secret sent on a named route.
+- **A research server with no login by default was exploited before it had a CVE (MONAI Label, CVE-2026-133968, 2026-11-18)** — 0.8.5 and earlier let an unauthenticated client write files outside the datastore. A fix is merged and no release carries it. Take the server off untrusted networks.
+- **A personal agent's browser is the way into its credential store (Meta Muse, NebuSec, 2026-11-20)** — A web page read and altered chats and memories with no approval prompt, and a second chain reached the VM's credential store. NebuSec says it is fixed and Meta has not confirmed. Connect the fewest accounts the task needs.
 - **Java4Shell: the Java runtime under Keycloak, Jenkins and Elasticsearch (CVE-2026-114938, 2026-11-17)** — OpenJDK 17.0.6 and later corrupts memory when decoding Base64 on x86-64 CPUs with AVX-512 VBMI. Upgrade Java to 17.0.21.1, 21.0.13.1 or 25.0.5.1, or set `-XX:-UseBASE64Intrinsics`. See [advisories/2026-11-java4shell-openjdk-base64-cve-2026-114938-keycloak-jenkins-elasticsearch-fixed-november-jdk.md](advisories/2026-11-java4shell-openjdk-base64-cve-2026-114938-keycloak-jenkins-elasticsearch-fixed-november-jdk.md).
 - **A hosted model can be swapped without its name changing (Prime Intellect, 2026-11-08 to 2026-11-10)** — an unauthorised party swapped one DeepSeek v4.1 Flash deployment to weights modified to reduce or remove refusals. Do not rely on a model's refusals as the only control. See [advisories/2026-11-prime-intellect-deepseek-v4-1-flash-endpoint-served-modified-weights-november-8-to-10.md](advisories/2026-11-prime-intellect-deepseek-v4-1-flash-endpoint-served-modified-weights-november-8-to-10.md).
 - **The web server and the language runtime under your app both shipped critical fixes (NGINX 2026-11-18; PHP 2026-11-19; Ruby 2026-11-18)** — NGINX 1.9.5 through 1.31.8 has an unauthenticated HTTP/2 memory bug (CVE-2026-123007), fixed in 1.31.9 and 1.30.7. PHP 8.5.13, 8.4.28, 8.3.37 and 8.2.36 fix eight CVEs, including PHP-FPM request smuggling. Ruby 4.0.10, 3.4.13 and 3.3.14 fix seven Regexp and string flaws, and Ruby 3.2 gets no fix. Upgrade, restart, and rebuild images. See `advisories/2026-11-nginx-http2-heap-overflow-cve-2026-123007-unauthenticated-code-execution-fixed-1-31-9-1-30-7.md`, `advisories/2026-11-php-november-19-security-release-eight-cves-fpm-request-smuggling-session-code-execution-fixed-8-5-13.md` and `advisories/2026-11-ruby-seven-regexp-string-memory-flaws-fixed-4-0-10-3-4-13-3-3-14-ruby-3-2-unfixed.md`.
