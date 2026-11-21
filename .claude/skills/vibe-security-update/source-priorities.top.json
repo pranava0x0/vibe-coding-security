@@ -5,25 +5,25 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 130,
-   "last_hit": "2026-11-19"
+   "hits": 131,
+   "last_hit": "2026-11-21"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 78,
-   "last_hit": "2026-11-20"
+   "hits": 79,
+   "last_hit": "2026-11-21"
+  },
+  {
+   "domain": "github.com",
+   "weight": 20.0,
+   "hits": 76,
+   "last_hit": "2026-11-21"
   },
   {
    "domain": "securityweek.com",
    "weight": 20.0,
    "hits": 76,
-   "last_hit": "2026-11-20"
-  },
-  {
-   "domain": "github.com",
-   "weight": 20.0,
-   "hits": 75,
    "last_hit": "2026-11-20"
   },
   {
@@ -53,8 +53,8 @@
   {
    "domain": "cveawg.mitre.org",
    "weight": 20.0,
-   "hits": 43,
-   "last_hit": "2026-11-20"
+   "hits": 44,
+   "last_hit": "2026-11-21"
   },
   {
    "domain": "vulncheck.com",
@@ -63,16 +63,16 @@
    "last_hit": "2026-11-19"
   },
   {
+   "domain": "hn.algolia.com",
+   "weight": 20.0,
+   "hits": 37,
+   "last_hit": "2026-11-21"
+  },
+  {
    "domain": "stepsecurity.io",
    "weight": 20.0,
    "hits": 37,
    "last_hit": "2026-11-16"
-  },
-  {
-   "domain": "hn.algolia.com",
-   "weight": 20.0,
-   "hits": 36,
-   "last_hit": "2026-11-20"
   },
   {
    "domain": "socket.dev",
@@ -89,8 +89,8 @@
   {
    "domain": "pypi.org",
    "weight": 20.0,
-   "hits": 30,
-   "last_hit": "2026-11-20"
+   "hits": 31,
+   "last_hit": "2026-11-21"
   },
   {
    "domain": "cisa.gov",
@@ -113,8 +113,8 @@
   {
    "domain": "aws.amazon.com",
    "weight": 20.0,
-   "hits": 23,
-   "last_hit": "2026-11-20"
+   "hits": 24,
+   "last_hit": "2026-11-21"
   },
   {
    "domain": "advisories.gitlab.com",

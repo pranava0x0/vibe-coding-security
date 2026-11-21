@@ -2,7 +2,7 @@
 id: 2026-11-bitrise-security-incident-internal-system-access-all-services-offline-rotate-secrets
 title: "Bitrise security incident: unauthorized access to an internal system, all services taken offline on 2026-11-13; rotate secrets, access tokens and certificates"
 date_disclosed: 2026-11-13
-last_updated: 2026-11-19
+last_updated: 2026-11-21
 severity: high
 status: contained
 ecosystems: [bitrise, ci-cd, mobile, saas, github, code-signing]
@@ -102,10 +102,26 @@ What to do, from the review:
 2. Authorize the Bitrise GitHub App again, or reconnect the GitHub OAuth connection, whichever the project uses.
 3. Re-add the SSH key if a build cannot clone the repository.
 
+## Update 2026-11-21: full incident report counts the files accessed in the 15 workspaces
+
+Bitrise published its [incident report](https://bitrise.io/artex-incident-report) on 2026-11-19. The page read on 2026-11-21 is version 1.4.
+
+- Activity ran from 2026-10-25 to 2026-11-18. The sign-in to the dormant internal test bot account was on 2026-11-13 at 11:46:48 UTC.
+- "Files in 15 customer workspaces were accessed without authorization." The files were 1 code-signing certificate file, 1 provisioning profile and 13 diagnostic build logs from May 2026.
+- Bitrise says the attacker could not access the password for the certificate file. It says one log contained a credential and another an email address.
+- "Our logs show no access, and no attempted access, to the store that holds customer secrets."
+- The attacker downloaded 236 production Terraform state files. Bitrise says it treated every secret in them as exposed and rotated it.
+- The attacker returned on 2026-11-18. Bitrise counts 19 cloud requests, all denied, and 9 sign-in attempts, all refused.
+- Bitrise says some of its repositories were copied and that it found no change to its code or releases.
+- The report says how several credentials were obtained, an infrastructure key among them, "is not established".
+
+Bitrise's advice is unchanged: rotate the secrets, tokens and certificates stored in Bitrise and reconnect GitHub. The status stays `contained`.
+
 ## Sources
 
 Single source: the vendor.
 
+- [Bitrise: security incident report, October to November 2026](https://bitrise.io/artex-incident-report): published 2026-11-19, version 1.4 read 2026-11-21. File counts, dates, quoted sentences.
 - [Bitrise status](https://status.bitrise.io), fetched 2026-11-14: the "Security Incident" entry (incident id 7055z4g9nbck), seventeen updates from 2026-11-13 20:44 UTC to 2026-11-14 14:34 UTC, SEV-1, All Users, unresolved.
 - Hacker News item 50489750, seen 2026-11-14 through the Algolia search feed: the status page submitted on 2026-11-13, 4 points. The item page was not opened.
 - Not covered: the incident's own URL, Bitrise's blog and trust centre, and any customer email.

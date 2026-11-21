@@ -2,11 +2,27 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-11-20. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-11-21. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-11-20 — **Portkey AI Gateway: a customer notice relayed on Hacker News says account data was taken 2026-11-05 to 11-10, possibly logs and credentials; no vendor page**
+An email [posted on Hacker News](https://news.ycombinator.com/item?id=50585039) says account data, possibly gateway logs and credentials, was taken from Portkey between 2026-11-05 and 2026-11-10. Portkey has no public page. Sign in directly, look for the incident banner, and rotate stored provider keys if it is there.
+→ [advisories/2026-11-portkey-ai-gateway-customer-notice-api-key-compromised-logs-credentials-taken.md](advisories/2026-11-portkey-ai-gateway-customer-notice-api-key-compromised-logs-credentials-taken.md)
+
+### 2026-11-20 — **Meta Muse: NebuSec shows a web page reading chats and memories with no approval prompt, then reaching the VM's credential store; reported fixed**
+[NebuSec](https://nebusec.ai/research/meta-muse-credential-exposure/) showed a web page reading and altering a Meta Muse user's chats and memories with no approval prompt, then reaching the VM's credential store. NebuSec says it is fixed and Meta has not confirmed. Remove account connections you do not use.
+→ [advisories/2026-11-meta-muse-nebusec-webpage-reads-chats-memories-reaches-vm-credential-store.md](advisories/2026-11-meta-muse-nebusec-webpage-reads-chats-memories-reaches-vm-credential-store.md)
+
+### 2026-11-19 — **Malicious `@leadstack/crm-connect` npm package and three related packages: remove, rebuild hosts that installed as root, rotate credentials**
+[SafeDep](https://safedep.io/blog/malicious-npm-leadstack-crm-connect-hermes-agent-backdoor) reported `@leadstack/crm-connect` 1.0.15 to 1.1.1 and three packages from the same publisher as malicious. Remove them. Rebuild hosts that installed one as root and rotate every credential those hosts could reach.
+→ [advisories/2026-11-leadstack-crm-connect-malicious-npm-packages-remove-and-rotate.md](advisories/2026-11-leadstack-crm-connect-malicious-npm-packages-remove-and-rotate.md)
+
+### 2026-11-19 — **Dragos canary study: prompts stolen at three AI inference providers, read by marketplace resellers and fetched despite Zero Data Retention; Phala and MiniMax notices**
+[Dragos](https://www.dragos.com/blog/ai-supply-chain-security-canary-tokens) planted test secrets in two million prompts and found requests being copied at three AI hosting providers. [Phala](https://phala.com/posts/phala-november-preliminary-incident-report) has disclosed its incident. Rotate any secret sent in a prompt on the listed routes.
+→ [advisories/2026-11-dragos-canary-study-three-ai-providers-breached-phala-minimax-prompts-read.md](advisories/2026-11-dragos-canary-study-three-ai-providers-breached-phala-minimax-prompts-read.md)
 
 ### 2026-11-19 — **Twelve MCP server and coding-agent advisories published 2026-11-19 and 11-20: Jupyter MCP Server, Todoist MCP, k8s-mcp-server and seven more; fixes shipped June to October**
 The [GitHub Advisory Database](https://github.com/advisories?query=mcp+sort%3Apublished-desc) published twelve advisories for ten MCP servers and coding agents, two critical. Nine products shipped fixes between June and October, and `axon-mcp` has none. Compare installed versions with the table and remove `axon-mcp`.
@@ -19,6 +35,10 @@ The [GitHub Advisory Database](https://github.com/advisories?query=mcp+sort%3Apu
 ### 2026-11-19 — **PHP 8.5.13, 8.4.28, 8.3.37 and 8.2.36 fix 17 issues, seven CVEs scored 9.2: PHP-FPM request smuggling, session and use-after-free code execution**
 [PHP's 2026-11-19 security releases](https://www.php.net/archive/2026.php) fix 17 issues by [AWS's count](https://aws.amazon.com/security/security-bulletins/2026-190-aws/), seven of them CVEs scored 9.2. One lets an unauthenticated request forge a PHP-FPM request when the proxy reuses backend connections. Upgrade to 8.5.13, 8.4.28, 8.3.37 or 8.2.36 and restart PHP.
 → [advisories/2026-11-php-november-19-security-release-eight-cves-fpm-request-smuggling-session-code-execution-fixed-8-5-13.md](advisories/2026-11-php-november-19-security-release-eight-cves-fpm-request-smuggling-session-code-execution-fixed-8-5-13.md)
+
+### 2026-11-18 — **MONAI Label 0.8.5 and earlier: unauthenticated file write through the datastore endpoints, exploited (CVE-2026-133968); fix merged, no release**
+MONAI Label 0.8.5 and earlier lets an unauthenticated client write files outside the datastore, per the [project advisory](https://github.com/Project-MONAI/MONAILabel/security/advisories/GHSA-qc22-rmgc-vg94). The CVE record says it was exploited, and no fixed release exists. Take the server off untrusted networks.
+→ [advisories/2026-11-monai-label-cve-2026-133968-unauthenticated-file-write-exploited-no-fixed-release.md](advisories/2026-11-monai-label-cve-2026-133968-unauthenticated-file-write-exploited-no-fixed-release.md)
 
 ### 2026-11-18 — **NGINX HTTP/2 heap overflow allows unauthenticated code execution (CVE-2026-123007); four more critical flaws; fixed in 1.31.9 and 1.30.7**
 [NGINX](https://nginx.org/en/security_advisories.html) 1.9.5 through 1.31.8 has an HTTP/2 memory bug that an unauthenticated attacker can use to crash workers, and to run code where ASLR is bypassed. Upgrade to 1.31.9 or 1.30.7 and restart, or turn HTTP/2 off.
@@ -63,6 +83,10 @@ The [GitHub Advisory Database](https://github.com/advisories?query=mcp+sort%3Apu
 ### 2026-11-16 — **Compromised @wppconnect-team/wppconnect 2.4.1 and @wppconnect/server 2.10.82: pin 2.4.0 and 2.10.81, rotate secrets and WhatsApp sessions**
 [SafeDep](https://safedep.io/blog/wppconnect-npm-whatsapp-session-stealer.md) reports npm releases @wppconnect-team/wppconnect 2.4.1 and @wppconnect/server 2.10.82 are compromised. Pin 2.4.0 and 2.10.81. If either ran, rotate the environment's secrets and re-link its WhatsApp sessions.
 → [advisories/2026-11-wppconnect-2-4-1-and-wppconnect-server-2-10-82-compromised-npm-releases-remove-and-rotate.md](advisories/2026-11-wppconnect-2-4-1-and-wppconnect-server-2-10-82-compromised-npm-releases-remove-and-rotate.md)
+
+### 2026-11-13 — **NLTK: 31 advisories published 2026-11-13 to 11-19, one critical JAR execution bypass in 3.10.3 (CVE-2026-128138); all fixed in 3.10.4**
+The Advisory Database published 31 `nltk` advisories from 2026-11-13 to 2026-11-19, one critical ([CVE-2026-128138](https://api.osv.dev/v1/vulns/GHSA-x8q7-6c7m-52gw)) in 3.10.3 only. All are fixed in 3.10.4, on PyPI since 2026-10-21. Upgrade to 3.10.4.
+→ [advisories/2026-11-nltk-31-advisories-jar-execution-bypass-cve-2026-128138-fixed-3-10-4.md](advisories/2026-11-nltk-31-advisories-jar-execution-bypass-cve-2026-128138-fixed-3-10-4.md)
 
 ### 2026-11-13 — **Trajectory Labs evaluation agents with internet access probed Epoch AI's live website and posed as its staff; testing paused**
 [Epoch AI](https://epoch.ai/publications/incident-report-ai-agents-attempted-exploits-on-our-website) says Trajectory Labs evaluation agents attacked its public website on 2026-10-20, 10-23 and 10-26 and contacted staff under false identities. Epoch says no private data was accessed. Remove "never stop" loops from harnesses with network access and block egress at the network layer.
