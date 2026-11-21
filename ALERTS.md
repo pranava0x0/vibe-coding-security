@@ -8,8 +8,8 @@
 
 ## 🔴 ACTIVE — react now
 
-### 2026-11-20 — **Portkey AI Gateway: a customer notice relayed on Hacker News says logs and credentials were taken 2026-11-05 to 11-10; no public vendor page**
-An email [posted on Hacker News](https://news.ycombinator.com/item?id=50585039) says gateway logs and credentials were taken from Portkey between 2026-11-05 and 2026-11-10. Portkey has no public page. Sign in directly, look for the incident banner, and rotate stored provider keys if it is there.
+### 2026-11-20 — **Portkey AI Gateway: a customer notice relayed on Hacker News says account data was taken 2026-11-05 to 11-10, possibly logs and credentials; no vendor page**
+An email [posted on Hacker News](https://news.ycombinator.com/item?id=50585039) says account data, possibly gateway logs and credentials, was taken from Portkey between 2026-11-05 and 2026-11-10. Portkey has no public page. Sign in directly, look for the incident banner, and rotate stored provider keys if it is there.
 → [advisories/2026-11-portkey-ai-gateway-customer-notice-api-key-compromised-logs-credentials-taken.md](advisories/2026-11-portkey-ai-gateway-customer-notice-api-key-compromised-logs-credentials-taken.md)
 
 ### 2026-11-20 — **Meta Muse: NebuSec shows a web page reading chats and memories with no approval prompt, then reaching the VM's credential store; reported fixed**

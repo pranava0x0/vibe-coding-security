@@ -4,7 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
-| 2026-11-20 | [Portkey AI Gateway: a customer notice relayed on Hacker News says logs and credentials were taken 2026-11-05 to 11-10; no public vendor page](2026-11-portkey-ai-gateway-customer-notice-api-key-compromised-logs-credentials-taken.md) | high | unconfirmed |
+| 2026-11-20 | [Portkey AI Gateway: a customer notice relayed on Hacker News says account data was taken 2026-11-05 to 11-10, possibly logs and credentials; no vendor page](2026-11-portkey-ai-gateway-customer-notice-api-key-compromised-logs-credentials-taken.md) | high | unconfirmed |
 | 2026-11-20 | [Meta Muse: NebuSec shows a web page reading chats and memories with no approval prompt, then reaching the VM's credential store; reported fixed](2026-11-meta-muse-nebusec-webpage-reads-chats-memories-reaches-vm-credential-store.md) | high | unconfirmed |
 | 2026-11-19 | [Dragos canary study: prompts stolen at three AI inference providers, read by marketplace resellers and fetched despite Zero Data Retention; Phala and MiniMax notices](2026-11-dragos-canary-study-three-ai-providers-breached-phala-minimax-prompts-read.md) | high | active |
 | 2026-11-19 | [Twelve MCP server and coding-agent advisories published 2026-11-19 and 11-20: Jupyter MCP Server, Todoist MCP, k8s-mcp-server and seven more; fixes shipped June to October](2026-11-mcp-server-advisories-november-19-20-jupyter-todoist-k8s-sqlite-obsidian-codewhale-fixed-earlier.md) | high | patched |

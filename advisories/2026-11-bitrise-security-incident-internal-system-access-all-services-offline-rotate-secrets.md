@@ -104,7 +104,7 @@ What to do, from the review:
 
 ## Update 2026-11-21: full incident report counts the files accessed in the 15 workspaces
 
-Bitrise published its [incident report](https://bitrise.io/artex-incident-report) on 2026-11-19. The page read on 2026-11-21 is version 1.4. It supersedes the preliminary review.
+Bitrise published its [incident report](https://bitrise.io/artex-incident-report) on 2026-11-19. The page read on 2026-11-21 is version 1.4.
 
 - Activity ran from 2026-10-25 to 2026-11-18. The sign-in to the dormant internal test bot account was on 2026-11-13 at 11:46:48 UTC.
 - "Files in 15 customer workspaces were accessed without authorization." The files were 1 code-signing certificate file, 1 provisioning profile and 13 diagnostic build logs from May 2026.
@@ -113,7 +113,7 @@ Bitrise published its [incident report](https://bitrise.io/artex-incident-report
 - The attacker downloaded 236 production Terraform state files. Bitrise says it treated every secret in them as exposed and rotated it.
 - The attacker returned on 2026-11-18. Bitrise counts 19 cloud requests, all denied, and 9 sign-in attempts, all refused.
 - Bitrise says some of its repositories were copied and that it found no change to its code or releases.
-- The report says how one infrastructure key was obtained "is not established".
+- The report says how several credentials were obtained, an infrastructure key among them, "is not established".
 
 Bitrise's advice is unchanged: rotate the secrets, tokens and certificates stored in Bitrise and reconnect GitHub. The status stays `contained`.
 

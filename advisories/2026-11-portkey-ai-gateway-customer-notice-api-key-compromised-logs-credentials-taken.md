@@ -1,6 +1,6 @@
 ---
 id: 2026-11-portkey-ai-gateway-customer-notice-api-key-compromised-logs-credentials-taken
-title: "Portkey AI Gateway: a customer notice relayed on Hacker News says logs and credentials were taken 2026-11-05 to 11-10; no public vendor page"
+title: "Portkey AI Gateway: a customer notice relayed on Hacker News says account data was taken 2026-11-05 to 11-10, possibly logs and credentials; no vendor page"
 date_disclosed: 2026-11-20
 last_updated: 2026-11-21
 severity: high
@@ -12,7 +12,7 @@ tags: [ai-gateway, breach, vendor-incident, relayed-notice, single-source, crede
 
 ## TL;DR
 
-A [Hacker News user](https://news.ycombinator.com/item?id=50585039) posted an email dated 2026-11-20 that says an unauthorized party took customer data from Portkey AI Gateway between 2026-11-05 and 2026-11-10. The email lists account emails, gateway logs and "Credentials (including API keys and tokens)". Portkey has no public page for it, and nothing else confirms it. Sign in to Portkey by typing the address yourself and look for the incident banner. Do not follow links in the email.
+A [Hacker News user](https://news.ycombinator.com/item?id=50585039) posted an email dated 2026-11-20 that says an unauthorized party took customer data from Portkey AI Gateway between 2026-11-05 and 2026-11-10. The email says the data "may include one or more of" account emails, gateway logs and "Credentials (including API keys and tokens)". Portkey has no public page for it, and nothing else confirms it. Sign in to Portkey by typing the address yourself and look for the incident banner. Do not follow links in the email.
 
 ## What happened
 
@@ -28,7 +28,7 @@ As relayed, the email says:
 
 What was checked on 2026-11-21:
 
-- `status.portkey.ai` listed no security incident.
+- `status.portkey.ai` listed no security incident. It shows "UI Features Disabled for Some Accounts" on 2026-11-10, degraded for 48 minutes.
 - The Portkey blog index showed no post about it.
 - A web search returned no outlet coverage.
 - The Hacker News item had 3 points and no comments.

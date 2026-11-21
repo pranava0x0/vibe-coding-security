@@ -12,7 +12,7 @@ tags: [inference-provider, prompt-exposure, breach, zero-data-retention, ai-rout
 
 ## TL;DR
 
-[Dragos](https://www.dragos.com/blog/ai-supply-chain-security-canary-tokens) sent about two million prompts with unique test secrets to AI services from July to November 2026. It reports that attackers were copying requests at three hosting providers, and names none of them. [Phala](https://phala.com/posts/phala-november-preliminary-incident-report) has published its own incident, and OpenRouter has emailed users about MiniMax models. Rotate any secret that appeared in a prompt sent on the routes below. Stop putting credentials in prompts.
+[Dragos](https://www.dragos.com/blog/ai-supply-chain-security-canary-tokens) sent about two million prompts with unique test secrets to AI services from July to November 2026. It reports that attackers were stealing data from three hosting providers, and names none of them. [Phala](https://phala.com/posts/phala-november-preliminary-incident-report) has published its own incident, and OpenRouter has emailed users about MiniMax models. Rotate any secret that appeared in a prompt sent on the routes below. Stop putting credentials in prompts.
 
 ## What happened
 
@@ -26,7 +26,7 @@ Dragos says the first provider "has still not publicly disclosed the incident". 
 
 ### Phala's report
 
-Phala's preliminary report is dated 2026-11-10. It says an attacker took control of an inference VM serving DeepSeek V4 Flash 0731, "making in-flight request data visible during processing". Phala served that model only through OpenRouter. A "third-party security researcher" gave it the evidence on 2026-11-08, from canary credentials sent on 2026-10-21 and 10-22. Phala says it contained the incident on 2026-11-08 at 05:35 UTC and that the investigation continues.
+Phala's preliminary report is dated 2026-11-10. It says an attacker took control of an inference VM serving DeepSeek V4 Flash 0731, "making in-flight request data visible during processing". Phala says the requests were routed to it by OpenRouter and that it served the model "only through the affected route". A "third-party security researcher" gave it the evidence on 2026-11-08, from canary credentials sent on 2026-10-21 and 10-22. Phala says it contained the incident on 2026-11-08 at 05:35 UTC and that the investigation continues.
 
 The same attacker created unauthorized confidential VMs on two servers and obtained application credentials. Phala confirmed misuse of some stolen credentials belonging to one tenant and says it contacted that tenant.
 
@@ -58,7 +58,7 @@ Dragos does not name the lab in its third finding. The notice's dates and method
 ## If you are affected
 
 1. Rotate every API key, token and password that appeared in a prompt or tool result on an affected route. Phala asks for this.
-2. Review those accounts for use you do not recognise. Dragos saw stolen AWS keys tested within hours, then used to list S3 buckets, read Secrets Manager and Parameter Store, enable Bedrock models and add IAM users. See [rotating cloud credentials](../playbooks/rotating-cloud-credentials.md).
+2. Review those accounts for use you do not recognise. Dragos saw stolen AWS keys tested within hours, then used to list S3 buckets and search Secrets Manager and Parameter Store. It saw attempts to enable Bedrock models and to add IAM users. See [rotating cloud credentials](../playbooks/rotating-cloud-credentials.md).
 3. Phala confidential VM owners who received a notice: rotate the KMS-derived secrets it lists.
 4. In your router settings, pick the upstream providers yourself and check that a privacy setting changes where requests go.
 
@@ -74,5 +74,5 @@ Dragos does not name the lab in its third finding. The notice's dates and method
 - [Dragos: Three breaches, endless leaks: Your AI supply chain needs canaries](https://www.dragos.com/blog/ai-supply-chain-security-canary-tokens): HD Moore, 2026-11-19, read 2026-11-21. Method, three findings, quoted sentences.
 - [Phala November Preliminary Incident Report](https://phala.com/posts/phala-november-preliminary-incident-report): 2026-11-10, read 2026-11-21. Window, timeline, tenant impact.
 - [Hacker News item 50585962](https://news.ycombinator.com/item?id=50585962): 2026-11-21, 27 points when read. The OpenRouter email as posted by a recipient, read through the Algolia items API.
-- [Ars Technica](https://arstechnica.com/security/2026/11/a-leaky-ai-supply-chain-is-exposing-secret-user-data-at-an-alarming-rate/): 2026-11-20. Coverage of the Dragos post. Names no provider.
+- [Ars Technica](https://arstechnica.com/security/2026/11/a-leaky-ai-supply-chain-is-exposing-secret-user-data-at-an-alarming-rate/): 2026-11-20. Coverage of the Dragos post. Names no breached provider.
 - Not found: a public OpenRouter page, a MiniMax statement, or the names of the other two providers.
