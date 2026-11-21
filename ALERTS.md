@@ -16,6 +16,10 @@ An email [posted on Hacker News](https://news.ycombinator.com/item?id=50585039) 
 [NebuSec](https://nebusec.ai/research/meta-muse-credential-exposure/) showed a web page reading and altering a Meta Muse user's chats and memories with no approval prompt, then reaching the VM's credential store. NebuSec says it is fixed and Meta has not confirmed. Remove account connections you do not use.
 → [advisories/2026-11-meta-muse-nebusec-webpage-reads-chats-memories-reaches-vm-credential-store.md](advisories/2026-11-meta-muse-nebusec-webpage-reads-chats-memories-reaches-vm-credential-store.md)
 
+### 2026-11-19 — **Malicious `@leadstack/crm-connect` npm package and three related packages: remove, rebuild hosts that installed as root, rotate credentials**
+[SafeDep](https://safedep.io/blog/malicious-npm-leadstack-crm-connect-hermes-agent-backdoor) reported `@leadstack/crm-connect` 1.0.15 to 1.1.1 and three packages from the same publisher as malicious. Remove them. Rebuild hosts that installed one as root and rotate every credential those hosts could reach.
+→ [advisories/2026-11-leadstack-crm-connect-malicious-npm-packages-remove-and-rotate.md](advisories/2026-11-leadstack-crm-connect-malicious-npm-packages-remove-and-rotate.md)
+
 ### 2026-11-19 — **Dragos canary study: prompts stolen at three AI inference providers, read by marketplace resellers and fetched despite Zero Data Retention; Phala and MiniMax notices**
 [Dragos](https://www.dragos.com/blog/ai-supply-chain-security-canary-tokens) planted test secrets in two million prompts and found requests being copied at three AI hosting providers. [Phala](https://phala.com/posts/phala-november-preliminary-incident-report) has disclosed its incident. Rotate any secret sent in a prompt on the listed routes.
 → [advisories/2026-11-dragos-canary-study-three-ai-providers-breached-phala-minimax-prompts-read.md](advisories/2026-11-dragos-canary-study-three-ai-providers-breached-phala-minimax-prompts-read.md)
