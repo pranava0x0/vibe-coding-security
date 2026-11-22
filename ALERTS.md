@@ -2,11 +2,19 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-11-21. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-11-22. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-11-21 — **RunPod MCP server 4.13.0 and 4.14.0 told agents to submit a rating and not mention it to the user; removed in 4.15.0**
+RunPod's hosted MCP server told agents to call a rating tool and not mention it to the user, as reported in [issue 202](https://github.com/runpod/runpod-mcp/issues/202). Version 4.15.0 removed the rating and referral tools on 2026-11-22. Search agent logs for `rate_nps_score` calls.
+→ [advisories/2026-11-runpod-mcp-server-told-agents-to-rate-it-and-not-mention-it-to-the-user-removed-4-15-0.md](advisories/2026-11-runpod-mcp-server-told-agents-to-rate-it-and-not-mention-it-to-the-user-removed-4-15-0.md)
+
+### 2026-11-21 — **Together AI: stored prompt samples from June and July 2026 downloaded after a coding agent committed a credential to a public repository**
+[Together AI](https://www.together.ai/blog/security-event-prompt-leakage-for-requests-in-june-and-july-of-2026) says an unauthorized party downloaded stored prompt samples from June and July 2026 requests to MiniMax M3, GLM-5.2 and Kimi K2.6, then tested credentials found in them. Rotate any secret sent in those prompts.
+→ [advisories/2026-11-together-ai-prompt-samples-downloaded-after-coding-agent-committed-credential-june-july-requests.md](advisories/2026-11-together-ai-prompt-samples-downloaded-after-coding-agent-committed-credential-june-july-requests.md)
 
 ### 2026-11-20 — **Portkey AI Gateway: a customer notice relayed on Hacker News says account data was taken 2026-11-05 to 11-10, possibly logs and credentials; no vendor page**
 An email [posted on Hacker News](https://news.ycombinator.com/item?id=50585039) says account data, possibly gateway logs and credentials, was taken from Portkey between 2026-11-05 and 2026-11-10. Portkey has no public page. Sign in directly, look for the incident banner, and rotate stored provider keys if it is there.
@@ -21,7 +29,7 @@ An email [posted on Hacker News](https://news.ycombinator.com/item?id=50585039) 
 → [advisories/2026-11-leadstack-crm-connect-malicious-npm-packages-remove-and-rotate.md](advisories/2026-11-leadstack-crm-connect-malicious-npm-packages-remove-and-rotate.md)
 
 ### 2026-11-19 — **Dragos canary study: prompts stolen at three AI inference providers, read by marketplace resellers and fetched despite Zero Data Retention; Phala and MiniMax notices**
-[Dragos](https://www.dragos.com/blog/ai-supply-chain-security-canary-tokens) planted test secrets in two million prompts and found requests being copied at three AI hosting providers. [Phala](https://phala.com/posts/phala-november-preliminary-incident-report) has disclosed its incident. Rotate any secret sent in a prompt on the listed routes.
+[Dragos](https://www.dragos.com/blog/ai-supply-chain-security-canary-tokens) planted test secrets in about two million prompts and found requests being copied at three AI hosting providers. [OpenRouter](https://openrouter.ai/blog/announcements/data-processing-incidents-on-inference-providers/) removed three unnamed providers on 2026-11-22, and Phala, Novita and Together AI have published notices. Rotate any secret sent in a prompt on the listed routes.
 → [advisories/2026-11-dragos-canary-study-three-ai-providers-breached-phala-minimax-prompts-read.md](advisories/2026-11-dragos-canary-study-three-ai-providers-breached-phala-minimax-prompts-read.md)
 
 ### 2026-11-19 — **Twelve MCP server and coding-agent advisories published 2026-11-19 and 11-20: Jupyter MCP Server, Todoist MCP, k8s-mcp-server and seven more; fixes shipped June to October**
@@ -171,6 +179,10 @@ The Advisory Database published 31 `nltk` advisories from 2026-11-13 to 2026-11-
 ### 2026-11-10 — **VS Code 1.145.3 fixes 19 CVEs (MCP server links, Workspace Trust bypasses); Aspire 13.6.5 and MCP Gateway also patched (2026-11-10)**
 [Microsoft](https://api.msrc.microsoft.com/cvrf/v3.0/cvrf/2026-Nov) fixed 19 CVEs in Visual Studio Code 1.145.3 on 2026-11-10, including remote MCP server code execution (CVE-2026-120779, 9.6). Update VS Code to 1.145.3 and Aspire to 13.6.5.
 → [advisories/2026-11-microsoft-november-patch-tuesday-vs-code-1-145-3-nineteen-cves-mcp-install-workspace-trust-aspire-mcp-gateway.md](advisories/2026-11-microsoft-november-patch-tuesday-vs-code-1-145-3-nineteen-cves-mcp-install-workspace-trust-aspire-mcp-gateway.md)
+
+### 2026-11-09 — **Ghostscript before 10.08.0: crafted file escapes -dSAFER and runs commands through upload, email and print paths (CVE-2026-125396, Upload2Shell)**
+A crafted file makes Ghostscript before 10.08.0 run arbitrary code. [pwn.ai](https://pwn.ai/upload2shell) ran commands through ImageMagick upload paths and reached the renderer through Pillow. Update Ghostscript on hosts and inside container images that process uploads.
+→ [advisories/2026-11-ghostscript-upload2shell-cve-2026-125396-dsafer-escape-through-image-upload-paths-fixed-10-08-0.md](advisories/2026-11-ghostscript-upload2shell-cve-2026-125396-dsafer-escape-through-image-upload-paths-fixed-10-08-0.md)
 
 ### 2026-11-09 — **Arize Phoenix 13.0.0 to before 15.7.0: unauthenticated read of server environment and PHOENIX_SECRET (CVE-2026-53998, CVSS 10.0); fixed in 15.7.0**
 [Arize Phoenix](https://github.com/Arize-ai/phoenix/security/advisories/GHSA-gfv3-m769-5xm3) 13.0.0 to before 15.7.0 lets anyone who can reach the server read its environment, including PHOENIX_SECRET, with no login on a default install. Upgrade to 15.7.0 or later, then change PHOENIX_SECRET and stored provider keys.

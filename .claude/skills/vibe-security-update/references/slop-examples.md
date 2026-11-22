@@ -4,6 +4,13 @@ Read this before writing any advisory or `ALERTS.md` entry. Append a pair each
 time review or the owner finds slop, and add a matching line to
 `tools/slop_patterns.tsv` when the shape can be matched by a regex. Newest on top.
 
+## 2026-11-22 (sweep self-review)
+
+**Generalisation no source states** (Ghostscript advisory, Am I affected?)
+- Before: "Many images install Ghostscript as a dependency of ImageMagick or a PDF tool."
+- After: "List the packages in each image before assuming Ghostscript is absent. pwn.ai notes that the official Paperless-ngx image includes it."
+- Why: "many" was not counted and no fetched page says it. No regex matches this shape, so check every quantifier against the fetched text.
+
 ## 2026-11-21 (sweep self-review)
 
 **Instruction about paperwork** (MONAI Label advisory, If you are affected)

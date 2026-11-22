@@ -2,7 +2,7 @@
 id: 2026-11-mcp-server-advisories-november-19-20-jupyter-todoist-k8s-sqlite-obsidian-codewhale-fixed-earlier
 title: "Twelve MCP server and coding-agent advisories published 2026-11-19 and 11-20: Jupyter MCP Server, Todoist MCP, k8s-mcp-server and seven more; fixes shipped June to October"
 date_disclosed: 2026-11-19
-last_updated: 2026-11-20
+last_updated: 2026-11-22
 severity: high
 status: patched
 ecosystems: [mcp, npm, pypi, go, jupyter, kubernetes, coding-agents]
@@ -44,6 +44,10 @@ This file rates the batch `high`. Both critical scores apply to an optional HTTP
 
 Earlier CodeWhale advisories are in [the August agent-framework batch](2026-08-agent-framework-mcp-cve-batch.md).
 
+## Update 2026-11-22: AWS Document Loader MCP Server, CVE-2026-130901
+
+[AWS bulletin 2026-195-AWS](https://aws.amazon.com/security/security-bulletins/2026-195-aws/) of 2026-11-20 covers `awslabs.document-loader-mcp-server` 1.0.10 through 1.0.20. When `DOCUMENT_BASE_DIR` is unset or empty and CI or test environment variables are present, the base directory restriction is not enforced. Someone who can influence the documents the client processes could read supported files outside the directory, and in 1.0.12 through 1.0.20 write PNG slide images elsewhere. Version 1.0.21 fixes it. PyPI's newest was 1.0.27 when read on 2026-11-22. AWS's workaround is to set `DOCUMENT_BASE_DIR` to the documents directory, and not to `/`.
+
 ## Am I affected?
 
 ```bash
@@ -73,4 +77,5 @@ npm ls -g @doist/todoist-mcp obsidian-sync-mcp @apireno/domshell safari-mcp code
 - OSV copies of the twelve advisories, linked per row, read 2026-11-20: ranges, fixed versions, descriptions.
 - [CVE-2026-77359](https://cveawg.mitre.org/api/cve/CVE-2026-77359) and [CVE-2026-76807](https://cveawg.mitre.org/api/cve/CVE-2026-76807), CVE Services records: the two 9.3 scores and their conditions.
 - Registry reads on 2026-11-20: `npm view <package> time`, `pypi.org/pypi/<package>/<version>/json`, `proxy.golang.org/<module>/@latest`.
+- [AWS bulletin 2026-195-AWS](https://aws.amazon.com/security/security-bulletins/2026-195-aws/), 2026-11-20, read 2026-11-22, and `pip index versions awslabs.document-loader-mcp-server` the same day.
 - Not opened: the ten vendor advisory pages, crates.io.

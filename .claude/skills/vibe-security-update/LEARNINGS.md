@@ -440,3 +440,15 @@ Five things from **2026-11-21**:
 5. **NLTK was declined on two runs while rows kept arriving.** One OSV package query gave 31 advisories, one fixed version, and a PyPI date a month before the first row. **Rule:** a package seen on a second run gets the OSV query that day. New SKILL.md row.
 
 A restricted `WebFetch` prompt on a package write-up still returned a behaviour summary. Only names, versions and paths were taken from it. Four literals written from memory were caught in review (a router feature, a gateway product term, a settings name, a package-manager command). The run skipped Tier B, Tier C, the tab walk and the vendor blog indexes, and the run log lists them as blockers. Slop loop: see the last line of the 2026-11-21 run-log notes.
+
+## 82. A router's incident page indexes its providers' notices; a vendor's MCP server can instruct the agent to hide an action; a researcher's index mixes executed and traced paths; and the registry tarball is the quotable copy of an issue thread
+
+Five things from **2026-11-22**:
+
+1. **OpenRouter's post linked three provider notices and named none of the three providers it removed.** Novita's window (2026-05-28 to 2026-11-11) is wider than the relayed email's. Together's notice is a separate incident: a coding agent committed a credential and stored prompt samples were downloaded. **Rule:** open every notice a router links, give each provider its own row and window, and never map an unnamed count onto the named providers. Two new SKILL.md rows.
+2. **RunPod's MCP server asked agents for a rating and told them not to mention it.** The story was a 5-point Algolia item linking a GitHub issue. `curl` cannot reach `github.com`, and the summarizing fetch said "fixed in 4.15.0". The npm tarballs showed the strings in 4.13.0 and 4.14.0, a rewording in 4.14.1 and removal in 4.15.0. **Rule:** for an npm-published MCP server, unpack the versions around the report in their own directories and quote from the build and the CHANGELOG. New SKILL.md row and a triage pattern.
+3. **pwn.ai's Ghostscript index lists 20 entries and says the first ten record execution.** Gradio is a recorded handoff. ComfyUI, InvokeAI, AUTOMATIC1111 and django-filer are mapped in source. The CNA record scores the flaw local. **Rule:** one table column for what the index records per product, and both the vector and the access path in the text. Two new SKILL.md rows.
+4. **The Hacker News attributed two statements to Together that the notice does not carry.** The existing "press-only detail" row covers it. They are printed as the outlet's.
+5. **VulnCheck issued ids for two Coder and two SurrealDB advisories already in home files.** Grepping the GHSA from the record's references found both. The files' "none has a CVE" sentences were dated.
+
+Three literals written from memory were removed before the gate (a claim about what container images install, a "by default" about MCP clients, an "only"). The run skipped every `WebSearch` tier, the vendor tabs, ZDI, CERT/CC and the vendor blog indexes, and the run log lists them as blockers. Slop loop: see the 2026-11-22 run-log notes.

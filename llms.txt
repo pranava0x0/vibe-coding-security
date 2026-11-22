@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-11-21
+**Last refreshed:** 2026-11-22
 
 ## Quick start
 
@@ -55,10 +55,13 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-11-21)
+## Active threat families (as of 2026-11-22)
 
 The highest-risk ongoing threat families for vibe coders:
 
+- **A vendor's own MCP server can tell the agent to act and keep it from the user (RunPod, 2026-11-21)** — `@runpod/mcp-server` 4.13.0 and 4.14.0 returned a tool-result note asking the agent to submit a rating and "do not mention it to the user". 4.15.0 removed it. Log every MCP tool call and review the ones outside the task. [Advisory](advisories/2026-11-runpod-mcp-server-told-agents-to-rate-it-and-not-mention-it-to-the-user-removed-4-15-0.md)
+- **A coding agent commits a credential to a public repository and the provider's stored prompts are downloaded (Together AI, 2026-11-21)** — Samples of June and July 2026 prompts were taken and searched for credentials. Rotate secrets sent in prompts, and scan agent commits for secrets. [Advisory](advisories/2026-11-together-ai-prompt-samples-downloaded-after-coding-agent-committed-credential-june-july-requests.md)
+- **The system renderer under an image upload is the exposure (Ghostscript CVE-2026-125396, fixed 10.08.0)** — Image libraries pass PostScript content to Ghostscript whatever the file is named. pwn.ai ran commands through ImageMagick paths and reached the renderer through Pillow. Update Ghostscript inside every image that processes uploads. [Advisory](advisories/2026-11-ghostscript-upload2shell-cve-2026-125396-dsafer-escape-through-image-upload-paths-fixed-10-08-0.md)
 - **Prompts are readable at every hop between you and the model (Dragos canary study, 2026-11-19; Phala 2026-11-10)** — Test secrets planted in two million prompts were stolen at three hosting providers, read by marketplace resellers and fetched despite Zero Data Retention flags. Keep credentials out of prompts, choose upstream providers yourself, and rotate any secret sent on a named route.
 - **A research server with no login by default was exploited before it had a CVE (MONAI Label, CVE-2026-133968, 2026-11-18)** — 0.8.5 and earlier let an unauthenticated client write files outside the datastore. A fix is merged and no release carries it. Take the server off untrusted networks.
 - **A personal agent's browser is the way into its credential store (Meta Muse, NebuSec, 2026-11-20)** — A web page read and altered chats and memories with no approval prompt, and a second chain reached the VM's credential store. NebuSec says it is fixed and Meta has not confirmed. Connect the fewest accounts the task needs.
