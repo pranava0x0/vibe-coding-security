@@ -2,7 +2,7 @@
 id: 2026-11-dragos-canary-study-three-ai-providers-breached-phala-minimax-prompts-read
 title: "Dragos canary study: prompts stolen at three AI inference providers, read by marketplace resellers and fetched despite Zero Data Retention; Phala and MiniMax notices"
 date_disclosed: 2026-11-19
-last_updated: 2026-11-21
+last_updated: 2026-11-22
 severity: high
 status: active
 ecosystems: [inference-providers, llm-api, ai-gateways, openrouter, open-weight-models]
@@ -12,7 +12,7 @@ tags: [inference-provider, prompt-exposure, breach, zero-data-retention, ai-rout
 
 ## TL;DR
 
-[Dragos](https://www.dragos.com/blog/ai-supply-chain-security-canary-tokens) sent about two million prompts with unique test secrets to AI services from July to November 2026. It reports that attackers were stealing data from three hosting providers, and names none of them. [Phala](https://phala.com/posts/phala-november-preliminary-incident-report) has published its own incident, and OpenRouter has emailed users about MiniMax models. Rotate any secret that appeared in a prompt sent on the routes below. Stop putting credentials in prompts.
+[Dragos](https://www.dragos.com/blog/ai-supply-chain-security-canary-tokens) sent about two million prompts with unique test secrets to AI services from July to November 2026. It reports that attackers were stealing data from three hosting providers, and names none of them. [Phala](https://phala.com/posts/phala-november-preliminary-incident-report), Together AI and Novita have published notices. [OpenRouter](https://openrouter.ai/blog/announcements/data-processing-incidents-on-inference-providers/) removed three providers on 2026-11-22 and names none of them. Rotate any secret that appeared in a prompt sent on the routes below. Stop putting credentials in prompts.
 
 ## What happened
 
@@ -43,12 +43,30 @@ A [Hacker News user](https://news.ycombinator.com/item?id=50585962) posted an em
 
 Dragos does not name the lab in its third finding. The notice's dates and method match it.
 
+## Update 2026-11-22: OpenRouter removes three providers; Novita and Together AI publish notices
+
+[OpenRouter](https://openrouter.ai/blog/announcements/data-processing-incidents-on-inference-providers/) published a page on 2026-11-22. It says the findings "did not show any breach or unauthorized access of OpenRouter". It lists three actions:
+
+- "Off-boarded three providers from OpenRouter". It does not name them.
+- "Removed 125 endpoints from Zero Data Retention (ZDR) eligibility", covering providers the researchers flagged and others removed as a precaution.
+- "Notified all potentially affected customers."
+
+The page links three provider notices, from Novita, Phala and Together, and says "not all affected providers have posted publicly".
+
+**Novita.** [Novita's notice](https://novita.ai/blog/minimax-requests-privacy-notice/) of 2026-11-22 says a routing configuration issue sent some MiniMax requests to MiniMax's official API. The window is 2026-05-28 to 2026-11-11, for requests made directly or routed through OpenRouter. That is wider than the July to October range in the relayed email. Novita says the researcher saw accesses to URLs and hostnames in test requests and "no use of the AWS test key markers was observed". It suspended the affected models and recommends rotating any secret sent in those requests.
+
+**Together AI.** Together's notice of 2026-11-21 says an unauthorized party downloaded stored prompt samples and tested credentials found in them. "Five of the credentials tested were canary credentials associated with a Dragos security experiment." It has [its own file](2026-11-together-ai-prompt-samples-downloaded-after-coding-agent-committed-credential-june-july-requests.md).
+
+[The Hacker News](https://thehackernews.com/2026/11/openrouter-drops-3-providers-after.html) writes that "Dragos has not named the three breached providers, OpenRouter has not named the three it removed, and neither has said publicly whether they are the same three."
+
 ## Am I affected?
 
 | Route | Window | Source | Action |
 |---|---|---|---|
 | OpenRouter to Phala, DeepSeek V4 Flash 0731 | 2026-10-21 00:00 UTC to 2026-11-08 05:35 UTC | Phala | rotate every secret in those requests |
 | MiniMax models through MiniMax, Novita, AtlasCloud or StreamLake | July to October 2026 | OpenRouter email, relayed | treat prompts and outputs as read |
+| MiniMax models through Novita, direct or through OpenRouter | 2026-05-28 to 2026-11-11 | Novita | rotate secrets sent in those requests |
+| Together AI serverless, MiniMax M3, GLM-5.2 or Kimi K2.6 | June and July 2026 | Together AI | rotate secrets sent in those prompts |
 | Two more breached providers | mid-July onward, and late October | Dragos, providers unnamed | cannot be checked by name |
 | Reseller marketplaces and routers with default provider pools | ongoing | Dragos | treat prompts as readable by each hop |
 
@@ -75,4 +93,8 @@ Dragos does not name the lab in its third finding. The notice's dates and method
 - [Phala November Preliminary Incident Report](https://phala.com/posts/phala-november-preliminary-incident-report): 2026-11-10, read 2026-11-21. Window, timeline, tenant impact.
 - [Hacker News item 50585962](https://news.ycombinator.com/item?id=50585962): 2026-11-21, 27 points when read. The OpenRouter email as posted by a recipient, read through the Algolia items API.
 - [Ars Technica](https://arstechnica.com/security/2026/11/a-leaky-ai-supply-chain-is-exposing-secret-user-data-at-an-alarming-rate/): 2026-11-20. Coverage of the Dragos post. Names no breached provider.
-- Not found: a public OpenRouter page, a MiniMax statement, or the names of the other two providers.
+- [OpenRouter: Data Processing Incidents on Inference Providers](https://openrouter.ai/blog/announcements/data-processing-incidents-on-inference-providers/): 2026-11-22. The three actions, the work under way, the list of provider notices.
+- [Novita: Privacy Notice Regarding MiniMax Requests on Novita](https://novita.ai/blog/minimax-requests-privacy-notice/): 2026-11-22. Window, cause, findings, advice.
+- [Together AI: Security event: Prompt leakage for requests in June and July of 2026](https://www.together.ai/blog/security-event-prompt-leakage-for-requests-in-june-and-july-of-2026): 2026-11-21. The canary sentence.
+- [The Hacker News](https://thehackernews.com/2026/11/openrouter-drops-3-providers-after.html): 2026-11-22. The sentence on what Dragos and OpenRouter have not named.
+- Not found: a MiniMax statement, notices from AtlasCloud or StreamLake, or the names of the providers Dragos counts and OpenRouter removed.

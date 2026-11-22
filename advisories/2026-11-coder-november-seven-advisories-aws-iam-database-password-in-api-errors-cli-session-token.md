@@ -2,7 +2,7 @@
 id: 2026-11-coder-november-seven-advisories-aws-iam-database-password-in-api-errors-cli-session-token
 title: "Coder: seven advisories from 2026-11-04 to 11-12; unauthenticated API errors could leak an AWS IAM database password (8.1); fixed 2.39.1, 2.38.7, 2.37.11"
 date_disclosed: 2026-11-11
-last_updated: 2026-11-13
+last_updated: 2026-11-22
 severity: high
 status: patched
 ecosystems: [coder, go, cloud-dev-environment, ai-agents]
@@ -11,7 +11,7 @@ tags: [coder, ghsa-batch, cloud-dev-environment, credential-leak, session-token,
 ---
 
 ## TL;DR
-Coder published seven advisories between 2026-11-04 and 2026-11-12, none with a CVE. The one rated High (GHSA-w4m3-qhx8-c649, vendor 8.1): on deployments that use AWS IAM database authentication, a failed database connection put the connection URL, with its temporary password, into API error responses that unauthenticated requests could trigger. Releases 2.39.1, 2.38.7, 2.37.11, 2.34.19 and 2.29.27, all dated 2026-11-10 on the Go module proxy, carry the fixes for all seven. The newest advisories list no patch for lines 2.30 to 2.33 and 2.35, which the vendor calls end-of-life, and most list none for 2.36.
+Coder published seven advisories between 2026-11-04 and 2026-11-12, none with a CVE when published. The one rated High (GHSA-w4m3-qhx8-c649, vendor 8.1) affects deployments that use AWS IAM database authentication. A failed database connection put the connection URL, with its temporary password, into API error responses that unauthenticated requests could trigger. Releases 2.39.1, 2.38.7, 2.37.11, 2.34.19 and 2.29.27, all dated 2026-11-10 on the Go module proxy, carry the fixes for all seven. The newest advisories list no patch for lines 2.30 to 2.33 and 2.35, which the vendor calls end-of-life, and most list none for 2.36.
 
 ## What happened
 
@@ -37,6 +37,17 @@ Details the reader needs:
 - **Skill symlink (GHSA-hm3r-4cg2-22xx).** A malicious skill in the victim's workspace could return a file outside the skill directory to the model. The read stays inside what the workspace agent's user can already read. Line 2.29 is not affected.
 
 The Go module proxy dates v2.39.1, v2.38.7, v2.37.11, v2.34.19 and v2.29.27 to 2026-11-10 between 14:20 and 15:10 UTC, and v2.39.0 to 2026-11-03.
+
+## Update 2026-11-22: two CVE ids from VulnCheck
+
+VulnCheck published records for two of the seven advisories on 2026-11-21. The fixed versions match the vendor pages. An install already on the fixed lines above needs nothing new, and scanners keyed on CVE ids flag from 2026-11-21.
+
+| Vendor advisory | CVE | VulnCheck score | Vendor score |
+|---|---|---|---|
+| GHSA-9h3q-h2rh-35gg, agent RPC crash | [CVE-2026-134361](https://cveawg.mitre.org/api/cve/CVE-2026-134361) | 7.1 (CVSS 4.0), 6.5 (CVSS 3.1) | 6.5 |
+| GHSA-hm3r-4cg2-22xx, `read_skill_file` symlink | [CVE-2026-134363](https://cveawg.mitre.org/api/cve/CVE-2026-134363) | 2.3 (CVSS 4.0), 3.1 (CVSS 3.1) | 3.1 Low |
+
+The other five advisories, including the High one, had no CVE id in the `agent` listing when read on 2026-11-22.
 
 ## Am I affected?
 
@@ -66,6 +77,8 @@ ps aux | grep -E 'samesite-auth-cookie[ =]none'   # widens the CSRF advisory
 - Keep the default `--samesite-auth-cookie lax`.
 
 ## Sources
+
+- [CVE-2026-134361](https://cveawg.mitre.org/api/cve/CVE-2026-134361) and [CVE-2026-134363](https://cveawg.mitre.org/api/cve/CVE-2026-134363), CVE Services, VulnCheck CNA, published 2026-11-21, read 2026-11-22: ranges, scores, the referenced vendor advisories.
 
 Single source: the vendor, for its own product.
 
