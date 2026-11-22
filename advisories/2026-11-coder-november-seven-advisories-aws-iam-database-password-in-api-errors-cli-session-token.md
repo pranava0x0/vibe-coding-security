@@ -40,7 +40,7 @@ The Go module proxy dates v2.39.1, v2.38.7, v2.37.11, v2.34.19 and v2.29.27 to 2
 
 ## Update 2026-11-22: two CVE ids from VulnCheck
 
-VulnCheck published records for two of the seven advisories on 2026-11-21. The fixed versions match the vendor pages. An install already on the fixed lines above needs nothing new, and scanners keyed on CVE ids flag from 2026-11-21.
+VulnCheck published records for two of the seven advisories on 2026-11-21. The fixed versions in the records are at or below the releases above. An install already on the fixed lines above needs nothing new, and scanners keyed on CVE ids flag from 2026-11-21.
 
 | Vendor advisory | CVE | VulnCheck score | Vendor score |
 |---|---|---|---|

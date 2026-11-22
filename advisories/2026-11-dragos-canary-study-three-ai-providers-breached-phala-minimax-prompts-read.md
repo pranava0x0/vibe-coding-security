@@ -12,7 +12,7 @@ tags: [inference-provider, prompt-exposure, breach, zero-data-retention, ai-rout
 
 ## TL;DR
 
-[Dragos](https://www.dragos.com/blog/ai-supply-chain-security-canary-tokens) sent about two million prompts with unique test secrets to AI services from July to November 2026. It reports that attackers were stealing data from three hosting providers, and names none of them. [Phala](https://phala.com/posts/phala-november-preliminary-incident-report), Together AI and Novita have published notices. [OpenRouter](https://openrouter.ai/blog/announcements/data-processing-incidents-on-inference-providers/) removed three providers on 2026-11-22 and names none of them. Rotate any secret that appeared in a prompt sent on the routes below. Stop putting credentials in prompts.
+[Dragos](https://www.dragos.com/blog/ai-supply-chain-security-canary-tokens) sent about two million prompts with unique test secrets to AI services from July to November 2026. It reports that attackers were stealing data from three hosting providers, and names none of them. [Phala](https://phala.com/posts/phala-november-preliminary-incident-report), Together AI and Novita have published notices. [OpenRouter](https://openrouter.ai/blog/announcements/data-processing-incidents-on-inference-providers/) removed three providers on 2026-11-22 and names none of them. Rotate any secret that appeared in a prompt sent on the routes below, and stop putting credentials in prompts.
 
 ## What happened
 

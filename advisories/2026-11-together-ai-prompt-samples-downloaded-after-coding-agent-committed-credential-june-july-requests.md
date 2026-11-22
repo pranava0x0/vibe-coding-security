@@ -5,8 +5,8 @@ date_disclosed: 2026-11-21
 last_updated: 2026-11-22
 severity: high
 status: contained
-ecosystems: [inference-providers, llm-api, openrouter, huggingface, github]
-tools_affected: ["Together AI serverless inference requests to MiniMax M3, GLM-5.2 and Kimi K2.6, primarily 2026-06-24, 2026-07-04, 2026-07-08 and 2026-07-14", "requests routed to Together AI by OpenRouter for those models", "coding agents and pipelines that send credentials in prompts"]
+ecosystems: [inference-providers, llm-api, huggingface, github]
+tools_affected: ["Together AI serverless inference requests to MiniMax M3, GLM-5.2 and Kimi K2.6, primarily 2026-06-24, 2026-07-04, 2026-07-08 and 2026-07-14", "coding agents and pipelines that send credentials in prompts"]
 tags: [inference-provider, prompt-exposure, breach, credentials-in-prompts, coding-agent-committed-secret, secret-in-public-repo, zero-data-retention, vendor-incident]
 ---
 
@@ -25,7 +25,7 @@ Together published the notice on 2026-11-21, signed by its CEO. Single source: t
 - The party "searched those samples for credentials to other services and tested whether those credentials were valid".
 - "Five of the credentials tested were canary credentials associated with a Dragos security experiment."
 
-Together says it has "not identified evidence of additional prompt leakage beyond this incident". Its review of the sample contents continues, and it will contact affected customers directly.
+Together says it has "not identified evidence of additional prompt leakage beyond this incident". Its review of the sample contents continues, and it will contact affected customers directly "as needed".
 
 The notice does not give the date of the commit, the length of the exposure window, the number of samples, or the number of customers. It does not say whether requests with Zero Data Retention enabled were sampled.
 
@@ -38,11 +38,11 @@ The notice does not give the date of the commit, the length of the exposure wind
 | Route | Window | Action |
 |---|---|---|
 | Together AI serverless inference, MiniMax M3, GLM-5.2 or Kimi K2.6 | June and July 2026, primarily 06-24, 07-04, 07-08, 07-14 | rotate every secret that appeared in those prompts |
-| The same models reached through OpenRouter with Together as the provider | same | same |
 
-- Check your Together usage logs or your router's request logs for those models and dates.
-- Search agent transcripts from that period for API keys, tokens and passwords. A coding agent sends what it reads, including `.env` contents.
-- Together says it will contact affected customers. The absence of a notice is not yet a clear result, because its review is not finished.
+- Check your Together usage logs for those models and dates.
+- Together's notice does not mention routers. OpenRouter lists the notice and says it notified potentially affected customers, so check your router's request logs for Together as the provider.
+- Search agent transcripts from that period for API keys, tokens and passwords.
+- Together says it will contact affected customers as needed. The absence of a notice is not yet a clear result, because its review is not finished.
 
 ## If you are affected
 
@@ -54,7 +54,7 @@ The notice does not give the date of the commit, the length of the exposure wind
 ## Prevention
 
 - Keep credentials out of model context. See [credential hygiene](../prevention/credential-hygiene.md).
-- The exposed credential was committed by a coding agent to a public repository. Scan every commit and pull request for secrets before it reaches a public remote, and give agents scoped, short-lived tokens. Together lists both as changes it made. See [CI/CD hardening](../prevention/ci-cd-hardening.md).
+- The exposed credential was committed by a coding agent to a public repository. Scan every commit and pull request for secrets before it reaches a public remote, and give agents scoped, short-lived tokens. Together lists checking all pull requests for credentials and using scoped or short-lived credentials among its changes. See [CI/CD hardening](../prevention/ci-cd-hardening.md).
 - Ask a provider whether it samples prompts for testing and where it stores them. Retention settings differ per account and per provider.
 - Related: [Fireworks AI](2026-10-fireworks-ai-evaluation-job-environment-variable-credential-exposure.md) and [the Dragos canary study](2026-11-dragos-canary-study-three-ai-providers-breached-phala-minimax-prompts-read.md).
 

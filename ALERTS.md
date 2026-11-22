@@ -29,7 +29,7 @@ An email [posted on Hacker News](https://news.ycombinator.com/item?id=50585039) 
 → [advisories/2026-11-leadstack-crm-connect-malicious-npm-packages-remove-and-rotate.md](advisories/2026-11-leadstack-crm-connect-malicious-npm-packages-remove-and-rotate.md)
 
 ### 2026-11-19 — **Dragos canary study: prompts stolen at three AI inference providers, read by marketplace resellers and fetched despite Zero Data Retention; Phala and MiniMax notices**
-[Dragos](https://www.dragos.com/blog/ai-supply-chain-security-canary-tokens) planted test secrets in two million prompts and found requests being copied at three AI hosting providers. [OpenRouter](https://openrouter.ai/blog/announcements/data-processing-incidents-on-inference-providers/) removed three unnamed providers on 2026-11-22, and Phala, Novita and Together AI have published notices. Rotate any secret sent in a prompt on the listed routes.
+[Dragos](https://www.dragos.com/blog/ai-supply-chain-security-canary-tokens) planted test secrets in about two million prompts and found requests being copied at three AI hosting providers. [OpenRouter](https://openrouter.ai/blog/announcements/data-processing-incidents-on-inference-providers/) removed three unnamed providers on 2026-11-22, and Phala, Novita and Together AI have published notices. Rotate any secret sent in a prompt on the listed routes.
 → [advisories/2026-11-dragos-canary-study-three-ai-providers-breached-phala-minimax-prompts-read.md](advisories/2026-11-dragos-canary-study-three-ai-providers-breached-phala-minimax-prompts-read.md)
 
 ### 2026-11-19 — **Twelve MCP server and coding-agent advisories published 2026-11-19 and 11-20: Jupyter MCP Server, Todoist MCP, k8s-mcp-server and seven more; fixes shipped June to October**
@@ -180,8 +180,8 @@ The Advisory Database published 31 `nltk` advisories from 2026-11-13 to 2026-11-
 [Microsoft](https://api.msrc.microsoft.com/cvrf/v3.0/cvrf/2026-Nov) fixed 19 CVEs in Visual Studio Code 1.145.3 on 2026-11-10, including remote MCP server code execution (CVE-2026-120779, 9.6). Update VS Code to 1.145.3 and Aspire to 13.6.5.
 → [advisories/2026-11-microsoft-november-patch-tuesday-vs-code-1-145-3-nineteen-cves-mcp-install-workspace-trust-aspire-mcp-gateway.md](advisories/2026-11-microsoft-november-patch-tuesday-vs-code-1-145-3-nineteen-cves-mcp-install-workspace-trust-aspire-mcp-gateway.md)
 
-### 2026-11-09 — **Ghostscript before 10.08.0: crafted upload escapes -dSAFER and runs commands through ImageMagick or Pillow image paths (CVE-2026-125396, Upload2Shell)**
-A crafted file makes Ghostscript before 10.08.0 run commands as the rendering process. [pwn.ai](https://pwn.ai/upload2shell) reached it through image uploads handled by ImageMagick and Pillow. Update Ghostscript on hosts and inside container images that process uploads.
+### 2026-11-09 — **Ghostscript before 10.08.0: crafted file escapes -dSAFER and runs commands through upload, email and print paths (CVE-2026-125396, Upload2Shell)**
+A crafted file makes Ghostscript before 10.08.0 run arbitrary code. [pwn.ai](https://pwn.ai/upload2shell) ran commands through ImageMagick upload paths and reached the renderer through Pillow. Update Ghostscript on hosts and inside container images that process uploads.
 → [advisories/2026-11-ghostscript-upload2shell-cve-2026-125396-dsafer-escape-through-image-upload-paths-fixed-10-08-0.md](advisories/2026-11-ghostscript-upload2shell-cve-2026-125396-dsafer-escape-through-image-upload-paths-fixed-10-08-0.md)
 
 ### 2026-11-09 — **Arize Phoenix 13.0.0 to before 15.7.0: unauthenticated read of server environment and PHOENIX_SECRET (CVE-2026-53998, CVSS 10.0); fixed in 15.7.0**
