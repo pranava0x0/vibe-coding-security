@@ -11,7 +11,7 @@ tags: [mcp, read-only-bypass, sql-injection, argument-injection, authorization-b
 ---
 
 ## TL;DR
-VulnCheck published seven CVE records on 2026-11-21 and 2026-11-22 for four products. A client limited to read-only SQL in DBHub below 1.7.0 can write and drop data ([CVE-2026-134803](https://cveawg.mitre.org/api/cve/CVE-2026-134803)). ArcadeDB 26.3.1 to below 26.11.1 has two read-only bypasses in its MCP mode, one limited to native-image builds and one to server administrators. mcp-server-kubernetes below 4.2.0 lets a remote MCP client read files on the server host. Lightdash below 3.212.0 sends the organization's GitLab token to a host a project developer chooses.
+VulnCheck published seven CVE records on 2026-11-21 and 2026-11-22 for four products. A client limited to read-only SQL in DBHub below 1.7.0 can write and drop data ([CVE-2026-134803](https://cveawg.mitre.org/api/cve/CVE-2026-134803)). ArcadeDB 26.3.1 to below 26.11.1 has two read-only bypasses in its MCP mode, one limited to native-image builds and one to server administrators. The `mcp-server-kubernetes` package below 4.2.0 lets a remote MCP client read files on the server host. Lightdash below 3.212.0 sends the organization's GitLab token to a host a project developer chooses.
 
 ## What happened
 
