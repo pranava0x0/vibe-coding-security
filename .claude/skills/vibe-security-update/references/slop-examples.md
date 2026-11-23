@@ -4,6 +4,13 @@ Read this before writing any advisory or `ALERTS.md` entry. Append a pair each
 time review or the owner finds slop, and add a matching line to
 `tools/slop_patterns.tsv` when the shape can be matched by a regex. Newest on top.
 
+## 2026-11-23 (sweep self-review)
+
+**Relative duration where two dates do the job** (LiteLLM advisory)
+- Before: "The fixed version is eight weeks older than the advisory."
+- After: "The fixed release predates the advisory. PyPI shows 1.103.0 uploaded 2026-09-27."
+- Why: the reader needs the two dates, and the subtraction was done by hand. No regex matches this shape.
+
 ## 2026-11-22 (sweep self-review)
 
 **Generalisation no source states** (Ghostscript advisory, Am I affected?)

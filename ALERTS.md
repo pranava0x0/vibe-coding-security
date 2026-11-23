@@ -2,11 +2,19 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-11-22. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-11-23. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-11-23 — **LiteLLM proxy: a request's own api_base or key joined the shared deployment list for every user (GHSA-m8fp-3f3g-j5p7); fixed 1.103.0**
+[GHSA-m8fp-3f3g-j5p7](https://github.com/BerriAI/litellm/security/advisories/GHSA-m8fp-3f3g-j5p7) says a LiteLLM proxy user could, where client-side `api_base` is allowed, route other users' requests to their own server and receive prompts and the provider key. Upgrade to 1.103.0 or later and restart the proxy.
+→ [advisories/2026-11-litellm-proxy-client-api-base-poisons-shared-deployments-ghsa-m8fp-3f3g-j5p7-fixed-1-103-0.md](advisories/2026-11-litellm-proxy-client-api-base-poisons-shared-deployments-ghsa-m8fp-3f3g-j5p7-fixed-1-103-0.md)
+
+### 2026-11-21 — **DBHub, ArcadeDB and mcp-server-kubernetes MCP restrictions bypassed, and Lightdash's AI agent sends a GitLab token to an unverified host; all fixed**
+A read-only MCP client can write and drop data in DBHub below 1.7.0 ([CVE-2026-134803](https://cveawg.mitre.org/api/cve/CVE-2026-134803)) and ArcadeDB below 26.11.1. Upgrade those, mcp-server-kubernetes to 4.2.0 and Lightdash to 3.212.0. Give agents a database account limited to `SELECT`.
+→ [advisories/2026-11-database-mcp-read-only-bypasses-dbhub-arcadedb-mcp-server-kubernetes-lightdash-agent-token-leak.md](advisories/2026-11-database-mcp-read-only-bypasses-dbhub-arcadedb-mcp-server-kubernetes-lightdash-agent-token-leak.md)
 
 ### 2026-11-21 — **RunPod MCP server 4.13.0 and 4.14.0 told agents to submit a rating and not mention it to the user; removed in 4.15.0**
 RunPod's hosted MCP server told agents to call a rating tool and not mention it to the user, as reported in [issue 202](https://github.com/runpod/runpod-mcp/issues/202). Version 4.15.0 removed the rating and referral tools on 2026-11-22. Search agent logs for `rate_nps_score` calls.
@@ -23,6 +31,10 @@ An email [posted on Hacker News](https://news.ycombinator.com/item?id=50585039) 
 ### 2026-11-20 — **Meta Muse: NebuSec shows a web page reading chats and memories with no approval prompt, then reaching the VM's credential store; reported fixed**
 [NebuSec](https://nebusec.ai/research/meta-muse-credential-exposure/) showed a web page reading and altering a Meta Muse user's chats and memories with no approval prompt, then reaching the VM's credential store. NebuSec says it is fixed and Meta has not confirmed. Remove account connections you do not use.
 → [advisories/2026-11-meta-muse-nebusec-webpage-reads-chats-memories-reaches-vm-credential-store.md](advisories/2026-11-meta-muse-nebusec-webpage-reads-chats-memories-reaches-vm-credential-store.md)
+
+### 2026-11-19 — **OpenClaw: a restricted agent could change configuration without approval and enable host command execution (GHSA-pw3x-g8v8-fvj2); fixed 2026.11.4 and 2026.10.33**
+[GHSA-pw3x-g8v8-fvj2](https://github.com/openclaw/openclaw/security/advisories/GHSA-pw3x-g8v8-fvj2) says an OpenClaw agent under a restrictive tool policy could change configuration without approval and enable host command execution. Upgrade to 2026.11.4, or 2026.10.33 on extended-stable.
+→ [advisories/2026-11-openclaw-restricted-agent-config-change-without-approval-ghsa-pw3x-g8v8-fvj2-fixed-2026-11-4.md](advisories/2026-11-openclaw-restricted-agent-config-change-without-approval-ghsa-pw3x-g8v8-fvj2-fixed-2026-11-4.md)
 
 ### 2026-11-19 — **Malicious `@leadstack/crm-connect` npm package and three related packages: remove, rebuild hosts that installed as root, rotate credentials**
 [SafeDep](https://safedep.io/blog/malicious-npm-leadstack-crm-connect-hermes-agent-backdoor) reported `@leadstack/crm-connect` 1.0.15 to 1.1.1 and three packages from the same publisher as malicious. Remove them. Rebuild hosts that installed one as root and rotate every credential those hosts could reach.
@@ -159,6 +171,10 @@ The Advisory Database published 31 `nltk` advisories from 2026-11-13 to 2026-11-
 ### 2026-11-11 — **Node.js 22.23.5, 24.22.3, 26.13.1 fix 16 CVEs: HTTP/2 crash and memory disclosure, HTTPS heap read (CVE-2026-123864), TLS client-certificate bypasses**
 [Node.js](https://nodejs.org/en/blog/vulnerability/november-2026-security-releases) fixes 16 CVEs in 22.23.5, 24.22.3 and 26.13.1, including HTTP/2 crashes and memory disclosure (CVE-2026-123864). Upgrade and restart.
 → [advisories/2026-11-nodejs-november-11-security-release-sixteen-cves-http2-crash-memory-disclosure-https-heap-read-tls-client-cert-bypass.md](advisories/2026-11-nodejs-november-11-security-release-sixteen-cves-http2-crash-memory-disclosure-https-heap-read-tls-client-cert-bypass.md)
+
+### 2026-11-10 — **Budibase: 30 vendor advisories on 2026-11-10, seven critical, including unauthenticated automation execution and a LiteLLM key exposure; fixed 4.0.0**
+[Budibase's advisory tab](https://github.com/Budibase/budibase/security/advisories) lists 30 advisories dated 2026-11-10, seven critical, including unauthenticated automation execution and a stored LiteLLM key returned without login. Run the `v4.0.0` image or later and rotate that key. The npm package has no fixed release.
+→ [advisories/2026-11-budibase-4-0-0-thirty-advisories-seven-critical-unauthenticated-automation-litellm-key-fixed-4-0-0.md](advisories/2026-11-budibase-4-0-0-thirty-advisories-seven-critical-unauthenticated-automation-litellm-key-fixed-4-0-0.md)
 
 ### 2026-11-10 — **Compromised fragment-api-py 14.4.2 on PyPI: pin 14.4.1 and move TON funds to a wallet with a new seed phrase**
 [SafeDep](https://safedep.io/blog/fragment-api-py-pypi-ton-wallet-drainer.md) reports fragment-api-py 14.4.2, published to PyPI on 2026-11-08, is compromised. Pin 14.4.1. If 14.4.2 ran with a TON wallet seed phrase, move all funds to a wallet with a new seed phrase.

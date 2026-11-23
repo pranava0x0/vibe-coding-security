@@ -11,14 +11,14 @@
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 80,
-   "last_hit": "2026-11-22"
+   "hits": 81,
+   "last_hit": "2026-11-23"
   },
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 77,
-   "last_hit": "2026-11-22"
+   "hits": 78,
+   "last_hit": "2026-11-23"
   },
   {
    "domain": "securityweek.com",
@@ -41,14 +41,14 @@
   {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
-   "hits": 51,
-   "last_hit": "2026-11-22"
+   "hits": 52,
+   "last_hit": "2026-11-23"
   },
   {
    "domain": "cveawg.mitre.org",
    "weight": 20.0,
-   "hits": 45,
-   "last_hit": "2026-11-22"
+   "hits": 46,
+   "last_hit": "2026-11-23"
   },
   {
    "domain": "cybersecuritynews.com",
@@ -89,8 +89,8 @@
   {
    "domain": "pypi.org",
    "weight": 20.0,
-   "hits": 31,
-   "last_hit": "2026-11-21"
+   "hits": 32,
+   "last_hit": "2026-11-23"
   },
   {
    "domain": "cisa.gov",
@@ -115,12 +115,6 @@
    "weight": 20.0,
    "hits": 25,
    "last_hit": "2026-11-22"
-  },
-  {
-   "domain": "advisories.gitlab.com",
-   "weight": 20.0,
-   "hits": 23,
-   "last_hit": "2026-09-23"
   },
   {
    "domain": "wiz.io",
@@ -151,6 +145,12 @@
    "weight": 20.0,
    "hits": 13,
    "last_hit": "2026-10-09"
+  },
+  {
+   "domain": "ibm.com",
+   "weight": 20.0,
+   "hits": 12,
+   "last_hit": "2026-11-14"
   }
  ]
 }

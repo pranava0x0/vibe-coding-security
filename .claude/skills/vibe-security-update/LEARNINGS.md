@@ -452,3 +452,14 @@ Five things from **2026-11-22**:
 5. **VulnCheck issued ids for two Coder and two SurrealDB advisories already in home files.** Grepping the GHSA from the record's references found both. The files' "none has a CVE" sentences were dated.
 
 Three literals written from memory were removed before the gate (a claim about what container images install, a "by default" about MCP clients, an "only"). The run skipped every `WebSearch` tier, the vendor tabs, ZDI, CERT/CC and the vendor blog indexes, and the run log lists them as blockers. Slop loop: see the 2026-11-22 run-log notes.
+
+## 83. A vendor tab is not in date order; the advisories name a registry package that stopped months before the fix; an advisory can publish eight weeks after its fix; and a research CNA's same-day records are one file
+
+Four things from **2026-11-23**:
+
+1. **Budibase's tab held 30 advisories dated 2026-11-10 across pages 1 to 5 of 13, mixed with rows from 2026-09-10.** Reading "until a row predates the batch day" would have stopped on page 3 with 23. Two CVE rows on the reviewed npm listing were the only feed signal, and the package had been declined on two runs. **Rule:** when page 1 of a tab is not in date order, read every page with a three-field prompt (id, severity, date), save the rows to a file and count by date in code.
+2. **The advisories name `@budibase/server` and patched 4.0.0. npm stops at 3.38.1 (2026-05-12).** The fix is the Docker Hub tag `v4.0.0`. The existing GPUStack row covers the shape. `hub.docker.com/v2/repositories/<org>/<image>/tags/<tag>` returns the push date or a 404 to `curl`.
+3. **LiteLLM published a High advisory on 2026-11-23 for a fix released on 2026-09-27, and its tab showed the new rows at positions 2, 3 and 7.** The two Moderate pages print the same version as last affected and patched. **Rule:** scan every row on page 1 of a tracked product's tab for today's date, not only the first row, and read the fix release's upload date from `pypi.org/pypi/<pkg>/json`, which answered this run.
+4. **VulnCheck issued seven records over two days for four small products, each fixed on its registry before the record.** One file with one row per record holds them. A record that references only a pull request, a commit and a tag has no vendor advisory to open, and the file says so.
+
+`WebSearch` ran five queries and returned nothing dated after 2026-11-02. X and Bluesky stay "not covered". A config key written from memory was removed from the LiteLLM file before the gate.
