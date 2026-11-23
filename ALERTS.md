@@ -9,11 +9,11 @@
 ## 🔴 ACTIVE — react now
 
 ### 2026-11-23 — **LiteLLM proxy: a request's own api_base or key joined the shared deployment list for every user (GHSA-m8fp-3f3g-j5p7); fixed 1.103.0**
-[GHSA-m8fp-3f3g-j5p7](https://github.com/BerriAI/litellm/security/advisories/GHSA-m8fp-3f3g-j5p7) says a LiteLLM proxy user could, where client-side `api_base` is allowed, route other users' requests to their own server and receive prompts and the provider key. Upgrade to 1.103.0 or later and restart the proxy.
+[GHSA-m8fp-3f3g-j5p7](https://github.com/BerriAI/litellm/security/advisories/GHSA-m8fp-3f3g-j5p7) says a LiteLLM proxy user could, where client-side `api_base` is allowed, route part of other users' requests to their own server and receive prompts and the provider key. Upgrade to 1.103.0 or later and restart the proxy.
 → [advisories/2026-11-litellm-proxy-client-api-base-poisons-shared-deployments-ghsa-m8fp-3f3g-j5p7-fixed-1-103-0.md](advisories/2026-11-litellm-proxy-client-api-base-poisons-shared-deployments-ghsa-m8fp-3f3g-j5p7-fixed-1-103-0.md)
 
 ### 2026-11-21 — **DBHub, ArcadeDB and mcp-server-kubernetes MCP restrictions bypassed, and Lightdash's AI agent sends a GitLab token to an unverified host; all fixed**
-A read-only MCP client can write and drop data in DBHub below 1.7.0 ([CVE-2026-134803](https://cveawg.mitre.org/api/cve/CVE-2026-134803)) and ArcadeDB below 26.11.1. Upgrade those, mcp-server-kubernetes to 4.2.0 and Lightdash to 3.212.0. Give agents a database account limited to `SELECT`.
+A read-only MCP client can write and drop data in DBHub below 1.7.0 ([CVE-2026-134803](https://cveawg.mitre.org/api/cve/CVE-2026-134803)). ArcadeDB 26.3.1 to below 26.11.1 has read-only bypasses too. Upgrade both, mcp-server-kubernetes to 4.2.0 and Lightdash to 3.212.0, and give agents a `SELECT`-only database account.
 → [advisories/2026-11-database-mcp-read-only-bypasses-dbhub-arcadedb-mcp-server-kubernetes-lightdash-agent-token-leak.md](advisories/2026-11-database-mcp-read-only-bypasses-dbhub-arcadedb-mcp-server-kubernetes-lightdash-agent-token-leak.md)
 
 ### 2026-11-21 — **RunPod MCP server 4.13.0 and 4.14.0 told agents to submit a rating and not mention it to the user; removed in 4.15.0**
@@ -173,7 +173,7 @@ The Advisory Database published 31 `nltk` advisories from 2026-11-13 to 2026-11-
 → [advisories/2026-11-nodejs-november-11-security-release-sixteen-cves-http2-crash-memory-disclosure-https-heap-read-tls-client-cert-bypass.md](advisories/2026-11-nodejs-november-11-security-release-sixteen-cves-http2-crash-memory-disclosure-https-heap-read-tls-client-cert-bypass.md)
 
 ### 2026-11-10 — **Budibase: 30 vendor advisories on 2026-11-10, seven critical, including unauthenticated automation execution and a LiteLLM key exposure; fixed 4.0.0**
-[Budibase's advisory tab](https://github.com/Budibase/budibase/security/advisories) lists 30 advisories dated 2026-11-10, seven critical, including unauthenticated automation execution and a stored LiteLLM key returned without login. Run the `v4.0.0` image or later and rotate that key. The npm package has no fixed release.
+[Budibase's advisory tab](https://github.com/Budibase/budibase/security/advisories) lists 30 advisories dated 2026-11-10, seven critical, including automation execution by a lowest-role or Public caller and a stored LiteLLM key returned without login. Run the `v4.0.0` image or later and rotate that key. The npm package has no fixed release.
 → [advisories/2026-11-budibase-4-0-0-thirty-advisories-seven-critical-unauthenticated-automation-litellm-key-fixed-4-0-0.md](advisories/2026-11-budibase-4-0-0-thirty-advisories-seven-critical-unauthenticated-automation-litellm-key-fixed-4-0-0.md)
 
 ### 2026-11-10 — **Compromised fragment-api-py 14.4.2 on PyPI: pin 14.4.1 and move TON funds to a wallet with a new seed phrase**

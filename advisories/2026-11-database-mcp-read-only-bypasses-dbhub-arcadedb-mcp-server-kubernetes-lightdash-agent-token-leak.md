@@ -11,7 +11,7 @@ tags: [mcp, read-only-bypass, sql-injection, argument-injection, authorization-b
 ---
 
 ## TL;DR
-VulnCheck published seven CVE records on 2026-11-21 and 2026-11-22 for four products. A client limited to read-only SQL in DBHub below 1.7.0 can write and drop data ([CVE-2026-134803](https://cveawg.mitre.org/api/cve/CVE-2026-134803)). ArcadeDB below 26.11.1 has the same class of bypass in its MCP read-only mode. mcp-server-kubernetes below 4.2.0 lets a remote MCP client read files on the server host. Lightdash below 3.212.0 sends the organization's GitLab token to a host a project developer chooses. Every fix was on its registry before the records appeared.
+VulnCheck published seven CVE records on 2026-11-21 and 2026-11-22 for four products. A client limited to read-only SQL in DBHub below 1.7.0 can write and drop data ([CVE-2026-134803](https://cveawg.mitre.org/api/cve/CVE-2026-134803)). ArcadeDB 26.3.1 to below 26.11.1 has two read-only bypasses in its MCP mode, one limited to native-image builds and one to server administrators. mcp-server-kubernetes below 4.2.0 lets a remote MCP client read files on the server host. Lightdash below 3.212.0 sends the organization's GitLab token to a host a project developer chooses.
 
 ## What happened
 
@@ -22,12 +22,12 @@ VulnCheck published seven CVE records on 2026-11-21 and 2026-11-22 for four prod
 | ArcadeDB | [CVE-2026-134337](https://cveawg.mitre.org/api/cve/CVE-2026-134337) | 8.7 / 8.8 | Native-image builds 26.8.1 and later: an authenticated client nests a write inside `SELECT` and it persists through the query endpoint, MCP read-only mode and follower routing. | 26.11.1 | Maven Central and Docker Hub, 2026-11-04 |
 | ArcadeDB | [CVE-2026-134324](https://cveawg.mitre.org/api/cve/CVE-2026-134324) | 6.9 / 4.9 | 26.3.1 and later: a server administrator commits writes through the MCP read-only query tool with a Gremlin script. | 26.11.1 | same |
 | ArcadeDB | [CVE-2026-134327](https://cveawg.mitre.org/api/cve/CVE-2026-134327) | 7.1 / 6.5 | An authenticated user reads schema definitions of types an ACL denies, through the PostgreSQL wire catalog, GraphQL introspection or MCP `get_schema`. | 26.11.1 | same |
-| ArcadeDB | [CVE-2026-134329](https://cveawg.mitre.org/api/cve/CVE-2026-134329) | 7.1 / 4.3 | 26.2.1 and later: MCP tools return different errors for "not authorized" and "does not exist", so a caller can list database names it has no grant for. | 26.11.1 | same |
+| ArcadeDB | [CVE-2026-134329](https://cveawg.mitre.org/api/cve/CVE-2026-134329) | 7.1 / 4.3 | 26.2.1 and later: MCP tools return different errors for "not authorized" and "does not exist", so a caller can confirm by probing which database names exist. | 26.11.1 | same |
 | Lightdash | [CVE-2026-134827](https://cveawg.mitre.org/api/cve/CVE-2026-134827) | 8.3 / 7.7 | A project developer sets the dbt connection `host_domain` to their own server. When the AI agent reads the repository, Lightdash sends the organization GitLab app token there. | 3.212.0 | Docker Hub tag `3.212.0`, 2026-11-11 |
 
 VulnCheck is the CNA for all seven. The ArcadeDB records reference eight vendor advisories on the `ArcadeData/arcadedb` repository. The DBHub, mcp-server-kubernetes and Lightdash records reference a pull request, a commit and a release tag, and no vendor advisory. None of those pages was opened for this file.
 
-Newer versions exist for each product. On 2026-11-23 npm listed `@bytebase/dbhub` 2.1.0 and `mcp-server-kubernetes` 4.2.3, Maven Central listed ArcadeDB 26.11.1 as its release, and Docker Hub listed Lightdash 3.371.2.
+Every fix was on its registry before the records appeared. Newer versions exist for three of the four. On 2026-11-23 npm listed `@bytebase/dbhub` 2.1.0 and `mcp-server-kubernetes` 4.2.3, Maven Central listed ArcadeDB 26.11.1 as its release, and Docker Hub listed Lightdash 3.371.2.
 
 DBHub had an earlier read-only bypass, tracked in [2026-08-agent-framework-mcp-cve-batch.md](2026-08-agent-framework-mcp-cve-batch.md). CVE-2026-134803 is a different record with a different fix version.
 

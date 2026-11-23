@@ -6,7 +6,7 @@ last_updated: 2026-11-23
 severity: high
 status: patched
 ecosystems: [pypi, python, litellm, llm-gateway]
-tools_affected: ["litellm (PyPI) 1.63.2 to below 1.103.0", "LiteLLM proxy deployments with `allow_client_side_credentials`, a deployment that allows `api_base`, or `forward_llm_provider_auth_headers`", "litellm (PyPI) below 1.108.0 for the two Moderate advisories", "agents and applications that share a LiteLLM proxy across users or teams"]
+tools_affected: ["litellm (PyPI) 1.63.2 to below 1.103.0", "LiteLLM proxy deployments with `allow_client_side_credentials`, a deployment that allows `api_base`, or `forward_llm_provider_auth_headers`", "litellm (PyPI) 1.40.4 to 1.108.0 as printed, for the two Moderate advisories", "agents and applications that share a LiteLLM proxy across users or teams"]
 tags: [litellm, llm-gateway, pypi, traffic-redirect, prompt-exposure, provider-key, authenticated, no-cve, patched]
 ---
 
@@ -36,17 +36,17 @@ Both are 4.3, need a logged-in low-privilege user, and expose no keys, prompts o
 | [GHSA-2364-6whj-g7vx](https://github.com/BerriAI/litellm/security/advisories/GHSA-2364-6whj-g7vx) | `GET /global/activity/cache_hits` | proxy-wide request, cache-hit and failure counts, key aliases and models | `>= 1.83.6, <= 1.108.0` | 1.108.0 |
 | [GHSA-fjxr-j47c-4x2x](https://github.com/BerriAI/litellm/security/advisories/GHSA-fjxr-j47c-4x2x) | `GET /spend/tags` | every request tag with its request count and spend | `>= 1.40.4, <= 1.108.0` | 1.108.0 |
 
-Each page prints 1.108.0 as both the last affected and the patched version. The two ranges overlap, so this file does not say whether 1.108.0 is fixed. PyPI shows 1.108.0 uploaded 2026-11-04 and 1.108.1 on 2026-11-05.
+Each page prints 1.108.0 as both the last affected and the patched version. The affected range and the patched version overlap, so this file does not say whether 1.108.0 is fixed. PyPI shows 1.108.0 uploaded 2026-11-04 and 1.108.1 on 2026-11-05.
 
 ## Am I affected?
 
 ```bash
 pip show litellm | grep -i '^version'
-grep -rn 'allow_client_side_credentials\|forward_llm_provider_auth_headers' .
+grep -rn 'allow_client_side_credentials\|forward_llm_provider_auth_headers\|configurable_clientside_auth_params' .
 ```
 
 - Below 1.103.0, and people or agents you do not fully trust hold proxy keys.
-- The redirect outcome needs one of the settings in the table. The `grep` covers the two setting names the advisory gives. Run it in the directory that holds the proxy config.
+- The redirect outcome needs one of the settings in the table. The `grep` covers the three setting names the advisory gives. Run it in the directory that holds the proxy config.
 - No CVE exists, so a scanner keyed on CVE ids will not flag this.
 
 ## If you are affected

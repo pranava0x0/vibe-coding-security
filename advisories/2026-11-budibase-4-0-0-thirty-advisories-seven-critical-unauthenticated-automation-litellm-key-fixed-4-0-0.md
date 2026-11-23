@@ -11,7 +11,7 @@ tags: [budibase, low-code, app-builder, unauthenticated, authorization-bypass, s
 ---
 
 ## TL;DR
-[Budibase's advisory tab](https://github.com/Budibase/budibase/security/advisories) holds 30 advisories dated 2026-11-10, seven rated Critical and 23 High, plus four Moderate dated 2026-11-12. The three opened for this file list every version below 4.0.0 as affected and 4.0.0 as patched, with no CVE. One lets an unauthenticated caller run builder-authored automations. One returns a stored LiteLLM key to anyone who can reach the tenant. Run the `v4.0.0` image or later and rotate any LiteLLM key Budibase stored.
+[Budibase's advisory tab](https://github.com/Budibase/budibase/security/advisories) holds 30 advisories dated 2026-11-10, seven rated Critical and 23 High, plus four Moderate dated 2026-11-12. The three opened for this file list every version below 4.0.0 as affected and 4.0.0 as patched, with no CVE. One lets a caller with the lowest role run builder-authored automations, or a caller with no login where the automation is granted to Public. One returns a stored LiteLLM key to anyone who can reach the tenant. Run the `v4.0.0` image or later and rotate any LiteLLM key Budibase stored.
 
 ## What happened
 
@@ -26,8 +26,8 @@ Three advisories were opened. Each lists package `@budibase/server`, affected `<
 
 | Advisory | Severity | What the advisory says |
 |---|---|---|
-| [GHSA-5rq2-4mjm-m7q2](https://github.com/Budibase/budibase/security/advisories/GHSA-5rq2-4mjm-m7q2) | Critical 9.1 | `POST /api/automations/:id/test` runs builder-authored automations at service privilege with no builder check. Where a builder's step invokes a shell, that is command execution as root. |
-| [GHSA-wr7j-r9v4-6rjh](https://github.com/Budibase/budibase/security/advisories/GHSA-wr7j-r9v4-6rjh) | Critical 9.9 | A user-supplied attachment key is not bound to the app, so a low-privilege user can delete other tenants' files in the shared object-store bucket. Reading a file needs its random filename. |
+| [GHSA-5rq2-4mjm-m7q2](https://github.com/Budibase/budibase/security/advisories/GHSA-5rq2-4mjm-m7q2) | Critical 9.1 | `POST /api/automations/:id/test` runs builder-authored automations at service privilege with no builder check. A lowest-role account can call it, and no login is needed where a builder granted the automation to the Public role. Where a builder's step invokes a shell, that is command execution as root. |
+| [GHSA-wr7j-r9v4-6rjh](https://github.com/Budibase/budibase/security/advisories/GHSA-wr7j-r9v4-6rjh) | Critical 9.9 | A user-supplied attachment key is not bound to the app, so a low-privilege user can delete other tenants' files in the shared object-store bucket. Reading a file needs its random filename. The advisory says the caller needs write access to a table and that the finding comes from static analysis only. |
 | [GHSA-c24r-7gmq-4rgm](https://github.com/Budibase/budibase/security/advisories/GHSA-c24r-7gmq-4rgm) | High 7.5 | `GET /api/global/configs/public` needs no login and returns the full global settings object. On tenants with a legacy `liteLLM` field, that includes a LiteLLM virtual key and secret. |
 
 The other five Critical rows dated 2026-11-10 are GHSA-p7c8-m379-jf3x, GHSA-x4w8-596q-fmh7, GHSA-6wc7-w493-mw5m, GHSA-jm85-crv2-88px and GHSA-q4f7-c337-92c9. Their pages were not opened. The tab titles for the first three describe privilege escalation to server-side code execution, an anonymous MongoDB filter bypass in public query templates, and authenticated code execution as root through a datasource plugin.
@@ -54,7 +54,7 @@ docker ps --format '{{.Image}}' | grep -i budibase
 ```
 
 - A tag below `v4.0.0` is affected by the three advisories opened here.
-- A scanner keyed on CVE ids flags two of the 30.
+- A scanner keyed on CVE ids flags at least two of the 30. Two CVE records were found, and 27 advisory pages were not opened.
 
 For the LiteLLM key, request `/api/global/configs/public` on your own tenant without a session and look for a `liteLLM` field in the response.
 
@@ -63,7 +63,7 @@ For the LiteLLM key, request `/api/global/configs/public` on your own tenant wit
 1. Move to the `v4.0.0` image or later.
 2. If the public settings response held a `liteLLM` field, revoke that LiteLLM key. The advisory says to treat keys stored there as possibly exposed.
 3. Review automations that include a shell step, and the run history of `/api/automations/:id/test`, for runs no builder started. This step is this file's advice.
-4. Check the user list for global administrators you did not create.
+4. Check CouchDB for tenant databases you did not create. CVE-2026-122247 says the administrator record lands in a separate tenant database. This step is this file's advice.
 
 See [playbooks/if-your-webapp-was-compromised.md](../playbooks/if-your-webapp-was-compromised.md) and [playbooks/rotating-cloud-credentials.md](../playbooks/rotating-cloud-credentials.md).
 

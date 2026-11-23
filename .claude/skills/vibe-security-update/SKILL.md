@@ -201,7 +201,7 @@ Each row is a shape of wrong-but-plausible data that has shipped from this routi
 | Vendor tab not in date order | Budibase's 30 advisories of 2026-11-10 sat on pages 1 to 5 of 13 between rows from 2026-09-10, and stopping at the first older row would have counted 23 | when page 1 mixes dates, read every page for id, severity and date, save the rows and count by date in code; say how many advisory pages were opened |
 | Advisory published long after its fix release | LiteLLM GHSA-m8fp-3f3g-j5p7 was published 2026-11-23 for a fix on PyPI since 2026-09-27, and the tab listed it seventh | date the file by the advisory, print the fix release's registry date, and scan every page-1 row for today's date |
 | Same version printed as last affected and as patched | two LiteLLM advisories print `<= 1.108.0` affected and 1.108.0 patched | print both, say they overlap, and tell readers to run a version above it; never state whether that version is fixed |
-| Config key or flag written from memory beside the advisory's own | a LiteLLM draft added a third setting name to a `grep` that the advisory does not print (caught before commit) | a detection command names only the settings a fetched page printed |
+| Summarizing fetch drops a setting name or a condition | the first fetch of LiteLLM GHSA-m8fp-3f3g-j5p7 returned two of three setting names, and the fetch of Budibase GHSA-5rq2-4mjm-m7q2 dropped the Public-role condition behind its "unauthenticated" title (caught in review) | fetch a vendor page twice with different prompts, one asking for every setting name and every precondition; an "unauthenticated" title is the vendor's label until the body's conditions are read |
 ---
 
 
