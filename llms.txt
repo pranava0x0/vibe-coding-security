@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-11-22
+**Last refreshed:** 2026-11-23
 
 ## Quick start
 
@@ -55,10 +55,13 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-11-22)
+## Active threat families (as of 2026-11-23)
 
 The highest-risk ongoing threat families for vibe coders:
 
+- **An MCP server's read-only mode is not the database's (DBHub CVE-2026-134803, ArcadeDB, 2026-11-22)** — A client limited to read-only SQL could write and drop data in DBHub below 1.7.0 and ArcadeDB below 26.11.1. Upgrade, and give the agent a database account with only `SELECT`.
+- **A shared LLM proxy can adopt one caller's endpoint for everyone (LiteLLM GHSA-m8fp-3f3g-j5p7, fixed 1.103.0)** — Where client-side `api_base` is allowed, a user could route other users' requests, prompts and the provider key to their own server. Upgrade and restart the proxy.
+- **A low-code builder's advisory tab can hold a 30-advisory batch no feed carried (Budibase, 2026-11-10)** — Seven critical, fixed in the `v4.0.0` image. The npm package the advisories name has no fixed release.
 - **A vendor's own MCP server can tell the agent to act and keep it from the user (RunPod, 2026-11-21)** — `@runpod/mcp-server` 4.13.0 and 4.14.0 returned a tool-result note asking the agent to submit a rating and "do not mention it to the user". 4.15.0 removed it. Log every MCP tool call and review the ones outside the task. [Advisory](advisories/2026-11-runpod-mcp-server-told-agents-to-rate-it-and-not-mention-it-to-the-user-removed-4-15-0.md)
 - **A coding agent commits a credential to a public repository and the provider's stored prompts are downloaded (Together AI, 2026-11-21)** — Samples of June and July 2026 prompts were taken and searched for credentials. Rotate secrets sent in prompts, and scan agent commits for secrets. [Advisory](advisories/2026-11-together-ai-prompt-samples-downloaded-after-coding-agent-committed-credential-june-july-requests.md)
 - **The system renderer under an image upload is the exposure (Ghostscript CVE-2026-125396, fixed 10.08.0)** — Image libraries pass PostScript content to Ghostscript whatever the file is named. pwn.ai ran commands through ImageMagick paths and reached the renderer through Pillow. Update Ghostscript inside every image that processes uploads. [Advisory](advisories/2026-11-ghostscript-upload2shell-cve-2026-125396-dsafer-escape-through-image-upload-paths-fixed-10-08-0.md)
