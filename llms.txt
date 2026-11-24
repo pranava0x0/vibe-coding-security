@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-11-23
+**Last refreshed:** 2026-11-24
 
 ## Quick start
 
@@ -55,10 +55,12 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-11-23)
+## Active threat families (as of 2026-11-24)
 
 The highest-risk ongoing threat families for vibe coders:
 
+- **A repository someone sends you can run commands through the reference Git MCP server (mcp-server-git, fixed 2026.11.18)** — Six High advisories say a repository's own Git config ran programs as the server user, some through read-only tools. The attacker's `.git` directory must reach the disk through an archive or shared folder. No CVE.
+- **A package registry's web servers were breached (Hex.pm, CVE-2026-129514, 2026-11-23)** — Hex found no changed packages and cannot rule out reads of password hashes and 2FA secrets. Change the password, reset 2FA, and fetch only from repo.hex.pm until the new client ships.
 - **An MCP server's read-only mode is not the database's (DBHub CVE-2026-134803, ArcadeDB, 2026-11-22)** — A client limited to read-only SQL could write and drop data in DBHub below 1.7.0 and ArcadeDB below 26.11.1. Upgrade, and give the agent a database account with only `SELECT`.
 - **A shared LLM proxy can adopt one caller's endpoint for everyone (LiteLLM GHSA-m8fp-3f3g-j5p7, fixed 1.103.0)** — Where client-side `api_base` is allowed, a user could route other users' requests, prompts and the provider key to their own server. Upgrade and restart the proxy.
 - **A low-code builder's advisory tab can hold a 30-advisory batch no feed carried (Budibase, 2026-11-10)** — Seven critical, fixed in the `v4.0.0` image. The npm package the advisories name has no fixed release.
@@ -66,7 +68,7 @@ The highest-risk ongoing threat families for vibe coders:
 - **A coding agent commits a credential to a public repository and the provider's stored prompts are downloaded (Together AI, 2026-11-21)** — Samples of June and July 2026 prompts were taken and searched for credentials. Rotate secrets sent in prompts, and scan agent commits for secrets. [Advisory](advisories/2026-11-together-ai-prompt-samples-downloaded-after-coding-agent-committed-credential-june-july-requests.md)
 - **The system renderer under an image upload is the exposure (Ghostscript CVE-2026-125396, fixed 10.08.0)** — Image libraries pass PostScript content to Ghostscript whatever the file is named. pwn.ai ran commands through ImageMagick paths and reached the renderer through Pillow. Update Ghostscript inside every image that processes uploads. [Advisory](advisories/2026-11-ghostscript-upload2shell-cve-2026-125396-dsafer-escape-through-image-upload-paths-fixed-10-08-0.md)
 - **Prompts are readable at every hop between you and the model (Dragos canary study, 2026-11-19; Phala 2026-11-10)** — Test secrets planted in two million prompts were stolen at three hosting providers, read by marketplace resellers and fetched despite Zero Data Retention flags. Keep credentials out of prompts, choose upstream providers yourself, and rotate any secret sent on a named route.
-- **A research server with no login by default was exploited before it had a CVE (MONAI Label, CVE-2026-133968, 2026-11-18)** — 0.8.5 and earlier let an unauthenticated client write files outside the datastore. A fix is merged and no release carries it. Take the server off untrusted networks.
+- **A research server with no login by default was exploited before it had a CVE (MONAI Label, CVE-2026-133968, 2026-11-18)** — 0.8.5 and earlier let an unauthenticated client write files outside the datastore. Fixed in 0.8.6, on PyPI since 2026-11-22. CISA listed the CVE as exploited on 2026-11-23.
 - **A personal agent's browser is the way into its credential store (Meta Muse, NebuSec, 2026-11-20)** — A web page read and altered chats and memories with no approval prompt, and a second chain reached the VM's credential store. NebuSec says it is fixed and Meta has not confirmed. Connect the fewest accounts the task needs.
 - **Java4Shell: the Java runtime under Keycloak, Jenkins and Elasticsearch (CVE-2026-114938, 2026-11-17)** — OpenJDK 17.0.6 and later corrupts memory when decoding Base64 on x86-64 CPUs with AVX-512 VBMI. Upgrade Java to 17.0.21.1, 21.0.13.1 or 25.0.5.1, or set `-XX:-UseBASE64Intrinsics`. See [advisories/2026-11-java4shell-openjdk-base64-cve-2026-114938-keycloak-jenkins-elasticsearch-fixed-november-jdk.md](advisories/2026-11-java4shell-openjdk-base64-cve-2026-114938-keycloak-jenkins-elasticsearch-fixed-november-jdk.md).
 - **A hosted model can be swapped without its name changing (Prime Intellect, 2026-11-08 to 2026-11-10)** — an unauthorised party swapped one DeepSeek v4.1 Flash deployment to weights modified to reduce or remove refusals. Do not rely on a model's refusals as the only control. See [advisories/2026-11-prime-intellect-deepseek-v4-1-flash-endpoint-served-modified-weights-november-8-to-10.md](advisories/2026-11-prime-intellect-deepseek-v4-1-flash-endpoint-served-modified-weights-november-8-to-10.md).
