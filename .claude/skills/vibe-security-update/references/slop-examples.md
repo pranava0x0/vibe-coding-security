@@ -4,6 +4,13 @@ Read this before writing any advisory or `ALERTS.md` entry. Append a pair each
 time review or the owner finds slop, and add a matching line to
 `tools/slop_patterns.tsv` when the shape can be matched by a regex. Newest on top.
 
+## 2026-11-24 (sweep review)
+
+**One page's wording applied to six** (mcp-server-git advisory)
+- Before: "The pages share one precondition. A repository with an attacker-written `.git` directory has to reach the disk through an archive, a CI artifact, a shared folder, a vendored tree or a copied workspace."
+- After: "Five of the six pages name a delivery path. GHSA-pm7p-vphh-2cg7 lists an archive, a CI artifact, a shared folder, a vendored tree or a copied workspace. GHSA-8wv7-r664-7594 names no delivery path."
+- Why: "share" was not checked page by page. No regex matches this shape, so attribute each condition to an id.
+
 ## 2026-11-23 (sweep self-review)
 
 **Relative duration where two dates do the job** (LiteLLM advisory)

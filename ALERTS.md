@@ -2,11 +2,19 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-11-23. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-11-24. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-11-24 — **Hex.pm: attacker ran commands on the registry's web servers on 2026-11-23 (CVE-2026-129514); no package changes found; change password, reset 2FA**
+[Hex.pm says](https://hex.pm/blog/security-incident-on-hexpm) an attacker ran commands on its web servers on 2026-11-23 and may have read password hashes and 2FA secrets. It found no changed packages. Change your password, reset 2FA, and fetch only from repo.hex.pm.
+→ [advisories/2026-11-hex-pm-registry-web-servers-command-execution-cve-2026-129514-change-password-reset-2fa.md](advisories/2026-11-hex-pm-registry-web-servers-command-execution-cve-2026-129514-change-password-reset-2fa.md)
+
+### 2026-11-23 — **Pomerium 0.30.0 to below 0.34.0: MCP token endpoint skips the secret check for client_secret_basic clients (CVE-2026-135300); fixed in 0.34.0**
+Pomerium's MCP token endpoint does not check the secret of `client_secret_basic` clients, per [CVE-2026-135300](https://cveawg.mitre.org/api/cve/CVE-2026-135300). An attacker holding an intercepted authorization code or refresh token gets the victim's access tokens. Upgrade to 0.34.0 and retest MCP clients.
+→ [advisories/2026-11-pomerium-mcp-token-endpoint-skips-client-secret-check-cve-2026-135300-fixed-0-34-0.md](advisories/2026-11-pomerium-mcp-token-endpoint-skips-client-secret-check-cve-2026-135300-fixed-0-34-0.md)
 
 ### 2026-11-23 — **LiteLLM proxy: a request's own api_base or key joined the shared deployment list for every user (GHSA-m8fp-3f3g-j5p7); fixed 1.103.0**
 [GHSA-m8fp-3f3g-j5p7](https://github.com/BerriAI/litellm/security/advisories/GHSA-m8fp-3f3g-j5p7) says a LiteLLM proxy user could, where client-side `api_base` is allowed, route part of other users' requests to their own server and receive prompts and the provider key. Upgrade to 1.103.0 or later and restart the proxy.
@@ -56,8 +64,12 @@ The [GitHub Advisory Database](https://github.com/advisories?query=mcp+sort%3Apu
 [PHP's 2026-11-19 security releases](https://www.php.net/archive/2026.php) fix 17 issues by [AWS's count](https://aws.amazon.com/security/security-bulletins/2026-190-aws/), seven of them CVEs scored 9.2. One lets an unauthenticated request forge a PHP-FPM request when the proxy reuses backend connections. Upgrade to 8.5.13, 8.4.28, 8.3.37 or 8.2.36 and restart PHP.
 → [advisories/2026-11-php-november-19-security-release-eight-cves-fpm-request-smuggling-session-code-execution-fixed-8-5-13.md](advisories/2026-11-php-november-19-security-release-eight-cves-fpm-request-smuggling-session-code-execution-fixed-8-5-13.md)
 
-### 2026-11-18 — **MONAI Label 0.8.5 and earlier: unauthenticated file write through the datastore endpoints, exploited (CVE-2026-133968); fix merged, no release**
-MONAI Label 0.8.5 and earlier lets an unauthenticated client write files outside the datastore, per the [project advisory](https://github.com/Project-MONAI/MONAILabel/security/advisories/GHSA-qc22-rmgc-vg94). The CVE record says it was exploited, and no fixed release exists. Take the server off untrusted networks.
+### 2026-11-18 — **mcp-server-git: a repository's own Git config runs commands as the server user, six High advisories; fixed in 2026.11.18**
+`mcp-server-git` below 2026.11.18 runs programs named in a repository's Git config, per [six High advisories](https://github.com/modelcontextprotocol/servers/security/advisories). Most need a repository received with its `.git` directory, such as an archive. Upgrade to 2026.11.18.
+→ [advisories/2026-11-mcp-server-git-repository-config-runs-commands-six-high-advisories-fixed-2026-11-18.md](advisories/2026-11-mcp-server-git-repository-config-runs-commands-six-high-advisories-fixed-2026-11-18.md)
+
+### 2026-11-18 — **MONAI Label 0.8.5 and earlier: unauthenticated file write through the datastore endpoints, exploited and in KEV (CVE-2026-133968); fixed in 0.8.6**
+MONAI Label 0.8.5 and earlier lets an unauthenticated client write files outside the datastore, per the [project advisory](https://github.com/Project-MONAI/MONAILabel/security/advisories/GHSA-qc22-rmgc-vg94). CISA listed it as exploited on 2026-11-23. Upgrade to 0.8.6 and keep the server off untrusted networks.
 → [advisories/2026-11-monai-label-cve-2026-133968-unauthenticated-file-write-exploited-no-fixed-release.md](advisories/2026-11-monai-label-cve-2026-133968-unauthenticated-file-write-exploited-no-fixed-release.md)
 
 ### 2026-11-18 — **NGINX HTTP/2 heap overflow allows unauthenticated code execution (CVE-2026-123007); four more critical flaws; fixed in 1.31.9 and 1.30.7**

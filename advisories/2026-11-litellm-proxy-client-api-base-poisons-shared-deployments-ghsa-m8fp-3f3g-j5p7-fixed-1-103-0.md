@@ -2,11 +2,11 @@
 id: 2026-11-litellm-proxy-client-api-base-poisons-shared-deployments-ghsa-m8fp-3f3g-j5p7-fixed-1-103-0
 title: "LiteLLM proxy: a request's own api_base or key joined the shared deployment list for every user (GHSA-m8fp-3f3g-j5p7); fixed 1.103.0"
 date_disclosed: 2026-11-23
-last_updated: 2026-11-23
+last_updated: 2026-11-24
 severity: high
 status: patched
 ecosystems: [pypi, python, litellm, llm-gateway]
-tools_affected: ["litellm (PyPI) 1.63.2 to below 1.103.0", "LiteLLM proxy deployments with `allow_client_side_credentials`, a deployment that allows `api_base`, or `forward_llm_provider_auth_headers`", "litellm (PyPI) 1.40.4 to 1.108.0 as printed, for the two Moderate advisories", "agents and applications that share a LiteLLM proxy across users or teams"]
+tools_affected: ["litellm (PyPI) 1.63.2 to below 1.103.0", "LiteLLM proxy deployments with `allow_client_side_credentials`, a deployment that allows `api_base`, or `forward_llm_provider_auth_headers`", "litellm (PyPI) 1.40.4 to 1.108.0 as printed, for the two Moderate advisories", "litellm (PyPI) 1.83.0 to below 1.104.0, for the plaintext password advisory", "agents and applications that share a LiteLLM proxy across users or teams"]
 tags: [litellm, llm-gateway, pypi, traffic-redirect, prompt-exposure, provider-key, authenticated, no-cve, patched]
 ---
 
@@ -61,7 +61,19 @@ grep -rn 'allow_client_side_credentials\|forward_llm_provider_auth_headers\|conf
 - Leave client-supplied endpoints and credentials off on a proxy that more than one team uses.
 - See [prevention/credential-hygiene.md](../prevention/credential-hygiene.md).
 
+## Update 2026-11-24
+
+[GHSA-p377-4hwj-f3fh](https://github.com/BerriAI/litellm/security/advisories/GHSA-p377-4hwj-f3fh), published 2026-11-24, Moderate, CVSS 3.1 4.9, no CVE. A `POST /user/bulk_update` with `all_users: true` and a `password` field stored that password unhashed for every user. Affected 1.83.0 to below 1.104.0. Fixed in 1.104.0, on PyPI since 2026-10-03.
+
+- It applies only where an admin used that call to give every user one password. The advisory says this pattern is not expected in deployments.
+- Anyone who can read the database or its backups can read the password and sign in as any affected user.
+- Upgrading does not rehash stored passwords. The advisory gives a query on `LiteLLM_UserTable` for rows whose `password` is set and does not start with `scrypt:` or `pbkdf2:`.
+- Upgrade to 1.104.0 or later for this advisory, then reset the password of every user the query returns.
+- Treat backups that hold those rows as exposed. This step is this file's advice.
+
 ## Sources
+
+- [GHSA-p377-4hwj-f3fh](https://github.com/BerriAI/litellm/security/advisories/GHSA-p377-4hwj-f3fh), fetched 2026-11-24 through a summarizing fetch. Paraphrased, not quoted. PyPI simple API for the 1.83.0 and 1.104.0 upload times.
 
 Single source: the vendor.
 
