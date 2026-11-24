@@ -12,8 +12,8 @@
 [Hex.pm says](https://hex.pm/blog/security-incident-on-hexpm) an attacker ran commands on its web servers on 2026-11-23 and may have read password hashes and 2FA secrets. It found no changed packages. Change your password, reset 2FA, and fetch only from repo.hex.pm.
 → [advisories/2026-11-hex-pm-registry-web-servers-command-execution-cve-2026-129514-change-password-reset-2fa.md](advisories/2026-11-hex-pm-registry-web-servers-command-execution-cve-2026-129514-change-password-reset-2fa.md)
 
-### 2026-11-23 — **Pomerium 0.30.0 to below 0.34.0: MCP token endpoint accepts any client secret (CVE-2026-135300); fixed in 0.34.0**
-Pomerium's MCP token endpoint does not check the client secret, per [CVE-2026-135300](https://cveawg.mitre.org/api/cve/CVE-2026-135300). An attacker holding an intercepted authorization code or refresh token gets the victim's access tokens. Upgrade to 0.34.0 and retest MCP clients.
+### 2026-11-23 — **Pomerium 0.30.0 to below 0.34.0: MCP token endpoint skips the secret check for client_secret_basic clients (CVE-2026-135300); fixed in 0.34.0**
+Pomerium's MCP token endpoint does not check the secret of `client_secret_basic` clients, per [CVE-2026-135300](https://cveawg.mitre.org/api/cve/CVE-2026-135300). An attacker holding an intercepted authorization code or refresh token gets the victim's access tokens. Upgrade to 0.34.0 and retest MCP clients.
 → [advisories/2026-11-pomerium-mcp-token-endpoint-skips-client-secret-check-cve-2026-135300-fixed-0-34-0.md](advisories/2026-11-pomerium-mcp-token-endpoint-skips-client-secret-check-cve-2026-135300-fixed-0-34-0.md)
 
 ### 2026-11-23 — **LiteLLM proxy: a request's own api_base or key joined the shared deployment list for every user (GHSA-m8fp-3f3g-j5p7); fixed 1.103.0**
@@ -65,7 +65,7 @@ The [GitHub Advisory Database](https://github.com/advisories?query=mcp+sort%3Apu
 → [advisories/2026-11-php-november-19-security-release-eight-cves-fpm-request-smuggling-session-code-execution-fixed-8-5-13.md](advisories/2026-11-php-november-19-security-release-eight-cves-fpm-request-smuggling-session-code-execution-fixed-8-5-13.md)
 
 ### 2026-11-18 — **mcp-server-git: a repository's own Git config runs commands as the server user, six High advisories; fixed in 2026.11.18**
-`mcp-server-git` below 2026.11.18 runs programs named in a repository's Git config, per [six High advisories](https://github.com/modelcontextprotocol/servers/security/advisories). The attacker's `.git` directory must reach your disk through an archive or shared folder. Upgrade to 2026.11.18.
+`mcp-server-git` below 2026.11.18 runs programs named in a repository's Git config, per [six High advisories](https://github.com/modelcontextprotocol/servers/security/advisories). Most need a repository received with its `.git` directory, such as an archive. Upgrade to 2026.11.18.
 → [advisories/2026-11-mcp-server-git-repository-config-runs-commands-six-high-advisories-fixed-2026-11-18.md](advisories/2026-11-mcp-server-git-repository-config-runs-commands-six-high-advisories-fixed-2026-11-18.md)
 
 ### 2026-11-18 — **MONAI Label 0.8.5 and earlier: unauthenticated file write through the datastore endpoints, exploited and in KEV (CVE-2026-133968); fixed in 0.8.6**

@@ -59,7 +59,7 @@ Followed by sections: TL;DR, What happened, Am I affected?, If you are affected,
 
 The highest-risk ongoing threat families for vibe coders:
 
-- **A repository someone sends you can run commands through the reference Git MCP server (mcp-server-git, fixed 2026.11.18)** — Six High advisories say a repository's own Git config ran programs as the server user, some through read-only tools. The attacker's `.git` directory must reach the disk through an archive or shared folder. No CVE.
+- **A repository someone sends you can run commands through the reference Git MCP server (mcp-server-git, fixed 2026.11.18)** — Six High advisories say a repository's own Git config ran programs as the server user, some through read-only tools. Most need a repository received with its `.git` directory, such as an archive. No CVE.
 - **A package registry's web servers were breached (Hex.pm, CVE-2026-129514, 2026-11-23)** — Hex found no changed packages and cannot rule out reads of password hashes and 2FA secrets. Change the password, reset 2FA, and fetch only from repo.hex.pm until the new client ships.
 - **An MCP server's read-only mode is not the database's (DBHub CVE-2026-134803, ArcadeDB, 2026-11-22)** — A client limited to read-only SQL could write and drop data in DBHub below 1.7.0 and ArcadeDB below 26.11.1. Upgrade, and give the agent a database account with only `SELECT`.
 - **A shared LLM proxy can adopt one caller's endpoint for everyone (LiteLLM GHSA-m8fp-3f3g-j5p7, fixed 1.103.0)** — Where client-side `api_base` is allowed, a user could route other users' requests, prompts and the provider key to their own server. Upgrade and restart the proxy.

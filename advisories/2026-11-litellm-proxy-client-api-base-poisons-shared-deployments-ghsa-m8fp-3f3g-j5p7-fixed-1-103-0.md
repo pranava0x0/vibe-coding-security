@@ -68,7 +68,8 @@ grep -rn 'allow_client_side_credentials\|forward_llm_provider_auth_headers\|conf
 - It applies only where an admin used that call to give every user one password. The advisory says this pattern is not expected in deployments.
 - Anyone who can read the database or its backups can read the password and sign in as any affected user.
 - Upgrading does not rehash stored passwords. The advisory gives a query on `LiteLLM_UserTable` for rows whose `password` is set and does not start with `scrypt:` or `pbkdf2:`.
-- Reset the password of every user the query returns, and treat backups that hold those rows as exposed.
+- Upgrade to 1.104.0 or later for this advisory, then reset the password of every user the query returns.
+- Treat backups that hold those rows as exposed. This step is this file's advice.
 
 ## Sources
 

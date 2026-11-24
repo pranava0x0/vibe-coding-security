@@ -5,7 +5,7 @@ One file per incident. Latest at the top.
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
 | 2026-11-24 | [Hex.pm: attacker ran commands on the registry's web servers on 2026-11-23 (CVE-2026-129514); no package changes found; change password, reset 2FA](2026-11-hex-pm-registry-web-servers-command-execution-cve-2026-129514-change-password-reset-2fa.md) | high | contained |
-| 2026-11-23 | [Pomerium 0.30.0 to below 0.34.0: MCP token endpoint accepts any client secret (CVE-2026-135300); fixed in 0.34.0](2026-11-pomerium-mcp-token-endpoint-skips-client-secret-check-cve-2026-135300-fixed-0-34-0.md) | high | patched |
+| 2026-11-23 | [Pomerium 0.30.0 to below 0.34.0: MCP token endpoint skips the secret check for client_secret_basic clients (CVE-2026-135300); fixed in 0.34.0](2026-11-pomerium-mcp-token-endpoint-skips-client-secret-check-cve-2026-135300-fixed-0-34-0.md) | high | patched |
 | 2026-11-23 | [LiteLLM proxy: a request's own api_base or key joined the shared deployment list for every user (GHSA-m8fp-3f3g-j5p7); fixed 1.103.0](2026-11-litellm-proxy-client-api-base-poisons-shared-deployments-ghsa-m8fp-3f3g-j5p7-fixed-1-103-0.md) | high | patched |
 | 2026-11-21 | [DBHub, ArcadeDB and mcp-server-kubernetes MCP restrictions bypassed, and Lightdash's AI agent sends a GitLab token to an unverified host; all fixed](2026-11-database-mcp-read-only-bypasses-dbhub-arcadedb-mcp-server-kubernetes-lightdash-agent-token-leak.md) | high | patched |
 | 2026-11-21 | [RunPod MCP server 4.13.0 and 4.14.0 told agents to submit a rating and not mention it to the user; removed in 4.15.0](2026-11-runpod-mcp-server-told-agents-to-rate-it-and-not-mention-it-to-the-user-removed-4-15-0.md) | medium | patched |
