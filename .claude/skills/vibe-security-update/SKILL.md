@@ -13,7 +13,7 @@ You are running a fresh sweep of vibe-coding-relevant security incidents and int
 |---|---|---|
 | [`references/queries.md`](references/queries.md) | the literal search strings + rotation lists | Step 1. **The only file that may go into a delegated agent's prompt.** |
 | [`references/triage-patterns.md`](references/triage-patterns.md) | why each query exists, and the named attack classes | Step 2 onward, **main session only** |
-| [`LEARNINGS.md`](LEARNINGS.md) | durable rules distilled from ~100 prior runs; §7 to §53 and §55 to §60 sit in [`LEARNINGS.archive.md`](LEARNINGS.archive.md), a grep target | Step 0, every run |
+| [`LEARNINGS.md`](LEARNINGS.md) | durable rules distilled from ~100 prior runs; §7 to §53 and §55 to §64 sit in [`LEARNINGS.archive.md`](LEARNINGS.archive.md), a grep target | Step 0, every run |
 | [`fallback.log.md`](fallback.log.md) | one row per safeguard stop, model switch, permission block or rate-limit event | append-only, the moment an event appears |
 
 ## Output for the user (always include at end)
@@ -217,6 +217,7 @@ Each row is a shape of wrong-but-plausible data that has shipped from this routi
 | CNA fix reference is a rewrite that names no bug | VulnCheck's browser-use records reference the pull request that replaces the 0.x engine | quote the pull request's own lines, say no vendor text describes a fix for the ids, and keep the CNA range |
 | Fix merged, stable release notes silent | T3 Code's analytics fix is in the nightly notes of 2026-11-24 and absent from the 0.1.12 notes read on 2026-11-25 | table each release with what its notes list; `mitigated`; say how much of a long page was read |
 | Social post quoted from a paraphrase or a truncated mirror | an outlet summarises an X reply, and the mirror API returns only the post's opening | card only the words the mirror returned; attribute the rest to the outlet's summary; name the mirror in Sources |
+| Quotation closed where the source sentence continues, or advice wider than the vendor's scope | a T3 Code pull-request quote ended with a full stop the source lacks; a Todoist line said "if you ever" where the notice limits the searches to one shard (caught in review) | end a quotation inside the source's own words, keep the source's punctuation marks, and check every "ever", "any" and "all" in advice against the vendor's stated scope |
 ---
 
 
@@ -299,7 +300,7 @@ python3 tools/sweep_context.py   # refreshes advisory-index.jsonl + source-prior
 
 | Read | Why | ~Tokens |
 |---|---|---|
-| [`LEARNINGS.md`](LEARNINGS.md) | durable rules from prior runs | ~15K (grep the section headers, then read the newest ten sections and §1 to §6; §7 to §53 and §55 to §60 are in `LEARNINGS.archive.md`, grep only) |
+| [`LEARNINGS.md`](LEARNINGS.md) | durable rules from prior runs | ~15K (grep the section headers, then read the newest ten sections and §1 to §6; §7 to §53 and §55 to §64 are in `LEARNINGS.archive.md`, grep only) |
 | `runs.log.md` | the last 7 entries only — recent context | ~17K |
 | `source-priorities.top.json` | the top sources Step 1 actually uses | ~0.5K |
 | `references/queries.md` | the query list | ~1K |
@@ -360,9 +361,9 @@ Don't repeat queries already run within the last 24h (check `runs.log.md`).
 
 **A vendor's incident page can sit on a path its status host never lists, and the first widely read copy can be a support-ticket reply on Hacker News.** GitBook (2026-11-02) published updates at `gitbook.com/status/security-incident-2026-11-03` while `gitbookstatus.com` showed no incident and `gitbook.com/status` 404ed; the HN thread (16:45 UTC on 2026-11-03) carried the support reply and the CTO's answers, and crypto.news carried the page URL. When a status host is clean and the HN feed has a "<vendor> breached" item, open the item, follow the links commenters post, and search the outlets for the vendor's slug page before writing that the vendor has said nothing. A vendor rotation list that names an MCP server connection is a credential category for the file (`LEARNINGS.md` §65).
 
-**A vendor whose only statement is a social post, and whose site is down, is still a primary you can describe.** On 2026-10-31 DebugBear's incident statement existed as an X status and `debugbear.com` returned 530; Polymarket's statements were X posts. HN Algolia's `search_by_date` returns the X status URLs as story links, NBC News and SecurityWeek quote the posts, and the HTTP status with its read time is a fact for the file (`LEARNINGS.md` §61). For a research CNA record whose fix version has a `+N` suffix, open the vendor changelog for "Build N" and expect no security wording.
+**A vendor whose only statement is a social post, and whose site is down, is still a primary you can describe.** On 2026-10-31 DebugBear's incident statement existed as an X status and `debugbear.com` returned 530; Polymarket's statements were X posts. HN Algolia's `search_by_date` returns the X status URLs as story links, NBC News and SecurityWeek quote the posts, and the HTTP status with its read time is a fact for the file (`LEARNINGS.archive.md` §61). For a research CNA record whose fix version has a `+N` suffix, open the vendor changelog for "Build N" and expect no security wording.
 
-**A vendor research roundup is a channel, not coverage.** Wiz's "Black October" post (2026-10-30) listed nine AI developer platforms breached in one month; one of them (Lightning AI, 2026-10-15) had no file here and surfaced nowhere else in sixteen days of sweeps. When a research post, a CSIRT summary or an outlet's "in other news" lists incidents, grep every named organisation in the corpus, open each primary the post links, and file the misses with the vendor page as the primary and the roundup as the second source (`LEARNINGS.md` §62).
+**A vendor research roundup is a channel, not coverage.** Wiz's "Black October" post (2026-10-30) listed nine AI developer platforms breached in one month; one of them (Lightning AI, 2026-10-15) had no file here and surfaced nowhere else in sixteen days of sweeps. When a research post, a CSIRT summary or an outlet's "in other news" lists incidents, grep every named organisation in the corpus, open each primary the post links, and file the misses with the vendor page as the primary and the roundup as the second source (`LEARNINGS.archive.md` §62).
 
 **A product's own issue tracker is a disclosure channel when a thread reaches the Hacker News front page, and the home file may already exist under a different mechanism name.** On 2026-11-06 the day's lead was `anthropics/claude-code` issue #107757 (1,380 points): the account email in web `User-Agent` headers. The product-name grep showed dozens of files; the mechanism grep (`userEmail`, `User-Agent`) found the 2026-10-29 home file for issue #81138, the same context injection, and the story became an Update instead of a duplicate file. For an issue-tracker story, open the issue for the maintainer replies and labels, the CHANGELOG for the version that carries the change, the repository path the maintainer names for the published control, the registry `time` and `dist-tags` for the channels, the HN thread through the Algolia items API for vendor-affiliated comments, and the older closed issues the thread links; grep the mechanism tokens the thread uses before grepping the product (`LEARNINGS.md` §67).
 

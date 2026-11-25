@@ -1,18 +1,18 @@
 ---
 id: 2026-11-t3-code-analytics-read-codex-claude-sign-in-files-hashed-account-ids
-title: "T3 Code through 0.1.11 read Codex and Claude sign-in files and sent unsalted hashes of the account ids; fix merged 2026-11-24"
+title: "T3 Code 0.1.11 read Codex and Claude sign-in files and sent unsalted hashes of the account ids; fix merged 2026-11-24"
 date_disclosed: 2026-11-24
 last_updated: 2026-11-25
 severity: medium
 status: mitigated
 ecosystems: [t3-code, coding-agents, telemetry, codex, claude-code]
-tools_affected: ["T3 Code desktop app and server through 0.1.11", "machines with `~/.codex/auth.json` or `~/.claude.json` present"]
+tools_affected: ["T3 Code desktop app and server 0.1.11, and earlier releases since October 2026 per EveryDev", "machines with `~/.codex/auth.json` or `~/.claude.json` present"]
 tags: [telemetry, privacy, account-identifiers, coding-agent, credential-file-read, unsalted-hash, vendor-fix, mitigated]
 ---
 
 ## TL;DR
 
-T3 Code's analytics read `~/.codex/auth.json` and `~/.claude.json` at server start and sent unsalted SHA-256 hashes of the OpenAI and Claude account ids, according to [the vendor's own fix](https://github.com/pingdotgg/t3code/pull/42299). The fix merged on 2026-11-24 and is listed in the nightly notes. The 0.1.12 release notes read on 2026-11-25 do not list it. Set `T3CODE_TELEMETRY_ENABLED=false` until a release you run names the change.
+T3 Code's analytics read `~/.codex/auth.json` and `~/.claude.json` at server start and sent unsalted SHA-256 hashes of the Codex and Claude account ids, according to [the vendor's own fix](https://github.com/pingdotgg/t3code/pull/42299). The fix merged on 2026-11-24 and is listed in the nightly notes. The 0.1.12 release notes read on 2026-11-25 do not list it. Set `T3CODE_TELEMETRY_ENABLED=false` until a release you run names the change.
 
 ## What happened
 
@@ -24,7 +24,7 @@ A post on X on 2026-11-24 accused T3 Code of collecting user data. [EveryDev.ai]
 - EveryDev found no tokens, names, email addresses, prompts, code or file paths in the uploads.
 - After a reinstall the install id changed and the three account hashes did not.
 
-The vendor's pull request #42299, "fix(server): analytics no longer reads or sends Codex and Claude account IDs", merged on 2026-11-24. Its description says: "T3 Code's analytics read `~/.codex/auth.json` and `~/.claude.json` at server boot." It says the hashes "were unsalted" and that "Users did not sign in to those providers to be identified by T3 Code." After the change, "analytics never opens a provider's sign-in files" and the install id is the analytics identity.
+The vendor's pull request #42299, "fix(server): analytics no longer reads or sends Codex and Claude account IDs", merged on 2026-11-24. Its description says T3 Code's analytics "read `~/.codex/auth.json` and `~/.claude.json` at server boot" and sent hashes of the ids it found. It says "Users did not sign in to those providers to be identified by T3 Code" and that the hashes were unsalted. After the change, "analytics never opens a provider's sign-in files" and the install id is the analytics identity.
 
 The 0.1.11 [telemetry document](https://github.com/pingdotgg/t3code/blob/v0.1.11/docs/user/telemetry.md) said the server "sends hashed account identifiers: your T3 Connect account, your OpenAI and Claude accounts". EveryDev reports that the welcome screen says the app "collects anonymous usage data" and that neither it nor the privacy policy mentions account identifiers.
 
@@ -34,7 +34,7 @@ The maintainer replied on X:
 >
 > [@theo on X, 2026-11-24](https://x.com/theo/status/2125332390239494211)
 
-EveryDev summarises the rest of that post. The team removed the sign-in file reads, which existed so one person on several computers counts as one user. The app never uploaded files, prompts or file paths.
+EveryDev summarises the rest of that post, including that a stable fix would follow within hours. The team removed the sign-in file reads, which existed so one person on several computers counts as one user. The app never uploaded files, prompts or file paths.
 
 Which release carries the fix:
 
@@ -62,7 +62,7 @@ env | grep T3CODE_TELEMETRY_ENABLED
 1. Set `T3CODE_TELEMETRY_ENABLED=false` in the server's environment and restart the app. The vendor document says the desktop app reads it from your shell profile on macOS and Linux.
 2. The opt-out is partial. The vendor document says the browser web app ignores the variable and mobile tracing has no toggle. EveryDev reports that a startup diagnostic still went to Axiom.
 3. Update when a release's notes name pull request #42299.
-4. No token was sent, per EveryDev and the pull request, so no credential rotation follows from this. The hashes already sent stay with the vendor's analytics.
+4. EveryDev found no token in the uploads, so no credential rotation follows from this. The hashes already sent stay with the vendor's analytics.
 
 ## Prevention
 

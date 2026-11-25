@@ -8,7 +8,7 @@
 
 ## 🔴 ACTIVE — react now
 
-### 2026-11-24 — **T3 Code through 0.1.11 read Codex and Claude sign-in files and sent unsalted hashes of the account ids; fix merged 2026-11-24**
+### 2026-11-24 — **T3 Code 0.1.11 read Codex and Claude sign-in files and sent unsalted hashes of the account ids; fix merged 2026-11-24**
 T3 Code's analytics read Codex and Claude sign-in files and sent unsalted hashes of the account ids, per [the vendor's fix](https://github.com/pingdotgg/t3code/pull/42299) merged 2026-11-24. The 0.1.12 notes read on 2026-11-25 do not list it. Set `T3CODE_TELEMETRY_ENABLED=false`.
 → [advisories/2026-11-t3-code-analytics-read-codex-claude-sign-in-files-hashed-account-ids.md](advisories/2026-11-t3-code-analytics-read-codex-claude-sign-in-files-hashed-account-ids.md)
 
@@ -81,7 +81,7 @@ The [GitHub Advisory Database](https://github.com/advisories?query=mcp+sort%3Apu
 → [advisories/2026-11-php-november-19-security-release-eight-cves-fpm-request-smuggling-session-code-execution-fixed-8-5-13.md](advisories/2026-11-php-november-19-security-release-eight-cves-fpm-request-smuggling-session-code-execution-fixed-8-5-13.md)
 
 ### 2026-11-18 — **LiteLLM: ZDI publishes stdio MCP command execution as a 0-day (CVE-2026-136535); vendor disputes it; stdio is off by default from 1.104.0**
-[ZDI-26-1031](https://www.zerodayinitiative.com/advisories/ZDI-26-1031/) says a proxy admin can run commands on a LiteLLM host through stdio MCP configurations. The vendor disputes it and ships no patch. Upgrade to 1.104.0 or later, leave `LITELLM_ENABLE_MCP_STDIO` unset, and replace any default master key.
+[ZDI-26-1031](https://www.zerodayinitiative.com/advisories/ZDI-26-1031/) says an authenticated attacker can run commands on a LiteLLM host through stdio MCP configurations. The vendor disputes it and ships no patch. Upgrade to 1.104.0 or later, leave `LITELLM_ENABLE_MCP_STDIO` unset, and replace any default master key.
 → [advisories/2026-11-litellm-stdio-mcp-command-injection-zdi-26-1031-cve-2026-136535-vendor-disputes.md](advisories/2026-11-litellm-stdio-mcp-command-injection-zdi-26-1031-cve-2026-136535-vendor-disputes.md)
 
 ### 2026-11-18 — **mcp-server-git: a repository's own Git config runs commands as the server user, six High advisories; fixed in 2026.11.18**

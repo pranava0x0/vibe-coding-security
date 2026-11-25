@@ -49,14 +49,14 @@ A separate flaw in the `@doist/todoist-mcp` server, CVE-2026-76807, is in [the 2
 ## Am I affected?
 
 - Todoist says it emailed every affected account from `no-reply@notify.todoist.com`, and that accounts with no email need no action.
-- You are in the token group if a script, agent or MCP server that used your Todoist API token stopped authenticating after 2026-11-23.
-- You are exposed beyond Todoist if you ever wrote an API key, access token or recovery phrase into a task or comment.
+- Todoist says it revoked API tokens for accounts in the token group. A script, agent or MCP server holding a revoked token stops authenticating.
+- If the email says your content matched the searches, treat every credential in your tasks and comments as read. Todoist says the searches covered one database shard.
 
 ## If you are affected
 
 1. Reset your Todoist password. Change it on any other service where you reused it.
 2. Copy the new API token from Settings → Integrations → Developer in the Todoist web app, and update every script, agent configuration and MCP server that held the old one.
-3. Revoke and replace every credential you stored in tasks or comments, at the service that issued it. Todoist notes that deleting a comment does not invalidate a secret that was already copied.
+3. Revoke and replace every credential you stored in Todoist, at the service that issued it. Todoist notes that deleting a comment does not invalidate a secret that "may already have been copied".
 4. Reconnect the Slack integration and the Outlook add-in if Todoist disconnected them. Todoist says the new Outlook app may show as unverified until Microsoft's verification completes.
 5. Treat email about this incident from any other sender as phishing. Todoist says it will not ask for your password or ask you to install software.
 

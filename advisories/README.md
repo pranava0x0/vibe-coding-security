@@ -4,7 +4,7 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
-| 2026-11-24 | [T3 Code through 0.1.11 read Codex and Claude sign-in files and sent unsalted hashes of the account ids; fix merged 2026-11-24](2026-11-t3-code-analytics-read-codex-claude-sign-in-files-hashed-account-ids.md) | medium | mitigated |
+| 2026-11-24 | [T3 Code 0.1.11 read Codex and Claude sign-in files and sent unsalted hashes of the account ids; fix merged 2026-11-24](2026-11-t3-code-analytics-read-codex-claude-sign-in-files-hashed-account-ids.md) | medium | mitigated |
 | 2026-11-24 | [browser-use below 1.0.0: crafted URLs get past allowed_domains and IP blocking (CVE-2026-136452, CVE-2026-136453); 1.0.0 replaces the engine](2026-11-browser-use-allowed-domains-bypass-cve-2026-136452-cve-2026-136453-engine-replaced-1-0-0.md) | high | patched |
 | 2026-11-24 | [DBHub: ZDI publishes an MCP server authentication bypass as a 0-day (CVE-2026-136441, 9.8); no fixed version is stated](2026-11-dbhub-mcp-authentication-bypass-zdi-26-1067-cve-2026-136441-no-fix-stated.md) | high | active |
 | 2026-11-24 | [Todoist: attacker reached production on 2026-11-23, took API tokens and searched tasks for credentials; rotate tokens and any secret stored in Todoist](2026-11-todoist-production-breach-api-tokens-credentials-in-tasks-outlook-add-in.md) | high | contained |
