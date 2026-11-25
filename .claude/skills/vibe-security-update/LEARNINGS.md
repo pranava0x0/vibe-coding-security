@@ -460,3 +460,16 @@ Four things from **2026-11-24**:
 4. **Pomerium's release notes list the fix under breaking changes with no security wording, and a research CNA issued the id 19 days later.** The notes also say which clients fail after the upgrade. **Rule:** when a CNA record references a release, read the release notes for a breaking-change entry and put its client impact in the upgrade step. `proxy.golang.org/<module>/@v/list` gives the version list.
 
 `WebSearch` ran four queries and returned nothing dated in the window. X, Bluesky and Reddit stay "not covered".
+
+## 85. A coordinator's 0-day page is the only copy of the vendor's position; a CNA entry can be one tested version or a commit; a SaaS help-centre notice is an incident channel; and a harness's fix can merge without reaching the stable notes
+
+Five things from **2026-11-25**:
+
+1. **ZDI-26-1031 (LiteLLM stdio MCP) was on ZDI's site on 2026-11-18 and reached a listing on 2026-11-24, when the CVE record published.** The page carries the vendor's dispute and the vendor's mitigation text, including the default-off switch from 1.104.0. The vendor tab has no row. **Rule:** fetch `zerodayinitiative.com/advisories/published/` every run and grep each row's product. Date the file by the ZDI page. Quote the vendor's position as ZDI's account of it. The pages render to `curl`, and one attempt in two was reset, so retry once.
+2. **Both ZDI records list one entry in `affected`: a tested version (1.88.0) or a commit hash.** Neither is a range. **Rule:** print the entry as read, add the registry dates around the report date, and write no "fixed in". A tracked product's home file that is `patched` for another id does not hold an unpatched 0-day. It gets its own file.
+3. **Todoist's breach notice is a help-centre article, found through the Algolia `incident` term at 9 points.** It lists API tokens and "content resembling credentials" searched in tasks. **Rule:** a SaaS breach is in scope when the vendor lists API or integration tokens or says stored content was searched for credentials. The page renders to `curl` and has an update log with UTC times.
+4. **T3 Code's fix merged on 2026-11-24 and the stable 0.1.12 notes of 2026-11-25 do not list it.** The vendor's pull-request description is the primary for what the old code did. An independent test (EveryDev) gave the wire detail. **Rule:** for a telemetry story, open the fix pull request, the telemetry document at the affected tag and the release notes of every release after the merge. `mitigated` until a stable release's notes name the change. A release page over 100,000 characters needs a second fetch with `offset`.
+5. **`api.fxtwitter.com/<handle>/status/<id>` returned X post text to `curl`, truncated for long posts.** **Rule:** quote only the text the mirror returned, as a post card, and say in Sources that the mirror truncated it. Do not quote from an outlet's paraphrase.
+
+VulnCheck's browser-use records reference a pull request that replaces the engine and names neither bug. The file says so. `WebSearch` ran six queries and returned nothing dated in the window. Bluesky and Reddit stay "not covered".
+

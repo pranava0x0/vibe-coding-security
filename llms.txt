@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-11-24
+**Last refreshed:** 2026-11-25
 
 ## Quick start
 
@@ -55,10 +55,14 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-11-24)
+## Active threat families (as of 2026-11-25)
 
 The highest-risk ongoing threat families for vibe coders:
 
+- **A task manager's breach reaches the secrets written into tasks (Todoist, 2026-11-23)** — The attacker took API tokens for a small group and searched tasks and comments for credentials. Replace the API token in scripts and agents, and revoke every secret stored in Todoist.
+- **A coordinator publishes a 0-day the vendor disputes or never answers (LiteLLM CVE-2026-136535, DBHub CVE-2026-136441, ZDI)** — LiteLLM stdio MCP servers are off by default from 1.104.0. ZDI names no fixed DBHub version. Keep both off networks you do not control.
+- **A browser agent's domain allowlist is a string check (browser-use below 1.0.0, CVE-2026-136452 and CVE-2026-136453)** — Crafted URLs pass `allowed_domains` and IP blocking. Upgrade to 1.0.0 or later and enforce egress at the network.
+- **A coding harness reads other tools' sign-in files for analytics (T3 Code through 0.1.11)** — It sent unsalted hashes of Codex and Claude account ids. The fix merged 2026-11-24. Set `T3CODE_TELEMETRY_ENABLED=false` until a release names it.
 - **A repository someone sends you can run commands through the reference Git MCP server (mcp-server-git, fixed 2026.11.18)** — Six High advisories say a repository's own Git config ran programs as the server user, some through read-only tools. Most need a repository received with its `.git` directory, such as an archive. No CVE.
 - **A package registry's web servers were breached (Hex.pm, CVE-2026-129514, 2026-11-23)** — Hex found no changed packages and cannot rule out reads of password hashes and 2FA secrets. Change the password, reset 2FA, and fetch only from repo.hex.pm until the new client ships.
 - **An MCP server's read-only mode is not the database's (DBHub CVE-2026-134803, ArcadeDB, 2026-11-22)** — A client limited to read-only SQL could write and drop data in DBHub below 1.7.0 and ArcadeDB below 26.11.1. Upgrade, and give the agent a database account with only `SELECT`.
