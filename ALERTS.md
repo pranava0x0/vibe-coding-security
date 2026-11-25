@@ -2,11 +2,27 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-11-24. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-11-25. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-11-24 — **T3 Code 0.1.11 read Codex and Claude sign-in files and sent unsalted hashes of the account ids; fix merged 2026-11-24**
+T3 Code's analytics read Codex and Claude sign-in files and sent unsalted hashes of the account ids, per [the vendor's fix](https://github.com/pingdotgg/t3code/pull/42299) merged 2026-11-24. The 0.1.12 notes read on 2026-11-25 do not list it. Set `T3CODE_TELEMETRY_ENABLED=false`.
+→ [advisories/2026-11-t3-code-analytics-read-codex-claude-sign-in-files-hashed-account-ids.md](advisories/2026-11-t3-code-analytics-read-codex-claude-sign-in-files-hashed-account-ids.md)
+
+### 2026-11-24 — **browser-use below 1.0.0: crafted URLs get past allowed_domains and IP blocking (CVE-2026-136452, CVE-2026-136453); 1.0.0 replaces the engine**
+Two [VulnCheck records](https://cveawg.mitre.org/api/cve/CVE-2026-136453) say crafted URLs pass `allowed_domains` and IP blocking in `browser-use` below 1.0.0, so an injected page can send the agent and URL secrets elsewhere. Upgrade to 1.0.0 or later.
+→ [advisories/2026-11-browser-use-allowed-domains-bypass-cve-2026-136452-cve-2026-136453-engine-replaced-1-0-0.md](advisories/2026-11-browser-use-allowed-domains-bypass-cve-2026-136452-cve-2026-136453-engine-replaced-1-0-0.md)
+
+### 2026-11-24 — **DBHub: ZDI publishes an MCP server authentication bypass as a 0-day (CVE-2026-136441, 9.8); no fixed version is stated**
+[ZDI-26-1067](https://www.zerodayinitiative.com/advisories/ZDI-26-1067/) says a remote attacker with no credentials can bypass authentication on DBHub's MCP server. ZDI names no fixed version. Keep DBHub off networks you do not control and enforce read-only access in the database.
+→ [advisories/2026-11-dbhub-mcp-authentication-bypass-zdi-26-1067-cve-2026-136441-no-fix-stated.md](advisories/2026-11-dbhub-mcp-authentication-bypass-zdi-26-1067-cve-2026-136441-no-fix-stated.md)
+
+### 2026-11-24 — **Todoist: attacker reached production on 2026-11-23, took API tokens and searched tasks for credentials; rotate tokens and any secret stored in Todoist**
+[Todoist says](https://www.todoist.com/help/todoist/get-started/security-incident-in-november-2026-cG0EIACNU) an attacker reached production on 2026-11-23, took legacy password hashes for about 6% of users, and for small groups took API tokens and searched tasks for credentials. If Todoist emailed you, replace your API token and every secret stored in Todoist.
+→ [advisories/2026-11-todoist-production-breach-api-tokens-credentials-in-tasks-outlook-add-in.md](advisories/2026-11-todoist-production-breach-api-tokens-credentials-in-tasks-outlook-add-in.md)
 
 ### 2026-11-24 — **Hex.pm: attacker ran commands on the registry's web servers on 2026-11-23 (CVE-2026-129514); no package changes found; change password, reset 2FA**
 [Hex.pm says](https://hex.pm/blog/security-incident-on-hexpm) an attacker ran commands on its web servers on 2026-11-23 and may have read password hashes and 2FA secrets. It found no changed packages. Change your password, reset 2FA, and fetch only from repo.hex.pm.
@@ -63,6 +79,10 @@ The [GitHub Advisory Database](https://github.com/advisories?query=mcp+sort%3Apu
 ### 2026-11-19 — **PHP 8.5.13, 8.4.28, 8.3.37 and 8.2.36 fix 17 issues, seven CVEs scored 9.2: PHP-FPM request smuggling, session and use-after-free code execution**
 [PHP's 2026-11-19 security releases](https://www.php.net/archive/2026.php) fix 17 issues by [AWS's count](https://aws.amazon.com/security/security-bulletins/2026-190-aws/), seven of them CVEs scored 9.2. One lets an unauthenticated request forge a PHP-FPM request when the proxy reuses backend connections. Upgrade to 8.5.13, 8.4.28, 8.3.37 or 8.2.36 and restart PHP.
 → [advisories/2026-11-php-november-19-security-release-eight-cves-fpm-request-smuggling-session-code-execution-fixed-8-5-13.md](advisories/2026-11-php-november-19-security-release-eight-cves-fpm-request-smuggling-session-code-execution-fixed-8-5-13.md)
+
+### 2026-11-18 — **LiteLLM: ZDI publishes stdio MCP command execution as a 0-day (CVE-2026-136535); vendor disputes it; stdio is off by default from 1.104.0**
+[ZDI-26-1031](https://www.zerodayinitiative.com/advisories/ZDI-26-1031/) says an authenticated attacker can run commands on a LiteLLM host through stdio MCP configurations. The vendor disputes it and ships no patch. Upgrade to 1.104.0 or later, leave `LITELLM_ENABLE_MCP_STDIO` unset, and replace any default master key.
+→ [advisories/2026-11-litellm-stdio-mcp-command-injection-zdi-26-1031-cve-2026-136535-vendor-disputes.md](advisories/2026-11-litellm-stdio-mcp-command-injection-zdi-26-1031-cve-2026-136535-vendor-disputes.md)
 
 ### 2026-11-18 — **mcp-server-git: a repository's own Git config runs commands as the server user, six High advisories; fixed in 2026.11.18**
 `mcp-server-git` below 2026.11.18 runs programs named in a repository's Git config, per [six High advisories](https://github.com/modelcontextprotocol/servers/security/advisories). Most need a repository received with its `.git` directory, such as an archive. Upgrade to 2026.11.18.
@@ -287,6 +307,10 @@ SurrealDB's [advisories tab](https://github.com/surrealdb/surrealdb/security/adv
 ### 2026-11-03 — **Forged commit in the antd-img-crop GitHub repository: do not install from git; the npm package is clean**
 [SafeDep](https://safedep.io/blog/antd-img-crop-forged-commit-overlord-stealer.md) reports a forged commit force-pushed to the `nanxiaobei/antd-img-crop` GitHub repository on 2026-10-31. The npm package, ending at 4.30.0, is clean. If you cloned, forked or installed from GitHub after that date, rotate browser, SSH, `.env`, `.npmrc`, keychain and wallet credentials.
 → [advisories/2026-11-antd-img-crop-github-repository-forged-commit-do-not-install-from-git-npm-clean.md](advisories/2026-11-antd-img-crop-github-repository-forged-commit-do-not-install-from-git-npm-clean.md)
+
+### 2026-11-02 — **Electerm below 5.9.0 and Prismor below 1.57.0: a web page can call their local APIs (CVE-2026-136630, CVE-2026-136185); both fixed**
+A web page can run commands through Electerm's MCP Server widget below 5.9.0 ([CVE-2026-136630](https://cveawg.mitre.org/api/cve/CVE-2026-136630)) and overwrite Prismor's agent policy below 1.57.0. Both need the local server running. Upgrade both.
+→ [advisories/2026-11-electerm-mcp-widget-prismor-local-api-web-page-reaches-loopback-cve-2026-136630-cve-2026-136185.md](advisories/2026-11-electerm-mcp-widget-prismor-local-api-web-page-reaches-loopback-cve-2026-136630-cve-2026-136185.md)
 
 ### 2026-11-02 — **Nuxt: eight advisories on 2026-11-02, route-rule bypasses and server error details sent to clients; fixed in 4.6.4, no fix for Nuxt 3**
 [Nuxt](https://github.com/nuxt/nuxt/security/advisories) 4 before 4.6.4 lets a request skip route rules and path-based server middleware, and sends server error details to clients. Upgrade to 4.6.4. Nuxt 3 is end of life and gets no fix, so move to Nuxt 4 or apply the advisories' workarounds.

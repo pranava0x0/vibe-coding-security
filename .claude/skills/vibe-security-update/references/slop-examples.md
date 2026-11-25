@@ -4,6 +4,18 @@ Read this before writing any advisory or `ALERTS.md` entry. Append a pair each
 time review or the owner finds slop, and add a matching line to
 `tools/slop_patterns.tsv` when the shape can be matched by a regex. Newest on top.
 
+## 2026-11-25 (sweep review)
+
+**Advice wider than the vendor's scope** (Todoist advisory, Am I affected?)
+- Before: "You are exposed beyond Todoist if you ever wrote an API key, access token or recovery phrase into a task or comment."
+- After: "If the email says your content matched the searches, treat every credential in your tasks and comments as read. Todoist says the searches covered one database shard."
+- Why: "ever" covered every user, and the notice limits the searches to one shard and the emailed accounts. No regex matches this shape, so check each "if you ever" against the vendor's stated scope.
+
+**Quotation closed where the source goes on** (T3 Code advisory)
+- Before: 'Its description says: "T3 Code's analytics read ... at server boot."'
+- After: 'Its description says T3 Code's analytics "read ... at server boot" and sent hashes of the ids it found.'
+- Why: the source sentence continues, so the full stop inside the quotation marks was not the source's.
+
 ## 2026-11-24 (sweep review)
 
 **One page's wording applied to six** (mcp-server-git advisory)
