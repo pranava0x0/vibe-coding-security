@@ -4,6 +4,23 @@ Read this before writing any advisory or `ALERTS.md` entry. Append a pair each
 time review or the owner finds slop, and add a matching line to
 `tools/slop_patterns.tsv` when the shape can be matched by a regex. Newest on top.
 
+## 2026-11-26 (sweep review)
+
+**Step the vendor does not give, written as an instruction** (Kiro Web alert, MCP batch, Rackspace Spot)
+- Before: "It is fixed service-side. Review sessions from that window that read untrusted content."
+- After: "It is fixed service-side and AWS asks for no action. As a caution, review sessions from that window."
+- Why: the vendor asks for nothing, and the alert dropped that. No regex matches this shape, so mark each step that goes beyond the source.
+
+**Example list read as a limit** (Kiro Web advisory)
+- Before: 'Per the bulletin, the content could be "a repository file or a web page".'
+- After: 'Per the bulletin, the content is anything the session read, "such as a repository file or a web page".'
+- Why: the quotation cut "such as", which turned two examples into the whole scope.
+
+**Verb stronger than the source** (Rackspace Spot title)
+- Before: "intruders read Kubernetes Secrets and API tokens"
+- After: "intruders gained access to Kubernetes Secrets"
+- Why: the notification says they "could have read" them.
+
 ## 2026-11-25 (sweep review)
 
 **Advice wider than the vendor's scope** (Todoist advisory, Am I affected?)

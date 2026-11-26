@@ -428,3 +428,15 @@ Five things from **2026-11-25**:
 
 VulnCheck's browser-use records reference a pull request that replaces the engine and names neither bug. The file says so. `WebSearch` ran six queries and returned nothing dated in the window. Bluesky and Reddit stay "not covered".
 
+## 86. A deploy platform's breach hands out its GitHub App key; a service-side fix can carry a five-month window and "no action required"; a vendor's release line can exist only as image tags; and a shutdown notice can be known only through an outlet
+
+Five things from **2026-11-26**:
+
+1. **Defang's breach post was a 76-point Algolia item with no outlet coverage.** The copied credentials included the vendor's GitHub App key and the key that encrypts stored sign-in tokens, so the reader's repositories and cloud deploy role were in scope for eleven days. **Rule:** a breach at a deploy, CI or hosting platform that installs a GitHub App is in scope whatever its size. Table what a key holder could do from the vendor's own list, print the validity window, and print any timeline line the vendor leaves unexplained without linking it to the cause.
+2. **AWS bulletin 2026-202 says "No customer action is required" for a Kiro Web flaw that ran commands from 2026-05-18 through 2026-10-30.** **Rule:** for a service-side fix, print the exposure window and the vendor's sentence, say what the bulletin does not state (use, notification), and label any review step as a cautious check.
+3. **n8n's bulletin names a v3 line that npm does not carry.** The 3.x versions are Docker Hub tags. One advisory's npm fix had been on npm for a week. **Rule:** on an n8n batch day read the bulletin through `/t/<id>.json`, open each advisory for its own npm and Docker ranges, and check `registry.npmjs.org/n8n` `time` and `hub.docker.com/v2/repositories/n8nio/n8n/tags/<tag>` for each version named.
+4. **The markdownify-mcp CVE names the repository, and the vendor advisory names a different npm package.** `mcp-markdownify-server` stops at 1.1.0 while the advisory says patched 1.2.0. **Rule:** take the package name from the vendor advisory's package field, query that name, and write "no registry release carries the fix as of DATE".
+5. **Rackspace Spot's wind-down notice and customer notification reached this run only through The Register.** The status host is client-rendered. **Rule:** file from the outlet's quotations, say which documents were not opened, and keep the root-cause statement attributed to the person the outlet names.
+
+1Password's post was the day's top Algolia item and on all three front pages. A password manager breach is in scope when the vendor lists CI/CD secrets or tokens among what was reached. OpenAI's report on the 2026-07-19 runs carried "Report updated: Nov 10" and surfaced on 2026-11-26: read `openai.com/safety-alignment/misalignment-reports/` with `curl`, which returned 200 this run. No `WebSearch` call was run, and the run log says so.
+

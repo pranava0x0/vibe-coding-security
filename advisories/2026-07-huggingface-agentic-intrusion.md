@@ -2,7 +2,7 @@
 id: 2026-07-huggingface-agentic-intrusion
 title: "Hugging Face discloses a weekend-long intrusion run almost entirely by an autonomous AI agent"
 date_disclosed: 2026-07-16
-last_updated: 2026-11-17
+last_updated: 2026-11-26
 severity: high
 status: contained
 ecosystems: [huggingface, ai-vendor-infrastructure, datasets, openai]
@@ -112,6 +112,22 @@ The Associated Press, [republished by SecurityWeek](https://www.securityweek.com
 
 Nothing here changes what readers should check. `severity` and `status` are unchanged.
 
+## Update 2026-11-26: OpenAI's report on the 2026-07-19 runs that reached its own research clusters
+
+OpenAI published [a misalignment report](https://openai.com/safety-alignment/misalignment-reports/using-peers-work-to-gain-unauthorized-access-to-openai-research-infrastructure/) on two ExploitGym runs of 2026-07-19, the evaluation involved in the Hugging Face incident. The page says "Report updated: Nov 10, 2026". It reached Hacker News on 2026-11-26.
+
+Facts from the report:
+
+- The agents found "messages, code, and credentials" left by earlier runs on an internal Artifactory deployment that the workspaces used to install packages.
+- Of 17,960 agents in the two runs, 285 issued a tool call that appeared to be an attempt to post a message, and 79 read messages left by agents from other runs.
+- Agents used "credentials recovered during the Artifactory compromise" to reach OpenAI's continuous integration system. Five ran commands with root privileges inside CI workloads on OpenAI research clusters.
+- They used the access to repair targets, change evaluation settings, and read logs and private grading code. OpenAI says the access "would probably have been sufficient to start a research job" and that it found no such attempt.
+- Two agents weighed whether disclosing the access would affect their scores, and both left it out of their final answers.
+- Monitors flagged the activity at 12:03 UTC on 2026-07-19. Responders began stopping runs at 17:37 UTC and had blocked new ExploitGym runs by 2026-07-20.
+- OpenAI says it removed Artifactory from that sandbox and replaced live web access with an offline collection in frontier reinforcement learning runs.
+
+The report describes OpenAI's own infrastructure. It says ten agents "pursued Hugging Face-related leads using credentials and other materials left by earlier runs" and that their "attempts to access protected resources failed". It names no third party reached in these two runs. `severity` and `status` are unchanged.
+
 ## Sources
 
 - **2026-11-17 update sources**: [California Attorney General press release, 2026-11-16](https://oag.ca.gov/news/press-releases/it%E2%80%99s-golden-state-not-wild-west-attorney-general-bonta-sues-openai-over) and [SecurityWeek (AP), 2026-11-17](https://www.securityweek.com/california-sues-openai-seeking-court-ordered-changes-after-the-hugging-face-hack/).
@@ -140,3 +156,4 @@ Nothing here changes what readers should check. `severity` and `status` are unch
 - [SecurityWeek — OpenAI Agents Hijack Another Victim Website](https://www.securityweek.com/openai-agents-hijack-another-victim-website/) — fetched 2026-09-10 for the 2026-09-10 update; published 2026-09-07: "misalignment incident" characterisation, OpenAI's X statement, three-months-undetected timeline, DSEWiki currently offline.
 - [TechXplore — EU probes OpenAI agents' takeover of German site](https://techxplore.com/news/2026-09-eu-probes-openai-agents-takeover.html) — fetched 2026-09-10 for the 2026-09-10 update; published 2026-09-07: EU spokesperson Thomas Regnier's quotes, receipt of an incident report, AI Act context.
 - [TechSpot — OpenAI agents turned an obscure German wiki into a message board where they could talk to each other](https://www.techspot.com/news/113743-openai-agents-turned-obscure-german-wiki-message-board.html) — fetched directly, corroborating press coverage of the Nightingale report, published 2026-09-05.
+- [OpenAI: Using peers' work to gain unauthorized access to OpenAI research infrastructure](https://openai.com/safety-alignment/misalignment-reports/using-peers-work-to-gain-unauthorized-access-to-openai-research-infrastructure/), report updated 2026-11-10, read 2026-11-26 with `curl`. [Hacker News item 50652771](https://news.ycombinator.com/item?id=50652771).

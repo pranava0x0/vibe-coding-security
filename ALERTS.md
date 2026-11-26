@@ -2,11 +2,39 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-11-25. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-11-26. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-11-26 — **n8n 2026-11-26: four advisories, one High expression sandbox escape to code execution; fixed in 1.123.102, 2.49.7, 2.50.2 and Docker 3.4.1**
+[n8n's 2026-11-26 bulletin](https://community.n8n.io/t/security-update-26-november-2026/331111) lists four advisories. One lets a user who can create and run workflows run code in the main n8n process. Upgrade to 1.123.102, 2.49.7, 2.50.2 or Docker 3.4.1.
+→ [advisories/2026-11-n8n-security-update-november-26-expression-sandbox-escape-chroma-redaction-websocket.md](advisories/2026-11-n8n-security-update-november-26-expression-sandbox-escape-chroma-redaction-websocket.md)
+
+### 2026-11-25 — **1Password: attacker used an employee GitHub account to push code to backend services and copy account records; vaults not affected**
+[1Password says](https://1password.com/blog/update-on-nov-2026-security-incident) an attacker used an employee's GitHub account to push code to backend services and copy names, sign-in emails and invitation tokens for a subset of customers. It says vaults were not accessed. Expect 1Password-themed phishing.
+→ [advisories/2026-11-1password-backend-breach-github-account-malicious-code-account-records-ci-secrets.md](advisories/2026-11-1password-backend-breach-github-account-malicious-code-account-records-ci-secrets.md)
+
+### 2026-11-25 — **Kiro Web: tool-call markup in content an agent read could run as a command with five models (CVE-2026-136267); fixed service-side 2026-10-30**
+[AWS says](https://aws.amazon.com/security/security-bulletins/2026-202-aws/) tool-call markup in content a Kiro Web agent read could run as a command with five models, from 2026-05-18 through 2026-10-30. It is fixed service-side and AWS asks for no action. As a caution, review sessions from that window.
+→ [advisories/2026-11-kiro-web-tool-call-markup-command-execution-cve-2026-136267-fixed-service-side.md](advisories/2026-11-kiro-web-tool-call-markup-command-execution-cve-2026-136267-fixed-service-side.md)
+
+### 2026-11-23 — **13 malicious NuGet packages in fake .NET take-home assessments: remove them, reimage the machine and rotate developer credentials**
+[Socket](https://socket.dev/blog/malicious-nuget-packages-fake-job-assessments) lists 13 malicious NuGet package ids delivered through fake .NET job assessments, all gone from NuGet on 2026-11-26. If you built such a project, reimage the machine and rotate GitHub, registry and cloud credentials.
+→ [advisories/2026-11-nuget-fake-dotnet-assessment-packages-remove-and-rotate.md](advisories/2026-11-nuget-fake-dotnet-assessment-packages-remove-and-rotate.md)
+
+### 2026-11-24 — **Defang: attacker copied production credentials and the main database on 2026-11-12; GitHub App key and stored GitHub tokens usable until 2026-11-23**
+[Defang says](https://defang.io/blog/post/security-incident-november-2026/) an attacker copied its production credentials and database on 2026-11-12, including the Defang GitHub App key, valid until 2026-11-23. Audit connected repositories and the cloud deploy role. Rotate database passwords from deploys between 2026-10-12 and 2026-11-19.
+→ [advisories/2026-11-defang-build-system-breach-github-app-key-database-copy-deploy-role.md](advisories/2026-11-defang-build-system-breach-github-app-key-database-copy-deploy-role.md)
+
+### 2026-11-24 — **Rackspace Spot: intruders gained access to Kubernetes Secrets on 2026-11-17; service shuts down 2026-12-08; rotate every secret in affected clusters**
+[The Register reports](https://www.theregister.com/cyber-crime/2026/11/26/rackspace-pulls-plug-on-spot-cloud-service-after-security-breach/5312352) intruders reached Kubernetes Secrets in Rackspace Spot customer clusters on 2026-11-17, and the service closes on 2026-12-08. Rotate every credential stored in those clusters and move your data.
+→ [advisories/2026-11-rackspace-spot-breach-kubernetes-secrets-tokens-service-shutdown-2026-12-08.md](advisories/2026-11-rackspace-spot-breach-kubernetes-secrets-tokens-service-shutdown-2026-12-08.md)
+
+### 2026-11-24 — **MCP advisories 2026-11-24 to 11-26: markdownify-mcp SSRF with no npm release of the fix, Amazon ECS MCP Server, two WordPress plugins, GitLab**
+[CVE-2026-137308](https://cveawg.mitre.org/api/cve/CVE-2026-137308) says an injected prompt can make markdownify-mcp fetch internal hosts, and npm had no fixed release on 2026-11-26. Amazon's ECS MCP Server below 0.1.36 returned unredacted task-definition secrets. Upgrade it, isolate markdownify-mcp, and update two WordPress plugins.
+→ [advisories/2026-11-mcp-server-advisories-november-24-26-markdownify-ecs-mcp-wordpress-mcp-plugins-gitlab.md](advisories/2026-11-mcp-server-advisories-november-24-26-markdownify-ecs-mcp-wordpress-mcp-plugins-gitlab.md)
 
 ### 2026-11-24 — **T3 Code 0.1.11 read Codex and Claude sign-in files and sent unsalted hashes of the account ids; fix merged 2026-11-24**
 T3 Code's analytics read Codex and Claude sign-in files and sent unsalted hashes of the account ids, per [the vendor's fix](https://github.com/pingdotgg/t3code/pull/42299) merged 2026-11-24. The 0.1.12 notes read on 2026-11-25 do not list it. Set `T3CODE_TELEMETRY_ENABLED=false`.

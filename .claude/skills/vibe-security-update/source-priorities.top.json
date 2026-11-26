@@ -5,32 +5,32 @@
   {
    "domain": "thehackernews.com",
    "weight": 20.0,
-   "hits": 134,
-   "last_hit": "2026-11-25"
+   "hits": 135,
+   "last_hit": "2026-11-26"
   },
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 83,
-   "last_hit": "2026-11-25"
+   "hits": 84,
+   "last_hit": "2026-11-26"
   },
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 80,
-   "last_hit": "2026-11-25"
+   "hits": 81,
+   "last_hit": "2026-11-26"
   },
   {
    "domain": "securityweek.com",
    "weight": 20.0,
-   "hits": 76,
-   "last_hit": "2026-11-20"
+   "hits": 77,
+   "last_hit": "2026-11-26"
   },
   {
    "domain": "theregister.com",
    "weight": 20.0,
-   "hits": 66,
-   "last_hit": "2026-11-10"
+   "hits": 67,
+   "last_hit": "2026-11-26"
   },
   {
    "domain": "nvd.nist.gov",
@@ -41,14 +41,20 @@
   {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
-   "hits": 54,
-   "last_hit": "2026-11-25"
+   "hits": 55,
+   "last_hit": "2026-11-26"
   },
   {
    "domain": "cveawg.mitre.org",
    "weight": 20.0,
-   "hits": 48,
-   "last_hit": "2026-11-25"
+   "hits": 49,
+   "last_hit": "2026-11-26"
+  },
+  {
+   "domain": "vulncheck.com",
+   "weight": 20.0,
+   "hits": 45,
+   "last_hit": "2026-11-26"
   },
   {
    "domain": "cybersecuritynews.com",
@@ -57,16 +63,10 @@
    "last_hit": "2026-10-08"
   },
   {
-   "domain": "vulncheck.com",
-   "weight": 20.0,
-   "hits": 44,
-   "last_hit": "2026-11-24"
-  },
-  {
    "domain": "hn.algolia.com",
    "weight": 20.0,
-   "hits": 40,
-   "last_hit": "2026-11-25"
+   "hits": 41,
+   "last_hit": "2026-11-26"
   },
   {
    "domain": "stepsecurity.io",
@@ -77,14 +77,14 @@
   {
    "domain": "socket.dev",
    "weight": 20.0,
-   "hits": 35,
-   "last_hit": "2026-11-18"
+   "hits": 36,
+   "last_hit": "2026-11-26"
   },
   {
    "domain": "pypi.org",
    "weight": 20.0,
-   "hits": 34,
-   "last_hit": "2026-11-25"
+   "hits": 35,
+   "last_hit": "2026-11-26"
   },
   {
    "domain": "bleepingcomputer.com",
@@ -105,16 +105,16 @@
    "last_hit": "2026-11-18"
   },
   {
+   "domain": "aws.amazon.com",
+   "weight": 20.0,
+   "hits": 26,
+   "last_hit": "2026-11-26"
+  },
+  {
    "domain": "aikido.dev",
    "weight": 20.0,
    "hits": 26,
    "last_hit": "2026-11-18"
-  },
-  {
-   "domain": "aws.amazon.com",
-   "weight": 20.0,
-   "hits": 25,
-   "last_hit": "2026-11-22"
   },
   {
    "domain": "wiz.io",
