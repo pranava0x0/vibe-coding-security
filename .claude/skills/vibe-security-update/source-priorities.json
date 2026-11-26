@@ -1,6 +1,6 @@
 {
- "last_updated": "2026-11-25",
- "notes": "Scope change 2026-11-16 (owner request, not a sweep): 3D, simulation and scientific-computing tools added to the rotation (LEARNINGS §75); three backfill advisories (Blender five-CVE batch, OpenUSD CVE-2026-92211, blender-mcp four CVEs); added projects.blender.org, download.blender.org, docs.blender.org; weighted cveawg.mitre.org, zerodayinitiative.com, github.com, access.redhat.com, pypi.org. Sweep 2026-10-16: direct WebSearch/WebFetch + curl in the main session, no subagents. Five new advisories (Archon CVE-2026-111322, TanStack Start CVE-2026-102989, Junie CLI CVE-2026-111091, Podman CVE-2026-94603, CERT-In CIAD-2026-0049) and three updates; weighted cveawg.mitre.org, vulncheck.com, hackmd.io, github.com, github.com/advisories, ox.security, tanstack.com, lovable.dev, netlify.com, jetbrains.com, access.redhat.com, thehackernews.com, securityweek.com, alignment.openai.com, coindesk.com, nextjs.org, gendigital.com, registry.npmjs.org, api.npmjs.org, hn.algolia.com (the re-hits on tanstack.com, lovable.dev, jetbrains.com and access.redhat.com cleared their last_decayed); added cert-in.org.in, junie.jetbrains.com, wionews.com, security.com; decayed cymulate.com and dailycve.com (first decay batch since 2026-09-13). Sweep 2026-10-15: direct WebSearch/WebFetch + curl in the main session, no subagents. Three new advisories (Next.js/React 10-14 out-of-band, IntentKit CVE-2026-76066, Claude Code Desktop SneakPeek) and six updates; weighted github.com, thehackernews.com, noma.security, vulncheck.com, cveawg.mitre.org, lasso.security, blog.gitguardian.com, hackmd.io, registry.npmjs.org; added previdian.com; 0 decayed. Sweep 2026-10-14: direct WebSearch/WebFetch + curl in the main session, no subagents. Seven new advisories (VS Code 1.141.1 ten-CVE batch, Visual Studio Copilot CVE-2026-103572, n8n 10-14 ten-advisory batch, Bisheng CERT/CC cluster, npm SlugFest, Docker Hub GhostPat, Meta GitHub breach), two updates. New: bloom.security, ghostpat.com, docker.com, docs.npmjs.com. MSRC month CVRF and the sug/v2.0 FAQ were the source for both Microsoft files; kb.cert.org for Bisheng. Sweep 2026-10-13: direct WebSearch/WebFetch + curl in the main session, no subagents. Six new advisories (GitLab 19.4.2 CVSS 10.0, Continue CLI / VulnCheck agent-sandbox batch, Claude Desktop git.exe search path, Zod/nub/standard-schema repository compromise, MALFEX npm native-addon loader, the deferred CyberXero offensive-use file) and four updates (Conductor MCP SSRF, Coder GCE audience, Barracuda pickup, VulnCheck wave pointer). No search produced a new file; the HN Algolia feed, the THN front page, the advisory-database agent/mcp/claude listings, the Claude Code tab and the SafeDep blog index did. No new sources; sixteen weighted. Decay (60-day rule) touched 0 sources.",
+ "last_updated": "2026-11-26",
+ "notes": "Scope change 2026-11-16 (owner request, not a sweep): 3D, simulation and scientific-computing tools added to the rotation (LEARNINGS \u00a775); three backfill advisories (Blender five-CVE batch, OpenUSD CVE-2026-92211, blender-mcp four CVEs); added projects.blender.org, download.blender.org, docs.blender.org; weighted cveawg.mitre.org, zerodayinitiative.com, github.com, access.redhat.com, pypi.org. Sweep 2026-10-16: direct WebSearch/WebFetch + curl in the main session, no subagents. Five new advisories (Archon CVE-2026-111322, TanStack Start CVE-2026-102989, Junie CLI CVE-2026-111091, Podman CVE-2026-94603, CERT-In CIAD-2026-0049) and three updates; weighted cveawg.mitre.org, vulncheck.com, hackmd.io, github.com, github.com/advisories, ox.security, tanstack.com, lovable.dev, netlify.com, jetbrains.com, access.redhat.com, thehackernews.com, securityweek.com, alignment.openai.com, coindesk.com, nextjs.org, gendigital.com, registry.npmjs.org, api.npmjs.org, hn.algolia.com (the re-hits on tanstack.com, lovable.dev, jetbrains.com and access.redhat.com cleared their last_decayed); added cert-in.org.in, junie.jetbrains.com, wionews.com, security.com; decayed cymulate.com and dailycve.com (first decay batch since 2026-09-13). Sweep 2026-10-15: direct WebSearch/WebFetch + curl in the main session, no subagents. Three new advisories (Next.js/React 10-14 out-of-band, IntentKit CVE-2026-76066, Claude Code Desktop SneakPeek) and six updates; weighted github.com, thehackernews.com, noma.security, vulncheck.com, cveawg.mitre.org, lasso.security, blog.gitguardian.com, hackmd.io, registry.npmjs.org; added previdian.com; 0 decayed. Sweep 2026-10-14: direct WebSearch/WebFetch + curl in the main session, no subagents. Seven new advisories (VS Code 1.141.1 ten-CVE batch, Visual Studio Copilot CVE-2026-103572, n8n 10-14 ten-advisory batch, Bisheng CERT/CC cluster, npm SlugFest, Docker Hub GhostPat, Meta GitHub breach), two updates. New: bloom.security, ghostpat.com, docker.com, docs.npmjs.com. MSRC month CVRF and the sug/v2.0 FAQ were the source for both Microsoft files; kb.cert.org for Bisheng. Sweep 2026-10-13: direct WebSearch/WebFetch + curl in the main session, no subagents. Six new advisories (GitLab 19.4.2 CVSS 10.0, Continue CLI / VulnCheck agent-sandbox batch, Claude Desktop git.exe search path, Zod/nub/standard-schema repository compromise, MALFEX npm native-addon loader, the deferred CyberXero offensive-use file) and four updates (Conductor MCP SSRF, Coder GCE audience, Barracuda pickup, VulnCheck wave pointer). No search produced a new file; the HN Algolia feed, the THN front page, the advisory-database agent/mcp/claude listings, the Claude Code tab and the SafeDep blog index did. No new sources; sixteen weighted. Decay (60-day rule) touched 0 sources.",
  "sources": {
   "aikido.dev": {
    "ecosystems": [
@@ -137,8 +137,8 @@
     "security-agent-mcp-cve-87913",
     "security-agent-mcp-cve-97662"
    ],
-   "hits": 25,
-   "last_hit": "2026-11-22",
+   "hits": 26,
+   "last_hit": "2026-11-26",
    "tier": "vendor",
    "weight": 20
   },
@@ -436,8 +436,8 @@
     "xinference",
     "zitadel-cve-records"
    ],
-   "hits": 48,
-   "last_hit": "2026-11-25",
+   "hits": 49,
+   "last_hit": "2026-11-26",
    "tier": "official",
    "weight": 20
   },
@@ -827,8 +827,8 @@
     "zitadel-advisories-walk-2026-10-05",
     "zod"
    ],
-   "hits": 80,
-   "last_hit": "2026-11-25",
+   "hits": 81,
+   "last_hit": "2026-11-26",
    "tier": "independent",
    "weight": 20
   },
@@ -1053,8 +1053,8 @@
     "vm2-cve-92946-92956",
     "wordpress"
    ],
-   "hits": 83,
-   "last_hit": "2026-11-25",
+   "hits": 84,
+   "last_hit": "2026-11-26",
    "tier": "official",
    "weight": 20
   },
@@ -1149,8 +1149,8 @@
     "workos-item-50345712",
     "zod"
    ],
-   "hits": 40,
-   "last_hit": "2026-11-25",
+   "hits": 41,
+   "last_hit": "2026-11-26",
    "tier": "aggregator",
    "weight": 20
   },
@@ -1506,8 +1506,8 @@
     "usd-core",
     "zotero-mcp-name-collision"
    ],
-   "hits": 34,
-   "last_hit": "2026-11-25",
+   "hits": 35,
+   "last_hit": "2026-11-26",
    "tier": "official",
    "weight": 20
   },
@@ -1624,8 +1624,8 @@
     "wppconnect-time-dist-tags-deprecation",
     "zod"
    ],
-   "hits": 54,
-   "last_hit": "2026-11-25",
+   "hits": 55,
+   "last_hit": "2026-11-26",
    "tier": "official",
    "weight": 20
   },
@@ -1776,8 +1776,8 @@
     "x47c-api-drain-declined",
     "zenity-pleasefix-update"
    ],
-   "hits": 76,
-   "last_hit": "2026-11-20",
+   "hits": 77,
+   "last_hit": "2026-11-26",
    "tier": "aggregator",
    "weight": 20
   },
@@ -2099,8 +2099,8 @@
     "whitecobra",
     "wikimedia-openai-agents"
    ],
-   "hits": 134,
-   "last_hit": "2026-11-25",
+   "hits": 135,
+   "last_hit": "2026-11-26",
    "tier": "aggregator",
    "weight": 20
   },
@@ -2189,8 +2189,8 @@
     "vibe-platform",
     "zcode"
    ],
-   "hits": 66,
-   "last_hit": "2026-11-10",
+   "hits": 67,
+   "last_hit": "2026-11-26",
    "tier": "aggregator",
    "weight": 20
   },
@@ -2303,8 +2303,8 @@
     "xinference",
     "zitadel-cve-105206-105215"
    ],
-   "hits": 44,
-   "last_hit": "2026-11-24",
+   "hits": 45,
+   "last_hit": "2026-11-26",
    "tier": "research",
    "weight": 20
   },
@@ -2980,6 +2980,25 @@
    "tier": "aggregator",
    "weight": 13
   },
+  "docs.gitlab.com": {
+   "ecosystems": [
+    "ci-cd",
+    "gitlab",
+    "gitlab-19-4-1-patch-release",
+    "gitlab-ai-gateway-cve-90970",
+    "gitlab-cve-85706",
+    "gitlab-duo-claude-agent-cve-18252",
+    "gitlab-duo-mcp",
+    "gitlab-patch-release",
+    "gitlab-regex-rce",
+    "patch-release-19-4-2-reread-19-3-4-note",
+    "patch-releases-feed-other-patches"
+   ],
+   "hits": 9,
+   "last_hit": "2026-11-26",
+   "tier": "vendor",
+   "weight": 13
+  },
   "hackread.com": {
    "ecosystems": [
     "claude-desktop",
@@ -3123,25 +3142,6 @@
    "tier": "research",
    "weight": 12
   },
-  "docs.gitlab.com": {
-   "ecosystems": [
-    "ci-cd",
-    "gitlab",
-    "gitlab-19-4-1-patch-release",
-    "gitlab-ai-gateway-cve-90970",
-    "gitlab-cve-85706",
-    "gitlab-duo-claude-agent-cve-18252",
-    "gitlab-duo-mcp",
-    "gitlab-patch-release",
-    "gitlab-regex-rce",
-    "patch-release-19-4-2-reread-19-3-4-note",
-    "patch-releases-feed-other-patches"
-   ],
-   "hits": 8,
-   "last_hit": "2026-11-18",
-   "tier": "vendor",
-   "weight": 12
-  },
   "osv.dev": {
    "ecosystems": [
     "github-account-campaign-2026-11-10",
@@ -3252,6 +3252,20 @@
    "tier": "official",
    "weight": 11
   },
+  "openai.com": {
+   "_added": "2026-05-21",
+   "ecosystems": [
+    "npm",
+    "tanstack",
+    "supply-chain",
+    "axios",
+    "macos-cert"
+   ],
+   "hits": 3,
+   "last_hit": "2026-11-26",
+   "tier": "vendor",
+   "weight": 11
+  },
   "reversinglabs.com": {
    "ecosystems": [
     "npm",
@@ -3343,21 +3357,6 @@
    "last_decayed": "2026-10-27",
    "last_hit": "2026-08-25",
    "tier": "research",
-   "weight": 10
-  },
-  "openai.com": {
-   "_added": "2026-05-21",
-   "ecosystems": [
-    "npm",
-    "tanstack",
-    "supply-chain",
-    "axios",
-    "macos-cert"
-   ],
-   "hits": 2,
-   "last_decayed": "2026-10-22",
-   "last_hit": "2026-05-31",
-   "tier": "vendor",
    "weight": 10
   },
   "opensourcemalware.com": {
@@ -3461,6 +3460,19 @@
    "hits": 6,
    "last_hit": "2026-11-24",
    "tier": "official",
+   "weight": 10
+  },
+  "community.n8n.io": {
+   "_added": "2026-09-13",
+   "ecosystems": [
+    "n8n",
+    "n8n-2026-09-30-security-release",
+    "n8n-security-update-2026-09-02",
+    "n8n-security-update-2026-10-28"
+   ],
+   "hits": 6,
+   "last_hit": "2026-11-26",
+   "tier": "vendor",
    "weight": 10
   },
   "manifold.security": {
@@ -3571,19 +3583,6 @@
    "hits": 3,
    "last_hit": "2026-10-29",
    "tier": "research",
-   "weight": 9
-  },
-  "community.n8n.io": {
-   "_added": "2026-09-13",
-   "ecosystems": [
-    "n8n",
-    "n8n-2026-09-30-security-release",
-    "n8n-security-update-2026-09-02",
-    "n8n-security-update-2026-10-28"
-   ],
-   "hits": 5,
-   "last_hit": "2026-11-13",
-   "tier": "vendor",
    "weight": 9
   },
   "cyera.com": {
@@ -4508,6 +4507,26 @@
    "tier": "vendor",
    "weight": 7
   },
+  "api.wordpress.org": {
+   "_added": "2026-10-30",
+   "ecosystems": [
+    "ai-engine",
+    "ai-engine-plugin-info"
+   ],
+   "hits": 3,
+   "last_hit": "2026-11-26",
+   "tier": "official",
+   "weight": 7
+  },
+  "hub.docker.com": {
+   "ecosystems": [
+    "docker"
+   ],
+   "hits": 3,
+   "last_hit": "2026-11-26",
+   "tier": "official",
+   "weight": 7
+  },
   "gambit.security": {
    "ecosystems": [
     "agentic-threat-actor",
@@ -4580,17 +4599,6 @@
    "tier": "research",
    "weight": 6
   },
-  "abc.net.au": {
-   "_added": "2026-09-24",
-   "ecosystems": [
-    "openai",
-    "openai-australia-medicare"
-   ],
-   "hits": 2,
-   "last_hit": "2026-09-26",
-   "tier": "aggregator",
-   "weight": 6
-  },
   "aisi.gov.uk": {
    "ecosystems": [
     "ai-agent",
@@ -4601,17 +4609,6 @@
    ],
    "hits": 3,
    "last_hit": "2026-10-26",
-   "tier": "official",
-   "weight": 6
-  },
-  "api.wordpress.org": {
-   "_added": "2026-10-30",
-   "ecosystems": [
-    "ai-engine",
-    "ai-engine-plugin-info"
-   ],
-   "hits": 2,
-   "last_hit": "2026-10-31",
    "tier": "official",
    "weight": 6
   },
@@ -5279,15 +5276,6 @@
    ],
    "tier": "vendor"
   },
-  "hub.docker.com": {
-   "ecosystems": [
-    "docker"
-   ],
-   "hits": 2,
-   "last_hit": "2026-11-23",
-   "tier": "official",
-   "weight": 6
-  },
   "hex.pm": {
    "weight": 6,
    "hits": 2,
@@ -5297,6 +5285,18 @@
     "hex"
    ],
    "tier": "vendor"
+  },
+  "abc.net.au": {
+   "_added": "2026-09-24",
+   "ecosystems": [
+    "openai",
+    "openai-australia-medicare"
+   ],
+   "hits": 2,
+   "last_hit": "2026-09-26",
+   "tier": "aggregator",
+   "weight": 5,
+   "last_decayed": "2026-11-26"
   },
   "cyberinsider.com": {
    "_added": "2026-05-19",
@@ -6356,16 +6356,6 @@
    "tier": "independent",
    "weight": 5
   },
-  "remedio.io": {
-   "ecosystems": [
-    "vscode",
-    "ai-ide"
-   ],
-   "hits": 1,
-   "last_hit": "2026-09-26",
-   "tier": "research",
-   "weight": 5
-  },
   "repo.packagist.org": {
    "_added": "2026-11-12",
    "ecosystems": [
@@ -6418,18 +6408,6 @@
    "hits": 1,
    "last_hit": "2026-10-28",
    "tier": "aggregator",
-   "weight": 5
-  },
-  "securelist.com": {
-   "ecosystems": [
-    "pypi",
-    "supply-chain",
-    "apt"
-   ],
-   "hits": 1,
-   "last_decayed": "2026-09-26",
-   "last_hit": "2026-07-26",
-   "tier": "vendor",
    "weight": 5
   },
   "sekoia.com": {
@@ -6569,16 +6547,6 @@
    "hits": 1,
    "last_hit": "2026-11-06",
    "tier": "independent",
-   "weight": 5
-  },
-  "upguard.com": {
-   "ecosystems": [
-    "supabase",
-    "vibe-platforms"
-   ],
-   "hits": 1,
-   "last_hit": "2026-09-26",
-   "tier": "research",
    "weight": 5
   },
   "upwind.io": {
@@ -6932,6 +6900,61 @@
     "social"
    ],
    "tier": "independent"
+  },
+  "1password.com": {
+   "weight": 5,
+   "hits": 1,
+   "last_hit": "2026-11-26",
+   "ecosystems": [
+    "saas",
+    "ci-cd"
+   ],
+   "tier": "vendor"
+  },
+  "defang.io": {
+   "weight": 5,
+   "hits": 1,
+   "last_hit": "2026-11-26",
+   "ecosystems": [
+    "saas",
+    "github-apps",
+    "ci-cd"
+   ],
+   "tier": "vendor"
+  },
+  "remedio.io": {
+   "ecosystems": [
+    "vscode",
+    "ai-ide"
+   ],
+   "hits": 1,
+   "last_hit": "2026-09-26",
+   "tier": "research",
+   "weight": 4,
+   "last_decayed": "2026-11-26"
+  },
+  "securelist.com": {
+   "ecosystems": [
+    "pypi",
+    "supply-chain",
+    "apt"
+   ],
+   "hits": 1,
+   "last_decayed": "2026-11-26",
+   "last_hit": "2026-07-26",
+   "tier": "vendor",
+   "weight": 4
+  },
+  "upguard.com": {
+   "ecosystems": [
+    "supabase",
+    "vibe-platforms"
+   ],
+   "hits": 1,
+   "last_hit": "2026-09-26",
+   "tier": "research",
+   "weight": 4,
+   "last_decayed": "2026-11-26"
   },
   "openclaw.ai": {
    "_added": "2026-09-24",
@@ -7454,17 +7477,6 @@
    "tier": "aggregator",
    "weight": 4
   },
-  "dailysecurityreview.com": {
-   "ecosystems": [
-    "pypi",
-    "supply-chain"
-   ],
-   "hits": 1,
-   "last_decayed": "2026-09-26",
-   "last_hit": "2026-07-26",
-   "tier": "aggregator",
-   "weight": 4
-  },
   "databricks.com": {
    "_added": "2026-06-05",
    "ecosystems": [
@@ -7777,16 +7789,6 @@
    "tier": "research",
    "weight": 4
   },
-  "research.intezer.com": {
-   "ecosystems": [
-    "kiro-cve-10591"
-   ],
-   "hits": 1,
-   "last_decayed": "2026-09-26",
-   "last_hit": "2026-07-27",
-   "tier": "research",
-   "weight": 4
-  },
   "rubyhack.ai": {
    "ecosystems": [
     "rubygems-gemstuffer",
@@ -7992,6 +7994,27 @@
    "last_hit": "2026-11-16",
    "tier": "aggregator",
    "weight": 4
+  },
+  "dailysecurityreview.com": {
+   "ecosystems": [
+    "pypi",
+    "supply-chain"
+   ],
+   "hits": 1,
+   "last_decayed": "2026-11-26",
+   "last_hit": "2026-07-26",
+   "tier": "aggregator",
+   "weight": 3
+  },
+  "research.intezer.com": {
+   "ecosystems": [
+    "kiro-cve-10591"
+   ],
+   "hits": 1,
+   "last_decayed": "2026-11-26",
+   "last_hit": "2026-07-27",
+   "tier": "research",
+   "weight": 3
   },
   "hunt.io": {
    "ecosystems": [

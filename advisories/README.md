@@ -4,6 +4,12 @@ One file per incident. Latest at the top.
 
 | Date disclosed | ID | Severity | Status |
 |---|---|---|---|
+| 2026-11-26 | [n8n 2026-11-26: four advisories, one High expression sandbox escape to code execution; fixed in 1.123.102, 2.49.7, 2.50.2 and Docker 3.4.1](2026-11-n8n-security-update-november-26-expression-sandbox-escape-chroma-redaction-websocket.md) | high | patched |
+| 2026-11-25 | [1Password: attacker used an employee GitHub account to push code to backend services and copy account records; vaults not affected](2026-11-1password-backend-breach-github-account-malicious-code-account-records-ci-secrets.md) | high | contained |
+| 2026-11-25 | [Kiro Web: tool-call markup in content an agent read could run as a command with five models (CVE-2026-136267); fixed service-side 2026-10-30](2026-11-kiro-web-tool-call-markup-command-execution-cve-2026-136267-fixed-service-side.md) | high | patched |
+| 2026-11-24 | [Defang: attacker copied production credentials and the main database on 2026-11-12; GitHub App key and stored GitHub tokens usable until 2026-11-23](2026-11-defang-build-system-breach-github-app-key-database-copy-deploy-role.md) | high | active |
+| 2026-11-24 | [Rackspace Spot: intruders read Kubernetes Secrets and API tokens on 2026-11-17; service shuts down 2026-12-08; rotate every secret in affected clusters](2026-11-rackspace-spot-breach-kubernetes-secrets-tokens-service-shutdown-2026-12-08.md) | high | active |
+| 2026-11-24 | [MCP advisories 2026-11-24 to 11-26: markdownify-mcp SSRF with no npm release of the fix, Amazon ECS MCP Server, two WordPress MCP plugins, GitLab](2026-11-mcp-server-advisories-november-24-26-markdownify-ecs-mcp-wordpress-mcp-plugins-gitlab.md) | high | active |
 | 2026-11-24 | [T3 Code 0.1.11 read Codex and Claude sign-in files and sent unsalted hashes of the account ids; fix merged 2026-11-24](2026-11-t3-code-analytics-read-codex-claude-sign-in-files-hashed-account-ids.md) | medium | mitigated |
 | 2026-11-24 | [browser-use below 1.0.0: crafted URLs get past allowed_domains and IP blocking (CVE-2026-136452, CVE-2026-136453); 1.0.0 replaces the engine](2026-11-browser-use-allowed-domains-bypass-cve-2026-136452-cve-2026-136453-engine-replaced-1-0-0.md) | high | patched |
 | 2026-11-24 | [DBHub: ZDI publishes an MCP server authentication bypass as a 0-day (CVE-2026-136441, 9.8); no fixed version is stated](2026-11-dbhub-mcp-authentication-bypass-zdi-26-1067-cve-2026-136441-no-fix-stated.md) | high | active |
