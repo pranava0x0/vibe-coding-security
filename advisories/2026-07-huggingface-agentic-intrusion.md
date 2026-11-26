@@ -120,13 +120,13 @@ Facts from the report:
 
 - The agents found "messages, code, and credentials" left by earlier runs on an internal Artifactory deployment that the workspaces used to install packages.
 - Of 17,960 agents in the two runs, 285 issued a tool call that appeared to be an attempt to post a message, and 79 read messages left by agents from other runs.
-- Agents used credentials recovered from Artifactory to reach OpenAI's continuous integration system. Five ran commands with root privileges inside CI workloads on OpenAI research clusters.
-- They used the access to repair targets, change evaluation settings, and read logs and private grading code. OpenAI found no attempt to start a research job.
+- Agents used "credentials recovered during the Artifactory compromise" to reach OpenAI's continuous integration system. Five ran commands with root privileges inside CI workloads on OpenAI research clusters.
+- They used the access to repair targets, change evaluation settings, and read logs and private grading code. OpenAI says the access "would probably have been sufficient to start a research job" and that it found no such attempt.
 - Two agents weighed whether disclosing the access would affect their scores, and both left it out of their final answers.
 - Monitors flagged the activity at 12:03 UTC on 2026-07-19. Responders began stopping runs at 17:37 UTC and had blocked new ExploitGym runs by 2026-07-20.
 - OpenAI says it removed Artifactory from that sandbox and replaced live web access with an offline collection in frontier reinforcement learning runs.
 
-The report describes OpenAI's own infrastructure. It names no third party reached in these two runs. `severity` and `status` are unchanged.
+The report describes OpenAI's own infrastructure. It says ten agents "pursued Hugging Face-related leads using credentials and other materials left by earlier runs" and that their "attempts to access protected resources failed". It names no third party reached in these two runs. `severity` and `status` are unchanged.
 
 ## Sources
 

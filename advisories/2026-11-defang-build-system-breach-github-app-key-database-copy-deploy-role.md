@@ -12,7 +12,7 @@ tags: [incident, vendor-incident, saas-breach, github-app, ci-cd, release-tag-tr
 
 ## TL;DR
 
-[Defang says](https://defang.io/blog/post/security-incident-november-2026/) an attacker copied its production credentials and its main database on 2026-11-12. The credentials included the Defang GitHub App's key and the key that encrypts stored GitHub sign-in tokens. Until Defang replaced them on 2026-11-23, a holder could push commits, change workflows and overwrite Actions secrets in connected repositories. Deployment state from 2026-10-12 to 2026-11-19 was copied and can hold database passwords. Audit connected repositories and the cloud deploy role, then rotate those passwords.
+[Defang says](https://defang.io/blog/post/security-incident-november-2026/) an attacker copied its production credentials and its main database on 2026-11-12. The credentials included the Defang GitHub App's key and the key that encrypts stored GitHub sign-in tokens. Until Defang replaced them on 2026-11-23, a holder could push commits, change workflows and overwrite Actions secrets in connected repositories. Deployment state from deploys between 2026-10-12 and 2026-11-19 was exposed, per the post, and can hold database passwords. Audit connected repositories and the cloud deploy role, then rotate those passwords.
 
 ## What happened
 
@@ -24,8 +24,10 @@ Defang published the post on 2026-11-24. All times are UTC and come from the pos
 | 2026-11-12 06:26 | Production credentials were copied. |
 | 2026-11-12 07:57 to 08:10 | The database was copied. |
 | 2026-11-15 | Defang "were made aware of a security issue with a dependency and installed the update". |
-| 2026-11-19 | Defang stopped keeping copies of deployment state and deleted the copies it had. |
+| 2026-11-19 | Defang stopped keeping copies of deployment state. It also deleted the copies it had, with no date given. |
 | 2026-11-23 | A routine security scan found suspicious activity in Defang's repositories. Defang confirmed the database copy, replaced production credentials and emailed affected users. |
+
+Defang says the activity it can see "ran from about 06:00 to 10:30 UTC on November 12". The post lists the deployment state under what the attacker could see and does not say how state from deploys after 2026-11-12 was reached.
 
 Defang says it ran a separate GitHub App for development and testing. The app was installed on two of Defang's own repositories and could change deployment environments. Acting as that app, the attacker pushed a commit and tagged it as a release. Production trusted release tags, so the attacker's code ran in CI with production credentials.
 
@@ -33,7 +35,7 @@ The post does not say how the attacker came to act as the development app. It do
 
 Defang says the credentials "stayed valid until we replaced them on November 23" and that it is "still checking whether they were used after November 12". It says some logs are not detailed enough to rule that out.
 
-Data in the copied database, per the post:
+What the attacker could see, per the post:
 
 - Name and email address, GitHub or GitLab username and organization names, and sign-up answers
 - Names of the repositories the Defang GitHub App can access, private ones included
@@ -48,7 +50,9 @@ The post lists what a holder of the GitHub App key and sign-in tokens could do i
 - overwrite Actions secrets and variables
 - change deployment environments and their protection rules
 - open and merge pull requests
-- change repository settings, including branch protection, deploy keys and collaborators Defang adds that a workflow run started this way "can receive your cloud credentials", because the deploy role trusts workflows in the repository. It says that role "has administrator access to your account".
+- change repository settings, including branch protection, deploy keys and collaborators
+
+Defang adds that a workflow run started this way "can receive your cloud credentials", because the deploy role trusts workflows in the repository. It says the role or identity it set up for GitHub deploys "has administrator access to your account".
 
 The copied credentials also included Defang's Stripe key. Defang says a holder could read names, billing addresses, tax IDs, card brand, last four digits and expiry, and invoice history. Full card numbers were not available through the key.
 

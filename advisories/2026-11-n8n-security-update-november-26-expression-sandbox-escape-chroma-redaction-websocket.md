@@ -12,18 +12,18 @@ tags: [vendor-batch, sandbox-escape, code-execution, expression-sandbox, credent
 
 ## TL;DR
 
-[n8n's bulletin of 2026-11-26](https://community.n8n.io/t/security-update-26-november-2026/331111) lists four advisories. The High one lets a user who can create and run workflows escape the expression sandbox and run code in the main n8n process. One Moderate flaw needs no login and can stop the server from responding. Upgrade self-hosted n8n to 1.123.102, 2.49.7 or 2.50.2, or to Docker image 3.4.1. n8n says its cloud instances are patched. No advisory carried a CVE when read on 2026-11-26.
+[n8n's bulletin of 2026-11-26](https://community.n8n.io/t/security-update-26-november-2026/331111) lists four advisories. The High one lets a user who can create and run workflows escape the expression sandbox and run code in the main n8n process. One Moderate flaw needs no login and can stop the server from responding. Upgrade self-hosted n8n to 1.123.102, 2.49.7 or 2.50.2, or to Docker image 3.4.1. No advisory carried a CVE when read on 2026-11-26.
 
 ## What happened
 
-The bulletin lists four advisories and four fixed lines: "v1 patched in v1.123.102", "v3 patched in v3.4.1", "beta patched in v2.50.2" and "stable patched in v2.49.7". The vendor tab showed the same four rows dated 2026-11-26.
+The bulletin says cloud instances are patched automatically. It lists four advisories and four fixed lines: "v1 patched in v1.123.102", "v3 patched in v3.4.1", "beta patched in v2.50.2" and "stable patched in v2.49.7". The vendor tab showed the same four rows dated 2026-11-26.
 
 | Advisory | Severity, CVSS 4.0 | Who can do it | Affected, as printed | Patched, as printed |
 |---|---|---|---|---|
 | [GHSA-w6f8-8qh4-h3j4](https://github.com/n8n-io/n8n/security/advisories/GHSA-w6f8-8qh4-h3j4) Expression sandbox escape allows code execution in the main process | High, 7.7 | a user who can create and run workflows | npm `< 2.49.2`, Docker `< 3.4.0` | npm `>= 2.49.2`, Docker `>= 3.4.0` |
 | [GHSA-g45f-rmpv-24vc](https://github.com/n8n-io/n8n/security/advisories/GHSA-g45f-rmpv-24vc) Chroma Vector Store node gives members access to the host's Chroma Cloud account | Moderate, 5.8 | a member who can create credentials and run workflows, when `CHROMA_API_KEY` is set on the host | npm `< 2.49.0`, Docker `< 3.3.0` | npm `>= 2.49.0`, Docker `>= 3.3.0` |
-| [GHSA-rqx8-m8xf-23ff](https://github.com/n8n-io/n8n/security/advisories/GHSA-rqx8-m8xf-23ff) Execution data redaction sends unredacted node errors to the editor | Moderate, 5.3 | a user who can run workflows from the editor, when execution data redaction is enabled | npm `< 2.50.2` and `< 2.49.7`, Docker `< 3.4.1` | npm 2.50.2 and 2.49.7, Docker 3.4.1 |
-| [GHSA-p3cc-p7wp-f2x7](https://github.com/n8n-io/n8n/security/advisories/GHSA-p3cc-p7wp-f2x7) Unclaimed WebSocket upgrade requests exhaust file descriptors | Moderate, 6.9 | anyone who can reach the n8n HTTP port, no login | npm `< 1.123.102`, `< 2.50.2`, `< 2.49.7`, Docker `< 3.4.1` | npm 1.123.102, 2.50.2, 2.49.7, Docker 3.4.1 |
+| [GHSA-rqx8-m8xf-23ff](https://github.com/n8n-io/n8n/security/advisories/GHSA-rqx8-m8xf-23ff) Execution data redaction sends unredacted node errors to the editor | Moderate, 5.3 | a user who can run workflows from the editor but may not reveal redacted data, when execution data redaction is enabled. Only executions that user started are exposed. | npm `< 2.50.2` and `< 2.49.7`, Docker `< 3.4.1` | npm `>= 2.50.2`, `>= 2.49.7`, Docker `>= 3.4.1` |
+| [GHSA-p3cc-p7wp-f2x7](https://github.com/n8n-io/n8n/security/advisories/GHSA-p3cc-p7wp-f2x7) Unclaimed WebSocket upgrade requests exhaust file descriptors in the n8n server | Moderate, 6.9 | anyone who can reach the n8n HTTP port, no login | npm `< 1.123.102`, `< 2.50.2`, `< 2.49.7`, Docker `< 3.4.1` | npm `>= 1.123.102`, `>= 2.50.2`, `>= 2.49.7`, Docker `>= 3.4.1` |
 
 The bulletin rates the three Moderate advisories "Medium".
 
@@ -58,9 +58,9 @@ The sandbox escape advisory lists npm `< 2.49.2` as affected and names no 1.x fi
 ## If you are affected
 
 1. Upgrade to 1.123.102, 2.49.7, 2.50.2 or Docker 3.4.1, or later on the same line.
-2. Until then, remove workflow creation and editing access from users who are not fully trusted. n8n says this does not fully remove the risk.
+2. Until then, restrict instance access to fully trusted users and remove workflow creation and editing access from the rest. n8n says this does not fully remove the risk.
 3. If `CHROMA_API_KEY` was set on the host, rotate the Chroma Cloud API key and check its collections for unexpected changes, as the advisory says. Remove the variable if it is not needed, or add `@n8n/n8n-nodes-langchain.vectorStoreChromaDB` to `NODES_EXCLUDE`.
-4. If untrusted users could run workflows on a version inside the sandbox escape range, treat credentials stored in n8n as readable by them and rotate. See [rotating cloud credentials](../playbooks/rotating-cloud-credentials.md).
+4. As a caution beyond the advisory: if untrusted users could run workflows on a version inside the sandbox escape range, treat credentials stored in n8n as readable by them and rotate. See [rotating cloud credentials](../playbooks/rotating-cloud-credentials.md).
 5. For the WebSocket flaw, n8n's workaround is to have the reverse proxy forward WebSocket upgrades only for the editor and chat paths.
 
 ## Prevention

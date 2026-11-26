@@ -1821,8 +1821,8 @@
     "tensorlake-chaindrop",
     "trapdoor"
    ],
-   "hits": 35,
-   "last_hit": "2026-11-18",
+   "hits": 36,
+   "last_hit": "2026-11-26",
    "tier": "research",
    "weight": 20
   },
@@ -9090,6 +9090,15 @@
    "last_hit": "2026-05-16",
    "tier": "aggregator",
    "weight": 1
+  },
+  "api.nuget.org": {
+   "weight": 5,
+   "hits": 1,
+   "last_hit": "2026-11-26",
+   "ecosystems": [
+    "nuget"
+   ],
+   "tier": "official"
   }
  },
  "version": 1

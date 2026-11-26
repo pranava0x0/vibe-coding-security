@@ -16,7 +16,7 @@ tags: [incident, vendor-incident, saas-breach, github-account-compromise, ci-cd,
 
 ## What happened
 
-1Password published the post on 2026-11-25. It says the investigation began on 2026-11-19, when it saw signs that an attacker had access to an employee's corporate GitHub account. The post gives no earlier date and does not say how the account was taken.
+1Password published the post on 2026-11-25. It says the investigation began on 2026-11-19, when it saw signs that an attacker had access to an employee's corporate GitHub account. The post gives no earlier date and does not say how the account was taken. It says 1Password revoked "the stolen token" and removed "the access the attacker created", and explains neither.
 
 Per the post, the attacker "used the account to access source code and push malicious code to backend services, which downloaded administrative data pertaining to our customers". The attacker also copied source code from private repositories and "gained access to our CI/CD system". 1Password says the CI/CD system holds infrastructure secrets and that it "triggered a rotation of all credentials which may have been exposed".
 
@@ -35,7 +35,7 @@ The post lists as not affected: vaults and their items, the keys that protect va
 
 The post gives no count of affected customers. It does not say how long the malicious code ran or which backend services ran it.
 
-[SecurityWeek](https://www.securityweek.com/1password-breach-exposes-customer-data-internal-source-code/) reports that a 1Password representative said on the company's community forum that the stolen data included Secure Remote Password verifiers derived from account passwords and Secret Keys. The forum thread was not opened for this file. [The Register](https://www.theregister.com/security/2026/11/26/hackers-help-themselves-to-1passwords-source-code-and-customer-data/5312317) says 1Password did not answer its questions about how a GitHub account led to code running on backend services.
+[SecurityWeek](https://www.securityweek.com/1password-breach-exposes-customer-data-internal-source-code/) reports that a 1Password representative said on the company's community forum that the stolen data included Secure Remote Password verifiers derived from account passwords and Secret Keys. SecurityWeek also quotes a community manager: "We have no evidence that encrypted vaults were downloaded or accessed". The forum thread was not opened for this file. [The Register](https://www.theregister.com/security/2026/11/26/hackers-help-themselves-to-1passwords-source-code-and-customer-data/5312317) says 1Password did not answer its questions about how a GitHub account led to code running on backend services.
 
 ## Am I affected?
 
@@ -45,16 +45,16 @@ The post gives no count of affected customers. It does not say how long the mali
 
 ## If you are affected
 
-1. Treat email, texts and calls about 1Password invitations or account recovery that you did not start as phishing. 1Password says it "will never contact you to ask for your account password or Secret Key".
+1. Be cautious of unexpected email, texts and calls that mention 1Password, invitations or account recovery. 1Password says it "will never contact you to ask for your account password or Secret Key".
 2. Enter the account password and Secret Key only in the app, or on the site after typing the address yourself.
-3. If 1Password notified you about a pending invitation or recovery, cancel it and start a new one.
+3. As a caution beyond the post: if 1Password notified you about a pending invitation or recovery, cancel it and start a new one.
 4. Report anything suspicious to the address in 1Password's post.
 
-1Password says no password or Secret Key change is needed.
+1Password says: "You do not need to update anything in your 1Password account."
 
 ## Prevention
 
-- The entry point was one employee's GitHub account that could change what backend services ran. Require review and protected environments for deploys. See [CI/CD hardening](../prevention/ci-cd-hardening.md).
+- The attacker used one employee's GitHub account to push code that backend services ran. Require review and protected environments for deploys. See [CI/CD hardening](../prevention/ci-cd-hardening.md).
 - Keep long-lived infrastructure secrets out of CI where short-lived credentials work. See [credential hygiene](../prevention/credential-hygiene.md).
 - If a personal access token of yours may be exposed, follow [if your GitHub PAT leaked](../playbooks/if-your-github-pat-leaked.md).
 

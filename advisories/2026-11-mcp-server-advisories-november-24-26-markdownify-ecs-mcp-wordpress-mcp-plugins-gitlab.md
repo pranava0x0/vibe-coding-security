@@ -1,6 +1,6 @@
 ---
 id: 2026-11-mcp-server-advisories-november-24-26-markdownify-ecs-mcp-wordpress-mcp-plugins-gitlab
-title: "MCP advisories 2026-11-24 to 11-26: markdownify-mcp SSRF with no npm release of the fix, Amazon ECS MCP Server, two WordPress MCP plugins, GitLab"
+title: "MCP advisories 2026-11-24 to 11-26: markdownify-mcp SSRF with no npm release of the fix, Amazon ECS MCP Server, two WordPress plugins, GitLab"
 date_disclosed: 2026-11-24
 last_updated: 2026-11-26
 severity: high
@@ -12,13 +12,13 @@ tags: [cve-batch, mcp, ssrf, prompt-injection, redaction-bypass, privilege-escal
 
 ## TL;DR
 
-Five MCP-related CVE records were published between 2026-11-24 and 2026-11-26. The [markdownify-mcp advisory](https://github.com/zcaceres/markdownify-mcp/security/advisories/GHSA-pxwh-pcrm-vrm3) says an injected prompt can make the server fetch internal hosts and cloud metadata endpoints, fixed in 1.2.0. npm's newest `mcp-markdownify-server` was 1.1.0 on 2026-11-26. Amazon's ECS MCP Server returned task-definition secrets its redaction setting should hide, fixed in 0.1.36. Update the two WordPress plugins and GitLab.
+Five CVE records for MCP servers and products that ship one were published between 2026-11-24 and 2026-11-26. [CVE-2026-137308](https://cveawg.mitre.org/api/cve/CVE-2026-137308) says an injected prompt can make markdownify-mcp fetch internal hosts and cloud metadata endpoints. The vendor advisory says 1.2.0 fixes it. npm's newest `mcp-markdownify-server` was 1.1.0 on 2026-11-26. Amazon's ECS MCP Server returned task-definition secrets its redaction setting should hide, fixed in 0.1.36. Update the two WordPress plugins and GitLab.
 
 ## What happened
 
 | Product | Id | Score, provider | Affected | Fix |
 |---|---|---|---|---|
-| markdownify-mcp, npm `mcp-markdownify-server` | CVE-2026-137308 | 8.3 CVSS 4.0, VulnCheck | before 1.2.0 | 1.2.0 per the vendor advisory. Not on npm when read. |
+| markdownify-mcp, npm `mcp-markdownify-server` | CVE-2026-137308 | 8.3 CVSS 4.0 and 7.4 CVSS 3.1, VulnCheck | before 1.2.0 | 1.2.0 per the vendor advisory. Not on npm when read. |
 | Amazon ECS MCP Server, PyPI `awslabs.ecs-mcp-server` | CVE-2026-135614 | 5.5 CVSS 3.1 and 6.8 CVSS 4.0, Amazon | below 0.1.36 | 0.1.36 |
 | Secure MCP Server for Claude, ChatGPT, Gemini, Cursor and other AI Agents, WordPress slug `miniorange-secure-mcp-server` | CVE-2026-131688 | 8.1 CVSS 3.1, Wordfence | 1.5.8 and earlier | none stated in the record |
 | AI Engine, WordPress slug `ai-engine` | CVE-2026-131589 | 7.2 CVSS 3.1, Wordfence | 3.9.4 and earlier | none stated in the record |
@@ -26,7 +26,7 @@ Five MCP-related CVE records were published between 2026-11-24 and 2026-11-26. T
 
 ### markdownify-mcp
 
-The vendor advisory, published 2026-11-25, says the URL checks in `webpage-to-markdown`, `youtube-to-markdown`, `bing-search-to-markdown` and `git-repo-to-markdown` could be bypassed with DNS names, bracketed IPv6 literals and IPv4-mapped IPv6 addresses. [VulnCheck's record](https://cveawg.mitre.org/api/cve/CVE-2026-137308), published 2026-11-26, says attackers can reach the tools "through prompt injection to fetch loopback services, internal hosts, and cloud metadata endpoints". The vendor page printed "No known CVE" when read on 2026-11-26.
+The vendor advisory, published 2026-11-25, says the SSRF protections in `webpage-to-markdown`, `youtube-to-markdown`, `bing-search-to-markdown` and `git-repo-to-markdown` could be bypassed. Its title names DNS hostnames, IPv6 and IPv4-mapped IPv6 literals, and scp-style SSH shorthand. [VulnCheck's record](https://cveawg.mitre.org/api/cve/CVE-2026-137308), published 2026-11-26, says attackers can reach the tools "through prompt injection to fetch loopback services, internal hosts, and cloud metadata endpoints". The vendor page printed "No known CVE" when read on 2026-11-26.
 
 The advisory names the npm package `mcp-markdownify-server`, affected `<= 1.1.0`, patched 1.2.0. The npm registry listed four versions on 2026-11-26, the newest 1.1.0 from 2026-05-01. npm has no package named `markdownify-mcp`. The record references a `v1.2.0` release tag in the repository, which was not opened for this file.
 
@@ -38,13 +38,13 @@ PyPI shows 0.1.36 uploaded on 2026-09-22 and 0.1.39 as the newest on 2026-11-17.
 
 ### WordPress plugins
 
-[Wordfence's record for CVE-2026-131688](https://cveawg.mitre.org/api/cve/CVE-2026-131688) says any valid MCP bearer token for the miniOrange plugin, including a scope-restricted connection-test token, can be sent to other WordPress endpoints and gives the sender's account the Administrator role. It scores attack complexity high. WordPress.org listed version 1.5.10, updated 2026-11-25, with 10,000 active installs. The record names no fixed version and references a plugin changeset.
+[Wordfence's record for CVE-2026-131688](https://cveawg.mitre.org/api/cve/CVE-2026-131688) says any valid MCP bearer token for the miniOrange plugin, including a scope-restricted connection-test token, can be sent to other WordPress endpoints and gives the sender's account the Administrator role. It scores attack complexity high. WordPress.org listed version 1.5.10, updated 2026-11-25, with 10,000+ active installs. The record names no fixed version and references a plugin changeset.
 
-[Wordfence's record for CVE-2026-131589](https://cveawg.mitre.org/api/cve/CVE-2026-131589) says an authenticated user with Editor access or above can upload HTML, SVG or JavaScript files through AI Engine's `/mwai/v1/helpers/create_image` endpoint. Its references compare the 3.9.4 and 3.9.5 tags. WordPress.org listed version 3.9.7, updated 2026-11-26, with 90,000 active installs.
+[Wordfence's record for CVE-2026-131589](https://cveawg.mitre.org/api/cve/CVE-2026-131589) says an authenticated user with Editor access or above can upload HTML, SVG or JavaScript files through AI Engine's `/mwai/v1/helpers/create_image` endpoint. The record does not involve the plugin's MCP feature. Its references compare the 3.9.4 and 3.9.5 tags. WordPress.org listed version 3.9.7, updated 2026-11-26, with 90,000+ active installs.
 
 ### GitLab
 
-[GitLab's record](https://cveawg.mitre.org/api/cve/CVE-2026-135221) says an authenticated user could make server-side requests to internal network resources "due to insufficient URL validation in MCP server OAuth handling". The [patch release of 2026-11-25](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-6-2-released/) names 15 CVE ids, this one included.
+[GitLab's record](https://cveawg.mitre.org/api/cve/CVE-2026-135221) says that "under certain conditions" an authenticated user could make server-side requests to internal network resources "due to insufficient URL validation in MCP server OAuth handling". The [patch release of 2026-11-25](https://docs.gitlab.com/releases/patches/patch-release-gitlab-19-6-2-released/) names 15 CVE ids, this one included.
 
 ## Am I affected?
 
@@ -54,6 +54,8 @@ PyPI shows 0.1.36 uploaded on 2026-09-22 and 0.1.39 as the newest on 2026-11-17.
 - Self-managed GitLab EE from 18.10 on a version below the three fixed releases is affected.
 
 ## If you are affected
+
+The vendor sources give upgrade steps only. The removal and review steps below are cautions beyond them.
 
 1. markdownify-mcp: no npm release carries the fix as of 2026-11-26. Remove the server from agents that read untrusted content, or run it where it cannot reach internal hosts or a cloud metadata endpoint. Check npm again before reinstalling.
 2. ECS MCP Server: upgrade to 0.1.36 or later. AWS says to "rotate any credentials stored as plaintext task definition environment variables".

@@ -1,6 +1,6 @@
 ---
 id: 2026-11-rackspace-spot-breach-kubernetes-secrets-tokens-service-shutdown-2026-12-08
-title: "Rackspace Spot: intruders read Kubernetes Secrets and API tokens on 2026-11-17; service shuts down 2026-12-08; rotate every secret in affected clusters"
+title: "Rackspace Spot: intruders gained access to Kubernetes Secrets on 2026-11-17; service shuts down 2026-12-08; rotate every secret in affected clusters"
 date_disclosed: 2026-11-24
 last_updated: 2026-11-26
 severity: high
@@ -28,23 +28,23 @@ The Register says the notice was posted on Tuesday, which is 2026-11-24. It says
 
 In [a discussion on the Spot repository](https://github.com/rackerlabs/spot/discussions/510) on 2026-11-20, a customer asked about an outage then 24 hours old. The account `sirishkr` replied that the root cause was an observability system breached using a compromised credential, and that changes to the underlying infrastructure clusters were extending the outage. The Register identifies the author as Sirish Raghuram, a co-founder of Platform9, which it says co-developed Spot with Rackspace.
 
-No source says how the credential was compromised.
+No source says how the credential was compromised. The Register calls the credentials "leaked".
 
 ## Am I affected?
 
 - You are in scope if you had a Rackspace Spot account with clusters on 2026-11-17. The Register's account does not say how Rackspace decided which users were affected.
-- Look in each cluster for pods, service accounts and role bindings you did not create, dated 2026-11-17 or later.
+- As a check beyond the report, look in each cluster for pods, service accounts and role bindings you did not create, dated 2026-11-17 or later.
 - Any Secret in an affected user's clusters may have been read, per the notification. That includes database passwords and third-party API keys your workloads mounted.
 
 ## If you are affected
 
-The Register lists three steps from the customer notification:
+The Register says customers must:
 
 1. Reissue Spot API tokens.
 2. Download new Kubernetes configuration files.
 3. Rotate credentials stored in the clusters, "including database passwords and third-party API keys".
 
-Rotate at the service that issued each credential, and review that service's logs from 2026-11-17 onward. See [rotating cloud credentials](../playbooks/rotating-cloud-credentials.md).
+As a caution beyond the report, rotate at the service that issued each credential and review that service's logs from 2026-11-17 onward. See [rotating cloud credentials](../playbooks/rotating-cloud-credentials.md).
 
 Move workloads and copy data out before 2026-12-08 23:00 UTC.
 

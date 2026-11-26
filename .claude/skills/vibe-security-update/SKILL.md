@@ -224,6 +224,9 @@ Each row is a shape of wrong-but-plausible data that has shipped from this routi
 | Unexplained line in a vendor timeline | Defang's timeline has "made aware of a security issue with a dependency" three days after the intrusion and names nothing | print the line as written; write "the post does not link it to the intrusion"; name no dependency |
 | Window or scope invented for advice | a draft told 1Password users to reissue invitations "pending between 2026-11-19 and 2026-11-25", dates the post does not give as a window (caught before commit) | every date range in a step comes from the vendor's text; otherwise key the step to the vendor's notification |
 | Notice known only through an outlet | The Register quotes Rackspace's wind-down notice and a customer notification; the status host renders no text | quote the outlet's quotations as the outlet's account; list each unopened document in Sources; `active` |
+| Example list quoted as a limit, or "could have" written as "did" | a Kiro Web quotation dropped "such as" before two examples; a Rackspace title said intruders "read" Secrets where the notice says they "could have read" them (caught in review) | keep "such as", "for example" and "could have" inside the quotation or the paraphrase; check the title's verb against the source's |
+| Record's wording credited to the vendor advisory | a TL;DR said the markdownify-mcp advisory describes prompt injection; only VulnCheck's record does (caught in review) | link each claim to the document that states it; a vendor page and its CNA record are two sources |
+| Product named for a feature the flaw does not touch | AI Engine's CVE-2026-131589 is a file upload through a REST endpoint, filed in a draft as an "MCP plugin" flaw because "MCP Server" is in the plugin name (caught in review) | say which feature the record names; a product name is not a mechanism |
 ---
 
 
