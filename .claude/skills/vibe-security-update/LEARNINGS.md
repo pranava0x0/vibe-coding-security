@@ -440,3 +440,13 @@ Five things from **2026-11-26**:
 
 1Password's post was the day's top Algolia item and on all three front pages. A password manager breach is in scope when the vendor lists CI/CD secrets or tokens among what was reached. OpenAI's report on the 2026-07-19 runs carried "Report updated: Nov 10" and surfaced on 2026-11-26: read `openai.com/safety-alignment/misalignment-reports/` with `curl`, which returned 200 this run. No `WebSearch` call was run, and the run log says so.
 
+## 87. A tracked tab batches again nine days after its last batch; an "Unknown" severity row can be a vendor CNA's command execution; a status page keeps only its newest update; and a pre-release can sit above a range and before the fix
+
+Four things from **2026-11-27**:
+
+1. **The reference MCP servers tab held eight rows dated 2026-11-27, published the morning the releases reached PyPI and npm.** One is High on `mcp-server-git`, and 2026.11.18, the previous fix, is inside every range. Two bodies say no patched version is identified beside a patched field. Four print a higher score the reporter requested for one deployment. **Rule:** table the base score and the label, say a requested score exists, and confirm the patched field on the registry. OSV had none of the ids.
+2. **Airflow's CVE-2026-120353 showed severity "Unknown" on the `agent` and `llm` listings.** Apache rates in words and gives no CVSS. The record covers `@task.llm` and `@task.agent`. **Rule:** open every listing row whose CNA is a vendor, whatever the severity column says. `lists.apache.org/api/email.lua?id=<id>` returns the announcement with credits. The HTML thread page is client-rendered.
+3. **`apache-airflow-providers-standard` 2.0.0rc1 was uploaded on 2026-11-05, above the range and before the 1.22.0 fix of 2026-11-23.** **Rule:** list registry versions above the fixed one with upload dates and write "no source says" for any that predate the fix.
+4. **1984 Hosting's status entry held only its newest update.** The first statement, joint with CERT-IS, was printed in full by DV in Icelandic. `status.1984.is/api/status-page/public` returns the entry with creation and update times. **Rule:** for a host breach found on the Algolia feed, read the status API, search the feed for the vendor name over the previous two weeks for the first outlet, and list what no text states.
+
+VulnCheck issued two more Coder ids, and one record's entries disagree on 2.37.0. The Notion MCP report (57 points) links a Reddit post that returned 403, so no file was written. `WebSearch` was not run. X, Bluesky and Reddit stay "not covered".

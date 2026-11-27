@@ -2,7 +2,7 @@
 id: 2026-03-polinrider-multi-ecosystem-dprk-campaign
 title: "PolinRider — ongoing DPRK-linked campaign backdoors npm, Packagist, Go, and a Chrome extension via maintainer-account takeover (Mar 2026–ongoing)"
 date_disclosed: 2026-03-01
-last_updated: 2026-10-01
+last_updated: 2026-11-27
 severity: high
 status: active
 ecosystems: [npm, packagist, go, chrome-extension]
@@ -28,6 +28,25 @@ First flagged by the OpenSourceMalware team around **2026-03**, PolinRider invol
 
 ### Update 2026-07-25 — disputed link to ChainVeil/ViteVenom npm typosquat waves
 Researcher outlet **OpenSourceMalware** published an analysis ([ChainVeil and ViteVenom are DPRK's PolinRider Campaign](https://opensourcemalware.com/blog/chainveil-and-vitevenom-dprk-polinrider-campaign), 2026-07-17) arguing that the **ChainVeil** (May–June 2026, Tailwind CSS/Sass typosquats) and **ViteVenom** (June–July 2026, Vite typosquats) npm campaigns — see the new standalone writeup at [2026-07-chainveil-vitevenom-npm-blockchain-c2.md](2026-07-chainveil-vitevenom-npm-blockchain-c2.md) — share blockchain-wallet infrastructure with PolinRider, based on wallet addresses OpenSourceMalware says it had independently tracked before either campaign's public report. **This is a contested claim, not a confirmed one:** Checkmarx Zero, the primary researcher who discovered and named both ChainVeil and ViteVenom, attributes them to a distinct operator it calls "SuccessKey" and makes no DPRK or PolinRider attribution in either of its own writeups. Noting the dispute here rather than merging the campaigns — a single party's claimed infrastructure overlap is not sufficient to override the original discoverer's own attribution.
+
+## Update 2026-11-27: repository counts and file names from SafeDep and The Hacker News
+
+[SafeDep](https://safedep.io/blog/polinrider-python-loader-ethereum-calldata) reported on 2026-11-24 that 375 public GitHub repositories owned by 260 accounts held a Python loader from this campaign, 370 of them pushed in November 2026. SafeDep says no PyPI or npm package carries that loader. [The Hacker News](https://thehackernews.com/2026/11/north-korea-linked-polinrider-poisons.html) reported on 2026-11-26 that Apiiro estimates at least 7,609 repositories owned by 2,330 accounts. The Apiiro post was not opened for this file.
+
+What to look for in a repository, per SafeDep:
+
+| Where | Name |
+|---|---|
+| repository root or a subfolder | `conftest.py` you did not write |
+| a `utils`, `lib`, `helpers`, `common` or `shared` folder | `session.py`, `transport.py`, `clients.py`, `http_session.py`, `net.py` |
+| repository root | `api.js`, and a `package.json` whose `build` or `dev` script runs `node api.js` |
+| test configuration | `jest.config.js` with code appended at the end |
+
+SafeDep says commit dates on affected repositories are forged, so check the full history and the GitHub Activity log.
+
+npm package names The Hacker News lists, citing OpenSourceMalware: `itsa-utils` 1.4.2, `itsa-jsext` 2.0.3, `itsa-react-docviewer` 16.1.2, `itsa-cli` 16.5.3, `itsa-react-button` 16.0.11, `itsa-react-maskedinput` 16.1.2, `itsa-react-checkbox` 16.0.5, `itsa-react-focuscontainer` 16.0.10, `itsa-react-input` 16.1.2. It lists these without versions: `@adminide-stack/utils`, `@adminide-stack/health-api-server`, `@adminide-stack/user-activity-browser`, `@adminide-stack/forms-core`, `@adminide-stack/yantra-help-browser`, `server-hemera-mongo`, `cdeops`, `@cdmbase/wiki-browser` and `@pubngo-stack/help-browser`. It also names the VS Code extension `huntrole.assessment-tool`. Registry state for these names was not checked for this file.
+
+If you ran `pytest`, a start command, `npm run build`, `npm run dev` or Jest in an affected repository, SafeDep says to treat the machine as compromised. Rebuild it, then replace GitHub tokens and SSH keys, environment secrets, browser-saved passwords and wallets.
 
 ## Am I affected?
 
@@ -81,3 +100,4 @@ git log --format='%h %an <%ae> %ad | %cn %cd' --date=short -- '*.js' '*.mjs' | a
 - [The Hacker News — "North Korean Hackers Publish 108 Malicious Packages and Extensions in PolinRider Campaign"](https://thehackernews.com/2026/07/north-korean-hackers-publish-108.html) — scale, ecosystem breakdown, TaskJacker cross-link, historical repository-count figures.
 - [Socket — "PolinRider: North Korea-Linked Supply Chain Campaign Expands"](https://socket.dev/blog/polinrider-north-korea-linked-supply-chain-campaign-expands) — attack mechanism detail (Git history rewriting, `.woff2` concealment, blockchain RPC C2), specific IOCs, timeline, live-tracking status.
 - **2026-10-01 update sources** — [SafeDep — PolinRider Switches to Ethereum C2 in 30+ Repositories (2026-09-30)](https://safedep.io/polinrider-ethereum-c2-github-repositories) (primary, fetched 2026-10-01 with indicators filtered: the recipient-address C2 encoding, two operator wallets and their cadence since 06-23 / 07-25, 11 C2 servers / AS149440, the two-loader infection, the oxc pull request anatomy — 20 scripts, 2,000-space padding, forged author, `autofix.ci` reformat, Boshen's 09-30 post — the 35-repository / 7,578-star count at HEAD on 09-30, the OpenSSF malicious-packages cross-reference, and the overlap with SafeDep's astro.config.mjs and @joyfill cases); [SafeDep blog index](https://safedep.io/blog/) (fetched 2026-10-01; the 09-30 post sits beside the 09-29 DirtyBlanket post).
+- **2026-11-27 update sources**: [SafeDep, PolinRider Python loader (2026-11-24)](https://safedep.io/blog/polinrider-python-loader-ethereum-calldata), fetched 2026-11-27 for counts, file names and remediation only. [The Hacker News (2026-11-26)](https://thehackernews.com/2026/11/north-korea-linked-polinrider-poisons.html), fetched 2026-11-27 for Apiiro's counts and the package and extension names. Not opened: the Apiiro, OpenSourceMalware, StepSecurity and Unit 42 posts.

@@ -2,7 +2,7 @@
 id: 2026-11-coder-november-seven-advisories-aws-iam-database-password-in-api-errors-cli-session-token
 title: "Coder: seven advisories from 2026-11-04 to 11-12; unauthenticated API errors could leak an AWS IAM database password (8.1); fixed 2.39.1, 2.38.7, 2.37.11"
 date_disclosed: 2026-11-11
-last_updated: 2026-11-22
+last_updated: 2026-11-27
 severity: high
 status: patched
 ecosystems: [coder, go, cloud-dev-environment, ai-agents]
@@ -49,6 +49,19 @@ VulnCheck published records for two of the seven advisories on 2026-11-21. The f
 
 The other five advisories, including the High one, had no CVE id in the `agent` listing when read on 2026-11-22.
 
+## Update 2026-11-27: two more CVE ids from VulnCheck
+
+VulnCheck published records for two more of the seven advisories on 2026-11-26. Four of the seven now have a CVE id. The fixed versions in the records match the vendor releases above, so an install on a fixed line needs nothing new. Scanners keyed on CVE ids flag these two from 2026-11-26.
+
+| Vendor advisory | CVE | VulnCheck score | Vendor score |
+|---|---|---|---|
+| GHSA-7hf9-gp2x-ppfm, tailnet crash | [CVE-2026-137545](https://cveawg.mitre.org/api/cve/CVE-2026-137545) | 7.1 (CVSS 4.0), 6.5 (CVSS 3.1) | 6.5 |
+| GHSA-5wcx-v9qj-4gj6, agent status links | [CVE-2026-137548](https://cveawg.mitre.org/api/cve/CVE-2026-137548) | 5.1 (CVSS 4.0), 4.6 (CVSS 3.1) | 4.6 |
+
+The record for CVE-2026-137548 lists 2.35.0 to below 2.37.0 as affected and marks 2.37.0 unaffected. It also lists 2.37.0 to below 2.37.11 as affected. The two entries disagree on 2.37.0. The vendor advisory's fixed releases, in the table above, include none on 2.35 or 2.36.
+
+The High advisory, GHSA-w4m3-qhx8-c649, had no CVE id in the `agent` listing when read on 2026-11-27. The vendor tab's page 1 showed no row newer than 2026-11-12.
+
 ## Am I affected?
 
 ```bash
@@ -78,6 +91,7 @@ ps aux | grep -E 'samesite-auth-cookie[ =]none'   # widens the CSRF advisory
 
 ## Sources
 
+- [CVE-2026-137545](https://cveawg.mitre.org/api/cve/CVE-2026-137545) and [CVE-2026-137548](https://cveawg.mitre.org/api/cve/CVE-2026-137548), CVE Services, VulnCheck CNA, published 2026-11-26, read 2026-11-27: ranges, scores, the referenced vendor advisories.
 - [CVE-2026-134361](https://cveawg.mitre.org/api/cve/CVE-2026-134361) and [CVE-2026-134363](https://cveawg.mitre.org/api/cve/CVE-2026-134363), CVE Services, VulnCheck CNA, published 2026-11-21, read 2026-11-22: ranges, scores, the referenced vendor advisories.
 
 Single source: the vendor, for its own product.
