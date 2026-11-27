@@ -12,7 +12,7 @@ tags: [hosting-provider, vps, incident, outage, infrastructure-breach, investiga
 
 ## TL;DR
 
-Icelandic host 1984 ehf suspended all services on 2026-11-20 after what it and CERT-IS called an extensive and serious attack on its infrastructure, per [their joint statement as printed by DV](https://dv.is/frettir/2026/11/20/stodva-thjonustu-timabundid-eftir-alvarlega-tolvuaras-a-innvidi-1984-ehf). The statement says the scope is under investigation and more systems may be affected than confirmed. No vendor text read for this file says whether customer data, virtual machine disks or account credentials were accessed. The [status page](https://status.1984.is/status/public) said on 2026-11-27 that about 90% of VPS instances and about 85% of hosted websites were back online. If you host there, rotate the secrets stored on your servers as a caution. The vendor has not asked for that.
+Icelandic host 1984 ehf suspended all services on 2026-11-20 after what it and CERT-IS called an extensive and serious attack on its infrastructure, per [their joint statement as printed by DV](https://dv.is/frettir/2026/11/20/stodva-thjonustu-timabundid-eftir-alvarlega-tolvuaras-a-innvidi-1984-ehf). The statement says the scope is under investigation and more systems may be affected than confirmed. No vendor text read for this file says whether customer data, virtual machine disks or account credentials were accessed. The [status page](https://status.1984.is/status/public) said on 2026-11-27 that about 90% of VPS instances and about 85% of hosted websites were back online. If you host there, rotating the secrets stored on your servers is a caution that no vendor text read asks for.
 
 ## What happened
 
@@ -40,12 +40,12 @@ A commenter on [the Hacker News thread](https://news.ycombinator.com/item?id=506
 ## Am I affected?
 
 - You are affected by the outage if you run a VPS, a shared-hosting site, email or DNS at 1984 Hosting.
-- Whether your data was reached is not known. The vendor has not said.
+- Whether your data was reached is not known. No vendor text read for this file says.
 - List what the server holds: `.env` files, database passwords, API keys for model providers, SSH private keys, deploy tokens and TLS private keys.
 
 ## If you are affected
 
-The vendor's statements give no customer steps. These are this file's advice.
+The vendor statements read for this file give no customer steps. These are this file's advice.
 
 1. When your server returns, check it before putting it back into use. Compare the authorised SSH keys, user accounts, scheduled jobs and running services with what you expect.
 2. Rotate the secrets the server stored, starting with cloud and model-provider API keys. See [rotating cloud credentials](../playbooks/rotating-cloud-credentials.md).

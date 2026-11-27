@@ -18,14 +18,14 @@ tags: [mcp, mcp-server-git, git-lfs, git-config, command-execution, credential-l
 
 The [advisory tab](https://github.com/modelcontextprotocol/servers/security/advisories) of the Model Context Protocol reference servers showed eight rows dated 2026-11-27 on page 1 when read that day. Page 2 held none. Six name `mcp-server-git`, one names `mcp-server-fetch` and one names `@modelcontextprotocol/server-memory`. All eight print "No known CVE". Earlier advisories for these servers are in [the 2026-11-18 file](2026-11-mcp-server-git-repository-config-runs-commands-six-high-advisories-fixed-2026-11-18.md).
 
-| Advisory | Package | Severity as printed | Affected as printed | Patched | What the advisory says |
+| Advisory | Package | Severity label and score | Affected as printed | Patched | What the advisory says |
 |---|---|---|---|---|---|
 | [GHSA-6663-fm5v-gqm5](https://github.com/modelcontextprotocol/servers/security/advisories/GHSA-6663-fm5v-gqm5) | `mcp-server-git` | High, 7.8 | below 2026.11.27 | 2026.11.27 | Repository config names programs that run through the Git LFS filter, as the user who runs the server. |
 | [GHSA-wvv2-676g-r57j](https://github.com/modelcontextprotocol/servers/security/advisories/GHSA-wvv2-676g-r57j) | `mcp-server-git` | Moderate, 5.3 | 2026.11.4 to below 2026.11.27 | 2026.11.27 | `git_remote` output can show a Git credential from the user's own global or system config. |
 | [GHSA-f33v-89w7-f9vc](https://github.com/modelcontextprotocol/servers/security/advisories/GHSA-f33v-89w7-f9vc) | `mcp-server-git` | Moderate, no score | below 2026.11.27 | 2026.11.27 | `repo_path` expands environment variables and the error message shows their values. |
-| [GHSA-5pwg-5xfw-x322](https://github.com/modelcontextprotocol/servers/security/advisories/GHSA-5pwg-5xfw-x322) | `mcp-server-git` | Moderate, 6.5 | below 2026.11.27 | 2026.11.27 | `git_show` can read objects from a second repository outside `--repository`, through a race. |
-| [GHSA-3whj-m8jj-x97q](https://github.com/modelcontextprotocol/servers/security/advisories/GHSA-3whj-m8jj-x97q) | `mcp-server-git` | Moderate, 5.9 | below 2026.11.27 | 2026.11.27 | A `.git` pointer file in the configured root makes `git_show` read a second repository. |
-| [GHSA-qf89-h82f-h5r5](https://github.com/modelcontextprotocol/servers/security/advisories/GHSA-qf89-h82f-h5r5) | `mcp-server-git` | Low | 2026.11.4 to below 2026.11.27 | 2026.11.27 | `git_merge` with `fast_forward_only=false` can replace an ignored local file such as `.env`. |
+| [GHSA-5pwg-5xfw-x322](https://github.com/modelcontextprotocol/servers/security/advisories/GHSA-5pwg-5xfw-x322) | `mcp-server-git` | Moderate, 6.5 in the body | below 2026.11.27 | 2026.11.27 | `git_show` can read objects from a second repository outside `--repository`, through a race. Needs a file-write tool on the same repository and a known object id. |
+| [GHSA-3whj-m8jj-x97q](https://github.com/modelcontextprotocol/servers/security/advisories/GHSA-3whj-m8jj-x97q) | `mcp-server-git` | Moderate, 5.9 in the body | below 2026.11.27 | 2026.11.27 | A `.git` pointer file in the configured root makes `git_show` read a second repository. |
+| [GHSA-qf89-h82f-h5r5](https://github.com/modelcontextprotocol/servers/security/advisories/GHSA-qf89-h82f-h5r5) | `mcp-server-git` | Low, 6.5 in the body | 2026.11.4 to below 2026.11.27 | 2026.11.27 | `git_merge` with `fast_forward_only=false` can replace an ignored local file such as `.env`. |
 | [GHSA-48j5-hj63-c82c](https://github.com/modelcontextprotocol/servers/security/advisories/GHSA-48j5-hj63-c82c) | `@modelcontextprotocol/server-memory` | Moderate, 4.2 | 1.0.0 to below 2.2.2 | 2.2.2 | A local user who can write to a shared graph directory can change permissions on a file outside it, through a race. |
 | [GHSA-g7v6-hfx3-8rv6](https://github.com/modelcontextprotocol/servers/security/advisories/GHSA-g7v6-hfx3-8rv6) | `mcp-server-fetch` | Low, 3.7 | 2026.10.10 to below 2026.11.27 | 2026.11.27 | The robots.txt check misses backslash and path-parameter spellings. Titled as an incomplete fix for GHSA-3rxj-6jhw-qfv7. |
 
@@ -47,7 +47,7 @@ The advisory says a plain `git clone` of a hostile repository is not sufficient,
 ### What the pages do not agree on
 
 - The bodies of GHSA-5pwg-5xfw-x322 and GHSA-3whj-m8jj-x97q say no patched version is identified. Their patched field says 2026.11.27.
-- GHSA-qf89-h82f-h5r5 is labelled Low. Its body prints a 6.5 base score.
+- GHSA-qf89-h82f-h5r5 is labelled Low. Its body prints a 6.5 base score. "In the body" in the table marks a score that the reporter's text gives.
 - GHSA-5pwg-5xfw-x322, GHSA-3whj-m8jj-x97q, GHSA-qf89-h82f-h5r5 and GHSA-48j5-hj63-c82c each print a higher score that the reporter requested for one described deployment. The table shows the base scores.
 - GHSA-5pwg-5xfw-x322 and GHSA-3whj-m8jj-x97q say only loss of confidentiality was demonstrated. GHSA-qf89-h82f-h5r5 says only replacement of an ignored file was demonstrated.
 
@@ -60,7 +60,9 @@ pip show mcp-server-git mcp-server-fetch 2>/dev/null | grep -iE '^(name|version)
 npm ls -g @modelcontextprotocol/server-memory
 git lfs version                                   # present = one condition of the High advisory
 git config --global --get-regexp '^filter\.lfs\.'  # LFS in the global Git configuration
+git config --system --get-regexp '^filter\.lfs\.'  # LFS in the system Git configuration
 git config --global --get-regexp 'insteadof'       # a credential here = GHSA-wvv2-676g-r57j applies
+git config --system --get-regexp 'insteadof'
 ```
 
 - `mcp-server-git` below 2026.11.27 is affected by at least four of the six. Version 2026.11.18, the fix for the earlier batch, is inside all six ranges.
@@ -72,7 +74,7 @@ git config --global --get-regexp 'insteadof'       # a credential here = GHSA-wv
 ## If you are affected
 
 1. Upgrade `mcp-server-git` and `mcp-server-fetch` to 2026.11.27 and `@modelcontextprotocol/server-memory` to 2.2.2. PyPI and npm show all three published on 2026-11-27.
-2. Restart the MCP client so it starts the new server.
+2. Restart the MCP client so it starts the new server. This step is this file's advice.
 3. If an agent used an affected `mcp-server-git` on a repository received as an archive, shared folder or vendored tree, on a machine with Git LFS, treat the account that ran the server as exposed. Rotate the credentials it could read. See [if your local AI agent was exploited](../playbooks/if-your-local-ai-agent-was-exploited.md). This step is this file's advice.
 4. If your global Git config holds a token in an `insteadOf` rewrite and an agent ran `git_remote` on a repository you did not create, rotate that token. See [if your GitHub PAT leaked](../playbooks/if-your-github-pat-leaked.md). This step is this file's advice.
 

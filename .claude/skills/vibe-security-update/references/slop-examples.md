@@ -4,6 +4,23 @@ Read this before writing any advisory or `ALERTS.md` entry. Append a pair each
 time review or the owner finds slop, and add a matching line to
 `tools/slop_patterns.tsv` when the shape can be matched by a regex. Newest on top.
 
+## 2026-11-27 (sweep review)
+
+**"The vendor has not said" from a partial read** (1984 Hosting advisory and alert)
+- Before: "Whether your data was reached is not known. The vendor has not said."
+- After: "Whether your data was reached is not known. No vendor text read for this file says."
+- Why: the status entry kept only its newest update and the vendor site was not opened. No regex matches this shape, so scope every "has not said" to the texts read.
+
+**Example list widened** (Airflow advisory, Am I affected?)
+- Before: "A Dag that feeds tickets, emails, web pages or documents to `@task.llm` or `@task.agent` meets the record's second case."
+- After: "A Dag that feeds tickets or downloaded documents ... meets the record's second case. Emails and web pages are the same kind of input."
+- Why: the record gives two examples, and the draft printed four as the record's.
+
+**Condition dropped from a table cell** (reference MCP servers advisory)
+- Before: "`git_show` can read objects from a second repository outside `--repository`, through a race."
+- After: the same, plus "Needs a file-write tool on the same repository and a known object id."
+- Why: the advisory states both conditions, and the cell read as if `git_show` alone were enough.
+
 ## 2026-11-26 (sweep review)
 
 **Step the vendor does not give, written as an instruction** (Kiro Web alert, MCP batch, Rackspace Spot)

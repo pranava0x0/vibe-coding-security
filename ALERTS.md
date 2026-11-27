@@ -85,7 +85,7 @@ RunPod's hosted MCP server told agents to call a rating tool and not mention it 
 → [advisories/2026-11-together-ai-prompt-samples-downloaded-after-coding-agent-committed-credential-june-july-requests.md](advisories/2026-11-together-ai-prompt-samples-downloaded-after-coding-agent-committed-credential-june-july-requests.md)
 
 ### 2026-11-20 — **1984 Hosting: all services suspended on 2026-11-20 after an attack on its infrastructure; scope still under investigation, most VPS and sites back by 2026-11-27**
-1984 ehf suspended all hosting on 2026-11-20 after an attack on its infrastructure, per [its joint statement with CERT-IS](https://dv.is/frettir/2026/11/20/stodva-thjonustu-timabundid-eftir-alvarlega-tolvuaras-a-innvidi-1984-ehf). It has not said whether customer data was reached. As a caution, rotate secrets stored on servers there.
+1984 ehf suspended all services on 2026-11-20 after an attack on its infrastructure, per [its joint statement with CERT-IS](https://dv.is/frettir/2026/11/20/stodva-thjonustu-timabundid-eftir-alvarlega-tolvuaras-a-innvidi-1984-ehf). No vendor text read says whether customer data was reached. As a caution, rotate secrets stored on servers there.
 → [advisories/2026-11-1984-hosting-infrastructure-attack-all-services-suspended-scope-under-investigation.md](advisories/2026-11-1984-hosting-infrastructure-attack-all-services-suspended-scope-under-investigation.md)
 
 ### 2026-11-20 — **Portkey AI Gateway: a customer notice relayed on Hacker News says account data was taken 2026-11-05 to 11-10, possibly logs and credentials; no vendor page**
