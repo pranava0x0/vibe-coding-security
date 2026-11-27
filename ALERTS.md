@@ -2,11 +2,19 @@
 
 > Single scannable feed. Latest on top. Each entry links to a full advisory.
 >
-> **Last refreshed:** 2026-11-26. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
+> **Last refreshed:** 2026-11-27. If this date is more than 7 days old, treat the repo as stale — check [sources/](sources/) directly.
 
 ---
 
 ## 🔴 ACTIVE — react now
+
+### 2026-11-27 — **Reference MCP servers: eight advisories on 2026-11-27, one High in mcp-server-git through the Git LFS filter; fixed in 2026.11.27**
+`mcp-server-git` below 2026.11.27 runs programs named in a repository's `.git/config` through the Git LFS filter, per [GHSA-6663-fm5v-gqm5](https://github.com/modelcontextprotocol/servers/security/advisories/GHSA-6663-fm5v-gqm5). It needs Git LFS and a repository received with its `.git` directory. Upgrade to 2026.11.27.
+→ [advisories/2026-11-reference-mcp-servers-november-27-eight-advisories-mcp-server-git-lfs-filter-fixed-2026-11-27.md](advisories/2026-11-reference-mcp-servers-november-27-eight-advisories-mcp-server-git-lfs-filter-fixed-2026-11-27.md)
+
+### 2026-11-26 — **Apache Airflow: text passed to @task.llm, @task.agent, @task.bash and similar decorators runs commands on the worker (CVE-2026-120353); fixed in four provider releases**
+Four Airflow providers rendered Jinja twice in TaskFlow decorators, so run conf or text given to `@task.llm` or `@task.bash` could run commands on the worker, per [CVE-2026-120353](https://cveawg.mitre.org/api/cve/CVE-2026-120353). Upgrade the standard, cncf-kubernetes, common-sql and common-ai providers.
+→ [advisories/2026-11-apache-airflow-taskflow-llm-agent-decorators-jinja-double-render-worker-code-execution-cve-2026-120353.md](advisories/2026-11-apache-airflow-taskflow-llm-agent-decorators-jinja-double-render-worker-code-execution-cve-2026-120353.md)
 
 ### 2026-11-26 — **n8n 2026-11-26: four advisories, one High expression sandbox escape to code execution; fixed in 1.123.102, 2.49.7, 2.50.2 and Docker 3.4.1**
 [n8n's 2026-11-26 bulletin](https://community.n8n.io/t/security-update-26-november-2026/331111) lists four advisories. One lets a user who can create and run workflows run code in the main n8n process. Upgrade to 1.123.102, 2.49.7, 2.50.2 or Docker 3.4.1.
@@ -75,6 +83,10 @@ RunPod's hosted MCP server told agents to call a rating tool and not mention it 
 ### 2026-11-21 — **Together AI: stored prompt samples from June and July 2026 downloaded after a coding agent committed a credential to a public repository**
 [Together AI](https://www.together.ai/blog/security-event-prompt-leakage-for-requests-in-june-and-july-of-2026) says an unauthorized party downloaded stored prompt samples from June and July 2026 requests to MiniMax M3, GLM-5.2 and Kimi K2.6, then tested credentials found in them. Rotate any secret sent in those prompts.
 → [advisories/2026-11-together-ai-prompt-samples-downloaded-after-coding-agent-committed-credential-june-july-requests.md](advisories/2026-11-together-ai-prompt-samples-downloaded-after-coding-agent-committed-credential-june-july-requests.md)
+
+### 2026-11-20 — **1984 Hosting: all services suspended on 2026-11-20 after an attack on its infrastructure; scope still under investigation, most VPS and sites back by 2026-11-27**
+1984 ehf suspended all hosting on 2026-11-20 after an attack on its infrastructure, per [its joint statement with CERT-IS](https://dv.is/frettir/2026/11/20/stodva-thjonustu-timabundid-eftir-alvarlega-tolvuaras-a-innvidi-1984-ehf). It has not said whether customer data was reached. As a caution, rotate secrets stored on servers there.
+→ [advisories/2026-11-1984-hosting-infrastructure-attack-all-services-suspended-scope-under-investigation.md](advisories/2026-11-1984-hosting-infrastructure-attack-all-services-suspended-scope-under-investigation.md)
 
 ### 2026-11-20 — **Portkey AI Gateway: a customer notice relayed on Hacker News says account data was taken 2026-11-05 to 11-10, possibly logs and credentials; no vendor page**
 An email [posted on Hacker News](https://news.ycombinator.com/item?id=50585039) says account data, possibly gateway logs and credentials, was taken from Portkey between 2026-11-05 and 2026-11-10. Portkey has no public page. Sign in directly, look for the incident banner, and rotate stored provider keys if it is there.

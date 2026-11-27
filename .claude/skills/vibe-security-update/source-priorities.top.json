@@ -11,14 +11,14 @@
   {
    "domain": "github.com/advisories",
    "weight": 20.0,
-   "hits": 84,
-   "last_hit": "2026-11-26"
+   "hits": 85,
+   "last_hit": "2026-11-27"
   },
   {
    "domain": "github.com",
    "weight": 20.0,
-   "hits": 81,
-   "last_hit": "2026-11-26"
+   "hits": 82,
+   "last_hit": "2026-11-27"
   },
   {
    "domain": "securityweek.com",
@@ -41,20 +41,20 @@
   {
    "domain": "registry.npmjs.org",
    "weight": 20.0,
-   "hits": 55,
-   "last_hit": "2026-11-26"
+   "hits": 56,
+   "last_hit": "2026-11-27"
   },
   {
    "domain": "cveawg.mitre.org",
    "weight": 20.0,
-   "hits": 49,
-   "last_hit": "2026-11-26"
+   "hits": 50,
+   "last_hit": "2026-11-27"
   },
   {
    "domain": "vulncheck.com",
    "weight": 20.0,
-   "hits": 45,
-   "last_hit": "2026-11-26"
+   "hits": 46,
+   "last_hit": "2026-11-27"
   },
   {
    "domain": "cybersecuritynews.com",
@@ -65,8 +65,8 @@
   {
    "domain": "hn.algolia.com",
    "weight": 20.0,
-   "hits": 41,
-   "last_hit": "2026-11-26"
+   "hits": 42,
+   "last_hit": "2026-11-27"
   },
   {
    "domain": "stepsecurity.io",
@@ -75,15 +75,15 @@
    "last_hit": "2026-11-16"
   },
   {
+   "domain": "pypi.org",
+   "weight": 20.0,
+   "hits": 36,
+   "last_hit": "2026-11-27"
+  },
+  {
    "domain": "socket.dev",
    "weight": 20.0,
    "hits": 36,
-   "last_hit": "2026-11-26"
-  },
-  {
-   "domain": "pypi.org",
-   "weight": 20.0,
-   "hits": 35,
    "last_hit": "2026-11-26"
   },
   {

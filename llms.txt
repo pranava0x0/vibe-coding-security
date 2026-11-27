@@ -4,7 +4,7 @@
 
 This repository tracks supply-chain attacks, malicious MCP servers, prompt-injection exploits, CVEs in AI coding frameworks, and data-exposure incidents specific to the "vibe coding" ecosystem. It is maintained by a community of security researchers and updated by automated sweeps using the vibe-security-update skill.
 
-**Last refreshed:** 2026-11-26
+**Last refreshed:** 2026-11-27
 
 ## Quick start
 
@@ -55,10 +55,12 @@ tags: [supply-chain, credential-theft, prompt-injection, ...]
 
 Followed by sections: TL;DR, What happened, Am I affected?, If you are affected, Prevention, Sources.
 
-## Active threat families (as of 2026-11-26)
+## Active threat families (as of 2026-11-27)
 
 The highest-risk ongoing threat families for vibe coders:
 
+- **A workflow engine's LLM and agent tasks evaluate the text they are given (Apache Airflow CVE-2026-120353)** — Text passed to `@task.llm`, `@task.agent` or `@task.bash` was rendered as a template on the worker. Upgrade the standard, cncf-kubernetes, common-sql and common-ai providers.
+- **The reference Git MCP server runs repository config again, through Git LFS (mcp-server-git below 2026.11.27)** — Needs Git LFS and a repository received with its `.git` directory. Two more advisories show a Git token or environment variables to the agent. Upgrade to 2026.11.27.
 - **A task manager's breach reaches the secrets written into tasks (Todoist, 2026-11-23)** — The attacker took API tokens for a small group and searched tasks and comments for credentials. Replace the API token in scripts and agents, and revoke every secret stored in Todoist.
 - **A coordinator publishes a 0-day the vendor disputes or never answers (LiteLLM CVE-2026-136535, DBHub CVE-2026-136441, ZDI)** — LiteLLM stdio MCP servers are off by default from 1.104.0. ZDI names no fixed DBHub version. Keep both off networks you do not control.
 - **A browser agent's domain allowlist is a string check (browser-use below 1.0.0, CVE-2026-136452 and CVE-2026-136453)** — Crafted URLs pass `allowed_domains` and IP blocking. Upgrade to 1.0.0 or later and enforce egress at the network.
