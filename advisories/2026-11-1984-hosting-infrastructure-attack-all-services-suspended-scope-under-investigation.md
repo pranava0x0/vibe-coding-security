@@ -57,7 +57,6 @@ The vendor's statements give no customer steps. These are this file's advice.
 
 - Keep secrets in a secret manager, not in files on a rented server. See [credential hygiene](../prevention/credential-hygiene.md).
 - Keep off-provider backups and a copy of your DNS zone so you can move during a provider outage.
-- Wipe keys from a virtual machine before deleting it.
 
 ## Sources
 
