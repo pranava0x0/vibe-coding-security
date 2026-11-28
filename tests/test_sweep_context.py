@@ -145,19 +145,20 @@ def test_index_carries_body_only_names():
 def test_step2_requires_a_corpus_grep_before_filing_new():
     """The index is a fast path, never the authority.
 
-    It cannot carry a name written only in prose — `SiYuan` in
-    2026-05-mcp-stdio-systemic-rce.md is the standing counterexample, and no
+    It cannot carry a name written only in prose — `MCPwnfluence` in
+    2026-05-mcp-stdio-systemic-rce.md is the standing counterexample (`SiYuan`
+    was, until a 2026-11-28 advisory put it in frontmatter), and no
     code-span extraction will ever find it. So Step 2 must tell the sweep to
     confirm a miss against the corpus. This asserts that instruction is still
     there, because deleting it silently re-opens the duplicate-advisory path."""
     corpus_hits = [
         p.name for p in (REPO_ROOT / "advisories").glob("*.md")
-        if "siyuan" in p.read_text(encoding="utf-8").lower()
+        if "mcpwnfluence" in p.read_text(encoding="utf-8").lower()
     ]
     assert corpus_hits, "counterexample gone — pick a new prose-only name for this guard"
     index = (SKILL_DIR / "advisory-index.jsonl").read_text(encoding="utf-8")
-    assert "SiYuan" not in index, (
-        "SiYuan is now indexed, so it no longer demonstrates the gap — "
+    assert "MCPwnfluence" not in index, (
+        "MCPwnfluence is now indexed, so it no longer demonstrates the gap — "
         "find another prose-only name or drop this guard"
     )
 
