@@ -29,6 +29,7 @@
 |---|---|---|---|
 | **[Vibe App Scanner](https://vibeappscanner.com/)** | Targets the specific failure modes of Lovable / Bolt / Replit / Cursor apps. [Platform-specific guides](https://vibeappscanner.com/platforms). | Free + paid | Commercial |
 | **[Mobb](https://www.mobb.ai/)** | Auto-fixes common vibe-coded vulns. See [their 40% leak study](https://www.mobb.ai/blog/the-hidden-security-crisis-in-ai-generated-apps). | Free tier | Commercial |
+| **[ProofForge](https://proofforge.live)** | Read-only scan of a live app's public surface: privileged keys in client code, Supabase tables readable because RLS is off, open Firebase rules, missing headers. Checks published as [open rules](https://github.com/zambodotdev/proofforge/tree/main/rules). | Free scan; first fix free | Commercial |
 | **[Wiz](https://www.wiz.io/)** / **[Orca Security](https://orca.security/)** | Cloud + SaaS posture scanners. Standard for orgs. | Paid | Commercial |
 | **[Anthropic Claude Code Security](https://www.anthropic.com/news/claude-code-security)** | Research-preview agent that scans codebases and suggests patches. Remember it's vulnerable to [Comment and Control](../advisories/2026-04-comment-and-control-pr-injection.md) — isolate its workflow secrets. | Research preview | Commercial |
 
