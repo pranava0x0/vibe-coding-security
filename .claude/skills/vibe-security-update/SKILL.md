@@ -232,6 +232,10 @@ Each row is a shape of wrong-but-plausible data that has shipped from this routi
 | Advisory body says no patched version, its field names one | GHSA-5pwg-5xfw-x322 and GHSA-3whj-m8jj-x97q bodies say no patched version is identified beside a patched field of 2026.11.27 | print both; confirm the field's version on the registry with its upload date |
 | Status page keeps only the newest update | 1984 Hosting's entry (created 2026-11-21) held only the 2026-11-27 restoration text, and the first statement survived only as an outlet's full print of it | read the status API for creation and update times; cite the outlet for the earlier statement; list under the file's unknowns what no text read states |
 | CNA entries disagree on one version | VulnCheck's CVE-2026-137548 lists Coder 2.35.0 to below 2.37.0 with 2.37.0 unaffected, and 2.37.0 to below 2.37.11 affected | print both entries and say which version they disagree on; take fixed releases from the vendor advisory |
+| CNA description states a bind default the vendor page contradicts | VulnCheck's Pydantic Deep record (CVE-2026-137953) says the server is "bound to all interfaces"; the vendor advisory says the app binds to loopback by default | open the vendor advisory for every default or bind address a research CNA states; print both and scope "exposed" to the vendor's default |
+| Provider notification known only through an outlet's account of a customer's copy | Microsoft's Azure API Management notice (found 2026-11-18, access path closed 2026-11-19) reached this corpus as SecurityWeek quoting a Reddit post | quote it as the outlet's account, name each hop not opened, and take the reader's steps from the national authority's public notice |
+| Record lists one mid-line version as affected beside ranges | pdf-reader-mcp CVE-2026-138030 lists 3.0.16 alone; npm also has 3.0.17, 3.0.18, 3.1.0 and 3.1.1, which the record omits | print the entries as read, list the registry versions the record skips, and state nothing about them |
+| Carried item never filed | "the Azure APIM primary" sat in three run logs' open lists while the public notice was readable the whole time | on the third carry, file from what can be opened or drop it with the reason |
 ---
 
 
@@ -419,6 +423,8 @@ Don't repeat queries already run within the last 24h (check `runs.log.md`).
 
 **A tracked tab can batch again nine days later, and an ASF project's CVE is a list message with a JSON copy.** On 2026-11-27 the reference-servers tab held eight new rows, one High, published the same morning as the PyPI and npm releases. The `agent` and `llm` listings showed Airflow's CVE-2026-120353 with severity "Unknown", because Apache gives a text rating and no CVSS. `lists.apache.org/api/email.lua?id=<thread id>` returns the announcement body to `curl`. An Uptime Kuma status page has a JSON copy at `<host>/api/status-page/<slug>` (`LEARNINGS.md` §87).
 
+**A national authority's notice and a DNS vendor's blog are incident channels.** On 2026-11-28 Azure API Management's secrets exposure was filed from Norway's NSM notice (`nsm.no/aktuelt/`, in Norwegian, renders to `curl`), nine days after it was published. No CVE or listing row existed, and Microsoft's notification was private. easyDNS's breach post (a 7-point Algolia item) said customers' AWS keys stored for a Route 53 integration were used. A GPU marketplace's host escape (Vast.ai) was a researcher page at 3 points. Read the Algolia feed with no points floor for DNS, registrar and GPU-rental vendors, and file a same-day research-CNA wave on the `mcp` listing as one batch counted in code (`LEARNINGS.md` §88).
+
 **Report source-access gaps as "not covered," never as "nothing found."** The standing gaps are listed in `queries.md`; a future sweep reading the log needs to know whether a quiet category was quiet or merely unreachable.
 
 ### Step 2 — Triage findings
@@ -468,10 +474,10 @@ A hit means the incident is tracked — open that advisory to decide NEW vs UPDA
 **An index miss is not proof. Confirm against the corpus before filing anything as new:**
 
 ```bash
-grep -ril 'siyuan' advisories/*.md      # authoritative — searches full bodies
+grep -ril 'mcpwnfluence' advisories/*.md      # authoritative — searches full bodies
 ```
 
-The index carries frontmatter fields plus every CVE/GHSA id and every identifier-shaped `` `code span` `` in the body. That covers most names, but **not one written only in prose**: `SiYuan` appears in [`2026-05-mcp-stdio-systemic-rce.md`](advisories/2026-05-mcp-stdio-systemic-rce.md) and `chalk-tempalte` in [`2026-05-shai-hulud-copycat-wave.md`](advisories/2026-05-shai-hulud-copycat-wave.md); before the `names` field only the second was findable, and neither was findable from frontmatter alone. Treating a miss as proof is exactly how a duplicate advisory gets filed — the failure this index exists to prevent. The corpus grep is cheap and exhaustive; run it on every candidate that misses.
+The index carries frontmatter fields plus every CVE/GHSA id and every identifier-shaped `` `code span` `` in the body. That covers most names, but **not one written only in prose**: `MCPwnfluence` appears in [`2026-05-mcp-stdio-systemic-rce.md`](advisories/2026-05-mcp-stdio-systemic-rce.md) and `chalk-tempalte` in [`2026-05-shai-hulud-copycat-wave.md`](advisories/2026-05-shai-hulud-copycat-wave.md); before the `names` field only the second was findable, and neither was findable from frontmatter alone. Treating a miss as proof is exactly how a duplicate advisory gets filed — the failure this index exists to prevent. The corpus grep is cheap and exhaustive; run it on every candidate that misses.
 
 **Now load [`references/triage-patterns.md`](references/triage-patterns.md)** — the named attack classes and per-query notes. It belongs here, at triage and write-up, not in the search step, and it stays in this session.
 
