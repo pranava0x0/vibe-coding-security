@@ -14,6 +14,7 @@ Hardening guides — the things you do **before** an incident so the incident do
 | Running agents inside containers/VMs | [agent-sandboxing.md](agent-sandboxing.md) |
 | Auditing your app with an agent security-audit skill | [agent-security-audit.md](agent-security-audit.md) |
 | 60-second checklist before any new install | [package-vetting-checklist.md](package-vetting-checklist.md) |
+| Your backend is public by default (Supabase RLS, Firebase rules, service keys) | [exposed-backend-defaults.md](exposed-backend-defaults.md) |
 
 ## The 6 highest-leverage habits
 
