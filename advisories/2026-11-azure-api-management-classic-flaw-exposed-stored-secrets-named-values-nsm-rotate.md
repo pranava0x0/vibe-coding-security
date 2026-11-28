@@ -1,6 +1,6 @@
 ---
 id: 2026-11-azure-api-management-classic-flaw-exposed-stored-secrets-named-values-nsm-rotate
-title: "Azure API Management classic tiers: flaw exposed stored secrets and named values, used in attacks before Microsoft's 2026-11-19 fix; NSM says rotate them"
+title: "Azure API Management classic tiers: flaw exposed stored secrets and named values and was used in attacks, NSM says rotate them"
 date_disclosed: 2026-11-20
 last_updated: 2026-11-28
 severity: high
@@ -22,7 +22,7 @@ NSM says it learned of the flaw earlier in the week of 2026-11-20 and that sever
 
 > Our investigation found that customers were exposed and an unauthorized party could have used the issue to access secrets stored in Azure API Management Classic instances before Microsoft identified the security issue
 
-SecurityWeek lists the data that can be exposed as secrets stored as named values, client secrets for identity providers, subscription keys, and tokens for APIM's direct management APIs. It says Equinor reported an attack on 2026-11-17 and found no evidence that data was stolen or altered.
+SecurityWeek adds that, per Microsoft, classic tier instances that do not follow its documented security guidance are affected, and v2 tier instances are not. It lists the data that can be exposed as secrets stored as named values, client secrets for identity providers, subscription keys, and tokens for APIM's direct management APIs. It says Equinor reported an attack on 2026-11-17 and found no evidence that data was stolen or altered.
 
 No Microsoft page was opened for this file. The Reddit post was not opened. No source read describes the flaw itself.
 
@@ -44,12 +44,13 @@ A patched instance still held its secrets while the flaw was open. NSM's rotatio
 
 NSM's steps:
 
-1. Rotate every token and secret stored in APIM, and every named value that holds one.
-2. Map what data and systems sit behind each APIM instance.
-3. If the instance is not updated, contact Microsoft. Organisations in Norway that see signs of compromise are asked to contact NSM.
+1. Rotate all tokens and secrets.
+2. Map what information sits behind the APIM instance.
+3. If the instance is not updated, contact the vendor. If you see signs of compromise, contact NSM.
 
 Kristiansen's post adds steps that NSM does not give:
 
+- Map which data and systems sit behind each instance.
 - Rotate backend credentials, app registration secrets, subscription keys, the Key Vault secrets that APIM references, and the tenant access keys.
 - Set "Enable Management REST API" to No on every instance. He says the direct Management API does not use Entra ID and its calls are not recorded in the Activity log.
 - Unpublish a developer portal you do not use and disable sign-up.

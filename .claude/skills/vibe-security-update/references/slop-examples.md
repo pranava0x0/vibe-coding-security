@@ -4,6 +4,23 @@ Read this before writing any advisory or `ALERTS.md` entry. Append a pair each
 time review or the owner finds slop, and add a matching line to
 `tools/slop_patterns.tsv` when the shape can be matched by a regex. Newest on top.
 
+## 2026-11-28 (sweep review)
+
+**Discovery date written as the event date** (easyDNS advisory and alert)
+- Before: "someone logged in to its AWS account without authorisation on 2026-11-26 and used AWS keys that some customers had stored"
+- After: "it learned on 2026-11-26 of an unauthorised login to its AWS account and of unauthorised use of some customers' AWS keys"
+- Why: the post dates when the vendor became aware, and does not say one party did both. No regex matches this shape, so check each date's verb against the source's.
+
+**Steps credited to an authority in words it does not use** (Azure API Management advisory)
+- Before: "NSM's steps: 1. Rotate every token and secret stored in APIM, and every named value that holds one."
+- After: "1. Rotate all tokens and secrets."
+- Why: the added clause and a phrase from a second source sat under the authority's name. Keep each list to its own source.
+
+**Advice that assumes where the fix landed** (Vast.ai advisory and alert)
+- Before: "Hosts should confirm their daemon is current."
+- After: "Hosts should ask Vast.ai whether their machines have the 2026-11-04 fix."
+- Why: the write-up names no fixed daemon version and does not say the fix is in the daemon.
+
 ## 2026-11-27 (sweep review)
 
 **"The vendor has not said" from a partial read** (1984 Hosting advisory and alert)

@@ -1,18 +1,18 @@
 ---
 id: 2026-11-vast-ai-cloud-sync-renter-to-host-root-write-patched-2026-11-04-eighth-rank
-title: "Vast.ai: a renter could write files as root on the host machine through Cloud Sync, per Eighth Rank; patched 2026-11-04"
+title: "Vast.ai: a renter could write files as root on the host machine through Cloud Sync, patched 2026-11-04 per Eighth Rank"
 date_disclosed: 2026-11-19
 last_updated: 2026-11-28
 severity: high
 status: unconfirmed
 ecosystems: [gpu-cloud, ai-infrastructure, docker]
-tools_affected: ["Vast.ai host machines running the vendor's host daemon before the 2026-11-04 patch", "workloads on a Vast.ai host shared with other renters before that date"]
+tools_affected: ["Vast.ai host machines before the 2026-11-04 patch", "workloads on a Vast.ai host shared with other renters before that date"]
 tags: [gpu-marketplace, tenant-isolation, container-escape, researcher-report, no-cve, single-source]
 ---
 
 ## TL;DR
 
-[Eighth Rank reports](https://8rank.ai/game/vast-cloud-sync-host-write) that a Vast.ai customer renting a GPU could write files as root on the host machine through the Cloud Sync feature, and so run code as root there. The researchers say Vast.ai patched it on 2026-11-04. Their page is the only source. No CVE id and no Vast.ai statement were found. Hosts should confirm their daemon is current.
+[Eighth Rank reports](https://8rank.ai/game/vast-cloud-sync-host-write) that a Vast.ai customer renting a GPU could write files as root on the host machine through the Cloud Sync feature, and so run code as root there. The researchers say Vast.ai patched it on 2026-11-04. Their page is the only source. No CVE id and no Vast.ai statement were found. Hosts should ask Vast.ai whether their machines have the 2026-11-04 fix.
 
 ## What happened
 
@@ -34,13 +34,13 @@ The write-up names no fixed daemon version. It does not say whether the flaw was
 ## Am I affected?
 
 - **You host on Vast.ai.** Your machine was exposed to any renter until the patch. The write-up does not say how hosts receive daemon updates or how to read the installed version.
-- **You rented on Vast.ai before 2026-11-04.** Another renter on the same host could have reached the host as root, and from there your container. No source says this happened.
+- **You rented on Vast.ai before 2026-11-04.** Another renter on the same host could have reached the host as root. Root on a Docker host can read its containers, which the write-up does not spell out. No source says this happened.
 
 ## If you are affected
 
 These steps are a cautious reading. No vendor guidance was found.
 
-- Hosts: confirm with Vast.ai that the daemon on each machine includes the 2026-11-04 patch. Review root's crontab and the daemon's directory for files you did not expect.
+- Hosts: ask Vast.ai whether each machine has the 2026-11-04 fix. The write-up does not say where the fix landed. Check the contents of the scripts that root's crontab runs from the daemon's directory.
 - Renters: treat API keys, model weights and datasets placed on a shared host before 2026-11-04 as readable by the host. Rotate keys that were stored in an instance. See [credential hygiene](../prevention/credential-hygiene.md).
 
 ## Prevention

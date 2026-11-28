@@ -3491,6 +3491,21 @@
    "tier": "vendor",
    "weight": 10
   },
+  "huggingface.co": {
+   "ecosystems": [
+    "agentic-intrusion-timeline",
+    "ai-vendor-infra",
+    "cohere-qwen-traces-dataset",
+    "datasets",
+    "gguf-repo-status",
+    "numbat-repo-api-discussion-13",
+    "qwen2-tiny-repo-status"
+   ],
+   "hits": 6,
+   "last_hit": "2026-11-28",
+   "tier": "vendor",
+   "weight": 10
+  },
   "manifold.security": {
    "ecosystems": [
     "agent-skills",
@@ -3670,20 +3685,6 @@
    "hits": 5,
    "last_hit": "2026-10-17",
    "tier": "research",
-   "weight": 9
-  },
-  "huggingface.co": {
-   "ecosystems": [
-    "agentic-intrusion-timeline",
-    "ai-vendor-infra",
-    "cohere-qwen-traces-dataset",
-    "datasets",
-    "numbat-repo-api-discussion-13",
-    "qwen2-tiny-repo-status"
-   ],
-   "hits": 5,
-   "last_hit": "2026-11-02",
-   "tier": "vendor",
    "weight": 9
   },
   "malwarebytes.com": {
@@ -6996,6 +6997,28 @@
     "azure-apim"
    ],
    "tier": "independent",
+   "_added": "2026-11-28"
+  },
+  "infohawk.com": {
+   "weight": 5,
+   "hits": 1,
+   "last_hit": "2026-11-28",
+   "ecosystems": [
+    "third-party-script",
+    "e-commerce"
+   ],
+   "tier": "research",
+   "_added": "2026-11-28"
+  },
+  "malspark.com": {
+   "weight": 5,
+   "hits": 1,
+   "last_hit": "2026-11-28",
+   "ecosystems": [
+    "huggingface",
+    "gguf"
+   ],
+   "tier": "research",
    "_added": "2026-11-28"
   },
   "cbsnews.com": {

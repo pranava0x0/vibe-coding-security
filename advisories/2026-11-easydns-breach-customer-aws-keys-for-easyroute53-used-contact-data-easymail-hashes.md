@@ -12,7 +12,7 @@ tags: [vendor-breach, dns-provider, aws-keys, stored-credentials, password-hashe
 
 ## TL;DR
 
-[easyDNS says](https://easydns.com/blog/2026/11/27/easydns-data-breach/) someone logged in to its AWS account without authorisation on 2026-11-26 and used AWS keys that some customers had stored for the easyRoute53 integration. Contact data, limited billing data and unsalted SHA256 easyMail password hashes were also exposed. easyDNS says control panel passwords and REST API keys were not exposed. Change your easyMail password. As a caution, replace any AWS key you gave easyRoute53.
+[easyDNS says](https://easydns.com/blog/2026/11/27/easydns-data-breach/) it learned on 2026-11-26 of an unauthorised login to its AWS account and of unauthorised use of some customers' AWS keys stored for easyRoute53. Contact and limited billing data may be exposed, and unsalted SHA256 easyMail password hashes were exposed. easyDNS says control panel passwords and REST API keys were not exposed. Change your easyMail password. As a caution, replace any AWS key you gave easyRoute53.
 
 ## What happened
 
@@ -39,18 +39,18 @@ The post does not say how many customers or keys were affected.
 ## Am I affected?
 
 - You have an easyDNS account. Your contact data may be exposed.
-- You enabled easyRoute53 with your own AWS key. easyDNS says it alerted the users whose keys were used. The post does not say whether unused stored keys were also read.
+- You enabled easyRoute53 with your own AWS key. easyDNS says it alerted affected easyRoute53 users. The post does not say whether unused stored keys were also read.
 - You use easyMail. Your mailbox password hash was exposed.
 
 To find AWS activity from a key you gave easyRoute53, look up the access key id in CloudTrail:
 
 ```bash
-aws cloudtrail lookup-events \
+aws cloudtrail lookup-events --region us-east-1 \
   --lookup-attributes AttributeKey=AccessKeyId,AttributeValue=<your-access-key-id> \
   --start-time 2026-11-01
 ```
 
-The start date is a wide starting point. easyDNS has not published when the access began.
+Route 53 events are recorded in `us-east-1`, and this lookup covers the last 90 days. The start date is a wide starting point. The post does not say when the access began.
 
 ## If you are affected
 

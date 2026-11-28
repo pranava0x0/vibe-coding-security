@@ -8,12 +8,20 @@
 
 ## 🔴 ACTIVE — react now
 
+### 2026-11-27 — **Altered Quorum marketing pixel and Seers consent banner settings on store checkouts: review your embeds and tell affected shoppers**
+[InfoHawk reports](https://www.infohawk.com/news/2026-11-27-black-friday-webrtc-skimmer) that an altered Quorum pixel, edited Seers banner settings and one retailer CDN file loaded unwanted code on five store checkouts, removed by 2026-11-25. Check your embeds for `Insds.js` or `gtage.js`.
+→ [advisories/2026-11-quorum-pixel-seers-consent-banner-altered-checkout-scripts-remove-and-review.md](advisories/2026-11-quorum-pixel-seers-consent-banner-altered-checkout-scripts-remove-and-review.md)
+
+### 2026-11-27 — **Five malicious GGUF model repositories on Hugging Face (Mir2k, timdedid): delete the files and rotate browser-stored passwords**
+[Malspark reports](https://malspark.com/blog/malicious-gguf-models-hugging-face/) five malicious GGUF repositories under `Mir2k` and `timdedid`. The Hugging Face API showed all five disabled on 2026-11-28. If you ran one, delete it and rotate browser-saved passwords and wallet credentials.
+→ [advisories/2026-11-hugging-face-gguf-repositories-mir2k-timdedid-remove-and-rotate.md](advisories/2026-11-hugging-face-gguf-repositories-mir2k-timdedid-remove-and-rotate.md)
+
 ### 2026-11-27 — **MCP and agent CVE records 2026-11-26 to 11-27: Bagel, Crypto APIs MCP servers, bigcommerce-api-mcp, WhoDB, Pydantic Deep, SiYuan and four more**
 [CVE-2026-138028](https://cveawg.mitre.org/api/cve/CVE-2026-138028) says injected text can make `bagel-mcp` below 2.5.5 run commands, one of eleven VulnCheck records for ten MCP servers and agent apps. Three servers answered tool calls with no authentication over HTTP. Upgrade to the versions in the advisory.
 → [advisories/2026-11-mcp-agent-cve-records-november-27-bagel-crypto-apis-whodb-pydantic-deep-siyuan.md](advisories/2026-11-mcp-agent-cve-records-november-27-bagel-crypto-apis-whodb-pydantic-deep-siyuan.md)
 
 ### 2026-11-27 — **easyDNS breach: customers' AWS keys stored for easyRoute53 were used, and contact data and unsalted easyMail password hashes were exposed**
-[easyDNS says](https://easydns.com/blog/2026/11/27/easydns-data-breach/) an intruder in its AWS account used AWS keys that customers stored for easyRoute53 and exposed contact data and unsalted easyMail password hashes. Change your easyMail password. As a caution, replace any AWS key you gave easyRoute53.
+[easyDNS reports](https://easydns.com/blog/2026/11/27/easydns-data-breach/) an unauthorised login to its AWS account, unauthorised use of some customers' stored easyRoute53 AWS keys, and exposed easyMail password hashes. Change your easyMail password. As a caution, replace any AWS key you gave easyRoute53.
 → [advisories/2026-11-easydns-breach-customer-aws-keys-for-easyroute53-used-contact-data-easymail-hashes.md](advisories/2026-11-easydns-breach-customer-aws-keys-for-easyroute53-used-contact-data-easymail-hashes.md)
 
 ### 2026-11-27 — **Reference MCP servers: eight advisories on 2026-11-27, one High in mcp-server-git through the Git LFS filter; fixed in 2026.11.27**
@@ -92,7 +100,7 @@ RunPod's hosted MCP server told agents to call a rating tool and not mention it 
 [Together AI](https://www.together.ai/blog/security-event-prompt-leakage-for-requests-in-june-and-july-of-2026) says an unauthorized party downloaded stored prompt samples from June and July 2026 requests to MiniMax M3, GLM-5.2 and Kimi K2.6, then tested credentials found in them. Rotate any secret sent in those prompts.
 → [advisories/2026-11-together-ai-prompt-samples-downloaded-after-coding-agent-committed-credential-june-july-requests.md](advisories/2026-11-together-ai-prompt-samples-downloaded-after-coding-agent-committed-credential-june-july-requests.md)
 
-### 2026-11-20 — **Azure API Management classic tiers: flaw exposed stored secrets and named values, used in attacks before Microsoft's 2026-11-19 fix; NSM says rotate them**
+### 2026-11-20 — **Azure API Management classic tiers: flaw exposed stored secrets and named values and was used in attacks, NSM says rotate them**
 [Norway's NSM says](https://nsm.no/aktuelt/nsm-deler-tiltak-mot-sarbarhet-i-azure-api-management) an unknown actor went after tokens, secrets and named values stored in Azure API Management. The flaw should now be closed. NSM tells every APIM customer to rotate all tokens and secrets and check the runtime version.
 → [advisories/2026-11-azure-api-management-classic-flaw-exposed-stored-secrets-named-values-nsm-rotate.md](advisories/2026-11-azure-api-management-classic-flaw-exposed-stored-secrets-named-values-nsm-rotate.md)
 
@@ -108,8 +116,8 @@ An email [posted on Hacker News](https://news.ycombinator.com/item?id=50585039) 
 [NebuSec](https://nebusec.ai/research/meta-muse-credential-exposure/) showed a web page reading and altering a Meta Muse user's chats and memories with no approval prompt, then reaching the VM's credential store. NebuSec says it is fixed and Meta has not confirmed. Remove account connections you do not use.
 → [advisories/2026-11-meta-muse-nebusec-webpage-reads-chats-memories-reaches-vm-credential-store.md](advisories/2026-11-meta-muse-nebusec-webpage-reads-chats-memories-reaches-vm-credential-store.md)
 
-### 2026-11-19 — **Vast.ai: a renter could write files as root on the host machine through Cloud Sync, per Eighth Rank; patched 2026-11-04**
-[Eighth Rank reports](https://8rank.ai/game/vast-cloud-sync-host-write) that a Vast.ai renter could write files as root on the host machine through Cloud Sync. The researchers say it was patched on 2026-11-04, and no Vast.ai statement was found. Hosts should confirm their daemon is current.
+### 2026-11-19 — **Vast.ai: a renter could write files as root on the host machine through Cloud Sync, patched 2026-11-04 per Eighth Rank**
+[Eighth Rank reports](https://8rank.ai/game/vast-cloud-sync-host-write) that a Vast.ai renter could write files as root on the host machine through Cloud Sync. The researchers say it was patched on 2026-11-04, and no Vast.ai statement was found. Hosts should ask Vast.ai whether their machines have the fix.
 → [advisories/2026-11-vast-ai-cloud-sync-renter-to-host-root-write-patched-2026-11-04-eighth-rank.md](advisories/2026-11-vast-ai-cloud-sync-renter-to-host-root-write-patched-2026-11-04-eighth-rank.md)
 
 ### 2026-11-19 — **OpenClaw: a restricted agent could change configuration without approval and enable host command execution (GHSA-pw3x-g8v8-fvj2); fixed 2026.11.4 and 2026.10.33**
